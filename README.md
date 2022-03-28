@@ -16,14 +16,14 @@ This new Portal will access two internal storage systems, use Single Sign-on for
 
 ## The Technical Requirement
 
-* FFS will be store NMs (and tracings) for both public and distributor needs.
+* FSS will be store NMs (and tracings) for both public and distributor needs.
 * Existing FSS Desktop Client will be used by internal team to upload NMs to FSS with the aid of a config file.
-* Website built in ASP.Net MCV.
-* Website will list available NMs and provide download functionality from FFS via current FSS APIs.
-* Batch Zipping functionality will be provided as part of FFS enhancements.
-* SSO group management will be provided as part of SSO/FFS enhancements
+* Website built in ASP.NET MVC.
+* Website will list available NMs and provide download functionality from FSS via current FSS APIs.
+* Batch Zipping functionality will be provided as part of FSS enhancements.
+* SSO group management will be provided as part of SSO/FSS enhancements
 * Website will present RNWs for viewing and printing which will be fed from a database (proposed SQL Server).  This will only support the text required for the website.
-* External Notification Service used to notify distributors that NMs have been published to the FFS.
+* External Notification Service used to notify distributors that NMs have been published to the FSS.
 
 ## Architecture principle alignment
 
