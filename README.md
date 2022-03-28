@@ -40,3 +40,15 @@ The NMs and RNW solution will be hosted in the cloud (likely Azure as this is th
 * RNW DB - will only be developed to store the text required for the website.
 
 ![Proposed Solution Architecture](Documentation/NMandRNWWebsiteSolutionDesign.png)
+
+## Glossary
+
+| Term | Definition |
+| ---- | ---------- |
+| FSS | File Share Service, a UKHO service that provides APIs to allow searching for and downloading of files. See <https://github.com/UKHO/file-share-service> and <https://fss.admiralty.co.uk/> |
+| MSI | Marine Safety Information |
+| NMs | Notice to Mariners - ADMIRALTY Notices to Mariners are weekly updates that provide bridge crews with the latest safety-critical navigational information. |
+| RNW | Radio Navigation Warnings - Radio Navigational Warnings provide early information of important incidents which may constitute a danger to navigation. Many navigational warnings are of a temporary nature, but others remain in force for several weeks and may be succeeded by Notice to Mariners (NMs). |
+| SOLAS | The International Convention for the Safety of Life at Sea (SOLAS) is an international maritime treaty that sets minimum safety standards in the construction, equipment and operation of merchant ships. |
+| SNC | Standard Nautical Chart - A paper chart. |
+| Tracings | A PDF representation of corrections that need to be applied to a paper chart. |
