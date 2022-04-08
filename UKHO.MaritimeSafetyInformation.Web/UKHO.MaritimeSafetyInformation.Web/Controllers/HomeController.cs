@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using UKHO.MaritimeSafetyInformation.Web.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
