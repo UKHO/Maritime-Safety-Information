@@ -1,12 +1,12 @@
 ﻿
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 

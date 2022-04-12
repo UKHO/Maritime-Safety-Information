@@ -2,7 +2,7 @@
 
 namespace UKHO.MaritimeSafetyInformation.Web.HealthCheck
 {
-    public class EventHubLoggingHealthCheck
+    public class EventHubLoggingHealthCheck :IHealthCheck
     {
         private readonly IEventHubLoggingHealthClient _eventHubLoggingHealthClient;
 
