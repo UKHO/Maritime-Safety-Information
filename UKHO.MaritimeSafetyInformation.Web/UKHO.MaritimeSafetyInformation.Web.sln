@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.Common", "UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj", "{6BDA8628-6153-424F-996C-3E9B66E214C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
