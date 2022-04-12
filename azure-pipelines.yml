@@ -24,7 +24,7 @@ variables:
   - name: UKHOAssemblyVersionPrefix
     value: "1.0."
   - name: UKHOAssemblyProduct
-    value: "External Notification Service"
+    value: "Maritime Safety Information"
   - name: UKHOAssemblyCopyright
     value: "Copyright © UK Hydrographic Office"
   - name: Container
@@ -67,7 +67,7 @@ stages:
             displayName: "Run OWASP Dependency Checker"
             inputs:
               filename: 'dependency-check.bat'
-              arguments: '--project "External-Notification-Service - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
+              arguments: '--project "Maritime-Safety-Information - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifact: OWASP Dependency Checker Report"
