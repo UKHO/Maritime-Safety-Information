@@ -167,7 +167,7 @@ stages:
               arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory)'
 
           - task: DotNetCoreCLI@2
-            displayName: "Publish WebAPI"
+            displayName: "Publish WebApp"
             inputs:
               command: "publish"
               publishWebProjects: false
@@ -177,7 +177,40 @@ stages:
               modifyOutputPath: true
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish WebAPI Artifact"
+            displayName: "Publish Web Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
               ArtifactName: MaritimeSafetyInformation
+
+      - job: PublishTerraformArtifacts
+        workspace:
+          clean: all
+        displayName: "Publish Terraform Artifacts"
+        steps:
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish terraform Artifacts"
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+              ArtifactName: terraformartifact
+
+  - stage: Devdeploy
+    displayName: "Devdeploy (inc terraform, webapp deploy)"
+    jobs:
+      - deployment: DevDeployApp
+        displayName: "Dev - deploy terraform and dotnet App"
+        environment: "Msi-Dev"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        variables:
+          - group: "MSI-Dev-TF-Variables"
+          - group: "MSI-Dev-Variables"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information Dev - A.008.02"
