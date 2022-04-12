@@ -1,0 +1,20 @@
+﻿@model IEnumerable<UKHO.FileShareClient.Models.BatchDetailsFiles>
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <td>File Name</td>
+            <td>File Size</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+            <td><a href="@item.Links.Get.Href">@item.Filename</a></td>
+            <td>@item.FileSize</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
