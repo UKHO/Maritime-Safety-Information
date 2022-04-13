@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.Common", "UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj", "{6BDA8628-6153-424F-996C-3E9B66E214C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Common.UnitTests", "UKHO.MaritimeSafetyInformation.Common.UnitTests\UKHO.MaritimeSafetyInformation.Common.UnitTests.csproj", "{1BCE0BFA-F200-4B02-944F-1F465277E807}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,12 +36,17 @@ Global
 		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDA8628-6153-424F-996C-3E9B66E214C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BCE0BFA-F200-4B02-944F-1F465277E807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BCE0BFA-F200-4B02-944F-1F465277E807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BCE0BFA-F200-4B02-944F-1F465277E807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BCE0BFA-F200-4B02-944F-1F465277E807}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17F2F671-1279-4582-802C-EB3BB5CA0799} = {CAC252B6-01EF-483B-ABFF-D1143EB89F62}
+		{1BCE0BFA-F200-4B02-944F-1F465277E807} = {CAC252B6-01EF-483B-ABFF-D1143EB89F62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7473D48C-027B-4B02-BD3B-0EFFADF1EC72}
