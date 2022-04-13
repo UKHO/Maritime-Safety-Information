@@ -7,7 +7,7 @@ parameters:
 
 steps:
   - task: FileTransform@1
-    displayName: "File Transform: Msi Config" #Replace ens instance value from pipeline 
+    displayName: "File Transform: Msi Config" #Replace msi instance value from pipeline 
     inputs:
       folderPath: '$(Pipeline.Workspace)/terraformartifact/src'
       fileType: 'json'
