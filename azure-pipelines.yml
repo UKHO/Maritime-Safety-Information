@@ -198,14 +198,14 @@ stages:
     jobs:
       - deployment: DevDeployApp
         displayName: "Dev - deploy terraform and dotnet App"
-        environment: "Msi-Dev"
+        environment: "Maritime-Safety-Information-Dev"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
         workspace:
           clean: all
         variables:
-          - group: "MSI-Dev-TF-Variables"
-          - group: "MSI-Dev-Variables"
+          - group: "Maritime-Safety-Information-Dev-TF-Variables"
+          - group: "Maritime-Safety-Information-Dev-Variables"
         strategy:
           runOnce:
             deploy:
