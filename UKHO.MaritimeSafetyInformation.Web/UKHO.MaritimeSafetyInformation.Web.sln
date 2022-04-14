@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CAC252B6-01EF-483B-ABFF-D1143EB89F62}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.Web.Tests", "UKHO.MaritimeSafetyInformation.Web.Tests\UKHO.MaritimeSafetyInformation.Web.Tests.csproj", "{17F2F671-1279-4582-802C-EB3BB5CA0799}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81A65B65-60D0-471A-B7AF-34936D7B376D}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
@@ -24,16 +22,9 @@ Global
 		{1E980BA5-AEF4-45C9-890E-224A6AF169DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E980BA5-AEF4-45C9-890E-224A6AF169DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E980BA5-AEF4-45C9-890E-224A6AF169DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{17F2F671-1279-4582-802C-EB3BB5CA0799} = {CAC252B6-01EF-483B-ABFF-D1143EB89F62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7473D48C-027B-4B02-BD3B-0EFFADF1EC72}
