@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
@@ -8,11 +9,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
     {
 
         private readonly ILogger<HomeController> _logger;
-        protected readonly IHttpClientFactory httpClientFactory;
-        public NoticestoMarinersController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly IFileShareService fileShareService;
+        private readonly INMDataService nMDataService;
+        public NoticestoMarinersController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, IFileShareService fileShareService, INMDataService nMDataService)
         {
             _logger = logger;
             this.httpClientFactory = httpClientFactory;
+            this.fileShareService = fileShareService;
+            this.nMDataService = nMDataService;
         }
 
         public IActionResult Index()
@@ -23,13 +28,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         public async Task<IActionResult> ShowWeeklyFilesAsync()
         {
             string accessToken = "";
-            FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, "https://filesqa.admiralty.co.uk", accessToken);
-            var result = await fileShareApi.Search("$batch(Year) eq '2022' and $batch(Week Number) eq '14'", 25, 0, CancellationToken.None);
-
-            string SearchResultAsJson = result.Data.ToJson();
-            BatchSearchResponse SearchResult = result.Data;
-            IEnumerable<BatchDetailsFiles> listFiles = SearchResult.Entries.SelectMany(e => e.Files).ToList();
+            IEnumerable<BatchDetailsFiles> listFiles = await nMDataService.GetBatchDetailsFiles(2022, 14, accessToken);
             return View(listFiles);
+        }
+
+        [HttpGet]
+        [Route("/batch/{batchId}/files/{filename}")]
+        public async Task<IActionResult> DownloadFssFilesAsync(string batchId, string filename)
+        {
+            string accessToken = "";
+            byte[] fileBytes = await nMDataService.DownloadFssFileAsync(batchId, filename, accessToken);
+            return File(fileBytes, "application/octet-stream", filename);
         }
     }
 }

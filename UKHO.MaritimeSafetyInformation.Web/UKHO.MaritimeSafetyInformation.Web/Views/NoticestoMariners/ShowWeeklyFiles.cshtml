@@ -1,20 +1,41 @@
-﻿@model IEnumerable<UKHO.FileShareClient.Models.BatchDetailsFiles>
+﻿@using UKHO.FileShareClient.Models
+@model IEnumerable<UKHO.FileShareClient.Models.BatchDetailsFiles>
 <div class="container">
     <table class="table table-bordered table-striped">
         <thead>
-        <tr>
-            <td>File Name</td>
-            <td>File Size</td>
-        </tr>
+            <tr>
+                <td>
+                    <select class="form-control">
+                        <option>Year</option>
+                        <option>2022</option>
+                        <option>2021</option>
+                        <option>2022</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>Week Number</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>File Name</td>
+                <td>File Size</td>
+            </tr>
         </thead>
         <tbody>
-        @foreach(var item in Model)
-        {
-            <tr>
-            <td><a href="@item.Links.Get.Href">@item.Filename</a></td>
-            <td>@item.FileSize</td>
-        </tr>
-        }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><a href="@item.Links.Get.Href">@item.Filename</a></td>
+                    <td>@item.FileSize</td>
+                </tr>
+            }
         </tbody>
     </table>
+
+    @*<partial name="_WeeklyData" model="Model" />*@
 </div>
