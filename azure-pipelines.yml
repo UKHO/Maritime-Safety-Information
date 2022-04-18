@@ -187,6 +187,14 @@ stages:
           clean: all
         displayName: "Publish Terraform Artifacts"
         steps:
+
+          - task: CopyFiles@2
+            displayName: Copy MaritimeSafetyInformationService Config
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web\'
+              Contents: 'appsettings.json'
+              TargetFolder: '$(Build.SourcesDirectory)\Deployment\src'
+
           - task: PublishBuildArtifacts@1
             displayName: "Publish terraform Artifacts"
             inputs:
