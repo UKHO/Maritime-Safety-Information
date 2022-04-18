@@ -47,8 +47,8 @@ module "key_vault" {
   }
   secrets =
        {
-        "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
-        "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
-       }
+        "EventHubLoggingConfiguration--ConnectionString"       = module.eventhub.log_primary_connection_string
+        "EventHubLoggingConfiguration--EntityPath"             = module.eventhub.entity_path
+ }
   tags                = local.tags
 }
