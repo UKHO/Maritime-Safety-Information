@@ -21,7 +21,7 @@ module "webapp_service" {
   resource_group_name       = azurerm_resource_group.rg.name
   env_name                  = local.env_name
   location                  = azurerm_resource_group.rg.location
-  app_service_sku           = var.app_service_sku[local.env_name]
+  sku_name                  = var.sku_name[local.env_name]
   app_settings = {
     "KeyVaultSettings:ServiceUri"                              = "https://${local.key_vault_name}.vault.azure.net/"
     "EventHubLoggingConfiguration:Environment"                 = local.env_name
