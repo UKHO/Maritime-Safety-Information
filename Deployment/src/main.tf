@@ -45,10 +45,10 @@ module "key_vault" {
   read_access_objects = {
      "webapp_service" = module.webapp_service.web_app_object_id
   }
-  secrets             = 
+  secrets =
        {
         "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
         "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
-      }
+       }
   tags                = local.tags
 }

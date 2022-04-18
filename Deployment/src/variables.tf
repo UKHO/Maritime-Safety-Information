@@ -21,7 +21,7 @@ locals {
     CALLOUT_TEAM     = "On-Call_N/A"
     COST_CENTRE      = "A.008.02"
   }
-
+}
 
 variable "app_service_sku" {
   type = map(any)
