@@ -15,7 +15,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
   tags                = var.tags
 
   site_config {
-        application_stack = "dotnet"
+        current_stack = "dotnet"
         dotnet_version = "v6.0"
        }
     always_on  = true
