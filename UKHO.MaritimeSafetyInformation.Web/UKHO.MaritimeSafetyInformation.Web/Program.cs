@@ -19,7 +19,7 @@ configurationBuilder.SetBasePath( webHostEnvironment.ContentRootPath);
 configurationBuilder.AddJsonFile("appsettings.json", false, true);
 configurationBuilder.AddEnvironmentVariables();
 builder.Configuration.AddAzureKeyVault(
-       new Uri(builder.Configuration["KeyVaultSettings:ServiceUri"]),
+       new Uri(configuration["KeyVaultSettings:ServiceUri"]),
        new DefaultAzureCredential());
 
 builder.Services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
