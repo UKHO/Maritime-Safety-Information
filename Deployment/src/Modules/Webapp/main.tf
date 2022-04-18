@@ -11,7 +11,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
-  app_service_plan_id = azurerm_service_plan.app_service_plan.id
+  service_plan_id     = azurerm_service_plan.service_plan.id
   tags                = var.tags
 
   site_config {
