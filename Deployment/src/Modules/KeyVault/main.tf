@@ -20,8 +20,8 @@ resource "azurerm_key_vault_access_policy" "kv_access_terraform" {
   object_id    = data.azurerm_client_config.current.object_id
 
   key_permissions = [
-    "create",
-    "get",
+    "Create",
+    "Get",
   ]
 
   secret_permissions = [
