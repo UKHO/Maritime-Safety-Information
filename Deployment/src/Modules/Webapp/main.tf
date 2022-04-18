@@ -30,7 +30,9 @@ resource "azurerm_windows_web_app" "webapp_service" {
 
   identity {
     type = "SystemAssigned"
-  }
+    }
 
   https_only = true
+  }
+
 }
