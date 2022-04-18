@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="dfc62d0e-3fb3-4a9c-a285-313e8f094da5" ChangeDateTime="04/15/2022 11:21:06">
+    <Property Name="ElementName" Value="[dbo].[RadioNavigationalWarnings].[Reference]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RadioNavigationalWarnings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WarningType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1510133a-e213-4b1b-8f8c-c027b2f626aa" ChangeDateTime="04/15/2022 11:21:30">
+    <Property Name="ElementName" Value="[dbo].[RadioNavigationalWarnings].[DateTimeGroup]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RadioNavigationalWarnings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Reference" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a4cb537b-43e5-4753-ad33-ad775d8c84b1" ChangeDateTime="04/15/2022 11:21:45">
+    <Property Name="ElementName" Value="[dbo].[RadioNavigationalWarnings].[Description]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RadioNavigationalWarnings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Date Time Group" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8834e1d0-56cd-496d-a480-75e1bb97ff33" ChangeDateTime="04/15/2022 11:21:50">
+    <Property Name="ElementName" Value="[dbo].[RadioNavigationalWarnings].[Date Time Group]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RadioNavigationalWarnings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DateTimeGroup" />
+  </Operation>
+</Operations>

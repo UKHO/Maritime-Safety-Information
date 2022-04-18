@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using UKHO.MaritimeSafetyInformation.Web.Models;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<RadioNavigationalWarningsContext>(o =>
+{
+    o.UseSqlServer(builder.Configuration["ConnectionString"]);
+});
 
 WebApplication app = builder.Build();
 
@@ -22,6 +30,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=RadioNavigationalWarnings}/{action=Index}/{id?}");
 
 app.Run();
