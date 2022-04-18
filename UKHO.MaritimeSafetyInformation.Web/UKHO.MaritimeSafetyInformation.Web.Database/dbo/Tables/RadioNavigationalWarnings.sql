@@ -6,7 +6,7 @@
     [Description] VARCHAR(256) NULL, 
     [Text] VARCHAR(MAX) NULL, 
     [ExpiryDate] DATETIME NULL, 
-    [ApprovalStatus] CHAR(4) NULL, 
-    [IsDeleted] CHAR(4) NULL, 
+    [ApprovalStatus] BIT NULL, 
+    [IsDeleted] BIT NULL, 
     CONSTRAINT [PK_RadioNavigationalWarnings] PRIMARY KEY CLUSTERED ([Id] ASC)
 );

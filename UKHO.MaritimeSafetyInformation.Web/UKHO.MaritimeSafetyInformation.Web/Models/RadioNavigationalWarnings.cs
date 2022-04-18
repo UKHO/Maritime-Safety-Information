@@ -14,7 +14,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Models
         public string? Description { get; set; }
         public string? Text { get; set; }
         public DateTime ExpiryDate { get; set; }
-        public char ApprovalStatus { get; set; }
-        public char IsDeleted { get; set; }
+        public bool ApprovalStatus { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
