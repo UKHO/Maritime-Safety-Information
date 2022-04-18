@@ -39,4 +39,4 @@ steps:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/MaritimeSafetyInformationWeb/UKHO.MaritimeSafetyInformation.Web.zip"
+      package: "$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip"
