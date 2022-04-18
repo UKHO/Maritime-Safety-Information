@@ -29,7 +29,7 @@ steps:
   - task: FileTransform@1
     displayName: "File Transform: WebAppSettings"
     inputs:
-      folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationWeb/*.zip'
+      folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
