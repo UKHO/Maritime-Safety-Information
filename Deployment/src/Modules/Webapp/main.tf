@@ -7,7 +7,7 @@ resource "azurerm_service_plan" "app_service_plan" {
   tags                = var.tags
 }
 
-resource "azurerm_app_service" "webapp_service" {
+resource "azurerm_windows_web_app" "webapp_service" {
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
