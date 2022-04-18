@@ -15,9 +15,8 @@ resource "azurerm_windows_web_app" "webapp_service" {
   tags                = var.tags
 
   site_config {
-        current_stack = "dotnet"
-        dotnet_version = "v6.0"
-       }
+    current_stack = "dotnet"
+    dotnet_version = "v6.0"
     always_on  = true
     ftps_state = "Disabled"
 
