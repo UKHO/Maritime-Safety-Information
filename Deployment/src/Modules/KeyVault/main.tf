@@ -25,11 +25,11 @@ resource "azurerm_key_vault_access_policy" "kv_access_terraform" {
   ]
 
   secret_permissions = [
-    "set",
-    "get",
-    "delete",
-    "recover",
-    "purge"
+    "Set",
+    "Get",
+    "Delete",
+    "Recover",
+    "Purge"
   ]
 }
 
@@ -41,13 +41,13 @@ resource "azurerm_key_vault_access_policy" "kv_read_access" {
   object_id    = each.value
 
   key_permissions = [
-    "list",
-    "get",
+    "List",
+    "Get",
   ]
 
   secret_permissions = [
-    "list",
-    "get"
+    "List",
+    "Get"
   ]
 }
 
