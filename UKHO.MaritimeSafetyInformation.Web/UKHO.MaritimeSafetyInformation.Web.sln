@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "UKHO.MaritimeSafetyInformation.Database", "UKHO.MaritimeSafetyInformation.Database\UKHO.MaritimeSafetyInformation.Database.sqlproj", "{73413111-04BE-4E7D-BF93-FFC6E48D719A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,12 @@ Global
 		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F2F671-1279-4582-802C-EB3BB5CA0799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73413111-04BE-4E7D-BF93-FFC6E48D719A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73413111-04BE-4E7D-BF93-FFC6E48D719A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73413111-04BE-4E7D-BF93-FFC6E48D719A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{73413111-04BE-4E7D-BF93-FFC6E48D719A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73413111-04BE-4E7D-BF93-FFC6E48D719A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73413111-04BE-4E7D-BF93-FFC6E48D719A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
