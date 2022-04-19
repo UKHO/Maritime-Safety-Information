@@ -1,41 +1,25 @@
 ﻿@using UKHO.FileShareClient.Models
 @model List<ShowFilesResponseModel>
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+}
 
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-lg-2">Select period</div>
 
-        <label for="inputYear" class="col-md-2 col-form-label text-start text-lg-end">Year</label>
+        <label for="ddlYears" class="col-md-2 col-form-label text-start text-lg-end">Year</label>
         <div class="col-lg-3 col-md-4">
-            <select class="form-select" id="inputYear">
+            <select class="form-select" id="ddlYears">
                 <option selected>Please select year</option>
-                <option value="1">2020</option>
-                <option value="2">2021</option>
-                <option value="3">2022</option>
             </select>
         </div>
 
-        <label for="inputWeek" class="col-md-2 col-form-label text-start text-lg-end">Week</label>
+        <label for="ddlWeeks" class="col-md-2 col-form-label text-start text-lg-end">Week</label>
         <div class="col-lg-3 col-md-4">
-            <select class="form-select" id="inputWeek">
+            <select class="form-select" id="ddlWeeks">
                 <option selected>Please select week</option>
-                <option value="1">01</option>
-                <option value="2">02</option>
-                <option value="3">03</option>
-                <option value="3">04</option>
-                <option value="3">05</option>
-                <option value="3">06</option>
-                <option value="3">07</option>
-                <option value="3">08</option>
-                <option value="3">09</option>
-                <option value="3">10</option>
-                <option value="3">11</option>
-                <option value="3">12</option>
-                <option value="3">13</option>
-                <option value="3">14</option>
-                <option value="3">15</option>
-                <option value="3">16</option>
-                <option value="3">17</option>
             </select>
         </div>
     </div>
@@ -45,7 +29,7 @@
             <div class="table-responsive">
                 <table class="table table-striped">
                     <tbody>
-                        @if (Model.Count > 0)
+                        @if (Model != null && Model.Count > 0)
                         {
                             @foreach (var item in Model)
                             {
