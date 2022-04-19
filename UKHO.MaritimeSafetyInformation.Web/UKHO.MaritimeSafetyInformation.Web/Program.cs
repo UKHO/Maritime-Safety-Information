@@ -6,19 +6,17 @@ using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 
+IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+EventHubLoggingConfiguration eventHubLoggingConfiguration;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+IConfiguration configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//*****************************************************
-
 IWebHostEnvironment webHostEnvironment = builder.Environment;
-IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-ILoggerFactory loggerFactory = new LoggerFactory();
-IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-IConfiguration configuration = builder.Configuration;
-EventHubLoggingConfiguration eventHubLoggingConfiguration;
 
 configurationBuilder.SetBasePath(webHostEnvironment.ContentRootPath);
 configurationBuilder.AddJsonFile("appsettings.json", false, true);
@@ -31,56 +29,16 @@ if (!string.IsNullOrWhiteSpace(configuration["KeyVaultSettings:ServiceUri"]))
        new DefaultAzureCredential());
 }
 
-builder.Services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-builder.Services.AddLogging(loggingBuilder =>
-{
-    loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
-    loggingBuilder.AddConsole();
-    loggingBuilder.AddDebug();
-    loggingBuilder.AddAzureWebAppDiagnostics();
-});
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
-builder.Services.AddHeaderPropagation(options =>
-{
-    options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
-});
-builder.Services.AddApplicationInsightsTelemetry();
-
 eventHubLoggingConfiguration = configuration.GetSection("EventHubLoggingConfiguration").Get<EventHubLoggingConfiguration>();
 
-//*****************************************************
-
-WebApplication app = builder.Build();
-
-ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+builder.Host.ConfigureLogging(logging =>
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    logging.ClearProviders();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+    #if (DEBUG)
+    logging.AddFile(configuration.GetSection("Logging"));
+    #endif
 
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
-
-
-void ConfigureLogging(WebApplication app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor, EventHubLoggingConfiguration eventHubLoggingConfiguration)
-{
     if (!string.IsNullOrWhiteSpace(eventHubLoggingConfiguration?.ConnectionString))
     {
         void ConfigAdditionalValuesProvider(IDictionary<string, object> additionalValues)
@@ -104,29 +62,60 @@ void ConfigureLogging(WebApplication app, ILoggerFactory loggerFactory, IHttpCon
             }
         }
 
-        loggerFactory.AddEventHub(
-                                 config =>
-                                 {
-                                     config.Environment = eventHubLoggingConfiguration.Environment;
-                                     config.DefaultMinimumLogLevel =
-                                         (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.MinimumLoggingLevel, true);
-                                     config.MinimumLogLevels["UKHO"] =
-                                         (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.UkhoMinimumLoggingLevel, true);
-                                     config.EventHubConnectionString = eventHubLoggingConfiguration.ConnectionString;
-                                     config.EventHubEntityPath = eventHubLoggingConfiguration.EntityPath;
-                                     config.System = eventHubLoggingConfiguration.System;
-                                     config.Service = eventHubLoggingConfiguration.Service;
-                                     config.NodeName = eventHubLoggingConfiguration.NodeName;
-                                     config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
-                                 });
+        logging.AddEventHub(config =>
+        {
+            config.Environment = eventHubLoggingConfiguration.Environment;
+            config.DefaultMinimumLogLevel =
+                (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.MinimumLoggingLevel, true);
+            config.MinimumLogLevels["UKHO"] =
+                (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.UkhoMinimumLoggingLevel, true);
+            config.EventHubConnectionString = eventHubLoggingConfiguration.ConnectionString;
+            config.EventHubEntityPath = eventHubLoggingConfiguration.EntityPath;
+            config.System = eventHubLoggingConfiguration.System;
+            config.Service = eventHubLoggingConfiguration.Service;
+            config.NodeName = eventHubLoggingConfiguration.NodeName;
+            config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
+        });
     }
-#if (DEBUG)
-    //Add file based logger for development
-    loggerFactory.AddFile(configuration.GetSection("Logging"));
-#endif
+});
 
-    app.UseCorrelationIdMiddleware()
-       .UseErrorLogging(loggerFactory);
+builder.Services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
+    loggingBuilder.AddConsole();
+    loggingBuilder.AddDebug();
+    loggingBuilder.AddAzureWebAppDiagnostics();
+});
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+builder.Services.AddHeaderPropagation(options =>
+{
+    options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+});
+builder.Services.AddApplicationInsightsTelemetry();
+
+WebApplication app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
