@@ -1,10 +1,11 @@
 ﻿using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Web.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
     public interface INMDataService
     {
-        public Task<IEnumerable<BatchDetailsFiles>> GetBatchDetailsFiles(int year, int week, string accessToken);
+        public Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week, string accessToken);
         public Task<byte[]> DownloadFssFileAsync(string batchId, string filename, string accessToken);
     }
 }
