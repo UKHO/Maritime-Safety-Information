@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -15,6 +16,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Started Maritime Safety Information.");
+
             return View();
         }
 
