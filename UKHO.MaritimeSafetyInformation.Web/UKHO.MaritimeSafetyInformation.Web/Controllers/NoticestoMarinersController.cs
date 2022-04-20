@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             AuthFssTokenProvider authFssTokenProvider = new AuthFssTokenProvider();
             AuthenticationResult authentication = await authFssTokenProvider.GetAuthTokenAsync();
             string accessToken = authentication.AccessToken;
-            List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(2022, 15, accessToken);
+            List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(year, week, accessToken);
             return View(listFiles);
         }
 
