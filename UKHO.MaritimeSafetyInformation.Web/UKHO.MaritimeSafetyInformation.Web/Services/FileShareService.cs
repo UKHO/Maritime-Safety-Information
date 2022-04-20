@@ -31,12 +31,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
 
         }
-
-        public async Task<Stream> GetFssFileStreamAsync(string batchId, string filename,string accessToken)
-        {
-            FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, "https://filesqa.admiralty.co.uk", accessToken);
-            Stream stream = await fileShareApi.DownloadFileAsync(batchId, filename);
-            return stream;
-        }
     }
 }
