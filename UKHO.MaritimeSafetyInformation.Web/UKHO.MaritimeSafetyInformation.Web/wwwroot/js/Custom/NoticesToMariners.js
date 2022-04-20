@@ -57,10 +57,6 @@ function LoadWeeks(selectedYear) {
 function ShowWeeklyFilesAsync() {
     let selectedYear = $('#ddlYears').val();
     let selectedWeek = $('#ddlWeeks').val();
-    let datas = JSON.stringify({
-        year: selectedYear,
-        week: selectedWeek
-    });
     if (selectedYear != "" && selectedWeek != "") {
         $.ajax({
             url: '/NoticestoMariners/ShowWeeklyFiles',
@@ -70,8 +66,7 @@ function ShowWeeklyFilesAsync() {
                 week: parseInt(selectedWeek)
             },
             success: function (data) {
-
-                console.log(data);
+                $('#divFilesList').html(data);
             },
             error: function (error) {
                 console.log(`Error ${error}`);

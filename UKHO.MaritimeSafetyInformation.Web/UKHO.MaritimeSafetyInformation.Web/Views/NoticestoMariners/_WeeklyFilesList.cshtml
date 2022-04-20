@@ -1,0 +1,26 @@
+﻿@using UKHO.FileShareClient.Models
+@model List<ShowFilesResponseModel>
+@{
+    var a = Model;
+}
+<table class="table table-striped">
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><a href="@item.Links.Get.Href">@item.FileDescription</a></td>
+                    <td>@item.FileSizeinKB (@item.FileExtension)</td>
+                    <td></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan='3'>No data found!!!</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -54,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             AuthenticationResult authentication = await authFssTokenProvider.GetAuthTokenAsync();
             string accessToken = authentication.AccessToken;
             List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(year, week, accessToken);
-            return View(listFiles);
+            return PartialView("~/Views/NoticestoMariners/_WeeklyFilesList.cshtml",listFiles);
         }
 
         private async Task<AccessTokenItem> GetNewAuthToken(string resource)
