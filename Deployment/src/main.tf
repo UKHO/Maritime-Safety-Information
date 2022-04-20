@@ -8,7 +8,7 @@ module "app_insights" {
 
 module "eventhub" {
   source              = "./Modules/EventHub"
-  name                = "${local.service_name}-${local.env_name}-events"
+  name                = "${local.service_name}-${local.env_name}-eventss"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   tags                = local.tags

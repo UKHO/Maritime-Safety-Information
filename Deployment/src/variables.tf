@@ -11,8 +11,8 @@ variable "resource_group_name" {
 locals {
   env_name           = lower(terraform.workspace)
   service_name       = "msi"
-  web_app_name       = "${local.service_name}-${local.env_name}-webapp"
-  key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kv"
+  web_app_name       = "${local.service_name}-${local.env_name}-webappp"
+  key_vault_name     = "${local.service_name}-ukho-${local.env_name}-kvv"
   tags = {
     SERVICE          = "Maritime Safety Information"
     ENVIRONMENT      = local.env_name
