@@ -18,7 +18,7 @@ variable "tags" {
 
 }
 
-variable "sku_name" {
+variable "app_service_sku" {
 
 }
 
