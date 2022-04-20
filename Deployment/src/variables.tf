@@ -23,11 +23,20 @@ locals {
   }
 }
 
-variable "sku_name" {
+variable "app_service_sku" {
   type = map(any)
   default = {
-             "dev"  =  "P1v2"
-             "qa"   =  "P1v3"
-             "live" =  "P1v3"
-            }
+    "dev"    = {
+	    tier = "PremiumV2"
+	    size = "P1v2"
+        }
+    "qa"     = {
+	    tier = "PremiumV3"
+	    size = "P1v3"
+        }
+    "live"   = {
+	    tier = "PremiumV3"
+	    size = "P1v3"
+        }
+  }
 }
