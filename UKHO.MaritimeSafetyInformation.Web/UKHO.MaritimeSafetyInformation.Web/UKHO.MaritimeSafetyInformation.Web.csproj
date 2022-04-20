@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.6.0" />
     <PackageReference Include="UKHO.FileShareAdminClient" Version="1.1.20225.10" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.1.20225.10" />
     <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.21167.4" />
