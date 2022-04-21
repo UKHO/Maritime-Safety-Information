@@ -30,17 +30,15 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
+            services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
 
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
-            });
-
-            services.AddApplicationInsightsTelemetry();
-
-            services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            });            
+            services.AddApplicationInsightsTelemetry();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
