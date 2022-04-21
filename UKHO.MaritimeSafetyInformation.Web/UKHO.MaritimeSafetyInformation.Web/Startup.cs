@@ -76,7 +76,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true);
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
 
             builder.AddEnvironmentVariables();
             IConfigurationRoot tempConfig = builder.Build();

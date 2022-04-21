@@ -1,0 +1,215 @@
+﻿@import "variables";
+.site-header {
+    .navbar {
+        padding: 0;
+        border: 2px solid transparent;
+
+        @media screen and (max-width: $medium) {
+            border: 0;
+        }
+
+        .navbar-toggler {
+            border: 0;
+            width: 20px;
+            height: 20px;
+            position: relative;
+            transition: .5s ease-in-out;
+
+            &.collapsed {
+                .top-bar {
+                    margin-top: -20px;
+                    transform: rotate(0deg)
+                }
+
+                .middle-bar {
+                    opacity: 1;
+                    filter: aplha(opacity=100);
+                }
+
+                .bottom-bar {
+                    margin-top: 20px;
+                    transform: rotate(0deg)
+                }
+            }
+
+            span {
+                padding: 0;
+                margin: 0;
+            }
+
+            &:hover, &:focus, &:active {
+                outline: none;
+                box-shadow: none;
+                border: 0;
+                background-color: transparent;
+            }
+        }
+
+        .navbar-brand {
+            margin: 0;
+            padding: 0;
+
+            .logo-img {
+                width: 10rem;
+                padding: 0;
+                margin: 0;
+
+                @media screen and (max-width: $medium) {
+                    width: 7rem;
+                }
+
+                @media screen and (max-width: $small) {
+                    width: 5.5rem;
+                }
+            }
+        }
+    }
+
+    .navbar-collapse {
+        @media screen and (max-width: $large) {
+            position: absolute;
+            width: 50%;
+            top: 58px;
+            right: 0;
+            z-index: 2;
+            background-color: $white;
+            box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 5%);
+            border-width: 0 1px;
+            border-style: solid;
+            border-color: #dee2e6;
+        }
+
+        @media screen and (max-width: $small) {
+            left: 0;
+            width: 100%;
+        }
+
+        @media screen and (max-width: $xx-small) {
+            top: 83px;
+        }
+
+        .navbar-nav {
+            li {
+                margin: 0;
+                padding: 0;
+                transform: none;
+
+                &:before {
+                    content: none;
+                }
+
+                a {
+                    padding: 2rem 1rem;
+
+                    @media screen and (max-width: $large) {
+                        padding: 0.5rem 1rem;
+                        border-bottom: 1px solid #dee2e6 !important;
+                    }
+
+                    &:hover {
+                        background-color: $anti-flash-white;
+                        box-shadow: inset 0 -5px $prussian-blue;
+
+                        @media screen and (max-width: $large) {
+                            box-shadow: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .vertical-divider {
+        border-right: 1px solid $light-silver;
+        margin-left: 24px;
+        margin-right: 24px;
+        min-height: 40px;
+
+        @media screen and (max-width: $small) {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        @media screen and (max-width: $xx-small) {
+            display: none;
+        }
+    }
+
+    .site-title {
+        font-size: 30px;
+        line-height: 40px;
+        color: $prussian-blue;
+        text-decoration: none !important;
+
+        @media screen and (max-width: $medium) {
+            font-size: 24px;
+        }
+
+        @media screen and (max-width: $x-small) {
+            flex-basis: 50%;
+            line-height: 20px;
+            font-size: 16px;
+        }
+
+        @media screen and (max-width: $xx-small) {
+            flex-basis: 70%;
+        }
+    }
+}
+.navbar-toggler-icon {
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border: 0;
+    }
+}
+.toggler-icon {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: $prussian-blue;
+    border-radius: 1px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+
+    &.middle-bar {
+        margin-top: 0;
+        opacity: 0;
+        filter: aplha(opacity=0);
+    }
+
+    &.top-bar {
+        margin-top: 0;
+        transform: rotate(135deg);
+    }
+
+    &.bottom-bar {
+        margin-top: 0;
+        transform: rotate(-135deg);
+    }
+}
+
+.skip-to-content-link {
+    background: $prussian-blue;
+    color: $white !important;
+    font-weight: 300;
+    left: 45%;
+    padding: 10px;
+    position: absolute;
+    transform: translateY(-101%);
+    transition: transform 0.3s;
+    z-index: 10;
+    text-decoration: none;
+    border-radius: 0;
+}
+
+.skip-to-content-link:hover {
+    color: $white;
+}
+
+.skip-to-content-link:focus {
+    transform: translateY(-5%);
+}

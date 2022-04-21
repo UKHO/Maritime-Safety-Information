@@ -5,12 +5,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
     public enum EventIds
     {
         /// <summary>
-        /// 900001 - An unhandled exception occurred while processing the request.
+        /// 700001 - An unhandled exception occurred while processing the request.
         /// </summary>
-        UnhandledControllerException = 900001,
-        Start = 900002
+        UnhandledControllerException = 700001,
+        /// <summary>
+        /// 700002 - Maritime safety information request started.
+        /// </summary>
+        Start = 700002
     }
-
 
     public static class EventIdExtensions
     {
