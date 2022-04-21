@@ -1,22 +1,22 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController<HomeController>
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger) : base(contextAccessor, logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            _logger.LogInformation(EventIds.Start.ToEventId(), "Started Maritime Safety Information.");
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
             return View();
         }
