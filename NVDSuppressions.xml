@@ -104,7 +104,7 @@
     ]]>
     </notes>
     <cve>CVE-2014-8117</cve>
-    <cve>CVE-2014-9652</cve>
+    <cve>CVE-2014-9652</cve>    
   </suppress>
   <suppress>
     <notes>
@@ -116,6 +116,14 @@
     </notes>
     <cve>CVE-2014-9653</cve>
   </suppress>
+  <suppress>
+   <notes>
+     <![CDATA[
+   file name: Serilog.Sinks.Async.dll
+   A vulnerability exists in Async through 3.2.1 (fixed in 3.2.2) , which could let a malicious user obtain privileges via the mapValues() method.
+   ]]></notes>
+   <cve>CVE-2021-43138</cve>
+</suppress>
   <suppress>
     <notes>
       <![CDATA[
