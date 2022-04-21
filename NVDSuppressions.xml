@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
-  
   <suppress>
     <notes>
       <![CDATA[
@@ -10,5 +9,4 @@
     </notes>
     <cve>CVE-2020-22475</cve>
   </suppress>
-  
 </suppressions>
