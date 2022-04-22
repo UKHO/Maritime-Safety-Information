@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
 
             HealthCheckResult response = await _eventHubLoggingHealthCheck.CheckHealthAsync(new HealthCheckContext());
 
-            Assert.AreEqual(HealthStatus.Healthy, response.Status);
+            Assert.AreEqual(HealthStatus.Unhealthy, response.Status);
         }
     }
 }
