@@ -135,4 +135,16 @@
     </notes>
     <cve>CVE-2019-18218</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Net.WebSockets.Client.dll
+   file name: System.Net.WebSockets.dll
+   file name: System.Net.WebSockets:4.3.0
+   The aaugustin websockets library before 9.1 for Python has an Observable Timing Discrepancy on servers when HTTP Basic Authentication is enabled with basic_auth_protocol_factory(credentials=...). An attacker may be able to guess a password via a timing attack.
+   This is a false positive as the vulnerability exists in a Python websockets library not used by Maritime Safety Information.
+   ]]>
+    </notes>
+    <cve>CVE-2021-33880</cve>
+  </suppress>
 </suppressions>
