@@ -1,5 +1,4 @@
-﻿
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
