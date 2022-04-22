@@ -1,0 +1,14 @@
+﻿@import "variables";
+@import "header";
+@import "footer";
+
+%focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.14rem #fd0 !important;
+}
+a, button{
+    &:focus{
+        @extend %focus;
+    }
+}
+
