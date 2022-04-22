@@ -1,19 +1,36 @@
-﻿
+﻿using Microsoft.Extensions.Logging;
+
 namespace UKHO.MaritimeSafetyInformation.Common.Logging
 {
     public enum EventIds
     {
         /// <summary>
-        /// 910001 - Event hub for MSI is healthy.
+        /// 910001 - An unhandled exception occurred while processing the request.
         /// </summary>
-        EventHubLoggingIsHealthy = 910001,
+        UnhandledControllerException = 910001,
         /// <summary>
-        /// 910002 - Event hub for MSI is unhealthy.
+        /// 910002 - Maritime safety information request started.
         /// </summary>
-        EventHubLoggingIsUnhealthy = 910002,
+        Start = 910002,
         /// <summary>
-        /// 910003 -  Event data for MSI event hub health check.
+        /// 910003 - Event hub for MSI is healthy.
         /// </summary>
-        EventHubLoggingEventDataForHealthCheck = 910003,
+        EventHubLoggingIsHealthy = 910003,
+        /// <summary>
+        /// 910004 - Event hub for MSI is unhealthy.
+        /// </summary>
+        EventHubLoggingIsUnhealthy = 910004,
+        /// <summary>
+        /// 910005 -  Event data for MSI event hub health check.
+        /// </summary>
+        EventHubLoggingEventDataForHealthCheck = 910005,
+    }
+
+    public static class EventIdExtensions
+    {
+        public static EventId ToEventId(this EventIds eventId)
+        {
+            return new EventId((int)eventId, eventId.ToString());
+        }
     }
 }

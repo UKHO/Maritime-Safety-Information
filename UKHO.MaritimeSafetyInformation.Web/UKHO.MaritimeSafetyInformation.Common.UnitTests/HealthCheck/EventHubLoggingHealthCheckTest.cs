@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
             _fakeLogger = A.Fake<ILogger<EventHubLoggingHealthCheck>>();
             _fakeEventHubLoggingHealthClient = A.Fake<IEventHubLoggingHealthClient>();
 
-            _eventHubLoggingHealthCheck = new EventHubLoggingHealthCheck(_fakeEventHubLoggingHealthClient);
+            _eventHubLoggingHealthCheck = new EventHubLoggingHealthCheck(_fakeEventHubLoggingHealthClient, _fakeLogger);
         }
 
         [Test]
