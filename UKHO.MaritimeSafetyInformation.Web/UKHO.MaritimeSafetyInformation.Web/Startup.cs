@@ -144,6 +144,5 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);
         }
-
     }
 }
