@@ -15,13 +15,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory httpClientFactory;
-        private readonly IFileShareService fileShareService;
         private readonly INMDataService nMDataService;
-        public NoticestoMarinersController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, IFileShareService fileShareService, INMDataService nMDataService)
+        public NoticestoMarinersController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, INMDataService nMDataService)
         {
             _logger = logger;
             this.httpClientFactory = httpClientFactory;
-            this.fileShareService = fileShareService;
             this.nMDataService = nMDataService;
         }
 
