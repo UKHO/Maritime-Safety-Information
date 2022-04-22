@@ -1,38 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using UKHO.MaritimeSafetyInformation.Web.Models;
-using UKHO.MaritimeSafetyInformation.Web.Services;
+using System.Diagnostics.CodeAnalysis;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<RadioNavigationalWarningsContext>(o =>
+namespace UKHO.MaritimeSafetyInformation.Web
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("RadioNavigationalWarningsContext"));
-});
-builder.Services.AddScoped<IRNWRepository, RNWRepository>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+    [ExcludeFromCodeCoverage]
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-WebApplication app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=RadioNavigationalWarnings}/{action=Index}/{id?}");
-
-app.Run();
