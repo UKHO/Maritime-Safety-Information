@@ -6,6 +6,8 @@ using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
+using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -38,7 +40,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });            
-            services.AddApplicationInsightsTelemetry();            
+            services.AddApplicationInsightsTelemetry();
+            services.AddHttpClient();
+            services.AddScoped<INMDataService, NMDataService>();
+            services.AddScoped<IFileShareService, FileShareService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
