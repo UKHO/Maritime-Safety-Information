@@ -2,16 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Web.Models;
+using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
     public class RadioNavigationalWarningsController : Controller
     {
         private readonly RadioNavigationalWarningsContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly IRNWRepository _iRNWRepository;
 
-        public RadioNavigationalWarningsController(RadioNavigationalWarningsContext context)
+        public RadioNavigationalWarningsController(RadioNavigationalWarningsContext context, IRNWRepository iRNWRepository,
+            IConfiguration configuration)
         {
             _context = context;
+            _iRNWRepository = iRNWRepository;
+            _configuration = configuration;
         }
 
         // GET: RadioNavigationalWarnings
@@ -50,26 +56,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,WarningType,Reference,DateTimeGroup,Description,Text,ExpiryDate,ApprovalStatus,IsDeleted")] RadioNavigationalWarnings radioNavigationalWarnings)
+        //public async Task<IActionResult> Create([FromBody] RadioNavigationalWarningsModel radioNavigationalWarnings)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(radioNavigationalWarnings);
+                _iRNWRepository.AddRadioNavigation(radioNavigationalWarnings);
 
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(radioNavigationalWarnings);
         }
 
         // GET: RadioNavigationalWarnings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var radioNavigationalWarnings = await _context.RadioNavigationalWarnings.FindAsync(id);
+            var radioNavigationalWarnings = _iRNWRepository.EditRadioNavigation(id);
             if (radioNavigationalWarnings == null)
             {
                 return NotFound();
@@ -93,7 +100,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 try
                 {
-                    _context.Update(radioNavigationalWarnings);
+                     _iRNWRepository.UpdateRadioNavigation(radioNavigationalWarnings);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -121,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
 
             var radioNavigationalWarnings = await _context.RadioNavigationalWarnings
-                .FirstOrDefaultAsync(m => m.Id == id);
+                          .FirstOrDefaultAsync(m => m.Id == id);
             if (radioNavigationalWarnings == null)
             {
                 return NotFound();

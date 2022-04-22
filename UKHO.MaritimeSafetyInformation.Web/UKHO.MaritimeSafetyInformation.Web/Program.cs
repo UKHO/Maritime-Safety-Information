@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Web.Models;
+using UKHO.MaritimeSafetyInformation.Web.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,10 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<RadioNavigationalWarningsContext>(o =>
 {
-    o.UseSqlServer(builder.Configuration["ConnectionString"]);
+    o.UseSqlServer(builder.Configuration.GetConnectionString("RadioNavigationalWarningsContext"));
 });
+builder.Services.AddScoped<IRNWRepository, RNWRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 WebApplication app = builder.Build();
 
