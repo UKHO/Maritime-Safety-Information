@@ -14,13 +14,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IFileShareService fileShareService;
         private readonly IConfiguration configuration;
+        private readonly ILogger<NMDataService> _logger;
         private readonly FileShareServiceConfiguration fileShareServiceConfig;
-        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<NMDataService> logger)
         {
             this.fileShareService = fileShareService;
             this.httpClientFactory = httpClientFactory;
             this.configuration = configuration;
             this.fileShareServiceConfig = configuration.GetSection("FileShareService").Get<FileShareServiceConfiguration>();
+            _logger = logger;
         }
         public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
         {

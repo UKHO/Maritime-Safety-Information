@@ -5,18 +5,19 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Models;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
-    public class NoticestoMarinersController : Controller
+    public class NoticestoMarinersController : BaseController<NoticestoMarinersController>
     {
 
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<NoticestoMarinersController> _logger;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly INMDataService nMDataService;
-        public NoticestoMarinersController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, INMDataService nMDataService)
+        public NoticestoMarinersController(IHttpClientFactory httpClientFactory, INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticestoMarinersController> logger) : base(contextAccessor, logger)
         {
             _logger = logger;
             this.httpClientFactory = httpClientFactory;
@@ -25,6 +26,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
             return View("~/Views/NoticestoMariners/ShowWeeklyFiles.cshtml");
         }
 

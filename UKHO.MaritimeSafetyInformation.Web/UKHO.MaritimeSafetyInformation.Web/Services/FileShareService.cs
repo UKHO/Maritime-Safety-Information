@@ -10,11 +10,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IConfiguration configuration;
         private readonly FileShareServiceConfiguration fileShareServiceConfig;
-        public FileShareService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        private readonly ILogger<FileShareService> _logger;
+        public FileShareService(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<FileShareService> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.configuration = configuration;
             this.fileShareServiceConfig = configuration.GetSection("FileShareService").Get<FileShareServiceConfiguration>();
+            _logger = logger;
 
         }
         public async Task<IResult<BatchSearchResponse>> FssWeeklySearchAsync(string searchText, string accessToken)
