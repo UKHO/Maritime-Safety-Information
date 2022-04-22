@@ -11,7 +11,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910002 - Maritime safety information request started.
         /// </summary>
-        Start = 910002
+        Start = 910002,
+        RetrievalOfMSIShowWeeklyFilesRequest = 910003,
+        RetrievalOfMSIShowWeeklyFilesCompleted = 910003,
+        RetrievalOfMSIShowFilesResponseStarted = 910004,
+        RetrievalOfMSIShowFilesResponseDataFound = 910005,
+        RetrievalOfMSIShowFilesResponseDataFoundNotFound = 910006,
+        RetrievalOfMSIShowFilesResponseFailed = 910007,
+        RetrievalOfMSIGetPastYearsStart = 910008,
+        RetrievalOfMSIGetPastYearsFailed = 910009,
+        RetrievalOfMSIGetAllWeeksofYearStart = 910010,
+        RetrievalOfMSIGetAllWeeksofYearFailed = 910011,
+        RetrievalOfMSIBatchSearchResponse = 910012,
+        RetrievalOfMSIBatchSearchResponseFailed = 910013,
+        RetrievalOfMSIFailed = 10019,
+        UnhandledCleanUpException = 10071
     }
 
     public static class EventIdExtensions

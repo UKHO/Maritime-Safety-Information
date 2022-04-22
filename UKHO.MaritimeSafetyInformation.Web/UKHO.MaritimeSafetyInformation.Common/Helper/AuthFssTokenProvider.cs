@@ -1,6 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 
-namespace UKHO.MaritimeSafetyInformation.Web
+namespace UKHO.MaritimeSafetyInformation.Common
 {
     public class AuthFssTokenProvider
     {

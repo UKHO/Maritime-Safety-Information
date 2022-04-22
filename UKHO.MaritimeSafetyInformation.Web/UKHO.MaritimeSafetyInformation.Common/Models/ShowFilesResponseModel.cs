@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using UKHO.FileShareClient.Models;
 
-namespace UKHO.MaritimeSafetyInformation.Web.Models
+namespace UKHO.MaritimeSafetyInformation.Common.Models
 {
     public class ShowFilesResponseModel
     {

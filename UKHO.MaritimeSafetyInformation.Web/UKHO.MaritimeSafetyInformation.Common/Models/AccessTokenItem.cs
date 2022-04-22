@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.MaritimeSafetyInformation.Web.Models
+namespace UKHO.MaritimeSafetyInformation.Common.Models
 {
 
     [ExcludeFromCodeCoverage]

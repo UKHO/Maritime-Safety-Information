@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.Identity.Client;
 
-namespace UKHO.MaritimeSafetyInformation.Web
+namespace UKHO.MaritimeSafetyInformation.Common
 {
     static class TokenCacheHelper
     {
