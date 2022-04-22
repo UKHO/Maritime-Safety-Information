@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });            
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry();            
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
         }
