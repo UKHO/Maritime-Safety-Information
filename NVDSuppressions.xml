@@ -121,7 +121,8 @@
      <![CDATA[
    file name: Serilog.Sinks.Async.dll
    A vulnerability exists in Async through 3.2.1 (fixed in 3.2.2) , which could let a malicious user obtain privileges via the mapValues() method.
-   ]]></notes>
+   This is a false positive as the vulnerability exists in a NPM Javascript package named 'Async' and not the nuget .NET package named 'Serilog.Sinks.Async'.
+    ]]></notes>
    <cve>CVE-2021-43138</cve>
 </suppress>
   <suppress>
