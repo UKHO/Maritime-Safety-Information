@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using Azure.Core;
+using Azure.Identity;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -39,11 +40,16 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
-            });            
+            });
             services.AddApplicationInsightsTelemetry();
             services.AddHttpClient();
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
+            services.AddSingleton<TokenCredential>(new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                VisualStudioTenantId = configuration.GetSection("DefaultTokenCredentials").GetSection("VisualStudioTenantId").Value,
+                ManagedIdentityClientId = configuration.GetSection("DefaultTokenCredentials").GetSection("ManagedIdentityClientId").Value
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

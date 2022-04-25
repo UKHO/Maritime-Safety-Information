@@ -16,13 +16,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IConfiguration configuration;
         private readonly ILogger<NMDataService> _logger;
         private readonly FileShareServiceConfiguration fileShareServiceConfig;
-        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<NMDataService> logger)
+        private readonly TokenCredential tokenCredential;
+        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<NMDataService> logger, TokenCredential _tokenCredential)
         {
             this.fileShareService = fileShareService;
             this.httpClientFactory = httpClientFactory;
             this.configuration = configuration;
             this.fileShareServiceConfig = configuration.GetSection("FileShareService").Get<FileShareServiceConfiguration>();
             _logger = logger;
+            tokenCredential = _tokenCredential;
         }
         public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
         {
@@ -44,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        private List<ShowFilesResponseModel> GetShowFilesResponses(BatchSearchResponse SearchResult)
+        public List<ShowFilesResponseModel> GetShowFilesResponses(BatchSearchResponse SearchResult)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new List<ShowFilesResponseModel>();
             foreach (var item in SearchResult.Entries)
@@ -80,13 +82,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return string.Format("{0:n1} {1}", number, suffixes[counter]);
         }
 
-        private async Task<AccessTokenItem> GetNewAuthToken(string resource)
+        public async Task<AccessTokenItem> GetNewAuthToken(string resource)
         {
             try
             {
-                var tokenCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { VisualStudioTenantId = "9134ca48-663d-4a05-968a-31a42f0aed3e", ManagedIdentityClientId = "644e4406-4e92-4e5d-bdc5-3b233884f900" });
+                CancellationToken cancellationToken = new CancellationToken();  
+               // var tokenCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { VisualStudioTenantId = "9134ca48-663d-4a05-968a-31a42f0aed3e", ManagedIdentityClientId = "644e4406-4e92-4e5d-bdc5-3b233884f900" });
                 var accessToken = await tokenCredential.GetTokenAsync(
-                    new TokenRequestContext(scopes: new string[] { resource + "/.default" }) { }
+                    new TokenRequestContext(scopes: new string[] { resource + "/.default" }) { }, cancellationToken
                 );
                 return new AccessTokenItem
                 {
@@ -103,6 +106,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public List<KeyValuePair<string, string>> GetPastYears()
         {
+            _logger.LogInformation("aaa");
             List<KeyValuePair<string, string>> years = new List<KeyValuePair<string, string>>();
             years.Add(new KeyValuePair<string, string>("Year", ""));
             for (int i = 0; i < 3; i++)
@@ -134,7 +138,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             for (int i = 0; i < totalWeeks; i++)
             {
-                string week =  (i+1).ToString();
+                string week = (i + 1).ToString();
                 weeks.Add(new KeyValuePair<string, string>(week, week));
             }
             return weeks;
