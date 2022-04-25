@@ -11,6 +11,8 @@ using UKHO.MaritimeSafetyInformation.Web.Configuration;
 using Microsoft.Extensions.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using Microsoft.Extensions.Logging;
+using UKHO.MaritimeSafetyInformation.Web.Controllers;
+
 using System.Globalization;
 using UKHO.MaritimeSafetyInformation.Web.Models;
 using Azure.Core;
@@ -19,7 +21,7 @@ using UKHO.FileShareClient.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
-
+    [TestFixture]
     public class NMDataServiceTest
     {
         private IHttpClientFactory _fakehttpClientFactory;
@@ -27,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IConfiguration _fakeconfiguration;
         private ILogger<NMDataService> _fakeLogger;
         private FileShareServiceConfiguration _fakefileShareServiceConfig;
+        private ILogger<NMDataService> fakeLogger;
         private TokenCredential _faketokenCredential;
 
         private NMDataService _fakeNMDataService;

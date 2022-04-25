@@ -1,5 +1,6 @@
 ﻿using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
@@ -23,13 +24,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
+                _logger.LogInformation(EventIds.RetrievalOfMSIBatchSearchResponse.ToEventId(), "Maritime safety information request batch search response started");
+
                 FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, fileShareServiceConfig.BaseUrl, accessToken);
-                IResult<BatchSearchResponse> result = await fileShareApi.Search(searchText, 25, 0, CancellationToken.None);
+                IResult<BatchSearchResponse> result = await fileShareApi.Search(searchText, 100, 0, CancellationToken.None);
                 return result;
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logger.LogError(EventIds.RetrievalOfMSIBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
+                throw;
             }
 
         }

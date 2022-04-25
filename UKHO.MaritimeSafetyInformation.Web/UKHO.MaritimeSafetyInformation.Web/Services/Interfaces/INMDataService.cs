@@ -1,5 +1,5 @@
 ﻿using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Web.Models;
+using UKHO.MaritimeSafetyInformation.Common.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {

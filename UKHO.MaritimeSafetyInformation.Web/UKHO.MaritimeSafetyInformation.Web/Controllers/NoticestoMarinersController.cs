@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Web.Models;
+using UKHO.MaritimeSafetyInformation.Common.Models;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -45,7 +45,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
+            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesRequest.ToEventId(), "Maritime safety information request for show weekly files requested:{correlationId}", GetCurrentCorrelationId());
+
             List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(year, week);
+
+            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesCompleted.ToEventId(), "Maritime safety information request for show weekly files completed:{correlationId}", GetCurrentCorrelationId());
+
             return PartialView("~/Views/NoticestoMariners/_WeeklyFilesList.cshtml",listFiles);
         }
 

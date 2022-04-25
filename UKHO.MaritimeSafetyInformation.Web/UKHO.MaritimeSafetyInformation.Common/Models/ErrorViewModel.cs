@@ -1,4 +1,4 @@
-namespace UKHO.MaritimeSafetyInformation.Web.Models
+namespace UKHO.MaritimeSafetyInformation.Common.Models
 {
     public class ErrorViewModel
     {
