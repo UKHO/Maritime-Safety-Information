@@ -12,28 +12,27 @@ using Microsoft.Extensions.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using Microsoft.Extensions.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
+using Microsoft.Extensions.Options;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
     [TestFixture]
     public class NMDataServiceTest
     {
-        private IHttpClientFactory _fakehttpClientFactory;
-        private IFileShareService _fakefileShareService;
-        private IConfiguration _fakeconfiguration;
-        private FileShareServiceConfiguration _fakefileShareServiceConfig;
-        private ILogger<NMDataService> fakeLogger;
-        private NMDataService _fakeNMDataService;
+        private IHttpClientFactory _httpClientFactory;
+        private IFileShareService _fileShareService;
+        private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
+        private ILogger<NMDataService> Logger;
+        private NMDataService _NMDataService;
 
         [SetUp]
         public void Setup()
         {
-            _fakehttpClientFactory = A.Fake<IHttpClientFactory>();
-            _fakefileShareService = A.Fake<IFileShareService>();
-            _fakeconfiguration = A.Fake<IConfiguration>();
-            _fakefileShareServiceConfig = A.Fake<FileShareServiceConfiguration>();
-            fakeLogger = A.Fake<ILogger<NMDataService>>();
-            _fakeNMDataService = new NMDataService(_fakefileShareService,_fakehttpClientFactory,_fakeconfiguration, fakeLogger);
+            _httpClientFactory = A.Fake<IHttpClientFactory>();
+            _fileShareService = A.Fake<IFileShareService>();
+            _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
+            Logger = A.Fake<ILogger<NMDataService>>();
+            _NMDataService = new NMDataService(_fileShareService,_httpClientFactory,_fileShareServiceConfig, Logger);
         }
 
 
