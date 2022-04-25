@@ -6,6 +6,7 @@ using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
+using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -32,6 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
 
+            services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -39,6 +41,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });            
             services.AddApplicationInsightsTelemetry();            
+            services.AddHealthChecks()
+                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +69,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHealthChecks("/health");
             });
         }
 
@@ -139,6 +144,5 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);
         }
-
     }
 }

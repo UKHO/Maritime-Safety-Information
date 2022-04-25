@@ -11,7 +11,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910002 - Maritime safety information request started.
         /// </summary>
-        Start = 910002
+        Start = 910002,
+        /// <summary>
+        /// 910003 - Event hub for Maritime safety information is healthy.
+        /// </summary>
+        EventHubLoggingIsHealthy = 910003,
+        /// <summary>
+        /// 910004 - Event hub for Maritime safety information is unhealthy.
+        /// </summary>
+        EventHubLoggingIsUnhealthy = 910004,
+        /// <summary>
+        /// 910005 -  Event data for Maritime safety information event hub health check.
+        /// </summary>
+        EventHubLoggingEventDataForHealthCheck = 910005,
     }
 
     public static class EventIdExtensions
