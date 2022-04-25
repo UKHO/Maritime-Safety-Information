@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using NUnit.Framework;
 using UKHO.FileShareClient.Models;
@@ -20,22 +21,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     public class FileShareServiceTest
     {
         private IHttpClientFactory _httpClientFactory;
-        private IConfiguration _configuration;
-        private FileShareServiceConfiguration _fileShareServiceConfig;
+        private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private ILogger<FileShareService> _logger;
-        private ILogger<NMDataService> _loggerNM;
         private FileShareService _fileShareService;
-        private NMDataService _fakeNMDataService;
+
+        public static IConfiguration InitConfiguration()
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            return config;
+        }
 
         [SetUp]
         public void Setup()
         {
             _httpClientFactory = A.Fake<IHttpClientFactory>();
-            _fileShareServiceConfig = A.Fake<FileShareServiceConfiguration>();
-            _configuration = A.Fake<IConfiguration>();
+            _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _logger = A.Fake<ILogger<FileShareService>>();
-            _fileShareService = new FileShareService(_httpClientFactory,_configuration,_logger);
-            _fakeNMDataService = new NMDataService(_fileShareService, _httpClientFactory, _configuration, _loggerNM);
+            IConfiguration config = InitConfiguration().GetSection("FileShareService");
+            _fileShareServiceConfig = Options.Create(config.Get<FileShareServiceConfiguration>());
+            _fileShareService = new FileShareService(_httpClientFactory, _fileShareServiceConfig, _logger);
 
         }
 
@@ -48,8 +54,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             int year = 2022, week = 16;
             string searchText = $"BusinessUnit eq 'Test' and $batch(Product Type) eq 'Notices to Mariners' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
-            var result = _fileShareService.FssWeeklySearchAsync(searchText, accessToken);
-            Assert.IsInstanceOf<BatchSearchResponse>(result);
+            var result = await _fileShareService.FssWeeklySearchAsync(searchText, accessToken);
+            Assert.IsInstanceOf<IResult<BatchSearchResponse>>(result);
         }
     }
 }

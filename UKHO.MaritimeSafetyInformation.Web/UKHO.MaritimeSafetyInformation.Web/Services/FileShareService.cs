@@ -1,4 +1,5 @@
-﻿using UKHO.FileShareClient;
+﻿using Microsoft.Extensions.Options;
+using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Configuration;
@@ -9,14 +10,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public class FileShareService : IFileShareService
     {
         private readonly IHttpClientFactory httpClientFactory;
-        private readonly IConfiguration configuration;
-        private readonly FileShareServiceConfiguration fileShareServiceConfig;
+        private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
         private readonly ILogger<FileShareService> _logger;
-        public FileShareService(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<FileShareService> logger)
+        public FileShareService(IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<FileShareService> logger)
         {
             this.httpClientFactory = httpClientFactory;
-            this.configuration = configuration;
-            this.fileShareServiceConfig = configuration.GetSection("FileShareService").Get<FileShareServiceConfiguration>();
+            this.fileShareServiceConfig = fileShareServiceConfig;
             _logger = logger;
 
         }
@@ -26,7 +25,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.RetrievalOfMSIBatchSearchResponse.ToEventId(), "Maritime safety information request batch search response started");
 
-                FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, fileShareServiceConfig.BaseUrl, accessToken);
+                FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
                 IResult<BatchSearchResponse> result = await fileShareApi.Search(searchText, 100, 0, CancellationToken.None);
                 return result;
             }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using Microsoft.Extensions.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
+using Microsoft.Extensions.Options;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
@@ -20,8 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     {
         private IHttpClientFactory _fakehttpClientFactory;
         private IFileShareService _fakefileShareService;
-        private IConfiguration _fakeconfiguration;
-        private FileShareServiceConfiguration _fakefileShareServiceConfig;
+        private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private ILogger<NMDataService> fakeLogger;
         private NMDataService _fakeNMDataService;
 
@@ -30,10 +30,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _fakehttpClientFactory = A.Fake<IHttpClientFactory>();
             _fakefileShareService = A.Fake<IFileShareService>();
-            _fakeconfiguration = A.Fake<IConfiguration>();
-            _fakefileShareServiceConfig = A.Fake<FileShareServiceConfiguration>();
+            _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             fakeLogger = A.Fake<ILogger<NMDataService>>();
-            _fakeNMDataService = new NMDataService(_fakefileShareService,_fakehttpClientFactory,_fakeconfiguration, fakeLogger);
+            _fakeNMDataService = new NMDataService(_fakefileShareService,_fakehttpClientFactory, _fileShareServiceConfig, fakeLogger);
         }
 
 

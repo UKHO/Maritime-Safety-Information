@@ -18,18 +18,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
     public class NoticestoMarinersControllerTest
     {
         private NoticestoMarinersController controller;
-        private INMDataService fakeTidalApiService;
-        private ILogger<NoticestoMarinersController> fakeLogger;
+        private INMDataService nMService;
+        private ILogger<NoticestoMarinersController> logger;
         private IHttpClientFactory httpClientFactory;
         private IHttpContextAccessor contextAccessor;
 
         [SetUp]
         public void Setup()
         {
-            fakeTidalApiService = A.Fake<INMDataService>();
+            nMService = A.Fake<INMDataService>();
             httpClientFactory = A.Fake<IHttpClientFactory>();
-            fakeLogger = A.Fake<ILogger<NoticestoMarinersController>>();
-            controller = new NoticestoMarinersController(httpClientFactory, fakeTidalApiService, contextAccessor, fakeLogger);
+            logger = A.Fake<ILogger<NoticestoMarinersController>>();
+            contextAccessor = A.Fake<IHttpContextAccessor>();
+            A.CallTo(() => contextAccessor.HttpContext).Returns(new DefaultHttpContext());
+            controller = new NoticestoMarinersController(httpClientFactory, nMService, contextAccessor, logger);
         }
 
         [Test]
