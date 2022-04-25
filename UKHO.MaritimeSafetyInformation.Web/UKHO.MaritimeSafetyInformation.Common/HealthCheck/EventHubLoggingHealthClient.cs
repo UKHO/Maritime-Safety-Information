@@ -11,7 +11,7 @@ using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 
-namespace UKHO.MaritimeSafetyInformation.Web.HealthCheck
+namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
 {
     [ExcludeFromCodeCoverage]
     public class EventHubLoggingHealthClient : IEventHubLoggingHealthClient

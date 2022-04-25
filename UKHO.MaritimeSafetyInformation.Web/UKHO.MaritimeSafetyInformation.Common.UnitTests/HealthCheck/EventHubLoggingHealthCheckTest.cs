@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using UKHO.MaritimeSafetyInformation.Web.HealthCheck;
+using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
 namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
 {

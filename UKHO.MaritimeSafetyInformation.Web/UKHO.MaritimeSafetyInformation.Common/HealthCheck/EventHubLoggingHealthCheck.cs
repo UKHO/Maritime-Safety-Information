@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 
-namespace UKHO.MaritimeSafetyInformation.Web.HealthCheck
+namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
 {
     public class EventHubLoggingHealthCheck :IHealthCheck
     {

@@ -6,7 +6,7 @@ using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
-using UKHO.MaritimeSafetyInformation.Web.HealthCheck;
+using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
