@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Azure.Core;
 using Microsoft.Identity.Client;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common;
@@ -18,8 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly ILogger<NMDataService> _logger;
         private readonly FileShareServiceConfiguration fileShareServiceConfig;
         private readonly NMHelper nMHelper;
-        private readonly TokenCredential tokenCredential;
-        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<NMDataService> logger, TokenCredential _tokenCredential)
+        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<NMDataService> logger)
         {
             this.fileShareService = fileShareService;
             this.httpClientFactory = httpClientFactory;
@@ -27,7 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             this.fileShareServiceConfig = configuration.GetSection("FileShareService").Get<FileShareServiceConfiguration>();
             _logger = logger;
             nMHelper = new NMHelper();
-            tokenCredential = _tokenCredential;
+           
         }
         public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
         {
