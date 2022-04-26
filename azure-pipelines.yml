@@ -289,10 +289,6 @@ stages:
               npm ci
              displayName: 'npm restore'
 
-           - script: |
-             npx playwright install --with-deps
-             displayName: 'playwright install'
-
            - task: FileTransform@1
              inputs:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
