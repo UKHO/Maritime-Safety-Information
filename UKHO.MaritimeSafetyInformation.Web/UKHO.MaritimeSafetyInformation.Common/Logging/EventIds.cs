@@ -12,18 +12,31 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910002 - Maritime safety information request started.
         /// </summary>
         Start = 910002,
-        RetrievalOfMSIShowWeeklyFilesRequest = 910003,
-        RetrievalOfMSIShowWeeklyFilesCompleted = 910003,
-        RetrievalOfMSIShowFilesResponseStarted = 910004,
-        RetrievalOfMSIShowFilesResponseDataFound = 910005,
-        RetrievalOfMSIShowFilesResponseDataFoundNotFound = 910006,
-        RetrievalOfMSIShowFilesResponseFailed = 910007,
-        RetrievalOfMSIGetPastYearsStart = 910008,
-        RetrievalOfMSIGetPastYearsFailed = 910009,
-        RetrievalOfMSIGetAllWeeksofYearStart = 910010,
-        RetrievalOfMSIGetAllWeeksofYearFailed = 910011,
-        RetrievalOfMSIBatchSearchResponse = 910012,
-        RetrievalOfMSIBatchSearchResponseFailed = 910013,
+        /// <summary>
+        /// 910003 - Event hub for Maritime safety information is healthy.
+        /// </summary>
+        EventHubLoggingIsHealthy = 910003,
+        /// <summary>
+        /// 910004 - Event hub for Maritime safety information is unhealthy.
+        /// </summary>
+        EventHubLoggingIsUnhealthy = 910004,
+        /// <summary>
+        /// 910005 -  Event data for Maritime safety information event hub health check.
+        /// </summary>
+        EventHubLoggingEventDataForHealthCheck = 910005,
+
+        RetrievalOfMSIShowWeeklyFilesRequest = 910006,
+        RetrievalOfMSIShowWeeklyFilesCompleted = 910007,
+        RetrievalOfMSIShowFilesResponseStarted = 910008,
+        RetrievalOfMSIShowFilesResponseDataFound = 910009,
+        RetrievalOfMSIShowFilesResponseDataFoundNotFound = 910010,
+        RetrievalOfMSIShowFilesResponseFailed = 910011,
+        RetrievalOfMSIGetPastYearsStart = 910012,
+        RetrievalOfMSIGetPastYearsFailed = 910013,
+        RetrievalOfMSIGetAllWeeksofYearStart = 910014,
+        RetrievalOfMSIGetAllWeeksofYearFailed = 910015,
+        RetrievalOfMSIBatchSearchResponse = 910016,
+        RetrievalOfMSIBatchSearchResponseFailed = 910017,
         RetrievalOfMSIFailed = 10019,
         UnhandledCleanUpException = 10071
     }

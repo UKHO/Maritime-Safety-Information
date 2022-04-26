@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -35,6 +34,15 @@
     <PackageReference Include="UKHO.FileShareAdminClient" Version="1.1.20225.10" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.1.20225.10" />
     <PackageReference Include="UKHO.WeekNumberUtils" Version="1.5.21167.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
