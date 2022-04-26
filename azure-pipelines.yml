@@ -241,11 +241,12 @@ stages:
              inputs:
               versionSpec: '14.x'
              displayName: 'Install Node.js'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
            - script: |
-              npm install
               npm ci
              displayName: 'npm restore'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
            - task: FileTransform@1
              inputs:
@@ -287,7 +288,6 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
-              npm install
               npm ci
              displayName: 'npm restore'
 
