@@ -31,6 +31,8 @@ variables:
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
+  - name: WindowsPool
+    value: "NautilusBuild"
 
 
 stages:
