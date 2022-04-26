@@ -243,6 +243,7 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
+              npm install -g @angular/cli
               npm ci
              displayName: 'npm restore'
 
@@ -256,6 +257,7 @@ stages:
               npm run test:auto
              continueOnError: false
              displayName: 'Run Functional Tests'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
            - task: PublishTestResults@2
              condition: succeededOrFailed()
@@ -285,6 +287,7 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
+              npm install -g @angular/cli
               npm ci
              displayName: 'npm restore'
 
@@ -296,8 +299,8 @@ stages:
 
            - script: |
               npm run test:a11y
-             continueOnError: false
              displayName: 'Run Accessibility Tests'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
 
            - task: PublishTestResults@2
              condition: succeededOrFailed()
