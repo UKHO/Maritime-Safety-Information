@@ -42,10 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareApiClient = A.Fake<IFileShareApiClient>();
             _fileShareService = new FileShareService(_httpClientFactory, _fileShareServiceConfig, _logger);
 
-        }
-
-        
-        
+        }        
 
         [Test]
         public void FssWeeklySearchAsync()
