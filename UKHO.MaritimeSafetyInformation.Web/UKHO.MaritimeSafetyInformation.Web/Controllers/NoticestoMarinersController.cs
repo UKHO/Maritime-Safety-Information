@@ -1,10 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using Newtonsoft.Json;
-using UKHO.FileShareClient;
-using UKHO.FileShareClient.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;

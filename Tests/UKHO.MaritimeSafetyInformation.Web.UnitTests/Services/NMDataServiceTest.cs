@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using FakeItEasy;
-using NUnit.Framework;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using Microsoft.Extensions.Configuration;
-using UKHO.MaritimeSafetyInformation.Web.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using System.Globalization;
-using UKHO.MaritimeSafetyInformation.Common.Models;
-using Azure.Core;
-using System.Threading;
-using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common.Helper;
-using UKHO.MaritimeSafetyInformation.Common;
 using Microsoft.Identity.Client;
+using NUnit.Framework;
+using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Helper;
+using UKHO.MaritimeSafetyInformation.Common.Models;
+using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
