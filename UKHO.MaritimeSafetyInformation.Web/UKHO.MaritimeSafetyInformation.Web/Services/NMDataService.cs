@@ -38,8 +38,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new List<ShowFilesResponseModel>();
             try
             {
-                //AuthFssTokenProvider authFssTokenProvider = new AuthFssTokenProvider();
-                //AuthenticationResult authentication = await authFssTokenProvider.GetAuthTokenAsync();
                 AuthenticationResult authentication = await _authFssTokenProvider.GetAuthTokenAsync();
                 string accessToken = authentication.AccessToken;
 
