@@ -243,13 +243,9 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
-              npm install -g @angular/cli
+              npm install
               npm ci
              displayName: 'npm restore'
-
-           - script: |
-              npx playwright install
-             displayName: 'Playwright install'
 
            - task: FileTransform@1
              inputs:
@@ -291,13 +287,9 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
-              npm install -g @angular/cli
+              npm install
               npm ci
              displayName: 'npm restore'
-
-           - script: |
-              npm i
-             displayName: 'Playwright install'
 
            - task: FileTransform@1
              inputs:
