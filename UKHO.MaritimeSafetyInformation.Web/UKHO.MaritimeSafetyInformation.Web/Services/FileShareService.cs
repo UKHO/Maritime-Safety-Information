@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.RetrievalOfMSIBatchSearchResponse.ToEventId(), "Maritime safety information request batch search response started");
 
                 FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
-                IResult<BatchSearchResponse> result = await fileShareApi.Search(searchText, 100, 0, CancellationToken.None);
+                IResult<BatchSearchResponse> result = await fileShareApi.Search(searchText, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
                 return result;
             }
             catch (Exception ex)
