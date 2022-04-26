@@ -1,16 +1,48 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
 namespace UKHO.MaritimeSafetyInformation.Common
 {
     public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
+
+        private readonly IOptions<AzureADConfiguration> azureADConfiguration;
+        public AuthFssTokenProvider(IOptions<AzureADConfiguration> _azureADConfiguration)
+        {
+            azureADConfiguration = _azureADConfiguration;
+        }
         public async Task<AuthenticationResult> GetAuthTokenAsync()
         {
-            string? tenantId = "9134ca48-663d-4a05-968a-31a42f0aed3e";
-            string[]? scopes = new[] { $"805be024-a208-40fb-ab6f-399c2647d334/.default" };
+            AuthenticationResult authenticationResult;
+#if(DEBUG)
+            authenticationResult  = await GenerateAccessTokenLocal();
+            return authenticationResult;
+#else
+            authenticationResult  = await GenerateADAccessToken();
+#endif
+
+
+        }
+        public async Task<AuthenticationResult> GenerateADAccessToken()
+        {
+           
+
+            string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
+            IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(azureADConfiguration.Value.ClientId)
+            .WithClientSecret(azureADConfiguration.Value.ClientSecret)
+            .WithAuthority(new Uri(azureADConfiguration.Value.MicrosoftOnlineLoginUrl + azureADConfiguration.Value.TenantId))
+            .Build(); AuthenticationResult authenticationResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
+            return authenticationResult;
+        }
+
+        public async Task<AuthenticationResult> GenerateAccessTokenLocal()
+        {   
+            string? tenantId = azureADConfiguration.Value.TenantId;
+            string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
 
             var publicClientApplication = PublicClientApplicationBuilder
-              .Create("805be024-a208-40fb-ab6f-399c2647d334")
+              .Create(azureADConfiguration.Value.Scope)
               .WithAuthority(AzureCloudInstance.AzurePublic, tenantId)
               .WithDefaultRedirectUri()
               .Build();

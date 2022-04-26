@@ -12,6 +12,8 @@ using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -54,6 +56,31 @@ namespace UKHO.MaritimeSafetyInformation.Web
             
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+
+            services.Configure<AzureADConfiguration>(configuration.GetSection("AuthConfiguration"));
+
+
+            var AuthConfiguration = new AzureADConfiguration();
+            configuration.Bind("AuthConfiguration", AuthConfiguration);
+
+
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer("AzureAD", options =>
+            {
+                options.Audience = AuthConfiguration.ClientId;
+                options.Authority = $"{AuthConfiguration.MicrosoftOnlineLoginUrl}{AuthConfiguration.TenantId}";
+            });
+
+
+
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .AddAuthenticationSchemes("AzureAD")
+                .Build();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

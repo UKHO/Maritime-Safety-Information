@@ -42,6 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 string accessToken = authentication.AccessToken;
 
                 _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
+
                 string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
                 var result = await fileShareService.FssWeeklySearchAsync(searchText, accessToken);
 
