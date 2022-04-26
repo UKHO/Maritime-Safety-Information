@@ -19,6 +19,8 @@ using Azure.Core;
 using System.Threading;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helper;
+using UKHO.MaritimeSafetyInformation.Common;
+using Microsoft.Identity.Client;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
@@ -32,6 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private ILogger<NMDataService> _fakeLogger;
         private ILogger<NMDataService> fakeLogger;
         private NMHelper _fakenMHelper;
+        private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
 
         private NMDataService _fakeNMDataService;
 
@@ -42,190 +45,117 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakefileShareService = A.Fake<IFileShareService>();
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             fakeLogger = A.Fake<ILogger<NMDataService>>();
-            _fakeNMDataService = new NMDataService(_fakefileShareService,_fakehttpClientFactory, _fileShareServiceConfig, fakeLogger);
             _fakeLogger = A.Fake<ILogger<NMDataService>>();
             _fakenMHelper = A.Fake<NMHelper>();
+            _fakeAuthFssTokenProvider = A.Fake<AuthFssTokenProvider>();
 
-            _fakeNMDataService = new NMDataService(_fakefileShareService,_fakehttpClientFactory,_fakeconfiguration,_fakeLogger);
+            _fakeNMDataService = new NMDataService(_fakefileShareService, _fakehttpClientFactory, _fileShareServiceConfig, fakeLogger, _fakeAuthFssTokenProvider);
         }
 
 
-        //[Test]
-        //public void GetShowFilesResponses_CheckConversionisProper()
-        //{
-        //    BatchSearchResponse SearchResult = new BatchSearchResponse() {
-        //        Count = 2,
-        //        Links = null,
-        //        Total = 0,
-        //        Entries = new List<BatchDetails>() {
-        //            new BatchDetails() {
-        //                BatchId = "1",
-        //                Files = new List<BatchDetailsFiles>() {
-        //                    new BatchDetailsFiles () {
-        //                        Filename = "aaa.pdf",
-        //                        FileSize=1232,
-        //                        MimeType = "PDF",
-        //                        Links = null
-        //                    },
-        //                    new BatchDetailsFiles () {
-        //                        Filename = "bbb.pdf",
-        //                        FileSize=1232,
-        //                        MimeType = "PDF",
-        //                        Links = null
-        //                    }
-        //                }
-                        
-        //            },
-        //            new BatchDetails() {
-        //                BatchId = "2",
-        //                Files = new List<BatchDetailsFiles>() {
-        //                    new BatchDetailsFiles () {
-        //                        Filename = "ccc.pdf",
-        //                        FileSize=1232,
-        //                        MimeType = "PDF",
-        //                        Links = null
-        //                    },
-        //                    new BatchDetailsFiles () {
-        //                        Filename = "ddd.pdf",
-        //                        FileSize=1232,
-        //                        MimeType = "PDF",
-        //                        Links = null
-        //                    }
-        //                }
+        [Test]
+        public  void GetBatchDetailsFiles()
+        {
+            int year = 2022; int week = 15;
+            
 
-        //            }
-        //        }
-        //    };
 
-        //    List<ShowFilesResponseModel> expected = new List<ShowFilesResponseModel>() {
-        //        new ShowFilesResponseModel() {
-        //                BatchId = "1",
-        //                Filename = "aaa.pdf",
-        //                FileDescription = "aaa",
-        //                FileExtension = ".pdf",
-        //                FileSize = 1232,
-        //                FileSizeinKB = "1.2 KB",
-        //                MimeType = "PDF",
-        //                Links = null
-        //        },
-        //        new ShowFilesResponseModel() {
-        //                BatchId = "1",
-        //                Filename = "bbb.pdf",
-        //                FileDescription = "bbb",
-        //                FileExtension = ".pdf",
-        //                FileSize = 1232,
-        //                FileSizeinKB = "1.2 KB",
-        //                MimeType = "PDF",
-        //                Links = null
-        //        },
-        //        new ShowFilesResponseModel() {
-        //                BatchId = "2",
-        //                Filename = "ccc.pdf",
-        //                FileDescription = "ccc",
-        //                FileExtension = ".pdf",
-        //                FileSize = 1232,
-        //                FileSizeinKB = "1.2 KB",
-        //                MimeType = "PDF",
-        //                Links = null
-        //        },
-        //        new ShowFilesResponseModel() {
-        //                BatchId = "2",
-        //                Filename = "ddd.pdf",
-        //                FileDescription = "ddd",
-        //                FileExtension = ".pdf",
-        //                FileSize = 1232,
-        //                FileSizeinKB = "1.2 KB",
-        //                MimeType = "PDF",
-        //                Links = null
-        //        }
-        //    };
+            Task<AuthenticationResult> authentication = _fakeAuthFssTokenProvider.GetAuthTokenAsync();
+            Task<IResult<BatchSearchResponse>> res = null;
+            A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("","")).Returns(res);
 
-        //    List<ShowFilesResponseModel> result = _fakeNMDataService.GetShowFilesResponses(SearchResult);
+            BatchSearchResponse SearchResult = new BatchSearchResponse()
+            {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "aaa.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "bbb.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
 
-        //    Assert.Multiple(() =>
-        //    {
-        //        for (int i = 0; i < result.Count; i++)
-        //        {
-        //            Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-        //            Assert.AreEqual(expected[i].Filename, result[i].Filename);
-        //            Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-        //            Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-        //            Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-        //            Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-        //            Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
-        //        }
-        //    });
-        //}
+                        },
+                        new BatchDetails() {
+                            BatchId = "2",
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "ccc.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "ddd.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
 
-        //private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
-        //[Test]
-        //public void FormatSize_SizeLessthan1024()
-        //{
-        //    long bytes = 100;
-        //    string expected = "100.0 Bytes";
-        //    string result = _fakeNMDataService.FormatSize(bytes);
-        //    Assert.AreEqual(expected, result);
-        //}
+                        }
+                    }
+            };
 
-        //[Test]
-        //public void FormatSize_SizeInKB()
-        //{
-        //    long bytes = 1232;
-        //    string expected = "1.2 KB";
-        //    string result = _fakeNMDataService.FormatSize(bytes);
-        //    Assert.AreEqual(expected, result);
-        //}
+            List<ShowFilesResponseModel> expected = new List<ShowFilesResponseModel>() {
+                    new ShowFilesResponseModel() {
+                            BatchId = "1",
+                            Filename = "aaa.pdf",
+                            FileDescription = "aaa",
+                            FileExtension = ".pdf",
+                            FileSize = 1232,
+                            FileSizeinKB = "1.2 KB",
+                            MimeType = "PDF",
+                            Links = null
+                    },
+                    new ShowFilesResponseModel() {
+                            BatchId = "1",
+                            Filename = "bbb.pdf",
+                            FileDescription = "bbb",
+                            FileExtension = ".pdf",
+                            FileSize = 1232,
+                            FileSizeinKB = "1.2 KB",
+                            MimeType = "PDF",
+                            Links = null
+                    },
+                    new ShowFilesResponseModel() {
+                            BatchId = "2",
+                            Filename = "ccc.pdf",
+                            FileDescription = "ccc",
+                            FileExtension = ".pdf",
+                            FileSize = 1232,
+                            FileSizeinKB = "1.2 KB",
+                            MimeType = "PDF",
+                            Links = null
+                    },
+                    new ShowFilesResponseModel() {
+                            BatchId = "2",
+                            Filename = "ddd.pdf",
+                            FileDescription = "ddd",
+                            FileExtension = ".pdf",
+                            FileSize = 1232,
+                            FileSizeinKB = "1.2 KB",
+                            MimeType = "PDF",
+                            Links = null
+                    }
+                };
+            string expectedstatus = "RanToCompletion";
+           Task< List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetBatchDetailsFiles(year, week);
+            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
 
-        //[Test]
-        //public void FormatSize_SizeInMB()
-        //{
-        //    long bytes = 1234567;
-        //    string expected = "1.2 MB";
-        //    string result = _fakeNMDataService.FormatSize(bytes);
-        //    Assert.AreEqual(expected, result);
-        //}
-
-        //[Test]
-        //public void GetNewAuthToken_ForNotNullResource()
-        //{
-        //    string resource = "MSI";
-
-        //    AccessTokenItem accessTokenItem = new AccessTokenItem
-        //    {
-        //        ExpiresIn = DateTime.Now.AddHours(1)/*accessToken.ExpiresOn.UtcDateTime*/,
-        //        AccessToken =  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyIsImtpZCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyJ9.eyJhdWQiOiI4MDViZTAyNC1hMjA4LTQwZmItYWI2Zi0zOTljMjY0N2QzMzQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UvIiwiaWF0IjoxNjQ5MjM4OTIwLCJuYmYiOjE2NDkyMzg5MjAsImV4cCI6MTY0OTI0NDU2OSwiYWNyIjoiMSIsImFpbyI6IkFWUUFxLzhUQUFBQW5YVFVTMWtDL3l4ZTJ5R1Nlc1JBVkk5NkJkNXFnTThYNDNkWlorQ1l4eGFGWFFySWpVSkVGVkJsVVMrZDJaUkJOQ3JrNXpMaEVXOW5XK2s4aElHSE9YckU1V1FsNnR1YlhDSURiUTZTZkpRPSIsImFtciI6WyJwd2QiLCJyc2EiXSwiYXBwaWQiOiI4MDViZTAyNC1hMjA4LTQwZmItYWI2Zi0zOTljMjY0N2QzMzQiLCJhcHBpZGFjciI6IjAiLCJlbWFpbCI6Im1vaGFtbWUxNTMxNUBtYXN0ZWsuY29tIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYWRkMWM1MDAtYTZkNy00ZGJkLWI4OTAtN2Y4Y2I2ZjdkODYxLyIsImlwYWRkciI6IjIyMy4xODQuMjU0LjE1NCIsIm5hbWUiOiJNb2hhbW1lZCBLaGFuIiwib2lkIjoiMDEzMDU1Y2ItZWQ2Mi00NmQyLWFkZTgtMzhmY2NkNjQwYWE2IiwicmgiOiIwLkFWTUFTTW8wa1QxbUJVcVdpakdrTHdydFBpVGdXNEFJb3Z0QXEyODVuQ1pIMHpRQ0FBNC4iLCJyb2xlcyI6WyJCYXRjaENyZWF0ZSJdLCJzY3AiOiJVc2VyLlJlYWQiLCJzdWIiOiJnZHBHdUE3dVNmT0djRG5LZWZmTjUxdkFQNldraEo2V3Fsd05pWlIyT2o0IiwidGlkIjoiOTEzNGNhNDgtNjYzZC00YTA1LTk2OGEtMzFhNDJmMGFlZDNlIiwidW5pcXVlX25hbWUiOiJtb2hhbW1lMTUzMTVAbWFzdGVrLmNvbSIsInV0aSI6IlcxeHZYbllfLVVpeS1POVZTTGU4QUEiLCJ2ZXIiOiIxLjAifQ.l0I0fST2hJoNKAZrNiCWINcCJf9E9odSTVPAegqF9ra2AHYS3Ba4WFHxP6KwT6KhreVc3nsRDQkASlmUOvqBxKhP0c5Xrl2l6w4I_6MmqqT81z1D3p9zbYKF7x4zUMfBlvzX6LW5czjTiocGC4iU42Mnil_H4ufVOPbXeu8dOfm05LZ2Rl8YKbyzRwg2V0l9XePXhWQpe9uFoKyDSfplmf2aeHETv1OwtY3sDVnjEXK5fuS5N9KsXM8eNfnq930IkszLAy11lj05yUXoQa7TTe8VZBN2mo9KTFGG6EYzDE4OFbGcRgQCORjT9ifr606p0Kc-fc2U9ayX4h0_Nvb9eg" 
-        //    };
-
-        //    CancellationToken cancellationToken = new CancellationToken();
-        //    TokenRequestContext tokenRequestContext = new TokenRequestContext(scopes: new string[] { resource + "/.default" }) { };
-        //    AccessToken accessToken = new AccessToken();
-        //    A.CallTo(() => _faketokenCredential.GetTokenAsync(tokenRequestContext, cancellationToken)).Returns(accessToken);
-
-        //    Task<AccessTokenItem> result = _fakeNMDataService.GetNewAuthToken(resource);
-
-        //    Assert.AreEqual(accessTokenItem.AccessToken, result.Result.AccessToken);
-        //}
-
-        //[Test]
-        //public void GetNewAuthToken_ForNullResource()
-        //{
-        //    string resource = null;
-
-        //    AccessTokenItem accessTokenItem = new AccessTokenItem
-        //    {
-        //        ExpiresIn = DateTime.Now.AddHours(1)/*accessToken.ExpiresOn.UtcDateTime*/,
-        //        AccessToken  = null
-        //    };
-
-        //    CancellationToken cancellationToken = new CancellationToken();
-        //    TokenRequestContext tokenRequestContext = new TokenRequestContext(scopes: new string[] { resource + "/.default" }) { };
-        //    AccessToken accessToken = new AccessToken();
-        //    A.CallTo(() => _faketokenCredential.GetTokenAsync(tokenRequestContext, cancellationToken)).Returns(accessToken);
-
-        //    Task<AccessTokenItem> result = _fakeNMDataService.GetNewAuthToken(resource);
-
-        //    Assert.AreEqual(accessTokenItem.AccessToken,result.Result.AccessToken);
-        //}
+        }
 
         [Test]
         public void GetAllWeeksofYear_ForCurrentYearShouldReturnWeeksPassedTillNow()

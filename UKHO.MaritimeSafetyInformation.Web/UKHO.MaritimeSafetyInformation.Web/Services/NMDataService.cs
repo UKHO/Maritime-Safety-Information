@@ -20,22 +20,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly ILogger<NMDataService> _logger;
         private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
         private readonly NMHelper nMHelper;
-        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<NMDataService> logger)
+
+        private readonly IAuthFssTokenProvider _authFssTokenProvider;
+        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
             this.fileShareService = fileShareService;
             this.httpClientFactory = httpClientFactory;
             this.fileShareServiceConfig = fileShareServiceConfig;
             _logger = logger;
             nMHelper = new NMHelper();
-           
+            _authFssTokenProvider = authFssTokenProvider;
+
+
         }
         public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new List<ShowFilesResponseModel>();
             try
             {
-                AuthFssTokenProvider authFssTokenProvider = new AuthFssTokenProvider();
-                AuthenticationResult authentication = await authFssTokenProvider.GetAuthTokenAsync();
+                //AuthFssTokenProvider authFssTokenProvider = new AuthFssTokenProvider();
+                //AuthenticationResult authentication = await authFssTokenProvider.GetAuthTokenAsync();
+                AuthenticationResult authentication = await _authFssTokenProvider.GetAuthTokenAsync();
                 string accessToken = authentication.AccessToken;
 
                 _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");

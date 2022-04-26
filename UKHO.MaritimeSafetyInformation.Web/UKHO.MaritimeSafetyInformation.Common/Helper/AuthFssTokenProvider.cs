@@ -2,7 +2,7 @@
 
 namespace UKHO.MaritimeSafetyInformation.Common
 {
-    public class AuthFssTokenProvider
+    public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
         public async Task<AuthenticationResult> GetAuthTokenAsync()
         {
