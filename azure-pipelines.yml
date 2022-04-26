@@ -248,7 +248,7 @@ stages:
              displayName: 'npm restore'
 
            - script: |
-              npx playwright install --with-deps
+              npx playwright install
              displayName: 'Playwright install'
 
            - task: FileTransform@1
@@ -296,7 +296,7 @@ stages:
              displayName: 'npm restore'
 
            - script: |
-              npx playwright install --with-deps
+              npx playwright install
              displayName: 'Playwright install'
 
            - task: FileTransform@1
