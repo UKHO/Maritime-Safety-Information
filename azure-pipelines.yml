@@ -301,9 +301,9 @@ stages:
               fileType: 'json'
               targetFiles: 'appConfig.json'
 
-          - script: |
+           - script: |
               npm run build
-            displayName: 'npm build'
+             displayName: 'npm build'
 
            - script: |
               npm run test:a11y
