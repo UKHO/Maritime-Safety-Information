@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Microsoft.Extensions.Options;
 using Azure.Core;
 using Microsoft.Identity.Client;
 using UKHO.FileShareClient.Models;
@@ -17,14 +18,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IFileShareService fileShareService;
         private readonly IConfiguration configuration;
         private readonly ILogger<NMDataService> _logger;
-        private readonly FileShareServiceConfiguration fileShareServiceConfig;
+        private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
         private readonly NMHelper nMHelper;
-        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<NMDataService> logger)
+        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<NMDataService> logger)
         {
             this.fileShareService = fileShareService;
             this.httpClientFactory = httpClientFactory;
-            this.configuration = configuration;
-            this.fileShareServiceConfig = configuration.GetSection("FileShareService").Get<FileShareServiceConfiguration>();
+            this.fileShareServiceConfig = fileShareServiceConfig;
             _logger = logger;
             nMHelper = new NMHelper();
            
@@ -39,7 +39,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 string accessToken = authentication.AccessToken;
 
                 _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
-                string searchText = $"BusinessUnit eq '{fileShareServiceConfig.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
+                string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
                 var result = await fileShareService.FssWeeklySearchAsync(searchText, accessToken);
 
                 BatchSearchResponse SearchResult = result.Data;

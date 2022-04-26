@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Web.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -43,6 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.AddApplicationInsightsTelemetry();
             services.AddHttpClient();
+            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
             
