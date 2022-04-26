@@ -3,56 +3,55 @@
 @{
     ViewData["Title"] = "Create";
 }
+<div class="container-fluid">
 
-<h1>Create</h1>
+<h1>Create Radio Navigational Warnings</h1>
 
-<h4>RadioNavigationalWarnings</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="WarningType" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="WarningType" class="form-label"></label>
                 <input asp-for="WarningType" class="form-control" />
                 <span asp-validation-for="WarningType" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Reference" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Reference" class="form-label"></label>
                 <input asp-for="Reference" class="form-control" />
                 <span asp-validation-for="Reference" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DateTimeGroup" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="DateTimeGroup" class="form-label"></label>
                 <input asp-for="DateTimeGroup" class="form-control" />
                 <span asp-validation-for="DateTimeGroup" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Text" class="form-label"></label>
                 <input asp-for="Text" class="form-control" />
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ExpiryDate" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="ExpiryDate" class="form-label"></label>
                 <input asp-for="ExpiryDate" class="form-control" />
                 <span asp-validation-for="ExpiryDate" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div class="mb-3 form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="ApprovalStatus" /> @Html.DisplayNameFor(model => model.ApprovalStatus)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="mb-3 form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -61,6 +60,7 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
+</div>
 </div>
 
 @section Scripts {
