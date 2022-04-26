@@ -16,7 +16,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     {
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IFileShareService fileShareService;
-        private readonly IConfiguration configuration;
         private readonly ILogger<NMDataService> _logger;
         private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
         private readonly NMHelper nMHelper;

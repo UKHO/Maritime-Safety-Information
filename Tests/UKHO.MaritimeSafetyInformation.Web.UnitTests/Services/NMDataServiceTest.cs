@@ -30,7 +30,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IHttpClientFactory _fakehttpClientFactory;
         private IFileShareService _fakefileShareService;
         private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
-        private IConfiguration _fakeconfiguration;
         private ILogger<NMDataService> _fakeLogger;
         private ILogger<NMDataService> fakeLogger;
         private NMHelper _fakenMHelper;

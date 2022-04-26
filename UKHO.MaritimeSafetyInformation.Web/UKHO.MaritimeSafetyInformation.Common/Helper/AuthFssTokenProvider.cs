@@ -17,29 +17,31 @@ namespace UKHO.MaritimeSafetyInformation.Common
         public async Task<AuthenticationResult> GetAuthTokenAsync()
         {
             AuthenticationResult authenticationResult;
-#if(DEBUG)
             authenticationResult = await GenerateAccessTokenLocal();
             return authenticationResult;
-#else
-            authenticationResult  = await GenerateADAccessToken();
-#endif
+            ////#if(DEBUG)
+            ////            authenticationResult = await GenerateAccessTokenLocal();
+            ////            return authenticationResult;
+            ////#else
+            ////            authenticationResult  = await GenerateADAccessToken();
+            ////#endif
         }
 
-        public async Task<AuthenticationResult> GenerateADAccessToken()
-        {
-
-
-            string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
-            IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(azureADConfiguration.Value.ClientId)
-            .WithClientSecret(azureADConfiguration.Value.ClientSecret)
-            .WithAuthority(new Uri(azureADConfiguration.Value.MicrosoftOnlineLoginUrl + azureADConfiguration.Value.TenantId))
-            .Build(); AuthenticationResult authenticationResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
-            return authenticationResult;
-        }
+       ////public async Task<AuthenticationResult> GenerateADAccessToken()
+       ////{
+       ////
+       ////
+       ////    string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
+       ////    IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(azureADConfiguration.Value.ClientId)
+       ////    .WithClientSecret(azureADConfiguration.Value.ClientSecret)
+       ////    .WithAuthority(new Uri(azureADConfiguration.Value.MicrosoftOnlineLoginUrl + azureADConfiguration.Value.TenantId))
+       ////    .Build(); AuthenticationResult authenticationResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
+       ////    return authenticationResult;
+       ////}
 
         public async Task<AuthenticationResult> GenerateAccessTokenLocal()
         {
-            string? tenantId = azureADConfiguration.Value.TenantId;
+            string tenantId = azureADConfiguration.Value.TenantId;
             string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
 
             var publicClientApplication = PublicClientApplicationBuilder
