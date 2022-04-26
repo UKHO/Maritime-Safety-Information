@@ -241,7 +241,6 @@ stages:
              inputs:
               versionSpec: '14.x'
              displayName: 'Install Node.js'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests/'
 
            - script: |
               npm ci
