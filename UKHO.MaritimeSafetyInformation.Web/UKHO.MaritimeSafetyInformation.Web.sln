@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.Web.UnitTests", "..\Tests\UKHO.MaritimeSafetyInformation.Web.UnitTests\UKHO.MaritimeSafetyInformation.Web.UnitTests.csproj", "{BF6409FA-1671-44BC-83C9-9652FEAB3FD5}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "UKHO.MaritimeSafetyInformation.Web.Database", "UKHO.MaritimeSafetyInformation.Web.Database\UKHO.MaritimeSafetyInformation.Web.Database.sqlproj", "{11186474-3757-4857-BB35-995DC2295D0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,12 @@ Global
 		{BF6409FA-1671-44BC-83C9-9652FEAB3FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF6409FA-1671-44BC-83C9-9652FEAB3FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF6409FA-1671-44BC-83C9-9652FEAB3FD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11186474-3757-4857-BB35-995DC2295D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11186474-3757-4857-BB35-995DC2295D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11186474-3757-4857-BB35-995DC2295D0E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{11186474-3757-4857-BB35-995DC2295D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11186474-3757-4857-BB35-995DC2295D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11186474-3757-4857-BB35-995DC2295D0E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
