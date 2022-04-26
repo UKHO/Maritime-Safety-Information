@@ -2,7 +2,7 @@
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Web.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services

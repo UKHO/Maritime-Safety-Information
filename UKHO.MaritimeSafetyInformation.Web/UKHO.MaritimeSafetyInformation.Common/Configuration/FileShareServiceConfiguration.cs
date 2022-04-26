@@ -1,4 +1,4 @@
-﻿namespace UKHO.MaritimeSafetyInformation.Web.Configuration
+﻿namespace UKHO.MaritimeSafetyInformation.Common.Configuration
 {
     public class FileShareServiceConfiguration
     {

@@ -14,7 +14,7 @@ using NUnit.Framework;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common;
-using UKHO.MaritimeSafetyInformation.Web.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
@@ -50,17 +50,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         
-        public async Task DoesFssWeeklySearchReturnBatchResponseAsync()
-        {
-            AuthFssTokenProvider authFssTokenProvider = new AuthFssTokenProvider();
-            AuthenticationResult authentication = await authFssTokenProvider.GetAuthTokenAsync();
-            string accessToken = authentication.AccessToken;
-            int year = 2022, week = 16;
-            string searchText = $"BusinessUnit eq 'Test' and $batch(Product Type) eq 'Notices to Mariners' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-
-            var result = await _fileShareService.FssWeeklySearchAsync(searchText, accessToken);
-            Assert.IsInstanceOf<IResult<BatchSearchResponse>>(result);
-        }
+        
 
         [Test]
         public void FssWeeklySearchAsync()

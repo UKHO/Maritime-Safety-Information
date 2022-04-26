@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using UKHO.MaritimeSafetyInformation.Web.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using Microsoft.Extensions.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using Microsoft.Extensions.Logging;
