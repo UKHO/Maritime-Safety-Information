@@ -61,9 +61,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
 
             Task<AuthenticationResult> authentication = _fakeAuthFssTokenProvider.GetAuthTokenAsync();
-            Task<IResult<BatchSearchResponse>> res = null;
-            A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("","")).Returns(res);
-
             BatchSearchResponse SearchResult = new BatchSearchResponse()
             {
                 Count = 2,
@@ -108,6 +105,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         }
                     }
             };
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("","")).Returns(res);
+
+            
 
             List<ShowFilesResponseModel> expected = new List<ShowFilesResponseModel>() {
                     new ShowFilesResponseModel() {
