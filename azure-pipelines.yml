@@ -249,7 +249,7 @@ stages:
 
            - task: FileTransform@1
              inputs:
-              folderPath: '$(Build.SourcesDirectory)\AutoTests\FunctionalTest'
+              folderPath: '$(Build.SourcesDirectory)\Configuration'
               fileType: 'json'
               targetFiles: 'appConfig.json'
 
@@ -293,7 +293,7 @@ stages:
 
            - task: FileTransform@1
              inputs:
-              folderPath: '$(Build.SourcesDirectory)\AutoTests\AccessebilityTest'
+              folderPath: '$(Build.SourcesDirectory)\Configuration'
               fileType: 'json'
               targetFiles: 'appConfig.json'
 
