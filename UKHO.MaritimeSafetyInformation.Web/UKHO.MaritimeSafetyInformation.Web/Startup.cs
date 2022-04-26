@@ -1,5 +1,6 @@
-﻿using Azure.Core;
-using Azure.Identity;
+﻿using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -7,13 +8,10 @@ using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
+using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -39,40 +37,36 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
+            services.Configure<AzureADConfiguration>(configuration.GetSection("AuthConfiguration"));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
+            services.AddScoped<INMDataService, NMDataService>();
+            services.AddScoped<IFileShareService, FileShareService>();
+            services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
-            services.AddApplicationInsightsTelemetry();
+
             services.AddHttpClient();
-            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
-            services.AddScoped<INMDataService, NMDataService>();
-            services.AddScoped<IFileShareService, FileShareService>();
-            services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-            
+
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
-
-            services.Configure<AzureADConfiguration>(configuration.GetSection("AuthConfiguration"));
-
+            services.AddApplicationInsightsTelemetry();
 
             var AuthConfiguration = new AzureADConfiguration();
             configuration.Bind("AuthConfiguration", AuthConfiguration);
 
-
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer("AzureAD", options =>
             {
                 options.Audience = AuthConfiguration.ClientId;
                 options.Authority = $"{AuthConfiguration.MicrosoftOnlineLoginUrl}{AuthConfiguration.TenantId}";
             });
-
-
 
             services.AddAuthorization(options =>
             {

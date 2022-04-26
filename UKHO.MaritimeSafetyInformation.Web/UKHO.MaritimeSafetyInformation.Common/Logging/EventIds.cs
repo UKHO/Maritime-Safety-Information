@@ -24,7 +24,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910005 -  Event data for Maritime safety information event hub health check.
         /// </summary>
         EventHubLoggingEventDataForHealthCheck = 910005,
-
+        /// <summary>
+        /// 910006 -  Event data for Retrieval of MSI Weekly File Request.
+        /// </summary>
         RetrievalOfMSIShowWeeklyFilesRequest = 910006,
         RetrievalOfMSIShowWeeklyFilesCompleted = 910007,
         RetrievalOfMSIShowFilesResponseStarted = 910008,
@@ -37,8 +39,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         RetrievalOfMSIGetAllWeeksofYearFailed = 910015,
         RetrievalOfMSIBatchSearchResponse = 910016,
         RetrievalOfMSIBatchSearchResponseFailed = 910017,
-        RetrievalOfMSIFailed = 10019,
-        UnhandledCleanUpException = 10071
+        RetrievalOfMSIFailed = 910018,
+        UnhandledCleanUpException = 910019
     }
 
     public static class EventIdExtensions

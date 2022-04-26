@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
@@ -12,6 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
         private readonly ILogger<FileShareService> _logger;
+
         public FileShareService(IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<FileShareService> logger)
         {
             this.httpClientFactory = httpClientFactory;
@@ -19,6 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
 
         }
+
         public async Task<IResult<BatchSearchResponse>> FssWeeklySearchAsync(string searchText, string accessToken)
         {
             try
@@ -34,7 +36,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.RetrievalOfMSIBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
                 throw;
             }
-
         }
     }
 }

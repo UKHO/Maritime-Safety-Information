@@ -8,25 +8,26 @@ namespace UKHO.MaritimeSafetyInformation.Common
     {
 
         private readonly IOptions<AzureADConfiguration> azureADConfiguration;
+
         public AuthFssTokenProvider(IOptions<AzureADConfiguration> _azureADConfiguration)
         {
             azureADConfiguration = _azureADConfiguration;
         }
+
         public async Task<AuthenticationResult> GetAuthTokenAsync()
         {
             AuthenticationResult authenticationResult;
 #if(DEBUG)
-            authenticationResult  = await GenerateAccessTokenLocal();
+            authenticationResult = await GenerateAccessTokenLocal();
             return authenticationResult;
 #else
             authenticationResult  = await GenerateADAccessToken();
 #endif
-
-
         }
+
         public async Task<AuthenticationResult> GenerateADAccessToken()
         {
-           
+
 
             string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
             IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(azureADConfiguration.Value.ClientId)
@@ -37,7 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
         }
 
         public async Task<AuthenticationResult> GenerateAccessTokenLocal()
-        {   
+        {
             string? tenantId = azureADConfiguration.Value.TenantId;
             string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
 
