@@ -1,7 +1,6 @@
 ﻿using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
@@ -27,6 +26,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
+            services.AddDbContext<RadioNavigationalWarningsContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("RadioNavigationalWarningsContext")));
+
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -42,11 +45,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });            
-            services.AddApplicationInsightsTelemetry();
+           
 
-            services.AddDbContext<RadioNavigationalWarningsContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("RadioNavigationalWarningsContext")));
-            
             services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
