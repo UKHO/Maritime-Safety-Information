@@ -243,6 +243,7 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
+              npm install -g @angular/cli
               npm ci
              displayName: 'npm restore'
 
@@ -286,6 +287,7 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
+              npm install -g @angular/cli
               npm ci
              displayName: 'npm restore'
 
