@@ -40,7 +40,7 @@ resources:
   - repository: covscan
     type: github
     name: UKHO/coverityscan-buildtemplates
-    endpoint: UKHO-Barrie
+    endpoint: UKHO
     ref: refs/heads/master
 
 stages:
