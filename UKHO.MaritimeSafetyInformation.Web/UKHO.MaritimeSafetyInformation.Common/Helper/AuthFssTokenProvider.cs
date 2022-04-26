@@ -50,7 +50,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
 
 
             using var cancellationSource = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-            TokenCacheHelper.EnableSerialization(publicClientApplication.UserTokenCache);
+            ////TokenCacheHelper.EnableSerialization(publicClientApplication.UserTokenCache);
             var accounts = (await publicClientApplication.GetAccountsAsync()).ToList();
             var authenticationResult = await publicClientApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
                     .ExecuteAsync(cancellationSource.Token)

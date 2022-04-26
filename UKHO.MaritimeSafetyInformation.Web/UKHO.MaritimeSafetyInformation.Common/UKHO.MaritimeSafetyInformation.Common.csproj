@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helper\AuthTokenProvider.cs" />
+    <Compile Remove="Helper\TokenCacheHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Logging\EventIds.cs" />
   </ItemGroup>
 
