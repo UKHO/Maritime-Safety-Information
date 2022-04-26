@@ -247,6 +247,10 @@ stages:
               npm ci
              displayName: 'npm restore'
 
+           - script: |
+              npx playwright install --with-deps
+             displayName: 'Playwright install'
+
            - task: FileTransform@1
              inputs:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
@@ -290,6 +294,10 @@ stages:
               npm install -g @angular/cli
               npm ci
              displayName: 'npm restore'
+
+           - script: |
+              npx playwright install --with-deps
+             displayName: 'Playwright install'
 
            - task: FileTransform@1
              inputs:
