@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,50 +10,48 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
 {
     [TestFixture]
-    public class NoticestoMarinersControllerTest
+    public class NoticesToMarinersControllerTest
     {
-        private NoticestoMarinersController controller;
-        private INMDataService nMService;
-        private ILogger<NoticestoMarinersController> logger;
-        private IHttpClientFactory httpClientFactory;
-        private IHttpContextAccessor contextAccessor;
+        private NoticesToMarinersController _controller;
+        private INMDataService _nMService;
+        private ILogger<NoticesToMarinersController> _logger;
+        private IHttpContextAccessor _contextAccessor;
 
         [SetUp]
         public void Setup()
         {
-            nMService = A.Fake<INMDataService>();
-            httpClientFactory = A.Fake<IHttpClientFactory>();
-            logger = A.Fake<ILogger<NoticestoMarinersController>>();
-            contextAccessor = A.Fake<IHttpContextAccessor>();
-            A.CallTo(() => contextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            controller = new NoticestoMarinersController(httpClientFactory, nMService, contextAccessor, logger);
+            _nMService = A.Fake<INMDataService>();
+            _logger = A.Fake<ILogger<NoticesToMarinersController>>();
+            _contextAccessor = A.Fake<IHttpContextAccessor>();
+            A.CallTo(() => _contextAccessor.HttpContext).Returns(new DefaultHttpContext());
+            _controller = new NoticesToMarinersController(_nMService, _contextAccessor, _logger);
         }
 
         [Test]
-        public void DoesIndexReturnsView()
+        public void WhenIndexIsCalled_ThenShouldReturnView()
         {
-            var result = controller.Index();
+            IActionResult result = _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
         }
         [Test]
-        public void DoesLoadYearsReturnsJson()
+        public void WhenLoadYearsIsCalled_ThenShouldReturnJson()
         {
-            var result = controller.LoadYears();
+            IActionResult result = _controller.LoadYears();
             Assert.IsInstanceOf<JsonResult>(result);
         }
         [Test]
-        public void DoesLoadWeeksReturnsJson()
+        public void WhenLoadWeeksIsCalled_ThenShouldReturnJson()
         {
             int year = 2022;
-            var result = controller.LoadWeeks(year);
+            IActionResult result = _controller.LoadWeeks(year);
             Assert.IsInstanceOf<JsonResult>(result);
         }
         [Test]
-        public async Task DoesShowWeeklyFilesReturnPartialViewAsync()
+        public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnPartialView()
         {
             int year = 2022;
             int week = 16;
-            var result = await controller.ShowWeeklyFilesAsync(year,week);
+            IActionResult result = await _controller.ShowWeeklyFilesAsync(year,week);
             Assert.IsInstanceOf<PartialViewResult>(result);
         }
 

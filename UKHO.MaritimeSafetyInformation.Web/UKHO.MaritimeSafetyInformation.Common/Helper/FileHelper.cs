@@ -15,7 +15,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helper
             decimal number = (decimal)bytes;
             while (Math.Round(number / 1024) >= 1)
             {
-                number = number / 1024;
+                number /= 1024;
                 counter++;
             }
             return string.Format("{0:n1} {1}", number, suffixes[counter]);

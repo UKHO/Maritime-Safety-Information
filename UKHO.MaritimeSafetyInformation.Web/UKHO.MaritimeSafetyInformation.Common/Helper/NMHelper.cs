@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UKHO.FileShareClient.Models;
+﻿using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Helper
 {
-    public class NMHelper
+    public static class NMHelper
     {
-        public List<ShowFilesResponseModel> GetShowFilesResponses(BatchSearchResponse SearchResult)
+        public static List<ShowFilesResponseModel> GetShowFilesResponses(BatchSearchResponse SearchResult)
         {
-            List<ShowFilesResponseModel> ListshowFilesResponseModels = new List<ShowFilesResponseModel>();
-            foreach (var item in SearchResult.Entries)
+            List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
+            foreach (BatchDetails item in SearchResult.Entries)
             {
-                foreach (var file in item.Files)
+                foreach (BatchDetailsFiles file in item.Files)
                 {
                     ListshowFilesResponseModels.Add(new ShowFilesResponseModel
                     {

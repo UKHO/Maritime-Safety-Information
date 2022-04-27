@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
         public static IConfiguration InitConfiguration()
         {
-            var config = new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
             return config;
@@ -42,64 +43,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareApiClient = A.Fake<IFileShareApiClient>();
             _fileShareService = new FileShareService(_httpClientFactory, _fileShareServiceConfig, _logger);
 
-        }        
+        }
 
         [Test]
-        public void FssWeeklySearchAsync()
+        public void WhenFssWeeklySearchAsyncIsCalled_ThenShouldCheckTypeOfInstance()
         {
             string searchText = "";
             string accessToken = "";
 
-            BatchSearchResponse SearchResult = new BatchSearchResponse()
-            {
-                Count = 2,
-                Links = null,
-                Total = 0,
-                Entries = new List<BatchDetails>() {
-                        new BatchDetails() {
-                            BatchId = "1",
-                            Files = new List<BatchDetailsFiles>() {
-                                new BatchDetailsFiles () {
-                                    Filename = "aaa.pdf",
-                                    FileSize=1232,
-                                    MimeType = "PDF",
-                                    Links = null
-                                },
-                                new BatchDetailsFiles () {
-                                    Filename = "bbb.pdf",
-                                    FileSize=1232,
-                                    MimeType = "PDF",
-                                    Links = null
-                                }
-                            }
-
-                        },
-                        new BatchDetails() {
-                            BatchId = "2",
-                            Files = new List<BatchDetailsFiles>() {
-                                new BatchDetailsFiles () {
-                                    Filename = "ccc.pdf",
-                                    FileSize=1232,
-                                    MimeType = "PDF",
-                                    Links = null
-                                },
-                                new BatchDetailsFiles () {
-                                    Filename = "ddd.pdf",
-                                    FileSize=1232,
-                                    MimeType = "PDF",
-                                    Links = null
-                                }
-                            }
-
-                        }
-                    }
-            };
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fileShareApiClient.Search("",100,0, CancellationToken.None)).Returns(expected);
+            A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
             Task<IResult<BatchSearchResponse>> result = _fileShareService.FssWeeklySearchAsync(searchText, accessToken);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
+        }
 
-
+        [Test]
+        public async Task WhenFssWeeklySearchAsyncIsCalled_ThenShouldExecuteCatch()
+        {
+            _fileShareServiceConfig.Value.PageSize = -100;
+            A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
+            IResult<BatchSearchResponse> result = await _fileShareService.FssWeeklySearchAsync("", "");
+            Assert.That(result.IsSuccess,Is.False);
         }
     }
 }

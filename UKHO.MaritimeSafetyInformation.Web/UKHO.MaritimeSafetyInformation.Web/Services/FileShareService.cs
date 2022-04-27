@@ -5,6 +5,7 @@ using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
+
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class FileShareService : IFileShareService
@@ -18,24 +19,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             this.httpClientFactory = httpClientFactory;
             this.fileShareServiceConfig = fileShareServiceConfig;
             _logger = logger;
-
         }
 
         public async Task<IResult<BatchSearchResponse>> FssWeeklySearchAsync(string searchText, string accessToken)
         {
+            IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
             try
             {
                 _logger.LogInformation(EventIds.RetrievalOfMSIBatchSearchResponse.ToEventId(), "Maritime safety information request batch search response started");
 
-                FileShareApiClient fileShareApi = new FileShareApiClient(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
-                IResult<BatchSearchResponse> result = await fileShareApi.Search(searchText, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
-                return result;
+                FileShareApiClient fileShareApi = new(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
+                result = await fileShareApi.Search(searchText, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.RetrievalOfMSIBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
-                throw;
             }
+            return result;
+            
         }
     }
 }

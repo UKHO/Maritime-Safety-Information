@@ -5,34 +5,30 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
-    public class NoticestoMarinersController : BaseController<NoticestoMarinersController>
+    public class NoticesToMarinersController : BaseController<NoticesToMarinersController>
     {
 
-        private readonly ILogger<NoticestoMarinersController> _logger;
-        private readonly IHttpClientFactory httpClientFactory;
+        private readonly ILogger<NoticesToMarinersController> _logger;
         private readonly INMDataService nMDataService;
-        public NoticestoMarinersController(IHttpClientFactory httpClientFactory, INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticestoMarinersController> logger) : base(contextAccessor, logger)
+        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger) : base(contextAccessor, logger)
         {
             _logger = logger;
-            this.httpClientFactory = httpClientFactory;
             this.nMDataService = nMDataService;
         }
 
         public IActionResult Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
-            return View("~/Views/NoticestoMariners/ShowWeeklyFiles.cshtml");
+            return View("~/Views/NoticesToMariners/ShowWeeklyFiles.cshtml");
         }
 
         public IActionResult LoadYears()
         {
-
             return Json(nMDataService.GetPastYears());
         }
 
         public IActionResult LoadWeeks(int year)
         {
-
             return Json(nMDataService.GetAllWeeksofYear(year));
         }
 
@@ -44,9 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesCompleted.ToEventId(), "Maritime safety information request for show weekly files completed:{correlationId}", GetCurrentCorrelationId());
 
-            return PartialView("~/Views/NoticestoMariners/_WeeklyFilesList.cshtml",listFiles);
+            return PartialView("~/Views/NoticesToMariners/_WeeklyFilesList.cshtml",listFiles);
         }
-
-        
     }
 }
