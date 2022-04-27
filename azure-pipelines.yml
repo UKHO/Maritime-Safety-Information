@@ -242,6 +242,9 @@ stages:
               versionSpec: '14.x'
              displayName: 'Install Node.js'
 
+           - script: 
+              echo "$(url)"
+
            - script: |
               npm ci
              displayName: 'npm restore'
@@ -252,12 +255,6 @@ stages:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
               fileType: 'json'
               targetFiles: 'appConfig.json'
-
-           - script: |
-              npm run test:auto
-             continueOnError: false
-             displayName: 'Run Functional Tests'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
            - task: PublishTestResults@2
              condition: succeededOrFailed()
@@ -275,7 +272,7 @@ stages:
         pool: $(WindowsPool)
         displayName: "Dev Accessibility Tests"
         variables: 
-         autoTestConfig.url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
         workspace:
          clean: all
         steps:
@@ -287,6 +284,7 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
+              npm install
               npm ci
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
@@ -296,11 +294,6 @@ stages:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
               fileType: 'json'
               targetFiles: 'appConfig.json'
-
-           - script: |
-              npm run test:a11y
-             displayName: 'Run Accessibility Tests'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
 
            - task: PublishTestResults@2
              condition: succeededOrFailed()
