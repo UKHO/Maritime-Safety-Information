@@ -289,7 +289,6 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
-              npm install
               npm ci
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
