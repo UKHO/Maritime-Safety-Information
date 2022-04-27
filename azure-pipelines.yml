@@ -36,7 +36,7 @@ variables:
   - group: Covscan-vars
 
 resources:
- repositories:
+  repositories:
   - repository: covscan
     type: github
     name: UKHO/coverityscan-buildtemplates
