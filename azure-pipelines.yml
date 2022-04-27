@@ -242,12 +242,14 @@ stages:
               versionSpec: '14.x'
              displayName: 'Install Node.js'
 
-           - script: 
-              echo "$(url)"
-
            - script: |
               npm ci
              displayName: 'npm restore'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
+
+           - script: |
+              npx playwright test --reporter=junit
+             displayName: 'Install Junit Reporter'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
            - task: FileTransform@1
@@ -293,6 +295,11 @@ stages:
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
+           - script: |
+              npx playwright test --reporter=junit
+             displayName: 'Install Junit Reporter'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
+
            - task: FileTransform@1
              inputs:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
@@ -303,7 +310,7 @@ stages:
               npm run test:a11y
              displayName: 'Run Accessibility Tests'
              workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
-
+          
            - task: PublishTestResults@2
              condition: succeededOrFailed()
              inputs:
