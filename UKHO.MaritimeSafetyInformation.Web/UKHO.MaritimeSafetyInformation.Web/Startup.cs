@@ -9,6 +9,7 @@ using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
+using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -48,6 +49,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
 
+            services.AddScoped<IRnwRepository, RnwRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
