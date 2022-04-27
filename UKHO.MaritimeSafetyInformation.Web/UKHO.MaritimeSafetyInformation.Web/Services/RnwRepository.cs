@@ -3,18 +3,18 @@ using UKHO.MaritimeSafetyInformation.Common.Models.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public class RnwRepository : Repository<RadioNavigationalWarnings>, IRnwRepository
+    public class RnwRepository : IRnwRepository
     {
-        public RnwRepository(RadioNavigationalWarningsContext rnwContext) :
-         base(rnwContext)
+        private readonly RadioNavigationalWarningsContext _context;
+        public RnwRepository(RadioNavigationalWarningsContext context)
         {
-
+            _context = context;
         }
 
-        public void AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings)
+        public async Task AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings)
         {
-            Add(radioNavigationalWarnings);
-            SaveEntities();
+            _context.Add(radioNavigationalWarnings);
+            await _context.SaveChangesAsync();
         }
     }
 }

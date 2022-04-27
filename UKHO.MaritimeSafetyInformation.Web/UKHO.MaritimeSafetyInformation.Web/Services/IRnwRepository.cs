@@ -2,8 +2,8 @@
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public interface IRnwRepository : IRepository<RadioNavigationalWarnings>
+    public interface IRnwRepository 
     {
-        void AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings);
+        Task AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings);
     }
 }

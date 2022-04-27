@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Models.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
@@ -7,13 +6,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
     public class RadioNavigationalWarningsAdminController : Controller
     {
-        private readonly RadioNavigationalWarningsContext _context;
         private readonly IRnwRepository _iRnwRepository;
 
-        public RadioNavigationalWarningsAdminController(RadioNavigationalWarningsContext context,
-                                                   IRnwRepository iRnwRepository)
+        public RadioNavigationalWarningsAdminController(IRnwRepository iRnwRepository)
         {
-            _context = context;
             _iRnwRepository = iRnwRepository;
         }
 
@@ -36,7 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _iRnwRepository.AddRadioNavigation(radioNavigationalWarnings);
+                await _iRnwRepository.AddRadioNavigation(radioNavigationalWarnings);
 
                 return RedirectToAction(nameof(Index));
             }
