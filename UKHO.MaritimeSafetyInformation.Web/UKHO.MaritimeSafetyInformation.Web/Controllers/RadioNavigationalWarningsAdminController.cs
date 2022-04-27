@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Models.DTO;
+using UKHO.MaritimeSafetyInformation.Common.Models.RNW;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -21,7 +21,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         // GET: RadioNavigationalWarnings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.RadioNavigationalWarnings.ToListAsync());
+            RadioNavigationalWarningsAdminList RadioNavigationalWarningsAdminList =_iRnwRepository.GetRadioNavigationForAdmin();
+            return  View(RadioNavigationalWarningsAdminList);
         }
 
         // GET: RadioNavigationalWarnings/Create

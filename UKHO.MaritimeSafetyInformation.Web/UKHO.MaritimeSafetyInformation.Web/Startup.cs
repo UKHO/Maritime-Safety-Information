@@ -50,7 +50,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
 
             services.AddScoped<IRnwRepository, RnwRepository>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

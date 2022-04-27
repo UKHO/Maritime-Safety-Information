@@ -1,4 +1,5 @@
-﻿@model IEnumerable<UKHO.MaritimeSafetyInformation.Common.Models.DTO.RadioNavigationalWarnings>
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.RNW;
+@model RadioNavigationalWarningsAdminList
 
 @{
     ViewData["Title"] = "Index";
@@ -13,31 +14,31 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.WarningType)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().WarningType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reference)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().Reference)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTimeGroup)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().DateTimeGroup)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Summary)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().Summary)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Content)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().Content)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ExpiryDate)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().ExpiryDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
+                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().IsDeleted)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.RadioNavigationalWarnings) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.WarningType)

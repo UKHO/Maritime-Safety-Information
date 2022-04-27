@@ -12,6 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
         }
 
         public DbSet<RadioNavigationalWarnings> RadioNavigationalWarnings { get; set; }
+        public DbSet<WarningType> WarningType { get; set; }
 
     }
 }
