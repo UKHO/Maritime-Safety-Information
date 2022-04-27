@@ -231,7 +231,7 @@ stages:
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated Tests"
         variables: 
-         url: $[ dependencies.DevDeployApp.outputs['DevDeploy.TerraformDeploy.WebsiteURL']  ]
+         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
         workspace:
          clean: all
         steps:
@@ -275,7 +275,7 @@ stages:
         pool: $(WindowsPool)
         displayName: "Dev Accessibility Tests"
         variables: 
-         autoTestConfig.url: $[ dependencies.DevDeployApp.outputs['DevDeploy.TerraformDeploy.WebsiteURL']  ]
+         autoTestConfig.url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
         workspace:
          clean: all
         steps:
