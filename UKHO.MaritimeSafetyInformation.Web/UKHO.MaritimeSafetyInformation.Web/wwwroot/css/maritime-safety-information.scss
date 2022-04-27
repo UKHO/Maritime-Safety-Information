@@ -11,4 +11,7 @@ a, button{
         @extend %focus;
     }
 }
-
+.form-label {
+    margin-bottom: 0.5rem !important;
+    box-shadow: none;
+}
