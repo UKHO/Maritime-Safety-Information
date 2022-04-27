@@ -256,6 +256,11 @@ stages:
               fileType: 'json'
               targetFiles: 'appConfig.json'
 
+           - script: |
+              npm run test:auto
+             displayName: 'Run Functional Tests'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
+
            - task: PublishTestResults@2
              condition: succeededOrFailed()
              inputs:
@@ -294,6 +299,11 @@ stages:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
               fileType: 'json'
               targetFiles: 'appConfig.json'
+
+		   - script: |
+              npm run test:a11y
+             displayName: 'Run Accessibility Tests'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
 
            - task: PublishTestResults@2
              condition: succeededOrFailed()
