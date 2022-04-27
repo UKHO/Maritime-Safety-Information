@@ -40,7 +40,7 @@ resources:
   - repository: covscan
     type: github
     name: UKHO/coverityscan-buildtemplates
-    endpoint: UKHO
+    endpoint: "Maritime Safety Information"
     ref: refs/heads/master
 
 stages:
