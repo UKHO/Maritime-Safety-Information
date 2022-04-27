@@ -4,7 +4,8 @@ import { devices } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
   testDir: './AutoTests',
-  timeout: 30 * 1000,
+    timeout: 30 * 1000,
+  reporter: [['junit', { outputFile: 'junit.xml' }]],
   expect: {
     timeout: 10000
   },
@@ -12,7 +13,6 @@ const config: PlaywrightTestConfig = {
 
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
   use: {
     actionTimeout: 0,
     trace: 'on-first-retry',

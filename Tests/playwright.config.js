@@ -11,19 +11,17 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-
 var test_1 = require("@playwright/test");
-
 var config = {
     testDir: './AutoTests',
     timeout: 30 * 1000,
+    reporter: [['junit', { outputFile: 'junit.xml' }]],
     expect: {
         timeout: 10000
     },
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
     workers: process.env.CI ? 1 : undefined,
-    reporter: 'html',
     use: {
         actionTimeout: 0,
         trace: 'on-first-retry',
@@ -36,3 +34,4 @@ var config = {
     ],
 };
 exports.default = config;
+//# sourceMappingURL=playwright.config.js.map
