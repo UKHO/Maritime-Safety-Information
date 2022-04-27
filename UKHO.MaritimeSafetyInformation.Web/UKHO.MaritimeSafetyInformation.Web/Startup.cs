@@ -1,12 +1,14 @@
 ﻿using Azure.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
+using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
+using UKHO.MaritimeSafetyInformation.Web.Filters;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -24,6 +26,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
+            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(configuration.GetConnectionString("RadioNavigationalWarningsContext")));
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -43,6 +47,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddApplicationInsightsTelemetry();            
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
