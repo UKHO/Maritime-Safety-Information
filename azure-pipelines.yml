@@ -247,11 +247,6 @@ stages:
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-           - script: |
-              npx playwright test --reporter=junit
-             displayName: 'Install Junit Reporter'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests'
-
            - task: FileTransform@1
              inputs:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
@@ -259,7 +254,7 @@ stages:
               targetFiles: 'appConfig.json'
 
            - script: |
-              npm run test:auto
+              npm run test:auto --reporter=junit
              displayName: 'Run Functional Tests'
              workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
@@ -295,11 +290,6 @@ stages:
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-           - script: |
-              npx playwright test --reporter=junit
-             displayName: 'Install Junit Reporter'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests'
-
            - task: FileTransform@1
              inputs:
               folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
@@ -307,7 +297,7 @@ stages:
               targetFiles: 'appConfig.json'
 
            - script: |
-              npm run test:a11y
+              npm run test:a11y --reporter=junit
              displayName: 'Run Accessibility Tests'
              workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
           
