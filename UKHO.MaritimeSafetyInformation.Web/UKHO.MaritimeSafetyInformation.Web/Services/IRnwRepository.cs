@@ -6,6 +6,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public interface IRnwRepository
     {
         void AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings);
-        RadioNavigationalWarningsAdminListPage GetRadioNavigationForAdmin(int pageIndex = 1);
+        RadioNavigationalWarningsAdminListFilter GetRadioNavigationForAdmin(int pageIndex = 1);
     }
 }

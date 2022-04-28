@@ -1,5 +1,5 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
-@model RadioNavigationalWarningsAdminListPage
+@model RadioNavigationalWarningsAdminListFilter
 
 @{
     ViewData["Title"] = "Radio Navigational Warnings List";
@@ -22,6 +22,16 @@
         <p>
             <a asp-action="Create" class="disabled-link">Create NewRadio Navigational Warning</a>
         </p>
+    </div>
+    <div>
+        @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"--Select Warning Type--", new { @class = "form-control", @id="WarningTypeIdDropDown", @onchange="clickfilter()"} )
+    </div>
+    <div>
+        @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"--Select Year--",  new { @class = "form-control"} )
+    </div>
+    <div>
+        @Html.ActionLink("Filter", "Index", new {warningType= @Model.WarningType, year= @Model.Years,page = 1},new { @class = "btn btn-dark"})
+        <input id="clickMe" type="button" value="clickme" onclick="clickfilter();" />
     </div>
 
     <div>
@@ -98,3 +108,11 @@
         </div>
     </div>
 </div>
+<script>
+    function clickfilter()
+    {
+      alert('hello!');
+      alert(@Model.WarningType);
+      alert(@Model.Year);
+    }
+</script>

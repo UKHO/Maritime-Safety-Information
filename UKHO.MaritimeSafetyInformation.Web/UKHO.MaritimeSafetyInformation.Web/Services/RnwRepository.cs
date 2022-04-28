@@ -20,14 +20,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _context.SaveChanges();
         }
 
-        public RadioNavigationalWarningsAdminListPage GetRadioNavigationForAdmin(int pageIndex = 1)
+        public RadioNavigationalWarningsAdminListFilter GetRadioNavigationForAdmin(int pageIndex = 1)
         {
-            RadioNavigationalWarningsAdminListPage radioNavigationalWarningsAdminListPage = new();
+            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminListFilter = new();
             List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = new();
             int rnwAdminListRecordPerPage = _configuration.GetValue<int>("RadioNavigationalWarningConfiguration:AdminListRecordPerPage");
+            List<RadioNavigationalWarnings> radioNavigationalWarnings = _context.RadioNavigationalWarnings.ToList();
+            List<WarningType> warningType = _context.WarningType.ToList();
 
-            radioNavigationalWarningsAdminList = (from rnwWarnings in _context.RadioNavigationalWarnings
-                                                  join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
+            radioNavigationalWarningsAdminList = (from rnwWarnings in radioNavigationalWarnings
+                                                  join warningTyp in warningType on rnwWarnings.WarningType equals warningTyp.Id
                                                   select new RadioNavigationalWarningsAdminList
                                                   {
                                                       Id = rnwWarnings.Id,
@@ -38,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                                       Content = rnwWarnings.Content,
                                                       ExpiryDate = rnwWarnings.ExpiryDate,
                                                       IsDeleted = rnwWarnings.IsDeleted == true ? "Yes" : "No",
-                                                      WarningTypeName = warningType.Name
+                                                      WarningTypeName = warningTyp.Name
 
                                                   })
                                                   .OrderByDescending(a => a.DateTimeGroup).ToList();
@@ -46,10 +48,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
             radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Skip((pageIndex - 1) * rnwAdminListRecordPerPage).Take(rnwAdminListRecordPerPage).ToList();
 
-            radioNavigationalWarningsAdminListPage.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
-            radioNavigationalWarningsAdminListPage.PageCount = (int)Math.Ceiling(pageCount);
-            radioNavigationalWarningsAdminListPage.CurrentPageIndex = pageIndex;
-            return radioNavigationalWarningsAdminListPage;
+            radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
+            radioNavigationalWarningsAdminListFilter.PageCount = (int)Math.Ceiling(pageCount);
+            radioNavigationalWarningsAdminListFilter.CurrentPageIndex = pageIndex;
+            radioNavigationalWarningsAdminListFilter.WarningTypes = warningType;
+            radioNavigationalWarningsAdminListFilter.Years = (from p in radioNavigationalWarnings
+                                                              select p.DateTimeGroup.Year.ToString()).Distinct().ToList();
+            radioNavigationalWarningsAdminListFilter.WarningType=0;
+            radioNavigationalWarningsAdminListFilter.Year = string.Empty;
+            return radioNavigationalWarningsAdminListFilter;
         }
     }
 }
