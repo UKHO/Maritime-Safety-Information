@@ -239,6 +239,24 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
+      - job: BuildAndPublishDacPac
+        workspace:
+          clean: all
+        displayName: "Build And publish DacPac"
+        steps:
+          - task: VSBuild@1
+            displayName: "Build solution for Maritime Safety Information Database"
+            inputs:
+              solution: "**/UKHO.MaritimeSafetyInformation.Web.Database.sqlproj"
+              configuration: $(BuildConfiguration)
+              platform: $(BuildPlatform)
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Database Dackpac Artifacts"
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
+              ArtifactName: Dackpack
+
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     jobs:
