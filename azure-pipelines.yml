@@ -262,9 +262,9 @@ stages:
              condition: succeededOrFailed()
              inputs:
                testRunner: 'JUnit'
-               testResultsFiles: 'junit.xml'
+               testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/FunctionalTest'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/AutoTests'
                testRunTitle: Dev Functional Test Results
              displayName: 'Publish Functional Test Results'
 
@@ -305,8 +305,8 @@ stages:
              condition: succeededOrFailed()
              inputs:
                testRunner: 'JUnit'
-               testResultsFiles: 'junit.xml'
+               testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/AccessebilityTest'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/AutoTests'
                testRunTitle: Dev Accessibility Test Results
              displayName: 'Publish Accessibility Test Results'
