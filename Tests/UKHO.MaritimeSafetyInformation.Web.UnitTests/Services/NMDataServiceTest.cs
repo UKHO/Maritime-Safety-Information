@@ -94,7 +94,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 }
             };
 
-            A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync(A<string>.Ignored, A<string>.Ignored)).Returns(SearchResult);
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored)).Returns(SearchResult);
 
             string expectedstatus = "RanToCompletion";
 
@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("", "")).Returns(res);
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "")).Returns(res);
 
             string expectedstatus = "RanToCompletion";
 
@@ -131,7 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken()).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("", "")).Returns(res);
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "")).Returns(res);
 
             Task<List<ShowFilesResponseModel>> result = _fakeNMDataService.GetBatchDetailsFiles(year, week);
             

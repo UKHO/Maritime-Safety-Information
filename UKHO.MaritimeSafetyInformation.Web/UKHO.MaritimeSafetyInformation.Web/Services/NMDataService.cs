@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
 
                 string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-                IResult<BatchSearchResponse> result = await fileShareService.FssWeeklySearchAsync(searchText, accessToken);
+                IResult<BatchSearchResponse> result = await fileShareService.FssBatchSearchAsync(searchText, accessToken);
 
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult.Entries.Count > 0)

@@ -46,23 +46,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenFssWeeklySearchAsyncIsCalled_ThenShouldCheckTypeOfInstance()
+        public void WhenFssBatchSearchAsyncIsCalled_ThenShouldCheckTypeOfInstance()
         {
             string searchText = "";
             string accessToken = "";
 
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
-            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssWeeklySearchAsync(searchText, accessToken);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
         }
 
         [Test]
-        public async Task WhenFssWeeklySearchAsyncIsCalled_ThenShouldExecuteCatch()
+        public async Task WhenFssBatchSearchAsyncIsCalled_ThenShouldExecuteCatch()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            IResult<BatchSearchResponse> result = await _fileShareService.FssWeeklySearchAsync("", "");
+            IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync("", "");
             Assert.That(result.IsSuccess,Is.False);
         }
     }

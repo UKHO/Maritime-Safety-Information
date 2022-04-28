@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<IResult<BatchSearchResponse>> FssWeeklySearchAsync(string searchText, string accessToken)
+        public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken)
         {            
             IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
             try
