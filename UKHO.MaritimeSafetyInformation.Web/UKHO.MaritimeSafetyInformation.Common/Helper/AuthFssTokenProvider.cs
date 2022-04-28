@@ -1,12 +1,13 @@
-﻿using Azure.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Common.Logging;
 
 namespace UKHO.MaritimeSafetyInformation.Common
 {
+    [ExcludeFromCodeCoverage]
     public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
         private readonly IOptions<AzureADConfiguration> azureADConfiguration;
