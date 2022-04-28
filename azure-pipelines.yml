@@ -150,7 +150,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]*'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -195,8 +195,7 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]*'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'              
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
