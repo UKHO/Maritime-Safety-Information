@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
                 logger.LogInformation("AD Authentication- call defaultAzureCredential for ClientId:{ClientId} and _X-Correlation-ID:{CorrelationId}", azureADConfiguration.Value.ClientId, correlationId);
                 AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
 
-                logger.LogInformation("AD Authentication- call defaultAzureCredential post gettokenasync for tokenResult:{tokenResult} and _X-Correlation-ID:{CorrelationId}", tokenResult, correlationId);
+                logger.LogInformation("AD Authentication- call defaultAzureCredential post gettokenasync for tokenResult:{tokenResult} and _X-Correlation-ID:{CorrelationId}", tokenResult.Token, correlationId);
                 return tokenResult.Token;
             }
             catch (Exception ex)
