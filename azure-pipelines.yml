@@ -264,7 +264,7 @@ stages:
                testRunner: 'JUnit'
                testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/AutoTests/'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
                testRunTitle: Dev Functional Test Results
              displayName: 'Publish Functional Test Results'
 
@@ -307,6 +307,6 @@ stages:
                testRunner: 'JUnit'
                testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/AutoTests'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
                testRunTitle: Dev Accessibility Test Results
              displayName: 'Publish Accessibility Test Results'
