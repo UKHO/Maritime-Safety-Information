@@ -1,72 +1,100 @@
-﻿@using UKHO.MaritimeSafetyInformation.Common.Models.RNW;
-@model RadioNavigationalWarningsAdminList
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
+@model RadioNavigationalWarningsAdminListPage
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Radio Navigational Warnings List";
 }
+<style>
+    .disabled-link {
+        pointer-events: none;
+    }
 
-<h1>Index</h1>
+    .enabled-link {
+        pointer-events: auto;
+    }
+</style>
+<div class="container- fluid">
+    <div>
+        <h1>Radio Navigational Warnings List</h1>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().WarningType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().Reference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().DateTimeGroup)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().Summary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().ExpiryDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RadioNavigationalWarnings.FirstOrDefault().IsDeleted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.RadioNavigationalWarnings) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.WarningType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reference)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTimeGroup)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpiryDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div>
+        <p>
+            <a asp-action="Create" class="disabled-link">Create NewRadio Navigational Warning</a>
+        </p>
+    </div>
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().WarningTypeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().Reference)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().DateTimeGroup)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().Summary)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().Content)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().ExpiryDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().IsDeleted)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.RadioNavigationalWarningsAdminList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WarningTypeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reference)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateTimeGroup)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Summary)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpiryDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsDeleted)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="disabled-link">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { pageIndex = 1 })">First</a></li>
+            <li class="page-item"><a class="@(Model.CurrentPageIndex==1 ? "page-link disabled-link" : "page-link enabled-link")" href="@Url.Action("Index", new { pageIndex = Model.CurrentPageIndex-1 })">Previous</a></li>
+            <li class="page-item"><a class="@(Model.CurrentPageIndex==Model.PageCount ? "page-link disabled-link" : "page-link enabled-link")" href="@Url.Action("Index", new { pageIndex = Model.CurrentPageIndex+1 })">Next</a></li>
+            <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { pageIndex =Model.PageCount })">Last</a></li>
+        </ul>
+        <div>
+            Page @Model.CurrentPageIndex of @Model.PageCount
+        </div>
+    </div>
+</div>

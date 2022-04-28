@@ -1,11 +1,11 @@
-﻿using UKHO.MaritimeSafetyInformation.Common.Models.DTO;
-using UKHO.MaritimeSafetyInformation.Common.Models.RNW;
+﻿using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public interface IRnwRepository
     {
         void AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings);
-        RadioNavigationalWarningsAdminList GetRadioNavigationForAdmin(int pageIndex = 1);
+        RadioNavigationalWarningsAdminListPage GetRadioNavigationForAdmin(int pageIndex = 1);
     }
 }
