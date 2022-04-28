@@ -1,0 +1,6 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="9.858">
+<testsuite name="functional.spec.ts" timestamp="1651129791794" hostname="" tests="1" failures="0" skipped="0" time="8.717" errors="0">
+<testcase name="Goto maritime-safety-information Home Page Should Goto Homepage Page" classname="functional.spec.ts:32:2 › Goto maritime-safety-information Home Page › Should Goto Homepage Page" time="8.717">
+</testcase>
+</testsuite>
+</testsuites>
