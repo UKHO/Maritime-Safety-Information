@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:a11y": "playwright test --config=Autotests/AccessebilityTest",
-    "test:auto": "playwright test --config=Autotests/FunctionalTest"
+    "test:a11y": "playwright test --config=Autotests/AccessebilityTest --reporter=junit",
+    "test:auto": "playwright test --config=Autotests/FunctionalTest --reporter=junit"
   },
   "keywords": [],
   "author": "",
