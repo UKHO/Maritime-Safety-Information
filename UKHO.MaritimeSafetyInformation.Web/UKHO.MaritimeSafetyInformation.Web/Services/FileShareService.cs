@@ -21,19 +21,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken)
+        public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken, string correlationId)
         {            
             IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
             try
             {
-                _logger.LogInformation(EventIds.RetrievalOfMSIBatchSearchResponse.ToEventId(), "Maritime safety information request batch search response started");
-
+                _logger.LogInformation(EventIds.FSSBatchSearchResponseStarted.ToEventId(), "Maritime safety information request batch search response started", correlationId);
+                
+                string searchQuery = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType} " + searchText;
                 FileShareApiClient fileShareApi = new(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
-                result = await fileShareApi.Search(searchText, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
+                result = await fileShareApi.Search(searchQuery, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.RetrievalOfMSIBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError(EventIds.FSSBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response data {exceptionMessage} {exceptionTrace} for _X-Correlation-ID:{CorrelationId}", ex.Message, ex.StackTrace, correlationId);
             }
             return result;
             

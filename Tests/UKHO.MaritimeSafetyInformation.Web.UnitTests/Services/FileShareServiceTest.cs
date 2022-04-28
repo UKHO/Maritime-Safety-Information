@@ -23,6 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private ILogger<FileShareService> _logger;
         private FileShareService _fileShareService;
         private IFileShareApiClient _fileShareApiClient;
+        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         public static IConfiguration InitConfiguration()
         {
@@ -53,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
-            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken , CorrelationId);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
         }
 
@@ -62,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _fileShareServiceConfig.Value.PageSize = -100;
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync("", "");
+            IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
             Assert.That(result.IsSuccess,Is.False);
         }
     }

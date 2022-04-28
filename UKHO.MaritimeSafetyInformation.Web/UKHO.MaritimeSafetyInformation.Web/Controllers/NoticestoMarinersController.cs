@@ -24,21 +24,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public IActionResult LoadYears()
         {
-            return Json(nMDataService.GetPastYears());
+            return Json(nMDataService.GetPastYears(GetCurrentCorrelationId()));
         }
 
         public IActionResult LoadWeeks(int year)
         {
-            return Json(nMDataService.GetAllWeeksofYear(year));
+            return Json(nMDataService.GetAllWeeksofYear(year, GetCurrentCorrelationId()));
         }
 
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
-            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesRequest.ToEventId(), "Maritime safety information request for show weekly files requested for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestStarted.ToEventId(), "Maritime safety information request for show weekly files requested for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(year, week, GetCurrentCorrelationId());
+            List<ShowFilesResponseModel> listFiles = await nMDataService.GetNMBatchFiles(year, week, GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesCompleted.ToEventId(), "Maritime safety information request for show weekly files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestCompleted.ToEventId(), "Maritime safety information request for show weekly files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             return PartialView("~/Views/NoticesToMariners/_WeeklyFilesList.cshtml",listFiles);
         }
