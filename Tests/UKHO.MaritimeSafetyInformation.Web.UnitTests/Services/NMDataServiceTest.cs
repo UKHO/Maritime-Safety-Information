@@ -34,7 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeLogger = A.Fake<ILogger<NMDataService>>();
             _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
 
-            _fakeNMDataService = new NMDataService(_fakefileShareService, _fileShareServiceConfig, _fakeLogger, _fakeAuthFssTokenProvider);
+            _fakeNMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider);
         }
 
 
