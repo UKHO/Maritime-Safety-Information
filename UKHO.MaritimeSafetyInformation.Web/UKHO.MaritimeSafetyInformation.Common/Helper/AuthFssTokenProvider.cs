@@ -25,8 +25,10 @@ namespace UKHO.MaritimeSafetyInformation.Common
             {
                 DefaultAzureCredential azureCredential = new();
                 TokenRequestContext tokenRequestContext = new(new string[] { azureADConfiguration.Value.ClientId + "/.default" });
-                logger.LogInformation("AD Authentication- call defaultAzureCredential for _X-Correlation-ID:{CorrelationId}", correlationId);
+                logger.LogInformation("AD Authentication- call defaultAzureCredential for ClientId:{ClientId} and _X-Correlation-ID:{CorrelationId}", azureADConfiguration.Value.ClientId, correlationId);
                 AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
+
+                logger.LogInformation("AD Authentication- call defaultAzureCredential post gettokenasync for tokenResult:{tokenResult} and _X-Correlation-ID:{CorrelationId}", tokenResult, correlationId);
                 return tokenResult.Token;
             }
             catch (Exception ex)
