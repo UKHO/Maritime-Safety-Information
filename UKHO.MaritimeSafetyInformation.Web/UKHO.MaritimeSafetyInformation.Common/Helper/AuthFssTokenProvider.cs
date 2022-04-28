@@ -10,13 +10,13 @@ namespace UKHO.MaritimeSafetyInformation.Common
     [ExcludeFromCodeCoverage]
     public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
-        private readonly IOptions<AzureADConfiguration> azureADConfiguration;
-        private readonly ILogger<AuthFssTokenProvider> logger;
+        private readonly IOptions<AzureADConfiguration> _azureADConfiguration;
+        private readonly ILogger<AuthFssTokenProvider> _logger;
 
-        public AuthFssTokenProvider(IOptions<AzureADConfiguration> _azureADConfiguration, ILogger<AuthFssTokenProvider> _logger)
+        public AuthFssTokenProvider(IOptions<AzureADConfiguration> azureADConfiguration, ILogger<AuthFssTokenProvider> logger)
         {
-            azureADConfiguration = _azureADConfiguration;
-            logger = _logger;
+            _azureADConfiguration = azureADConfiguration;
+            _logger = logger;
         }
 
         public async Task<string> GenerateADAccessToken(string correlationId)
@@ -24,16 +24,13 @@ namespace UKHO.MaritimeSafetyInformation.Common
             try
             {
                 DefaultAzureCredential azureCredential = new();
-                TokenRequestContext tokenRequestContext = new(new string[] { azureADConfiguration.Value.ClientId + "/.default" });
-                logger.LogInformation("AD Authentication- call defaultAzureCredential for ClientId:{ClientId} and _X-Correlation-ID:{CorrelationId}", azureADConfiguration.Value.ClientId, correlationId);
-                AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
-
-                logger.LogInformation("AD Authentication- call defaultAzureCredential post gettokenasync for tokenResult:{tokenResult} and _X-Correlation-ID:{CorrelationId}", tokenResult.Token, correlationId);
+                TokenRequestContext tokenRequestContext = new(new string[] { _azureADConfiguration.Value.ClientId + "/.default" });
+                AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);               
                 return tokenResult.Token;
             }
             catch (Exception ex)
             {
-                logger.LogInformation("AD Authentication failed with message:{ex} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogInformation("AD Authentication failed with message:{ex} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 return string.Empty;
             }
         }
