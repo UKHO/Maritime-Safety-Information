@@ -12,7 +12,7 @@ const config: PlaywrightTestConfig = {
 
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [ ['junit', { outputFile: 'results.xml' }] ],
   use: {
     actionTimeout: 0,
     trace: 'on-first-retry',

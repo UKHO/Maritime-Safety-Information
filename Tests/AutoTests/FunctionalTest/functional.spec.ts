@@ -1,5 +1,4 @@
 import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
-import * as data from "../../Configuration/pageObject.json";
 import * as app from "../../Configuration/appConfig.json";
 import home from '../../pageObject/home.page';
 
