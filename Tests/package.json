@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+<<<<<<< HEAD
   "scripts": {
     "test": "playwright test",
     "test:a11y": "playwright test --config=Autotests/AccessebilityTest --reporter=junit",
     "test:auto": "playwright test --config=Autotests/FunctionalTest --reporter=junit"
   },
+=======
+    "scripts": {
+        "test": "playwright test",
+        "test:a11y": "playwright test --config=Autotests/AccessebilityTest --reporter=junit",
+        "test:auto": "playwright test --config=Autotests/FunctionalTest --reporter=junit"
+    },
+>>>>>>> ec53106fcc3ace770ab9e57d3a4a2159d238b7ee
   "keywords": [],
   "author": "",
   "license": "ISC",

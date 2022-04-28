@@ -28,7 +28,7 @@ test.describe("Goto maritime-safety-information Home Page ", ()=> {
     await page.goto(app.url);
     await injectAxe(page);
   });
-  test('Sample Test Accessibility Check', async () => {
-       
+  test('Sample Test Accessibility Check', async () => {  
+    expect('test').toEqual('test');
 })
 });
