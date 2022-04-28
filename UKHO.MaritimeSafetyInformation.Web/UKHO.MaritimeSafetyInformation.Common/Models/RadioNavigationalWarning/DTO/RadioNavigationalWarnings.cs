@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UKHO.MaritimeSafetyInformation.Common.Models.DTO
+namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO
 {
     public class RadioNavigationalWarnings
     {
@@ -26,6 +26,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.DTO
         public string Summary { get; set; }
 
         [DisplayName("Text")]
+        [Required]
         public string Content { get; set; }
 
         public DateTime ExpiryDate { get; set; }

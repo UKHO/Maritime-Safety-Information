@@ -1,5 +1,5 @@
 ﻿using UKHO.MaritimeSafetyInformation.Common;
-using UKHO.MaritimeSafetyInformation.Common.Models.DTO;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
@@ -15,6 +15,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             _context.Add(radioNavigationalWarnings);
             await _context.SaveChangesAsync();
+        }
+
+        public List<WarningType> GetWarningType()
+        {
+            List<WarningType> warningType = (from c in _context.WarningType select c).ToList();
+            warningType.Insert(0, new WarningType { Id = 0, Name = "--Select Warning Type--" });
+
+            return warningType;
         }
     }
 }

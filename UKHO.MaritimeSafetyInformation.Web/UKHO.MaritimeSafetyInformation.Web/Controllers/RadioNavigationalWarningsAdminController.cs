@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UKHO.MaritimeSafetyInformation.Common.Models.DTO;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -22,6 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         // GET: RadioNavigationalWarnings/Create
         public IActionResult Create()
         {
+            ViewBag.message = _iRnwRepository.GetWarningType();
             return View();
         }
 
@@ -36,6 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
             return View(radioNavigationalWarnings);
         }
     }
