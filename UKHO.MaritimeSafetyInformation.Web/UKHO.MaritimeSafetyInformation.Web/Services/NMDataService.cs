@@ -25,14 +25,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _authFssTokenProvider = authFssTokenProvider;
         }
 
-        public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
+        public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week, string correlationId)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken();               
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);               
 
-                _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
+                _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
                 IResult<BatchSearchResponse> result = await fileShareService.FssWeeklySearchAsync(searchText, accessToken);
@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseDataFound.ToEventId(), "Maritime safety information request for show weekly files response data found");
+                    _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseDataFound.ToEventId(), "Maritime safety information request for show weekly files response data found for _X-Correlation-ID:{correlationId}", correlationId);
 
                     ListshowFilesResponseModels = NMHelper.GetShowFilesResponses(SearchResult);
                     ListshowFilesResponseModels = ListshowFilesResponseModels.OrderBy(e => e.FileDescription).ToList();

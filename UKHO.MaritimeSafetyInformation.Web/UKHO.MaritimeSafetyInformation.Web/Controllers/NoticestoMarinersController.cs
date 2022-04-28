@@ -34,11 +34,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
-            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesRequest.ToEventId(), "Maritime safety information request for show weekly files requested:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesRequest.ToEventId(), "Maritime safety information request for show weekly files requested for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(year, week);
+            List<ShowFilesResponseModel> listFiles = await nMDataService.GetBatchDetailsFiles(year, week, GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesCompleted.ToEventId(), "Maritime safety information request for show weekly files completed:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.RetrievalOfMSIShowWeeklyFilesCompleted.ToEventId(), "Maritime safety information request for show weekly files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             return PartialView("~/Views/NoticesToMariners/_WeeklyFilesList.cshtml",listFiles);
         }

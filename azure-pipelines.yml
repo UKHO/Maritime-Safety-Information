@@ -158,6 +158,7 @@ stages:
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]*'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
