@@ -33,12 +33,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
             IActionResult result = _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
         }
+
         [Test]
         public void WhenLoadYearsIsCalled_ThenShouldReturnJson()
         {
             IActionResult result = _controller.LoadYears();
             Assert.IsInstanceOf<JsonResult>(result);
         }
+
         [Test]
         public void WhenLoadWeeksIsCalled_ThenShouldReturnJson()
         {
@@ -46,6 +48,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
             IActionResult result = _controller.LoadWeeks(year);
             Assert.IsInstanceOf<JsonResult>(result);
         }
+
         [Test]
         public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnPartialView()
         {
@@ -54,6 +57,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
             IActionResult result = await _controller.ShowWeeklyFilesAsync(year,week);
             Assert.IsInstanceOf<PartialViewResult>(result);
         }
-
     }
 }

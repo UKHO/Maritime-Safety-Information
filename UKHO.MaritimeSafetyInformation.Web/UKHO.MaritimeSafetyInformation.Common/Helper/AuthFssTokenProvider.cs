@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
+﻿using Azure.Core;
+using Azure.Identity;
+using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
 namespace UKHO.MaritimeSafetyInformation.Common
@@ -14,51 +15,12 @@ namespace UKHO.MaritimeSafetyInformation.Common
             azureADConfiguration = _azureADConfiguration;
         }
 
-        public async Task<AuthenticationResult> GetAuthTokenAsync()
+        public async Task<string> GenerateADAccessToken()
         {
-            AuthenticationResult authenticationResult;
-            authenticationResult = await GenerateAccessTokenLocal();
-            return authenticationResult;
-            ////#if(DEBUG)
-            ////            authenticationResult = await GenerateAccessTokenLocal();
-            ////            return authenticationResult;
-            ////#else
-            ////            authenticationResult  = await GenerateADAccessToken();
-            ////#endif
-        }
-
-       ////public async Task<AuthenticationResult> GenerateADAccessToken()
-       ////{
-       ////
-       ////
-       ////    string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
-       ////    IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(azureADConfiguration.Value.ClientId)
-       ////    .WithClientSecret(azureADConfiguration.Value.ClientSecret)
-       ////    .WithAuthority(new Uri(azureADConfiguration.Value.MicrosoftOnlineLoginUrl + azureADConfiguration.Value.TenantId))
-       ////    .Build(); AuthenticationResult authenticationResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
-       ////    return authenticationResult;
-       ////}
-
-        public async Task<AuthenticationResult> GenerateAccessTokenLocal()
-        {
-            string tenantId = azureADConfiguration.Value.TenantId;
-            string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
-
-            var publicClientApplication = PublicClientApplicationBuilder
-              .Create(azureADConfiguration.Value.Scope)
-              .WithAuthority(AzureCloudInstance.AzurePublic, tenantId)
-              .WithDefaultRedirectUri()
-              .Build();
-
-
-            using var cancellationSource = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-            ////TokenCacheHelper.EnableSerialization(publicClientApplication.UserTokenCache);
-            var accounts = (await publicClientApplication.GetAccountsAsync()).ToList();
-            var authenticationResult = await publicClientApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
-                    .ExecuteAsync(cancellationSource.Token)
-                    .ConfigureAwait(false);
-
-            return authenticationResult;
+            DefaultAzureCredential azureCredential = new();
+            TokenRequestContext tokenRequestContext = new(new string[] { azureADConfiguration.Value.ClientId + "/.default" });
+            AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
+            return tokenResult.Token;
         }
     }
 }

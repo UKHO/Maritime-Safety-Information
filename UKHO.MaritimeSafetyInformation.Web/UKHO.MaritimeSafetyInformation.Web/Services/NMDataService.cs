@@ -24,13 +24,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
             _authFssTokenProvider = authFssTokenProvider;
         }
+
         public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             try
             {
-                AuthenticationResult authentication = await _authFssTokenProvider.GetAuthTokenAsync();
-                string accessToken = authentication.AccessToken;
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken();               
 
                 _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
 

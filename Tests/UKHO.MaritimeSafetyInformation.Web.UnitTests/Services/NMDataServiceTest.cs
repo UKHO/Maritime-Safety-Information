@@ -44,7 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             int year = 2022;
             int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GetAuthTokenAsync());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken());
 
             Result<BatchSearchResponse> SearchResult = new()
             {
@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             int year = 2022;
             int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GetAuthTokenAsync());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("", "")).Returns(res);
@@ -128,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             int year = 2022;
             int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GetAuthTokenAsync()).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken()).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssWeeklySearchAsync("", "")).Returns(res);
