@@ -53,6 +53,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return PartialView("~/Views/NoticestoMariners/_WeeklyFilesList.cshtml",listFiles);
         }
 
-        
+        public async Task<IActionResult> ShowDailyFilesAsync()
+        {
+            _logger.LogInformation(EventIds.MSIShowDailyFilesRequest.ToEventId(), "Maritime safety information request for show daily files requested:{correlationId}", GetCurrentCorrelationId());
+
+            List<ShowDailyFilesResponseModel> Entries = await nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+
+            _logger.LogInformation(EventIds.MSIShowDailyFilesCompleted.ToEventId(), "Maritime safety information request for show daily files completed:{correlationId}", GetCurrentCorrelationId());
+
+            return View(Entries);
+        }
+
+
     }
 }

@@ -40,6 +40,31 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         RetrievalOfMSIBatchSearchResponse = 910016,
         RetrievalOfMSIBatchSearchResponseFailed = 910017,
         RetrievalOfMSIFailed = 910018,
+        /// <summary>
+        /// 910051 -  Event data for Retrieval of MSI Daily File Request.
+        /// </summary>
+        MSIShowDailyFilesRequest = 910051,
+        /// <summary>
+        /// 910052 -  Event data for Retrieval of MSI Daily File Completed.
+        /// </summary>
+        MSIShowDailyFilesCompleted = 910052,
+        /// <summary>
+        /// 910053 -  Event data for Retrieval of MSI Daily File Response Started.
+        /// </summary>
+        MSIShowDailyFilesResponseStarted = 910053,
+        /// <summary>
+        /// 910054 -  Event data for Retrieval of MSI Daily File Response Data Found.
+        /// </summary>
+        MSIShowDailyFilesResponseDataFound = 910054,
+        /// <summary>
+        /// 910055-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        MSIShowDailyFilesResponseDataNotFound = 910055,
+        /// <summary>
+        /// 910056-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        MSIShowDailyFilesResponseFailed = 910056,
+
         UnhandledCleanUpException = 910019
     }
 

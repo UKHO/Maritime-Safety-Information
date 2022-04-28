@@ -5,6 +5,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
     public interface IFileShareService
     {
-        public Task<IResult<BatchSearchResponse>> FssWeeklySearchAsync(string searchText,string accessToken);
+        public Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText,string accessToken);
     }
 }

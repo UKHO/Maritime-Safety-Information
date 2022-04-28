@@ -1,13 +1,12 @@
-﻿using System.Globalization;
-using Microsoft.Extensions.Options;
-using Azure.Core;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+using System.Globalization;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helper;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models;
-using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
@@ -43,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
 
                 string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-                var result = await fileShareService.FssWeeklySearchAsync(searchText, accessToken);
+                var result = await fileShareService.FssBatchSearchAsync(searchText, accessToken);
 
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult.Entries.Count > 0)
@@ -53,7 +52,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     ListshowFilesResponseModels = nMHelper.GetShowFilesResponses(SearchResult);
                     ListshowFilesResponseModels = ListshowFilesResponseModels.OrderBy(e => e.FileDescription).ToList();
                 }
-                else {
+                else
+                {
                     _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseDataFoundNotFound.ToEventId(), "Maritime safety information request for show weekly files response data found");
                 }
             }
@@ -65,7 +65,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return ListshowFilesResponseModels;
 
         }
-
 
         public List<KeyValuePair<string, string>> GetPastYears()
         {
@@ -122,6 +121,41 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.RetrievalOfMSIGetAllWeeksofYearFailed.ToEventId(), "Failed to get all weeks of year data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
             }
             return weeks;
+        }
+
+        public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string CurrentCorrelationId)
+        {
+            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new List<ShowDailyFilesResponseModel>();
+            try
+            {
+                AuthenticationResult authentication = await _authFssTokenProvider.GetAuthTokenAsync();
+                string accessToken = authentication.AccessToken;
+
+                _logger.LogInformation(EventIds.MSIShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request for show daily files response started:{CurrentCorrelationId}", CurrentCorrelationId);
+
+                string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Daily'";
+                var result = await fileShareService.FssBatchSearchAsync(searchText, accessToken);
+
+                BatchSearchResponse SearchResult = result.Data;
+
+                if (SearchResult.Entries !=null && SearchResult.Entries.Count > 0)
+                {
+                    _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request for show daily files response data found:{CurrentCorrelationId}", CurrentCorrelationId);
+
+                    showDailyFilesResponses = nMHelper.GetDailyShowFilesResponse(SearchResult);
+                }
+                else
+                {
+                    _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request for show daily files response data not found:{CurrentCorrelationId}", CurrentCorrelationId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.MSIShowDailyFilesResponseFailed.ToEventId(), "Failed to get MSI Daily response data {CurrentCorrelationId} {exceptionMessage} {exceptionTrace}", CurrentCorrelationId, ex.Message, ex.StackTrace);
+            }
+
+            return showDailyFilesResponses;
+
         }
 
     }

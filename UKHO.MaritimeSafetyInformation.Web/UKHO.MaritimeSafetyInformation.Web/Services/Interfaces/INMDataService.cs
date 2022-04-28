@@ -8,5 +8,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         public Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week);
         public List<KeyValuePair<string, string>> GetPastYears();
         public List<KeyValuePair<string, string>> GetAllWeeksofYear(int year);
+        public Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string CurrentCorrelationId);
     }
 }

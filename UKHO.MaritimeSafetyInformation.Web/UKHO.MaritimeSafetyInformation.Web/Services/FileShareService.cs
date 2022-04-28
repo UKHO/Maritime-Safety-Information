@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public async Task<IResult<BatchSearchResponse>> FssWeeklySearchAsync(string searchText, string accessToken)
+        public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken)
         {
             try
             {
