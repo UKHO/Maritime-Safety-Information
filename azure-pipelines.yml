@@ -225,7 +225,7 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
-      - job: FunctionalTest
+       - job: FunctionalTest
         dependsOn: 
         - DevDeployApp
         pool: $(WindowsPool)
@@ -241,9 +241,6 @@ stages:
              inputs:
               versionSpec: '14.x'
              displayName: 'Install Node.js'
-
-           - script: 
-              echo "$(url)"
 
            - script: |
               npm ci
@@ -265,9 +262,9 @@ stages:
              condition: succeededOrFailed()
              inputs:
                testRunner: 'JUnit'
-               testResultsFiles: 'junit.xml'
+               testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
                testRunTitle: Dev Functional Test Results
              displayName: 'Publish Functional Test Results'
 
@@ -303,13 +300,13 @@ stages:
               npm run test:a11y
              displayName: 'Run Accessibility Tests'
              workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
-
+          
            - task: PublishTestResults@2
              condition: succeededOrFailed()
              inputs:
                testRunner: 'JUnit'
-               testResultsFiles: 'junit.xml'
+               testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
                testRunTitle: Dev Accessibility Test Results
              displayName: 'Publish Accessibility Test Results'
