@@ -1,8 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using UKHO.FileShareClient.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ShowFilesResponseModel
     {
         [DataMember(Name = "batchId", EmitDefaultValue = false)]
@@ -11,6 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models
             get;
             set;
         }
+
         [DataMember(Name = "filename", EmitDefaultValue = false)]
         public string Filename
         {

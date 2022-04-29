@@ -1,64 +1,38 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
+﻿using Azure.Core;
+using Azure.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
 namespace UKHO.MaritimeSafetyInformation.Common
 {
+    [ExcludeFromCodeCoverage]
     public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
+        private readonly IOptions<AzureADConfiguration> _azureADConfiguration;
+        private readonly ILogger<AuthFssTokenProvider> _logger;
 
-        private readonly IOptions<AzureADConfiguration> azureADConfiguration;
-
-        public AuthFssTokenProvider(IOptions<AzureADConfiguration> _azureADConfiguration)
+        public AuthFssTokenProvider(IOptions<AzureADConfiguration> azureADConfiguration, ILogger<AuthFssTokenProvider> logger)
         {
-            azureADConfiguration = _azureADConfiguration;
+            _azureADConfiguration = azureADConfiguration;
+            _logger = logger;
         }
 
-        public async Task<AuthenticationResult> GetAuthTokenAsync()
+        public async Task<string> GenerateADAccessToken(string correlationId)
         {
-            AuthenticationResult authenticationResult;
-            authenticationResult = await GenerateAccessTokenLocal();
-            return authenticationResult;
-            ////#if(DEBUG)
-            ////            authenticationResult = await GenerateAccessTokenLocal();
-            ////            return authenticationResult;
-            ////#else
-            ////            authenticationResult  = await GenerateADAccessToken();
-            ////#endif
-        }
-
-       ////public async Task<AuthenticationResult> GenerateADAccessToken()
-       ////{
-       ////
-       ////
-       ////    string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
-       ////    IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(azureADConfiguration.Value.ClientId)
-       ////    .WithClientSecret(azureADConfiguration.Value.ClientSecret)
-       ////    .WithAuthority(new Uri(azureADConfiguration.Value.MicrosoftOnlineLoginUrl + azureADConfiguration.Value.TenantId))
-       ////    .Build(); AuthenticationResult authenticationResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
-       ////    return authenticationResult;
-       ////}
-
-        public async Task<AuthenticationResult> GenerateAccessTokenLocal()
-        {
-            string tenantId = azureADConfiguration.Value.TenantId;
-            string[] scopes = new string[] { azureADConfiguration.Value.Scope + "/.default" };
-
-            var publicClientApplication = PublicClientApplicationBuilder
-              .Create(azureADConfiguration.Value.Scope)
-              .WithAuthority(AzureCloudInstance.AzurePublic, tenantId)
-              .WithDefaultRedirectUri()
-              .Build();
-
-
-            using var cancellationSource = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-            ////TokenCacheHelper.EnableSerialization(publicClientApplication.UserTokenCache);
-            var accounts = (await publicClientApplication.GetAccountsAsync()).ToList();
-            var authenticationResult = await publicClientApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
-                    .ExecuteAsync(cancellationSource.Token)
-                    .ConfigureAwait(false);
-
-            return authenticationResult;
+            try
+            {
+                DefaultAzureCredential azureCredential = new();
+                TokenRequestContext tokenRequestContext = new(new string[] { _azureADConfiguration.Value.ClientId + "/.default" });
+                AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);               
+                return tokenResult.Token;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("AD Authentication failed with message:{ex} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                return string.Empty;
+            }
         }
     }
 }

@@ -25,7 +25,55 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         EventHubLoggingEventDataForHealthCheck = 910005,
         /// <summary>
-        /// 910006 -  Event data for Retrieval of MSI Weekly File Request.
+        /// 910006 -  Notices To Mariners Weekly File Request Started.
+        /// </summary>
+        NoticesToMarinersWeeklyFilesRequestStarted = 910006,
+        /// <summary>
+        /// 910007 -  Notices To Mariners Weekly File Request Started.
+        /// </summary>
+        NoticesToMarinersWeeklyFilesRequestCompleted = 910007,
+        /// <summary>
+        /// 910008 -  Get NM Batch Files Request Started.
+        /// </summary>
+        GetNMBatchFilesRequestStarted = 910008,
+        /// <summary>
+        /// 910009 -  Get NM Batch Files Data Found.
+        /// </summary>
+        GetNMBatchFilesRequestDataFound = 910009,
+        /// <summary>
+        /// 910010 -  Get NM Batch Files Not Data Found.
+        /// </summary>
+        GetNMBatchFilesRequestDataFoundNotFound = 910010,
+        /// <summary>
+        /// 910011 -  Get NM Batch Files Request Failed.
+        /// </summary>
+        GetNMBatchFilesResponseFailed = 910011,
+        /// <summary>
+        /// 910012 -  Get Past Years Request Started.
+        /// </summary>
+        GetPastYearsStarted = 910012,
+        /// <summary>
+        /// 910013 -  Get Past Years Request Failed.
+        /// </summary>
+        GetPastYearsFailed = 910013,
+        /// <summary>
+        /// 910014 -  Get All Weeks of Year Request Started.
+        /// </summary>
+        GetAllWeeksofYearStarted = 910014,
+        /// <summary>
+        /// 910015 -  Get All Weeks of Year Request Failed.
+        /// </summary>
+        GetAllWeeksofYearFailed = 910015,
+        /// <summary>
+        /// 910016 -  FSS Batch Search Request Started.
+        /// </summary>
+        FSSBatchSearchResponseStarted = 910016,
+        /// <summary>
+        /// 910017 -  FSS Batch Search Request Failed.
+        /// </summary>
+        FSSBatchSearchResponseFailed = 910017,
+        /// <summary>
+        /// 910018 -  Unhandled Exception Occured.
         /// </summary>
         RetrievalOfMSIShowWeeklyFilesRequest = 910006,
         RetrievalOfMSIShowWeeklyFilesCompleted = 910007,

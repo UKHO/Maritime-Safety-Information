@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
-using System.Globalization;
+﻿using System.Globalization;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common;
-using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helper;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models;
@@ -13,145 +10,125 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class NMDataService : INMDataService
     {
-        private readonly IHttpClientFactory httpClientFactory;
         private readonly IFileShareService fileShareService;
         private readonly ILogger<NMDataService> _logger;
-        private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
-        private readonly NMHelper nMHelper;
-
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
-        public NMDataService(IFileShareService fileShareService, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
+        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
             this.fileShareService = fileShareService;
-            this.httpClientFactory = httpClientFactory;
-            this.fileShareServiceConfig = fileShareServiceConfig;
             _logger = logger;
-            nMHelper = new NMHelper();
             _authFssTokenProvider = authFssTokenProvider;
-
-
         }
-        public async Task<List<ShowFilesResponseModel>> GetBatchDetailsFiles(int year, int week)
+
+        public async Task<List<ShowFilesResponseModel>> GetNMBatchFiles(int year, int week, string correlationId)
         {
-            List<ShowFilesResponseModel> ListshowFilesResponseModels = new List<ShowFilesResponseModel>();
+            List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             try
             {
-                AuthenticationResult authentication = await _authFssTokenProvider.GetAuthTokenAsync();
-                string accessToken = authentication.AccessToken;
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);               
 
-                _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseStarted.ToEventId(), "Maritime safety information request for show weekly files response started");
+                _logger.LogInformation(EventIds.GetNMBatchFilesRequestStarted.ToEventId(), "Maritime safety information request for show weekly files response started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-                var result = await fileShareService.FssBatchSearchAsync(searchText, accessToken);
+                string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
+                IResult<BatchSearchResponse> result = await fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
 
                 BatchSearchResponse SearchResult = result.Data;
-                if (SearchResult.Entries.Count > 0)
+                if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseDataFound.ToEventId(), "Maritime safety information request for show weekly files response data found");
+                    _logger.LogInformation(EventIds.GetNMBatchFilesRequestDataFound.ToEventId(), "Maritime safety information request for show weekly files response data found for _X-Correlation-ID:{correlationId}", correlationId);
 
-                    ListshowFilesResponseModels = nMHelper.GetShowFilesResponses(SearchResult);
+                    ListshowFilesResponseModels = NMHelper.GetShowFilesResponses(SearchResult);
                     ListshowFilesResponseModels = ListshowFilesResponseModels.OrderBy(e => e.FileDescription).ToList();
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.RetrievalOfMSIShowFilesResponseDataFoundNotFound.ToEventId(), "Maritime safety information request for show weekly files response data found");
+                    _logger.LogInformation(EventIds.GetNMBatchFilesRequestDataFoundNotFound.ToEventId(), "Maritime safety information request for show weekly files response data found", correlationId);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.RetrievalOfMSIShowFilesResponseFailed.ToEventId(), "Failed to get MSI response data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError(EventIds.GetNMBatchFilesResponseFailed.ToEventId(), "Failed to get MSI response data {exceptionMessage} {exceptionTrace} for _X-Correlation-ID:{CorrelationId}", ex.Message, ex.StackTrace, correlationId);
+                throw;
             }
-
             return ListshowFilesResponseModels;
 
         }
 
-        public List<KeyValuePair<string, string>> GetPastYears()
+        public List<KeyValuePair<string, string>> GetPastYears(string correlationId)
         {
-            List<KeyValuePair<string, string>> years = new List<KeyValuePair<string, string>>();
-            try
-            {
-                _logger.LogInformation(EventIds.RetrievalOfMSIGetPastYearsStart.ToEventId(), "Maritime safety information request get past years started");
+            List<KeyValuePair<string, string>> years = new();
 
-                years.Add(new KeyValuePair<string, string>("Year", ""));
-                for (int i = 0; i < 3; i++)
-                {
-                    string year = (DateTime.Now.Year - i).ToString();
-                    years.Add(new KeyValuePair<string, string>(year, year));
-                }
-            }
-            catch (Exception ex)
+            _logger.LogInformation(EventIds.GetPastYearsStarted.ToEventId(), "Maritime safety information request get past years started", correlationId);
+
+            years.Add(new KeyValuePair<string, string>("Year", ""));
+            for (int i = 0; i < 3; i++)
             {
-                _logger.LogError(EventIds.RetrievalOfMSIGetPastYearsFailed.ToEventId(), "Failed to get past years data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
+                string year = (DateTime.Now.Year - i).ToString();
+                years.Add(new KeyValuePair<string, string>(year, year));
             }
+
             return years;
         }
-        public List<KeyValuePair<string, string>> GetAllWeeksofYear(int year)
+        public List<KeyValuePair<string, string>> GetAllWeeksofYear(int year, string correlationId)
         {
-            List<KeyValuePair<string, string>> weeks = new List<KeyValuePair<string, string>>();
-            try
+            List<KeyValuePair<string, string>> weeks = new();
+
+            _logger.LogInformation(EventIds.GetAllWeeksofYearStarted.ToEventId(), "Maritime safety information request get all weeks of year started", correlationId);
+
+            weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
+
+            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            DateTime lastdate;
+            if (DateTime.Now.Year == year)
             {
-                _logger.LogInformation(EventIds.RetrievalOfMSIGetAllWeeksofYearStart.ToEventId(), "Maritime safety information request get all weeks of year started");
-
-                weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
-
-                DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-                DateTime lastdate;
-                if (DateTime.Now.Year == year)
-                {
-                    lastdate = new DateTime(year, DateTime.Now.Month, DateTime.Now.Day);
-                }
-                else
-                {
-                    lastdate = new DateTime(year, 12, 31);
-                }
-                Calendar cal = dfi.Calendar;
-
-                int totalWeeks = cal.GetWeekOfYear(lastdate, dfi.CalendarWeekRule,
-                                                    dfi.FirstDayOfWeek);
-
-                for (int i = 0; i < totalWeeks; i++)
-                {
-                    string week = (i + 1).ToString();
-                    weeks.Add(new KeyValuePair<string, string>(week, week));
-                }
+                lastdate = new DateTime(year, DateTime.Now.Month, DateTime.Now.Day);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(EventIds.RetrievalOfMSIGetAllWeeksofYearFailed.ToEventId(), "Failed to get all weeks of year data {exceptionMessage} {exceptionTrace}", ex.Message, ex.StackTrace);
+                lastdate = new DateTime(year, 12, 31);
             }
+            Calendar cal = dfi.Calendar;
+
+            int totalWeeks = cal.GetWeekOfYear(lastdate, dfi.CalendarWeekRule,
+                                                dfi.FirstDayOfWeek);
+
+            for (int i = 0; i < totalWeeks; i++)
+            {
+                string week = (i + 1).ToString();
+                weeks.Add(new KeyValuePair<string, string>(week, week));
+            }
+
             return weeks;
         }
 
-        public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string CurrentCorrelationId)
+        public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new List<ShowDailyFilesResponseModel>();
             try
             {
-                AuthenticationResult authentication = await _authFssTokenProvider.GetAuthTokenAsync();
-                string accessToken = authentication.AccessToken;
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-                _logger.LogInformation(EventIds.MSIShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request for show daily files response started:{CurrentCorrelationId}", CurrentCorrelationId);
+                _logger.LogInformation(EventIds.MSIShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request for show daily files response started", correlationId);
 
-                string searchText = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Daily'";
-                var result = await fileShareService.FssBatchSearchAsync(searchText, accessToken);
+                string searchText = $" and $batch(Frequency) eq 'Daily'";
+                var result = await fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
 
                 BatchSearchResponse SearchResult = result.Data;
 
                 if (SearchResult.Entries !=null && SearchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request for show daily files response data found:{CurrentCorrelationId}", CurrentCorrelationId);
+                    _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request for show daily files response data found", correlationId);
 
-                    showDailyFilesResponses = nMHelper.GetDailyShowFilesResponse(SearchResult);
+                    showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(SearchResult);
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request for show daily files response data not found:{CurrentCorrelationId}", CurrentCorrelationId);
+                    _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request for show daily files response data not found", correlationId);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.MSIShowDailyFilesResponseFailed.ToEventId(), "Failed to get MSI Daily response data {CurrentCorrelationId} {exceptionMessage} {exceptionTrace}", CurrentCorrelationId, ex.Message, ex.StackTrace);
+                _logger.LogError(EventIds.MSIShowDailyFilesResponseFailed.ToEventId(), "Failed to get MSI Daily response data {correlationId} {exceptionMessage} {exceptionTrace}", correlationId, ex.Message, ex.StackTrace);
             }
 
             return showDailyFilesResponses;

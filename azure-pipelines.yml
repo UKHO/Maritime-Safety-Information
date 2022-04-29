@@ -31,9 +31,47 @@ variables:
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
+  - name: coverityPool
+    value: NautilusBuild
+  - group: Covscan-vars
 
+resources:
+  repositories:
+  - repository: covscan
+    type: github
+    name: UKHO/coverityscan-buildtemplates
+    endpoint: "Maritime Safety Information"
+    ref: refs/heads/master
 
 stages:
+  - stage: CoverityScan
+    displayName: "Coverity Scan"
+    pool:
+      name: $(coverityPool)
+    jobs:
+    - job: Coverity
+      workspace:
+        clean: all
+      steps:
+        - checkout: self
+          submodules: recursive
+        - task: UseDotNet@2
+          displayName: 'Use .NET 6.0.x sdk'
+          inputs:
+            packageType: sdk
+            version: 6.0.x
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+        - checkout: covscan
+        - template: dotnet-cov.yml@covScan
+          parameters:
+            CovHostUrl: "$(CovHostUrl)"
+            CovUser: "$(CovUser)"
+            CovPwd: "$(CovPwd)"
+            StreamName: "maritime-safety-information"
+            BuildCommand: "$(Build.Repository.LocalPath)/maritime-safety-information/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.Web.csproj"
+            StripPath: $(Build.Repository.LocalPath)/maritime-safety-information
+            CoverityScanPath: $(Build.Repository.LocalPath)/coverityscan-buildtemplates
+
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (inc DependencyChecker, Dotnet Build , dotnet test and publish artifact )"
     dependsOn: []
@@ -112,7 +150,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]*'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -157,7 +195,7 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'              
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"

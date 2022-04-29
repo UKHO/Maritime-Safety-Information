@@ -11,7 +11,7 @@ $(function () {
 
 function LoadYears() {
     $.ajax({
-        url: '/NoticestoMariners/LoadYears',
+        url: '/NoticesToMariners/LoadYears',
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -34,7 +34,7 @@ function LoadYears() {
 function LoadWeeks(selectedYear) {
     if (selectedYear != "") {
         $.ajax({
-            url: '/NoticestoMariners/LoadWeeks',
+            url: '/NoticesToMariners/LoadWeeks',
             type: "POST",
             data: {
                 year: parseInt(selectedYear)
@@ -59,7 +59,7 @@ function ShowWeeklyFilesAsync() {
     let selectedWeek = $('#ddlWeeks').val();
     if (selectedYear != "" && selectedWeek != "") {
         $.ajax({
-            url: '/NoticestoMariners/ShowWeeklyFiles',
+            url: '/NoticesToMariners/ShowWeeklyFiles',
             type: "POST",
             data: {
                 year: parseInt(selectedYear),

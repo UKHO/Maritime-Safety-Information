@@ -1,10 +1,9 @@
-﻿using UKHO.FileShareClient;
-using UKHO.FileShareClient.Models;
+﻿using UKHO.FileShareClient.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
     public interface IFileShareService
     {
-        public Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText,string accessToken);
+        public Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken, string correlationId);
     }
 }
