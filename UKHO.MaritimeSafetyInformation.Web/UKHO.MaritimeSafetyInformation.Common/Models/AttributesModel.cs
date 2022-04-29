@@ -4,6 +4,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models
 {
     public class AttributesModel
     {
+        [DataMember(Name = "batchid", EmitDefaultValue = false)]
+        public string BatchId
+        {
+            get;
+            set;
+        }
         [DataMember(Name = "datadate", EmitDefaultValue = false)]
         public string DataDate
         {
@@ -29,5 +35,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models
             get;
             set;
         }
+        [DataMember(Name = "allfileszipsize", EmitDefaultValue = false)]
+        public long AllFilesZipSize
+        {
+            get;
+            set;
+        }
+
     }
 }

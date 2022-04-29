@@ -36,12 +36,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helper
         public List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse SearchResult)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new List<ShowDailyFilesResponseModel>();
-            List<AttributesModel> lstattributes = (SearchResult.Entries.Select(item => new AttributesModel
+            List<AttributesModel> lstattributes = (SearchResult.Entries.Where(x=>x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
             {
+                BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
                 Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
-                YearWeek = item.Attributes.Where(x => x.Key.Equals("Year / Week")).Select(x => x.Value).FirstOrDefault()
+                YearWeek = item.Attributes.Where(x => x.Key.Equals("Year / Week")).Select(x => x.Value).FirstOrDefault(),
+                AllFilesZipSize = (long)item.AllFilesZipSize
             })).ToList();
 
             var groupped = lstattributes.GroupBy(x => x.YearWeek);
@@ -49,11 +51,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helper
             {
                 List<DailyFilesDataModel> lstDataDate = (group.Select(item => new DailyFilesDataModel
                 {
+                    BatchId = item.BatchId,
                     DataDate = item.DataDate,
                     Filename = "Daily " + item.DataDate + ".zip",
                     FileExtension = ".zip",
                     FileDescription = "Daily " + item.DataDate + ".zip",
-                    FileSizeinKB = FileHelper.FormatSize(30000),
+                    AllFilesZipSize = item.AllFilesZipSize,
+                    FileSizeinKB = FileHelper.FormatSize(item.AllFilesZipSize),
                     MimeType = "application/gzip"
                 })).ToList();
 
