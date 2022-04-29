@@ -286,6 +286,11 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
+              $env:PLAYWRIGHT_JUNIT_OUTPUT_NAME="results.xml"
+             displayName: 'Setting Environment variable for Junit reporter'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
+
+           - script: |
               npm ci
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'

@@ -5,7 +5,7 @@ import { devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   testDir: './AutoTests',
 
-    reporter:'junit',
+    reporter: [ ['junit', { outputFile: 'results.xml' }] ],
 
  //  testDir: './tests/Accessebility Test',
  
