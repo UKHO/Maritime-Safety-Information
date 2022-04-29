@@ -1,3 +1,14 @@
+data "azurerm_sql_server" "sql_server" {
+  name = var.database_server_name
+  resource_group_name = var.database_resource_group  
+}
+
+data "azurerm_sql_database" "sql_database" {
+  resource_group_name = var.database_resource_group
+  server_name = data.azurerm_sql_server.sql_server.name
+  name = var.database_name
+}
+
 module "app_insights" {
   source              = "./Modules/AppInsights"
   name                = "${local.service_name}-${local.env_name}-insights"

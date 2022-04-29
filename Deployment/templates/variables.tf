@@ -31,3 +31,15 @@ variable "sku_name" {
              "live" =  "P1v3"
             }
 }
+
+variable "database_resource_group" {
+    type = string
+}
+
+variable "database_server_name" {
+    type = string
+}
+
+variable "database_name" {
+    type = string
+}
