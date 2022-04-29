@@ -26,7 +26,7 @@ variables:
   - name: UKHOAssemblyProduct
     value: "Maritime Safety Information"
   - name: UKHOAssemblyCopyright
-    value: "Copyright © UK Hydrographic Office"
+    value: "Copyright Â© UK Hydrographic Office"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: DeploymentPool
@@ -284,6 +284,12 @@ stages:
              inputs:
               versionSpec: '14.x'
              displayName: 'Install Node.js'
+
+           - task: PowerShell@2
+             inputs:
+              targetType: 'inline'
+              script: '$env:PLAYWRIGHT_JUNIT_OUTPUT_NAME="results.xml"'
+             displayName: 'Setting environment Variable for Junit reporter'
 
            - script: |
               npm ci
