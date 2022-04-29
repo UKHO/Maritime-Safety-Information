@@ -51,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             _logger.LogInformation(EventIds.MSIShowDailyFilesCompleted.ToEventId(), "Maritime safety information request for show daily files completed:{correlationId}", GetCurrentCorrelationId());
 
-            return View(Entries);
+            return View("~/Views/NoticesToMariners/_DailyFilesList.cshtml", Entries);
         }
 
 

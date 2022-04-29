@@ -35,12 +35,12 @@
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+    <PackageReference Include="UKHO.FileShareAdminClient" Version="1.1.20429.1" />
+    <PackageReference Include="UKHO.FileShareClient" Version="1.1.20429.1" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
 
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
-    <PackageReference Include="UKHO.FileShareAdminClient" Version="1.1.20225.10" />
-    <PackageReference Include="UKHO.FileShareClient" Version="1.1.20225.10" />
   </ItemGroup>
 
   <ItemGroup>

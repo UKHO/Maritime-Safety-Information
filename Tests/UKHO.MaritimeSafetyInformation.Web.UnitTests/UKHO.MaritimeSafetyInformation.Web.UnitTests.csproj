@@ -18,6 +18,8 @@
     </PackageReference>
       <PackageReference Include="System.Net.Security" Version="4.3.2" />
       <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+      <PackageReference Include="UKHO.FileShareAdminClient" Version="1.1.20429.1" />
+      <PackageReference Include="UKHO.FileShareClient" Version="1.1.20429.1" />
   </ItemGroup>
 
   <ItemGroup>
