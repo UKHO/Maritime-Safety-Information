@@ -6,7 +6,7 @@ const config: PlaywrightTestConfig = {
   testDir: './AutoTests',
 
     reporter: [['junit', { outputFile: 'results.xml' }]],
-    outputDir: './Tests/AutoTest/',
+    outputDir: './Tests/',
  //  testDir: './tests/Accessebility Test',
  
   /* Maximum time one test can run for. */
