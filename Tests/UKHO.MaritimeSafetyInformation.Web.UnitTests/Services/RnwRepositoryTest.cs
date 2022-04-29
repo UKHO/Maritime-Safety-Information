@@ -17,7 +17,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [SetUp]
         public void SetUp()
         {
-            var builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseInMemoryDatabase("msi-ut-db");
+            DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
+                                                                                .UseInMemoryDatabase("msi-ut-db");
 
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
 
