@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
-    public class RadioNavigationalWarningsAdminController : Controller
+    public class RadioNavigationalWarningsAdminController : BaseController<RadioNavigationalWarningsAdminController>
     {
         private readonly IRnwRepository _iRnwRepository;
+        private readonly ILogger<RadioNavigationalWarningsAdminController> _logger;
 
-        public RadioNavigationalWarningsAdminController(IRnwRepository iRnwRepository)
+        public RadioNavigationalWarningsAdminController(IHttpContextAccessor contextAccessor,
+                                                        ILogger<RadioNavigationalWarningsAdminController> logger,
+                                                        IRnwRepository iRnwRepository) : base(contextAccessor, logger)
         {
             _iRnwRepository = iRnwRepository;
+            _logger = logger;
         }
 
         // GET: RadioNavigationalWarnings
@@ -34,10 +39,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _iRnwRepository.AddRadioNavigation(radioNavigationalWarnings);
+                _logger.LogInformation(EventIds.MSICreateNewRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                await _iRnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings);
+
+                _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 TempData["message"] = "Record created successfully!";
-
                 return RedirectToAction(nameof(Index));
             }
 

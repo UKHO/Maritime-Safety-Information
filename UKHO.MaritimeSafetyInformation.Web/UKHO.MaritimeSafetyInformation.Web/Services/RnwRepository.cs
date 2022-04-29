@@ -11,7 +11,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _context = context;
         }
 
-        public async Task AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings)
+        public async Task AddRadioNavigationWarnings(RadioNavigationalWarnings radioNavigationalWarnings)
         {
             _context.Add(radioNavigationalWarnings);
             await _context.SaveChangesAsync();
