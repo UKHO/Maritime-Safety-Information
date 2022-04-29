@@ -270,6 +270,7 @@ stages:
         displayName: "Dev Functional Automated Tests"
         variables: 
          url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
         steps:
@@ -302,7 +303,7 @@ stages:
                testRunner: 'JUnit'
                testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
+               searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
                testRunTitle: Dev Functional Test Results
              displayName: 'Publish Functional Test Results'
 
@@ -313,6 +314,7 @@ stages:
         displayName: "Dev Accessibility Tests"
         variables: 
          url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
         steps:
@@ -345,7 +347,7 @@ stages:
                testRunner: 'JUnit'
                testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
+               searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
                testRunTitle: Dev Accessibility Test Results
              displayName: 'Publish Accessibility Test Results'
 
