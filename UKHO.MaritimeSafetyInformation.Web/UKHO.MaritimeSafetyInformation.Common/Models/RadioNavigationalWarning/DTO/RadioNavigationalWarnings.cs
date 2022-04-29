@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
         [Required]
         public string Content { get; set; }
 
-        public DateTime ExpiryDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
 
         public bool IsDeleted { get; set; }
     }

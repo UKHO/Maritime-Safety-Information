@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         // POST: RadioNavigationalWarnings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WarningType,Reference,DateTimeGroup,Summary,Content,ExpiryDate")] RadioNavigationalWarnings radioNavigationalWarnings)
+        public async Task<IActionResult> Create(RadioNavigationalWarnings radioNavigationalWarnings)
         {
             if (ModelState.IsValid)
             {
