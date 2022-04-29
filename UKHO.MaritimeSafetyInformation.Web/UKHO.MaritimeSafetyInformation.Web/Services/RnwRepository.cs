@@ -14,12 +14,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _configuration = configuration;
         }
 
-        public void AddRadioNavigation(RadioNavigationalWarnings radioNavigationalWarnings)
-        {
-            _context.Add(radioNavigationalWarnings);
-            _context.SaveChanges();
-        }
-
         public RadioNavigationalWarningsAdminListFilter GetRadioNavigationForAdmin(int pageIndex, int warningTypeId, string year)
         {
 
