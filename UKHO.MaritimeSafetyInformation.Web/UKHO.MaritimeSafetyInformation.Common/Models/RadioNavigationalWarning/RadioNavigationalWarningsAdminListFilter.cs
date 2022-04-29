@@ -4,6 +4,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
     public class RadioNavigationalWarningsAdminListFilter
     {
+        public int SrNo { get; set; }
+
         public List<RadioNavigationalWarningsAdminList> RadioNavigationalWarningsAdminList { get; set; }
 
         public List<WarningType> WarningTypes { get; set; }
