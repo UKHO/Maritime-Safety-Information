@@ -12,30 +12,34 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
-                <label asp-for="WarningType" class="form-label">Warning Type <span class="text-danger">*</span></label>
-                <select asp-for="WarningType" 
-                asp-items="@(new SelectList(ViewBag.message,"Id","Name"))" 
-                class="form-control"></select>
+                <label asp-for="WarningType" class="form-label"></label>
+                <span class="text-danger">*</span>
+                <select asp-for="WarningType" asp-items="@(new SelectList(ViewBag.WarningType,"Id","Name"))" class="form-control">
+                    <option value="" selected disabled hidden>--Select Warning Type--</option>
+                </select>
                 <span asp-validation-for="WarningType" class="text-danger"></span>
-             
             </div>
             <div class="mb-3">
-                <label asp-for="Reference" class="form-label">Reference <span class="text-danger">*</span></label>
+                <label asp-for="Reference" class="form-label"></label>
+                <span class="text-danger">*</span>
                 <input asp-for="Reference" class="form-control" />
                 <span asp-validation-for="Reference" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="DateTimeGroup" class="form-label">Date/time <span class="text-danger">*</span></label>
+                <label asp-for="DateTimeGroup" class="form-label">Date/time</label>
+                <span class="text-danger">*</span>
                 <input asp-for="DateTimeGroup" class="form-control" />
                 <span asp-validation-for="DateTimeGroup" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Summary" class="form-label">Description <span class="text-danger">*</span></label>
+                <label asp-for="Summary" class="form-label"></label>
+                <span class="text-danger">*</span>
                 <input asp-for="Summary" class="form-control" />
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Content" class="form-label">Text <span class="text-danger">*</span></label>
+                <label asp-for="Content" class="form-label"></label>
+                <span class="text-danger">*</span>
                 <input asp-for="Content" class="form-control" />
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>

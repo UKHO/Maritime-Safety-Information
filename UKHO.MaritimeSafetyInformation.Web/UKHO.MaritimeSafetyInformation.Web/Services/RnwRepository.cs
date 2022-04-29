@@ -20,8 +20,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public List<WarningType> GetWarningType()
         {
             List<WarningType> warningType = (from c in _context.WarningType select c).ToList();
-            warningType.Insert(0, new WarningType { Id = 0, Name = "--Select Warning Type--" });
-
             return warningType;
         }
     }

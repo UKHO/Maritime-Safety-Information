@@ -22,18 +22,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         // GET: RadioNavigationalWarnings/Create
         public IActionResult Create()
         {
-            ViewBag.message = _iRnwRepository.GetWarningType();
+            ViewBag.WarningType = _iRnwRepository.GetWarningType();
+         
             return View();
         }
 
         // POST: RadioNavigationalWarnings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WarningType,Reference,DateTimeGroup,Summary,Content,ExpiryDate,IsDeleted")] RadioNavigationalWarnings radioNavigationalWarnings)
+        public async Task<IActionResult> Create([Bind("Id,WarningType,Reference,DateTimeGroup,Summary,Content,ExpiryDate")] RadioNavigationalWarnings radioNavigationalWarnings)
         {
             if (ModelState.IsValid)
             {
                 await _iRnwRepository.AddRadioNavigation(radioNavigationalWarnings);
+
+                TempData["message"] = "Record created successfully!";
 
                 return RedirectToAction(nameof(Index));
             }

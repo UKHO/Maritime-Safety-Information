@@ -6,6 +6,15 @@
 
 <h1>Index</h1>
 
+@{
+    if (TempData["message"] != null) {
+    <script type="text/javascript">
+        alert(@Html.Raw(Json.Serialize(TempData["message"])));
+    </script>
+        }
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
