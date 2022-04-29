@@ -24,14 +24,13 @@
         </p>
     </div>
     <div>
-        @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"--Select Warning Type--", new { @class = "form-control", @id="WarningTypeIdDropDown", @onchange="clickfilter()"} )
+        @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"--Select Warning Type--", new { @class = "form-control", @onchange="WarningTypeValueChange(this)"} )
     </div>
     <div>
-        @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"--Select Year--",  new { @class = "form-control"} )
+        @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"--Select Year--",  new { @class = "form-control", @onchange="YearValueChange(this)"} )
     </div>
     <div>
-        @Html.ActionLink("Filter", "Index", new {warningType= @Model.WarningType, year= @Model.Years,page = 1},new { @class = "btn btn-dark"})
-        <input id="clickMe" type="button" value="clickme" onclick="clickfilter();" />
+        <button type="button" class="btn btn-dark" onclick="RnwFilterList(1)">Filter</button>
     </div>
 
     <div>
@@ -98,10 +97,10 @@
 
     <div>
         <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { pageIndex = 1 })">First</a></li>
-            <li class="page-item"><a class="@(Model.CurrentPageIndex==1 ? "page-link disabled-link" : "page-link enabled-link")" href="@Url.Action("Index", new { pageIndex = Model.CurrentPageIndex-1 })">Previous</a></li>
-            <li class="page-item"><a class="@(Model.CurrentPageIndex==Model.PageCount ? "page-link disabled-link" : "page-link enabled-link")" href="@Url.Action("Index", new { pageIndex = Model.CurrentPageIndex+1 })">Next</a></li>
-            <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { pageIndex =Model.PageCount })">Last</a></li>
+            <li class="page-item"><a class="page-link" onclick="RnwFilterList(1)">First</a></li>
+            <li class="page-item"><a class="@(Model.CurrentPageIndex==1 ? "page-link disabled-link" : "page-link enabled-link")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)" >Previous</a></li>
+            <li class="page-item"><a class="@(Model.CurrentPageIndex==Model.PageCount ? "page-link disabled-link" : "page-link enabled-link")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
+            <li class="page-item"><a class="page-link" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
         </ul>
         <div>
             Page @Model.CurrentPageIndex of @Model.PageCount
@@ -109,10 +108,39 @@
     </div>
 </div>
 <script>
-    function clickfilter()
+    var warningTypeSelectedValue;
+    var yeareSelectedValue;
+
+    function WarningTypeValueChange(WarningType)
     {
-      alert('hello!');
-      alert(@Model.WarningType);
-      alert(@Model.Year);
+        warningTypeSelectedValue=$(WarningType).val();
+    }
+
+    function YearValueChange(Year)
+    {
+        yeareSelectedValue=$(Year).val();
+    }
+
+    function RnwFilterList(pageSelectedIndex)
+    {
+       warningTypeSelectedValue = $("#WarningType").val();
+       yeareSelectedValue = $("#Year").val();
+
+        if(yeareSelectedValue==undefined)
+        {
+            yeareSelectedValue='';
+        }
+
+        if(warningTypeSelectedValue==undefined)
+        {
+            warningTypeSelectedValue=0;
+        }
+
+        var rnwUrl = '@Url.Action("Index", new { pageIndex ="ReplacepageSelectedIndex", warningType = "ReplaceWarningTypeSelectedValue",year= "ReplacYeareSelectedValue" })'
+        rnwUrl = rnwUrl.replace("ReplacepageSelectedIndex", pageSelectedIndex).trim();
+        rnwUrl = rnwUrl.replace("ReplaceWarningTypeSelectedValue", warningTypeSelectedValue).trim();
+        rnwUrl = rnwUrl.replace("ReplacYeareSelectedValue", yeareSelectedValue).trim();
+        rnwUrl = rnwUrl.replace("amp;","");
+        window.location.href  = rnwUrl.replace("amp;","");
     }
 </script>

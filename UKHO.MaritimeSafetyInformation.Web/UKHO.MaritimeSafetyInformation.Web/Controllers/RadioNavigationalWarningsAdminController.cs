@@ -14,9 +14,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _iRnwRepository = iRnwRepository;
         }
 
-        public async Task<IActionResult> Index(int warningType =0,string year= "", int pageIndex = 1)
+        public async Task<IActionResult> Index(int pageIndex = 1, int warningType =0, string year= "")
         {
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationForAdmin(pageIndex);
+            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationForAdmin(pageIndex, warningType, year);
             ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
             ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
             return View(radioNavigationalWarningsAdminFilter);
