@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.FSSBatchSearchResponseStarted.ToEventId(), "Maritime safety information request batch search response started", correlationId);
                 
-                string searchQuery = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType} " + searchText;
+                string searchQuery = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' " + searchText;
                 FileShareApiClient fileShareApi = new(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
                 result = await fileShareApi.Search(searchQuery, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
             }
