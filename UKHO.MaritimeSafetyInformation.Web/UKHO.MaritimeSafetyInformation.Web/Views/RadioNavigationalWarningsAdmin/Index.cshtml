@@ -20,13 +20,15 @@
 
     <div>
         <p>
-            <a asp-action="Create" class="disabled-link">Create NewRadio Navigational Warning</a>
+            <a asp-action="Create" class="disabled-link">Create New Warning</a>
         </p>
     </div>
     <div>
+        "Warning Type"
         @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"--Select Warning Type--", new { @class = "form-control", @onchange="WarningTypeValueChange(this)"} )
     </div>
     <div>
+        "Year"
         @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"--Select Year--",  new { @class = "form-control", @onchange="YearValueChange(this)"} )
     </div>
     <div>
