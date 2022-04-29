@@ -305,7 +305,7 @@ stages:
              condition: succeededOrFailed()
              inputs:
                testRunner: 'JUnit'
-               testResultsFiles: '**/*.results.xml'
+               testResultsFiles: '**/*results.xml'
                mergeTestResults: true
                searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
                testRunTitle: Dev Accessibility Test Results
