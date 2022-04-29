@@ -286,11 +286,6 @@ stages:
              displayName: 'Install Node.js'
 
            - script: |
-              $env:PLAYWRIGHT_JUNIT_OUTPUT_NAME="results.xml"
-             displayName: 'Setting Environment variable for Junit reporter'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests'
-
-           - script: |
               npm ci
              displayName: 'npm restore'
              workingDirectory: '$(Build.SourcesDirectory)/Tests'
@@ -310,7 +305,7 @@ stages:
              condition: succeededOrFailed()
              inputs:
                testRunner: 'JUnit'
-               testResultsFiles: 'results.xml'
+               testResultsFiles: '**/*.results.xml'
                mergeTestResults: true
                searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
                testRunTitle: Dev Accessibility Test Results
