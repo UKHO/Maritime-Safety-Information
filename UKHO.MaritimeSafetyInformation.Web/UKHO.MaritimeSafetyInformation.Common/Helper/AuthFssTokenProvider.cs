@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
             try
             {
                 DefaultAzureCredential azureCredential = new();
-                TokenRequestContext tokenRequestContext = new(new string[] { _azureADConfiguration.Value.ClientId + "/.default" });
+                TokenRequestContext tokenRequestContext = new(new string[] { _azureADConfiguration.Value.FssClientId + "/.default" });
                 AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);               
                 return tokenResult.Token;
             }

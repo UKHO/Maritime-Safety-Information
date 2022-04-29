@@ -1,5 +1,8 @@
-﻿namespace UKHO.MaritimeSafetyInformation.Common.Configuration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.MaritimeSafetyInformation.Common.Configuration
 {
+    [ExcludeFromCodeCoverage]
     public class FileShareServiceConfiguration
     {
         public string BaseUrl { get; set; }

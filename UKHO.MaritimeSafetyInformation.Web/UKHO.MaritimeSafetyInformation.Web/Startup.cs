@@ -64,8 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
               services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer("AzureAD", options =>
             {
-                options.Audience = AuthConfiguration.ClientId;
-                options.Authority = $"{AuthConfiguration.MicrosoftOnlineLoginUrl}{AuthConfiguration.TenantId}";
+                options.Audience = AuthConfiguration.FssClientId;
             });
 
             services.AddAuthorization(options =>
