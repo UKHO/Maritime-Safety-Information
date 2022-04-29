@@ -265,7 +265,7 @@ stages:
                testRunner: 'JUnit'
                testResultsFiles: 'results.xml'
                mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests/AutoTests'
+               searchFolder:  '$(System.DefaultWorkingDirectory)/'
                testRunTitle: Dev Functional Test Results
              displayName: 'Publish Functional Test Results'
 
