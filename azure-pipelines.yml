@@ -226,87 +226,88 @@ stages:
                     AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
       - job: FunctionalTest
-      dependsOn: 
-      - DevDeployApp
-      pool: $(WindowsPool)
-      displayName: "Dev Functional Automated Tests"
-      variables: 
-        url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
-      workspace:
-        clean: all
-      steps:
-          - checkout: self
+        dependsOn: 
+        - DevDeployApp
+        pool: $(WindowsPool)
+        displayName: "Dev Functional Automated Tests"
+        variables: 
+         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+        workspace:
+         clean: all
+        steps:
+           - checkout: self
 
-          - task: NodeTool@0
-            inputs:
-            versionSpec: '14.x'
-            displayName: 'Install Node.js'
+           - task: NodeTool@0
+             inputs:
+              versionSpec: '14.x'
+             displayName: 'Install Node.js'
 
-          - script: |
-            npm ci
-            displayName: 'npm restore'
-            workingDirectory: '$(Build.SourcesDirectory)/Tests'
+           - script: |
+              npm ci
+             displayName: 'npm restore'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-          - task: FileTransform@1
-            inputs:
-            folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-            fileType: 'json'
-            targetFiles: 'appConfig.json'
+           - task: FileTransform@1
+             inputs:
+              folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
+              fileType: 'json'
+              targetFiles: 'appConfig.json'
 
-          - script: |
-            npm run test:auto
-            displayName: 'Run Functional Tests'
-            workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
+           - script: |
+              npm run test:auto
+             displayName: 'Run Functional Tests'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
-          - task: PublishTestResults@2
-            condition: succeededOrFailed()
-            inputs:
-              testRunner: 'JUnit'
-              testResultsFiles: 'results.xml'
-              mergeTestResults: true
-              searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
-              testRunTitle: Dev Functional Test Results
-            displayName: 'Publish Functional Test Results'
+           - task: PublishTestResults@2
+             condition: succeededOrFailed()
+             inputs:
+               testRunner: 'JUnit'
+               testResultsFiles: 'results.xml'
+               mergeTestResults: true
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
+               testRunTitle: Dev Functional Test Results
+             displayName: 'Publish Functional Test Results'
 
-    - job: AccessibilityTest
-      dependsOn: 
-      - DevDeployApp
-      pool: $(WindowsPool)
-      displayName: "Dev Accessibility Tests"
-      variables: 
-        url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
-      workspace:
-        clean: all
-      steps:
-          - checkout: self
+      - job: AccessibilityTest
+        dependsOn: 
+        - DevDeployApp
+        pool: $(WindowsPool)
+        displayName: "Dev Accessibility Tests"
+        variables: 
+         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+        workspace:
+         clean: all
+        steps:
+           - checkout: self
 
-          - task: NodeTool@0
-            inputs:
-            versionSpec: '14.x'
-            displayName: 'Install Node.js'
+           - task: NodeTool@0
+             inputs:
+              versionSpec: '14.x'
+             displayName: 'Install Node.js'
 
-          - script: |
-            npm ci
-            displayName: 'npm restore'
-            workingDirectory: '$(Build.SourcesDirectory)/Tests'
+           - script: |
+              npm ci
+             displayName: 'npm restore'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-          - task: FileTransform@1
-            inputs:
-            folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-            fileType: 'json'
-            targetFiles: 'appConfig.json'
+           - task: FileTransform@1
+             inputs:
+              folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
+              fileType: 'json'
+              targetFiles: 'appConfig.json'
 
-          - script: |
-            npm run test:a11y
-            displayName: 'Run Accessibility Tests'
-            workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
+           - script: |
+              npm run test:a11y
+             displayName: 'Run Accessibility Tests'
+             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
           
-          - task: PublishTestResults@2
-            condition: succeededOrFailed()
-            inputs:
-              testRunner: 'JUnit'
-              testResultsFiles: 'results.xml'
-              mergeTestResults: true
-              searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
-              testRunTitle: Dev Accessibility Test Results
-            displayName: 'Publish Accessibility Test Results'
+           - task: PublishTestResults@2
+             condition: succeededOrFailed()
+             inputs:
+               testRunner: 'JUnit'
+               testResultsFiles: 'results.xml'
+               mergeTestResults: true
+               searchFolder:  '$(System.DefaultWorkingDirectory)/Tests'
+               testRunTitle: Dev Accessibility Test Results
+             displayName: 'Publish Accessibility Test Results'
+
