@@ -1,4 +1,6 @@
-﻿using UKHO.MaritimeSafetyInformation.Common;
+﻿using Microsoft.Extensions.Options;
+using UKHO.MaritimeSafetyInformation.Common;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
@@ -7,11 +9,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public class RnwRepository : IRnwRepository
     {
         private readonly RadioNavigationalWarningsContext _context;
-        private readonly IConfiguration _configuration;
-        public RnwRepository(RadioNavigationalWarningsContext context, IConfiguration configuration)
+        private readonly IOptions<RadioNavigationalWarningConfiguration> _radioNavigationalWarningConfiguration;
+        public RnwRepository(RadioNavigationalWarningsContext context, IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration)
         {
             _context = context;
-            _configuration = configuration;
+            _radioNavigationalWarningConfiguration = radioNavigationalWarningConfiguration;
         }
 
         public RadioNavigationalWarningsAdminListFilter GetRadioNavigationWarningsForAdmin(int pageIndex, int warningTypeId, string year)
@@ -19,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminListFilter = new();
             List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = new();
 
-            int rnwAdminListRecordPerPage = _configuration.GetValue<int>("RadioNavigationalWarningConfiguration:AdminListRecordPerPage");
+            int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
             List<RadioNavigationalWarnings> radioNavigationalWarnings = GetRadioNavigationWarnings();
             List<WarningType> warningType = GetWarningTypes();
             int SrNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
