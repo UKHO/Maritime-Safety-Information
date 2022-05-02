@@ -37,16 +37,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RadioNavigationalWarnings radioNavigationalWarnings)
         {
+            _logger.LogInformation(EventIds.MSICreateNewRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
             if (ModelState.IsValid)
             {
-                _logger.LogInformation(EventIds.MSICreateNewRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+                bool result = await _iRnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, GetCurrentCorrelationId());
 
-                await _iRnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings);
+                if (result)
+                {
+                    TempData["message"] = "Record created successfully!";
+                    _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for correlationId:{correlationId}", GetCurrentCorrelationId());
-
-                TempData["message"] = "Record created successfully!";
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
             return View(radioNavigationalWarnings);

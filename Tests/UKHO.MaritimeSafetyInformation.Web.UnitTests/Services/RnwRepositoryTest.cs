@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
@@ -13,6 +15,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     {
         private RnwRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
+        private ILogger<RnwRepository> _fakeLogger;
+        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void SetUp()
@@ -21,8 +25,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                                                                 .UseInMemoryDatabase("msi-ut-db");
 
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
+            _fakeLogger = A.Fake<ILogger<RnwRepository>>();
 
-            _rnwRepository = new RnwRepository(_fakeContext);
+            _rnwRepository = new RnwRepository(_fakeContext, _fakeLogger);
         }
 
         [Test]
@@ -34,7 +39,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                                                           Summary = "Test1",
                                                                           Content="test"};
 
-            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings);
+            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);
 
             Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1");
 
