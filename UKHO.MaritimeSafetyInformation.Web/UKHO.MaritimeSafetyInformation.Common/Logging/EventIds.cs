@@ -24,6 +24,18 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910005 -  Event data for Maritime safety information event hub health check.
         /// </summary>
         EventHubLoggingEventDataForHealthCheck = 910005,
+        /// <summary> 
+        /// 910006 -  Maritime safety information get RNW record from database started.
+        /// </summary>
+        MSIGetRnwForAdminStarted = 910006,
+        /// <summary> 
+        /// 910007 -  Maritime safety information get RNW record from database completed.
+        /// </summary>
+        MSIGetRnwForAdminCompleted = 910007,
+        /// <summary> 
+        /// 910008 -  Maritime safety information get RNW record from database request error.
+        /// </summary>
+        MSIGetRnwForAdminRequestError = 910008
     }
 
     public static class EventIdExtensions

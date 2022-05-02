@@ -5,18 +5,22 @@ using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
-    public class RadioNavigationalWarningsAdminController : Controller
+    public class RadioNavigationalWarningsAdminController : BaseController<RadioNavigationalWarningsAdminController>
     {
         private readonly IRnwRepository _iRnwRepository;
+        private readonly ILogger<RadioNavigationalWarningsAdminController> _logger;
 
-        public RadioNavigationalWarningsAdminController(IRnwRepository iRnwRepository)
+        public RadioNavigationalWarningsAdminController(IHttpContextAccessor contextAccessor,
+                                                        ILogger<RadioNavigationalWarningsAdminController> logger,
+                                                        IRnwRepository iRnwRepository) : base(contextAccessor, logger)
         {
             _iRnwRepository = iRnwRepository;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index(int pageIndex = 1, int warningType =0, string year= "")
         {
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year);
+            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year,GetCurrentCorrelationId());
             ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
             ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
             return View(radioNavigationalWarningsAdminFilter);

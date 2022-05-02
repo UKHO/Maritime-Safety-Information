@@ -4,6 +4,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public interface IRnwRepository
     {
-        RadioNavigationalWarningsAdminListFilter GetRadioNavigationWarningsForAdmin(int pageIndex,int warningType, string year);
+        RadioNavigationalWarningsAdminListFilter GetRadioNavigationWarningsForAdmin(int pageIndex,int warningType, string year, string correlationId);
     }
 }

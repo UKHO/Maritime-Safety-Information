@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
@@ -10,47 +11,60 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     {
         private readonly RadioNavigationalWarningsContext _context;
         private readonly IOptions<RadioNavigationalWarningConfiguration> _radioNavigationalWarningConfiguration;
-        public RnwRepository(RadioNavigationalWarningsContext context, IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration)
+        private readonly ILogger<RnwRepository> _logger;
+
+        public RnwRepository(RadioNavigationalWarningsContext context,
+                            IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration,
+                            ILogger<RnwRepository> logger)
         {
             _context = context;
             _radioNavigationalWarningConfiguration = radioNavigationalWarningConfiguration;
+            _logger = logger;
         }
 
-        public RadioNavigationalWarningsAdminListFilter GetRadioNavigationWarningsForAdmin(int pageIndex, int warningTypeId, string year)
+        public RadioNavigationalWarningsAdminListFilter GetRadioNavigationWarningsForAdmin(int pageIndex, int warningTypeId, string year, string correlationId)
         {
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminListFilter = new();
-            List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = new();
-
-            int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
-            List<RadioNavigationalWarnings> radioNavigationalWarnings = GetRadioNavigationWarnings();
-            List<WarningType> warningType = GetWarningTypes();
-            int SrNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
-
-            radioNavigationalWarningsAdminList = GetRadioNavigationWarningsAdminList(radioNavigationalWarnings, warningType);
-
-            if (warningTypeId != 0)
+            try
             {
-                radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.WarningType == warningTypeId).ToList();
-            }
+                RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminListFilter = new();
+                List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = new();
 
-            if (!string.IsNullOrEmpty(year))
+                int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
+                List<RadioNavigationalWarnings> radioNavigationalWarnings = GetRadioNavigationWarnings();
+                List<WarningType> warningType = GetWarningTypes();
+                int SrNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
+
+                radioNavigationalWarningsAdminList = GetRadioNavigationWarningsAdminList(radioNavigationalWarnings, warningType);
+
+                if (warningTypeId != 0)
+                {
+                    radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.WarningType == warningTypeId).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(year))
+                {
+                    radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.DateTimeGroup.Year.ToString().Trim() == year).ToList();
+                }
+
+                double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
+                radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Skip(SrNo).Take(rnwAdminListRecordPerPage).ToList();
+
+                radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
+                radioNavigationalWarningsAdminListFilter.PageCount = (int)Math.Ceiling(pageCount);
+                radioNavigationalWarningsAdminListFilter.CurrentPageIndex = pageIndex;
+                radioNavigationalWarningsAdminListFilter.WarningTypes = warningType;
+                radioNavigationalWarningsAdminListFilter.Years = (from p in radioNavigationalWarnings
+                                                                  select p.DateTimeGroup.Year.ToString()).Distinct().ToList();
+                radioNavigationalWarningsAdminListFilter.WarningType = warningTypeId;
+                radioNavigationalWarningsAdminListFilter.Year = year;
+                radioNavigationalWarningsAdminListFilter.SrNo = SrNo;
+                return radioNavigationalWarningsAdminListFilter;
+            }
+            catch (Exception ex)
             {
-                radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.DateTimeGroup.Year.ToString().Trim() == year).ToList();
+                _logger.LogError(EventIds.MSIGetRnwForAdminRequestError.ToEventId(), ex, "Maritime safety information get RNW record from database request failed with error with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                return new RadioNavigationalWarningsAdminListFilter();
             }
-
-            double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
-            radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Skip(SrNo).Take(rnwAdminListRecordPerPage).ToList();
-
-            radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
-            radioNavigationalWarningsAdminListFilter.PageCount = (int)Math.Ceiling(pageCount);
-            radioNavigationalWarningsAdminListFilter.CurrentPageIndex = pageIndex;
-            radioNavigationalWarningsAdminListFilter.WarningTypes = warningType;
-            radioNavigationalWarningsAdminListFilter.Years = (from p in radioNavigationalWarnings
-                                                              select p.DateTimeGroup.Year.ToString()).Distinct().ToList();
-            radioNavigationalWarningsAdminListFilter.WarningType = warningTypeId;
-            radioNavigationalWarningsAdminListFilter.Year = year;
-            radioNavigationalWarningsAdminListFilter.SrNo = SrNo;
-            return radioNavigationalWarningsAdminListFilter;
         }
 
         private List<RadioNavigationalWarnings> GetRadioNavigationWarnings()
@@ -65,23 +79,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         private static List<RadioNavigationalWarningsAdminList> GetRadioNavigationWarningsAdminList(List<RadioNavigationalWarnings> radioNavigationalWarnings, List<WarningType> warningType)
         {
-            List<RadioNavigationalWarningsAdminList>  radioNavigationalWarningsAdminList = (from rnwWarnings in radioNavigationalWarnings
-                                                  join warning in warningType on rnwWarnings.WarningType equals warning.Id
-                                                  select new RadioNavigationalWarningsAdminList
-                                                  {
-                                                      Id = rnwWarnings.Id,
-                                                      WarningType = rnwWarnings.WarningType,
-                                                      Reference = rnwWarnings.Reference,
-                                                      DateTimeGroup = rnwWarnings.DateTimeGroup,
-                                                      Summary = rnwWarnings.Summary,
-                                                      Content = rnwWarnings.Content,
-                                                      ExpiryDate = rnwWarnings.ExpiryDate,
-                                                      IsDeleted = rnwWarnings.IsDeleted == true ? "Yes" : "No",
-                                                      WarningTypeName = warning.Name
+            List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = (from rnwWarnings in radioNavigationalWarnings
+                                                                                           join warning in warningType on rnwWarnings.WarningType equals warning.Id
+                                                                                           select new RadioNavigationalWarningsAdminList
+                                                                                           {
+                                                                                               Id = rnwWarnings.Id,
+                                                                                               WarningType = rnwWarnings.WarningType,
+                                                                                               Reference = rnwWarnings.Reference,
+                                                                                               DateTimeGroup = rnwWarnings.DateTimeGroup,
+                                                                                               Summary = rnwWarnings.Summary,
+                                                                                               Content = rnwWarnings.Content,
+                                                                                               ExpiryDate = rnwWarnings.ExpiryDate,
+                                                                                               IsDeleted = rnwWarnings.IsDeleted == true ? "Yes" : "No",
+                                                                                               WarningTypeName = warning.Name
 
-                                                  })
-                                                 .OrderByDescending(a => a.DateTimeGroup).ToList();
-
+                                                                                           })
+                                                                                           .OrderByDescending(a => a.DateTimeGroup).ToList();
             return radioNavigationalWarningsAdminList;
         }
     }
