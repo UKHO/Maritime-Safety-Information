@@ -16,7 +16,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> Index(int pageIndex = 1, int warningType =0, string year= "")
         {
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationForAdmin(pageIndex, warningType, year);
+            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year);
             ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
             ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
             return View(radioNavigationalWarningsAdminFilter);
