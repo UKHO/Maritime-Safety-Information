@@ -310,7 +310,7 @@ stages:
                     ServerName: $(RNW_DB_Server)
                     DatabaseName: $(RNW_DB_Name)
                     aadSqlUsername: $(RNW_DB_Deploy_User)
-                    aadSqlPassword: $(RNW_DB_App_Pass)
+                    aadSqlPassword: "P@ssW0rd@123"
                     deployType: "DacpacTask"
                     DeploymentAction: "Publish"
                     IpDetectionMethod: "AutoDetect"
