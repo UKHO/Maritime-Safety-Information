@@ -306,11 +306,11 @@ stages:
                 - task: SqlAzureDacpacDeployment@1
                   inputs:
                     azureSubscription: "SharedServicesPre"
-                    AuthenticationType: "aadAuthenticationPassword"
-                    ServerName: $(RNW_DB_Server)
-                    DatabaseName: $(RNW_DB_Name)
-                    aadSqlUsername: $(RNW_DB_Deploy_User)
-                    aadSqlPassword: $(RNW_DB_Deploy_Pass)
+                    AuthenticationType: "server"
+                    serverName: $(RNW_DB_Server)
+                    databaseName: $(RNW_DB_Name)
+                    sqlUsername: $(RNW_DB_Deploy_User)
+                    sqlPassword: $(RNW_DB_Deploy_Pass)
                     deployType: "DacpacTask"
                     DeploymentAction: "Publish"
                     IpDetectionMethod: "AutoDetect"
