@@ -303,7 +303,7 @@ stages:
                   inputs:
                     azureSubscription: "SharedServicesPre"
                     AuthenticationType: "aadAuthenticationPassword"
-                    ServerName: $(RNW_DB_Server)
+                    ServerName: "m-sqlss-pre-mi01.421ce7404322.database.windows.net"
                     DatabaseName: $(RNW_DB_Name)
                     aadSqlUsername: $(RNW_DB_Deploy_User)
                     aadSqlPassword: $(RNW_DB_Deploy_Pass)
