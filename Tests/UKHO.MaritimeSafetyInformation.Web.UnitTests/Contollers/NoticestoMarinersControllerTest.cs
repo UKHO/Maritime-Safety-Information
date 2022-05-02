@@ -57,5 +57,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
             IActionResult result = await _controller.ShowWeeklyFilesAsync(year,week);
             Assert.IsInstanceOf<PartialViewResult>(result);
         }
+
+        [Test]
+        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnPartialView()
+        {
+            
+            IActionResult result = await _controller.ShowDailyFilesAsync();
+            Assert.IsInstanceOf<ViewResult>(result);
+        }
     }
 }
