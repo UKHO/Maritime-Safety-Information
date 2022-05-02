@@ -26,6 +26,26 @@ steps:
       ARM_TENANT_ID: $(TERRAFORM-TENANT-ID)
       ARM_SUBSCRIPTION_ID: $(TERRAFORM-SUBSCRIPTION-ID)
 
+  - task: DownloadPipelineArtifact@2
+    displayName: "Download Dackpack Artifact"
+    inputs:
+      source: "current"
+      artifact: "Dackpack"
+      path: $(Build.SourcesDirectory)/Dackpack
+
+  - task: SqlAzureDacpacDeployment@1
+    inputs:
+      azureSubscription: "SharedServicesPre"
+      AuthenticationType: "aadAuthenticationPassword"
+      ServerName: $(RNW_DB_Server)
+      DatabaseName: $(RNW_DB_Name)
+      aadSqlUsername: $(RNW_DB_Deploy_User)
+      aadSqlPassword: $(RNW_DB_Deploy_Pass)
+      deployType: "DacpacTask"
+      DeploymentAction: "Publish"
+      IpDetectionMethod: "AutoDetect"
+      DacpacFile: $(Build.SourcesDirectory)/Dackpack/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
+
   - task: FileTransform@1
     displayName: "File Transform: WebAppSettings"
     inputs:
