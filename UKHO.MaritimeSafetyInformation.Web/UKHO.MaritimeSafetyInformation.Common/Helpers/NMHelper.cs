@@ -1,11 +1,11 @@
 ﻿using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common.Models;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 
-namespace UKHO.MaritimeSafetyInformation.Common.Helper
+namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
     public static class NMHelper
     {
-        public static List<ShowFilesResponseModel> GetShowFilesResponses(BatchSearchResponse SearchResult)
+        public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             foreach (BatchDetails item in SearchResult.Entries)

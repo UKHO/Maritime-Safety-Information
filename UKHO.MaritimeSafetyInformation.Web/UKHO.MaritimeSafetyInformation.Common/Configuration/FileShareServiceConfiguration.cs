@@ -8,6 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Configuration
         public string BaseUrl { get; set; }
         public string BusinessUnit { get; set; }
         public string ProductType { get; set; }
+        public string FssClientId { get; set; }
         public int PageSize { get; set; }
         public int Start { get; set; }
     }

@@ -10,14 +10,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class FileShareService : IFileShareService
     {
-        private readonly IHttpClientFactory httpClientFactory;
-        private readonly IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private readonly ILogger<FileShareService> _logger;
 
         public FileShareService(IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<FileShareService> logger)
         {
-            this.httpClientFactory = httpClientFactory;
-            this.fileShareServiceConfig = fileShareServiceConfig;
+            _httpClientFactory = httpClientFactory;
+            _fileShareServiceConfig = fileShareServiceConfig;
             _logger = logger;
         }
 
@@ -26,15 +26,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
             try
             {
-                _logger.LogInformation(EventIds.FSSBatchSearchResponseStarted.ToEventId(), "Maritime safety information request batch search response started", correlationId);
-                
-                string searchQuery = $"BusinessUnit eq '{fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{fileShareServiceConfig.Value.ProductType}' " + searchText;
-                FileShareApiClient fileShareApi = new(httpClientFactory, fileShareServiceConfig.Value.BaseUrl, accessToken);
-                result = await fileShareApi.Search(searchQuery, fileShareServiceConfig.Value.PageSize, fileShareServiceConfig.Value.Start, CancellationToken.None);
+                string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' " + searchText;
+
+                _logger.LogInformation(EventIds.FSSBatchSearchResponseStarted.ToEventId(), "Maritime safety information request for FSS to get NM batch search response started for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
+
+                FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                result = await fileShareApi.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, CancellationToken.None);
+                _logger.LogInformation(EventIds.FSSBatchSearchResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response data {exceptionMessage} {exceptionTrace} for _X-Correlation-ID:{CorrelationId}", ex.Message, ex.StackTrace, correlationId);
+                _logger.LogError(EventIds.FSSBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response from FSS with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
             }
             return result;
             

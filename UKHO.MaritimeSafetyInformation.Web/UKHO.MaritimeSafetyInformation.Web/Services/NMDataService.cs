@@ -1,65 +1,62 @@
-﻿using Microsoft.Extensions.Options;
-using System.Globalization;
+﻿using System.Globalization;
 using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common;
-using UKHO.MaritimeSafetyInformation.Common.Helper;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Common.Models;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class NMDataService : INMDataService
     {
-        private readonly IFileShareService fileShareService;
+        private readonly IFileShareService _fileShareService;
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
-            this.fileShareService = fileShareService;
+            _fileShareService = fileShareService;
             _logger = logger;
             _authFssTokenProvider = authFssTokenProvider;
         }
 
-        public async Task<List<ShowFilesResponseModel>> GetNMBatchFiles(int year, int week, string correlationId)
+        public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);               
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-                _logger.LogInformation(EventIds.GetNMBatchFilesRequestStarted.ToEventId(), "Maritime safety information request for show weekly files response started for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-                IResult<BatchSearchResponse> result = await fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
+                IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
 
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.GetNMBatchFilesRequestDataFound.ToEventId(), "Maritime safety information request for show weekly files response data found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                    ListshowFilesResponseModels = NMHelper.GetShowFilesResponses(SearchResult);
-                    ListshowFilesResponseModels = ListshowFilesResponseModels.OrderBy(e => e.FileDescription).ToList();
+                    ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.GetNMBatchFilesRequestDataFoundNotFound.ToEventId(), "Maritime safety information request for show weekly files response data found", correlationId);
+                    _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.GetNMBatchFilesResponseFailed.ToEventId(), "Failed to get MSI response data {exceptionMessage} {exceptionTrace} for _X-Correlation-ID:{CorrelationId}", ex.Message, ex.StackTrace, correlationId);
+                _logger.LogError(EventIds.GetWeeklyNMFilesRequestFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}, year:{year} and week:{week}", ex.Message, correlationId, year, week);
                 throw;
             }
             return ListshowFilesResponseModels;
 
         }
 
-        public List<KeyValuePair<string, string>> GetPastYears(string correlationId)
+        public List<KeyValuePair<string, string>> GetAllYears(string correlationId)
         {
             List<KeyValuePair<string, string>> years = new();
 
-            _logger.LogInformation(EventIds.GetPastYearsStarted.ToEventId(), "Maritime safety information request get past years started", correlationId);
+            _logger.LogInformation(EventIds.GetAllYearsStarted.ToEventId(), "Maritime safety information request to get all years to populate year dropdown started", correlationId);
 
             years.Add(new KeyValuePair<string, string>("Year", ""));
             for (int i = 0; i < 3; i++)
@@ -74,11 +71,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             List<KeyValuePair<string, string>> weeks = new();
 
-            _logger.LogInformation(EventIds.GetAllWeeksofYearStarted.ToEventId(), "Maritime safety information request get all weeks of year started", correlationId);
+            _logger.LogInformation(EventIds.GetAllWeeksOfYearStarted.ToEventId(), "Maritime safety information request to get all weeks of year to populate week dropdown started", correlationId);
 
             weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
 
-            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
             DateTime lastdate;
             if (DateTime.Now.Year == year)
             {
@@ -88,10 +85,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 lastdate = new DateTime(year, 12, 31);
             }
-            Calendar cal = dfi.Calendar;
+            Calendar calender = dateTimeFormatInfo.Calendar;
 
-            int totalWeeks = cal.GetWeekOfYear(lastdate, dfi.CalendarWeekRule,
-                                                dfi.FirstDayOfWeek);
+            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule,
+                                                dateTimeFormatInfo.FirstDayOfWeek);
 
             for (int i = 0; i < totalWeeks; i++)
             {

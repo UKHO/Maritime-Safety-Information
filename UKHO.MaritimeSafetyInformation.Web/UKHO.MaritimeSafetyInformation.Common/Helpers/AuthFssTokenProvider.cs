@@ -5,17 +5,17 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
-namespace UKHO.MaritimeSafetyInformation.Common
+namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
     [ExcludeFromCodeCoverage]
     public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
-        private readonly IOptions<AzureADConfiguration> _azureADConfiguration;
+        private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfiguration;
         private readonly ILogger<AuthFssTokenProvider> _logger;
 
-        public AuthFssTokenProvider(IOptions<AzureADConfiguration> azureADConfiguration, ILogger<AuthFssTokenProvider> logger)
+        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger)
         {
-            _azureADConfiguration = azureADConfiguration;
+            _fileShareServiceConfiguration = fileShareServiceConfiguration;
             _logger = logger;
         }
 
@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
             try
             {
                 DefaultAzureCredential azureCredential = new();
-                TokenRequestContext tokenRequestContext = new(new string[] { _azureADConfiguration.Value.FssClientId + "/.default" });
+                TokenRequestContext tokenRequestContext = new(new string[] { _fileShareServiceConfiguration.Value.FssClientId + "/.default" });
                 AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);               
                 return tokenResult.Token;
             }

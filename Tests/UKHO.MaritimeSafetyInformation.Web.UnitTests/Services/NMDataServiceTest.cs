@@ -1,16 +1,16 @@
-﻿using System;
+﻿using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using FakeItEasy;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NUnit.Framework;
 using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Common.Models;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
@@ -20,7 +20,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     public class NMDataServiceTest
     {
         private IFileShareService _fakefileShareService;
-        private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private ILogger<NMDataService> _fakeLogger;
         private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
         private NMDataService _fakeNMDataService;
@@ -30,7 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void Setup()
         {
             _fakefileShareService = A.Fake<IFileShareService>();
-            _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _fakeLogger = A.Fake<ILogger<NMDataService>>();
             _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
 
@@ -46,6 +44,104 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
+            Result<BatchSearchResponse> SearchResult = SetSearchResult();
+
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(SearchResult);
+
+            string expectedstatus = "RanToCompletion";
+
+            Task<List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
+        }
+
+        [Test]
+        public void WhenGetNMBatchFilesIsCalled_ThenShouldReturnZeroFiles()
+        {
+            int year = 2022;
+            int week = 15;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+
+            string expectedstatus = "RanToCompletion";
+
+            Task<List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
+
+        }
+
+        [Test]
+        public void WhenGetNMBatchFilesIsCalled_ThenShouldExecuteCatch()
+        {
+            int year = 2022;
+            int week = 15;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+
+            Task<List<ShowFilesResponseModel>> result = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+
+        [Test]
+        public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
+        {
+            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+
+            Calendar calender = dateTimeFormatInfo.Calendar;
+
+            int year = DateTime.Now.Year;
+
+            int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
+
+            Assert.AreEqual(totalWeeks + 1, result.Count);
+        }
+        [Test]
+        public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
+        {
+            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+
+            Calendar calender = dateTimeFormatInfo.Calendar;
+
+            int year = DateTime.Now.Year - 1;
+
+            DateTime lastdate = new(year, 12, 31);
+
+            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
+
+            Assert.AreEqual(totalWeeks + 1, result.Count);
+        }
+
+        [Test]
+        public void WhenGetPastYearsIsCalled_ThenShouldReturn4Records()
+        {
+            int yearsCount = 4;
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
+            Assert.AreEqual(yearsCount, result.Count);
+        }
+
+        [Test]
+        public void WhenGetPastYearsIsCalled_ThenShouldCheckMinYear()
+        {
+            int minYear = DateTime.Now.Year - 2;
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
+            Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResult()
+        {
             Result<BatchSearchResponse> SearchResult = new()
             {
                 Data = new BatchSearchResponse
@@ -94,98 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 }
             };
 
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(SearchResult);
-
-            string expectedstatus = "RanToCompletion";
-
-            Task<List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetNMBatchFiles(year, week, CorrelationId);
-
-            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
-        }
-
-        [Test]
-        public void WhenGetNMBatchFilesIsCalled_ThenShouldReturnZeroFiles()
-        {
-            int year = 2022;
-            int week = 15;
-
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-
-            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
-
-            string expectedstatus = "RanToCompletion";
-
-            Task<List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetNMBatchFiles(year, week, CorrelationId);
-
-            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
-
-        }
-
-        [Test]
-        public void WhenGetNMBatchFilesIsCalled_ThenShouldExecuteCatch()
-        {
-            int year = 2022;
-            int week = 15;
-
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
-
-            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
-
-            Task<List<ShowFilesResponseModel>> result = _fakeNMDataService.GetNMBatchFiles(year, week, CorrelationId);
-
-            Assert.That(result.IsFaulted, Is.True);
-        }
-
-
-        [Test]
-        public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
-        {
-            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-
-            Calendar cal = dfi.Calendar;
-
-            int year = DateTime.Now.Year;
-
-            int totalWeeks = cal.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
-
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
-
-            Assert.AreEqual(totalWeeks + 1, result.Count);
-        }
-        [Test]
-        public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
-        {
-            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-
-            Calendar cal = dfi.Calendar;
-
-            int year = DateTime.Now.Year - 1;
-
-            DateTime lastdate = new(year, 12, 31);
-
-            int totalWeeks = cal.GetWeekOfYear(lastdate, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
-
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
-
-            Assert.AreEqual(totalWeeks + 1, result.Count);
-        }
-
-        [Test]
-        public void WhenGetPastYearsIsCalled_ThenShouldReturn4Records()
-        {
-            int yearsCount = 4;
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetPastYears(CorrelationId);
-            Assert.AreEqual(yearsCount, result.Count);
-        }
-
-        [Test]
-        public void WhenGetPastYearsIsCalled_ThenShouldCheckMinYear()
-        {
-            int minYear = DateTime.Now.Year - 2;
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetPastYears(CorrelationId);
-            Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
+            return SearchResult;
         }
     }
 }

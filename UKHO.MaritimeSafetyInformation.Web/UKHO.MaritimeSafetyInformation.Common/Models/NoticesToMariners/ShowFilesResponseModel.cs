@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using UKHO.FileShareClient.Models;
 
-namespace UKHO.MaritimeSafetyInformation.Common.Models
+namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 {
     [ExcludeFromCodeCoverage]
     public class ShowFilesResponseModel
