@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
@@ -33,30 +34,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
-            RadioNavigationalWarnings radioNavigationalWarnings = new() { WarningType = 1,
+           DateTime dateTime = DateTime.UtcNow;
+           RadioNavigationalWarnings radioNavigationalWarnings = new() { WarningType = 1,
                                                                           Reference = "test",
-                                                                          DateTimeGroup = DateTime.UtcNow ,
+                                                                          DateTimeGroup = dateTime,
                                                                           Summary = "Test1",
                                                                           Content="test"};
 
             Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);
 
-            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1");
+            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
         }
 
-    ////    [Test]
-    ////    public void WhenCallGetWarningTypeMethod_ThenReturnWarningType()
-    ////    {
-    ////        WarningType warningType = new() { Id =1 ,Name = "test"};
+        [Test]
+        public async Task WhenCallGetWarningTypeMethod_ThenReturnWarningType()
+        {
+            WarningType warningType = new() { Name = "test" };
 
-    ////        _fakeContext.WarningType.Add(warningType);
+            _fakeContext.WarningType.Add(warningType);
+            await _fakeContext.SaveChangesAsync();
 
-    ////        List<WarningType> warningTypeList = _rnwRepository.GetWarningType();
+            List<WarningType> warningTypeList = _rnwRepository.GetWarningType();
 
-    ////        Assert.AreEqual(warningType.Name, warningTypeList[0].Name);
-    ////    }
+            Assert.AreEqual(warningType.Name, warningTypeList[0].Name);
+        }
     }
 }
