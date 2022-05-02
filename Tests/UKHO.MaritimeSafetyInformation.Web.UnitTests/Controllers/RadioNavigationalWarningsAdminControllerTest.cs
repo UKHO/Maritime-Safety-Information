@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
@@ -41,12 +42,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<IActionResult>(result);
         }
 
-        ////[Test]
-        ////public void WhenPostRadioNavigationalWarningsInRequest_ThenCreatedNewRecord()
-        ////{
-        ////    Task<IActionResult> result = _controller.Create(null);
+        [Test]
+        public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordNotCreated()
+        {
+            A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(false);
 
-        ////    Assert.IsInstanceOf<IActionResult>(result);
-        ////}
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+        }
     }
 }
