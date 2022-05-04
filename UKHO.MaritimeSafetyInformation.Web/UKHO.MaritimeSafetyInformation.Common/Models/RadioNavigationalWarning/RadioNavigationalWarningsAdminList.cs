@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
+    [ExcludeFromCodeCoverage]
     public class RadioNavigationalWarningsAdminList
     {
         public int Id { get; set; }

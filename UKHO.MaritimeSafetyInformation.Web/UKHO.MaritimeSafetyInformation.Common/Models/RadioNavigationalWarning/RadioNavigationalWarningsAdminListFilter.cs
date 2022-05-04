@@ -1,7 +1,9 @@
-﻿using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+﻿using System.Diagnostics.CodeAnalysis;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
+    [ExcludeFromCodeCoverage]
     public class RadioNavigationalWarningsAdminListFilter
     {
         public int SrNo { get; set; }
