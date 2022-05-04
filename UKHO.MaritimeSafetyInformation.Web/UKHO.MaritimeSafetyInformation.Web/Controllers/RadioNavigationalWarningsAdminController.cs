@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
@@ -20,9 +21,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> Index(int pageIndex = 1, int warningType = 0, string year = "", bool reLoadData = false)
         {
+            _logger.LogInformation(EventIds.MSIGetRnwForAdminStarted.ToEventId(), "Maritime safety information get RNW record from database started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = _iRnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year, reLoadData, GetCurrentCorrelationId());
             ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
             ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
+            _logger.LogInformation(EventIds.MSIGetRnwForAdminCompleted.ToEventId(), "Maritime safety information get RNW record from database completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             return View(radioNavigationalWarningsAdminFilter);
         }
     }

@@ -94,7 +94,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallGetRadioNavigationWarnings_ThenReturnList()
         {
-            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex: 1, warningTypeId: 0, year: string.Empty, string.Empty);
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count > 0);
             Assert.IsTrue(result.PageCount == 2);
             Assert.IsTrue(result.SrNo == 0);
@@ -103,7 +103,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallGetRadioNavigationWarningsWithWarningTypeFilter_ThenReturnFilteredList()
         {
-            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex: 1, warningTypeId: 1, year: string.Empty, string.Empty);
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 1, string.Empty, true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 2);
             Assert.IsTrue(result.PageCount == 1);
             Assert.IsTrue(result.SrNo == 0);
@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallGetRadioNavigationWarningsWithYearFilter_ThenReturnFilteredList()
         {
-            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex: 1, warningTypeId: 0, year: "2022", string.Empty);
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, "2022", true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 1);
             Assert.IsTrue(result.PageCount == 1);
             Assert.IsTrue(result.SrNo == 0);
@@ -121,7 +121,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallGetRadioNavigationWarningsWithWarningTypeAndYearFilter_ThenReturnFilteredList()
         {
-            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex: 1, warningTypeId: 1, year: "2020", string.Empty);
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 1, "2020", true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 1);
             Assert.IsTrue(result.PageCount == 1);
             Assert.IsTrue(result.SrNo == 0);
@@ -130,20 +130,61 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallGetRadioNavigationWarningsWithValidPageNo_ThenReturnFilteredList()
         {
-            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex: 2, warningTypeId: 0, year: string.Empty, string.Empty);
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(2, 0, string.Empty, true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 1);
             Assert.IsTrue(result.PageCount == 2);
             Assert.IsTrue(result.SrNo == 3);
         }
 
         [Test]
-        public void WhenCallGetRadioNavigationWarningsWihInValidAdminListRecordPerPage_ThenThrowExceptionWithNullObject()
+        public void WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenReturnEmptyList()
+        {
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(4, 0, string.Empty, true, string.Empty);
+            Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 0);
+        }
+
+        [Test]
+        public void WhenCallGetRadioNavigationWarningsWithInValidAdminListRecordPerPage_ThenThrowExceptionWithNullObject()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 0;
-            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex: 1, warningTypeId: 0, year: string.Empty, string.Empty);
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList == null);
+        }
 
+        [Test]
+        public void WhenCallGetRadioNavigationWarningsWithNotReloadData_ReturnExisitngList()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
+            _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty);
+            AddRadioNavigationWarningRecord();
 
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty);
+            Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 4);
+        }
+
+        [Test]
+        public void WhenCallGetRadioNavigationWarningsWithReloadData_ReturnUpdatedList()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
+            _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty);
+            AddRadioNavigationWarningRecord();
+
+            RadioNavigationalWarningsAdminListFilter result = _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, true, string.Empty);
+            Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 5);
+        }
+
+        private void AddRadioNavigationWarningRecord()
+        {
+            RadioNavigationalWarnings radioNavigationalWarning5 = new()
+            {
+                WarningType = 2,
+                Reference = "RnwAdminListReferance",
+                DateTimeGroup = new DateTime(2022, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            };
+            _fakeContext.RadioNavigationalWarnings.Add(radioNavigationalWarning5);
+            _fakeContext.SaveChanges();
         }
     }
 }
