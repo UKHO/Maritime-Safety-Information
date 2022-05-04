@@ -13,15 +13,17 @@ export default class RadioNavigationalWarnings
     readonly createnewrecord:Locator;    
     readonly content:Locator;
     readonly create:Locator;
+    readonly warning:string;
     constructor(page:Page)
     {
         this.page = page; 
         this.refrence = this.page.locator('#Reference');
         this.datetime= this.page.locator('#DateTimeGroup');
         this.description =  this.page.locator('#Summary');
-        this.createnewrecord = this.page.locator('body > main > p > a');
+        this.createnewrecord = this.page.locator('text=create');
         this.content=this.page.locator('#Content');
        this.create= this.page.locator('body > main > div > div.row > div > form > div:nth-child(7) > input')
+       this.warning = '#WarningType';
     }
 
     public async creaternwrecord()
@@ -31,7 +33,8 @@ export default class RadioNavigationalWarnings
 
     public async warningtypedropdown(text:string)
     {
-        this.page.selectOption('#WarningType',text);   
+        this.page.selectOption(this.warning,text);   
+        
     }
 
     public async refrencetext(refercomment:string)
