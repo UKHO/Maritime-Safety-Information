@@ -18,6 +18,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         [DisplayName("Date/Time")]
         public DateTime DateTimeGroup { get; set; }
 
+        [DisplayName("Date/Time")]
+        public string DateTimeGroupRnwFormat { get; set; }
+
         [DisplayName("Description")]
         public string Summary { get; set; }
 
@@ -27,6 +30,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy hh:mm tt}")]
         [DisplayName("Expiry Date")]
         public DateTime ExpiryDate { get; set; }
+
+        [DisplayName("Expiry Date")]
+        public string ExpiryDateRnwFormat { get; set; }
 
         [DisplayName("Deleted")]
         public string IsDeleted { get; set; }
