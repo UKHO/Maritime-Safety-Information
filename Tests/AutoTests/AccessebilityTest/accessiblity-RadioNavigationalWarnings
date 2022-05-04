@@ -1,29 +1,32 @@
-import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
+import { test} from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
-import { injectAxe, getViolations, checkA11y} from 'axe-playwright'
+import { checkA11y, injectAxe, Options } from 'axe-playwright';
 import RadioNavigationalWarnings from '../../pageObject/RadioNavigationalWarnings.page';
 
 test.describe("A11y tests", ()=> {
+  const defaultCheckA11yOptions: Options = {
+    axeOptions: {
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2aa'],
+      },
+      reporter: 'v2'
+    },
+    detailedReport: true,
+    detailedReportOptions: { html: true }
+  };
  
   test.beforeEach(async ({page}) => {
-    await page.goto(app.url);
-    const rnw = new RadioNavigationalWarnings(page);
-    rnw.creaternwrecord();
-    await injectAxe(page);
+    await page.goto(app.url);    
   });
 
-  test('should return no violations Page Accessibility check', async ({page}) => {
-    const violations = await getViolations(page);
-    for (let index = 0; index < violations.length; index++) {
-      const element = violations[index];
-      if (element.id.includes("color-contrast")) {
-        expect(violations.length).toBeTruthy();
-      }
-      else {
-        expect(violations.length).toBe(0);
-      }
-    }
+  test('Radio Navigational Warnings page should be accessible', async ({page}) => {
+    const radioNavigationalWarnings = new RadioNavigationalWarnings(page);
+    radioNavigationalWarnings.clickCreateRadioNavigationalWarningsRecord();
+    await injectAxe(page);
+    
+    await checkA11y(page, undefined, defaultCheckA11yOptions);
+    
   })
-
  
 });
