@@ -9,7 +9,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
     public class NMHelperTest
     {
         [Test]
-        public void WhenListFilesResponseIsCalled_ThenCheckConversionisProper()
+        public void WhenNMHelperCallsListFilesResponse_ThenConversionIsCorrect()
         {
             BatchSearchResponse SearchResult = SetSearchResult();
 

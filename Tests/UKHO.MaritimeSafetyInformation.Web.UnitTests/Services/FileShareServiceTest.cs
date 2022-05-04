@@ -45,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenFssBatchSearchAsyncIsCalled_ThenShouldCheckTypeOfInstance()
+        public void WhenFileShareServiceCallsFssBatchSearchAsync_ThenReturnsBatchSearchResponse()
         {
             string searchText = "";
             string accessToken = "";
@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFssBatchSearchAsyncIsCalled_ThenShouldExecuteCatch()
+        public async Task WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));

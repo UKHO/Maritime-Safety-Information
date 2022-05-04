@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
 
         [Test]
-        public void WhenGetNMBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        public async Task WhenGetNMBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
             int year = 2022;
             int week = 15;
@@ -48,15 +48,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(SearchResult);
 
-            string expectedstatus = "RanToCompletion";
+            int ExpectedRecordCount = 4;
 
-            Task<List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            List<ShowFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
+            Assert.AreEqual(ExpectedRecordCount, ListshowFilesResponseModels.Count);
         }
 
         [Test]
-        public void WhenGetNMBatchFilesIsCalled_ThenShouldReturnZeroFiles()
+        public async Task WhenGetNMBatchFilesIsCalled_ThenShouldReturnZeroFiles()
         {
             int year = 2022;
             int week = 15;
@@ -66,11 +66,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
-            string expectedstatus = "RanToCompletion";
+            int ExpectedRecordCount = 0;
 
-            Task<List<ShowFilesResponseModel>> ListshowFilesResponseModels = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            List<ShowFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedstatus, ListshowFilesResponseModels.Status.ToString());
+            Assert.AreEqual(ExpectedRecordCount, ListshowFilesResponseModels.Count);
 
         }
 
@@ -125,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetPastYearsIsCalled_ThenShouldReturn4Records()
+        public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
         {
             int yearsCount = 4;
             List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
@@ -133,7 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetPastYearsIsCalled_ThenShouldCheckMinYear()
+        public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
         {
             int minYear = DateTime.Now.Year - 2;
             List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
