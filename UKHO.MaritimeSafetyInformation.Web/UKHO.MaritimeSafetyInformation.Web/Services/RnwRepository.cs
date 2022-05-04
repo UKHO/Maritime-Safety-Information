@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdminAsync(int pageIndex, int warningTypeId, string year, bool reLoadData, string correlationId)
+        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int warningTypeId, string year, bool reLoadData, string correlationId)
         {
             try
             {
@@ -32,11 +32,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = new();
 
                 int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
-                List<RadioNavigationalWarnings> radioNavigationalWarnings = GetRadioNavigationWarnings();
-                List<WarningType> warningType = GetWarningTypes();
                 int SrNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
 
-                radioNavigationalWarningsAdminList = GetRadioNavigationWarningsAdminList(radioNavigationalWarnings, warningType, reLoadData);
+                radioNavigationalWarningsAdminList = GetRadioNavigationWarningsAdminList(reLoadData);
 
                 if (warningTypeId != 0)
                 {
@@ -54,8 +52,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
                 radioNavigationalWarningsAdminListFilter.PageCount = (int)Math.Ceiling(pageCount);
                 radioNavigationalWarningsAdminListFilter.CurrentPageIndex = pageIndex;
-                radioNavigationalWarningsAdminListFilter.WarningTypes = warningType;
-                radioNavigationalWarningsAdminListFilter.Years = (from p in radioNavigationalWarnings
+                radioNavigationalWarningsAdminListFilter.WarningTypes = _context.WarningType.ToList();
+                radioNavigationalWarningsAdminListFilter.Years = (from p in _context.RadioNavigationalWarnings
                                                                   select p.DateTimeGroup.Year.ToString()).Distinct().ToList();
                 radioNavigationalWarningsAdminListFilter.WarningType = warningTypeId;
                 radioNavigationalWarningsAdminListFilter.Year = year;
@@ -69,22 +67,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        private List<RadioNavigationalWarnings> GetRadioNavigationWarnings()
-        {
-            return _context.RadioNavigationalWarnings.ToList();
-        }
-
-        private List<WarningType> GetWarningTypes()
-        {
-            return _context.WarningType.ToList();
-        }
-
-        private static List<RadioNavigationalWarningsAdminList> GetRadioNavigationWarningsAdminList(List<RadioNavigationalWarnings> radioNavigationalWarnings, List<WarningType> warningType, bool reLoadData = false)
+        private List<RadioNavigationalWarningsAdminList> GetRadioNavigationWarningsAdminList(bool reLoadData = true)
         {
             if (s_allRadioNavigationalWarningsAdminList == null || reLoadData)
             {
-                s_allRadioNavigationalWarningsAdminList = (from rnwWarnings in radioNavigationalWarnings
-                                                           join warning in warningType on rnwWarnings.WarningType equals warning.Id
+                s_allRadioNavigationalWarningsAdminList = (from rnwWarnings in _context.RadioNavigationalWarnings
+                                                           join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
                                                            select new RadioNavigationalWarningsAdminList
                                                            {
                                                                Id = rnwWarnings.Id,

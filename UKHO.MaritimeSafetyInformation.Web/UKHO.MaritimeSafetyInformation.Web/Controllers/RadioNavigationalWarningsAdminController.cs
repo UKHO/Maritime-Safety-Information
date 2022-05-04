@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             _logger.LogInformation(EventIds.MSIGetRnwForAdminStarted.ToEventId(), "Maritime safety information get RNW record from database started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = await _iRnwRepository.GetRadioNavigationWarningsForAdminAsync(pageIndex, warningType, year, reLoadData, GetCurrentCorrelationId());
+            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = await _iRnwRepository.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year, reLoadData, GetCurrentCorrelationId());
             ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
             ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
 
