@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public RadioNavigationalWarningsAdminListFilter GetRadioNavigationWarningsForAdmin(int pageIndex, int warningTypeId, string year, bool reLoadData, string correlationId)
+        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdminAsync(int pageIndex, int warningTypeId, string year, bool reLoadData, string correlationId)
         {
             try
             {
