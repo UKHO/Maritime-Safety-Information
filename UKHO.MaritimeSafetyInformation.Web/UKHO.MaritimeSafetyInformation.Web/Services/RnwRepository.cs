@@ -32,7 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = new();
 
                 int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
-                int SrNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
+                int srNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
 
                 radioNavigationalWarningsAdminList = GetRadioNavigationWarningsAdminList(reLoadData);
 
@@ -47,7 +47,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
 
                 double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
-                radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Skip(SrNo).Take(rnwAdminListRecordPerPage).ToList();
+                radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Skip(srNo).Take(rnwAdminListRecordPerPage).ToList();
 
                 radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
                 radioNavigationalWarningsAdminListFilter.PageCount = (int)Math.Ceiling(pageCount);
@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                                                   select p.DateTimeGroup.Year.ToString()).Distinct().ToList();
                 radioNavigationalWarningsAdminListFilter.WarningType = warningTypeId;
                 radioNavigationalWarningsAdminListFilter.Year = year;
-                radioNavigationalWarningsAdminListFilter.SrNo = SrNo;
+                radioNavigationalWarningsAdminListFilter.SrNo = srNo;
                 return radioNavigationalWarningsAdminListFilter;
             }
             catch (Exception ex)

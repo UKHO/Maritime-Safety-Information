@@ -88,7 +88,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             _fakeContext.WarningType.Add(WarningType1);
             _fakeContext.WarningType.Add(WarningType2);
-
             _fakeContext.SaveChanges();
         }
 
@@ -153,7 +152,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetRadioNavigationWarningsWithNotReloadData_ReturnExisitngList()
+        public async Task WhenCallGetRadioNavigationWarningsWithNotReloadData_ThenReturnExisitngList()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
             await _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty);
@@ -164,7 +163,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetRadioNavigationWarningsWithReloadDataReturnUpdatedList()
+        public async Task WhenCallGetRadioNavigationWarningsWithReloadData_ThenReturnUpdatedList()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
             await _rnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty);
