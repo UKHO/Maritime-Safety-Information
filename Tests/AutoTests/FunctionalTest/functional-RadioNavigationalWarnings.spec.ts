@@ -12,15 +12,27 @@ test.describe("Create new radio navigational warnings record", ()=> {
     radioNavigationalWarnings.clickCreateRadioNavigationalWarningsRecord();
   });
 
+  test('Without entered input fields',async()=>{ 
+    await radioNavigationalWarnings.clickCreateButton();
+    await radioNavigationalWarnings.getDialogText('Failed to create record.')    
+ })  
+
+ test('With content text as blank',async()=>{   
+  await radioNavigationalWarnings.fillFormWithValidDetails("");  
+  await radioNavigationalWarnings.clickCreateButton();
+  await radioNavigationalWarnings.getDialogText('Failed to create record.')    
+}) 
+
+test('With invalid input as content text',async()=>{   
+  await radioNavigationalWarnings.fillFormWithValidDetails("testdata1");  
+  await radioNavigationalWarnings.clickCreateButton();
+  await radioNavigationalWarnings.getDialogText('Failed to create record.')    
+})  
+
    test('With valid input details',async()=>{   
     await radioNavigationalWarnings.fillFormWithValidDetails("testdata");  
     await radioNavigationalWarnings.clickCreateButton(); 
     await radioNavigationalWarnings.getDialogText('Record created successfully')    
   } )
-
-  test('With invalid input as content text',async()=>{   
-    await radioNavigationalWarnings.fillFormWithValidDetails("testdata1");  
-    await radioNavigationalWarnings.clickCreateButton();
-    await radioNavigationalWarnings.getDialogText('Failed to create record.')    
- })  
+ 
 });
