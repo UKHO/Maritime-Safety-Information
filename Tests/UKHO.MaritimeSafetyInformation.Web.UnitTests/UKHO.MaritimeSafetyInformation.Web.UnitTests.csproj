@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="7.3.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
@@ -17,6 +18,10 @@
     </PackageReference>
       <PackageReference Include="System.Net.Security" Version="4.3.2" />
       <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj" />
   </ItemGroup>
 
 </Project>
