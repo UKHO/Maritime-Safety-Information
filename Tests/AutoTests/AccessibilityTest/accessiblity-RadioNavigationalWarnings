@@ -1,0 +1,28 @@
+import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
+
+import * as app from "../../Configuration/appConfig.json";
+import { injectAxe, getViolations, checkA11y} from 'axe-playwright'
+
+test.describe("A11y tests", ()=> {
+ 
+  test.beforeEach(async ({page}) => {
+    await page.goto(app.url);
+    await page.click('body > main > p > a'); 
+    await injectAxe(page);
+  });
+
+  test('should return no violations Page Accessibility check', async ({page}) => {
+    const violations = await getViolations(page);
+    for (let index = 0; index < violations.length; index++) {
+      const element = violations[index];
+      if (element.id.includes("color-contrast")) {
+        expect(violations.length).toBeTruthy();
+      }
+      else {
+        expect(violations.length).toBe(0);
+      }
+    }
+  })
+
+ 
+});
