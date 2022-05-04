@@ -14,7 +14,7 @@
             <div class="mb-3">
                 <label asp-for="WarningType" class="form-label"></label>
                 <span class="text-danger">*</span>
-                <select asp-for="WarningType" asp-items="@(new SelectList(ViewBag.WarningType,"Id","Name"))" class="form-control">
+                <select asp-for="WarningType" asp-items="@(new SelectList(ViewBag.WarningType,"Id","Name"))" class="form-select">
                     <option value="" selected disabled hidden>--Select Warning Type--</option>
                 </select>
                 <span asp-validation-for="WarningType" class="text-danger"></span>
@@ -40,7 +40,7 @@
             <div class="mb-3">
                 <label asp-for="Content" class="form-label"></label>
                 <span class="text-danger">*</span>
-                <input asp-for="Content" class="form-control" />
+                <textarea asp-for="Content" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="mb-3">

@@ -15,6 +15,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
         public int WarningType { get; set; }
 
         [Required]
+        [MaxLength(32, ErrorMessage= "Reference cannot be greater than 32")]
         public string Reference { get; set; }
 
         [DisplayName("Date Time Group")]
@@ -23,6 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
 
         [DisplayName("Description")]
         [Required]
+        [MaxLength(256)]
         public string Summary { get; set; }
 
         [DisplayName("Text")]

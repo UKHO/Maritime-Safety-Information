@@ -31,7 +31,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910007 -  Maritime safety information create new RNW record request Completed.
         /// </summary>
-        MSICreateNewRNWRecordCompleted = 910007
+        MSICreateNewRNWRecordCompleted = 910007,
+        /// <summary>
+        /// 910008 -  Maritime safety information add new RNW record to database request started.
+        /// </summary>
+        MSIAddNewRNWRecordStart = 910008,
+        /// <summary>
+        /// 910009 -  Maritime safety information add new RNW record to database request Completed.
+        /// </summary>
+        MSIAddNewRNWRecordCompleted = 910009,
+        /// <summary> 
+        /// 910010 -  Maritime safety information add new RNW record to database request error.
+        /// </summary>
+        MSIAddNewRNWRequestError = 910010
     }
 
     public static class EventIdExtensions

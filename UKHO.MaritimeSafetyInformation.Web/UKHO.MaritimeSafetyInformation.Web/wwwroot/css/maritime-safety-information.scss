@@ -15,3 +15,11 @@ a, button{
     margin-bottom: 0.5rem !important;
     box-shadow: none;
 }
+.form-select, .form-control {
+    border-radius: 0;
+    font-weight: 300;
+}
+
+.form-select option {
+    font-weight: 300;
+}
