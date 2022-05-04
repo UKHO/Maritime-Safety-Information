@@ -1,26 +1,35 @@
-﻿@using UKHO.MaritimeSafetyInformation.Common.Models
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 @model List<ShowFilesResponseModel>
 @{
     var a = Model;
 }
 <table class="table table-striped">
-    <tbody>
-        @if (Model != null && Model.Count > 0)
-        {
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <thead>
+            <tr>
+                <td>File Name</td>
+                <td>File Size</td>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (var item in Model)
             {
                 <tr>
                     <td><a href="#">@item.FileDescription</a></td>
                     <td>@item.FileSizeinKB (@item.FileExtension)</td>
-                    <td></td>
                 </tr>
             }
-        }
-        else
-        {
+        </tbody>
+    }
+    else
+    {
+        <tbody>
             <tr>
                 <td colspan='3'>No data found!!!</td>
             </tr>
-        }
-    </tbody>
+        </tbody>
+    }
+
 </table>

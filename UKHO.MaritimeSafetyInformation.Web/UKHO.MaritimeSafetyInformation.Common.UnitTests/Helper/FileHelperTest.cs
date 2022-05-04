@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using UKHO.MaritimeSafetyInformation.Common.Helper;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 
 namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
 {

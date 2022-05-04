@@ -35,23 +35,23 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910008 -  Get NM Batch Files Request Started.
         /// </summary>
-        GetNMBatchFilesRequestStarted = 910008,
+        GetWeeklyNMFilesRequestStarted = 910008,
         /// <summary>
         /// 910009 -  Get NM Batch Files Data Found.
         /// </summary>
-        GetNMBatchFilesRequestDataFound = 910009,
+        GetWeeklyNMFilesRequestDataFound = 910009,
         /// <summary>
         /// 910010 -  Get NM Batch Files Not Data Found.
         /// </summary>
-        GetNMBatchFilesRequestDataFoundNotFound = 910010,
+        GetWeeklyNMFilesRequestDataNotFound = 910010,
         /// <summary>
         /// 910011 -  Get NM Batch Files Request Failed.
         /// </summary>
-        GetNMBatchFilesResponseFailed = 910011,
+        GetWeeklyNMFilesRequestFailed = 910011,
         /// <summary>
         /// 910012 -  Get Past Years Request Started.
         /// </summary>
-        GetPastYearsStarted = 910012,
+        GetAllYearsStarted = 910012,
         /// <summary>
         /// 910013 -  Get Past Years Request Failed.
         /// </summary>
@@ -59,7 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910014 -  Get All Weeks of Year Request Started.
         /// </summary>
-        GetAllWeeksofYearStarted = 910014,
+        GetAllWeeksOfYearStarted = 910014,
         /// <summary>
         /// 910015 -  Get All Weeks of Year Request Failed.
         /// </summary>
@@ -69,26 +69,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseStarted = 910016,
         /// <summary>
+        /// 910017 -  FSS Batch Search Request Started.
+        /// </summary>
+        FSSBatchSearchResponseCompleted = 910017,
+        /// <summary>
         /// 910017 -  FSS Batch Search Request Failed.
         /// </summary>
-        FSSBatchSearchResponseFailed = 910017,
-        /// <summary>
-        /// 910018 -  Unhandled Exception Occured.
-        /// </summary>
-        RetrievalOfMSIShowWeeklyFilesRequest = 910006,
-        RetrievalOfMSIShowWeeklyFilesCompleted = 910007,
-        RetrievalOfMSIShowFilesResponseStarted = 910008,
-        RetrievalOfMSIShowFilesResponseDataFound = 910009,
-        RetrievalOfMSIShowFilesResponseDataFoundNotFound = 910010,
-        RetrievalOfMSIShowFilesResponseFailed = 910011,
-        RetrievalOfMSIGetPastYearsStart = 910012,
-        RetrievalOfMSIGetPastYearsFailed = 910013,
-        RetrievalOfMSIGetAllWeeksofYearStart = 910014,
-        RetrievalOfMSIGetAllWeeksofYearFailed = 910015,
-        RetrievalOfMSIBatchSearchResponse = 910016,
-        RetrievalOfMSIBatchSearchResponseFailed = 910017,
-        RetrievalOfMSIFailed = 910018,
-        /// <summary>
+        FSSBatchSearchResponseFailed = 910018,
+		/// <summary>
         /// 910051 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
         MSIShowDailyFilesRequest = 910051,
@@ -113,6 +101,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         MSIShowDailyFilesResponseFailed = 910056,
 
+        /// <summary>
+        /// 910018 -  Unhandled Exception Occured.
+        /// </summary>
         UnhandledCleanUpException = 910019
     }
 

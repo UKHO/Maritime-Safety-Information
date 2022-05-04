@@ -9,6 +9,7 @@ using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -38,7 +39,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
-            services.Configure<AzureADConfiguration>(configuration.GetSection("AuthConfiguration"));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<INMDataService, NMDataService>();
@@ -58,23 +58,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
-            var AuthConfiguration = new AzureADConfiguration();
-            configuration.Bind("AuthConfiguration", AuthConfiguration);
-
-              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer("AzureAD", options =>
-            {
-                options.Audience = AuthConfiguration.ClientId;
-                options.Authority = $"{AuthConfiguration.MicrosoftOnlineLoginUrl}{AuthConfiguration.TenantId}";
-            });
-
-            services.AddAuthorization(options =>
-            {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .AddAuthenticationSchemes("AzureAD")
-                .Build();
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

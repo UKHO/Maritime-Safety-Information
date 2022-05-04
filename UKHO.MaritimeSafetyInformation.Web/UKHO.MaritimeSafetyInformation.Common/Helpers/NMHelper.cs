@@ -1,11 +1,11 @@
 ﻿using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common.Models;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 
-namespace UKHO.MaritimeSafetyInformation.Common.Helper
+namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
     public static class NMHelper
     {
-        public static List<ShowFilesResponseModel> GetShowFilesResponses(BatchSearchResponse SearchResult)
+        public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             foreach (BatchDetails item in SearchResult.Entries)
@@ -27,11 +27,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helper
             }
             return ListshowFilesResponseModels;
         }
-
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse SearchResult)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new List<ShowDailyFilesResponseModel>();
-            List<AttributesModel> lstattributes = (SearchResult.Entries.Where(x=>x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
+            List<AttributesModel> lstattributes = (SearchResult.Entries.Where(x => x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
             {
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
@@ -41,8 +40,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helper
                 AllFilesZipSize = (long)item.AllFilesZipSize
             })).ToList();
 
-            var groupped = lstattributes.GroupBy(x => x.YearWeek);
-            foreach (var group in groupped)
+            IEnumerable<IGrouping<string, AttributesModel>> groupped = lstattributes.GroupBy(x => x.YearWeek);
+            foreach (IGrouping<string, AttributesModel> group in groupped)
             {
                 List<DailyFilesDataModel> lstDataDate = (group.Select(item => new DailyFilesDataModel
                 {
