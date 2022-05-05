@@ -16,6 +16,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         private INMDataService _nMService;
         private ILogger<NoticesToMarinersController> _logger;
         private IHttpContextAccessor _contextAccessor;
+        private IFileShareService _fileShareService;
 
         [SetUp]
         public void Setup()
@@ -23,8 +24,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
             _nMService = A.Fake<INMDataService>();
             _logger = A.Fake<ILogger<NoticesToMarinersController>>();
             _contextAccessor = A.Fake<IHttpContextAccessor>();
+            _fileShareService = A.Fake<IFileShareService>();
             A.CallTo(() => _contextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new NoticesToMarinersController(_nMService, _contextAccessor, _logger);
+            _controller = new NoticesToMarinersController(_nMService, _contextAccessor, _logger, _fileShareService);
         }
 
         [Test]

@@ -73,13 +73,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseCompleted = 910017,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Failed.
+        /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
         /// <summary>
-        /// 910018 -  Unhandled Exception Occured.
+        /// 910019 -  Unhandled Exception Occured.
         /// </summary>
-        UnhandledCleanUpException = 910019
+        UnhandledCleanUpException = 910019,
+        /// <summary>
+        /// 910020 -  FSS Search Attribute Response Started
+        /// </summary>
+        FSSSearchAttributeResponseStarted = 910020,
+        /// <summary>
+        /// 910021 -  FSS Search Attribute Response Completed
+        /// </summary>
+        FSSSearchAttributeResponseCompleted = 910021
     }
 
     public static class EventIdExtensions

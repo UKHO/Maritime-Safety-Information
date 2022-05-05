@@ -1,6 +1,7 @@
 ﻿//Document ready 
 $(function () {
-    LoadYears();
+  ///////  ShowYearWeekData();
+    LoadYears();    
     $("#ddlYears").change(function () {
         LoadWeeks($("#ddlYears").val());
     });
@@ -10,20 +11,22 @@ $(function () {
 });
 
 function LoadYears() {
-    $.ajax({
-        url: '/NoticesToMariners/LoadYears',
-        type: "GET",
+    $.ajax({       
+        url: '/NoticesToMariners/YearWeek',
+        type: "POST",
         dataType: "json",
         success: function (data) {
-            $('#ddlYears').empty();
-            $.each(data, function (i, data) {
-                var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
-                $(div_data).appendTo('#ddlYears');
-                let curYear = new Date().getFullYear()
-                $('#ddlYears').val(curYear);
-                LoadWeeks(curYear);
+            Console.log(data);            
 
-            });
+            ////////$('#ddlYears').empty();
+            ////////$.each(data, function (i, data) {
+            ////////    var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
+            ////////    $(div_data).appendTo('#ddlYears');
+            ////////    let curYear = new Date().getFullYear()
+            ////////    $('#ddlYears').val(curYear);
+            ////////    LoadWeeks(curYear);
+
+          ////////  });
         },
         error: function (error) {
             console.log(`Error ${error}`);
@@ -31,8 +34,10 @@ function LoadYears() {
     });
 }
 
+
 function LoadWeeks(selectedYear) {
     if (selectedYear != "") {
+       
         $.ajax({
             url: '/NoticesToMariners/LoadWeeks',
             type: "POST",
@@ -42,6 +47,7 @@ function LoadWeeks(selectedYear) {
             dataType: "json",
             success: function (data) {
                 $('#ddlWeeks').empty();
+                ////////
                 $.each(data, function (i, data) {
                     var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
                     $(div_data).appendTo('#ddlWeeks');
@@ -52,6 +58,20 @@ function LoadWeeks(selectedYear) {
             }
         });
     }
+}
+
+function ShowYearWeekData() {
+    $.ajax({
+        url: '/NoticesToMariners/Yearweek',
+        dataType: "json",
+        type: "GET",
+        data: {
+            success: function (data) {
+                Console.log(data);
+            }
+        }
+
+    })
 }
 
 function ShowWeeklyFilesAsync() {

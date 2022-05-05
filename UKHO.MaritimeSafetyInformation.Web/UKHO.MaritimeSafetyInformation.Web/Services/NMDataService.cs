@@ -52,28 +52,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public List<KeyValuePair<string, string>> GetAllYears(string correlationId)
-        {
+       
+
+        public async Task<List<KeyValuePair<string,string>>> GetAllYearsandWeek(string correlationId)
+        {            
             List<KeyValuePair<string, string>> years = new();
-
             _logger.LogInformation(EventIds.GetAllYearsStarted.ToEventId(), "Maritime safety information request to get all years to populate year dropdown started", correlationId);
-
-            years.Add(new KeyValuePair<string, string>("Year", ""));
+           /////// IResult<BatchAttributesSearchResponse> result = await GetSearchAttributeData(correlationId);
+            ///////IEnumerable<BatchAttributesSearchAttribute> y = result.Data.BatchAttributes.Where(h => h.Key == "YEAR").ToList();
+           /////// Console.WriteLine(y);
+            ///// years.Add(new KeyValuePair<string, string>(y, ""));
             for (int i = 0; i < 3; i++)
             {
                 string year = (DateTime.Now.Year - i).ToString();
                 years.Add(new KeyValuePair<string, string>(year, year));
             }
-
-            return years;
+            return years;         
         }
+
         public List<KeyValuePair<string, string>> GetAllWeeksofYear(int year, string correlationId)
         {
             List<KeyValuePair<string, string>> weeks = new();
 
             _logger.LogInformation(EventIds.GetAllWeeksOfYearStarted.ToEventId(), "Maritime safety information request to get all weeks of year to populate week dropdown started", correlationId);
 
-            weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
+
+            /////weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
 
             DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
             DateTime lastdate;

@@ -124,21 +124,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(totalWeeks + 1, result.Count);
         }
 
-        [Test]
-        public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
-        {
-            int yearsCount = 4;
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
-            Assert.AreEqual(yearsCount, result.Count);
-        }
+        //////////[Test]
+        //////////public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
+        //////////{
+        //////////    int yearsCount = 4;
+        //////////    List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYearsandWeek(CorrelationId);
+        //////////    Assert.AreEqual(yearsCount, result.Count);
+        //////////}
 
-        [Test]
-        public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
-        {
-            int minYear = DateTime.Now.Year - 2;
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
-            Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
-        }
+        //////////[Test]
+        //////////public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
+        //////////{
+        //////////    int minYear = DateTime.Now.Year - 2;
+        //////////    List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYearsandWeek(CorrelationId);
+        //////////    Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
+        //////////}
 
         private static Result<BatchSearchResponse> SetSearchResult()
         {
