@@ -18,6 +18,7 @@ test.describe("A11y tests", ()=> {
  
   test.beforeEach(async ({page}) => {
     await page.goto(app.url);    
+    console.log(page.url());
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
