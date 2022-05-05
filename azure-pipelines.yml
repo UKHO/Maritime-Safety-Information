@@ -306,7 +306,7 @@ stages:
 
                 - task: SqlAzureDacpacDeployment@1
                   inputs:
-                    azureSubscription: $(RNW_DB_Endpoint)
+                    azureSubscription: SharedServicesPre
                     AuthenticationType: "aadAuthenticationPassword"
                     ServerName: $(RNW_DB_Server)
                     DatabaseName: $(RNW_DB_Name)
