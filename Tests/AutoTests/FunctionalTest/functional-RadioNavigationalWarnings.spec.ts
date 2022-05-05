@@ -23,11 +23,6 @@ test.describe("Create new radio navigational warnings record", ()=> {
   await radioNavigationalWarnings.getDialogText('Failed to create record.')    
 }) 
 
-test('With invalid input as content text',async()=>{   
-  await radioNavigationalWarnings.fillFormWithValidDetails("testdata1");  
-  await radioNavigationalWarnings.clickCreateButton();
-  await radioNavigationalWarnings.getDialogText('Failed to create record.')    
-})  
 
    test('With valid input details',async()=>{   
     await radioNavigationalWarnings.fillFormWithValidDetails("testdata");  
