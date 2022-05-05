@@ -19,7 +19,7 @@ export default class RadioNavigationalWarnings
         this.description =  this.page.locator('#Summary');
         this.createNewRecord = this.page.locator('text=create');
         this.content=this.page.locator('#Content');
-        this.create= this.page.locator('body > main > div > div.row > div > form > div:nth-child(7) > input')
+        this.create= this.page.locator('#btnCreate')
         this.warning = this.page.locator('#WarningType');
     }
 
@@ -39,7 +39,7 @@ export default class RadioNavigationalWarnings
         expect(dialog.message).toEqual(text);
         dialog.accept();
       })     
-    }
+    }   
     
     public async fillFormWithValidDetails(content:string)
     {
