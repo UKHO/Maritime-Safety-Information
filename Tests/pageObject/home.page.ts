@@ -11,5 +11,5 @@ export default class homepage
         this.page = page; 
     }
 
-   
+  
 }
