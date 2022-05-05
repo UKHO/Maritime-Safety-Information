@@ -20,6 +20,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
             return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
+        }   
+
+        public IActionResult DailyFiles()
+        {
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+            return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml");
         }
 
         public IActionResult LoadYears()
@@ -50,7 +56,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             _logger.LogInformation(EventIds.MSIShowDailyFilesCompleted.ToEventId(), "Maritime safety information request for show daily files completed:{correlationId}", GetCurrentCorrelationId());
 
-            return View(Entries);
+            return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", Entries);
+
         }
     }
 }

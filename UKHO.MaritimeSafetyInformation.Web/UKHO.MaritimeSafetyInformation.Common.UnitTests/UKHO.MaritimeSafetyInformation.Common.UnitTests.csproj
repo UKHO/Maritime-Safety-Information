@@ -15,8 +15,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="UKHO.FileShareAdminClient" Version="1.2.20502.2" />
-    <PackageReference Include="UKHO.FileShareClient" Version="1.2.20502.2" />
+    <PackageReference Include="UKHO.FileShareAdminClient" Version="1.3.20504.3" />
+    <PackageReference Include="UKHO.FileShareClient" Version="1.3.20504.3" />
   </ItemGroup>
 
   <ItemGroup>

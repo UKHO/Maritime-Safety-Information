@@ -1,12 +1,18 @@
 ﻿//Document ready 
 $(function () {
-    LoadYears();
-    $("#ddlYears").change(function () {
-        LoadWeeks($("#ddlYears").val());
-    });
-    $("#ddlWeeks").change(function () {
-        ShowWeeklyFilesAsync();
-    });
+
+    if ($('#hdnRequestType').val() == "Daily") {
+        ShowDailyFilesAsync();
+    }
+    else {
+        LoadYears();
+        $("#ddlYears").change(function () {
+            LoadWeeks($("#ddlYears").val());
+        });
+        $("#ddlWeeks").change(function () {
+            ShowWeeklyFilesAsync();
+        });
+    }
 });
 
 function LoadYears() {
@@ -73,5 +79,19 @@ function ShowWeeklyFilesAsync() {
             }
         });
     }
+}
+
+function ShowDailyFilesAsync() {
+
+    $.ajax({
+        url: '/NoticesToMariners/ShowDailyFiles',
+        type: "GET",
+        success: function (data) {
+            $('#divFilesList').html(data);
+        },
+        error: function (error) {
+            console.log(`Error ${error}`);
+        }
+    });
 }
 
