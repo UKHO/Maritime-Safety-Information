@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 BatchSearchResponse SearchResult = result.Data;
 
-                if (SearchResult.Entries != null && SearchResult.Entries.Count > 0)
+                if (SearchResult != null && SearchResult.Entries != null && SearchResult.Entries.Count > 0)
                 {
                     _logger.LogInformation(EventIds.MSIShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request for show daily files response data found", correlationId);
 
@@ -126,6 +126,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.MSIShowDailyFilesResponseFailed.ToEventId(), "Failed to get MSI Daily response data {correlationId} {exceptionMessage} {exceptionTrace}", correlationId, ex.Message, ex.StackTrace);
+                throw;
             }
 
             return showDailyFilesResponses;

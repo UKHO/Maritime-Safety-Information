@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
@@ -16,6 +16,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         private INMDataService _nMService;
         private ILogger<NoticesToMarinersController> _logger;
         private IHttpContextAccessor _contextAccessor;
+        private INMDataService _nMDataService;
+
 
         [SetUp]
         public void Setup()
@@ -23,15 +25,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
             _nMService = A.Fake<INMDataService>();
             _logger = A.Fake<ILogger<NoticesToMarinersController>>();
             _contextAccessor = A.Fake<IHttpContextAccessor>();
+            _nMDataService = A.Fake<INMDataService>();
             A.CallTo(() => _contextAccessor.HttpContext).Returns(new DefaultHttpContext());
             _controller = new NoticesToMarinersController(_nMService, _contextAccessor, _logger);
         }
 
         [Test]
-        public void WhenIndexIsCalled_ThenShouldReturnView()
+        public void WhenIndexIsCalled_ThenShouldReturnsExpectedView()
         {
+            string expectedView = "~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml";
             IActionResult result = _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
+        public void WhenDailyFilesIsCalled_ThenShouldReturnsExpectedView()
+        {
+            string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
+            IActionResult result = _controller.DailyFiles();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult) result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
 
         [Test]
@@ -50,20 +66,31 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         }
 
         [Test]
-        public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnPartialView()
+        public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
         {
             int year = 2022;
             int week = 16;
+            string expectedView = "~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml";
+
+            A.CallTo(() => _nMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored));
+
             IActionResult result = await _controller.ShowWeeklyFilesAsync(year,week);
             Assert.IsInstanceOf<PartialViewResult>(result);
+            string actualView = ((PartialViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
 
         [Test]
-        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnPartialView()
+        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
         {
-            
+            string expectedView = "~/Views/NoticesToMariners/ShowDailyFilesList.cshtml";
+
+            A.CallTo(() => _nMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored));
+
             IActionResult result = await _controller.ShowDailyFilesAsync();
             Assert.IsInstanceOf<PartialViewResult>(result);
+            string actualView = ((PartialViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
     }
 }

@@ -6,55 +6,60 @@ using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 
-namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
+namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 {
     public class NMHelperTest
     {
         [Test]
         public void WhenNMHelperCallsListFilesResponse_ThenConversionIsCorrect()
         {
-            BatchSearchResponse SearchResult = SetSearchResult();
+            BatchSearchResponse SearchResult = SetSearchResultForWeekly();
 
-            List<ShowFilesResponseModel> expected = new() {
-                new ShowFilesResponseModel() {
-                        BatchId = "1",
-                        Filename = "aaa.pdf",
-                        FileDescription = "aaa",
-                        FileExtension = ".pdf",
-                        FileSize = 1232,
-                        FileSizeinKB = "1.2 KB",
-                        MimeType = "PDF",
-                        Links = null
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "aaa.pdf",
+                    FileDescription = "aaa",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1.2 KB",
+                    MimeType = "PDF",
+                    Links = null
                 },
-                new ShowFilesResponseModel() {
-                        BatchId = "1",
-                        Filename = "bbb.pdf",
-                        FileDescription = "bbb",
-                        FileExtension = ".pdf",
-                        FileSize = 1232,
-                        FileSizeinKB = "1.2 KB",
-                        MimeType = "PDF",
-                        Links = null
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "bbb.pdf",
+                    FileDescription = "bbb",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1.2 KB",
+                    MimeType = "PDF",
+                    Links = null
                 },
-                new ShowFilesResponseModel() {
-                        BatchId = "2",
-                        Filename = "ccc.pdf",
-                        FileDescription = "ccc",
-                        FileExtension = ".pdf",
-                        FileSize = 1232,
-                        FileSizeinKB = "1.2 KB",
-                        MimeType = "PDF",
-                        Links = null
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ccc.pdf",
+                    FileDescription = "ccc",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1.2 KB",
+                    MimeType = "PDF",
+                    Links = null
                 },
-                new ShowFilesResponseModel() {
-                        BatchId = "2",
-                        Filename = "ddd.pdf",
-                        FileDescription = "ddd",
-                        FileExtension = ".pdf",
-                        FileSize = 1232,
-                        FileSizeinKB = "1.2 KB",
-                        MimeType = "PDF",
-                        Links = null
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ddd.pdf",
+                    FileDescription = "ddd",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1.2 KB",
+                    MimeType = "PDF",
+                    Links = null
                 }
             };
 
@@ -75,7 +80,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
             });
         }
 
-        private static BatchSearchResponse SetSearchResult()
+        private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse SearchResult = new()
             {
@@ -125,8 +130,113 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
             return SearchResult;
         }
 
-[Test]
-        public void WhenGetDailyShowFilesResponseIsCalled_ThenCheckConversionisProper()
+        [Test]
+        public void WhenGetDailyShowFilesResponseIsCalled_ThenConversionIsCorrect()
+        {
+            BatchSearchResponse SearchResult = SetSearchResultForDaily();
+
+            List<ShowDailyFilesResponseModel> expected = new()
+            {
+                new ShowDailyFilesResponseModel
+                {
+                    YearWeek = "2022 / 17",
+                    WeekNumber = "17",
+                    Year = "2022",
+                    DailyFilesData = new()
+                    {
+                        new DailyFilesDataModel()
+                        {
+                            DataDate = "2022-04-21",
+                            BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
+                            Filename = "Daily 2022-04-21.zip",
+                            FileDescription = "Daily 2022-04-21.zip",
+                            FileExtension = ".zip",
+                            FileSizeinKB = FileHelper.FormatSize(299170),
+                            MimeType = "application/gzip",
+                            Links = null,
+                            AllFilesZipSize = 299170
+                        },
+                        new DailyFilesDataModel()
+                        {
+                            DataDate = "2022-04-22",
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            Filename = "Daily 2022-04-22.zip",
+                            FileDescription = "Daily 2022-04-22.zip",
+                            FileExtension = ".zip",
+                            FileSizeinKB = FileHelper.FormatSize(346040),
+                            MimeType = "application/gzip",
+                            Links = null,
+                            AllFilesZipSize = 346040
+                        }
+                    }
+                },
+                new ShowDailyFilesResponseModel
+                {
+                    YearWeek = "2022 / 18",
+                    WeekNumber = "18",
+                    Year = "2022",
+                    DailyFilesData = new()
+                    {
+                        new DailyFilesDataModel()
+                        {
+                            DataDate = "2022-04-24",
+                            BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
+                            Filename = "Daily 2022-04-24.zip",
+                            FileDescription = "Daily 2022-04-24.zip",
+                            FileExtension = ".zip",
+                            FileSizeinKB = FileHelper.FormatSize(299170),
+                            MimeType = "application/gzip",
+                            Links = null,
+                            AllFilesZipSize = 299170
+                        },
+                        new DailyFilesDataModel()
+                        {
+                            DataDate = "2022-04-23",
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            Filename = "Daily 2022-04-23.zip",
+                            FileDescription = "Daily 2022-04-23.zip",
+                            FileExtension = ".zip",
+                            FileSizeinKB = FileHelper.FormatSize(346040),
+                            MimeType = "application/gzip",
+                            Links = null,
+                            AllFilesZipSize = 346040
+                        }
+                    }
+                }
+            };
+            expected = expected.OrderByDescending(x => x.Year).ThenByDescending(x => x.WeekNumber).ToList();
+
+            foreach (var item in expected)
+            {
+                item.DailyFilesData = item.DailyFilesData.OrderBy(x => Convert.ToDateTime(x.DataDate)).ToList();
+            }
+
+            List<ShowDailyFilesResponseModel> result = NMHelper.GetDailyShowFilesResponse(SearchResult);
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].Year, result[i].Year);
+                    Assert.AreEqual(expected[i].YearWeek, result[i].YearWeek);
+                    Assert.AreEqual(expected[i].WeekNumber, result[i].WeekNumber);
+
+                    for (int j = 0; j < expected[i].DailyFilesData.Count; j++)
+                    {
+                        Assert.AreEqual(expected[i].DailyFilesData[j].BatchId, result[i].DailyFilesData[j].BatchId);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].DataDate, result[i].DailyFilesData[j].DataDate);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].Filename, result[i].DailyFilesData[j].Filename);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].FileDescription, result[i].DailyFilesData[j].FileDescription);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].FileExtension, result[i].DailyFilesData[j].FileExtension);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].FileSizeinKB, result[i].DailyFilesData[j].FileSizeinKB);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].MimeType, result[i].DailyFilesData[j].MimeType);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].Links, result[i].DailyFilesData[j].Links);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].AllFilesZipSize, result[i].DailyFilesData[j].AllFilesZipSize);
+                    }
+                }
+            });
+        }
+
+        private static BatchSearchResponse SetSearchResultForDaily()
         {
             BatchSearchResponse SearchResult = new()
             {
@@ -299,105 +409,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
                     }
             };
 
-            List<ShowDailyFilesResponseModel> expected = new()
-            {
-                new ShowDailyFilesResponseModel
-                {
-                    YearWeek = "2022 / 17",
-                    WeekNumber = "17",
-                    Year = "2022",
-                    DailyFilesData = new()
-                    {
-                        new DailyFilesDataModel()
-                        {
-                            DataDate = "2022-04-21",
-                            BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
-                            Filename = "Daily 2022-04-21.zip",
-                            FileDescription = "Daily 2022-04-21.zip",
-                            FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(299170),
-                            MimeType = "application/gzip",
-                            Links = null,
-                            AllFilesZipSize = 299170
-                        },
-                        new DailyFilesDataModel()
-                        {
-                            DataDate = "2022-04-22",
-                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
-                            Filename = "Daily 2022-04-22.zip",
-                            FileDescription = "Daily 2022-04-22.zip",
-                            FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(346040),
-                            MimeType = "application/gzip",
-                            Links = null,
-                            AllFilesZipSize = 346040
-                        }
-                    }
-                },
-                new ShowDailyFilesResponseModel
-                {
-                    YearWeek = "2022 / 18",
-                    WeekNumber = "18",
-                    Year = "2022",
-                    DailyFilesData = new()
-                    {
-                        new DailyFilesDataModel()
-                        {
-                            DataDate = "2022-04-24",
-                            BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
-                            Filename = "Daily 2022-04-24.zip",
-                            FileDescription = "Daily 2022-04-24.zip",
-                            FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(299170),
-                            MimeType = "application/gzip",
-                            Links = null,
-                            AllFilesZipSize = 299170
-                        },
-                        new DailyFilesDataModel()
-                        {
-                            DataDate = "2022-04-23",
-                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
-                            Filename = "Daily 2022-04-23.zip",
-                            FileDescription = "Daily 2022-04-23.zip",
-                            FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(346040),
-                            MimeType = "application/gzip",
-                            Links = null,
-                            AllFilesZipSize = 346040
-                        }
-                    }
-                }
-            };
-            expected = expected.OrderByDescending(x => x.Year).ThenByDescending(x => x.WeekNumber).ToList();
-
-            foreach (var item in expected)
-            {
-                item.DailyFilesData = item.DailyFilesData.OrderBy(x => Convert.ToDateTime(x.DataDate)).ToList();
-            }
-
-            List<ShowDailyFilesResponseModel> result = NMHelper.GetDailyShowFilesResponse(SearchResult);
-            Assert.Multiple(() =>
-            {
-                for (int i = 0; i < result.Count; i++)
-                {
-                    Assert.AreEqual(expected[i].Year, result[i].Year);
-                    Assert.AreEqual(expected[i].YearWeek, result[i].YearWeek);
-                    Assert.AreEqual(expected[i].WeekNumber, result[i].WeekNumber);
-
-                    for (int j = 0; j < expected[i].DailyFilesData.Count; j++)
-                    {
-                        Assert.AreEqual(expected[i].DailyFilesData[j].BatchId, result[i].DailyFilesData[j].BatchId);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].DataDate, result[i].DailyFilesData[j].DataDate);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].Filename, result[i].DailyFilesData[j].Filename);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileDescription, result[i].DailyFilesData[j].FileDescription);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileExtension, result[i].DailyFilesData[j].FileExtension);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileSizeinKB, result[i].DailyFilesData[j].FileSizeinKB);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].MimeType, result[i].DailyFilesData[j].MimeType);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].Links, result[i].DailyFilesData[j].Links);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].AllFilesZipSize, result[i].DailyFilesData[j].AllFilesZipSize);
-                    }
-                }
-            });
+            return SearchResult;
         }
+
     }
 }

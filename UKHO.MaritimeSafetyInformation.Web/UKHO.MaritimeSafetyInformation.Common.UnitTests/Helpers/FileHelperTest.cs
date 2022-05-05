@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 
-namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helper
+namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 {
     [TestFixture]
     public class FileHelperTest
