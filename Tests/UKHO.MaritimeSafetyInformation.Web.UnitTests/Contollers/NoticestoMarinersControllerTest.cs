@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         {
             
             IActionResult result = await _controller.ShowDailyFilesAsync();
-            Assert.IsInstanceOf<ViewResult>(result);
+            Assert.IsInstanceOf<PartialViewResult>(result);
         }
     }
 }
