@@ -100,7 +100,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
         public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
         {
-            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new List<ShowDailyFilesResponseModel>();
+            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);

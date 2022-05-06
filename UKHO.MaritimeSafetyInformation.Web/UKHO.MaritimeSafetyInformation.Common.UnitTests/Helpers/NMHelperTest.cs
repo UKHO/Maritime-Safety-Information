@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "aaa",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1.2 KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "bbb",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1.2 KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "ccc",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1.2 KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "ddd",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1.2 KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 }
