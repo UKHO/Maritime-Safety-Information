@@ -1,0 +1,196 @@
+﻿using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
+using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+
+namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
+{
+    [TestFixture]
+    public class NMDataServiceTest
+    {
+        private IFileShareService _fakefileShareService;
+        private ILogger<NMDataService> _fakeLogger;
+        private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
+        private NMDataService _fakeNMDataService;
+        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+
+        [SetUp]
+        public void Setup()
+        {
+            _fakefileShareService = A.Fake<IFileShareService>();
+            _fakeLogger = A.Fake<ILogger<NMDataService>>();
+            _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
+
+            _fakeNMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider);
+        }
+
+
+        [Test]
+        public async Task WhenGetNMBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            int year = 2022;
+            int week = 15;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> SearchResult = SetSearchResult();
+
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(SearchResult);
+
+            int ExpectedRecordCount = 4;
+
+            List<ShowFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(ExpectedRecordCount, ListshowFilesResponseModels.Count);
+        }
+
+        [Test]
+        public async Task WhenGetNMBatchFilesIsCalled_ThenShouldReturnZeroFiles()
+        {
+            int year = 2022;
+            int week = 15;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+
+            int ExpectedRecordCount = 0;
+
+            List<ShowFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(ExpectedRecordCount, ListshowFilesResponseModels.Count);
+
+        }
+
+        [Test]
+        public void WhenGetNMBatchFilesIsCalled_ThenShouldExecuteCatch()
+        {
+            int year = 2022;
+            int week = 15;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+
+            Task<List<ShowFilesResponseModel>> result = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+
+        [Test]
+        public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
+        {
+            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+
+            Calendar calender = dateTimeFormatInfo.Calendar;
+
+            int year = DateTime.Now.Year;
+
+            int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
+
+            Assert.AreEqual(totalWeeks + 1, result.Count);
+        }
+        [Test]
+        public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
+        {
+            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+
+            Calendar calender = dateTimeFormatInfo.Calendar;
+
+            int year = DateTime.Now.Year - 1;
+
+            DateTime lastdate = new(year, 12, 31);
+
+            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
+
+            Assert.AreEqual(totalWeeks + 1, result.Count);
+        }
+
+        [Test]
+        public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
+        {
+            int yearsCount = 4;
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
+            Assert.AreEqual(yearsCount, result.Count);
+        }
+
+        [Test]
+        public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
+        {
+            int minYear = DateTime.Now.Year - 2;
+            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
+            Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResult()
+        {
+            Result<BatchSearchResponse> SearchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 2,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "aaa.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "bbb.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "2",
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "ccc.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "ddd.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        }
+                    }
+                }
+            };
+
+            return SearchResult;
+        }
+    }
+}
