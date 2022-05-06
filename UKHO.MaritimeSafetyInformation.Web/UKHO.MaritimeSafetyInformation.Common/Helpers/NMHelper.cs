@@ -1,4 +1,5 @@
-﻿using UKHO.FileShareClient.Models;
+﻿using System.Globalization;
+using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Helpers
@@ -47,9 +48,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 {
                     BatchId = item.BatchId,
                     DataDate = item.DataDate,
-                    Filename = "Daily " + item.DataDate + ".zip",
+                    Filename = "Daily " + GetFormattedDate(item.DataDate) + ".zip",
                     FileExtension = ".zip",
-                    FileDescription = "Daily " + item.DataDate + ".zip",
+                    FileDescription = "Daily " + GetFormattedDate(item.DataDate) + ".zip",
                     AllFilesZipSize = item.AllFilesZipSize,
                     FileSizeinKB = FileHelper.FormatSize(item.AllFilesZipSize),
                     MimeType = "application/gzip"
@@ -69,6 +70,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 showDailyFilesResponses = showDailyFilesResponses.OrderByDescending(x => x.Year).ThenByDescending(x => x.WeekNumber).ToList();
             }
             return showDailyFilesResponses;
+        }
+
+        public static string GetFormattedDate(string strdate)
+        {
+            string[] formats = { "M/d/yyyy", "d/M/yyyy", "M-d-yyyy", "d-M-yyyy", "d-MMM-yy", "d-MMMM-yyyy","yyyy-MM-dd" };
+            string retVal = "";
+            DateTime date;
+            if (DateTime.TryParseExact(strdate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                retVal = date.ToString("dd-MM-yy");
+
+            return retVal;
         }
     }
 }

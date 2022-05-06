@@ -100,6 +100,22 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910056-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
         MSIShowDailyFilesResponseFailed = 910056,
+        /// <summary>
+        /// 910057-  Event data for Retrieval of MSI Get Daily File Result.
+        /// </summary>
+        MSIGetDailyFilesResultRequest = 910057,
+        /// <summary>
+        /// 910058-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        MSIGetDailyFilesResultCompleted = 910058,
+        /// <summary>
+        /// 910059-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        MSIGetWeeklyFilesResultRequest = 910059,
+        /// <summary>
+        /// 910060-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        MSIGetWeeklyFilesResultRequestCompleted = 910060,
 
         /// <summary>
         /// 910018 -  Unhandled Exception Occured.

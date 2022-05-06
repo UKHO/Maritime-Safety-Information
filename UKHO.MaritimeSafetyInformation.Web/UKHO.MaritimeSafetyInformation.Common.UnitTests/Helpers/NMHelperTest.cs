@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -148,8 +148,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                         {
                             DataDate = "2022-04-21",
                             BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
-                            Filename = "Daily 2022-04-21.zip",
-                            FileDescription = "Daily 2022-04-21.zip",
+                            Filename = "Daily 21-04-22.zip",
+                            FileDescription = "Daily 21-04-22.zip",
                             FileExtension = ".zip",
                             FileSizeinKB = FileHelper.FormatSize(299170),
                             MimeType = "application/gzip",
@@ -160,8 +160,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                         {
                             DataDate = "2022-04-22",
                             BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
-                            Filename = "Daily 2022-04-22.zip",
-                            FileDescription = "Daily 2022-04-22.zip",
+                            Filename = "Daily 22-04-22.zip",
+                            FileDescription = "Daily 22-04-22.zip",
                             FileExtension = ".zip",
                             FileSizeinKB = FileHelper.FormatSize(346040),
                             MimeType = "application/gzip",
@@ -181,8 +181,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                         {
                             DataDate = "2022-04-24",
                             BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
-                            Filename = "Daily 2022-04-24.zip",
-                            FileDescription = "Daily 2022-04-24.zip",
+                            Filename = "Daily 24-04-22.zip",
+                            FileDescription = "Daily 24-04-22.zip",
                             FileExtension = ".zip",
                             FileSizeinKB = FileHelper.FormatSize(299170),
                             MimeType = "application/gzip",
@@ -193,8 +193,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                         {
                             DataDate = "2022-04-23",
                             BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
-                            Filename = "Daily 2022-04-23.zip",
-                            FileDescription = "Daily 2022-04-23.zip",
+                            Filename = "Daily 23-04-22.zip",
+                            FileDescription = "Daily 23-04-22.zip",
                             FileExtension = ".zip",
                             FileSizeinKB = FileHelper.FormatSize(346040),
                             MimeType = "application/gzip",
@@ -410,6 +410,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             };
 
             return SearchResult;
+        }
+
+        [Test]
+        public void WhenGetFormattedDateIsCalled_ThenShouldReturnDateInExpectedFormat()
+        {
+            string strdate = "2022-05-26";
+            string actualDate = NMHelper.GetFormattedDate(strdate);
+            string expectedDate = "26-05-22";
+            Assert.AreEqual(expectedDate, actualDate);
         }
 
     }
