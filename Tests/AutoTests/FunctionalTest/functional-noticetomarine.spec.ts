@@ -4,11 +4,8 @@ import noticetomarine from '../../pageObject/noticetomarine.page';
 
 test.describe("Maritime Safety Information Notice to Marine Page Functional Test Scenarios", ()=> {
  
- 
   let notice:any;
-  
-  
-  
+
   test.beforeEach(async ({page}) => {
       await page.goto(app.url);  
        notice = new noticetomarine(page);
@@ -21,7 +18,7 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
           expect(weeklyenable).toBeTruthy();     
        })
   
-      test('Does the Table Data Include the File size',async ({page}) => {
+      test('Does the Table Data For Yearly and Weekly Drop Down Include Table Data,File Name and File Size',async ({page}) => {
          const tablecount = await notice.noticeMarinecRecordCount('2022','16');
          expect(tablecount).toBeGreaterThan(0);   
          expect(await notice.getFileNameText()).toEqual('File Name');
