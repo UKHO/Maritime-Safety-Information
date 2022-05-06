@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Configuration\AzureADConfiguration.cs" />
-    <Compile Remove="Models\NoticesToMariners\AccessTokenItem.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Logging\EventIds.cs" />
   </ItemGroup>
 
