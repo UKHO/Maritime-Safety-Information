@@ -106,10 +106,10 @@
 
         <div>
             <ul class="pagination">
-                <li class="page-item"><a class="page-link" onclick="RnwFilterList(1)">First</a></li>
-                <li class="page-item"><a class="@(Model.CurrentPageIndex==1 ? "page-link disabled-link" : "page-link enabled-link")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)" >Previous</a></li>
-                <li class="page-item"><a class="@(Model.CurrentPageIndex==Model.PageCount ? "page-link disabled-link" : "page-link enabled-link")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
-                <li class="page-item"><a class="page-link" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
+                <li class="page-item  @(Model.CurrentPageIndex==1 ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(1)">First</a></li>
+                <li class="page-item  @(Model.CurrentPageIndex==1 ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(@Model.CurrentPageIndex-1)" >Previous</a></li>
+                <li class="page-item  @(Model.CurrentPageIndex==Model.PageCount ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
+                <li class="page-item  @(Model.CurrentPageIndex==Model.PageCount ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
             </ul>
             <div>
                 Page @Model.CurrentPageIndex of @Model.PageCount
