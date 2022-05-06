@@ -1,6 +1,6 @@
 import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
-import noticetomarine from '../../pageObject/noticetomarine.page';
+import noticeToMarine from '../../pageObject/noticetomarine.page';
 
 test.describe("Maritime Safety Information Notice to Marine Page Functional Test Scenarios", ()=> {
  
@@ -8,7 +8,7 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
 
   test.beforeEach(async ({page}) => {
       await page.goto(app.url);  
-       notice = new noticetomarine(page);
+       notice = new noticeToMarine(page);
        await notice.clickToNoticemarine();
     });  
       test('Does the Yearly and Weekly Drop Down is enabled',async ({page}) => {
@@ -19,32 +19,11 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
        })
   
       test('Does the Table Data For Yearly and Weekly Drop Down Include Table Data,File Name and File Size',async ({page}) => {
-         const tablecount = await notice.noticeMarinecRecordCount('2022','16');
-         expect(tablecount).toBeGreaterThan(0);   
+         const tableData = await notice.noticeMarinecRecordCount('2022','16');
+         expect(tableData).toBeGreaterThan(0);   
          expect(await notice.getFileNameText()).toEqual('File Name');
          expect(await notice.getFileSizeText()).toEqual('File Size');  
          await page.waitForSelector('td')
-         const fileSizeData = await page.$$("td:nth-child(2)");
-         for (const table of fileSizeData)
-         {
-           var fileData = await (await table.innerText());
-           if(fileData.includes("MB"))
-          {
-             expect(fileData).toContain("MB"); 
-          }
-          else if (fileData.includes("KB"))
-          {
-            expect(fileData).toContain("KB");
-          }
-          else if(fileData.includes("bytes"))
-          {
-            expect(fileData).toContain("bytes");
-          }
-          else{}
-         }
-      })
-      
-
-  
-          
+         await notice.getTableData();
+      })  
     })

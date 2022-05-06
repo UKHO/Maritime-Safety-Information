@@ -1,6 +1,7 @@
-import type { Locator, Page } from 'playwright';
+import { expect } from '@playwright/test';
+import { errors, Locator, Page } from 'playwright';
 
-export default class noticetomarine
+export default class noticetoMarine
 {
     private page:Page;
     readonly noticeMarine:Locator;
@@ -42,17 +43,43 @@ public async noticeMarinecRecordCount(year:string,week:string)
     await this.page.waitForSelector('tr')
     const tablerow = await this.page.$$("tr");
     return tablerow.length;
-    
 }
 
 public async getFileSizeText()
 {
   return (await this.fileSize.textContent()).toString();   
-  
 }
 public async getFileNameText()
 {
     return (await this.fileName.textContent()).toString();   
-    
+}
+
+public async getTableData()
+{
+    const fileSizeData = await this.page.$$("td:nth-child(2)");
+         
+         for (const table of fileSizeData)
+         {
+           var fileData = await (await table.innerText());
+           if(fileData!="File Size")
+           {
+           if(fileData.includes("MB"))
+          {
+             expect(fileData).toContain("MB"); 
+          }
+          else if (fileData.includes("KB"))
+          {
+            expect(fileData).toContain("KB");
+          }
+          else if(fileData.includes("bytes"))
+          {
+            expect(fileData).toContain("bytes");
+          }
+          else
+          {
+            throw new Error("No Element");
+          }
+        }
+         }
 }
 }
