@@ -7,12 +7,12 @@
         {
             int counter = 0;
             decimal number = (decimal)bytes;
-            while (Math.Round(number / 1024) >= 1)
+            while ((number / 1024) >= 1)
             {
                 number /= 1024;
                 counter++;
             }
-            return string.Format("{0:n1} {1}", number, suffixes[counter]);
+            return string.Format("{0} {1}", Convert.ToInt32(Math.Round(number)), suffixes[counter]);
         }
     }
 }
