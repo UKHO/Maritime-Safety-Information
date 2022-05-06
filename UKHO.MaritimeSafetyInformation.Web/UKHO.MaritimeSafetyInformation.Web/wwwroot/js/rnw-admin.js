@@ -20,10 +20,11 @@ function RnwFilterList(pageSelectedIndex) {
     if (warningTypeSelectedValue == undefined) {
         warningTypeSelectedValue = 0;
     }
-    var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacepageSelectedIndex&warningType=ReplaceWarningTypeSelectedValue&year=ReplacYeareSelectedValue";
+    var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacepageSelectedIndex&warningType=ReplaceWarningTypeSelectedValue&year=ReplacYeareSelectedValue&reLoadData=ReplacReLoadData";
     rnwUrl = rnwUrl.replace("ReplacepageSelectedIndex", pageSelectedIndex).trim();
     rnwUrl = rnwUrl.replace("ReplaceWarningTypeSelectedValue", warningTypeSelectedValue).trim();
     rnwUrl = rnwUrl.replace("ReplacYeareSelectedValue", yeareSelectedValue).trim();
+    rnwUrl = rnwUrl.replace("ReplacReLoadData", "false").trim();
     rnwUrl = rnwUrl.replace("amp;", "");
     window.location.href = rnwUrl.replace("amp;", "");
 }
