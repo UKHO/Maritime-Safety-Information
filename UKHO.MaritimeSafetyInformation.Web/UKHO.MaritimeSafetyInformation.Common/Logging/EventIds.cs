@@ -79,7 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910018 -  Unhandled Exception Occured.
         /// </summary>
-        UnhandledCleanUpException = 910019
+        UnhandledCleanUpException = 910019,
         /// <summary>
         /// 910006 -  Maritime safety information create new RNW record request started.
         /// </summary>
