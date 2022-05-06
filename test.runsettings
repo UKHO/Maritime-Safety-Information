@@ -18,12 +18,6 @@
               </Exclude>
             </ModulePaths>
 
-      	<Sources>
-              <Exclude>
-                <Source>.*cshtml.*</Source> <!-- Ignore the pre-compiled views for code coverage -->
-              </Exclude>
-            </Sources>
-
             <Attributes>
               <Exclude>
                 <Attribute>^System\.Diagnostics\.DebuggerHiddenAttribute$</Attribute>
