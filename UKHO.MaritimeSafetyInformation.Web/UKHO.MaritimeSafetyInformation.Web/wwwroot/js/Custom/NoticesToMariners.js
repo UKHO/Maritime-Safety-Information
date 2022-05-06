@@ -1,9 +1,10 @@
 ﻿//Document ready 
 $(function () {
   ///////  ShowYearWeekData();
-    LoadYears();    
+   var getdata= LoadYears();    
     $("#ddlYears").change(function () {
-        LoadWeeks($("#ddlYears").val());
+        //////LoadWeeks($("#ddlYears").val());
+        GetCorrespondingWeeks($("#ddlYears").val(), getdata);
     });
     $("#ddlWeeks").change(function () {
         ShowWeeklyFilesAsync();
@@ -16,17 +17,24 @@ function LoadYears() {
         type: "POST",
         dataType: "json",
         success: function (data) {
-            Console.log(data);            
-
-            ////////$('#ddlYears').empty();
-            ////////$.each(data, function (i, data) {
-            ////////    var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
-            ////////    $(div_data).appendTo('#ddlYears');
-            ////////    let curYear = new Date().getFullYear()
+            $('#ddlYears').empty();
+            var div_data = ('<option value="' + data.data.batchAttributes[2].key + '">' + data.data.batchAttributes[2].values + '</option>');
+            $(div_data).appendTo('#ddlYears');
+            let curYear = new Date().getFullYear()
+            var year;
+            for (var i = 0; i < 5; i++) {
+                if (curYear == data.data.batchAttributes[2].values) {
+                     year = curYear;
+                    $('#ddlYears').val(year);
+                }
+                curYear --;
+            }
             ////////    $('#ddlYears').val(curYear);
-            ////////    LoadWeeks(curYear);
-
-          ////////  });
+            ////// LoadWeeks(curYear);
+            
+            GetCorrespondingWeeks(year, data)                       
+            return data;
+          
         },
         error: function (error) {
             console.log(`Error ${error}`);
@@ -34,6 +42,20 @@ function LoadYears() {
     });
 }
 
+function GetCorrespondingWeeks(id, data) {
+    if (id != "") {
+        $('#ddlWeeks').empty();
+      //////  var div_data = ('<option value="' + data.data.batchAttributes[0].values + '">' + data.data.batchAttributes[0].key + '</option>');
+        let currYearWeek = data.data.batchAttributes[0].values
+        var propId = currYearWeek.toString().replace(/ /g, '').split('/');
+        if (propId[0] == id){
+            for (i = 1; i < propId.length; i++) {
+                var weekdata = '<option>' + propId[i].toString().split(',')[0] + '</option>'
+                $(weekdata).appendTo('#ddlWeeks');
+            }
+        }        
+    }
+}
 
 function LoadWeeks(selectedYear) {
     if (selectedYear != "") {
