@@ -19,7 +19,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         // GET: RadioNavigationalWarnings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex = 1, int warningType = 0, string year = "", bool reLoadData = false)
+
         {
             return View();
         }
@@ -47,8 +48,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 {
                     TempData["message"] = "Record created successfully!";
                     _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                    
+                    return RedirectToAction(nameof(Index), new { reLoadData = true });
+                }
+                else
+                {
+                    TempData["message"] = "Failed to create record.";
+                    _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request failed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { reLoadData = true });
                 }
             }
 

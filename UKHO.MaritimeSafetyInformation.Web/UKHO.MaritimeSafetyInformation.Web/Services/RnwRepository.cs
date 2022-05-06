@@ -20,12 +20,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.MSIAddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
-                _context.Add(radioNavigationalWarnings);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation(EventIds.MSIAddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
-               
-                return true;
+                if (radioNavigationalWarnings.WarningType != 0 && radioNavigationalWarnings.Reference != "" && radioNavigationalWarnings.DateTimeGroup.HasValue 
+                    && radioNavigationalWarnings.Summary != null && radioNavigationalWarnings.Content != null)
+                {
+                    _logger.LogInformation(EventIds.MSIAddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
+                    _context.Add(radioNavigationalWarnings);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation(EventIds.MSIAddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
+
+                    return true;
+                }
+                else
+                {
+                    _logger.LogInformation(EventIds.MSIAddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request failed for _X-Correlation-ID:{correlationId}", correlationId);
+
+                    return false;
+                }
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
@@ -18,7 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRnwRepository _fakeRnwRepository;
 
-        [SetUp]
+       [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
@@ -45,11 +46,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordNotCreated()
         {
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
+            _controller.TempData = tempData;
             A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(false);
-
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
-
             Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNotEmpty(_controller.TempData["message"].ToString());
+            Assert.AreEqual("Failed to create record.", _controller.TempData["message"].ToString());
+        }
+
+        [Test]
+        public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
+        {
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
+            _controller.TempData = tempData;
+            A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNotEmpty(_controller.TempData["message"].ToString());
+            Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
         }
     }
 }
