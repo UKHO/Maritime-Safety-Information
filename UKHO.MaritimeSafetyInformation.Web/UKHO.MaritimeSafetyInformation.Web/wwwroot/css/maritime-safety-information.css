@@ -316,6 +316,19 @@ button:active {
   padding-right: 0;
   transform: none;
 }
+.pagination li a {
+  color: #09315b;
+  border-radius: 0 !important;
+  cursor: pointer;
+  font-weight: 400;
+  border-color: #d8d8d8;
+  border-width: 1.5px;
+}
+.pagination li a:hover, .pagination li a:focus {
+  background-color: #09315b;
+  border-color: #09315b;
+  color: #ffffff;
+}
 .pagination li:before {
   content: none;
 }

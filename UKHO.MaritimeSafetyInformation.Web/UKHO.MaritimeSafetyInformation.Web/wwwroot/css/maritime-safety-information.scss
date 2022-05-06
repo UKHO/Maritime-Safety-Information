@@ -95,6 +95,21 @@ button {
         padding-right: 0;
         transform: none;
 
+        a {
+            color: $prussian-blue;
+            border-radius: 0 !important;
+            cursor: pointer;
+            font-weight: 400;
+            border-color: $light-silver;
+            border-width: 1.5px;
+
+            &:hover, &:focus {
+                background-color: $prussian-blue;
+                border-color: $prussian-blue;
+                color: $white;
+            }
+        }
+
         &:before {
             content: none;
         }
