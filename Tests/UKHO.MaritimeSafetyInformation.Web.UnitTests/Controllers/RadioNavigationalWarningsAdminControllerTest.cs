@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
@@ -17,7 +17,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
-        private IRnwRepository _fakeRnwRepository;
+        private IRnwService _fakeRnwService;
 
         private RadioNavigationalWarningsAdminController _controller;
 
@@ -26,15 +26,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
-            _fakeRnwRepository = A.Fake<IRnwRepository>();
+            _fakeRnwService = A.Fake<IRnwService>();
 
-            _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwRepository);
+            _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
 
         [Test]
         public void WhenICallIndexView_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
             Task<IActionResult> result = _controller.Index();
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenICallIndexViewWithParameters_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
             Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: "2020");
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }

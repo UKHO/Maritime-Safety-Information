@@ -73,25 +73,33 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseCompleted = 910017,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Failed.
+        /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
         /// <summary>
-        /// 910018 -  Unhandled Exception Occured.
+        /// 910019 -  Unhandled Exception Occured.
         /// </summary>
         UnhandledCleanUpException = 910019,
         /// <summary> 
-        /// 910020 -  Maritime safety information get RNW record from database started.
+        /// 910020 -  Maritime safety information request to get RNW records for Admin started.
         /// </summary>
         MSIGetRnwForAdminStarted = 910020,
         /// <summary> 
-        /// 910021 -  Maritime safety information get RNW record from database completed.
+        /// 910021 -  Maritime safety information request to get RNW records for Admin completed.
         /// </summary>
         MSIGetRnwForAdminCompleted = 910021,
         /// <summary> 
-        /// 910022 -  Maritime safety information get RNW record from database request error.
+        /// 910022 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
-        MSIGetRnwForAdminRequestError = 910022
+        MSIGetRnwForAdminRequestError = 910022,
+        /// <summary> 
+        /// 910023 -  Maritime safety information query to get RNW records for Admin from database started.
+        /// </summary>
+        MSIGetRnwForAdminDatabaseCallStarted = 910023,
+        /// <summary> 
+        /// 910024 -  Maritime safety information query to get RNW records for Admin from database completed.
+        /// </summary>
+        MSIGetRnwForAdminDatabaseCallCompleted = 910024,
     }
 
     public static class EventIdExtensions

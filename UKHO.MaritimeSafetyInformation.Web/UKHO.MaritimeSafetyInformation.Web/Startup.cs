@@ -47,7 +47,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-
+            services.AddScoped<IRnwService, RnwService>();
+            services.AddScoped<IRnwRepository, RnwRepository>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -62,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddApplicationInsightsTelemetry();
 
 
-            services.AddScoped<IRnwRepository, RnwRepository>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
