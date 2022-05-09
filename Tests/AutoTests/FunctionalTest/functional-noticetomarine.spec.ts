@@ -12,10 +12,10 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
        await notice.clickToNoticemarine();
     });  
       test('Does the Yearly and Weekly Drop Down is enabled',async ({page}) => {
-         const yearenable = await notice.checkEnabledYearDropDown();
-          expect(yearenable).toBeTruthy();
-          const weeklyenable = await notice.checkEnabledWeekDropDown();
-          expect(weeklyenable).toBeTruthy();     
+         const yearEnable = await notice.checkEnabledYearDropDown();
+          expect(yearEnable).toBeTruthy();
+          const weeklyEnable = await notice.checkEnabledWeekDropDown();
+          expect(weeklyEnable).toBeTruthy();     
        })
   
       test('Does the Table Data For Yearly and Weekly Drop Down Include Table Data,File Name and File Size',async ({page}) => {
