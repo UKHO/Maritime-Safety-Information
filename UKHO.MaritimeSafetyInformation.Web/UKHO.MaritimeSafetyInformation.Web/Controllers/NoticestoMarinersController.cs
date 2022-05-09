@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public IActionResult DailyFiles()
         {
-            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml");
         }
 
@@ -51,13 +51,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
-            _logger.LogInformation(EventIds.MSIShowDailyFilesRequest.ToEventId(), "Maritime safety information request for show daily files requested:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.MSIShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<ShowDailyFilesResponseModel> Entries = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.MSIShowDailyFilesCompleted.ToEventId(), "Maritime safety information request for show daily files completed:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.MSIShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", Entries);
+            return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", showDailyFilesResponseModels);
 
         }
     }
