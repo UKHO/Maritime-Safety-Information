@@ -77,7 +77,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                     string[] yearWeek = yw.Split('/');
                                     yearWeekModelList.Add(new YearWeekModel { Year = yearWeek[0].Trim(), Week = yearWeek[1].Trim() });
                                 }
-                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request Search Attribute Year and week data recieved successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}" correlationId);
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request Search Attribute Year and week data recieved successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}" , correlationId);
                             }
                             else
                             {
