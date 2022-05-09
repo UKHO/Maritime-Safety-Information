@@ -43,9 +43,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public Task<List<WarningType>> GetWarningTypes()
+        public async Task<List<WarningType>> GetWarningTypes()
         {
-           return _rnwRepository.GetWarningTypes();
+           return await _rnwRepository.GetWarningTypes();
         }
     }
 }
