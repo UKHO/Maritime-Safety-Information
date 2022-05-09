@@ -373,7 +373,7 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
+                    AzureSubscription: "Maritime-Safety-Information-QA-A.008.02"
 
       - job: FunctionalTest
         dependsOn: 
