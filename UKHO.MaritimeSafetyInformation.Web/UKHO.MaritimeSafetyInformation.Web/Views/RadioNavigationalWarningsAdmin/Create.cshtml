@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Create";
 }
+
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/js/Custom/RadioNavigationWarning.js")"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 <div class="container-fluid">
 
 <h1>Create Radio Navigational Warnings</h1>
@@ -28,7 +34,7 @@
             <div class="mb-3">
                 <label asp-for="DateTimeGroup" class="form-label">Date/time</label>
                 <span class="text-danger">*</span>
-                <input asp-for="DateTimeGroup" class="form-control" />
+                <input asp-for="DateTimeGroup" class="form-control" id="dateTimeGroup"/>
                 <span asp-validation-for="DateTimeGroup" class="text-danger"></span>
             </div>
             <div class="mb-3">
@@ -60,6 +66,3 @@
 </div>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
