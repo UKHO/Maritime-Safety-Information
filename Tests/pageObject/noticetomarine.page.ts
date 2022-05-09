@@ -9,10 +9,11 @@ export default class noticetoMarine
     readonly dropDownWeekly:Locator;
     readonly fileName:Locator;
     readonly fileSize:Locator;
+    
     constructor(page:Page)
     {
         this.page = page; 
-        this.noticeMarine =this.page.locator("#navbarSupportedContent > ul > li:nth-child(1) > a");
+        this.noticeMarine =this.page.locator("text=Notices to Mariners");
         this.dropDownYearly = this.page.locator("#ddlYears");
         this.dropDownWeekly = this.page.locator("#ddlWeeks");
         this.fileName=this.page.locator('text=File Name');
@@ -24,19 +25,20 @@ public async clickToNoticemarine()
  await this.noticeMarine.click();
 }
 
-public async noticeMarinePageTheYearDropDownIsEnabled()
+public async checkEnabledYearDropDown()
 {
-    const success=await this.dropDownYearly.isEnabled();
-    return success;
+          
+  return await this.dropDownYearly.isEnabled();
+    
 }
 
-public async noticeMarinePageTheweeklyDropDownIsEnabled()
+public async checkEnabledWeekDropDown()
 {
-    const success=await this.dropDownWeekly.isEnabled();
-    return success;
+     return await this.dropDownWeekly.isEnabled();
+    
 }
 
-public async noticeMarinecRecordCount(year:string,week:string)
+public async getRecordCountTableNoticeToMarine(year:string,week:string)
 {
     await this.dropDownYearly.selectOption(year);
     await this.dropDownWeekly.selectOption(week);
@@ -56,30 +58,50 @@ public async getFileNameText()
 
 public async getTableData()
 {
-    const fileSizeData = await this.page.$$("td:nth-child(2)");
+  const yearlyCount = (await this.page.$$("#ddlYears option")).length;
+  const weekCount = (await this.page.$$("#ddlWeeks option")).length;
+
+  for(var year=1;year<yearlyCount;year++)
+  {
+    await this.dropDownYearly.selectOption({index:year});
+
+    for(var week=1;week<weekCount;week++)
+    {
+      await this.dropDownWeekly.selectOption({index:week});
+      
+     await this.page.waitForSelector("td:nth-child(2)");
+      const fileSizeData = await this.page.$$("#divFilesList > table > tbody >tr >td:nth-child(2)");
          
-         for (const table of fileSizeData)
+         for await (const table of fileSizeData)
          {
-           var fileData = await (await table.innerText());
-           if(fileData!="File Size")
+           var fileData = (await (await table.innerText()).toString()).split(" ");
+           
+           switch(fileData[1])
            {
-           if(fileData.includes("MB"))
-          {
-             expect(fileData).toContain("MB"); 
-          }
-          else if (fileData.includes("KB"))
-          {
-            expect(fileData).toContain("KB");
-          }
-          else if(fileData.includes("bytes"))
-          {
-            expect(fileData).toContain("bytes");
-          }
-          else
-          {
-            throw new Error("No Element");
-          }
+             case "MB":
+               {
+                expect(fileData[1]).toContain("MB"); 
+                break;
+               }
+               case "KB":
+                {
+                 expect(fileData[1]).toContain("KB"); 
+                 break;
+                }
+                case "GB":
+                  {
+                   expect(fileData[1]).toContain("GB"); 
+                   break;
+                  }
+                  case "B":
+                    {
+                     expect(fileData[1]).toContain("B"); 
+                     break;
+                    }
+            }
+         }    
+         
         }
-         }
-}
+      }
+   }     
 }
