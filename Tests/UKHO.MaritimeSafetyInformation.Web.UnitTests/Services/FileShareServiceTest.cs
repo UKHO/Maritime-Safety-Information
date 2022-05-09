@@ -79,8 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = "www.test.com/";
             A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<CancellationToken>.Ignored));
             IResult<BatchAttributesSearchResponse> result = await _fileShareService.FssSearchAttributeAsync("", CorrelationId);
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.IsNull(result);
+            Assert.That(result.IsSuccess, Is.False);            
         }
     }
 }
