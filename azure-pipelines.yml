@@ -484,4 +484,4 @@ stages:
                 - template: Deployment/templates/continuous-deployment.yml
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                    AzureSubscription: "Maritime Safety Information Live A.008.02"
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"
