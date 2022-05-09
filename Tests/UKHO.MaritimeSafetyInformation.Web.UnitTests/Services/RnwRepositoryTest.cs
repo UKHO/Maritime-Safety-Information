@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
@@ -18,7 +20,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RadioNavigationalWarningsContext _fakeContext;
         private ILogger<RnwRepository> _fakeLogger;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
-
+        private RadioNavigationalWarningsAdminController _controller;
+        
         [SetUp]
         public void SetUp()
         {
@@ -29,17 +32,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeLogger = A.Fake<ILogger<RnwRepository>>();
 
             _rnwRepository = new RnwRepository(_fakeContext, _fakeLogger);
+
         }
 
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
-           DateTime dateTime = DateTime.UtcNow;
-           RadioNavigationalWarnings radioNavigationalWarnings = new() { WarningType = 1,
-                                                                          Reference = "test",
-                                                                          DateTimeGroup = dateTime,
-                                                                          Summary = "Test1",
-                                                                          Content="test"};
+            DateTime dateTime = DateTime.UtcNow;
+            RadioNavigationalWarnings radioNavigationalWarnings = new()
+            {
+                WarningType = 1,
+                Reference = "test",
+                DateTimeGroup = dateTime,
+                Summary = "Test1",
+                Content = "test"
+            };
 
             Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);
 
@@ -47,6 +54,52 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
+        }
+
+
+        [Test]
+        public void WhenCallAddRadioNavigationWarningsMethod_ThenFailedToCreateNewRNWRecord()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            RadioNavigationalWarnings radioNavigationalWarnings = new()
+            {
+                WarningType = 1,
+                Reference = "",
+                DateTimeGroup = dateTime,
+                Summary = "",
+                Content = ""
+            };
+
+
+            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);//.Exception.//  Exception(InvalidOperationException);
+
+            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "" && b.DateTimeGroup == dateTime);
+
+            Assert.IsTrue(result.IsCompleted);
+            Assert.IsNull(data.Result);
+        }
+
+        [Test]
+        public void WhenCallAddRadioNavigationWarningsMethod_ThenExceptionHandledToCreateNewRNWRecord()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            RadioNavigationalWarnings radioNavigationalWarnings = new()
+            {
+                WarningType = 1,
+                Reference = "",
+                DateTimeGroup = dateTime,
+                Summary = "",
+                Content = ""
+            };
+
+            Exception exception = new Exception();
+            
+            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);//.Exception.//  Exception(InvalidOperationException);
+
+            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "" && b.DateTimeGroup == dateTime);
+
+            Assert.IsTrue(result.IsCompleted);
+            Assert.IsNull(data.Result);
         }
 
         [Test]
