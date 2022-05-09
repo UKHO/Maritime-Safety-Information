@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -12,15 +10,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         private readonly ILogger<NoticesToMarinersController> _logger;
         private readonly INMDataService _nMDataService;
-        private readonly IFileShareService _fileShareService;
-        private readonly IAuthFssTokenProvider _authFssTokenProvider;
+       
 
-        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IFileShareService fileShareService, IAuthFssTokenProvider authFssTokenProvider) : base(contextAccessor, logger)
+        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
-            _fileShareService = fileShareService;
-            _authFssTokenProvider = authFssTokenProvider;
+         
         }
 
         public IActionResult Index()
@@ -29,17 +25,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
         }
 
-        public IActionResult LoadYears()
-        {
-            return Json(  _nMDataService.GetAllYearsandWeek(GetCurrentCorrelationId()));
-        }
-
-        public IActionResult LoadWeeks(int year)
-        {
-            return Json(_nMDataService.GetAllWeeksofYear(year, GetCurrentCorrelationId()));
-        }
-
-        public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
+         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
             _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestStarted.ToEventId(), "Maritime safety information request to show weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
@@ -50,19 +36,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return PartialView("~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml", listFiles);
         }
 
-        public async Task<IActionResult> YearWeek()
+        public async Task<IActionResult> GetAllYearWeeks()
         {
-            IResult<BatchAttributesSearchResponse> result = await GetSearchAttributeData();
-            return Json(result);                     
+            _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksStarted.ToEventId(), "Maritime safety information request to Search Year and Week for NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());             
 
-        }
+            List<YearWeekModel> listYear = await _nMDataService.GetAllYearWeek(GetCurrentCorrelationId());
 
-        public async Task<IResult<BatchAttributesSearchResponse>> GetSearchAttributeData()
-        {
-            string accessToken = await _authFssTokenProvider.GenerateADAccessToken(GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksCompleted.ToEventId(), "Maritime safety information request to  Search Year and Week for NM files started for Year count as:{listYear} for _X-Correlation-ID:{correlationId}", listYear, GetCurrentCorrelationId());
 
-            IResult <BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FssSearchAttributeAsync(accessToken, "");
-            return searchAttributes;
-        }
+            return Json(listYear);               
+        }           
     }
 }

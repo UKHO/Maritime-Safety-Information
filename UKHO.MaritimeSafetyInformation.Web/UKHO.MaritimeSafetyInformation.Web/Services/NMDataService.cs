@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using UKHO.FileShareClient.Models;
+﻿using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -12,6 +11,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IFileShareService _fileShareService;
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
+
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
             _fileShareService = fileShareService;
@@ -49,59 +49,51 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 throw;
             }
             return ListshowFilesResponseModels;
-
         }
 
-       
-
-        public async Task<List<KeyValuePair<string,string>>> GetAllYearsandWeek(string correlationId)
-        {            
-            List<KeyValuePair<string, string>> years = new();
-            _logger.LogInformation(EventIds.GetAllYearsStarted.ToEventId(), "Maritime safety information request to get all years to populate year dropdown started", correlationId);
-           /////// IResult<BatchAttributesSearchResponse> result = await GetSearchAttributeData(correlationId);
-            ///////IEnumerable<BatchAttributesSearchAttribute> y = result.Data.BatchAttributes.Where(h => h.Key == "YEAR").ToList();
-           /////// Console.WriteLine(y);
-            ///// years.Add(new KeyValuePair<string, string>(y, ""));
-            for (int i = 0; i < 3; i++)
-            {
-                string year = (DateTime.Now.Year - i).ToString();
-                years.Add(new KeyValuePair<string, string>(year, year));
-            }
-            return years;         
-        }
-
-        public List<KeyValuePair<string, string>> GetAllWeeksofYear(int year, string correlationId)
+        public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
         {
-            List<KeyValuePair<string, string>> weeks = new();
+            List<YearWeekModel> yearWeekModelList = new();
+            try
+                {
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-            _logger.LogInformation(EventIds.GetAllWeeksOfYearStarted.ToEventId(), "Maritime safety information request to get all weeks of year to populate week dropdown started", correlationId);
+                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Maritime safety information request to get BatchSearchAttribute data after authentication from File Share Service started with _X-Correlation-ID:{correlationId}", correlationId);
 
+                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FssSearchAttributeAsync(accessToken, correlationId);
 
-            /////weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
+                if (searchAttributes.Data != null)
+                {
+                    for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
+                    {
+                        if (searchAttributes.Data.BatchAttributes[i].Key == "YEAR / WEEK")
+                        {
+                            List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
 
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
-            DateTime lastdate;
-            if (DateTime.Now.Year == year)
-            {
-                lastdate = new DateTime(year, DateTime.Now.Month, DateTime.Now.Day);
+                            if (yearWeekList != null && yearWeekList.Count != 0)
+                            {
+                                foreach (string yw in yearWeekList)
+                                {
+                                    string[] yearWeek = yw.Split('/');
+                                    yearWeekModelList.Add(new YearWeekModel { Year = yearWeek[0].Trim(), Week = yearWeek[1].Trim() });
+                                }
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Data recieved from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
+                            }
+                            else
+                            {
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data recieved from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
+                            }
+                        }
+                    }
+                }
+                else
+                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data recieved from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);         
             }
-            else
-            {
-                lastdate = new DateTime(year, 12, 31);
+            catch (Exception ex) {
+                _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Maritime safety information request to Search AttributeRequest data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId );
+                throw;
             }
-            Calendar calender = dateTimeFormatInfo.Calendar;
-
-            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule,
-                                                dateTimeFormatInfo.FirstDayOfWeek);
-
-            for (int i = 0; i < totalWeeks; i++)
-            {
-                string week = (i + 1).ToString();
-                weeks.Add(new KeyValuePair<string, string>(week, week));
-            }
-
-            return weeks;
+            return yearWeekModelList;
         }
-
     }
 }

@@ -1,10 +1,12 @@
-﻿//Document ready 
+﻿//Document ready
+var yearweekdata;
+var onload = false;
 $(function () {
-  ///////  ShowYearWeekData();
-   var getdata= LoadYears();    
+    LoadYears();
+
     $("#ddlYears").change(function () {
-        //////LoadWeeks($("#ddlYears").val());
-        GetCorrespondingWeeks($("#ddlYears").val(), getdata);
+        GetCorrespondingWeeks($("#ddlYears").val(), yearweekdata);
+        
     });
     $("#ddlWeeks").change(function () {
         ShowWeeklyFilesAsync();
@@ -13,28 +15,32 @@ $(function () {
 
 function LoadYears() {
     $.ajax({       
-        url: '/NoticesToMariners/YearWeek',
+        url: '/NoticesToMariners/GetAllYearWeeks',
         type: "POST",
         dataType: "json",
         success: function (data) {
+            yearweekdata = data;
+            onload = true;
+            var selectedyear;
             $('#ddlYears').empty();
-            var div_data = ('<option value="' + data.data.batchAttributes[2].key + '">' + data.data.batchAttributes[2].values + '</option>');
-            $(div_data).appendTo('#ddlYears');
-            let curYear = new Date().getFullYear()
-            var year;
-            for (var i = 0; i < 5; i++) {
-                if (curYear == data.data.batchAttributes[2].values) {
-                     year = curYear;
-                    $('#ddlYears').val(year);
-                }
-                curYear --;
+
+            var yeardata = getUniqueYear(data, "year").sort()
+            var defaultYear = '<option selected> --Please select year-- </option>'
+            $(defaultYear).appendTo('#ddlYears');
+            for (i = 0; i < yeardata.length; i++) {
+                var year = '<option>' + yeardata[i] + '</option>'
+                $(year).appendTo('#ddlYears');
+            }          
+            if (onload) {
+                selectedyear = yeardata[yeardata.length - 1];
+                $('#ddlYears').val(selectedyear);
             }
-            ////////    $('#ddlYears').val(curYear);
-            ////// LoadWeeks(curYear);
-            
-            GetCorrespondingWeeks(year, data)                       
-            return data;
-          
+            else {
+                $('#ddlYears').val('--Please select year--');
+            }
+            GetCorrespondingWeeks(selectedyear, data);
+                      
+            return data;          
         },
         error: function (error) {
             console.log(`Error ${error}`);
@@ -42,59 +48,69 @@ function LoadYears() {
     });
 }
 
+function getUniqueYear(arr, prop) {
+    return arr.reduce((a, d) => {
+        if (!a.includes(d[prop])) { a.push(d[prop]); }
+        return a;
+    }, []);
+}
+
+function getUniqueWeekByYear(arr, year) {
+    return arr.reduce((a, d) => {
+        if (d.year == year) { a.push(d.week); }
+        return a;
+    }, []);
+}
+
 function GetCorrespondingWeeks(id, data) {
     if (id != "") {
         $('#ddlWeeks').empty();
-      //////  var div_data = ('<option value="' + data.data.batchAttributes[0].values + '">' + data.data.batchAttributes[0].key + '</option>');
-        let currYearWeek = data.data.batchAttributes[0].values
-        var propId = currYearWeek.toString().replace(/ /g, '').split('/');
-        if (propId[0] == id){
-            for (i = 1; i < propId.length; i++) {
-                var weekdata = '<option>' + propId[i].toString().split(',')[0] + '</option>'
-                $(weekdata).appendTo('#ddlWeeks');
-            }
-        }        
-    }
-}
+        var weekdata = getUniqueWeekByYear(data, id).sort()
 
-function LoadWeeks(selectedYear) {
-    if (selectedYear != "") {
-       
-        $.ajax({
-            url: '/NoticesToMariners/LoadWeeks',
-            type: "POST",
-            data: {
-                year: parseInt(selectedYear)
-            },
-            dataType: "json",
-            success: function (data) {
-                $('#ddlWeeks').empty();
-                ////////
-                $.each(data, function (i, data) {
-                    var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
-                    $(div_data).appendTo('#ddlWeeks');
-                });
-            },
-            error: function (error) {
-                console.log(`Error ${error}`);
-            }
-        });
-    }
-}
+        var defaultweek = '<option selected> --Please select week-- </option>'        
+        $(defaultweek).appendTo('#ddlWeeks');
 
-function ShowYearWeekData() {
-    $.ajax({
-        url: '/NoticesToMariners/Yearweek',
-        dataType: "json",
-        type: "GET",
-        data: {
-            success: function (data) {
-                Console.log(data);
-            }
+        for (i = 0; i < weekdata.length; i++) {
+           var week = '<option>' + weekdata[i] + '</option>'
+            $(week).appendTo('#ddlWeeks');
         }
 
-    })
+        if (onload) {
+            var selectedweek = weekdata[weekdata.length - 1];
+            $('#ddlWeeks').val(selectedweek);
+            ShowWeeklyFilesAsync();
+            onload = false;
+        }
+        else {
+            $('#ddlWeeks').val('--Please select week--');
+        }
+    }
 }
+
+////////////function LoadWeeks(selectedYear) {
+//////    if (selectedYear != "") {
+       
+//////        $.ajax({
+//////            url: '/NoticesToMariners/LoadWeeks',
+//////            type: "POST",
+//////            data: {
+//////                year: parseInt(selectedYear)
+//////            },
+//////            dataType: "json",
+//////            success: function (data) {
+//////                $('#ddlWeeks').empty();
+//////                ////////
+//////                $.each(data, function (i, data) {
+//////                    var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
+//////                    $(div_data).appendTo('#ddlWeeks');
+//////                });
+//////            },
+//////            error: function (error) {
+//////                console.log(`Error ${error}`);
+//////            }
+//////        });
+//////    }
+//////}
 
 function ShowWeeklyFilesAsync() {
     let selectedYear = $('#ddlYears').val();

@@ -87,7 +87,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910021 -  FSS Search Attribute Response Completed
         /// </summary>
-        FSSSearchAttributeResponseCompleted = 910021
+        FSSSearchAttributeResponseCompleted = 910021,
+        /// <summary>
+        /// 910022 -  FSS Search Attribute Response Failed
+        /// </summary>
+        FSSSearchAttributeResponseFailed = 910022,
+        /// <summary>
+        /// 910023 -  Get Search Attribute Request Data Started
+        /// </summary>
+        GetSearchAttributeRequestDataStarted = 910023,
+        /// <summary>
+        /// 910024 -  Get Search Attribute Request Data Completed
+        /// </summary>
+        GetSearchAttributeRequestDataCompleted = 910024,
+        /// <summary>
+        /// 910025 -  Get All weeks and Year data for Notices to Mariners Started
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksStarted = 910025,
+        /// <summary>
+        /// 910026 -  Get All weeks and Year data for Notices to Mariners Completed
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksCompleted = 910026,
+        /// <summary>
+        /// 910027 - Recieved Year Week data from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataFound = 910027,
+        /// <summary>
+        /// 910028 - No data recieved Year Week data from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataNotFound = 910028,
+        /// <summary>
+        /// 910029 - Failed to laod data for Year Week from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataFailed = 910029
     }
 
     public static class EventIdExtensions
