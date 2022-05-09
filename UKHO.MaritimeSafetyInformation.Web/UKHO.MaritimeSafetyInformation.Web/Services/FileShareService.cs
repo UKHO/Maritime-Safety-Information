@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSSearchAttributeResponseFailed.ToEventId(), "Failed to get NM batch search attribute with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSSearchAttributeResponseError.ToEventId(), "Failed to get NM batch search attribute with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
             }
             return result;
 

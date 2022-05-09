@@ -1,6 +1,6 @@
 ﻿//Document ready
 var yearweekdata;
-var onload = false;
+let onload = false;
 $(function () {
     LoadYears();
 
@@ -15,16 +15,16 @@ $(function () {
 
 function LoadYears() {
     $.ajax({       
-        url: '/NoticesToMariners/GetAllYearWeeks',
+        url: '/NoticesToMariners/GetAllYearandWeeks',
         type: "POST",
         dataType: "json",
         success: function (data) {
             yearweekdata = data;
-            onload = true;
+            onload = !onload;
             var selectedyear;
             $('#ddlYears').empty();
 
-            var yeardata = getUniqueYear(data, "year").sort()
+            var yeardata = getUniqueYearandWeeks(data, "year", "Y").sort()
             var defaultYear = '<option selected> --Please select year-- </option>'
             $(defaultYear).appendTo('#ddlYears');
             for (i = 0; i < yeardata.length; i++) {
@@ -38,9 +38,7 @@ function LoadYears() {
             else {
                 $('#ddlYears').val('--Please select year--');
             }
-            GetCorrespondingWeeks(selectedyear, data);
-                      
-            return data;          
+            GetCorrespondingWeeks(selectedyear, data);                     
         },
         error: function (error) {
             console.log(`Error ${error}`);
@@ -48,24 +46,25 @@ function LoadYears() {
     });
 }
 
-function getUniqueYear(arr, prop) {
-    return arr.reduce((a, d) => {
-        if (!a.includes(d[prop])) { a.push(d[prop]); }
-        return a;
-    }, []);
-}
-
-function getUniqueWeekByYear(arr, year) {
-    return arr.reduce((a, d) => {
-        if (d.year == year) { a.push(d.week); }
-        return a;
-    }, []);
+function getUniqueYearandWeeks(arr, prop, type) {
+    if (type == 'Y') {
+        return arr.reduce((a, d) => {
+            if (!a.includes(d[prop])) { a.push(d[prop]); }
+            return a;
+        }, []);
+    }
+    else if (type == 'W') {
+        return arr.reduce((a, d) => {
+            if (d.year == prop) { a.push(d.week); }
+            return a;
+        }, []);
+    }
 }
 
 function GetCorrespondingWeeks(id, data) {
     if (id != "") {
         $('#ddlWeeks').empty();
-        var weekdata = getUniqueWeekByYear(data, id).sort()
+        var weekdata = getUniqueYearandWeeks(data, id, "W").sort()
 
         var defaultweek = '<option selected> --Please select week-- </option>'        
         $(defaultweek).appendTo('#ddlWeeks');
