@@ -77,50 +77,49 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
 		/// <summary>
-        /// 910051 -  Event data for Retrieval of MSI Daily File Request.
+        /// 910019 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
-        MSIShowDailyFilesRequest = 910051,
+        MSIShowDailyFilesRequest = 910019,
         /// <summary>
-        /// 910052 -  Event data for Retrieval of MSI Daily File Completed.
+        /// 910020 -  Event data for Retrieval of MSI Daily File Completed.
         /// </summary>
-        MSIShowDailyFilesCompleted = 910052,
+        MSIShowDailyFilesCompleted = 910020,
         /// <summary>
-        /// 910053 -  Event data for Retrieval of MSI Daily File Response Started.
+        /// 910021 -  Event data for Retrieval of MSI Daily File Response Started.
         /// </summary>
-        MSIShowDailyFilesResponseStarted = 910053,
+        MSIShowDailyFilesResponseStarted = 910021,
         /// <summary>
-        /// 910054 -  Event data for Retrieval of MSI Daily File Response Data Found.
+        /// 910022 -  Event data for Retrieval of MSI Daily File Response Data Found.
         /// </summary>
-        MSIShowDailyFilesResponseDataFound = 910054,
+        MSIShowDailyFilesResponseDataFound = 910022,
         /// <summary>
-        /// 910055-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// 910023-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        MSIShowDailyFilesResponseDataNotFound = 910055,
+        MSIShowDailyFilesResponseDataNotFound = 910023,
         /// <summary>
-        /// 910056-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// 910024-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        MSIShowDailyFilesResponseFailed = 910056,
+        MSIShowDailyFilesResponseFailed = 910024,
         /// <summary>
-        /// 910057-  Event data for Retrieval of MSI Get Daily File Result.
+        /// 910025-  Event data for Retrieval of MSI Get Daily File Result.
         /// </summary>
-        MSIGetDailyFilesResultRequest = 910057,
+        MSIGetDailyFilesResultRequest = 910025,
         /// <summary>
-        /// 910058-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// 910026-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        MSIGetDailyFilesResultCompleted = 910058,
+        MSIGetDailyFilesResultCompleted = 910026,
         /// <summary>
-        /// 910059-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// 910027-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        MSIGetWeeklyFilesResultRequest = 910059,
+        MSIGetWeeklyFilesResultRequest = 910027,
         /// <summary>
-        /// 910060-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// 910028-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        MSIGetWeeklyFilesResultRequestCompleted = 910060,
-
+        MSIGetWeeklyFilesResultRequestCompleted = 910028,
         /// <summary>
-        /// 910019 -  Unhandled Exception Occured.
+        /// 910029 -  Unhandled Exception Occured.
         /// </summary>
-        UnhandledCleanUpException = 910019
+        UnhandledCleanUpException = 910029
     }
 
     public static class EventIdExtensions

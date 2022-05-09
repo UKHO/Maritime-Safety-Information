@@ -3,6 +3,7 @@
     public static class FileHelper
     {
         private static readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
+
         public static string FormatSize(long bytes)
         {
             int counter = 0;

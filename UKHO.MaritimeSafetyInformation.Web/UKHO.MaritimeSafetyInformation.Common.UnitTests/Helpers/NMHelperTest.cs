@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -78,56 +78,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
                 }
             });
-        }
-
-        private static BatchSearchResponse SetSearchResultForWeekly()
-        {
-            BatchSearchResponse SearchResult = new()
-            {
-                Count = 2,
-                Links = null,
-                Total = 0,
-                Entries = new List<BatchDetails>() {
-                    new BatchDetails() {
-                        BatchId = "1",
-                        Files = new List<BatchDetailsFiles>() {
-                            new BatchDetailsFiles () {
-                                Filename = "aaa.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            },
-                            new BatchDetailsFiles () {
-                                Filename = "bbb.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            }
-                        }
-
-                    },
-                    new BatchDetails() {
-                        BatchId = "2",
-                        Files = new List<BatchDetailsFiles>() {
-                            new BatchDetailsFiles () {
-                                Filename = "ccc.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            },
-                            new BatchDetailsFiles () {
-                                Filename = "ddd.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            }
-                        }
-
-                    }
-                }
-            };
-
-            return SearchResult;
         }
 
         [Test]
@@ -234,6 +184,65 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     }
                 }
             });
+        }
+
+        [Test]
+        public void WhenGetFormattedDateIsCalled_ThenShouldReturnDateInExpectedFormat()
+        {
+            string strdate = "2022-05-26";
+            string actualDate = NMHelper.GetFormattedDate(strdate);
+            string expectedDate = "26-05-22";
+            Assert.AreEqual(expectedDate, actualDate);
+        }
+
+        private static BatchSearchResponse SetSearchResultForWeekly()
+        {
+            BatchSearchResponse SearchResult = new()
+            {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "1",
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "aaa.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "bbb.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+
+                    },
+                    new BatchDetails() {
+                        BatchId = "2",
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "ccc.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "ddd.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+
+                    }
+                }
+            };
+
+            return SearchResult;
         }
 
         private static BatchSearchResponse SetSearchResultForDaily()
@@ -410,15 +419,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             };
 
             return SearchResult;
-        }
-
-        [Test]
-        public void WhenGetFormattedDateIsCalled_ThenShouldReturnDateInExpectedFormat()
-        {
-            string strdate = "2022-05-26";
-            string actualDate = NMHelper.GetFormattedDate(strdate);
-            string expectedDate = "26-05-22";
-            Assert.AreEqual(expectedDate, actualDate);
         }
 
     }

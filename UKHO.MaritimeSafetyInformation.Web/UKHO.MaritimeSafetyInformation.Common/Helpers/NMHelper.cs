@@ -28,9 +28,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             }
             return ListshowFilesResponseModels;
         }
+
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse SearchResult)
         {
-            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new List<ShowDailyFilesResponseModel>();
+            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new ();
             List<AttributesModel> lstattributes = (SearchResult.Entries.Where(x => x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
             {
                 BatchId = item.BatchId,
@@ -54,10 +55,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     AllFilesZipSize = item.AllFilesZipSize,
                     FileSizeinKB = FileHelper.FormatSize(item.AllFilesZipSize),
                     MimeType = "application/gzip"
-                })).ToList();
-
-                lstDataDate.Distinct();
-                lstDataDate = lstDataDate.OrderBy(x => Convert.ToDateTime(x.DataDate)).ToList();
+                })).Distinct().OrderBy(x => Convert.ToDateTime(x.DataDate)).ToList();
 
                 showDailyFilesResponses.Add(new ShowDailyFilesResponseModel
                 {
@@ -76,8 +74,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         {
             string[] formats = { "M/d/yyyy", "d/M/yyyy", "M-d-yyyy", "d-M-yyyy", "d-MMM-yy", "d-MMMM-yyyy","yyyy-MM-dd" };
             string retVal = "";
-            DateTime date;
-            if (DateTime.TryParseExact(strdate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+
+            if (DateTime.TryParseExact(strdate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
                 retVal = date.ToString("dd-MM-yy");
 
             return retVal;

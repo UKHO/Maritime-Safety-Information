@@ -32,5 +32,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             string result = FileHelper.FormatSize(bytes);
             Assert.AreEqual(expected, result);
         }
+
     }
 }

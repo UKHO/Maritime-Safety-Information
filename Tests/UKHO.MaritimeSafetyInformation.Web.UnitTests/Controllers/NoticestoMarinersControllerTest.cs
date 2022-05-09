@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
-namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
+namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
     [TestFixture]
     public class NoticesToMarinersControllerTest
