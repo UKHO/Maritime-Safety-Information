@@ -20,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                if (radioNavigationalWarnings.WarningType != 0 && radioNavigationalWarnings.Reference != "" 
+                if (radioNavigationalWarnings.WarningType != 0 && radioNavigationalWarnings.Reference != "" && radioNavigationalWarnings.DateTimeGroup.ToString() != null
                            && radioNavigationalWarnings.Summary != null && radioNavigationalWarnings.Content != null)
                 {
                     _logger.LogInformation(EventIds.MSIAddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);

@@ -54,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 else
                 {
                     TempData["message"] = "Failed to create record.";
-                    _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request failed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                    _logger.LogInformation(EventIds.MSICreateNewRNWRecordFailed.ToEventId(), "Maritime safety information create new RNW record request failed for _X-Correlation-ID", GetCurrentCorrelationId());
 
                     return RedirectToAction(nameof(Index), new { reLoadData = true });
                 }
