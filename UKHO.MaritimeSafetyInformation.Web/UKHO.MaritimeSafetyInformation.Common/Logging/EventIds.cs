@@ -73,7 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseCompleted = 910017,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Failed.
+        /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
 		/// <summary>
@@ -118,7 +118,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         MSIGetWeeklyFilesResultRequestCompleted = 910060,
 
         /// <summary>
-        /// 910018 -  Unhandled Exception Occured.
+        /// 910019 -  Unhandled Exception Occured.
         /// </summary>
         UnhandledCleanUpException = 910019
     }
