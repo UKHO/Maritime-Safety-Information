@@ -16,7 +16,7 @@
                 <ModulePath>.*microsoft.*</ModulePath>
                 <ModulePath>.microsoft*.*</ModulePath>
 		    <ModulePath>.*Views.*</ModulePath>
-		    <ModulePath>.*Views*.*</ModulePath>
+		    <ModulePath>.*Views*.*</ModulePath> 
               </Exclude>
             </ModulePaths>
 
