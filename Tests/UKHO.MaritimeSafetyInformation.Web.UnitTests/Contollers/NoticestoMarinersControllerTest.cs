@@ -75,7 +75,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
 
             string expectedView = "~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml";
 
-            //A.CallTo(() => _controller.GetWeeklyFilesResultAsync(A<int>.Ignored, A<int>.Ignored));
+            A.CallTo(() => _nMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
             IActionResult result = await _controller.ShowWeeklyFilesAsync(year, week);
             Assert.IsInstanceOf<PartialViewResult>(result);
@@ -84,32 +84,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         }
 
         [Test]
-        public async Task WhenGetWeeklyFilesResultAsyncIsCalled_ThenShouldReturnsJson()
-        {
-            A.CallTo(() => _nMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
-
-            JsonResult result = await _controller.GetDailyFilesResultAsync();
-            Assert.IsInstanceOf<JsonResult>(result);
-        }
-
-        [Test]
         public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
         {
             string expectedView = "~/Views/NoticesToMariners/ShowDailyFilesList.cshtml";
+
+            A.CallTo(() => _nMDataService.GetDailyBatchDetailsFiles(CorrelationId));
 
             IActionResult result = await _controller.ShowDailyFilesAsync();
             Assert.IsInstanceOf<PartialViewResult>(result);
             string actualView = ((PartialViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
-        }
-
-        [Test]
-        public async Task WhenGetDailyFilesResultAsyncIsCalled_ThenShouldReturnsJson()
-        {
-            A.CallTo( () =>  _nMDataService.GetDailyBatchDetailsFiles(CorrelationId));
-
-            JsonResult result = await _controller.GetDailyFilesResultAsync();
-            Assert.IsInstanceOf<JsonResult>(result);
         }
     }
 }
