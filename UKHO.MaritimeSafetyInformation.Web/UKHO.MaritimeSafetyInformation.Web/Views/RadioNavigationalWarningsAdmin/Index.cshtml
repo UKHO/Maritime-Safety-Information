@@ -2,6 +2,8 @@
 @model RadioNavigationalWarningsAdminListFilter
 
 @{
+    bool isFirstPage = Model.CurrentPageIndex == 1 ? true : false;
+    bool isLastPage  = Model.CurrentPageIndex == Model.PageCount ? true : false;
     ViewData["Title"] = "Radio Navigational Warnings List";
 }
 <style>
@@ -34,7 +36,7 @@
 
     @if (Model.RadioNavigationalWarningsAdminList.Count != 0 && Model.RadioNavigationalWarningsAdminList != null)
     {
-        
+
         <div class="table-responsive-md">
             <table class="table">
                 <thead>
@@ -106,10 +108,10 @@
 
         <div>
             <ul class="pagination">
-                <li class="page-item  @(Model.CurrentPageIndex==1 ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(1)">First</a></li>
-                <li class="page-item  @(Model.CurrentPageIndex==1 ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(@Model.CurrentPageIndex-1)" >Previous</a></li>
-                <li class="page-item  @(Model.CurrentPageIndex==Model.PageCount ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
-                <li class="page-item  @(Model.CurrentPageIndex==Model.PageCount ? "disabled" : "")"><a class="page-link" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
+                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(1)">First</a></li>
+                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)">Previous</a></li>
+                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
+                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
             </ul>
             <div>
                 Page @Model.CurrentPageIndex of @Model.PageCount
@@ -120,8 +122,8 @@
     {
 
         <div class="alert alert-primary p-4" role="alert">
-             <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i> 
-             <h5>No Record Found.</h5>
+            <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+            <h5>No Record Found.</h5>
         </div>
     }
 
