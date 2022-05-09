@@ -34,14 +34,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
                          DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
                          Summary = rnwWarnings.Summary,
-                         Content = rnwWarnings.Content,
+                         Content = rnwWarnings.Content != null ? string.Concat(rnwWarnings.Content.Substring(0, 300), rnwWarnings.Content.Length > 300 ? "..." : string.Empty) : string.Empty,
                          ExpiryDate = rnwWarnings.ExpiryDate,
                          ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
                          IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
                          WarningTypeName = warning.Name
-
                      }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
-           
+
             _logger.LogInformation(EventIds.MSIGetRnwForAdminDatabaseCallCompleted.ToEventId(), "Maritime safety information query to get RNW records for Admin from database completed for _X-Correlation-ID:{correlationId}", correlationId);
             return radioNavigationalWarningsAdminLists;
         }

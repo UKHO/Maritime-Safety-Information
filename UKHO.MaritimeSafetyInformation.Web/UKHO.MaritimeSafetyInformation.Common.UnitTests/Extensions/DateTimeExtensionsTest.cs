@@ -14,5 +14,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Extensions
             string result = DateTimeExtensions.ToRnwDateFormat(_fakeDateTime);
             Assert.AreEqual("310130 UTC Dec 22", result);
         }
+
+        [Test]
+        public void WhenCallRnwDateFormatWithNullDate_ThenReturnEmptyString()
+        {
+            string result = DateTimeExtensions.ToRnwDateFormat(null);
+            Assert.True(string.IsNullOrEmpty(result));
+        }
     }
 }
