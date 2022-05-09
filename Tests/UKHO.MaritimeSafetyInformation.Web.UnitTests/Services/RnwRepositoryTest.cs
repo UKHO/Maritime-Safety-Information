@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FakeItEasy;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
-using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
@@ -18,88 +14,37 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     {
         private RnwRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
-        private ILogger<RnwRepository> _fakeLogger;
-        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
-        private RadioNavigationalWarningsAdminController _controller;
-        
+        private RadioNavigationalWarnings _fakeRadioNavigationalWarnings;
+
         [SetUp]
         public void SetUp()
         {
+            _fakeRadioNavigationalWarnings = new(){ WarningType = 1,
+                                                    Reference = "test",
+                                                    DateTimeGroup = DateTime.UtcNow,
+                                                    Summary = "Test1",
+                                                    Content = "test" };
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                                                 .UseInMemoryDatabase("msi-ut-db");
 
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
-            _fakeLogger = A.Fake<ILogger<RnwRepository>>();
 
-            _rnwRepository = new RnwRepository(_fakeContext, _fakeLogger);
+            _rnwRepository = new RnwRepository(_fakeContext);
 
         }
 
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
-            DateTime dateTime = DateTime.UtcNow;
-            RadioNavigationalWarnings radioNavigationalWarnings = new()
-            {
-                WarningType = 1,
-                Reference = "test",
-                DateTimeGroup = dateTime,
-                Summary = "Test1",
-                Content = "test"
-            };
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
 
-            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);
+            Task result = _rnwRepository.AddRadioNavigationWarnings(_fakeRadioNavigationalWarnings);
 
-            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
+            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == _fakeDateTime);
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
-        }
-
-
-        [Test]
-        public void WhenCallAddRadioNavigationWarningsMethod_ThenFailedToCreateNewRNWRecord()
-        {
-            DateTime dateTime = DateTime.UtcNow;
-            RadioNavigationalWarnings radioNavigationalWarnings = new()
-            {
-                WarningType = 1,
-                Reference = "",
-                DateTimeGroup = dateTime,
-                Summary = "",
-                Content = ""
-            };
-
-
-            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);//.Exception.//  Exception(InvalidOperationException);
-
-            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "" && b.DateTimeGroup == dateTime);
-
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsNull(data.Result);
-        }
-
-        [Test]
-        public void WhenCallAddRadioNavigationWarningsMethod_ThenExceptionHandledToCreateNewRNWRecord()
-        {
-            DateTime dateTime = DateTime.UtcNow;
-            RadioNavigationalWarnings radioNavigationalWarnings = new()
-            {
-                WarningType = 1,
-                Reference = "",
-                DateTimeGroup = dateTime,
-                Summary = "",
-                Content = ""
-            };
-
-            Exception exception = new Exception();
-            
-            Task result = _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, CorrelationId);//.Exception.//  Exception(InvalidOperationException);
-
-            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "" && b.DateTimeGroup == dateTime);
-
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsNull(data.Result);
         }
 
         [Test]
@@ -110,9 +55,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeContext.WarningType.Add(warningType);
             await _fakeContext.SaveChangesAsync();
 
-            List<WarningType> warningTypeList = _rnwRepository.GetWarningType();
+            Task<List<WarningType>> warningTypeList = _rnwRepository.GetWarningTypes();
 
-            Assert.AreEqual(warningType.Name, warningTypeList[0].Name);
+            Assert.IsNotNull(warningTypeList);
+            Assert.IsInstanceOf(typeof(Task<List<WarningType>>), warningTypeList);
         }
     }
 }

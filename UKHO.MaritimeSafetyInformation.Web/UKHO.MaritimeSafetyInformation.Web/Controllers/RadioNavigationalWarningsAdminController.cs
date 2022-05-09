@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
-using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
     public class RadioNavigationalWarningsAdminController : BaseController<RadioNavigationalWarningsAdminController>
     {
-        private readonly IRnwRepository _iRnwRepository;
+        private readonly IRnwService _rnwService;
         private readonly ILogger<RadioNavigationalWarningsAdminController> _logger;
 
         public RadioNavigationalWarningsAdminController(IHttpContextAccessor contextAccessor,
                                                         ILogger<RadioNavigationalWarningsAdminController> logger,
-                                                        IRnwRepository iRnwRepository) : base(contextAccessor, logger)
+                                                        IRnwService rnwService) : base(contextAccessor, logger)
         {
-            _iRnwRepository = iRnwRepository;
+            _rnwService = rnwService;
             _logger = logger;
         }
 
@@ -26,10 +26,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         // GET: RadioNavigationalWarnings/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.WarningType = _iRnwRepository.GetWarningType();
-         
+            ViewBag.WarningType = await _rnwService.GetWarningTypes();
+                    
             return View();
         }
 
@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                bool result = await _iRnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings, GetCurrentCorrelationId());
+                bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarnings, GetCurrentCorrelationId());
 
                 if (result)
                 {

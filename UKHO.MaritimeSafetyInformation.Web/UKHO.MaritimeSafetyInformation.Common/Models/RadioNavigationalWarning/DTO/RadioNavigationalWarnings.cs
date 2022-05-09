@@ -20,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
 
         [DisplayName("Date Time Group")]
         [Required]
-        public DateTime? DateTimeGroup { get; set; }
+        public DateTime DateTimeGroup { get; set; }
 
         [DisplayName("Description")]
         [Required]

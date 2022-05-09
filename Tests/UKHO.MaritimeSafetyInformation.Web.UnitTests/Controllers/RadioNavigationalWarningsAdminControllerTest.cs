@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
@@ -17,16 +17,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private RadioNavigationalWarningsAdminController _controller;
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
-        private IRnwRepository _fakeRnwRepository;
+        private IRnwService _fakeRnwService;
 
        [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
-            _fakeRnwRepository = A.Fake<IRnwRepository>();
+            _fakeRnwService = A.Fake<IRnwService>();
 
-            _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwRepository);
+            _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
 
         [Test]
@@ -39,8 +39,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenICallCreateView_ThenReturnView()
         {
-            IActionResult result = _controller.Create();
-            Assert.IsInstanceOf<IActionResult>(result);
+            Task<IActionResult> result = _controller.Create();
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
 
         [Test]
@@ -49,8 +49,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             var httpContext = new DefaultHttpContext();
             var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = tempData;
-            A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(false);
+
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(false);
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
+
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.IsNotEmpty(_controller.TempData["message"].ToString());
             Assert.AreEqual("Failed to create record.", _controller.TempData["message"].ToString());
@@ -62,8 +64,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             var httpContext = new DefaultHttpContext();
             var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = tempData;
-            A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(true);
+
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(true);
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
+
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.IsNotEmpty(_controller.TempData["message"].ToString());
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());

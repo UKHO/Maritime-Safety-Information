@@ -73,33 +73,37 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseCompleted = 910017,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Failed.
+        /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
         /// <summary>
-        /// 910018 -  Unhandled Exception Occured.
+        /// 910019 -  Unhandled Exception Occured.
         /// </summary>
         UnhandledCleanUpException = 910019,
         /// <summary>
-        /// 910006 -  Maritime safety information create new RNW record request started.
+        /// 910020 -  Maritime safety information create new RNW record request started.
         /// </summary>
-        MSICreateNewRNWRecordStart = 910006,
+        MSICreateNewRNWRecordStart = 910020,
         /// <summary>
-        /// 910007 -  Maritime safety information create new RNW record request Completed.
+        /// 910021 -  Maritime safety information create new RNW record request Completed.
         /// </summary>
-        MSICreateNewRNWRecordCompleted = 910007,
+        MSICreateNewRNWRecordCompleted = 910021,
         /// <summary>
-        /// 910008 -  Maritime safety information add new RNW record to database request started.
+        /// 910022 -  Maritime safety information add new RNW record to database request started.
         /// </summary>
-        MSIAddNewRNWRecordStart = 910008,
+        MSIAddNewRNWRecordStart = 910022,
         /// <summary>
-        /// 910009 -  Maritime safety information add new RNW record to database request Completed.
+        /// 910023 -  Maritime safety information add new RNW record to database request Completed.
         /// </summary>
-        MSIAddNewRNWRecordCompleted = 910009,
+        MSIAddNewRNWRecordCompleted = 910023,
         /// <summary> 
-        /// 910010 -  Maritime safety information add new RNW record to database request error.
+        /// 910024 -  Maritime safety information add new RNW record to database request error.
         /// </summary>
-        MSIAddNewRNWRequestError = 910010
+        MSIAddNewRNWRequestError = 910024,
+        /// <summary> 
+        /// 910025 -  Maritime safety information invalid new RNW record request.
+        /// </summary>
+        MSIInvalidNewRNWRecordRequest = 910025
     }
 
     public static class EventIdExtensions

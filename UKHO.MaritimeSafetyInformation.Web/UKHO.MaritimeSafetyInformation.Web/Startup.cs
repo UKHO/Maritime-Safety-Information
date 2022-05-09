@@ -12,8 +12,6 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using UKHO.MaritimeSafetyInformation.Web.Filters;
-using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -63,6 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
             services.AddScoped<IRnwRepository, RnwRepository>();
+            services.AddScoped<IRnwService, RnwService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
