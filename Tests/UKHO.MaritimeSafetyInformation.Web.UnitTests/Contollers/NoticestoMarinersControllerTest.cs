@@ -17,7 +17,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         private ILogger<NoticesToMarinersController> _logger;
         private IHttpContextAccessor _contextAccessor;
         private INMDataService _nMDataService;
-        private NoticesToMarinersController _fakeController;
 
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
