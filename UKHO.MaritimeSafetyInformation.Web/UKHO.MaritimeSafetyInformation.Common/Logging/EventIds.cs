@@ -49,77 +49,57 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetWeeklyNMFilesRequestFailed = 910011,
         /// <summary>
-        /// 910012 -  Get Past Years Request Started.
+        /// 910012 -  FSS Batch Search Request Started.
         /// </summary>
-        GetAllYearsStarted = 910012,
+        FSSBatchSearchResponseStarted = 910012,
         /// <summary>
-        /// 910013 -  Get Past Years Request Failed.
+        /// 910013 -  FSS Batch Search Request Started.
         /// </summary>
-        GetPastYearsFailed = 910013,
+        FSSBatchSearchResponseCompleted = 910013,
         /// <summary>
-        /// 910014 -  Get All Weeks of Year Request Started.
+        /// 910014 -  FSS Batch Search Request Failed.
         /// </summary>
-        GetAllWeeksOfYearStarted = 910014,
+        FSSBatchSearchResponseFailed = 910014,
         /// <summary>
-        /// 910015 -  Get All Weeks of Year Request Failed.
+        /// 910015 -  Unhandled Exception Occured.
         /// </summary>
-        GetAllWeeksofYearFailed = 910015,
+        UnhandledCleanUpException = 910015,
         /// <summary>
-        /// 910016 -  FSS Batch Search Request Started.
+        /// 910016 -  Search Attribute Response Started for File Share Service Client
         /// </summary>
-        FSSBatchSearchResponseStarted = 910016,
+        FSSSearchAttributeResponseStarted = 910016,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Started.
+        /// 910017 - Search Attribute Response Completed for File Share Service Client
         /// </summary>
-        FSSBatchSearchResponseCompleted = 910017,
+        FSSSearchAttributeResponseCompleted = 910017,
         /// <summary>
-        /// 910018 -  FSS Batch Search Request Failed.
+        /// 910018 - Search Attribute Response threw an exception in case of errors for File Share Service Client
         /// </summary>
-        FSSBatchSearchResponseFailed = 910018,
+        FSSSearchAttributeResponseError = 910018,        
         /// <summary>
-        /// 910019 -  Unhandled Exception Occured.
+        /// 910019 -  Get All weeks and Year data for Notices to Mariners Started
         /// </summary>
-        UnhandledCleanUpException = 910019,
+        NoticesToMarinersGetAllYearsandWeeksStarted = 910019,
         /// <summary>
-        /// 910020 -  FSS Search Attribute Response Started
+        /// 910020 -  Get All weeks and Year data for Notices to Mariners Completed
         /// </summary>
-        FSSSearchAttributeResponseStarted = 910020,
+        NoticesToMarinersGetAllYearsandWeeksCompleted = 910020,
         /// <summary>
-        /// 910021 -  FSS Search Attribute Response Completed
+        /// 910021 - Recieved Year Week data from FSS for Notices to Mariners 
         /// </summary>
-        FSSSearchAttributeResponseCompleted = 910021,
+        GetSearchAttributeRequestDataStarted = 910021,
         /// <summary>
-        /// 910022 -  FSS Search Attribute Response Failed
+        /// 910022 - Recieved Year Week data from FSS for Notices to Mariners 
         /// </summary>
-        FSSSearchAttributeResponseFailed = 910022,
+        GetSearchAttributeRequestDataFound = 910022,
         /// <summary>
-        /// 910023 -  Get Search Attribute Request Data Started
+        /// 910023 - No data recieved Year Week data from FSS for Notices to Mariners 
         /// </summary>
-        GetSearchAttributeRequestDataStarted = 910023,
+        GetSearchAttributeRequestDataNotFound = 910023,
         /// <summary>
-        /// 910024 -  Get Search Attribute Request Data Completed
+        /// 910024 - Failed to laod data for Year Week from FSS for Notices to Mariners 
         /// </summary>
-        GetSearchAttributeRequestDataCompleted = 910024,
-        /// <summary>
-        /// 910025 -  Get All weeks and Year data for Notices to Mariners Started
-        /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksStarted = 910025,
-        /// <summary>
-        /// 910026 -  Get All weeks and Year data for Notices to Mariners Completed
-        /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksCompleted = 910026,
-        /// <summary>
-        /// 910027 - Recieved Year Week data from FSS for Notices to Mariners 
-        /// </summary>
-        GetSearchAttributeRequestDataFound = 910027,
-        /// <summary>
-        /// 910028 - No data recieved Year Week data from FSS for Notices to Mariners 
-        /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910028,
-        /// <summary>
-        /// 910029 - Failed to laod data for Year Week from FSS for Notices to Mariners 
-        /// </summary>
-        GetSearchAttributeRequestDataFailed = 910029
+        GetSearchAttributeRequestDataFailed = 910024
     }
 
     public static class EventIdExtensions

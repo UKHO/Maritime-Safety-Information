@@ -36,13 +36,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return PartialView("~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml", listFiles);
         }
 
-        public async Task<IActionResult> GetAllYearWeeks()
+        public async Task<IActionResult> GetAllYearandWeeks()
         {
             _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksStarted.ToEventId(), "Maritime safety information request to Search Year and Week for NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());             
 
             List<YearWeekModel> listYear = await _nMDataService.GetAllYearWeek(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksCompleted.ToEventId(), "Maritime safety information request to  Search Year and Week for NM files started for Year count as:{listYear} for _X-Correlation-ID:{correlationId}", listYear, GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksCompleted.ToEventId(), "Maritime safety information request to Search Year and Week for NM files completed with Year/Week count as:{listYear} for _X-Correlation-ID:{correlationId}", listYear.Count, GetCurrentCorrelationId());
 
             return Json(listYear);               
         }           

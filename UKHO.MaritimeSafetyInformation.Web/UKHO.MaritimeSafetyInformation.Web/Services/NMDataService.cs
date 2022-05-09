@@ -58,7 +58,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Maritime safety information request to get BatchSearchAttribute data after authentication from File Share Service started with _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request Search Attribute Year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FssSearchAttributeAsync(accessToken, correlationId);
 
@@ -77,20 +77,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                     string[] yearWeek = yw.Split('/');
                                     yearWeekModelList.Add(new YearWeekModel { Year = yearWeek[0].Trim(), Week = yearWeek[1].Trim() });
                                 }
-                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Data recieved from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request Search Attribute Year and week data recieved successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}" correlationId);
                             }
                             else
                             {
-                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data recieved from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data recieved from File Share Service for Request Search Attribute Year and week for _X-Correlation-ID:{correlationId}", correlationId);
                             }
                         }
                     }
                 }
                 else
-                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data recieved from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);         
+                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data recieved from File Share Service for Request Search Attribute Year and week for _X-Correlation-ID:{correlationId}", correlationId);         
             }
             catch (Exception ex) {
-                _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Maritime safety information request to Search AttributeRequest data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId );
+                _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Request Search Attribute Year and week data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId );
                 throw;
             }
             return yearWeekModelList;
