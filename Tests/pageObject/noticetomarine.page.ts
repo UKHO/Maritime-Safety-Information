@@ -10,46 +10,43 @@ export default class noticetoMarine
     readonly fileName:Locator;
     readonly fileSize:Locator;
     
-    constructor(page:Page)
-    {
-        this.page = page; 
-        this.noticeMarine =this.page.locator("text=Notices to Mariners");
-        this.dropDownYearly = this.page.locator("#ddlYears");
-        this.dropDownWeekly = this.page.locator("#ddlWeeks");
-        this.fileName=this.page.locator('text=File Name');
-        this.fileSize= this.page.locator('text=File Size');
-    }
+constructor(page:Page)
+  {
+    this.page = page; 
+    this.noticeMarine =this.page.locator("text=Notices to Mariners");
+    this.dropDownYearly = this.page.locator("#ddlYears");
+    this.dropDownWeekly = this.page.locator("#ddlWeeks");
+    this.fileName=this.page.locator('text=File Name');
+    this.fileSize= this.page.locator('text=File Size');
+  }
 
 public async clickToNoticemarine()
 {
- await this.noticeMarine.click();
+    await this.noticeMarine.click();
 }
 
 public async checkEnabledYearDropDown()
-{
-          
-  return await this.dropDownYearly.isEnabled();
-    
+{      
+    return await this.dropDownYearly.isEnabled();   
 }
 
 public async checkEnabledWeekDropDown()
 {
-     return await this.dropDownWeekly.isEnabled();
-    
+    return await this.dropDownWeekly.isEnabled();
 }
 
 public async getRecordCountTableNoticeToMarine(year:string,week:string)
 {
     await this.dropDownYearly.selectOption(year);
     await this.dropDownWeekly.selectOption(week);
-    await this.page.waitForSelector('tr')
+    await this.page.waitForSelector('tr');
     const tablerow = await this.page.$$("tr");
     return tablerow.length;
 }
 
 public async getFileSizeText()
 {
-  return (await this.fileSize.textContent()).toString();   
+    return (await this.fileSize.textContent()).toString();   
 }
 public async getFileNameText()
 {
@@ -78,26 +75,26 @@ public async getTableData()
            
            switch(fileData[1])
            {
-             case "MB":
-               {
-                expect(fileData[1]).toContain("MB"); 
-                break;
-               }
-               case "KB":
+                case "MB":
+                {
+                 expect(fileData[1]).toContain("MB"); 
+                 break;
+                }
+                case "KB":
                 {
                  expect(fileData[1]).toContain("KB"); 
                  break;
                 }
                 case "GB":
-                  {
-                   expect(fileData[1]).toContain("GB"); 
-                   break;
-                  }
-                  case "B":
-                    {
-                     expect(fileData[1]).toContain("B"); 
-                     break;
-                    }
+                {
+                  expect(fileData[1]).toContain("GB"); 
+                  break;
+                }
+                case "B":
+                {
+                  expect(fileData[1]).toContain("B"); 
+                  break;
+                }
             }
          }    
          
