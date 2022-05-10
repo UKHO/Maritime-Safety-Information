@@ -34,7 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
                          DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
                          Summary = rnwWarnings.Summary,
-                         Content = rnwWarnings.Content != null ? string.Concat(rnwWarnings.Content.Substring(0, 300), rnwWarnings.Content.Length > 300 ? "..." : string.Empty) : string.Empty,
+                         Content = rnwWarnings.Content != null ? rnwWarnings.Content.Length > 300 ? string.Concat(rnwWarnings.Content.Substring(0, 300), "...") : rnwWarnings.Content : string.Empty,
                          ExpiryDate = rnwWarnings.ExpiryDate,
                          ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
                          IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
