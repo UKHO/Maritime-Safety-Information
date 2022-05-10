@@ -20,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IFileShareService _fakefileShareService;
         private ILogger<NMDataService> _fakeLogger;
         private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
-        private NMDataService _fakeNMDataService;
+        private NMDataService _nMDataService;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
@@ -30,59 +30,59 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeLogger = A.Fake<ILogger<NMDataService>>();
             _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
 
-            _fakeNMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider);
+            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider);
         }
 
         [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
-            int year = 2022;
-            int week = 15;
+            const int year = 2022;
+            const int week = 15;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-            Result<BatchSearchResponse> SearchResult = SetSearchResultForWeekly();
+            Result<BatchSearchResponse> searchResult = SetSearchResultForWeekly();
 
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(SearchResult);
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
 
-            int expectedRecordCount = 4;
+            const int expectedRecordCount = 4;
 
-            List<ShowFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, ListshowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
         }
 
         [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnZeroFiles()
         {
-            int year = 2022;
-            int week = 15;
+            const int year = 2022;
+            const int week = 15;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
-            int expectedRecordCount = 0;
+            const int expectedRecordCount = 0;
 
-            List<ShowFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, ListshowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
 
         }
 
         [Test]
         public void WhenGetWeeklyBatchFilesIsCalled_ThenShouldExecuteCatch()
         {
-            int year = 2022;
-            int week = 15;
+            const int year = 2022;
+            const int week = 15;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
-            Task<List<ShowFilesResponseModel>> result = _fakeNMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.That(result.IsFaulted, Is.True);
         }
@@ -92,17 +92,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-            Result<BatchSearchResponse> SearchResult = SetSearchResultForDaily();
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
 
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(SearchResult);
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
 
-            int expectedRecordCount = 1;
-            int dailyFilesDataCount = 2;
+            const int expectedRecordCount = 1;
+            const int dailyFilesDataCount = 2;
 
-            List<ShowDailyFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, ListshowFilesResponseModels.Count);
-            Assert.AreEqual(dailyFilesDataCount, ListshowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
 
         }
 
@@ -115,11 +115,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
-            int expectedRecordCount = 0;
+            const int expectedRecordCount = 0;
 
-            List<ShowDailyFilesResponseModel> ListshowFilesResponseModels = await _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, ListshowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
 
         }
 
@@ -131,7 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
-            Task<List<ShowDailyFilesResponseModel>> result = _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            Task<List<ShowDailyFilesResponseModel>> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
             Assert.That(result.IsFaulted, Is.True);
         }
@@ -147,7 +147,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
 
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
+            List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
 
             Assert.AreEqual(totalWeeks + 1, result.Count);
         }
@@ -164,7 +164,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
 
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllWeeksofYear(year, CorrelationId);
+            List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
 
             Assert.AreEqual(totalWeeks + 1, result.Count);
         }
@@ -172,8 +172,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
         {
-            int yearsCount = 4;
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
+            const int yearsCount = 4;
+            List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
             Assert.AreEqual(yearsCount, result.Count);
         }
 
@@ -181,13 +181,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
         {
             int minYear = DateTime.Now.Year - 2;
-            List<KeyValuePair<string, string>> result = _fakeNMDataService.GetAllYears(CorrelationId);
+            List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
             Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
         }
 
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
-            Result<BatchSearchResponse> SearchResult = new()
+            Result<BatchSearchResponse> searchResult = new()
             {
                 Data = new BatchSearchResponse
                 {
@@ -235,12 +235,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 }
             };
 
-            return SearchResult;
+            return searchResult;
         }
 
         private static Result<BatchSearchResponse> SetSearchResultForDaily()
         {
-            Result<BatchSearchResponse> SearchResult = new()
+            Result<BatchSearchResponse> searchResult = new()
             {
                 Data = new BatchSearchResponse
                 {
@@ -316,7 +316,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 }
             };
 
-            return SearchResult;
+            return searchResult;
         }
 
     }

@@ -79,43 +79,43 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
 		/// <summary>
         /// 910019 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
-        MSIShowDailyFilesRequest = 910019,
+        ShowDailyFilesRequest = 910019,
         /// <summary>
         /// 910020 -  Event data for Retrieval of MSI Daily File Completed.
         /// </summary>
-        MSIShowDailyFilesCompleted = 910020,
+        ShowDailyFilesCompleted = 910020,
         /// <summary>
         /// 910021 -  Event data for Retrieval of MSI Daily File Response Started.
         /// </summary>
-        MSIShowDailyFilesResponseStarted = 910021,
+        ShowDailyFilesResponseStarted = 910021,
         /// <summary>
         /// 910022 -  Event data for Retrieval of MSI Daily File Response Data Found.
         /// </summary>
-        MSIShowDailyFilesResponseDataFound = 910022,
+        ShowDailyFilesResponseDataFound = 910022,
         /// <summary>
         /// 910023-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        MSIShowDailyFilesResponseDataNotFound = 910023,
+        ShowDailyFilesResponseDataNotFound = 910023,
         /// <summary>
         /// 910024-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        MSIShowDailyFilesResponseFailed = 910024,
+        ShowDailyFilesResponseFailed = 910024,
         /// <summary>
         /// 910025-  Event data for Retrieval of MSI Get Daily File Result.
         /// </summary>
-        MSIGetDailyFilesResultRequest = 910025,
+        GetDailyFilesResultRequest = 910025,
         /// <summary>
         /// 910026-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        MSIGetDailyFilesResultCompleted = 910026,
+        GetDailyFilesResultCompleted = 910026,
         /// <summary>
         /// 910027-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        MSIGetWeeklyFilesResultRequest = 910027,
+        GetWeeklyFilesResultRequest = 910027,
         /// <summary>
         /// 910028-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        MSIGetWeeklyFilesResultRequestCompleted = 910028,
+        GetWeeklyFilesResultRequestCompleted = 910028,
         /// <summary>
         /// 910029 -  Unhandled Exception Occured.
         /// </summary>

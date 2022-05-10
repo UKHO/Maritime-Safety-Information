@@ -13,7 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         [Test]
         public void WhenNMHelperCallsListFilesResponse_ThenConversionIsCorrect()
         {
-            BatchSearchResponse SearchResult = SetSearchResultForWeekly();
+            BatchSearchResponse searchResult = SetSearchResultForWeekly();
 
             List<ShowFilesResponseModel> expected = new()
             {
@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 }
             };
 
-            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponse(SearchResult);
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponse(searchResult);
 
             Assert.Multiple(() =>
             {
@@ -83,7 +83,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         [Test]
         public void WhenGetDailyShowFilesResponseIsCalled_ThenConversionIsCorrect()
         {
-            BatchSearchResponse SearchResult = SetSearchResultForDaily();
+            BatchSearchResponse searchResult = SetSearchResultForDaily();
 
             List<ShowDailyFilesResponseModel> expected = new()
             {
@@ -101,7 +101,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Filename = "Daily 21-04-22.zip",
                             FileDescription = "Daily 21-04-22.zip",
                             FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(299170),
+                            FileSizeInKB = FileHelper.FormatSize(299170),
                             MimeType = "application/gzip",
                             Links = null,
                             AllFilesZipSize = 299170
@@ -113,7 +113,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Filename = "Daily 22-04-22.zip",
                             FileDescription = "Daily 22-04-22.zip",
                             FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(346040),
+                            FileSizeInKB = FileHelper.FormatSize(346040),
                             MimeType = "application/gzip",
                             Links = null,
                             AllFilesZipSize = 346040
@@ -134,7 +134,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Filename = "Daily 24-04-22.zip",
                             FileDescription = "Daily 24-04-22.zip",
                             FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(299170),
+                            FileSizeInKB = FileHelper.FormatSize(299170),
                             MimeType = "application/gzip",
                             Links = null,
                             AllFilesZipSize = 299170
@@ -146,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Filename = "Daily 23-04-22.zip",
                             FileDescription = "Daily 23-04-22.zip",
                             FileExtension = ".zip",
-                            FileSizeinKB = FileHelper.FormatSize(346040),
+                            FileSizeInKB = FileHelper.FormatSize(346040),
                             MimeType = "application/gzip",
                             Links = null,
                             AllFilesZipSize = 346040
@@ -161,7 +161,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 item.DailyFilesData = item.DailyFilesData.OrderBy(x => Convert.ToDateTime(x.DataDate)).ToList();
             }
 
-            List<ShowDailyFilesResponseModel> result = NMHelper.GetDailyShowFilesResponse(SearchResult);
+            List<ShowDailyFilesResponseModel> result = NMHelper.GetDailyShowFilesResponse(searchResult);
             Assert.Multiple(() =>
             {
                 for (int i = 0; i < result.Count; i++)
@@ -177,7 +177,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                         Assert.AreEqual(expected[i].DailyFilesData[j].Filename, result[i].DailyFilesData[j].Filename);
                         Assert.AreEqual(expected[i].DailyFilesData[j].FileDescription, result[i].DailyFilesData[j].FileDescription);
                         Assert.AreEqual(expected[i].DailyFilesData[j].FileExtension, result[i].DailyFilesData[j].FileExtension);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileSizeinKB, result[i].DailyFilesData[j].FileSizeinKB);
+                        Assert.AreEqual(expected[i].DailyFilesData[j].FileSizeInKB, result[i].DailyFilesData[j].FileSizeInKB);
                         Assert.AreEqual(expected[i].DailyFilesData[j].MimeType, result[i].DailyFilesData[j].MimeType);
                         Assert.AreEqual(expected[i].DailyFilesData[j].Links, result[i].DailyFilesData[j].Links);
                         Assert.AreEqual(expected[i].DailyFilesData[j].AllFilesZipSize, result[i].DailyFilesData[j].AllFilesZipSize);
@@ -189,15 +189,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         [Test]
         public void WhenGetFormattedDateIsCalled_ThenShouldReturnDateInExpectedFormat()
         {
-            string strdate = "2022-05-26";
-            string actualDate = NMHelper.GetFormattedDate(strdate);
-            string expectedDate = "26-05-22";
+            const string strDate = "2022-05-26";
+            string actualDate = NMHelper.GetFormattedDate(strDate);
+            const string expectedDate = "26-05-22";
             Assert.AreEqual(expectedDate, actualDate);
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()
         {
-            BatchSearchResponse SearchResult = new()
+            BatchSearchResponse searchResult = new()
             {
                 Count = 2,
                 Links = null,
@@ -242,12 +242,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 }
             };
 
-            return SearchResult;
+            return searchResult;
         }
 
         private static BatchSearchResponse SetSearchResultForDaily()
         {
-            BatchSearchResponse SearchResult = new()
+            BatchSearchResponse searchResult = new()
             {
 
                 Count = 2,
@@ -268,8 +268,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 
                             },
                             BusinessUnit = "TEST",
-                            BatchPublishedDate = System.DateTime.Now,
-                            ExpiryDate = System.DateTime.Now,
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "aaa.pdf",
@@ -300,8 +300,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 
                             },
                             BusinessUnit = "TEST",
-                            BatchPublishedDate = System.DateTime.Now,
-                            ExpiryDate = System.DateTime.Now,
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "ccc.pdf",
@@ -333,8 +333,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 
                             },
                             BusinessUnit = "TEST",
-                            BatchPublishedDate = System.DateTime.Now,
-                            ExpiryDate = System.DateTime.Now,
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "aaa.pdf",
@@ -365,8 +365,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 
                             },
                             BusinessUnit = "TEST",
-                            BatchPublishedDate = System.DateTime.Now,
-                            ExpiryDate = System.DateTime.Now,
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "ccc.pdf",
@@ -397,8 +397,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 
                             },
                             BusinessUnit = "TEST",
-                            BatchPublishedDate = System.DateTime.Now,
-                            ExpiryDate = System.DateTime.Now,
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "aaa.pdf",
@@ -418,7 +418,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     }
             };
 
-            return SearchResult;
+            return searchResult;
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿//Document ready 
 $(function () {
 
-    if ($('#hdnRequestType').val() == "Daily") {
+    if ($('#hdnRequestType').val() === "Daily") {
         ShowDailyFilesAsync();
     }
     else {

@@ -4,8 +4,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 {
     public class ShowDailyFilesResponseModel
     {
-
-        [DataMember(Name = "YearWeek", EmitDefaultValue = false)]
+        [DataMember(Name = "yearweek", EmitDefaultValue = false)]
         public string YearWeek { get; set; }
         
         [DataMember(Name = "weeknumber", EmitDefaultValue = false)]
@@ -14,7 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
         [DataMember(Name = "year", EmitDefaultValue = false)]
         public string Year { get; set; }
 
-        [DataMember(Name = "DataDate", EmitDefaultValue = false)]
+        [DataMember(Name = "dailyfilesdata", EmitDefaultValue = false)]
         public List<DailyFilesDataModel> DailyFilesData { get; set; }
     }
 }

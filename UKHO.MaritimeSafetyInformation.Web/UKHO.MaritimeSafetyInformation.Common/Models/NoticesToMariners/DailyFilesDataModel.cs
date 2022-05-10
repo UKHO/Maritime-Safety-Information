@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
         public long? FileSize { get; set; }
 
         [DataMember(Name = "filesizeinkb", EmitDefaultValue = false)]
-        public string FileSizeinKB { get; set; }
+        public string FileSizeInKB { get; set; }
 
         [DataMember(Name = "mimeType", EmitDefaultValue = false)]
         public string MimeType { get; set; }

@@ -29,10 +29,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return ListshowFilesResponseModels;
         }
 
-        public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse SearchResult)
+        public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new ();
-            List<AttributesModel> lstattributes = (SearchResult.Entries.Where(x => x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
+            List<AttributesModel> attributes = searchResult.Entries.Where(x => x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
             {
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
@@ -40,10 +40,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
                 YearWeek = item.Attributes.Where(x => x.Key.Equals("Year / Week")).Select(x => x.Value).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize
-            })).ToList();
+            }).ToList();
 
-            IEnumerable<IGrouping<string, AttributesModel>> groupped = lstattributes.GroupBy(x => x.YearWeek);
-            foreach (IGrouping<string, AttributesModel> group in groupped)
+            IEnumerable<IGrouping<string, AttributesModel>> grouped = attributes.GroupBy(x => x.YearWeek);
+            foreach (IGrouping<string, AttributesModel> group in grouped)
             {
                 List<DailyFilesDataModel> lstDataDate = (group.Select(item => new DailyFilesDataModel
                 {
@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     FileExtension = ".zip",
                     FileDescription = "Daily " + GetFormattedDate(item.DataDate) + ".zip",
                     AllFilesZipSize = item.AllFilesZipSize,
-                    FileSizeinKB = FileHelper.FormatSize(item.AllFilesZipSize),
+                    FileSizeInKB = FileHelper.FormatSize(item.AllFilesZipSize),
                     MimeType = "application/gzip"
                 })).Distinct().OrderBy(x => Convert.ToDateTime(x.DataDate)).ToList();
 
@@ -70,15 +70,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return showDailyFilesResponses;
         }
 
-        public static string GetFormattedDate(string strdate)
+        public static string GetFormattedDate(string strDate)
         {
             string[] formats = { "M/d/yyyy", "d/M/yyyy", "M-d-yyyy", "d-M-yyyy", "d-MMM-yy", "d-MMMM-yyyy","yyyy-MM-dd" };
-            string retVal = "";
 
-            if (DateTime.TryParseExact(strdate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
-                retVal = date.ToString("dd-MM-yy");
+            if (DateTime.TryParseExact(strDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
+                return date.ToString("dd-MM-yy");
 
-            return retVal;
+            return string.Empty;
         }
     }
 }

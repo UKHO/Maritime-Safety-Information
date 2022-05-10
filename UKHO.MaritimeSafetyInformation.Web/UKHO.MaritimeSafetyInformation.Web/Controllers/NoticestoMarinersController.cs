@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public IActionResult LoadWeeks(int year)
         {
-            return Json(_nMDataService.GetAllWeeksofYear(year, GetCurrentCorrelationId()));
+            return Json(_nMDataService.GetAllWeeksOfYear(year, GetCurrentCorrelationId()));
         }
 
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
@@ -51,11 +51,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
-            _logger.LogInformation(EventIds.MSIShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.MSIShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", showDailyFilesResponseModels);
 

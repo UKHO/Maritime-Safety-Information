@@ -7,13 +7,13 @@
         public static string FormatSize(long bytes)
         {
             int counter = 0;
-            decimal number = (decimal)bytes;
-            while ((number / 1024) >= 1)
+            decimal number = bytes;
+            while (number / 1024 >= 1)
             {
                 number /= 1024;
                 counter++;
             }
-            return string.Format("{0} {1}", Convert.ToInt32(Math.Round(number)), suffixes[counter]);
+            return $"{Convert.ToInt32(Math.Round(number))} {suffixes[counter]}";
         }
     }
 }
