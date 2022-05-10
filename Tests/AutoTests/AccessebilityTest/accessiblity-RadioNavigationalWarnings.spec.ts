@@ -3,8 +3,8 @@ import * as app from "../../Configuration/appConfig.json";
 import { checkA11y, injectAxe, Options } from 'axe-playwright';
 import RadioNavigationalWarnings from '../../pageObject/RadioNavigationalWarnings.page';
 
-test.describe("A11y tests", ()=> {
-  const defaultCheckA11yOptions: Options = {
+  test.describe("A11y tests", ()=> {
+   const defaultCheckA11yOptions: Options = {
     axeOptions: {
       runOnly: {
         type: 'tag',
@@ -18,7 +18,6 @@ test.describe("A11y tests", ()=> {
  
   test.beforeEach(async ({page}) => {
     await page.goto(app.url);    
-    console.log(page.url());
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
