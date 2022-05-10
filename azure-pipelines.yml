@@ -10,7 +10,7 @@ trigger:
   - main
   - release/*
 
-pool: Private Link Deployments (BUS)
+pool: NautilusBuild
 
 variables:
   - name: BuildConfiguration
