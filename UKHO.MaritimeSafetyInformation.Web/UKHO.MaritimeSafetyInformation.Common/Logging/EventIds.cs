@@ -73,13 +73,53 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseCompleted = 910017,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Failed.
+        /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
-        /// <summary>
-        /// 910018 -  Unhandled Exception Occured.
+		/// <summary>
+        /// 910019 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
-        UnhandledCleanUpException = 910019
+        ShowDailyFilesRequest = 910019,
+        /// <summary>
+        /// 910020 -  Event data for Retrieval of MSI Daily File Completed.
+        /// </summary>
+        ShowDailyFilesCompleted = 910020,
+        /// <summary>
+        /// 910021 -  Event data for Retrieval of MSI Daily File Response Started.
+        /// </summary>
+        ShowDailyFilesResponseStarted = 910021,
+        /// <summary>
+        /// 910022 -  Event data for Retrieval of MSI Daily File Response Data Found.
+        /// </summary>
+        ShowDailyFilesResponseDataFound = 910022,
+        /// <summary>
+        /// 910023-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        ShowDailyFilesResponseDataNotFound = 910023,
+        /// <summary>
+        /// 910024-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        ShowDailyFilesResponseFailed = 910024,
+        /// <summary>
+        /// 910025-  Event data for Retrieval of MSI Get Daily File Result.
+        /// </summary>
+        GetDailyFilesResultRequest = 910025,
+        /// <summary>
+        /// 910026-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetDailyFilesResultCompleted = 910026,
+        /// <summary>
+        /// 910027-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetWeeklyFilesResultRequest = 910027,
+        /// <summary>
+        /// 910028-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetWeeklyFilesResultRequestCompleted = 910028,
+        /// <summary>
+        /// 910029 -  Unhandled Exception Occured.
+        /// </summary>
+        UnhandledCleanUpException = 910029
     }
 
     public static class EventIdExtensions
