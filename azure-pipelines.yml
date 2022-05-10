@@ -282,7 +282,7 @@ stages:
       - deployment: DevDeployApp
         dependsOn: DevDeployTerraform
         displayName: "Dev - Dacpack and App Deployment"
-        pool: NautilusRelease
+        pool: NautilusBuild
         environment: "Maritime-Safety-Information-Dev"
         workspace:
           clean: all
