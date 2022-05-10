@@ -29,7 +29,7 @@ steps:
         testResultsFiles: 'results.xml'
         mergeTestResults: true
         searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-        testRunTitle: Dev Functional Test Results
+        testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
 
     - script: |
@@ -44,5 +44,5 @@ steps:
         testResultsFiles: 'results.xml'
         mergeTestResults: true
         searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-        testRunTitle: Dev Accessibility Test Results
+        testRunTitle: $(Environment) Accessibility Test Results
       displayName: 'Publish Accessibility Test Results'

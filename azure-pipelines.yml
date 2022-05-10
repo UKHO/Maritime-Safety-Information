@@ -243,6 +243,9 @@ stages:
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-Dev-TF-Variables"
+      - group: "Maritime-Safety-Information-Dev-Variables"
     jobs:
       - deployment: DevDeployApp
         displayName: "Dev - deploy terraform and dotnet App"
@@ -251,9 +254,6 @@ stages:
         container: ${{variables.Container}}
         workspace:
           clean: all
-        variables:
-          - group: "Maritime-Safety-Information-Dev-TF-Variables"
-          - group: "Maritime-Safety-Information-Dev-Variables"
         strategy:
           runOnce:
             deploy:
@@ -278,6 +278,9 @@ stages:
 
   - stage: QADeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-QA-TF-Variables"
+      - group: "Maritime-Safety-Information-QA-Variables"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployApp
@@ -287,9 +290,6 @@ stages:
         container: ${{variables.Container}}
         workspace:
           clean: all
-        variables:
-          - group: "Maritime-Safety-Information-QA-TF-Variables"
-          - group: "Maritime-Safety-Information-QA-Variables"
         strategy:
           runOnce:
             deploy:
