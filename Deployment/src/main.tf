@@ -27,7 +27,6 @@ module "webapp_service" {
   resource_group_name       = azurerm_resource_group.rg.name
   env_name                  = local.env_name
   location                  = azurerm_resource_group.rg.location
-  subnet_id                 = data.azurerm_subnet.main_subnet.id
   sku_name                  = var.sku_name[local.env_name]
   app_settings = {
     "KeyVaultSettings:ServiceUri"                              = "https://${local.key_vault_name}.vault.azure.net/"
