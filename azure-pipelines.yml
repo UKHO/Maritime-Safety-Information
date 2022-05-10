@@ -292,7 +292,7 @@ stages:
           - name: WEB_APP_NAME
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
           - name: MsiWebUrl
-            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.tfoutput.MsiWebUrl']  ]
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
         strategy:
           runOnce:
             deploy:
@@ -307,11 +307,11 @@ stages:
                 - task: SqlAzureDacpacDeployment@1
                   inputs:
                     azureSubscription: SharedServicesPre
-                    AuthenticationType: "aadAuthenticationPassword"
+                    AuthenticationType: "server"
                     ServerName: $(RNW_DB_Server)
                     DatabaseName: $(RNW_DB_Name)
-                    aadSqlUsername: $(RNW_DB_Deploy_User)
-                    aadSqlPassword: $(RNW_DB_Deploy_Pass)
+                    SqlUsername: $(RNW_DB_Deploy_SQLUser)
+                    SqlPassword: $(RNW_DB_Deploy_SQLPass)
                     deployType: "DacpacTask"
                     DeploymentAction: "Publish"
                     IpDetectionMethod: "AutoDetect"
