@@ -36,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Contollers
         }
 
         [Test]
-        public async Task WhenGetAllYearWeeksIsCalled_ThenShouldReturnJson()
+        public async Task WhenGetAllYearandWeeksIsCalled_ThenShouldReturnJson()
         {
             IActionResult result = await _controller.GetAllYearandWeeks();
             Assert.IsInstanceOf<JsonResult>(result);
