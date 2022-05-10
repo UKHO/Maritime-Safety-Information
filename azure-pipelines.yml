@@ -425,7 +425,7 @@ stages:
         pool: $(WindowsPool)
         displayName: "QA Accessibility Tests"
         variables: 
-         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         url: $[ dependencies.QADeployApp.outputs['QADeployApp.TerraformDeploy.WebsiteURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
