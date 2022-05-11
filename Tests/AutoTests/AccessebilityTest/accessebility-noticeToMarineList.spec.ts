@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
 
 import * as app from "../../Configuration/appConfig.json";
-import headerPage from '../../pageObject/home.page';
+
 import { injectAxe, getViolations, checkA11y} from 'axe-playwright'
 
 test.describe("A11y tests", ()=> {
