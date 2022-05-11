@@ -17,6 +17,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
         public int WarningType { get; set; }
 
         [Required]
+        [StringLength(32, ErrorMessage = "Reference cannot be longer than 32 characters.")]
         public string Reference { get; set; }
 
         [DisplayName("Date Time Group")]
@@ -25,9 +26,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
 
         [DisplayName("Description")]
         [Required]
+        [StringLength(256, ErrorMessage = "Summary cannot be longer than 256 characters.")]
         public string Summary { get; set; }
 
         [DisplayName("Text")]
+        [Required]
         public string Content { get; set; }
 
         public DateTime? ExpiryDate { get; set; }

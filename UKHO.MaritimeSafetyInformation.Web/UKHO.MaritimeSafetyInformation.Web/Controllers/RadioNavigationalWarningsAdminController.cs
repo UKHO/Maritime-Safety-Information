@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
@@ -29,6 +30,49 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             _logger.LogInformation(EventIds.MSIGetRnwForAdminCompleted.ToEventId(), "Maritime safety information request to get RNW records for Admin completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             return View(radioNavigationalWarningsAdminFilter);
+                    return RedirectToAction(nameof(Index), new { reLoadData = true });
+                }
+            }
+
+            return View(radioNavigationalWarnings);
         }
+
+// GET: RadioNavigationalWarnings/Create
+public async Task<IActionResult> Create()
+{
+    ViewBag.WarningType = await _rnwService.GetWarningTypes();
+
+    return View();
+}
+
+// POST: RadioNavigationalWarnings/Create
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(RadioNavigationalWarnings radioNavigationalWarnings)
+{
+    _logger.LogInformation(EventIds.MSICreateNewRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+    if (ModelState.IsValid)
+    {
+        bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarnings, GetCurrentCorrelationId());
+
+        if (result)
+        {
+            TempData["message"] = "Record created successfully!";
+            _logger.LogInformation(EventIds.MSICreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            return RedirectToAction(nameof(Index), new { reLoadData = true });
+        }
+        else
+        {
+            TempData["message"] = "Failed to create record.";
+            _logger.LogInformation(EventIds.MSICreateNewRNWRecordFailed.ToEventId(), "Maritime safety information create new RNW record request failed for _X-Correlation-ID", GetCurrentCorrelationId());
+
+            return RedirectToAction(nameof(Index), new { reLoadData = true });
+        }
+    }
+
+    return View(radioNavigationalWarnings);
+}
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Common;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -9,6 +11,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class RnwRepository : IRnwRepository
     {
+        private readonly RadioNavigationalWarningsContext _context;
+
+        public RnwRepository(RadioNavigationalWarningsContext context)
         private readonly RadioNavigationalWarningsContext _context;
         private readonly ILogger<RnwRepository> _logger;
 
@@ -21,8 +26,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList(string correlationId)
         {
+            _context = context;
+        }
             _logger.LogInformation(EventIds.MSIGetRnwForAdminDatabaseCallStarted.ToEventId(), "Maritime safety information query to get RNW records for Admin from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
+        public async Task AddRadioNavigationWarnings(RadioNavigationalWarnings radioNavigationalWarnings)
+        {
+            _context.Add(radioNavigationalWarnings);
+            await _context.SaveChangesAsync(); 
             List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminLists
             = await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
@@ -50,8 +61,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return await _context.WarningType.ToListAsync();
         }
 
+        public async Task<List<WarningType>> GetWarningTypes()
         public async Task<List<string>> GetYears()
         {
+            return await _context.WarningType.ToListAsync();
             List<string> years = await (_context.RadioNavigationalWarnings
                                 .Select(p => p.DateTimeGroup.Year.ToString())
                                 .Distinct().ToListAsync());

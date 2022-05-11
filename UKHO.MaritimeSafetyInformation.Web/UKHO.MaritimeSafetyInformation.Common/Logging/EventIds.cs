@@ -120,6 +120,35 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910029 -  Unhandled Exception Occured.
         /// </summary>
         UnhandledCleanUpException = 910029,
+        /// <summary>
+        /// 910030 -  Maritime safety information create new RNW record request started.
+        /// </summary>
+        MSICreateNewRNWRecordStart = 910030,
+        /// <summary>
+        /// 910031 -  Maritime safety information create new RNW record request Completed.
+        /// </summary>
+        MSICreateNewRNWRecordCompleted = 910031,
+        /// <summary>
+        /// 910032 -  Maritime safety information add new RNW record to database request started.
+        /// </summary>
+        MSIAddNewRNWRecordStart = 910032,
+        /// <summary>
+        /// 910033 -  Maritime safety information add new RNW record to database request Completed.
+        /// </summary>
+        MSIAddNewRNWRecordCompleted = 910033,
+        /// <summary> 
+        /// 910034 -  Maritime safety information add new RNW record to database request error.
+        /// </summary>
+        MSIAddNewRNWRequestError = 910034,
+        /// <summary> 
+        /// 910035 -  Maritime safety information invalid new RNW record request.
+        /// </summary>
+        MSIInvalidNewRNWRecordRequest = 910035,
+        /// <summary> 
+        /// 910036 -  Maritime safety information create new RNW record request failed.
+        /// </summary>
+        MSICreateNewRNWRecordFailed = 910036
+        UnhandledCleanUpException = 910029,
         /// <summary> 
         /// 910030 -  Maritime safety information request to get RNW records for Admin started.
         /// </summary>

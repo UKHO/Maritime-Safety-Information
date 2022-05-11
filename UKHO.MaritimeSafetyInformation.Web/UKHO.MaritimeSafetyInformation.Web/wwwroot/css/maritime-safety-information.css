@@ -238,6 +238,20 @@ a:focus, button:focus, .form-select:focus, .form-control:focus {
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
 
+.form-label {
+  margin-bottom: 0.5rem !important;
+  box-shadow: none;
+}
+
+.form-select, .form-control {
+  border-radius: 0;
+  font-weight: 300;
+}
+
+.form-select option {
+  font-weight: 300;
+}
+
 .alert {
   padding: 30px;
   background-color: #E0ECF3;
