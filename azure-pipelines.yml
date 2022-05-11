@@ -295,6 +295,8 @@ stages:
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
           - name: MsiWebUrl
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
+          - name: WebsiteURL
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
         strategy:
           runOnce:
             deploy:
@@ -348,11 +350,11 @@ stages:
                     filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
                     arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
-                - script:
-                   echo "$(WebsiteURL)"
+                - bash: echo "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)"
+                  name: SetOutputUrl
 
       - job: FunctionalAndAccessibilityTests
-        dependsOn: DevDeployTerraform
+        dependsOn: DevDeployApp
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
