@@ -25,7 +25,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
         }
 
-         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
+        public IActionResult DailyFiles()
+        {
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml");
+        }
+
+        public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
             _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestStarted.ToEventId(), "Maritime safety information request to show weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
@@ -45,6 +51,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksCompleted.ToEventId(), "Maritime safety information request to Search Year and Week for NM files completed with Year/Week count as:{listYear} for _X-Correlation-ID:{correlationId}", listYear.Count, GetCurrentCorrelationId());
 
             return Json(listYear);               
-        }           
+        }
+
+        public async Task<IActionResult> ShowDailyFilesAsync()
+        {
+            _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+
+            _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", showDailyFilesResponseModels);
+
+        }
     }
 }
+

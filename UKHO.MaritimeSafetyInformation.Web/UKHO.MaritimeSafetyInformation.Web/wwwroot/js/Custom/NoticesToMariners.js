@@ -21,24 +21,26 @@ function LoadYears() {
         success: function (data) {
             yearweekdata = data;
             onload = !onload;
-            var selectedyear;
-            $('#ddlYears').empty();
+            var selectedyear;            
 
-            var yeardata = getUniqueYearandWeeks(data, "year", "Y").sort()
-            var defaultYear = '<option selected> --Please select year-- </option>'
-            $(defaultYear).appendTo('#ddlYears');
-            for (i = 0; i < yeardata.length; i++) {
-                var year = '<option>' + yeardata[i] + '</option>'
-                $(year).appendTo('#ddlYears');
-            }          
-            if (onload) {
-                selectedyear = yeardata[yeardata.length - 1];
-                $('#ddlYears').val(selectedyear);
-            }
-            else {
-                $('#ddlYears').val('--Please select year--');
-            }
-            GetCorrespondingWeeks(selectedyear, data);                     
+            if (yearweekdata.length > 0) {
+                $('#ddlYears').empty();
+                var yeardata = getUniqueYearandWeeks(data, "year", "Y").sort()
+                var defaultYear = '<option selected> --Please select year-- </option>'
+                $(defaultYear).appendTo('#ddlYears');
+                for (i = 0; i < yeardata.length; i++) {
+                    var year = '<option>' + yeardata[i] + '</option>'
+                    $(year).appendTo('#ddlYears');
+                }
+                if (onload) {
+                    selectedyear = yeardata[yeardata.length - 1];
+                    $('#ddlYears').val(selectedyear);
+                }
+                else {
+                    $('#ddlYears').val('--Please select year--');
+                }
+                GetCorrespondingWeeks(selectedyear, data);
+            }           
         },
         error: function (error) {
             console.log(`Error ${error}`);
@@ -130,5 +132,19 @@ function ShowWeeklyFilesAsync() {
             }
         });
     }
+}
+
+function ShowDailyFilesAsync() {
+
+    $.ajax({
+        url: '/NoticesToMariners/ShowDailyFiles',
+        type: "GET",
+        success: function (data) {
+            $('#divFilesList').html(data);
+        },
+        error: function (error) {
+            console.log(`Error ${error}`);
+        }
+    });
 }
 

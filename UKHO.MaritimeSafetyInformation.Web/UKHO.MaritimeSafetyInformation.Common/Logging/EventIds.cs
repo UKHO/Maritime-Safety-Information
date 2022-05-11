@@ -47,7 +47,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910011 -  Get NM Batch Files Request Failed.
         /// </summary>
-        GetWeeklyNMFilesRequestFailed = 910011,
+        GetWeeklyNMFilesRequestFailed = 910011,        
         /// <summary>
         /// 910012 -  FSS Batch Search Request Started.
         /// </summary>
@@ -61,46 +61,87 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSBatchSearchResponseFailed = 910014,
         /// <summary>
-        /// 910015 -  Unhandled Exception Occured.
+        /// 910015 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
-        UnhandledCleanUpException = 910015,
+        ShowDailyFilesRequest = 910015,
         /// <summary>
-        /// 910016 -  Search Attribute Response Started for File Share Service Client
+        /// 910016 -  Event data for Retrieval of MSI Daily File Completed.
         /// </summary>
-        FSSSearchAttributeResponseStarted = 910016,
+        ShowDailyFilesCompleted = 910016,
         /// <summary>
-        /// 910017 - Search Attribute Response Completed for File Share Service Client
+        /// 910017 -  Event data for Retrieval of MSI Daily File Response Started.
         /// </summary>
-        FSSSearchAttributeResponseCompleted = 910017,
+        ShowDailyFilesResponseStarted = 910017,
         /// <summary>
-        /// 910018 - Search Attribute Response threw an exception in case of errors for File Share Service Client
+        /// 910018 -  Event data for Retrieval of MSI Daily File Response Data Found.
         /// </summary>
-        FSSSearchAttributeResponseError = 910018,        
+        ShowDailyFilesResponseDataFound = 910018,
         /// <summary>
-        /// 910019 -  Get All weeks and Year data for Notices to Mariners Started
+        /// 910019-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksStarted = 910019,
+        ShowDailyFilesResponseDataNotFound = 910019,
         /// <summary>
-        /// 910020 -  Get All weeks and Year data for Notices to Mariners Completed
+        /// 910020-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksCompleted = 910020,
+        ShowDailyFilesResponseFailed = 910020,
         /// <summary>
-        /// 910021 - Recieved Year Week data from FSS for Notices to Mariners 
+        /// 910021-  Event data for Retrieval of MSI Get Daily File Result.
         /// </summary>
-        GetSearchAttributeRequestDataStarted = 910021,
+        GetDailyFilesResultRequest = 910021,
         /// <summary>
-        /// 910022 - Recieved Year Week data from FSS for Notices to Mariners 
+        /// 910022-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        GetSearchAttributeRequestDataFound = 910022,
+        GetDailyFilesResultCompleted = 910022,
         /// <summary>
-        /// 910023 - No data recieved Year Week data from FSS for Notices to Mariners 
+        /// 910023-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910023,
+        GetWeeklyFilesResultRequest = 910023,
         /// <summary>
-        /// 910024 - Failed to laod data for Year Week from FSS for Notices to Mariners 
+        /// 910024-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        GetSearchAttributeRequestDataFailed = 910024
+        GetWeeklyFilesResultRequestCompleted = 910024,
+        /// <summary>
+        /// 910025 -  Unhandled Exception Occured.
+        /// </summary>
+        UnhandledCleanUpException = 910025,
+        /// <summary>
+        /// 910026 -  Search Attribute Response Started for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseStarted = 910026,
+        /// <summary>
+        /// 910027 - Search Attribute Response Completed for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseCompleted = 910027,
+        /// <summary>
+        /// 910028 - Search Attribute Response threw an exception in case of errors for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseError = 910028,
+        /// <summary>
+        /// 910029 -  Get All weeks and Year data for Notices to Mariners Started
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksStarted = 910029,
+        /// <summary>
+        /// 910030 -  Get All weeks and Year data for Notices to Mariners Completed
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksCompleted = 910030,
+        /// <summary>
+        /// 910031 - Recieved Year Week data from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataStarted = 910031,
+        /// <summary>
+        /// 910032 - Recieved Year Week data from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataFound = 910032,
+        /// <summary>
+        /// 910033 - No data recieved Year Week data from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataNotFound = 910033,
+        /// <summary>
+        /// 910034 - Failed to laod data for Year Week from FSS for Notices to Mariners 
+        /// </summary>
+        GetSearchAttributeRequestDataFailed = 910034
     }
+
 
     public static class EventIdExtensions
     {
