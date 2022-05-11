@@ -19,7 +19,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         public IActionResult Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
-            return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
+            //return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
+            return View();
         }   
 
         public IActionResult DailyFiles()

@@ -1,18 +1,25 @@
 ﻿//Document ready 
 $(function () {
     ShowDailyFilesAsync();
-    if ($('#hdnRequestType').val() === "Daily") {
+    LoadYears();
+    $("#ddlYears").change(function () {
+        LoadWeeks($("#ddlYears").val());
+    });
+    $("#ddlWeeks").change(function () {
+        ShowWeeklyFilesAsync();
+    });
+    //if ($('#hdnRequestType').val() === "Daily") {
         
-    }
-    else {
-        LoadYears();
-        $("#ddlYears").change(function () {
-            LoadWeeks($("#ddlYears").val());
-        });
-        $("#ddlWeeks").change(function () {
-            ShowWeeklyFilesAsync();
-        });
-    }
+    //}
+    //else {
+    //    LoadYears();
+    //    $("#ddlYears").change(function () {
+    //        LoadWeeks($("#ddlYears").val());
+    //    });
+    //    $("#ddlWeeks").change(function () {
+    //        ShowWeeklyFilesAsync();
+    //    });
+    //}
 });
 
 function LoadYears() {
