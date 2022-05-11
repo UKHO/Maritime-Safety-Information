@@ -350,10 +350,10 @@ stages:
                     filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
                     arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
-
-                - bash: echo "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)"
+                - task: CmdLine@2
                   name: SetOutputUrl
-
+                  inputs:
+                    script: '##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)'
 
       - job: FunctionalAndAccessibilityTests
         dependsOn: DevDeployApp
