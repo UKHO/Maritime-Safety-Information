@@ -352,7 +352,7 @@ stages:
                    echo "$(WebsiteURL)"
 
       - job: FunctionalAndAccessibilityTests
-        dependsOn: DevDeployApp
+        dependsOn: DevDeployTerraform
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
