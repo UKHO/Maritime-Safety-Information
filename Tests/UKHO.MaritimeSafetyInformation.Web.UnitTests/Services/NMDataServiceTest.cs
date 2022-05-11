@@ -130,7 +130,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetAllYearWeekIsCalledwithValidToken_ThenShouldReturnYearWeekList()
         {
-            int ExpectedRecordCount = 2;
+            int ExpectedRecordCount = 3;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
