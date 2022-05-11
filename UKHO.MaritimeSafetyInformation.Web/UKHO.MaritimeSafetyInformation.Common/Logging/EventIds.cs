@@ -119,7 +119,27 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910029 -  Unhandled Exception Occured.
         /// </summary>
-        UnhandledCleanUpException = 910029
+        UnhandledCleanUpException = 910029,
+        /// <summary> 
+        /// 910030 -  Maritime safety information request to get RNW records for Admin started.
+        /// </summary>
+        MSIGetRnwForAdminStarted = 910030,
+        /// <summary> 
+        /// 910031 -  Maritime safety information request to get RNW records for Admin completed.
+        /// </summary>
+        MSIGetRnwForAdminCompleted = 910031,
+        /// <summary> 
+        /// 910032 -  Maritime safety information get RNW records for Admin from database request error.
+        /// </summary>
+        MSIGetRnwForAdminRequestError = 910032,
+        /// <summary> 
+        /// 910033 -  Maritime safety information query to get RNW records for Admin from database started.
+        /// </summary>
+        MSIGetRnwForAdminDatabaseCallStarted = 910033,
+        /// <summary> 
+        /// 910034 -  Maritime safety information query to get RNW records for Admin from database completed.
+        /// </summary>
+        MSIGetRnwForAdminDatabaseCallCompleted = 910034,
     }
 
     public static class EventIdExtensions

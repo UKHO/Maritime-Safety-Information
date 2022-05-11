@@ -26,7 +26,7 @@ variables:
   - name: UKHOAssemblyProduct
     value: "Maritime Safety Information"
   - name: UKHOAssemblyCopyright
-    value: "Copyright © UK Hydrographic Office"
+    value: "Copyright Â© UK Hydrographic Office"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: DeploymentPool

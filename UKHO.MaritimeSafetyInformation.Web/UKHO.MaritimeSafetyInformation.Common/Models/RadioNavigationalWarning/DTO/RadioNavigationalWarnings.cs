@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UKHO.MaritimeSafetyInformation.Common.Models.DTO
+namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class RadioNavigationalWarnings
     {
         [Key]
@@ -28,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.DTO
         [DisplayName("Text")]
         public string Content { get; set; }
 
-        public DateTime ExpiryDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
 
         public bool IsDeleted { get; set; }
     }
