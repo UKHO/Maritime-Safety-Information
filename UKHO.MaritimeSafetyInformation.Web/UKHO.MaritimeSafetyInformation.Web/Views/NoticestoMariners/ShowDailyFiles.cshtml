@@ -1,0 +1,19 @@
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+
+@model List<ShowDailyFilesResponseModel>
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+}
+@*<partial name="ShowDailyFilesList" />*@
+<input type="hidden" id = "hdnRequestType" value="Daily"/>
+
+<div class="row">
+    <div class="col">
+        <div class="table-responsive" id="divFilesList">
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
+    [ExcludeFromCodeCoverage]
     public class BaseController<T> : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

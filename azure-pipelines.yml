@@ -31,9 +31,49 @@ variables:
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
+  - name: coverityPool
+    value: NautilusBuild
+  - group: Covscan-vars
+  - name: WindowsPool
+    value: "NautilusBuild"
 
+resources:
+  repositories:
+  - repository: covscan
+    type: github
+    name: UKHO/coverityscan-buildtemplates
+    endpoint: "Maritime Safety Information"
+    ref: refs/heads/master
 
 stages:
+  - stage: CoverityScan
+    displayName: "Coverity Scan"
+    pool:
+      name: $(coverityPool)
+    jobs:
+    - job: Coverity
+      workspace:
+        clean: all
+      steps:
+        - checkout: self
+          submodules: recursive
+        - task: UseDotNet@2
+          displayName: 'Use .NET 6.0.x sdk'
+          inputs:
+            packageType: sdk
+            version: 6.0.x
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+        - checkout: covscan
+        - template: dotnet-cov.yml@covScan
+          parameters:
+            CovHostUrl: "$(CovHostUrl)"
+            CovUser: "$(CovUser)"
+            CovPwd: "$(CovPwd)"
+            StreamName: "maritime-safety-information"
+            BuildCommand: "$(Build.Repository.LocalPath)/maritime-safety-information/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.Web.csproj"
+            StripPath: $(Build.Repository.LocalPath)/maritime-safety-information
+            CoverityScanPath: $(Build.Repository.LocalPath)/coverityscan-buildtemplates
+
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (inc DependencyChecker, Dotnet Build , dotnet test and publish artifact )"
     dependsOn: []
@@ -112,7 +152,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]*'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -157,7 +197,7 @@ stages:
               feedsToUse: config
               noCache: true
               nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'              
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build task"
@@ -203,6 +243,9 @@ stages:
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-Dev-TF-Variables"
+      - group: "Maritime-Safety-Information-Dev-Variables"
     jobs:
       - deployment: DevDeployApp
         displayName: "Dev - deploy terraform and dotnet App"
@@ -211,9 +254,6 @@ stages:
         container: ${{variables.Container}}
         workspace:
           clean: all
-        variables:
-          - group: "Maritime-Safety-Information-Dev-TF-Variables"
-          - group: "Maritime-Safety-Information-Dev-Variables"
         strategy:
           runOnce:
             deploy:
@@ -222,3 +262,75 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information Dev - A.008.02"
+
+      - job: FunctionalAndAccessibilityTests
+        dependsOn: 
+        - DevDeployApp
+        pool: $(WindowsPool)
+        displayName: "Dev Functional Automated And Accessibility Tests"
+        variables: 
+         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+
+  - stage: QADeploy
+    displayName: "QAdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-QA-TF-Variables"
+      - group: "Maritime-Safety-Information-QA-Variables"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
+      - deployment: QADeployApp
+        displayName: "QA - deploy terraform and dotnet App"
+        environment: "Maritime-Safety-Information-QA"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
+
+      - job: FunctionalAndAccessibilityTests
+        dependsOn: 
+        - QADeployApp
+        pool: $(WindowsPool)
+        displayName: "QA Functional Automated And Accessibility Tests"
+        variables: 
+         url: $[ dependencies.QADeployApp.outputs['QADeployApp.TerraformDeploy.WebsiteURL']  ]
+         PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+
+  - stage: Livedeploy
+    displayName: "Livedeploy (inc terraform, webapp deploy)"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
+      - deployment: LiveDeployApp
+        displayName: "Live - deploy terraform and dotnet App"
+        environment: "Maritime-Safety-Information-Live"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        variables:
+          - group: "Maritime-Safety-Information-Live-TF-Variables"
+          - group: "Maritime-Safety-Information-Live-Variables"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"

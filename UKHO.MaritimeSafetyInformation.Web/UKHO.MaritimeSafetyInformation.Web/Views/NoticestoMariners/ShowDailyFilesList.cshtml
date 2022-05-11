@@ -1,0 +1,36 @@
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+
+@model List<ShowDailyFilesResponseModel>
+<div class="container-fluid">
+    <div class="table-responsive-sm">
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+                <table class="table table-responsive caption-top table-striped">
+                    <caption>@item.Year, Week @item.WeekNumber</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">File name</th>
+                            <th scope="col">File size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var file in item.DailyFilesData)
+                        {
+                            <tr>
+                                <td><a href="#">@file.FileDescription</a></td>
+                                <td>@file.FileSizeInKB (@file.FileExtension)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+        else
+        {
+            <p>No data found!!!</p>
+        }
+
+    </div>
+</div>
