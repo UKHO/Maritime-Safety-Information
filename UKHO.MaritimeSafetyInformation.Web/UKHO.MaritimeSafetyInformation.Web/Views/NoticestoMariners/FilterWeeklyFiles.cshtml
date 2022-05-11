@@ -1,0 +1,34 @@
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+@model List<ShowFilesResponseModel>
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+}
+<input type="hidden" id = "hdnRequestType" value="Weekly"/>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-lg-2">Select period</div>
+
+        <label for="ddlYears" class="col-md-2 col-form-label text-start text-lg-end">Year</label>
+        <div class="col-lg-3 col-md-4">
+            <select class="form-select" id="ddlYears">
+                <option selected>Please select year</option>
+            </select>
+        </div>
+
+        <label for="ddlWeeks" class="col-md-2 col-form-label text-start text-lg-end">Week</label>
+        <div class="col-lg-3 col-md-4">
+            <select class="form-select" id="ddlWeeks">
+                <option selected>Please select week</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" id="divFilesList">
+               
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 ﻿[
-  {
-    "outputFile": "wwwroot/css/nm_style.css",
-    "inputFile": "wwwroot/css/nm_style.scss"
-  }
+    {
+        "outputFile": "wwwroot/css/maritime-safety-information.css",
+        "inputFile": "wwwroot/css/maritime-safety-information.scss"
+    }
 ]

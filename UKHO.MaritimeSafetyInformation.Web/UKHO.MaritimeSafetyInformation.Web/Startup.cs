@@ -5,8 +5,11 @@ using System.Reflection;
 using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
+using UKHO.MaritimeSafetyInformation.Web.Filters;
+using UKHO.MaritimeSafetyInformation.Web.Services;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -32,17 +35,26 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
+            services.AddScoped<INMDataService, NMDataService>();
+            services.AddScoped<IFileShareService, FileShareService>();
+            services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
-            });            
-            services.AddApplicationInsightsTelemetry();            
+            });
+
+            services.AddHttpClient();
+
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+            services.AddApplicationInsightsTelemetry();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,7 +7,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Filters
     [ExcludeFromCodeCoverage]
     public static class LoggingMiddleware
     {
-
         public static IApplicationBuilder UseErrorLogging(this IApplicationBuilder appBuilder, ILoggerFactory loggerFactory)
         {
             return appBuilder.Use(async (context, func) =>
