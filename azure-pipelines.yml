@@ -266,7 +266,7 @@ stages:
       - group: "Maritime-Safety-Information-Dev-Variables"
     jobs:
       - deployment: DevDeployTerraform
-        displayName: "Dev - deploy terraform and dotnet App"
+        displayName: "Dev - Deploy Terraform and Dotnet App"
         environment: "Maritime-Safety-Information-Dev"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
@@ -349,7 +349,6 @@ stages:
                     filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
                     arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
-
       - job: FunctionalAndAccessibilityTests
         dependsOn: 
         - DevDeployApp
@@ -370,8 +369,9 @@ stages:
       - group: "Maritime-Safety-Information-QA-Variables"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
-      - deployment: QADeployApp
-        displayName: "QA - deploy terraform and dotnet App"
+
+      - deployment: QADeployTerraform
+        displayName: "QA - Deploy Terraform and Dotnet App"
         environment: "Maritime-Safety-Information-QA"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
@@ -385,6 +385,73 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information QA - A.008.02"
+
+      - deployment: QADeployApp
+        dependsOn: QADeployTerraform
+        displayName: "QA - Dacpack and App Deployment"
+        pool: NautilusBuild
+        environment: "Maritime-Safety-Information-QA"
+        workspace:
+          clean: all
+        variables:
+          - group: "Maritime-Safety-Information-QA-TF-Variables"
+          - group: "Maritime-Safety-Information-QA-Variables"
+          - name: WEB_APP_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: MsiWebUrl
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWebUrl']  ]
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download Dackpack Artifact"
+                  inputs:
+                    source: "current"
+                    artifact: "Dackpack"
+                    path: $(Build.SourcesDirectory)/Dackpack
+
+                - task: SqlAzureDacpacDeployment@1
+                  inputs:
+                    azureSubscription: SharedServicesPre
+                    AuthenticationType: "server"
+                    ServerName: $(RNW_DB_Server)
+                    DatabaseName: $(RNW_DB_Name)
+                    SqlUsername: $(RNW_DB_Deploy_SQLUser)
+                    SqlPassword: $(RNW_DB_Deploy_SQLPass)
+                    deployType: "DacpacTask"
+                    DeploymentAction: "Publish"
+                    IpDetectionMethod: "AutoDetect"
+                    DacpacFile: $(Build.SourcesDirectory)/Dackpack/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
+
+                - task: DownloadPipelineArtifact@2
+                  displayName: "Download App service Artifact"
+                  inputs:
+                    source: "current"
+                    artifact: "MaritimeSafetyInformation"
+                    path: $(Build.SourcesDirectory)/MaritimeSafetyInformation
+
+                - task: FileTransform@1
+                  displayName: "File Transform: WebAppSettings"
+                  inputs:
+                    folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
+                    fileType: 'json'
+                    targetFiles: '**/appsettings.json'
+
+                - task: AzureWebApp@1
+                  displayName: "Azure App Deploy: msi-$(Environment)-webapp"
+                  inputs:
+                    azureSubscription: "Maritime Safety Information QA - A.008.02"
+                    appType: webApp
+                    appName: "$(WEB_APP_NAME)"
+                    package: "$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip"
+
+                - task: PowerShell@2
+                  displayName: "Check the status of Service"
+                  inputs:
+                    targetType: filePath
+                    filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+                    arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
       - job: FunctionalAndAccessibilityTests
         dependsOn: 
