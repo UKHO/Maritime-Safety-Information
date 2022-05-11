@@ -281,7 +281,6 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
-
       - deployment: DevDeployApp
         dependsOn: DevDeployTerraform
         displayName: "Dev - Dacpack and App Deployment"
@@ -353,8 +352,7 @@ stages:
                    echo "$(WebsiteURL)"
 
       - job: FunctionalAndAccessibilityTests
-        dependsOn: 
-        - DevDeployApp
+        dependsOn: DevDeployApp
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
