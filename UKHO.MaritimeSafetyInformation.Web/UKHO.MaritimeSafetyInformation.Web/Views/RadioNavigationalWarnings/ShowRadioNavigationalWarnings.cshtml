@@ -1,5 +1,12 @@
-﻿
-@model IEnumerable<UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.RadioNavigationalWarningsData>
+﻿@model IEnumerable<UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.RadioNavigationalWarningsData>
+
+@{
+    Layout = "~/Views/Shared/_MSILayout.cshtml";
+}
+
+@{
+    ViewData["Header"] = "Radio Navigation Warnings";
+}
 
 <table class="table">
     <thead>
