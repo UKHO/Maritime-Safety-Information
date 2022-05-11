@@ -76,30 +76,70 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
+		/// <summary>
+        /// 910019 -  Event data for Retrieval of MSI Daily File Request.
+        /// </summary>
+        ShowDailyFilesRequest = 910019,
         /// <summary>
-        /// 910019 -  Unhandled Exception Occured.
+        /// 910020 -  Event data for Retrieval of MSI Daily File Completed.
         /// </summary>
-        UnhandledCleanUpException = 910019,
+        ShowDailyFilesCompleted = 910020,
+        /// <summary>
+        /// 910021 -  Event data for Retrieval of MSI Daily File Response Started.
+        /// </summary>
+        ShowDailyFilesResponseStarted = 910021,
+        /// <summary>
+        /// 910022 -  Event data for Retrieval of MSI Daily File Response Data Found.
+        /// </summary>
+        ShowDailyFilesResponseDataFound = 910022,
+        /// <summary>
+        /// 910023-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        ShowDailyFilesResponseDataNotFound = 910023,
+        /// <summary>
+        /// 910024-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        ShowDailyFilesResponseFailed = 910024,
+        /// <summary>
+        /// 910025-  Event data for Retrieval of MSI Get Daily File Result.
+        /// </summary>
+        GetDailyFilesResultRequest = 910025,
+        /// <summary>
+        /// 910026-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetDailyFilesResultCompleted = 910026,
+        /// <summary>
+        /// 910027-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetWeeklyFilesResultRequest = 910027,
+        /// <summary>
+        /// 910028-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetWeeklyFilesResultRequestCompleted = 910028,
+        /// <summary>
+        /// 910029 -  Unhandled Exception Occured.
+        /// </summary>
+        UnhandledCleanUpException = 910029,
         /// <summary> 
-        /// 910020 -  Maritime safety information request to get RNW records for Admin started.
+        /// 910030 -  Maritime safety information request to get RNW records for Admin started.
         /// </summary>
-        MSIGetRnwForAdminStarted = 910020,
+        MSIGetRnwForAdminStarted = 910030,
         /// <summary> 
-        /// 910021 -  Maritime safety information request to get RNW records for Admin completed.
+        /// 910031 -  Maritime safety information request to get RNW records for Admin completed.
         /// </summary>
-        MSIGetRnwForAdminCompleted = 910021,
+        MSIGetRnwForAdminCompleted = 910031,
         /// <summary> 
-        /// 910022 -  Maritime safety information get RNW records for Admin from database request error.
+        /// 910032 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
-        MSIGetRnwForAdminRequestError = 910022,
+        MSIGetRnwForAdminRequestError = 910032,
         /// <summary> 
-        /// 910023 -  Maritime safety information query to get RNW records for Admin from database started.
+        /// 910033 -  Maritime safety information query to get RNW records for Admin from database started.
         /// </summary>
-        MSIGetRnwForAdminDatabaseCallStarted = 910023,
+        MSIGetRnwForAdminDatabaseCallStarted = 910033,
         /// <summary> 
-        /// 910024 -  Maritime safety information query to get RNW records for Admin from database completed.
+        /// 910034 -  Maritime safety information query to get RNW records for Admin from database completed.
         /// </summary>
-        MSIGetRnwForAdminDatabaseCallCompleted = 910024,
+        MSIGetRnwForAdminDatabaseCallCompleted = 910034,
     }
 
     public static class EventIdExtensions
