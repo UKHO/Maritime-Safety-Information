@@ -2,7 +2,7 @@
 import { expect } from '@playwright/test';
 import type { Page } from 'playwright';
 
-export default class noticeToMarineList
+export default class RadioNavigationalWarningsList
 {
     private page:Page;
 
@@ -13,6 +13,11 @@ export default class noticeToMarineList
         this.year= this.page.locator("#Year");
         this.filter = this.page.locator("#BtnFilter")
         this.createNewRecordText= this.page.locator("#BtnCreate");
+    }
+
+    public async clickCreateRadioNavigationalWarningsRecordList
+    {
+      this.page
     }
     
     public async checkEnabledWarningTypeDropDown()
