@@ -51,6 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             string accessToken = "";
 
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
+           
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
             Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken , CorrelationId);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
