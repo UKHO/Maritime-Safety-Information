@@ -15,9 +15,9 @@ export default class RadioNavigationalWarningsList
         this.createNewRecordText= this.page.locator("#BtnCreate");
     }
 
-    public async clickCreateRadioNavigationalWarningsRecordList
+    public async clickCreateRadioNavigationalWarningsRecordList()
     {
-      this.page
+      this.page.locator("");
     }
     
     public async checkEnabledWarningTypeDropDown()
