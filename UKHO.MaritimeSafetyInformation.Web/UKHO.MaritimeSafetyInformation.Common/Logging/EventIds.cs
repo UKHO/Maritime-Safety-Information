@@ -140,6 +140,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910034 -  Maritime safety information query to get RNW records for Admin from database completed.
         /// </summary>
         MSIGetRnwForAdminDatabaseCallCompleted = 910034,
+        MSIGetRnwDetailStarted = 910035,
+        MSIGetRnwDetailCompleted = 910036
     }
 
     public static class EventIdExtensions

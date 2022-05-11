@@ -45,6 +45,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return radioNavigationalWarningsAdminLists;
         }
 
+        public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList(string correlationId)
+        {
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData
+            = await (from rnwWarnings in _context.RadioNavigationalWarnings
+                     join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
+                     select new RadioNavigationalWarningsData
+                     {
+                         Reference = rnwWarnings.Reference,
+                         DateTimeGroup = rnwWarnings.DateTimeGroup,
+                         Description = rnwWarnings.Summary,
+                     }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
+
+            return radioNavigationalWarningsData;
+        }
+
         public async Task<List<WarningType>> GetWarningTypes()
         {
             return await _context.WarningType.ToListAsync();

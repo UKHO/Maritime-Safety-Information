@@ -68,5 +68,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
+        public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsData(int warningType, bool reLoadData, string correlationId)
+        {
+            try
+            {
+                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
+
+                if (radioNavigationalWarningsData == null || reLoadData)
+                {
+                    radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList(correlationId);
+                }
+                return radioNavigationalWarningsData;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.MSIGetRnwForAdminRequestError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                return new List<RadioNavigationalWarningsData>();
+            }
+        }
+
     }
 }
