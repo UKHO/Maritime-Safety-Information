@@ -1,8 +1,8 @@
 ﻿//Document ready 
 $(function () {
-
+    ShowDailyFilesAsync();
     if ($('#hdnRequestType').val() === "Daily") {
-        ShowDailyFilesAsync();
+        
     }
     else {
         LoadYears();
@@ -87,7 +87,7 @@ function ShowDailyFilesAsync() {
         url: '/NoticesToMariners/ShowDailyFiles',
         type: "GET",
         success: function (data) {
-            $('#divFilesList').html(data);
+            $('#divDailyFilesList').html(data);
         },
         error: function (error) {
             console.log(`Error ${error}`);
