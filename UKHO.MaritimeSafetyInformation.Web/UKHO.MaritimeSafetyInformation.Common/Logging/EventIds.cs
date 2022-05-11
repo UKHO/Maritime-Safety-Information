@@ -76,38 +76,78 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
-        /// <summary>
-        /// 910019 -  Unhandled Exception Occured.
+		/// <summary>
+        /// 910019 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
-        UnhandledCleanUpException = 910019,
+        ShowDailyFilesRequest = 910019,
         /// <summary>
-        /// 910020 -  Maritime safety information create new RNW record request started.
+        /// 910020 -  Event data for Retrieval of MSI Daily File Completed.
         /// </summary>
-        MSICreateNewRNWRecordStart = 910020,
+        ShowDailyFilesCompleted = 910020,
         /// <summary>
-        /// 910021 -  Maritime safety information create new RNW record request Completed.
+        /// 910021 -  Event data for Retrieval of MSI Daily File Response Started.
         /// </summary>
-        MSICreateNewRNWRecordCompleted = 910021,
+        ShowDailyFilesResponseStarted = 910021,
         /// <summary>
-        /// 910022 -  Maritime safety information add new RNW record to database request started.
+        /// 910022 -  Event data for Retrieval of MSI Daily File Response Data Found.
         /// </summary>
-        MSIAddNewRNWRecordStart = 910022,
+        ShowDailyFilesResponseDataFound = 910022,
         /// <summary>
-        /// 910023 -  Maritime safety information add new RNW record to database request Completed.
+        /// 910023-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        MSIAddNewRNWRecordCompleted = 910023,
+        ShowDailyFilesResponseDataNotFound = 910023,
+        /// <summary>
+        /// 910024-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// </summary>
+        ShowDailyFilesResponseFailed = 910024,
+        /// <summary>
+        /// 910025-  Event data for Retrieval of MSI Get Daily File Result.
+        /// </summary>
+        GetDailyFilesResultRequest = 910025,
+        /// <summary>
+        /// 910026-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetDailyFilesResultCompleted = 910026,
+        /// <summary>
+        /// 910027-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetWeeklyFilesResultRequest = 910027,
+        /// <summary>
+        /// 910028-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// </summary>
+        GetWeeklyFilesResultRequestCompleted = 910028,
+        /// <summary>
+        /// 910029 -  Unhandled Exception Occured.
+        /// </summary>
+        UnhandledCleanUpException = 910029,
+        /// <summary>
+        /// 910030 -  Maritime safety information create new RNW record request started.
+        /// </summary>
+        MSICreateNewRNWRecordStart = 910030,
+        /// <summary>
+        /// 910031 -  Maritime safety information create new RNW record request Completed.
+        /// </summary>
+        MSICreateNewRNWRecordCompleted = 910031,
+        /// <summary>
+        /// 910032 -  Maritime safety information add new RNW record to database request started.
+        /// </summary>
+        MSIAddNewRNWRecordStart = 910032,
+        /// <summary>
+        /// 910033 -  Maritime safety information add new RNW record to database request Completed.
+        /// </summary>
+        MSIAddNewRNWRecordCompleted = 910033,
         /// <summary> 
-        /// 910024 -  Maritime safety information add new RNW record to database request error.
+        /// 910034 -  Maritime safety information add new RNW record to database request error.
         /// </summary>
-        MSIAddNewRNWRequestError = 910024,
+        MSIAddNewRNWRequestError = 910034,
         /// <summary> 
-        /// 910025 -  Maritime safety information invalid new RNW record request.
+        /// 910035 -  Maritime safety information invalid new RNW record request.
         /// </summary>
-        MSIInvalidNewRNWRecordRequest = 910025,
+        MSIInvalidNewRNWRecordRequest = 910035,
         /// <summary> 
-        /// 910026 -  Maritime safety information create new RNW record request failed.
+        /// 910036 -  Maritime safety information create new RNW record request failed.
         /// </summary>
-        MSICreateNewRNWRecordFailed = 910026
+        MSICreateNewRNWRecordFailed = 910036
     }
 
     public static class EventIdExtensions

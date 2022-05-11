@@ -67,7 +67,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             return years;
         }
-        public List<KeyValuePair<string, string>> GetAllWeeksofYear(int year, string correlationId)
+
+        public List<KeyValuePair<string, string>> GetAllWeeksOfYear(int year, string correlationId)
         {
             List<KeyValuePair<string, string>> weeks = new();
 
@@ -97,6 +98,39 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
 
             return weeks;
+        }
+
+        public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
+        {
+            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
+            try
+            {
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                const string searchText = $" and $batch(Frequency) eq 'Daily'";
+                IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
+
+                BatchSearchResponse searchResult = result.Data;
+
+                if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
+                {
+                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
+                    showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
+                }
+                else
+                {
+                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
+
+            return showDailyFilesResponses;
+
         }
 
     }
