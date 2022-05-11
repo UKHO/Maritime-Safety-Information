@@ -279,7 +279,7 @@ stages:
       - job: ZAPSecurityTest
         dependsOn: 
         - DevDeployApp
-        pool: $(DeploymentPool)
+        pool: "Azure Pipelines"
         displayName: "ZAP OWASP Security Test"
         variables: 
          url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
