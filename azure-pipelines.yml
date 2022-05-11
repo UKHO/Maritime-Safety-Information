@@ -301,8 +301,12 @@ stages:
           runOnce:
             deploy:
               steps:
-                - bash: echo "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)"
+                - task: PowerShell@2
                   name: SetOutputUrl
+                  inputs:
+                    targetType: 'inline'
+                    script: 'echo "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)"'
+
                 - task: DownloadPipelineArtifact@2
                   displayName: "Download Dackpack Artifact"
                   inputs:
