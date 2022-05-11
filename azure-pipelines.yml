@@ -349,13 +349,16 @@ stages:
                     filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
                     arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
+                - script:
+                   echo "$(WebsiteURL)"
+
       - job: FunctionalAndAccessibilityTests
         dependsOn: 
         - DevDeployApp
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.DevDeployTerraform.outputs['TerraformDeploy.WebsiteURL']  ]
+         url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
