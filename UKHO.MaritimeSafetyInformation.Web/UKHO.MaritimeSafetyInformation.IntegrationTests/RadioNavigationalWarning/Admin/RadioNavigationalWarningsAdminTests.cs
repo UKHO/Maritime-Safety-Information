@@ -41,16 +41,16 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _rnwService);
         }
 
-        [Test]
-        public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
-        {
-            IActionResult result = await _controller.Index(1, null, null, true);
-            RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
+        //[Test]
+        //public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
+        //{
+        //    IActionResult result = await _controller.Index(1, null, null, true);
+        //    RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
 
-            Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 8);
-            Assert.IsTrue(adminListFilter.PageCount == 2);
-            Assert.IsTrue(adminListFilter.SrNo == 0);
-            Assert.IsTrue(adminListFilter.CurrentPageIndex == 1);
-        }
+        //    Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 8);
+        //    Assert.IsTrue(adminListFilter.PageCount == 2);
+        //    Assert.IsTrue(adminListFilter.SrNo == 0);
+        //    Assert.IsTrue(adminListFilter.CurrentPageIndex == 1);
+        //}
     }
 }
