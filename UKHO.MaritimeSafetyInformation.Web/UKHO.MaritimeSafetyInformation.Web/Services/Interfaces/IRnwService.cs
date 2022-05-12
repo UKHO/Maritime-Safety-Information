@@ -4,6 +4,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
     public interface IRnwService
     {
-        Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int warningType, string year, bool reLoadData, string correlationId);
+        Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, bool reLoadData, string correlationId);
     }
 }

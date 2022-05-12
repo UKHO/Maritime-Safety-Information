@@ -23,7 +23,7 @@ import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWar
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
     const radioNavigationalWarningsList = new RadioNavigationalWarningsList(page);
-    radioNavigationalWarningsList.clickCreateRadioNavigationalWarningsRecordList();
+    radioNavigationalWarningsList.goToCreateRadioNavigationalWarningsRecordList();
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);

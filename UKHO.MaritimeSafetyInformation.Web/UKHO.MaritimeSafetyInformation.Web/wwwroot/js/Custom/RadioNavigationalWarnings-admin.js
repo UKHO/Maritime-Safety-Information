@@ -10,15 +10,16 @@ function YearValueChange(Year) {
 }
 
 function RnwFilterList(pageSelectedIndex) {
+    debugger;
     warningTypeSelectedValue = $("#WarningType").val();
     yearSelectedValue = $("#Year").val();
 
     if (yearSelectedValue == undefined) {
-        yearSelectedValue = '';
+        yearSelectedValue = null;
     }
 
     if (warningTypeSelectedValue == undefined) {
-        warningTypeSelectedValue = 0;
+        warningTypeSelectedValue = null;
     }
     var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacepageSelectedIndex&warningType=ReplaceWarningTypeSelectedValue&year=ReplacYeareSelectedValue&reLoadData=ReplacReLoadData";
     rnwUrl = rnwUrl.replace("ReplacepageSelectedIndex", pageSelectedIndex).trim();

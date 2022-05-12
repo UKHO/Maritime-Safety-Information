@@ -22,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int warningType, string year, bool reLoadData, string correlationId)
+        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, bool reLoadData, string correlationId)
         {
             try
             {
@@ -38,14 +38,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = s_allRadioNavigationalWarningsAdminList;
 
-                if (warningType != 0)
+                if (warningType != null)
                 {
                     radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.WarningType == warningType).ToList();
                 }
 
-                if (!string.IsNullOrEmpty(year))
+                if (year != null)
                 {
-                    radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.DateTimeGroup.Year.ToString().Trim() == year).ToList();
+                    radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.DateTimeGroup.Year.ToString().Trim() == year.ToString()).ToList();
                 }
 
                 double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
