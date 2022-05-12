@@ -66,13 +66,13 @@ function getUniqueYearandWeeks(arr, prop, type) {
 function GetCorrespondingWeeks(id, data) {
     if (id != "") {
         $('#ddlWeeks').empty();
-        var weekdata = getUniqueYearandWeeks(data, id, "W").sort()
+        var weekdata = getUniqueYearandWeeks(data, id, "W").sort(function (a, b) { return a - b });
 
         var defaultweek = '<option selected> --Please select week-- </option>'        
         $(defaultweek).appendTo('#ddlWeeks');
 
         for (i = 0; i < weekdata.length; i++) {
-           var week = '<option>' + weekdata[i] + '</option>'
+            var week = '<option>' + weekdata[i] + '</option>'
             $(week).appendTo('#ddlWeeks');
         }
 
@@ -87,31 +87,6 @@ function GetCorrespondingWeeks(id, data) {
         }
     }
 }
-
-////////////function LoadWeeks(selectedYear) {
-//////    if (selectedYear != "") {
-       
-//////        $.ajax({
-//////            url: '/NoticesToMariners/LoadWeeks',
-//////            type: "POST",
-//////            data: {
-//////                year: parseInt(selectedYear)
-//////            },
-//////            dataType: "json",
-//////            success: function (data) {
-//////                $('#ddlWeeks').empty();
-//////                ////////
-//////                $.each(data, function (i, data) {
-//////                    var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
-//////                    $(div_data).appendTo('#ddlWeeks');
-//////                });
-//////            },
-//////            error: function (error) {
-//////                console.log(`Error ${error}`);
-//////            }
-//////        });
-//////    }
-//////}
 
 function ShowWeeklyFilesAsync() {
     let selectedYear = $('#ddlYears').val();

@@ -55,7 +55,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             List<YearWeekModel> yearWeekModelList = new();
             try
-                {
+            {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request Search Attribute Year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
@@ -66,18 +66,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
                     {
-                        if (searchAttributes.Data.BatchAttributes[i].Key == "YEAR / WEEK")
+                        if (searchAttributes.Data.BatchAttributes[i].Key.Trim() == "YEAR/WEEK")
                         {
                             List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
-
                             if (yearWeekList != null && yearWeekList.Count != 0)
                             {
                                 foreach (string yw in yearWeekList)
                                 {
-                                    string[] yearWeek = yw.Split('/');
-                                    yearWeekModelList.Add(new YearWeekModel { Year = yearWeek[0].Trim(), Week = yearWeek[1].Trim() });
+                                    string[] yearWeek = yw.Contains('/') ? yw.Split('/') : null;
+                                    if (yearWeek != null)
+                                    {
+                                        yearWeekModelList.Add(new YearWeekModel { Year = yearWeek[0].Trim(), Week = yearWeek[1].Trim() });
+                                    }
                                 }
-                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request Search Attribute Year and week data recieved successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}" , correlationId);
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request Search Attribute Year and week data recieved successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
                             }
                             else
                             {
@@ -87,10 +89,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     }
                 }
                 else
-                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data recieved from File Share Service for Request Search Attribute Year and week for _X-Correlation-ID:{correlationId}", correlationId);         
+                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data recieved from File Share Service for Request Search Attribute Year and week for _X-Correlation-ID:{correlationId}", correlationId);
             }
-            catch (Exception ex) {
-                _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Request Search Attribute Year and week data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId );
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Request Search Attribute Year and week data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
             return yearWeekModelList;
