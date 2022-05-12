@@ -8,31 +8,27 @@
 <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
 }
 
-<div class="container-fluid">
-    <input type="hidden" id="hdnRequestType" value="Weekly" />
+<input type="hidden" id="hdnRequestType" value="Weekly" />
 
-    <div class="row mb-3">
-        <div class="col-lg-2">Select period</div>
-
-        <label for="ddlYears" class="col-md-2 col-form-label text-start text-lg-end">Year</label>
-        <div class="col-lg-3 col-md-4">
-            <select class="form-select" id="ddlYears">
-                <option selected>Please select year</option>
-            </select>
-        </div>
-
-        <label for="ddlWeeks" class="col-md-2 col-form-label text-start text-lg-end">Week</label>
-        <div class="col-lg-3 col-md-4">
-            <select class="form-select" id="ddlWeeks">
-                <option selected>Please select week</option>
-            </select>
-        </div>
+<div class="row mb-3">        
+    <div class="col-md-3 mb-3">
+        <label for="ddlYears" class="form-label">Select Year</label>
+        <select class="form-select" id="ddlYears">
+            <option selected>Please select year</option>
+        </select>
     </div>
+        
+    <div class="col-md-3 mb-3">
+        <label for="ddlWeeks" class="form-label">Select Week</label>
+        <select class="form-select" id="ddlWeeks">
+            <option selected>Please select week</option>
+        </select>
+    </div>
+</div>
 
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive" id="divFilesList">
-            </div>
+<div class="row">
+    <div class="col">
+        <div class="table-responsive-md" id="divFilesList">
         </div>
     </div>
 </div>

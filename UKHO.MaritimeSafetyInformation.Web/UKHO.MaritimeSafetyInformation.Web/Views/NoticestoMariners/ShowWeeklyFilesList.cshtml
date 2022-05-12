@@ -3,33 +3,36 @@
 @{
     var a = Model;
 }
-<table class="table table-striped">
 
-    @if (Model != null && Model.Count > 0)
-    {
-        <thead>
+@if (Model != null && Model.Count > 0)
+{
+<table class="table table-scroll small-first-col">
+    <caption class="hidden-caption">Notice to Mariners Weekly Updates</caption>
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>File Size</th>
+        </tr>
+    </thead>
+    <tbody class="scroll-content scroll-bar">
+        @foreach (var item in Model)
+        {
             <tr>
-                <td>File Name</td>
-                <td>File Size</td>
+                <td><a href="#">@item.FileDescription</a></td>
+                <td>@item.FileSizeinKB (@item.FileExtension)</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td><a href="#">@item.FileDescription</a></td>
-                    <td>@item.FileSizeinKB (@item.FileExtension)</td>
-                </tr>
-            }
-        </tbody>
-    }
-    else
-    {
-        <tbody>
-            <tr>
-                <td colspan='3'>No data found!!!</td>
-            </tr>
-        </tbody>
-    }
-
+        }
+    </tbody>
 </table>
+}
+else
+{
+    <div class="alert alert-danger" role="alert" aria-atomic="true">
+        <i class="bi bi-exclamation-lg" aria-hidden="true"></i> 
+        <div class="alert-head">There’s a problem</div>
+        <p>It looks like there might be a problem with our system. We’re sorry for the inconvenience. If the problem persists contact <a href="mailto:customerservices@ukho.gov.uk">customerservices@ukho.gov.uk</a></p>
+    </div>
+}
+
+
+
