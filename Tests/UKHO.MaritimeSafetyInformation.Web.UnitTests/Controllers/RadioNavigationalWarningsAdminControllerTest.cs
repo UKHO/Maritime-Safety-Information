@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -41,21 +41,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             Task<IActionResult> result = _controller.Create();
             Assert.IsInstanceOf<Task<IActionResult>>(result);
-        }
-
-        [Test]
-        public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordNotCreated()
-        {
-            var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
-            _controller.TempData = tempData;
-
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(false);
-            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
-
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.IsNotEmpty(_controller.TempData["message"].ToString());
-            Assert.AreEqual("Failed to create record.", _controller.TempData["message"].ToString());
         }
 
         [Test]

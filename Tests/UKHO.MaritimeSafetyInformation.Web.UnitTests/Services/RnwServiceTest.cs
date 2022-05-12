@@ -44,28 +44,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenPostInvalidRequest_ThenReturnFalse()
+        public void  WhenPostInvalidRequest_ThenReturnFalse()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
             _fakeRadioNavigationalWarnings.Reference = "";
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId);
-
-            Assert.IsFalse(result);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
         }
 
         [Test]
-        public async Task WhenPostValidRequestWithException_ThenReturnFalse()
+        public void WhenPostValidRequestWithException_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
 
             A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored)).Throws(new Exception());
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId);
-
-            Assert.IsFalse(result);
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+                               async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
         }
     }
 }

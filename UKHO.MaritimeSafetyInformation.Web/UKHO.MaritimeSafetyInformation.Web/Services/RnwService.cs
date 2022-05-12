@@ -32,14 +32,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 else
                 {
                     _logger.LogInformation(EventIds.MSIInvalidNewRNWRecordRequest.ToEventId(), "Maritime safety information invalid new RNW record request for _X-Correlation-ID:{correlationId}", correlationId);
-
-                    return false;
+                    throw new ArgumentNullException();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.MSIAddNewRNWRequestError.ToEventId(), ex, "Maritime safety information add new RNW record to database request failed with error with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
-                return false;
+                throw;
             }
         }
 

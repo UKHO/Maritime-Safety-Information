@@ -143,11 +143,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910035 -  Maritime safety information invalid new RNW record request.
         /// </summary>
-        MSIInvalidNewRNWRecordRequest = 910035,
-        /// <summary> 
-        /// 910036 -  Maritime safety information create new RNW record request failed.
-        /// </summary>
-        MSICreateNewRNWRecordFailed = 910036
+        MSIInvalidNewRNWRecordRequest = 910035
     }
 
     public static class EventIdExtensions
