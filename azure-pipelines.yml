@@ -289,25 +289,14 @@ stages:
         workspace:
           clean: all
         variables:
-          - group: "Maritime-Safety-Information-Dev-TF-Variables"
-          - group: "Maritime-Safety-Information-Dev-Variables"
           - name: WEB_APP_NAME
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
           - name: MsiWebUrl
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
-          - name: WebsiteURL
-            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
         strategy:
           runOnce:
             deploy:
               steps:
-                - task: PowerShell@2
-                  name: SetOutputUrl
-                  displayName: Setting Output URL Variable for Dev
-                  inputs:
-                    targetType: 'inline'
-                    script: 'echo "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)"'
-
                 - task: DownloadPipelineArtifact@2
                   displayName: "Download Dackpack Artifact"
                   inputs:
@@ -358,11 +347,13 @@ stages:
                     arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
       - job: FunctionalAndAccessibilityTests
-        dependsOn: DevDeployApp
+        dependsOn:
+        - DevDeployTerraform
+        - DevDeployApp
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.SetOutputUrl.WebsiteURL']  ]
+         url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
@@ -401,8 +392,6 @@ stages:
         workspace:
           clean: all
         variables:
-          - group: "Maritime-Safety-Information-QA-TF-Variables"
-          - group: "Maritime-Safety-Information-QA-Variables"
           - name: WEB_APP_NAME
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
           - name: MsiWebUrl
@@ -411,13 +400,6 @@ stages:
           runOnce:
             deploy:
               steps:
-                - task: PowerShell@2
-                  name: SetOutputUrl
-                  displayName: Setting Output URL Variable for QA
-                  inputs:
-                    targetType: 'inline'
-                    script: 'echo "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$(WebsiteURL)"'
-
                 - task: DownloadPipelineArtifact@2
                   displayName: "Download Dackpack Artifact"
                   inputs:
@@ -468,12 +450,13 @@ stages:
                     arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
       - job: FunctionalAndAccessibilityTests
-        dependsOn: 
+        dependsOn:
+        - QADeployTerraform
         - QADeployApp
         pool: $(WindowsPool)
         displayName: "QA Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.QADeployApp.outputs['QADeployApp.SetOutputUrl.WebsiteURL']  ] 
+         url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteURL']  ] 
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
