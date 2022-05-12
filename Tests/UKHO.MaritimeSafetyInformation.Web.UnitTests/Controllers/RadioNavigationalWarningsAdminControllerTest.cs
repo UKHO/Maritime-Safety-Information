@@ -34,7 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenICallIndexView_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
             Task<IActionResult> result = _controller.Index();
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
@@ -42,8 +42,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenICallIndexViewWithParameters_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
-            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: "2020");
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
 
