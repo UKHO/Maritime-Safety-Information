@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
@@ -24,14 +22,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private IRnwService _rnwService;
 
         private RadioNavigationalWarningsAdminController _controller;
-
-        //[OneTimeSetUp]
-        //public async Task OneTimeSetUp()
-        //{
-        //    //Add Value to Database
-        //    await SeedRadioNavigationalWarnings(GetRadioNavigationalWarnings());
-        //    await SeedWarningType(GetWarningTypes());
-        //}
 
         [SetUp]
         public void Setup()
@@ -62,12 +52,5 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.IsTrue(adminListFilter.SrNo == 0);
             Assert.IsTrue(adminListFilter.CurrentPageIndex == 1);
         }
-
-        //[OneTimeTearDown]
-        //public async Task GlobalTearDown()
-        //{
-        //    //Clean up from Database
-        //    await DeSeedRadioNavigationalWarnings();
-        //}
     }
 }
