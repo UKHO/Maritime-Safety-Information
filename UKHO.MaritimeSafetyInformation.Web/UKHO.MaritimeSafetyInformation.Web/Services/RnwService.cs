@@ -26,8 +26,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     _logger.LogInformation(EventIds.MSIAddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
                     await _rnwRepository.AddRadioNavigationWarnings(radioNavigationalWarnings);
                     _logger.LogInformation(EventIds.MSIAddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
-
-                    return true;
                 }
                 else
                 {
@@ -40,6 +38,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.MSIAddNewRNWRequestError.ToEventId(), ex, "Maritime safety information add new RNW record to database request failed with error with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
+
+            return true;
         }
 
         public async Task<List<WarningType>> GetWarningTypes()
