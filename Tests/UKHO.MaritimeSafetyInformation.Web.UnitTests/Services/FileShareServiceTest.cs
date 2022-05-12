@@ -61,6 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
+            _fileShareServiceConfig.Value.BaseUrl = "https://www.abc.com/";
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new ArgumentException("Page size must be greater than zero. (Parameter 'pageSize')"));
            
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
