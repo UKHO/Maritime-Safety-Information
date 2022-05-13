@@ -58,13 +58,16 @@ public async getTableData()
   const yearlyCount = (await this.page.$$("#ddlYears option")).length;
   const weekCount = (await this.page.$$("#ddlWeeks option")).length;
 
-  for(var year=1;year<yearlyCount;year++)
+
+  for(var year=1;year<=yearlyCount-1;year++)
   {
     await this.dropDownYearly.selectOption({index:year});
+    
 
-    for(var week=1;week<weekCount;week++)
+    for(var week=1;week<=weekCount-1;week++)
     {
       await this.dropDownWeekly.selectOption({index:week});
+      
       
      await this.page.waitForSelector("td:nth-child(2)");
       const fileSizeData = await this.page.$$("#divFilesList > table > tbody >tr >td:nth-child(2)");
