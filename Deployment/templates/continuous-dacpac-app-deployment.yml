@@ -1,10 +1,14 @@
+parameters:
+  - name: AzureSubscription
+    type: string
+
 steps:
   - task: DownloadPipelineArtifact@2
-    displayName: "Download Dackpack Artifact"
+    displayName: "Download DACPAC Artifact"
     inputs:
       source: "current"
-      artifact: "Dackpack"
-      path: $(Build.SourcesDirectory)/Dackpack
+      artifact: "DACPAC"
+      path: $(Build.SourcesDirectory)/DACPAC
 
   - task: SqlAzureDacpacDeployment@1
     inputs:
@@ -17,7 +21,7 @@ steps:
       deployType: "DacpacTask"
       DeploymentAction: "Publish"
       IpDetectionMethod: "AutoDetect"
-      DacpacFile: $(Build.SourcesDirectory)/Dackpack/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
+      DacpacFile: $(Build.SourcesDirectory)/DACPAC/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
 
   - task: DownloadPipelineArtifact@2
     displayName: "Download App service Artifact"
@@ -36,7 +40,7 @@ steps:
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: msi-$(Environment)-webapp"
     inputs:
-      azureSubscription: "Maritime Safety Information Dev - A.008.02"
+      azureSubscription: "$${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(WEB_APP_NAME)"
       package: "$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip"
