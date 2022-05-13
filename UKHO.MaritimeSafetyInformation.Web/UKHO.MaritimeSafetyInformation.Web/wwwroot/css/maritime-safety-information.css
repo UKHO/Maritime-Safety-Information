@@ -294,6 +294,9 @@ a:focus, button:focus, .form-select:focus, .form-control:focus {
 table {
   border-collapse: collapse;
 }
+table thead tr th {
+  border-bottom: 0;
+}
 table td {
   border-bottom: 1px solid #d8d8d8 !important;
   border-right: 1px solid #d8d8d8 !important;
