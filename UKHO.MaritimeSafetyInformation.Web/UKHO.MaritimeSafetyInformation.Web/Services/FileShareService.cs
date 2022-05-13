@@ -22,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken, string correlationId)
-        {            
+        {
             IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
             try
             {
@@ -37,8 +37,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.FSSBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response from FSS with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
             }
-            return result;            
+            return result;
         }
 
         public async Task<IResult<BatchAttributesSearchResponse>> FssSearchAttributeAsync(string accessToken, string correlationId)
@@ -58,6 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.FSSSearchAttributeResponseError.ToEventId(), "Failed to get NM batch search attribute with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
             }
             return result;
 

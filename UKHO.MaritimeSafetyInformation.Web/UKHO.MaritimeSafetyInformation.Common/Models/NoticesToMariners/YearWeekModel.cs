@@ -2,7 +2,7 @@
 {
     public class YearWeekModel
     {
-        public string Year { get; set; }
-        public string Week { get; set; }
+        public int Year { get; set; }
+        public int Week { get; set; }
     }
 }

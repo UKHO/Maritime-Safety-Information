@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,12 +58,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
+        public void WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
-            A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
-            Assert.That(result.IsSuccess,Is.False);
+            _fileShareServiceConfig.Value.BaseUrl = "https://www.abc.com/";
+            A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new ArgumentException("Page size must be greater than zero. (Parameter 'pageSize')"));
+           
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
+                   .And.Message.EqualTo("Page size must be greater than zero. (Parameter 'pageSize')")
+                    , async delegate { await _fileShareService.FssBatchSearchAsync("", "", CorrelationId); });           
         }
 
         [Test]
@@ -75,12 +79,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFileShareServiceCallsFssSearchAttributeAsyncWithInvalidData_ThenReturnsException()
+        public void WhenFileShareServiceCallsFssSearchAttributeAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.BaseUrl = "www.test.com/";
-            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<CancellationToken>.Ignored));
-            IResult<BatchAttributesSearchResponse> result = await _fileShareService.FssSearchAttributeAsync("", CorrelationId);
-            Assert.That(result.IsSuccess, Is.False);            
+            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
+            
+            Assert.ThrowsAsync(Is.TypeOf<UriFormatException>()
+                .And.Message.EqualTo("Invalid URI: The format of the URI could not be determined.")
+                , async delegate { await _fileShareService.FssSearchAttributeAsync("", CorrelationId); });          
         }
     }
 }
