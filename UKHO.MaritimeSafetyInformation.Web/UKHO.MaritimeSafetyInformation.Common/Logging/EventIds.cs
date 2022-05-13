@@ -119,7 +119,42 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910029 -  Unhandled Exception Occured.
         /// </summary>
-        UnhandledCleanUpException = 910029
+        UnhandledCleanUpException = 910029,
+
+        /// <summary>
+        /// 910030 -Request For Download Single Weekly NM File Started.
+        /// </summary>
+        DownloadSingleWeeklyNMFileStarted = 910030,
+
+        /// <summary>
+        /// 910031 -Request For Download Single Weekly NM File Completed.
+        /// </summary>
+        DownloadSingleWeeklyNMFileCompleted= 910031,
+
+        /// <summary>
+        /// 910032 - Request To Get Single Weekly NM File Started.
+        /// </summary>
+        GetSingleWeeklyNMFileStarted = 910032,
+
+        /// <summary>
+        /// 910033 - Request To Get Single Weekly NM File Completed.
+        /// </summary>
+        GetSingleWeeklyNMFileCompleted = 910033,
+
+        /// <summary>
+        /// 910034 - Request For FSS To Get Single Weekly NM File Started.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileStarted = 910034,
+
+        /// <summary>
+        /// 910035 - Request For FSS To Get Single Weekly NM File Completed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileCompleted = 910035,
+
+        /// <summary>
+        /// 910036 - Request For FSS To Get Single Weekly NM File Failed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileResponseFailed = 910036,
     }
 
     public static class EventIdExtensions

@@ -30,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
                 IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
-
+               
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
@@ -133,5 +133,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
+        public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId)
+        {
+            _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId,fileName,correlationId);
+
+            string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+
+            _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+
+            return await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
+        }
     }
 }

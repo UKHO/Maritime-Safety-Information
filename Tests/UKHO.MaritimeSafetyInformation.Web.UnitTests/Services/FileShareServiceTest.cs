@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,12 +59,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
+        public void WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
+            _fileShareServiceConfig.Value.BaseUrl =  "https://filesqa.admiralty.co.uk";
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
-            Assert.That(result.IsSuccess,Is.False);
+            Task<IResult<BatchSearchResponse>> result =  _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+        [Test]
+        public void WhenFSSDownloadFileAsyncIsCalled_ThenShouldReturnByteArray()
+        {
+                Stream stream = new System.IO.MemoryStream();
+
+                A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Returns(stream);
+                var result = _fileShareService.FSSDownloadFileAsync("", "","", CorrelationId);
+                Assert.IsInstanceOf<Task<byte[]>>(result);
+
+        }
+
+        [Test]
+        public void WhenFSSDownloadFileAsyncIsCalled_ThenShouldExecuteCatch()
+        {
+            Stream stream = Stream.Null;
+
+            A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Returns(stream);
+            var result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId);
+            Assert.That(result.IsFaulted, Is.True);
         }
     }
 }

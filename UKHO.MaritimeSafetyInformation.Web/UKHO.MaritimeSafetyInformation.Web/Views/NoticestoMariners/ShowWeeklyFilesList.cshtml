@@ -3,6 +3,7 @@
 @{
     var a = Model;
 }
+
 <table class="table table-striped">
 
     @if (Model != null && Model.Count > 0)
@@ -16,9 +17,32 @@
         <tbody>
             @foreach (var item in Model)
             {
+                @Html.Hidden("fileName",item.Filename)
+
+                @Html.Hidden("batchId",item.BatchId)
+
+                @Html.Hidden("mimeType",item.MimeType)
+
                 <tr>
+
+
+
                     <td><a href="#">@item.FileDescription</a></td>
                     <td>@item.FileSizeinKB (@item.FileExtension)</td>
+                    <td>
+
+                        @using (Html.BeginForm("DownloadWeeklyFile", "NoticesToMariners", FormMethod.Post, new { target = "_blank" }))
+                        {
+                            @Html.Hidden("fileName",item.Filename)
+
+                            @Html.Hidden("batchId",item.BatchId)
+
+                            @Html.Hidden("mimeType",item.MimeType)
+                            <input type="submit" value="Download" />
+                        }
+
+                    </td>
+
                 </tr>
             }
         </tbody>

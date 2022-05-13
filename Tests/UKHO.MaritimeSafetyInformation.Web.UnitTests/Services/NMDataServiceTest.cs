@@ -185,6 +185,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
         }
 
+        [Test]
+        public void WhenDownloadFssFileAsyncIsCalled_ThenShouldReturnByteArray()
+        {
+            const string batchId = "";
+            const string filename = "";
+            const string accessToken = "";
+
+            byte[] fileBytes = new byte[100];
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, CorrelationId)).Returns(fileBytes);
+            var result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            Assert.IsInstanceOf<Task<byte[]>>(result);
+        }
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()

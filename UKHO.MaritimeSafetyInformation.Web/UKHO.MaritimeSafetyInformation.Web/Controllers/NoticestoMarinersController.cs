@@ -20,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
             return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
-        }   
+        }
 
         public IActionResult DailyFiles()
         {
@@ -59,6 +59,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", showDailyFilesResponseModels);
 
+        }
+
+        public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
+        {
+            _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download single weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
+
+            _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            return File(fileBytes, mimeType);
         }
     }
 }

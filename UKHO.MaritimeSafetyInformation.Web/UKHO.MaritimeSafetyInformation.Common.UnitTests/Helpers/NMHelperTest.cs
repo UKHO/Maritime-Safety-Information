@@ -195,6 +195,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.AreEqual(expectedDate, actualDate);
         }
 
+        [Test]
+        public void WhenGetFormattedDateIsCalled_ThenShouldReturnEmptyString()
+        {
+            const string strDate = "";
+            string actualDate = NMHelper.GetFormattedDate(strDate);
+            const string expectedDate = "";
+            Assert.AreEqual(expectedDate, actualDate);
+        }
+
         private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse searchResult = new()

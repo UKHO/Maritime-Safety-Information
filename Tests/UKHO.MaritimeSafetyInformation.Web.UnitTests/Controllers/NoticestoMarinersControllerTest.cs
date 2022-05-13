@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
@@ -93,6 +94,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<PartialViewResult>(result);
             string actualView = ((PartialViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
+        public async Task DownloadWeeklyFile()
+        {
+            ShowFilesResponseModel showFilesResponseModel = new() { MimeType= "application/pdf" };
+
+            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            IActionResult result = await _controller.DownloadWeeklyFile("", "", "application/pdf");
+            Assert.IsInstanceOf<FileResult>(result);
         }
     }
 }
