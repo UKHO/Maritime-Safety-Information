@@ -90,7 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
-            List<RadioNavigationalWarningsAdminList> result = await _rnwRepository.GetRadioNavigationWarningsAdminList(string.Empty);            
+            List<RadioNavigationalWarningsAdminList> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();            
             Assert.IsTrue(result.Count == 4);
             Assert.AreEqual(4, result[0].Id);
             Assert.AreEqual("011200 UTC Jan 22", result[0].DateTimeGroupRnwFormat);

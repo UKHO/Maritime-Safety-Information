@@ -19,10 +19,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList(string correlationId)
+        public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList()
         {
-            _logger.LogInformation(EventIds.MSIGetRnwForAdminDatabaseCallStarted.ToEventId(), "Maritime safety information query to get RNW records for Admin from database started for _X-Correlation-ID:{correlationId}", correlationId);
-
             List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminLists
             = await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
@@ -41,7 +39,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          WarningTypeName = warning.Name
                      }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
 
-            _logger.LogInformation(EventIds.MSIGetRnwForAdminDatabaseCallCompleted.ToEventId(), "Maritime safety information query to get RNW records for Admin from database completed for _X-Correlation-ID:{correlationId}", correlationId);
             return radioNavigationalWarningsAdminLists;
         }
 
