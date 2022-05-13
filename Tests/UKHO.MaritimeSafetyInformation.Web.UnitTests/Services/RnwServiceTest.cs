@@ -149,11 +149,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetRadioNavigationWarningsWithInValidAdminListRecordPerPage_ThenThrowExceptionWithNullObject()
+        public void WhenCallGetRadioNavigationWarningsWithInValidAdminListRecordPerPage_ThenThrowDivideByZeroException()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 0;
-            RadioNavigationalWarningsAdminListFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, true, string.Empty);
-            Assert.IsTrue(result.RadioNavigationalWarningsAdminList == null);
+            Assert.ThrowsAsync(Is.TypeOf<DivideByZeroException>(),
+                           async delegate { await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, true, string.Empty); });
         }
 
         [Test]

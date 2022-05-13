@@ -33,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (s_allRadioNavigationalWarningsAdminList == null || reLoadData)
                 {
-                    s_allRadioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList(correlationId);
+                    s_allRadioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList();
                 }
 
                 List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = s_allRadioNavigationalWarningsAdminList;
@@ -64,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.MSIGetRnwForAdminRequestError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
-                return new RadioNavigationalWarningsAdminListFilter();
+                throw;
             }
         }
 
