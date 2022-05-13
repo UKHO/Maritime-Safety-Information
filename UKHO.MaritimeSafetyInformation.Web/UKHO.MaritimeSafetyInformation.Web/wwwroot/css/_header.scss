@@ -54,6 +54,10 @@
                 padding: 0;
                 margin: 0;
 
+                @media screen and (max-width: $x-large) {
+                    width: 8rem;
+                }
+
                 @media screen and (max-width: $medium) {
                     width: 7rem;
                 }
@@ -85,7 +89,7 @@
         }
 
         @media screen and (max-width: $xx-small) {
-            top: 83px;
+            top: 63px;
         }
 
         .navbar-nav {
@@ -100,6 +104,10 @@
 
                 a {
                     padding: 2rem 1rem;
+
+                    @media screen and (max-width: $x-large) {
+                        font-size: 14px;
+                    }
 
                     @media screen and (max-width: $large) {
                         padding: 0.5rem 1rem;
@@ -141,7 +149,7 @@
         color: $prussian-blue;
         text-decoration: none !important;
 
-        @media screen and (max-width: $medium) {
+        @media screen and (max-width: $x-large) {
             font-size: 24px;
         }
 
@@ -152,7 +160,7 @@
         }
 
         @media screen and (max-width: $xx-small) {
-            flex-basis: 70%;
+            flex-basis: 90%;
         }
     }
 }

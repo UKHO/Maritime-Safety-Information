@@ -14,23 +14,51 @@ a, button, .form-select, .form-control {
     }
 }
 .alert {
-    padding: 30px;
-    background-color: $azurish-white;
+    padding: 20px 30px 30px;    
     border-radius: 0;
     border: 0;
-    border-left: 6px solid $ocean-boat-blue;
-    color: $prussian-blue;
 
-    h5 {
+    .alert-head {
         display: inline-block;
         margin-left: 10px;
+        margin-bottom: 0;
+        font-weight: normal;
+        font-size: 21px;
+        line-height: 30px;
     }
 
     p {
         margin-bottom: 0;
+        margin-top: 5px;
     }
 }
-@import "variables";
+.alert-primary {
+    background-color: $azurish-white;
+    border-left: 6px solid $ocean-boat-blue;
+    color: $prussian-blue;
+
+    .alert-head {
+        color: $prussian-blue;
+    }
+}
+
+.alert-danger {
+    background-color: #F7E1E1;
+    border-left: 6px solid #E20D0D;
+    color: $prussian-blue;
+
+    i.bi {
+        font-size: 26px;
+        position: relative;
+        top: 4px;
+        left: -10px;
+    }
+
+    .alert-head {
+        color: $prussian-blue;
+        margin-left:-10px;
+    }
+}
 
 table {
     border-collapse: collapse;
@@ -41,17 +69,25 @@ table {
     }
 }
 
+.hidden-caption {
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px,1px,1px,1px);
+    margin-top: -1px;
+}
+
 .form-label {
     margin-bottom: 0.5rem !important;
-    font-size: 18px;
-    font-weight:400;
+    font-size: 16px;
+    font-weight: 400;
 }
 
 button {
     height: auto;
     min-width: auto;
     font-size: 18px;
-    padding: 7px 18px;
+    padding: 12px 18px;
 
     &:active {
         background-color: $prussian-blue;
@@ -78,6 +114,8 @@ button {
 .form-select, .form-control {
     border-radius: 0;
     border: 2px solid $eerie-black;
+    font-size:21px;
+    color:$black;
 
     &:focus {
         border-color: $eerie-black;
@@ -86,6 +124,7 @@ button {
 
 .form-select option {
     font-weight: 300;
+    font-size: 16px;
 }
 
 .pagination {
@@ -115,5 +154,140 @@ button {
         }
     }
 }
+.main-content{
+    padding:2rem 0;
+}
+.table-scroll {
+    display: block;
+    empty-cells: show;
+    border-spacing: 0;
+
+    &.small-first-col {
+        td, th {
+            &:first-child {
+                word-break: break-all;
+            }
+        }
+    }
+
+    thead {
+        background-color: #f1f1f1;
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    tbody {
+        display: block;
+        position: relative;
+        width: 100%;
+        overflow-y: scroll;
+
+        &.scroll-content {
+            max-height: 54vh;
+            padding-right: 4px;
+        }
+    }
+
+    tr {
+        width: 100%;
+        display: flex;
+    }
+
+    td, th {
+        flex-basis: 100%;
+        flex-grow: 2;
+        display: block;
+        text-align: left;
+    }
+}
+.scroll-bar {
+    scrollbar-color: $davys-grey $lavender-gray;
+}
+.scroll-bar {
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: $davys-grey; //forground dark color
+        border-radius: 50px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: $lavender-gray; //background light color
+        border-radius: 50px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 30px rgb(89, 89, 89); //forground dark color
+        border-radius: 5px;
+    }
+}
+.msi-page-nav {
+    margin-top: 91px;
+
+    @media screen and (max-width: $medium) {
+        margin-top:0;
+    }
+
+    li {
+        transform: none;
+        padding: 0;
+        margin: 0;
+
+        &:before {
+            content: none;
+        }
+
+        a {
+            font-size: 16px;
+            padding: 0.5rem;
+            color: $prussian-blue;
+
+            @media screen and (max-width: $x-large) {
+                font-size: 14px;
+            }
+
+            &.active {
+                background-color: $prussian-blue;
+                color: $white;
+                border-radius: 2px;
+
+                &:focus {
+                    color: $white;
+                }
+            }
+
+            &:focus {
+                color: $prussian-blue;
+            }
+        }
+    }
+}
+.msi-tabs {
+    margin-bottom: 20px;
+
+    li {
+        transform: none;
+        margin: 0;
+        padding: 0;
+
+        &:before {
+            content: none;
+        }
+
+        .nav-link {
+            color: $prussian-blue;
+            border-width: 0 0 5px 0;
+            border-color: transparent;
+            padding:0.5rem 1.5rem;
+            border-radius:0;
+
+            &.active {
+                border-color: $prussian-blue;
+            }
+        }
+    }
+}
+
+
 
 
