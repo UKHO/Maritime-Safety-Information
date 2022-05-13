@@ -42,7 +42,12 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
-                        <th style="width:190px"></th>
+                         <th style="width:100px">
+                            @Html.ActionLink("Select All", "View details", new { /* id=item.PrimaryKey */ })
+                        </th>
+                        <th style="width:80px">
+                            Select
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="scroll-content scroll-bar">
@@ -58,9 +63,10 @@
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td>
-                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                @Html.ActionLink("View details", "View details", new { /* id=item.PrimaryKey */ })
+                            </td>
+                            <td>
+                                <input type="checkbox" name="name2" />&nbsp;
                             </td>
                         </tr>
                     }
