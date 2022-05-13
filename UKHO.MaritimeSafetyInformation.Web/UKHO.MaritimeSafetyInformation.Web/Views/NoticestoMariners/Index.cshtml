@@ -1,12 +1,13 @@
-﻿
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+@model ShowWeeklyFilesResponseModel
 @{
     Layout = "~/Views/Shared/_MSILayout.cshtml";
 }
 
 @section Scripts
-{
+    {
 <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
-}
+    }
 @{
     ViewData["Header"] = "Notice to Mariners";
 }
@@ -28,27 +29,41 @@
 <div class="tab-content" id="nmTabContent">
     <div class="tab-pane fade show active" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
         <input type="hidden" id="hdnRequestType" value="Weekly" />
+        @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
+        {
+            <div class="row mb-3">
+                <div class="col-md-3 mb-3">
+                    <label for="ddlYears" class="form-label">Select Year</label>
+                    @*<select class="form-select" id="ddlYears">
+                        <option selected>Please select year</option>
+                        </select>*@
 
-        <div class="row mb-3">        
-            <div class="col-md-3 mb-3">
-                <label for="ddlYears" class="form-label">Select Year</label>
-                <select class="form-select" id="ddlYears">
-                    <option selected>Please select year</option>
-                </select>
-            </div>
-        
-            <div class="col-md-3 mb-3">
-                <label for="ddlWeeks" class="form-label">Select Week</label>
-                <select class="form-select" id="ddlWeeks">
-                    <option selected>Please select week</option>
-                </select>
-            </div>
-        </div>
+                    @*@Html.DropDownList("year", (List<SelectListItem>)ViewBag.Years, new { onchange = "this.form.submit();",@class = "form-control" })*@
+                    @Html.DropDownList("year", @Model.Years, new { onchange = "YearValueChange(this);this.form.submit();",@class = "form-control" })
 
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label for="ddlWeeks" class="form-label">Select Week</label>
+                    @*<select class="form-select" id="ddlWeeks">
+                        <option selected>Please select week</option>
+                        </select>*@
+
+                    @*@Html.DropDownList("week", (List<SelectListItem>)ViewBag.Weeks,new { onchange = "this.form.submit();",@class = "form-control" })*@
+                    @Html.DropDownList("week", @Model.Weeks,new { onchange = "this.form.submit();",@class = "form-control" })
+
+                </div>
+            </div>
+        }
         <div class="row">
             <div class="col">
-                <div class="table-responsive-md" id="divFilesList">
-                </div>
+                @if (@Model != null)
+                {
+                    <partial name="ShowWeeklyFilesList" model="@Model.ShowFilesResponseModel" />
+                }
+                @*@Html.Partial("ShowWeeklyFilesList", Model)*@
+                @* <div class="table-responsive-md" id="divFilesList">
+                    </div>*@
             </div>
         </div>
     </div>

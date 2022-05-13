@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
@@ -68,6 +69,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return years;
         }
 
+        public List<SelectListItem> GetAllYearsSelectItem(string correlationId)
+        {
+            List<SelectListItem> years = new();
+
+            _logger.LogInformation(EventIds.GetAllYearsStarted.ToEventId(), "Maritime safety information request to get all years to populate year dropdown started", correlationId);
+
+            years.Add(new SelectListItem("Year", "0"));
+            for (int i = 0; i < 3; i++)
+            {
+                string year = (DateTime.Now.Year - i).ToString();
+                if (i == 0)
+                    years.Add(new SelectListItem(year, year, true));
+                else
+                    years.Add(new SelectListItem(year, year));
+            }
+
+            return years;
+        }
+
         public List<KeyValuePair<string, string>> GetAllWeeksOfYear(int year, string correlationId)
         {
             List<KeyValuePair<string, string>> weeks = new();
@@ -95,6 +115,38 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 string week = (i + 1).ToString();
                 weeks.Add(new KeyValuePair<string, string>(week, week));
+            }
+
+            return weeks;
+        }
+
+        public List<SelectListItem> GetAllWeeksOfYearSelectItem(int year, string correlationId)
+        {
+            List<SelectListItem> weeks = new();
+
+            _logger.LogInformation(EventIds.GetAllWeeksOfYearStarted.ToEventId(), "Maritime safety information request to get all weeks of year to populate week dropdown started", correlationId);
+
+            weeks.Add(new SelectListItem("Week Number", ""));
+
+            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+            DateTime lastdate;
+            if (DateTime.Now.Year == year)
+            {
+                lastdate = new DateTime(year, DateTime.Now.Month, DateTime.Now.Day);
+            }
+            else
+            {
+                lastdate = new DateTime(year, 12, 31);
+            }
+            Calendar calender = dateTimeFormatInfo.Calendar;
+
+            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule,
+                                                dateTimeFormatInfo.FirstDayOfWeek);
+
+            for (int i = 0; i < totalWeeks; i++)
+            {
+                string week = (i + 1).ToString();
+                weeks.Add(new SelectListItem(week, week));
             }
 
             return weeks;
