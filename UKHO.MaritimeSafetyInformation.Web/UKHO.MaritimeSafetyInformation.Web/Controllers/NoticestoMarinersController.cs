@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -17,32 +18,59 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _nMDataService = nMDataService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
             //ShowWeeklyFilesResponseModel showWeeklyFiles = new ShowWeeklyFilesResponseModel();
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
             //return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");
-            showWeeklyFiles.Years = _nMDataService.GetAllYearsSelectItem(GetCurrentCorrelationId());
-            showWeeklyFiles.Weeks = _nMDataService.GetAllWeeksOfYearSelectItem(Convert.ToInt32(showWeeklyFiles.Years[1].Value), GetCurrentCorrelationId());
+            //showWeeklyFiles.Years = _nMDataService.GetAllYearsSelectItem(GetCurrentCorrelationId());
+            //showWeeklyFiles.Weeks = _nMDataService.GetAllWeeksOfYearSelectItem(Convert.ToInt32(showWeeklyFiles.Years[1].Value), GetCurrentCorrelationId());
+            //showWeeklyFiles.ShowFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(Convert.ToInt32(showWeeklyFiles.Years[1].Value), Convert.ToInt32(showWeeklyFiles.Weeks[showWeeklyFiles.Weeks.Count - 1].Value), GetCurrentCorrelationId());
+
+            showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
+
+            TempData["tdYear"] = Convert.ToInt32(showWeeklyFiles.Years.Where(x => x.Selected).OrderByDescending(x => x.Value).Select(x => x.Value).FirstOrDefault());
+            TempData["tdWeek"] = Convert.ToInt32(showWeeklyFiles.Weeks.Where(x => x.Selected).OrderByDescending(x => x.Value).Select(x => x.Value).FirstOrDefault());
+
+            TempData.Keep("tdWeek");
+            TempData.Keep("tdYear");
+
             return View(showWeeklyFiles);
         }
 
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(int? year, int? week)
+        public async Task<IActionResult> IndexAsync(int year, int week)
         {
             List<ShowFilesResponseModel> listFiles = new List<ShowFilesResponseModel>();
-            if (year.HasValue)
+            if (year != 0)
             {
-                showWeeklyFiles.Years = _nMDataService.GetAllYearsSelectItem(GetCurrentCorrelationId());
-                showWeeklyFiles.Weeks = _nMDataService.GetAllWeeksOfYearSelectItem((int)year, GetCurrentCorrelationId());
+                //showWeeklyFiles.Years = _nMDataService.GetAllYearsSelectItem(GetCurrentCorrelationId());
+                //showWeeklyFiles.Weeks = _nMDataService.GetAllWeeksOfYearSelectItem((int)year, GetCurrentCorrelationId());
+                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
             }
 
-            if (year.HasValue && week.HasValue)
+            if (year != 0 && week != 0)
             {
-                showWeeklyFiles.Years = _nMDataService.GetAllYearsSelectItem(GetCurrentCorrelationId());
-                showWeeklyFiles.Weeks = _nMDataService.GetAllWeeksOfYearSelectItem((int)year, GetCurrentCorrelationId());
+                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
-                showWeeklyFiles.ShowFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles((int)year, (int)week, GetCurrentCorrelationId());
+                //showWeeklyFiles.ShowFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles((int)year, (int)week, GetCurrentCorrelationId());
+
+                TempData["tdYear"] = year;
+                TempData["tdWeek"] = week;
+
+                TempData.Keep("tdWeek");
+                TempData.Keep("tdYear");
+            }
+            else if (year != 0 && week == 0)
+            {
+                if (TempData["tdYear"] != null && TempData["tdWeek"] != null)
+                {
+                    TempData.Keep("tdWeek");
+                    TempData.Keep("tdYear");
+
+                    //showWeeklyFiles.ShowFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles((int)TempData["tdYear"], (int)TempData["tdWeek"], GetCurrentCorrelationId());
+                    showWeeklyFiles.ShowFilesResponseModel = (await _nMDataService.GetWeeklyFilesResponseModelsAsync((int)TempData["tdYear"], (int)TempData["tdWeek"], GetCurrentCorrelationId())).ShowFilesResponseModel;
+                }
             }
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
             //return View("~/Views/NoticesToMariners/FilterWeeklyFiles.cshtml");

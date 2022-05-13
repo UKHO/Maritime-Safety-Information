@@ -11,5 +11,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         List<SelectListItem> GetAllYearsSelectItem(string correlationId);
         List<KeyValuePair<string, string>> GetAllWeeksOfYear(int year, string correlationId);
         List<SelectListItem> GetAllWeeksOfYearSelectItem(int year, string correlationId);
+        Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId);
     }
 }

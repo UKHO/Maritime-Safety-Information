@@ -146,7 +146,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             for (int i = 0; i < totalWeeks; i++)
             {
                 string week = (i + 1).ToString();
-                weeks.Add(new SelectListItem(week, week));
+                if (i == totalWeeks - 1)
+                    weeks.Add(new SelectListItem(week, week, true));
+                else
+                    weeks.Add(new SelectListItem(week, week));
             }
 
             return weeks;
@@ -183,6 +186,37 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             return showDailyFilesResponses;
 
+        }
+
+        public async Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId)
+        {
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
+
+            if (year != 0 && week == 0)
+            {
+                showWeeklyFilesResponses.Years = GetAllYearsSelectItem(correlationId);
+                showWeeklyFilesResponses.Weeks = GetAllWeeksOfYearSelectItem(year, correlationId);
+            }
+            if (year != 0 && week != 0)
+            {
+                showWeeklyFilesResponses.Years = GetAllYearsSelectItem(correlationId);
+                showWeeklyFilesResponses.Weeks = GetAllWeeksOfYearSelectItem(year, correlationId);
+
+                showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
+            }
+
+            if (year == 0 && week == 0)
+            {
+                showWeeklyFilesResponses.Years = GetAllYearsSelectItem(correlationId);
+                year = Convert.ToInt32(showWeeklyFilesResponses.Years.Where(x => x.Selected).OrderByDescending(x => x.Value).Select(x => x.Value).FirstOrDefault());
+
+                showWeeklyFilesResponses.Weeks = GetAllWeeksOfYearSelectItem(Convert.ToInt32(showWeeklyFilesResponses.Years[1].Value), correlationId);
+                week = Convert.ToInt32(showWeeklyFilesResponses.Weeks.Where(x => x.Selected).OrderByDescending(x => x.Value).Select(x => x.Value).FirstOrDefault());
+
+                showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
+            }
+
+            return showWeeklyFilesResponses;
         }
 
     }
