@@ -22,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int warningType, string year, bool reLoadData, string correlationId)
+        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, bool reLoadData, string correlationId)
         {
             try
             {
@@ -33,19 +33,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (s_allRadioNavigationalWarningsAdminList == null || reLoadData)
                 {
-                    s_allRadioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList(correlationId);
+                    s_allRadioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList();
                 }
 
                 List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = s_allRadioNavigationalWarningsAdminList;
 
-                if (warningType != 0)
+                if (warningType != null)
                 {
                     radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.WarningType == warningType).ToList();
                 }
 
-                if (!string.IsNullOrEmpty(year))
+                if (year != null)
                 {
-                    radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.DateTimeGroup.Year.ToString().Trim() == year).ToList();
+                    radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Where(a => a.DateTimeGroup.Year.ToString().Trim() == year.ToString()).ToList();
                 }
 
                 double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
@@ -64,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.MSIGetRnwForAdminRequestError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
-                return new RadioNavigationalWarningsAdminListFilter();
+                throw;
             }
         }
 

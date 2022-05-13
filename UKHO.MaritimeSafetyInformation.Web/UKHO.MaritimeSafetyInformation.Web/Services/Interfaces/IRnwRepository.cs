@@ -5,7 +5,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public interface IRnwRepository
     {
-        Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList(string correlationId);        
+        Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList();        
 
         Task<List<WarningType>> GetWarningTypes();
 
