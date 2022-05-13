@@ -1,0 +1,49 @@
+steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: "Download Dackpack Artifact"
+    inputs:
+      source: "current"
+      artifact: "Dackpack"
+      path: $(Build.SourcesDirectory)/Dackpack
+
+  - task: SqlAzureDacpacDeployment@1
+    inputs:
+      azureSubscription: SharedServicesPre
+      AuthenticationType: "server"
+      ServerName: $(RNW_DB_Server)
+      DatabaseName: $(RNW_DB_Name)
+      SqlUsername: $(RNW_DB_Deploy_SQLUser)
+      SqlPassword: $(RNW_DB_Deploy_SQLPass)
+      deployType: "DacpacTask"
+      DeploymentAction: "Publish"
+      IpDetectionMethod: "AutoDetect"
+      DacpacFile: $(Build.SourcesDirectory)/Dackpack/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
+
+  - task: DownloadPipelineArtifact@2
+    displayName: "Download App service Artifact"
+    inputs:
+      source: "current"
+      artifact: "MaritimeSafetyInformation"
+      path: $(Build.SourcesDirectory)/MaritimeSafetyInformation
+
+  - task: FileTransform@1
+    displayName: "File Transform: WebAppSettings"
+    inputs:
+      folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
+      fileType: 'json'
+      targetFiles: '**/appsettings.json'
+
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: msi-$(Environment)-webapp"
+    inputs:
+      azureSubscription: "Maritime Safety Information Dev - A.008.02"
+      appType: webApp
+      appName: "$(WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip"
+
+  - task: PowerShell@2
+    displayName: "Check the status of Service"
+    inputs:
+      targetType: filePath
+      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+      arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
