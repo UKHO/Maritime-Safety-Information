@@ -62,6 +62,11 @@ a, button, .form-select, .form-control {
 
 table {
     border-collapse: collapse;
+    thead{
+        tr th{
+            border-bottom:0;
+        }
+    }
 
     td {
         border-bottom: 1px solid $light-silver !important;
