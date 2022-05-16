@@ -1,5 +1,7 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -7,6 +9,8 @@ using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using UKHO.MaritimeSafetyInformation.Web.Controllers;
+using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning
 {
@@ -14,6 +18,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
     {
         public readonly RadioNavigationalWarningsContext _fakeContext;
         public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
+        public IHttpContextAccessor _fakeHttpContextAccessor;
+        public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
+        public ILogger<RnwRepository> _fakeLoggerRnwRepository;
+        public ILogger<RnwService> _fakeLoggerRnwService;
 
         public RnwTestsHelper()
         {
@@ -21,55 +29,45 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                                                                     .UseInMemoryDatabase("msi-in-db");
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
-            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
+            _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
+            _fakeLoggerRnwRepository = A.Fake<ILogger<RnwRepository>>();
+            _fakeLoggerRnwService = A.Fake<ILogger<RnwService>>();
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
 
         #region DBMethods
-        //public async Task SeedRadioNavigationalWarnings(List<RadioNavigationalWarnings> radioNavigationalWarnings)
-        //{
-        //    // Add all the  Warnings
-        //    _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarnings);
-        //    await _fakeContext.SaveChangesAsync();
-        //}
-
-        //public async Task SeedWarningType(List<WarningType> warningTypes)
-        //{
-        //    // Add all the  Warnings Type
-        //    _fakeContext.WarningType.AddRange(warningTypes);
-        //    await _fakeContext.SaveChangesAsync();
-        //}
-
-        //public async Task DeSeedRadioNavigationalWarnings()
-        //{
-        //    // Remove all the Warnings
-        //    DbSet<RadioNavigationalWarnings> warnings = _fakeContext.RadioNavigationalWarnings;
-        //    _fakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
-        //    await _fakeContext.SaveChangesAsync();
-        //}
-
-        public void SeedRadioNavigationalWarnings(List<RadioNavigationalWarnings> radioNavigationalWarnings)
+        public async Task SeedRadioNavigationalWarnings(List<RadioNavigationalWarnings> radioNavigationalWarnings)
         {
-            // Add all the  Warnings
+            // Add Warnings
             _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarnings);
-            _fakeContext.SaveChangesAsync();
+            await _fakeContext.SaveChangesAsync();
         }
 
-        public void  SeedWarningType(List<WarningType> warningTypes)
+        public async Task SeedWarningType(List<WarningType> warningTypes)
         {
-            // Add all the  Warnings Type
+            // Add Warnings Type
             _fakeContext.WarningType.AddRange(warningTypes);
-             _fakeContext.SaveChangesAsync();
+            await _fakeContext.SaveChangesAsync();
         }
 
-        public void DeSeedRadioNavigationalWarnings()
+        public async Task DeSeedRadioNavigationalWarnings()
         {
-            // Remove all the Warnings
+            // Remove all Warnings
             DbSet<RadioNavigationalWarnings> warnings = _fakeContext.RadioNavigationalWarnings;
             _fakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
-             _fakeContext.SaveChangesAsync();
+            await _fakeContext.SaveChangesAsync();
         }
-        #endregion DBMethods
 
+        public async Task DeSeedWarningType()
+        {
+            // Remove all the Warning Type
+            DbSet<WarningType> warningType = _fakeContext.WarningType;
+            _fakeContext.WarningType.RemoveRange(warningType);
+            await _fakeContext.SaveChangesAsync();
+        }
+
+        #endregion DBMethods
         public static List<RadioNavigationalWarnings> GetRadioNavigationalWarnings()
         {
             List<RadioNavigationalWarnings> radioNavigationalWarningList = new();
@@ -80,7 +78,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                IsDeleted = true,
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
@@ -134,7 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2023, 1, 1),
                 Summary = "NORTHEAST ATLANTIC. Outer Hebrides Westwards. Live weapons firing in progress.",
-                Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224."
+                Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224.",
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
@@ -149,7 +148,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                  + "Group Call (EGC) and/or relevant NAVTEX transmitters.  C. The complete texts of all in-force NAVAREA I warnings,"
                  + "including those which are no longer being broadcast, are reprinted in Section III of ANMB in weeks 1, 13, 26 and 39"
                  + "and are also available from the UKHO website at: www.admiralty.co.uk/RNW.  Alternatively, these may be requested by"
-                 + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22."
+                 + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22.",
             });
             return radioNavigationalWarningList;
         }
