@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO
 {
@@ -12,6 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
 
         [DisplayName("Warning Type")]
         [Required]
+        [Range(WarningTypes.NAVAREA_1, WarningTypes.UK_Coastal)]
         public int WarningType { get; set; }
 
         [Required]

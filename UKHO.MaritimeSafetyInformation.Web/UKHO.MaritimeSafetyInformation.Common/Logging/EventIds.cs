@@ -143,7 +143,24 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910035 -  Maritime safety information invalid new RNW record request.
         /// </summary>
-        MSIInvalidNewRNWRecordRequest = 910035
+        MSIInvalidNewRNWRecordRequest = 910035,
+        /// <summary> 
+        /// 910036 -  Maritime safety information invalid value received for parameter warningType.
+        /// </summary>
+        MSIInvalidWarningTypeInRequest = 910036,
+        /// <summary> 
+        /// 910037 -  Maritime safety information invalid value received for parameter reference.
+        /// </summary>
+        MSIInvalidReferenceInRequest = 910037,
+        /// <summary> 
+        /// 910038 -  Maritime safety information invalid value received for parameter summary.
+        /// </summary>
+        MSIInvalidSummaryInRequest = 910038,
+        /// <summary> 
+        /// 910039 -  Maritime safety information invalid value received for parameter content.
+        /// </summary>
+        MSIInvalidContentInRequest = 910039
+
     }
 
     public static class EventIdExtensions
