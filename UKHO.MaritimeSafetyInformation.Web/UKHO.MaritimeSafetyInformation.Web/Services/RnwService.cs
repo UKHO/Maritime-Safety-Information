@@ -72,12 +72,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
+                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList(correlationId);
 
-                if (radioNavigationalWarningsData == null || reLoadData)
-                {
-                    radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList(correlationId);
-                }
                 return radioNavigationalWarningsData;
             }
             catch (Exception ex)

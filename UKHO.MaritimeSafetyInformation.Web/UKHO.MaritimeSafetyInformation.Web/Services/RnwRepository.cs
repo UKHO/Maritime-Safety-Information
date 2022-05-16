@@ -47,11 +47,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData
             = await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
+                     where !rnwWarnings.IsDeleted
                      select new RadioNavigationalWarningsData
                      {
                          Reference = rnwWarnings.Reference,
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
                          Description = rnwWarnings.Summary,
+                         DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
                      }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
 
             return radioNavigationalWarningsData;
