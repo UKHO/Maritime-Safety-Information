@@ -243,6 +243,13 @@
   clear: both;
 }
 
+.notice-to-mariners-weekly-table thead tr th.th-3 {
+  flex-basis: 35%;
+}
+.notice-to-mariners-weekly-table tbody tr td.td-3 {
+  flex-basis: 35%;
+}
+
 a:focus, button:focus, .form-select:focus, .form-control:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
@@ -355,6 +362,11 @@ button:active {
   border-color: #1C1F22;
 }
 
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231C1F22' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-size: 1.2rem 1.2rem;
+}
+
 .form-select option {
   font-weight: 300;
   font-size: 16px;
@@ -412,6 +424,9 @@ button:active {
   max-height: 54vh;
   padding-right: 4px;
 }
+.table-scroll tbody td a {
+  font-weight: 300;
+}
 .table-scroll tr {
   width: 100%;
   display: flex;
@@ -419,8 +434,8 @@ button:active {
 .table-scroll td, .table-scroll th {
   flex-basis: 100%;
   flex-grow: 2;
-  display: block;
-  text-align: left;
+  display: flex;
+  align-items: center;
 }
 
 .scroll-bar {
