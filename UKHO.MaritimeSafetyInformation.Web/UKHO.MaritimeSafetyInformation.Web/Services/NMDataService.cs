@@ -11,12 +11,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IFileShareService _fileShareService;
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
+        private const string yearandWeek = "YEAR/WEEK";
 
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
             _fileShareService = fileShareService;
             _logger = logger;
-            _authFssTokenProvider = authFssTokenProvider;
+            _authFssTokenProvider = authFssTokenProvider;           
         }
 
         public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
@@ -52,8 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
-        {
-            const string yearandWeek = "YEAR/WEEK";
+        {            
             List<YearWeekModel> yearWeekModelList = new();
             try
             {
@@ -67,16 +67,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
                     {
-                        if (searchAttributes.Data.BatchAttributes[i].Key.Trim() == yearandWeek)
+                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == yearandWeek)
                         {
                             List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
+                           
                             if (yearWeekList != null && yearWeekList.Count != 0)
                             {
                                 foreach (string yw in yearWeekList)
                                 {
                                     string[] yearWeek = yw.Contains('/') ? yw.Split('/') : null;
-
-                                    if (yearWeek != null && yearWeek.Length != 0)
+                                    
+                                    if (yearWeek != null && yearWeek.Length >= 2)
                                     {
                                         yearWeekModelList.Add(new YearWeekModel { Year = Convert.ToInt32(yearWeek[0].Trim()), Week = Convert.ToInt32(yearWeek[1].Trim()) });
                                     }
