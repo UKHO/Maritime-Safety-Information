@@ -35,10 +35,10 @@ public async checkEnabledWeekDropDown()
     return await this.dropDownWeekly.isEnabled();
 }
 
-public async getRecordCountTableNoticeToMarine(year:string,week:string)
+public async getRecordCountTableNoticeToMarine(year:BigInt,week:BigInt)
 {
-    await this.dropDownYearly.selectOption(year);
-    await this.dropDownWeekly.selectOption(week);
+    await this.dropDownYearly.selectOption({index:1});
+    await this.dropDownWeekly.selectOption({index:1});
     await this.page.waitForSelector('tr');
     const tablerow = await this.page.$$("tr");
     return tablerow.length;
@@ -55,7 +55,7 @@ public async getFileNameText()
 
 public async getTableData()
 {
-  const yearlyCount = (await this.page.$$("#ddlYears option")).length;
+    const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
   for(var year=1;year<=yearlyCount-1;year++)
   {
@@ -68,36 +68,35 @@ public async getTableData()
       await this.page.waitForSelector("td:nth-child(2)");
       const fileSizeData = await this.page.$$("#divFilesList > table > tbody >tr >td:nth-child(2)");
       expect(fileSizeData.length).toBeGreaterThan(0); 
-         for await (const table of fileSizeData)
-         {
-           var fileData = (await (await table.innerText()).toString()).split(" ");
+      for await (const table of fileSizeData)
+      {
+      var fileData = (await (await table.innerText()).toString()).split(" ");
            
-           switch(fileData[1])
-           {
-                case "MB":
-                {
-                 expect(fileData[1]).toContain("MB"); 
-                 break;
-                }
-                case "KB":
-                {
-                 expect(fileData[1]).toContain("KB"); 
-                 break;
-                }
-                case "GB":
-                {
-                  expect(fileData[1]).toContain("GB"); 
-                  break;
-                }
-                case "B":
-                {
-                  expect(fileData[1]).toContain("B"); 
-                  break;
-                }
-            }
-         }    
-         
-        }
+      switch(fileData[1])
+      {
+      case "MB":
+      {
+      expect(fileData[1]).toContain("MB"); 
+      break;
+      }
+      case "KB":
+      {
+      expect(fileData[1]).toContain("KB"); 
+      break;
+      }
+      case "GB":
+      {
+      expect(fileData[1]).toContain("GB"); 
+      break;
+      }
+      case "B":
+      {
+      expect(fileData[1]).toContain("B"); 
+      break;
+      }
+      }
+      }    
+      }
       }
    }     
 }
