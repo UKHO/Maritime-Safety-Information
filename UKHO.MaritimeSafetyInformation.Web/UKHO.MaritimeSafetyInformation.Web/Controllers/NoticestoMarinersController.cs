@@ -98,17 +98,28 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml");
         }
 
-        public IActionResult LoadYears()
-        {
-            return Json(_nMDataService.GetAllYears(GetCurrentCorrelationId()));
-        }
+        ////////////public IActionResult LoadYears()
+        ////////////{
+        ////////////    return Json(_nMDataService.GetAllYears(GetCurrentCorrelationId()));
+        ////////////}
 
-        public IActionResult LoadWeeks(int year)
+        ////////////public IActionResult LoadWeeks(int year)
+        ////////////{
+        ////////////    return Json(_nMDataService.GetAllWeeksOfYear(year, GetCurrentCorrelationId()));
+        ////////////}
+        
+         public async Task<IActionResult> GetAllYearandWeeks()
         {
-            return Json(_nMDataService.GetAllWeeksOfYear(year, GetCurrentCorrelationId()));
-        }
+            _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksStarted.ToEventId(), "Maritime safety information request to Search Year and Week for NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());             
 
-        [HttpPost]
+            List<YearWeekModel> listYear = await _nMDataService.GetAllYearWeek(GetCurrentCorrelationId());
+
+        _logger.LogInformation(EventIds.NoticesToMarinersGetAllYearsandWeeksCompleted.ToEventId(), "Maritime safety information request to Search Year and Week for NM files completed with Year/Week count as:{listYear} for _X-Correlation-ID:{correlationId}", listYear.Count, GetCurrentCorrelationId());
+
+            return Json(listYear);
+    }
+
+    [HttpPost]
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
             _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestStarted.ToEventId(), "Maritime safety information request to show weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());

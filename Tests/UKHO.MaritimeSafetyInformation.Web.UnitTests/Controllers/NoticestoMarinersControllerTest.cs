@@ -70,20 +70,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual(expectedView, actualView);
         }
 
-        [Test]
-        public void WhenLoadYearsIsCalled_ThenShouldReturnJson()
-        {
-            IActionResult result = _controller.LoadYears();
-            Assert.IsInstanceOf<JsonResult>(result);
-        }
+       /////// [Test]
+        ////////public void WhenLoadYearsIsCalled_ThenShouldReturnJson()
+        ////////{
+        ////////    IActionResult result = _controller.LoadYears();
+        ////////    Assert.IsInstanceOf<JsonResult>(result);
+        ////////}
 
-        [Test]
-        public void WhenLoadWeeksIsCalled_ThenShouldReturnJson()
-        {
-            const int year = 2022;
-            IActionResult result = _controller.LoadWeeks(year);
-            Assert.IsInstanceOf<JsonResult>(result);
-        }
+        ////////[Test]
+        ////////public void WhenLoadWeeksIsCalled_ThenShouldReturnJson()
+        ////////{
+        ////////    const int year = 2022;
+        ////////    IActionResult result = _controller.LoadWeeks(year);
+        ////////    Assert.IsInstanceOf<JsonResult>(result);
+        ////////}
 
         [Test]
         public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()

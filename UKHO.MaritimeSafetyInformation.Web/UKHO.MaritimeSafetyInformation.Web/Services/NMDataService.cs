@@ -13,6 +13,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IFileShareService _fileShareService;
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
+        public const string yearandWeek = "YEAR/WEEK";
+
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
             _fileShareService = fileShareService;
@@ -51,23 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             return ListshowFilesResponseModels;
 
-        }
-
-        public List<KeyValuePair<string, string>> GetAllYears(string correlationId)
-        {
-            List<KeyValuePair<string, string>> years = new();
-
-            _logger.LogInformation(EventIds.GetAllYearsStarted.ToEventId(), "Maritime safety information request to get all years to populate year dropdown started", correlationId);
-
-            years.Add(new KeyValuePair<string, string>("Year", ""));
-            for (int i = 0; i < 3; i++)
-            {
-                string year = (DateTime.Now.Year - i).ToString();
-                years.Add(new KeyValuePair<string, string>(year, year));
-            }
-
-            return years;
-        }
+        }    
 
         public List<SelectListItem> GetAllYearsSelectItem(string correlationId)
         {
@@ -88,36 +74,56 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return years;
         }
 
-        public List<KeyValuePair<string, string>> GetAllWeeksOfYear(int year, string correlationId)
+        
+        public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
         {
-            List<KeyValuePair<string, string>> weeks = new();
-
-            _logger.LogInformation(EventIds.GetAllWeeksOfYearStarted.ToEventId(), "Maritime safety information request to get all weeks of year to populate week dropdown started", correlationId);
-
-            weeks.Add(new KeyValuePair<string, string>("Week Number", ""));
-
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
-            DateTime lastdate;
-            if (DateTime.Now.Year == year)
+            List<YearWeekModel> yearWeekModelList = new();
+            try
             {
-                lastdate = new DateTime(year, DateTime.Now.Month, DateTime.Now.Day);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+
+                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request Search Attribute Year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
+
+                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FssSearchAttributeAsync(accessToken, correlationId);
+
+                if (searchAttributes.Data != null)
+                {
+                    for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
+                    {
+                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == yearandWeek)
+                        {
+                            List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
+
+                            if (yearWeekList != null && yearWeekList.Count != 0)
+                            {
+                                foreach (string yw in yearWeekList)
+                                {
+                                    string[] yearWeek = yw.Contains('/') ? yw.Split('/') : null;
+
+                                    if (yearWeek != null && yearWeek.Length >= 2)
+                                    {
+                                        yearWeekModelList.Add(new YearWeekModel { Year = Convert.ToInt32(yearWeek[0].Trim()), Week = Convert.ToInt32(yearWeek[1].Trim()) });
+                                    }
+                                }
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request Search Attribute Year and week data recieved successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
+                            }
+                            else
+                            {
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data recieved from File Share Service for Request Search Attribute Year and week for _X-Correlation-ID:{correlationId}", correlationId);
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data recieved from File Share Service for Request Search Attribute Year and week for _X-Correlation-ID:{correlationId}", correlationId);
             }
-            else
+            catch (Exception ex)
             {
-                lastdate = new DateTime(year, 12, 31);
+                _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Request Search Attribute Year and week data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
             }
-            Calendar calender = dateTimeFormatInfo.Calendar;
-
-            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule,
-                                                dateTimeFormatInfo.FirstDayOfWeek);
-
-            for (int i = 0; i < totalWeeks; i++)
-            {
-                string week = (i + 1).ToString();
-                weeks.Add(new KeyValuePair<string, string>(week, week));
-            }
-
-            return weeks;
+            return yearWeekModelList;
         }
 
         public List<SelectListItem> GetAllWeeksOfYearSelectItem(int year, string correlationId)

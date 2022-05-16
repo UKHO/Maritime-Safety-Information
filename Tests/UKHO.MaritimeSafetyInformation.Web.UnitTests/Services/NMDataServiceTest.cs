@@ -136,54 +136,54 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.That(result.IsFaulted, Is.True);
         }
 
-        [Test]
-        public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
-        {
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+        //////////[Test]
+        //////////public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
+        //////////{
+        //////////    DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
 
-            Calendar calender = dateTimeFormatInfo.Calendar;
+        //////////    Calendar calender = dateTimeFormatInfo.Calendar;
 
-            int year = DateTime.Now.Year;
+        //////////    int year = DateTime.Now.Year;
 
-            int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+        //////////    int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
 
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
+        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
 
-            Assert.AreEqual(totalWeeks + 1, result.Count);
-        }
-        [Test]
-        public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
-        {
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+        //////////    Assert.AreEqual(totalWeeks + 1, result.Count);
+        //////////}
+        //////////[Test]
+        //////////public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
+        //////////{
+        //////////    DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
 
-            Calendar calender = dateTimeFormatInfo.Calendar;
+        //////////    Calendar calender = dateTimeFormatInfo.Calendar;
 
-            int year = DateTime.Now.Year - 1;
+        //////////    int year = DateTime.Now.Year - 1;
 
-            DateTime lastdate = new(year, 12, 31);
+        //////////    DateTime lastdate = new(year, 12, 31);
 
-            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+        //////////    int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
 
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
+        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
 
-            Assert.AreEqual(totalWeeks + 1, result.Count);
-        }
+        //////////    Assert.AreEqual(totalWeeks + 1, result.Count);
+        //////////}
 
-        [Test]
-        public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
-        {
-            const int yearsCount = 4;
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
-            Assert.AreEqual(yearsCount, result.Count);
-        }
+        //////////[Test]
+        //////////public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
+        //////////{
+        //////////    const int yearsCount = 4;
+        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
+        //////////    Assert.AreEqual(yearsCount, result.Count);
+        //////////}
 
-        [Test]
-        public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
-        {
-            int minYear = DateTime.Now.Year - 2;
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
-            Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
-        }
+        //////////[Test]
+        //////////public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
+        //////////{
+        //////////    int minYear = DateTime.Now.Year - 2;
+        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
+        //////////    Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
+        //////////}
 
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {

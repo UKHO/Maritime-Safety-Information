@@ -47,140 +47,161 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910011 -  Get NM Batch Files Request Failed.
         /// </summary>
-        GetWeeklyNMFilesRequestFailed = 910011,
+        GetWeeklyNMFilesRequestFailed = 910011,      
         /// <summary>
-        /// 910012 -  Get Past Years Request Started.
+        /// 910012 -  FSS Batch Search Request Started.
         /// </summary>
-        GetAllYearsStarted = 910012,
+        FSSBatchSearchResponseStarted = 910012,
         /// <summary>
-        /// 910013 -  Get Past Years Request Failed.
+        /// 910013 -  FSS Batch Search Request Started.
         /// </summary>
-        GetPastYearsFailed = 910013,
+        FSSBatchSearchResponseCompleted = 910013,
         /// <summary>
-        /// 910014 -  Get All Weeks of Year Request Started.
+        /// 910014 -  FSS Batch Search Request Failed.
         /// </summary>
-        GetAllWeeksOfYearStarted = 910014,
+        FSSBatchSearchResponseFailed = 910014,
         /// <summary>
-        /// 910015 -  Get All Weeks of Year Request Failed.
+        /// 910015 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
-        GetAllWeeksofYearFailed = 910015,
+        ShowDailyFilesRequest = 910015,
         /// <summary>
-        /// 910016 -  FSS Batch Search Request Started.
+        /// 910016 -  Event data for Retrieval of MSI Daily File Completed.
         /// </summary>
-        FSSBatchSearchResponseStarted = 910016,
+        ShowDailyFilesCompleted = 910016,
         /// <summary>
-        /// 910017 -  FSS Batch Search Request Started.
+        /// 910017 -  Event data for Retrieval of MSI Daily File Response Started.
         /// </summary>
-        FSSBatchSearchResponseCompleted = 910017,
+        ShowDailyFilesResponseStarted = 910017,
         /// <summary>
-        /// 910018 -  FSS Batch Search Request Failed.
+        /// 910018 -  Event data for Retrieval of MSI Daily File Response Data Found.
         /// </summary>
-        FSSBatchSearchResponseFailed = 910018,
+        ShowDailyFilesResponseDataFound = 910018,
         /// <summary>
-        /// 910019 -  Event data for Retrieval of MSI Daily File Request.
+        /// 910019-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        ShowDailyFilesRequest = 910019,
+        ShowDailyFilesResponseDataNotFound = 910019,
         /// <summary>
-        /// 910020 -  Event data for Retrieval of MSI Daily File Completed.
+        /// 910020-  Event data for Retrieval of MSI Daily File Response Data Not Found.
         /// </summary>
-        ShowDailyFilesCompleted = 910020,
+        ShowDailyFilesResponseFailed = 910020,
         /// <summary>
-        /// 910021 -  Event data for Retrieval of MSI Daily File Response Started.
+        /// 910021-  Event data for Retrieval of MSI Get Daily File Result.
         /// </summary>
-        ShowDailyFilesResponseStarted = 910021,
+        GetDailyFilesResultRequest = 910021,
         /// <summary>
-        /// 910022 -  Event data for Retrieval of MSI Daily File Response Data Found.
+        /// 910022-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        ShowDailyFilesResponseDataFound = 910022,
+        GetDailyFilesResultCompleted = 910022,
         /// <summary>
-        /// 910023-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// 910023-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        ShowDailyFilesResponseDataNotFound = 910023,
+        GetWeeklyFilesResultRequest = 910023,
         /// <summary>
-        /// 910024-  Event data for Retrieval of MSI Daily File Response Data Not Found.
+        /// 910024-  Event data for Retrieval of MSI Get Daily File Result Completed.
         /// </summary>
-        ShowDailyFilesResponseFailed = 910024,
+        GetWeeklyFilesResultRequestCompleted = 910024,
         /// <summary>
-        /// 910025-  Event data for Retrieval of MSI Get Daily File Result.
+        /// 910025 -  Unhandled Exception Occured.
         /// </summary>
-        GetDailyFilesResultRequest = 910025,
+        UnhandledCleanUpException = 910025,
         /// <summary>
-        /// 910026-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// 910026 -  Event data for Retrieval of MSI Get Weekly File Response Started.
         /// </summary>
-        GetDailyFilesResultCompleted = 910026,
+        GetWeeklyFilesResponseStarted = 910026,
         /// <summary>
-        /// 910027-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// 910027 -  Event data for Retrieval of MSI Get Weekly File Response For Year With Value And Week With Zero.
         /// </summary>
-        GetWeeklyFilesResultRequest = 910027,
+        GetWeeklyFilesResponseForYearValueAndWeekZero = 910027,
         /// <summary>
-        /// 910028-  Event data for Retrieval of MSI Get Daily File Result Completed.
+        /// 910028 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Value.
         /// </summary>
-        GetWeeklyFilesResultRequestCompleted = 910028,
+        GetWeeklyFilesResponseForYearAndWeekWithValue = 910028,
         /// <summary>
-        /// 910029 -  Unhandled Exception Occured.
+        /// 910029 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Zero.
         /// </summary>
-        UnhandledCleanUpException = 910029,
+        GetWeeklyFilesResponseForYearAndWeekWithZero = 910029,
         /// <summary>
-        /// 910030 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910030 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
         /// </summary>
-        GetWeeklyFilesResponseStarted = 910030,
+        GetWeeklyFilesResponseFailed = 910030,
         /// <summary>
-        /// 910031 -  Event data for Retrieval of MSI Get Weekly File Response For Year With Value And Week With Zero.
+        /// 910031 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
         /// </summary>
-        GetWeeklyFilesResponseForYearValueAndWeekZero = 910031,
+        ShowWeeklyFilesIndexGetFailed = 910031,
         /// <summary>
-        /// 910032 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Value.
+        /// 910032 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
         /// </summary>
-        GetWeeklyFilesResponseForYearAndWeekWithValue = 910032,
+        ShowWeeklyFilesIndexPostFailed = 910032,
         /// <summary>
-        /// 910033 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Zero.
+        /// 910033 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Not Null.
         /// </summary>
-        GetWeeklyFilesResponseForYearAndWeekWithZero = 910033,
+        ShowWeeklyFilesResponseForYearAndWeekNotNullForIndexGet = 910033,
         /// <summary>
-        /// 910034 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
+        /// 910034 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
         /// </summary>
-        GetWeeklyFilesResponseFailed = 910034,
+        ShowWeeklyFilesResponseStartIndexPost = 910034,
         /// <summary>
-        /// 910035 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
+        /// 910035 -  Event data for Retrieval of MSI Show Weekly File Response For Year Non Zero.
         /// </summary>
-        ShowWeeklyFilesIndexGetFailed = 910035,
+        ShowWeeklyFilesResponseForYearNonZero = 910035,
         /// <summary>
-        /// 910036 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
+        /// 910036 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
         /// </summary>
-        ShowWeeklyFilesIndexPostFailed = 910036,
+        ShowWeeklyFilesResponseForYearAndWeekNonZero = 910036,
         /// <summary>
-        /// 910037 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Not Null.
+        /// 910037 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
         /// </summary>
-        ShowWeeklyFilesResponseForYearAndWeekNotNullForIndexGet = 910037,
+        ShowWeeklyFilesResponseForYearNonZeroAndWeekWithZero = 910037,
         /// <summary>
-        /// 910038 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
+        /// 910038 -  Event data for Retrieval of MSI Show Weekly File Response TempData For Year And Week Is Not Null.
         /// </summary>
-        ShowWeeklyFilesResponseStartIndexPost = 910038,
+        ShowWeeklyFilesResponseForTempDataYearAndWeekNotNull = 910038,
         /// <summary>
-        /// 910039 -  Event data for Retrieval of MSI Show Weekly File Response For Year Non Zero.
+        /// 910039 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
         /// </summary>
-        ShowWeeklyFilesResponseForYearNonZero = 910039,
+        ShowWeeklyFilesResponsetIndexPostCompleted = 910039,
         /// <summary>
-        /// 910040 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// 910040 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
         /// </summary>
-        ShowWeeklyFilesResponseForYearAndWeekNonZero = 910040,
+        ShowWeeklyFilesResponseIndexGetCompleted = 910040,
         /// <summary>
-        /// 910041 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// 910041 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
         /// </summary>
-        ShowWeeklyFilesResponseForYearNonZeroAndWeekWithZero = 910041,
+        GetSearchAttributeRequestDataStarted = 910041,
         /// <summary>
-        /// 910042 -  Event data for Retrieval of MSI Show Weekly File Response TempData For Year And Week Is Not Null.
+        /// 910042 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
         /// </summary>
-        ShowWeeklyFilesResponseForTempDataYearAndWeekNotNull = 910042,
+        GetSearchAttributeRequestDataFound = 910042,
         /// <summary>
-        /// 910043 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
+        /// 910043 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
         /// </summary>
-        ShowWeeklyFilesResponsetIndexPostCompleted = 910043,
+        GetSearchAttributeRequestDataFailed = 910043,
         /// <summary>
-        /// 910044 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// 910044 -  Search Attribute Response Started for File Share Service Client
         /// </summary>
-        ShowWeeklyFilesResponseIndexGetCompleted = 910044,
-
+        FSSSearchAttributeResponseStarted = 910044,
+        /// <summary>
+        /// 910045 -  Search Attribute Response Completed for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseCompleted = 910045,
+        /// <summary>
+        /// 910046 - Search Attribute Response threw an exception in case of errors for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseError = 910046,
+        /// <summary>
+        /// 910047 - Get All weeks and Year data for Notices to Mariners Started 
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksStarted = 910047,
+        /// <summary>
+        /// 910048 - Get All weeks and Year data for Notices to Mariners Completed
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksCompleted = 910048,
+        /// <summary>
+        /// 910049 - No data recieved Year Week data from FSS for Notices to Mariners  
+        /// </summary>
+        GetSearchAttributeRequestDataNotFound = 910049  ,
+        GetAllYearsStarted = 910050,
+        GetAllWeeksOfYearStarted = 910051
 
     }
 
