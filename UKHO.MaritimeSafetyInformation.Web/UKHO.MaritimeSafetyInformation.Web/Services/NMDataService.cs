@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Globalization;
-using UKHO.FileShareClient.Models;
+﻿using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -53,28 +51,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             return ListshowFilesResponseModels;
 
-        }    
-
-        public List<SelectListItem> GetAllYearsSelectItem(string correlationId)
-        {
-            List<SelectListItem> years = new();
-
-            _logger.LogInformation(EventIds.GetAllYearsStarted.ToEventId(), "Maritime safety information request to get all years to populate year dropdown started", correlationId);
-
-            years.Add(new SelectListItem("Year", "0"));
-            for (int i = 0; i < 3; i++)
-            {
-                string year = (DateTime.Now.Year - i).ToString();
-                if (i == 0)
-                    years.Add(new SelectListItem(year, year, true));
-                else
-                    years.Add(new SelectListItem(year, year));
-            }
-
-            return years;
         }
 
-        
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
         {
             List<YearWeekModel> yearWeekModelList = new();
@@ -126,41 +104,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return yearWeekModelList;
         }
 
-        public List<SelectListItem> GetAllWeeksOfYearSelectItem(int year, string correlationId)
-        {
-            List<SelectListItem> weeks = new();
-
-            _logger.LogInformation(EventIds.GetAllWeeksOfYearStarted.ToEventId(), "Maritime safety information request to get all weeks of year to populate week dropdown started", correlationId);
-
-            weeks.Add(new SelectListItem("Week Number", ""));
-
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
-            DateTime lastdate;
-            if (DateTime.Now.Year == year)
-            {
-                lastdate = new DateTime(year, DateTime.Now.Month, DateTime.Now.Day);
-            }
-            else
-            {
-                lastdate = new DateTime(year, 12, 31);
-            }
-            Calendar calender = dateTimeFormatInfo.Calendar;
-
-            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule,
-                                                dateTimeFormatInfo.FirstDayOfWeek);
-
-            for (int i = 0; i < totalWeeks; i++)
-            {
-                string week = (i + 1).ToString();
-                if (i == totalWeeks - 1)
-                    weeks.Add(new SelectListItem(week, week, true));
-                else
-                    weeks.Add(new SelectListItem(week, week));
-            }
-
-            return weeks;
-        }
-
         public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
@@ -200,31 +143,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
             try
             {
-                if (year != 0 && week == 0)
-                {
-                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearValueAndWeekZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year with value and week with zero with _X-Correlation-ID:{correlationId}", correlationId);
 
-                    showWeeklyFilesResponses.Years = GetAllYearsSelectItem(correlationId);
-                    showWeeklyFilesResponses.Weeks = GetAllWeeksOfYearSelectItem(year, correlationId);
-                }
                 if (year != 0 && week != 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithValue.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with value with _X-Correlation-ID:{correlationId}", correlationId);
 
-                    showWeeklyFilesResponses.Years = GetAllYearsSelectItem(correlationId);
-                    showWeeklyFilesResponses.Weeks = GetAllWeeksOfYearSelectItem(year, correlationId);
+                    showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
+
                     showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 }
 
                 if (year == 0 && week == 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with zero with _X-Correlation-ID:{correlationId}", correlationId);
+                    showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
 
-                    showWeeklyFilesResponses.Years = GetAllYearsSelectItem(correlationId);
-                    year = Convert.ToInt32(showWeeklyFilesResponses.Years.Where(x => x.Selected).OrderByDescending(x => x.Value).Select(x => x.Value).FirstOrDefault());
-
-                    showWeeklyFilesResponses.Weeks = GetAllWeeksOfYearSelectItem(Convert.ToInt32(showWeeklyFilesResponses.Years[1].Value), correlationId);
-                    week = Convert.ToInt32(showWeeklyFilesResponses.Weeks.Where(x => x.Selected).OrderByDescending(x => x.Value).Select(x => x.Value).FirstOrDefault());
+                    year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
+                    week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Week).Select(x => x.Week).FirstOrDefault());
 
                     showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 }

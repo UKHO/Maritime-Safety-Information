@@ -28,18 +28,23 @@
 </ul>
 <div class="tab-content" id="nmTabContent">
     <div class="tab-pane fade show active" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
-        <input type="hidden" id="hdnRequestType" value="Weekly" />
+        <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
+        <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
         @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
         {
             <div class="row mb-3">
                 <div class="col-md-3 mb-3">
                     <label for="ddlYears" class="form-label">Select Year</label>
-                    @Html.DropDownList("year", @Model.Years, new { onchange = "YearValueChange(this);this.form.submit();",@class = "form-select" })
+                    <select class="form-select" id="ddlYears" name="year">
+                        <option selected>Please select year</option>
+                    </select>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label for="ddlWeeks" class="form-label">Select Week</label>
-                    @Html.DropDownList("week", @Model.Weeks,new { onchange = "this.form.submit();",@class = "form-select" })
+                    <select class="form-select" id="ddlWeeks" name="week" onchange="this.form.submit();">
+                        <option selected>Please select week</option>
+                    </select>
                 </div>
             </div>
         }
@@ -52,10 +57,11 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="daily" role="tabpanel" aria-labelledby="daily-tab">
-        <div class="table-responsive-md" id="divDailyFilesList">
-        </div>
-    </div>
-    <div class="tab-pane fade" id="cumulative" role="tabpanel" aria-labelledby="cumulative-tab">Cumulative </div>
-    <div class="tab-pane fade" id="annual" role="tabpanel" aria-labelledby="annual-tab">Annual </div>
 </div>
+
+<script type="text/javascript">
+    var serverData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.YearAndWeek));
+    window.onload = function () {
+        LoadData(serverData);
+    }
+</script>
