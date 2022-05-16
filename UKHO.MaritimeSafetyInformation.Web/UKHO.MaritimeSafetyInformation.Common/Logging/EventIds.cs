@@ -76,7 +76,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910018 -  FSS Batch Search Request Failed.
         /// </summary>
         FSSBatchSearchResponseFailed = 910018,
-		/// <summary>
+        /// <summary>
         /// 910019 -  Event data for Retrieval of MSI Daily File Request.
         /// </summary>
         ShowDailyFilesRequest = 910019,
@@ -119,7 +119,69 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910029 -  Unhandled Exception Occured.
         /// </summary>
-        UnhandledCleanUpException = 910029
+        UnhandledCleanUpException = 910029,
+        /// <summary>
+        /// 910030 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// </summary>
+        GetWeeklyFilesResponseStarted = 910030,
+        /// <summary>
+        /// 910031 -  Event data for Retrieval of MSI Get Weekly File Response For Year With Value And Week With Zero.
+        /// </summary>
+        GetWeeklyFilesResponseForYearValueAndWeekZero = 910031,
+        /// <summary>
+        /// 910032 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Value.
+        /// </summary>
+        GetWeeklyFilesResponseForYearAndWeekWithValue = 910032,
+        /// <summary>
+        /// 910033 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Zero.
+        /// </summary>
+        GetWeeklyFilesResponseForYearAndWeekWithZero = 910033,
+        /// <summary>
+        /// 910034 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
+        /// </summary>
+        GetWeeklyFilesResponseFailed = 910034,
+        /// <summary>
+        /// 910035 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
+        /// </summary>
+        ShowWeeklyFilesIndexGetFailed = 910035,
+        /// <summary>
+        /// 910036 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
+        /// </summary>
+        ShowWeeklyFilesIndexPostFailed = 910036,
+        /// <summary>
+        /// 910037 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Not Null.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearAndWeekNotNullForIndexGet = 910037,
+        /// <summary>
+        /// 910038 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
+        /// </summary>
+        ShowWeeklyFilesResponseStartIndexPost = 910038,
+        /// <summary>
+        /// 910039 -  Event data for Retrieval of MSI Show Weekly File Response For Year Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearNonZero = 910039,
+        /// <summary>
+        /// 910040 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearAndWeekNonZero = 910040,
+        /// <summary>
+        /// 910041 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearNonZeroAndWeekWithZero = 910041,
+        /// <summary>
+        /// 910042 -  Event data for Retrieval of MSI Show Weekly File Response TempData For Year And Week Is Not Null.
+        /// </summary>
+        ShowWeeklyFilesResponseForTempDataYearAndWeekNotNull = 910042,
+        /// <summary>
+        /// 910043 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
+        /// </summary>
+        ShowWeeklyFilesResponsetIndexPostCompleted = 910043,
+        /// <summary>
+        /// 910044 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// </summary>
+        ShowWeeklyFilesResponseIndexGetCompleted = 910044,
+
+
     }
 
     public static class EventIdExtensions
