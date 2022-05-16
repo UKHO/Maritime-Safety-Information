@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
@@ -97,14 +98,98 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task DownloadWeeklyFile()
+        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldRetunException()
         {
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType= "application/pdf" };
+            string batchId = null;
+            string fileName = "testfile.pdf";
+            string mimeType = "application/pdf";
+            var result =  _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldRetunException()
+        {
+            string batchId = String.Empty;
+            string fileName = "testfile.pdf";
+            string mimeType = "application/pdf";
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldRetunException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = null;
+            string mimeType = "application/pdf";
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldRetunException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = String.Empty;
+            string mimeType = "application/pdf";
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldRetunException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = "testfile.pdf";
+            string mimeType = null;
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldRetunException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = "testfile.pdf";
+            string mimeType = String.Empty;
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
+        [Test]
+        public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldRetunFileResult()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = "testfile.pdf";
+            string mimeType = "application/pdf";
+
+            ShowFilesResponseModel showFilesResponseModel = new() { MimeType= mimeType };
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
-            IActionResult result = await _controller.DownloadWeeklyFile("", "", "application/pdf");
+            IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            
             Assert.IsInstanceOf<FileResult>(result);
+        }
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalled_ThenShouldExecuteCatch()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = "testfile.pdf";
+            string mimeType = "application/pdf";
+
+            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
+
+            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            var result =  _controller.DownloadWeeklyFile(batchId, fileName, "wrongmime");
+            
+            Assert.That(result.IsFaulted, Is.True);
         }
     }
 }

@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using System;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UKHO.FileShareClient;
@@ -52,9 +54,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             string accessToken = "";
 
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
-           
+            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
+
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
-            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken , CorrelationId);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken, CorrelationId);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
         }
 
@@ -62,20 +65,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
-            _fileShareServiceConfig.Value.BaseUrl =  "https://filesqa.admiralty.co.uk";
+            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            Task<IResult<BatchSearchResponse>> result =  _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
             Assert.That(result.IsFaulted, Is.True);
         }
 
         [Test]
         public void WhenFSSDownloadFileAsyncIsCalled_ThenShouldReturnByteArray()
         {
-                Stream stream = new System.IO.MemoryStream();
 
-                A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Returns(stream);
-                var result = _fileShareService.FSSDownloadFileAsync("", "","", CorrelationId);
-                Assert.IsInstanceOf<Task<byte[]>>(result);
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = "testfile.pdf";
+
+            Stream strm = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+
+            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
+
+            A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
+                .Returns(strm);
+            var result = _fileShareService.FSSDownloadFileAsync(batchId,fileName,"", CorrelationId);
+            Assert.IsInstanceOf<Task<byte[]>>(result);
 
         }
 
@@ -83,6 +93,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFSSDownloadFileAsyncIsCalled_ThenShouldExecuteCatch()
         {
             Stream stream = Stream.Null;
+            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Returns(stream);
             var result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId);

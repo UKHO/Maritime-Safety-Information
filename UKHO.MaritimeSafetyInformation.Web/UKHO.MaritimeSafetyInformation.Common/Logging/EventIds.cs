@@ -132,29 +132,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         DownloadSingleWeeklyNMFileCompleted= 910031,
 
         /// <summary>
-        /// 910032 - Request To Get Single Weekly NM File Started.
+        /// 910032 -Download Single Weekly NM File Called With Invalid Arguments.
         /// </summary>
-        GetSingleWeeklyNMFileStarted = 910032,
+        DownloadSingleWeeklyNMFileInvalidParameter = 910032,
 
         /// <summary>
-        /// 910033 - Request To Get Single Weekly NM File Completed.
+        /// 910033 -Download Single Weekly NM File Failed.
         /// </summary>
-        GetSingleWeeklyNMFileCompleted = 910033,
+        DownloadSingleWeeklyNMFileFailed = 910033,
 
         /// <summary>
-        /// 910034 - Request For FSS To Get Single Weekly NM File Started.
+        /// 910034 - Request To Get Single Weekly NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileStarted = 910034,
+        GetSingleWeeklyNMFileStarted = 910034,
 
         /// <summary>
-        /// 910035 - Request For FSS To Get Single Weekly NM File Completed.
+        /// 910035 - Request To Get Single Weekly NM File Completed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileCompleted = 910035,
+        GetSingleWeeklyNMFileCompleted = 910035,
 
         /// <summary>
-        /// 910036 - Request For FSS To Get Single Weekly NM File Failed.
+        /// 910036 - Request For FSS To Get Single Weekly NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileResponseFailed = 910036,
+        FSSGetSingleWeeklyNMFileStarted = 910036,
+
+        /// <summary>
+        /// 910037 - Request For FSS To Get Single Weekly NM File Completed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileCompleted = 910037,
+
+        /// <summary>
+        /// 910038 - Request For FSS To Get Single Weekly NM File Failed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileResponseFailed = 910038,
     }
 
     public static class EventIdExtensions

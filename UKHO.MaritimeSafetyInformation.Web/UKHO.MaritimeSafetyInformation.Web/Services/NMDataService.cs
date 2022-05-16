@@ -106,6 +106,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
                 const string searchText = $" and $batch(Frequency) eq 'Daily'";
