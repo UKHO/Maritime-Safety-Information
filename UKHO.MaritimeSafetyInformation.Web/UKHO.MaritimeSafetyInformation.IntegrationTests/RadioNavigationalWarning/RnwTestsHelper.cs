@@ -39,21 +39,18 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         #region DBMethods
         public async Task SeedRadioNavigationalWarnings(List<RadioNavigationalWarnings> radioNavigationalWarnings)
         {
-            // Add Warnings
             _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarnings);
             await _fakeContext.SaveChangesAsync();
         }
 
         public async Task SeedWarningType(List<WarningType> warningTypes)
         {
-            // Add Warnings Type
             _fakeContext.WarningType.AddRange(warningTypes);
             await _fakeContext.SaveChangesAsync();
         }
 
         public async Task DeSeedRadioNavigationalWarnings()
         {
-            // Remove all Warnings
             DbSet<RadioNavigationalWarnings> warnings = _fakeContext.RadioNavigationalWarnings;
             _fakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
             await _fakeContext.SaveChangesAsync();
@@ -61,7 +58,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
         public async Task DeSeedWarningType()
         {
-            // Remove all the Warning Type
             DbSet<WarningType> warningType = _fakeContext.WarningType;
             _fakeContext.WarningType.RemoveRange(warningType);
             await _fakeContext.SaveChangesAsync();

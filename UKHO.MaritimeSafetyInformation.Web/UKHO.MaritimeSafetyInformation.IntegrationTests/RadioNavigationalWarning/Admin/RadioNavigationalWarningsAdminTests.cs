@@ -20,7 +20,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
         {
-            //Add Value to Database
             await SeedRadioNavigationalWarnings(GetRadioNavigationalWarnings());
             await SeedWarningType(GetWarningTypes());
         }
@@ -35,10 +34,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndex_ThenReturnList()
+        public async Task WhenCallIndex_ThenReturnListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, null, true);
+            IActionResult result = await _controller.Index(1, null, null);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
 
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 8);
@@ -48,10 +47,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithWarningTypeFilter_ThenReturnFilteredList()
+        public async Task WhenCallIndexWithWarningTypeFilter_ThenReturnFilteredListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, 1, null, true);
+            IActionResult result = await _controller.Index(1, 1, null);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 4);
             Assert.IsTrue(adminListFilter.PageCount == 1);
@@ -60,10 +59,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithYearFilter_ThenReturnFilteredList()
+        public async Task WhenCallIndexWithYearFilter_ThenReturnFilteredListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, 2020, true);
+            IActionResult result = await _controller.Index(1, null, 2020);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 2);
             Assert.IsTrue(adminListFilter.PageCount == 1);
@@ -72,10 +71,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithWarningTypeAndYearFilter_ThenReturnFilteredList()
+        public async Task WhenCallIndexWithWarningTypeAndYearFilter_ThenReturnFilteredListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, 2, 2024, true);
+            IActionResult result = await _controller.Index(1, 2, 2024);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 1);
             Assert.IsTrue(adminListFilter.PageCount == 1);
@@ -84,10 +83,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithValidPageNo_ThenReturnListBasedOnPageNo()
+        public async Task WhenCallIndexWithValidPageNo_ThenReturnAsyncListBasedOnPageNo()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-            IActionResult result = await _controller.Index(2, null, null, true);
+            IActionResult result = await _controller.Index(2, null, null);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 3);
             Assert.IsTrue(adminListFilter.PageCount == 3);
@@ -96,19 +95,19 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithInValidPageNo_ThenReturnEmptyList()
+        public async Task WhenCallIndexWithInValidPageNo_ThenReturnEmptyListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-            IActionResult result = await _controller.Index(4, null, null, true);
+            IActionResult result = await _controller.Index(4, null, null);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 0);
         }
 
         [Test]
-        public async Task WhenCallIndexWithWithValidAdminListRecordPerPage_ThenReturnValidRecordPerPage()
+        public async Task WhenCallIndexWithWithValidAdminListRecordPerPage_ThenReturnValidRecordPerPageAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
-            IActionResult result = await _controller.Index(1, null, null, true);
+            IActionResult result = await _controller.Index(1, null, null);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 5);
             Assert.IsTrue(adminListFilter.PageCount == 2);
@@ -121,14 +120,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 0;
             Assert.ThrowsAsync(Is.TypeOf<DivideByZeroException>(),
-                         async delegate { await  _controller.Index(1, null, null, true); });
+                         async delegate { await  _controller.Index(1, null, null); });
         }
 
         [Test]
         public async Task WhenCallIndex_IsDeletedShouldDisplayYesAndNoRespectively()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, 2020, true);
+            IActionResult result = await _controller.Index(1, null, 2020);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 2);
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted == "Yes");
@@ -139,7 +138,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenContentLenthGreaterThan300Char_ThenWrapTheContent()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, 2024, true);
+            IActionResult result = await _controller.Index(1, null, 2024);
             RadioNavigationalWarningsAdminListFilter adminListFilter = (RadioNavigationalWarningsAdminListFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].Content.Length <= 333);
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].Content.Contains("..."));
@@ -148,7 +147,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         [OneTimeTearDown]
         public async Task GlobalTearDown()
         {
-            //Clean up from Database
             await DeSeedRadioNavigationalWarnings();
             await DeSeedWarningType();
         }
