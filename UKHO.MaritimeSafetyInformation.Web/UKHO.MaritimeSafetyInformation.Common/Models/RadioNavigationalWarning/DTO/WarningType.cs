@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class WarningType
     {
         [Key]
