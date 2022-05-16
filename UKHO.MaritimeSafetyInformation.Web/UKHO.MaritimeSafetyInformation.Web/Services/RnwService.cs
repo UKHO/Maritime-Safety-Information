@@ -11,7 +11,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IRnwRepository _rnwRepository;
         private readonly IOptions<RadioNavigationalWarningConfiguration> _radioNavigationalWarningConfiguration;
         private readonly ILogger<RnwService> _logger;
-        private static List<RadioNavigationalWarningsAdminList> s_allRadioNavigationalWarningsAdminList;
 
         public RnwService(IRnwRepository repository,
                         IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration,
@@ -22,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, bool reLoadData, string correlationId)
+        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, string correlationId)
         {
             try
             {
@@ -31,12 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
                 int srNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
 
-                if (s_allRadioNavigationalWarningsAdminList == null || reLoadData)
-                {
-                    s_allRadioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-                }
-
-                List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = s_allRadioNavigationalWarningsAdminList;
+                List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList();
 
                 if (warningType != null)
                 {
@@ -63,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.MSIGetRnwForAdminRequestError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.MSIGetRnwForAdminListError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
         }

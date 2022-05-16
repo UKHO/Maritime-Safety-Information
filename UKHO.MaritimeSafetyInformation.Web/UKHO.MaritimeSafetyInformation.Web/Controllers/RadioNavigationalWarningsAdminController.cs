@@ -19,11 +19,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index(int pageIndex = 1, int? warningType = null, int? year = null, bool reLoadData = true)
+        public async Task<IActionResult> Index(int pageIndex = 1, int? warningType = null, int? year = null)
         {
             _logger.LogInformation(EventIds.MSIGetRnwForAdminStarted.ToEventId(), "Maritime safety information request to get RNW records for Admin started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = await _rnwService.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year, reLoadData, GetCurrentCorrelationId());
+            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = await _rnwService.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year, GetCurrentCorrelationId());
             ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
             ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
 

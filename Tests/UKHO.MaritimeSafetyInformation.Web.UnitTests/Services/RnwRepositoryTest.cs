@@ -33,57 +33,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeContext.RadioNavigationalWarnings.RemoveRange(_fakeContext.RadioNavigationalWarnings);
             _fakeContext.WarningType.RemoveRange(_fakeContext.WarningType);
 
-            RadioNavigationalWarnings radioNavigationalWarning1 = new()
-            {
-                WarningType = 1,
-                Reference = "RnwAdminListReferance",
-                DateTimeGroup = new DateTime(2020, 1, 1),
-                Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
-            };
-            RadioNavigationalWarnings radioNavigationalWarning2 = new()
-            {
-                WarningType = 2,
-                Reference = "RnwAdminListReferance",
-                DateTimeGroup = new DateTime(2020, 1, 1),
-                Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
-            };
-            RadioNavigationalWarnings radioNavigationalWarning3 = new()
-            {
-                WarningType = 1,
-                Reference = "RnwAdminListReferance",
-                DateTimeGroup = new DateTime(2021, 1, 1),
-                Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
-            };
-            RadioNavigationalWarnings radioNavigationalWarning4 = new()
-            {
-                WarningType = 2,
-                Reference = "RnwAdminListReferance",
-                DateTimeGroup = new DateTime(2022, 1, 1),
-                Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
-            };
-
-            _fakeContext.RadioNavigationalWarnings.Add(radioNavigationalWarning1);
-            _fakeContext.RadioNavigationalWarnings.Add(radioNavigationalWarning2);
-            _fakeContext.RadioNavigationalWarnings.Add(radioNavigationalWarning3);
-            _fakeContext.RadioNavigationalWarnings.Add(radioNavigationalWarning4);
-
-            WarningType WarningType1 = new()
-            {
-                Id = 1,
-                Name = "NAVAREA 1"
-            };
-            WarningType WarningType2 = new()
-            {
-                Id = 2,
-                Name = "UK Coastal"
-            };
-
-            _fakeContext.WarningType.Add(WarningType1);
-            _fakeContext.WarningType.Add(WarningType2);
+            _fakeContext.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
+            _fakeContext.WarningType.AddRange(GetFakeWarningTypeList());
             _fakeContext.SaveChanges();
         }
 
@@ -116,5 +67,65 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual("2021", result[1]);
             Assert.AreEqual("2020", result[2]);
         }
+
+        #region PrivateMethod
+        private static List<RadioNavigationalWarnings> GetFakeRadioNavigationalWarningList()
+        {
+            List<RadioNavigationalWarnings> radioNavigationalWarningList = new();
+            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            {
+                WarningType = 1,
+                Reference = "RnwAdminListReferance",
+                DateTimeGroup = new DateTime(2020, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+
+            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            {
+                WarningType = 2,
+                Reference = "RnwAdminListReferance",
+                DateTimeGroup = new DateTime(2020, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+
+            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            {
+                WarningType = 1,
+                Reference = "RnwAdminListReferance",
+                DateTimeGroup = new DateTime(2021, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+
+            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            {
+                WarningType = 2,
+                Reference = "RnwAdminListReferance",
+                DateTimeGroup = new DateTime(2022, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+            return radioNavigationalWarningList;
+        }
+
+        private static List<WarningType> GetFakeWarningTypeList()
+        {
+            List<WarningType> warningTypeList = new();
+            warningTypeList.Add(new WarningType()
+            {
+                Id = 1,
+                Name = "NAVAREA 1"
+            });
+
+            warningTypeList.Add(new WarningType()
+            {
+                Id = 2,
+                Name = "UK Coastal"
+            });
+            return warningTypeList;
+        }
+        #endregion
     }
 }
