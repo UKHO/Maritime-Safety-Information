@@ -18,11 +18,14 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
          expect(weeklyEnable).toBeTruthy();     
        })
   
-      test('Does the Table Data For Yearly and Weekly Drop Down Include Table Data,File Name and File Size',async ({page}) => {
+      test('Does the Table Data For Yearly and Weekly Record is Display with File Name and File Size',async ({page}) => {
          const tableData = await notice.getRecordCountTableNoticeToMarine("2022","16");
          expect(tableData).toBeGreaterThan(0);   
          expect(await notice.getFileNameText()).toEqual('File Name');
-         expect(await notice.getFileSizeText()).toEqual('File Size');  
-         await notice.getTableData();
+         expect(await notice.getFileSizeText()).toEqual('File Size');     
       })  
+      test('Does the Table Data For Yearly and Weekly Drop Down Include Table Data,File Name and File Size',async ({page}) => {
+            await notice.getTableData();
+      })  
+   
     })
