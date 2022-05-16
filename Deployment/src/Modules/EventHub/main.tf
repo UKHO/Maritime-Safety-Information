@@ -38,3 +38,13 @@ resource "azurerm_eventhub_authorization_rule" "log" {
   send                = true
   manage              = false
 }
+
+resource "azurerm_eventhub_authorization_rule" "logstash" {
+  name                = "logstashAccessKey"
+  namespace_name      = azurerm_eventhub_namespace.eventhub_namespace.name
+  eventhub_name       = azurerm_eventhub.eventhub.name
+  resource_group_name = var.resource_group_name
+  listen              = true
+  send                = false
+  manage              = false
+}
