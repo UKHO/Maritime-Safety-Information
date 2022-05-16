@@ -1,0 +1,21 @@
+﻿.notice-to-mariners-weekly-table {
+    thead {
+        tr {
+            th {
+                &.th-3 {
+                    flex-basis: 35%;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                &.td-3 {
+                    flex-basis: 35%;
+                }
+            }
+        }
+    }
+}

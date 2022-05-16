@@ -34,12 +34,12 @@
             <div class="row mb-3">
                 <div class="col-md-3 mb-3">
                     <label for="ddlYears" class="form-label">Select Year</label>
-                    @Html.DropDownList("year", @Model.Years, new { onchange = "YearValueChange(this);this.form.submit();",@class = "form-control" })
+                    @Html.DropDownList("year", @Model.Years, new { onchange = "YearValueChange(this);this.form.submit();",@class = "form-select" })
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label for="ddlWeeks" class="form-label">Select Week</label>
-                    @Html.DropDownList("week", @Model.Weeks,new { onchange = "this.form.submit();",@class = "form-control" })
+                    @Html.DropDownList("week", @Model.Weeks,new { onchange = "this.form.submit();",@class = "form-select" })
                 </div>
             </div>
         }
