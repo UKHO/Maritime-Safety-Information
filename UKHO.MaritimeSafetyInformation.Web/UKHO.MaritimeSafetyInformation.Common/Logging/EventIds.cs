@@ -137,9 +137,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         MSIAddNewRNWRecordCompleted = 910033,
         /// <summary> 
-        /// 910034 -  Maritime safety information add new RNW record to database request error.
+        /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        MSIAddNewRNWRequestError = 910034,
+        MSIErrorInRnwRepositoryProcess = 910034,
         /// <summary> 
         /// 910035 -  Maritime safety information invalid new RNW record request.
         /// </summary>
