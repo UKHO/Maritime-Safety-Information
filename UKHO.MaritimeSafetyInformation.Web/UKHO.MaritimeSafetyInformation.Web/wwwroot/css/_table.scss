@@ -1,0 +1,49 @@
+﻿.rnw-allwarnings-table {
+    thead {
+        tr {
+            th {
+                &.th-1 {
+                    flex-basis: 64%
+                }
+
+                &.th-2 {
+                    flex-basis: 94%
+                }
+
+                &.th-4 {
+                    flex-basis: 77%
+                }
+
+                &.th-5 {
+                    flex-basis: 38%
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                &.td-1 {
+                    flex-basis: 60%
+                }
+
+                &.td-2 {
+                    flex-basis: 90%
+                }
+
+                &.td-4 {
+                    flex-basis: 70%;
+                }
+
+                &.td-5 {
+                    flex-basis: 30%
+                }
+
+                a {
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+}

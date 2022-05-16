@@ -243,6 +243,34 @@
   clear: both;
 }
 
+.rnw-allwarnings-table thead tr th.th-1 {
+  flex-basis: 64%;
+}
+.rnw-allwarnings-table thead tr th.th-2 {
+  flex-basis: 94%;
+}
+.rnw-allwarnings-table thead tr th.th-4 {
+  flex-basis: 77%;
+}
+.rnw-allwarnings-table thead tr th.th-5 {
+  flex-basis: 38%;
+}
+.rnw-allwarnings-table tbody tr td.td-1 {
+  flex-basis: 60%;
+}
+.rnw-allwarnings-table tbody tr td.td-2 {
+  flex-basis: 90%;
+}
+.rnw-allwarnings-table tbody tr td.td-4 {
+  flex-basis: 70%;
+}
+.rnw-allwarnings-table tbody tr td.td-5 {
+  flex-basis: 30%;
+}
+.rnw-allwarnings-table tbody tr td a {
+  font-weight: 300;
+}
+
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
@@ -371,7 +399,7 @@ button:active {
   color: #09315b;
 }
 .form-check-input:checked[type=checkbox] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check' viewBox='0 0 16 16'%3E%3Cpath d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2309315b' class='bi bi-check' viewBox='0 0 16 16'%3E%3Cpath d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z'/%3E%3C/svg%3E");
 }
 .form-check-input:focus {
   border-color: #09315b;
@@ -436,8 +464,8 @@ button:active {
 .table-scroll td, .table-scroll th {
   flex-basis: 100%;
   flex-grow: 2;
-  display: block;
-  text-align: left;
+  display: flex;
+  align-items: center;
 }
 
 .scroll-bar {

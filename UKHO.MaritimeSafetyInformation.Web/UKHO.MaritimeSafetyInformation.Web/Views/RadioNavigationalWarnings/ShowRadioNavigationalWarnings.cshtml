@@ -26,26 +26,26 @@
         <button class="nav-link" id="ukcostal-tab" data-bs-toggle="tab" data-bs-target="#ukcostal" type="button" role="tab" aria-controls="ukcostal" aria-selected="false" tabindex="-1">UK Costal</button>
     </li>
 </ul>
-<div class="tab-content" id="nmTabContent">
+<div class="tab-content" id="rnwTabContent">
     <div class="tab-pane fade show active" id="allwarnings" role="tabpanel" aria-labelledby="allwarnings-tab">
         <div class="table-responsive-md">
-            <table class="table table-scroll small-first-col">
+            <table class="table table-scroll small-first-col rnw-allwarnings-table">
                 <caption class='hidden-caption'>Radio Navigation Warnings All warnings</caption>
                 <thead>
                     <tr>
-                        <th style="width:110px">
+                        <th class="th-1">
                             @Html.DisplayNameFor(model => model.Reference)
                         </th>
-                        <th style="width:200px">
+                        <th class="th-2">
                             @Html.DisplayNameFor(model => model.DateTimeGroup)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
-                         <th style="width:100px">
+                         <th class="th-4 justify-content-center">
                             @Html.ActionLink("Select All", "View details", new { /* id=item.PrimaryKey */ })
                         </th>
-                        <th style="width:80px">
+                        <th class="th-5 justify-content-center">
                             Select
                         </th>
                     </tr>
@@ -53,19 +53,19 @@
                 <tbody class="scroll-content scroll-bar">
                     @foreach (var item in Model) {
                         <tr>
-                            <td>
+                            <td class="td-1">
                                 @Html.DisplayFor(modelItem => item.Reference)
                             </td>
-                            <td>
+                            <td class="td-2">
                                 @Html.DisplayFor(modelItem => item.DateTimeGroup)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
-                            <td>
+                            <td class="td-4 justify-content-center">
                                 @Html.ActionLink("View details", "View details", new { /* id=item.PrimaryKey */ })
                             </td>
-                            <td>
+                            <td class="td-5 justify-content-center">
                                 <input type="checkbox" name="name2" class="form-check-input" />
                             </td>
                         </tr>
