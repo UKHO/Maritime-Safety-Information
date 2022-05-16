@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
@@ -31,6 +32,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRnwRepository = A.Fake<IRnwRepository>();
 
             _rnwService = new RnwService(_fakeRnwRepository, _fakeLogger);
+        }
+
+        [Test]
+        public async Task WhenRequestToGetWarningTypes_ThenReturnListOfWarningType()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+
+            A.CallTo(() => _fakeRnwRepository.GetWarningTypes()).Returns(new List<WarningType>() { new WarningType {Id=1, Name="test"}});
+
+            List<WarningType> result = await _rnwService.GetWarningTypes();
+
+            Assert.AreEqual("test", result[0].Name);
         }
 
         [Test]
