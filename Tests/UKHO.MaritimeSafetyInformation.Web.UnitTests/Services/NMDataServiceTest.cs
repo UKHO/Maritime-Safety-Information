@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldReturnZeroFiles()
         {
-            
+
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
@@ -136,54 +136,61 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.That(result.IsFaulted, Is.True);
         }
 
-        //////////[Test]
-        //////////public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
-        //////////{
-        //////////    DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+        [Test]
+        public void WhenGetAllYearWeekIsCalledWithInvalidToken_ThenShouldReturnException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
 
-        //////////    Calendar calender = dateTimeFormatInfo.Calendar;
+            IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
 
-        //////////    int year = DateTime.Now.Year;
+            Task<List<YearWeekModel>> result = _nMDataService.GetAllYearWeek(CorrelationId);
+            Assert.IsTrue(result.IsFaulted);
+        }
 
-        //////////    int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+        [Test]
+        public async Task WhenGetAllYearWeekIsCalledwithValidTokenandNodata_ThenShouldReturnCountZero()
+        {
+            int ExpectedRecordCount = 0;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
+            IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
 
-        //////////    Assert.AreEqual(totalWeeks + 1, result.Count);
-        //////////}
-        //////////[Test]
-        //////////public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
-        //////////{
-        //////////    DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            Assert.IsEmpty(result);
+            Assert.AreEqual(result.Count, ExpectedRecordCount);
+        }
 
-        //////////    Calendar calender = dateTimeFormatInfo.Calendar;
+        [Test]
+        public async Task WhenGetAllYearWeekIsCalledwithValidTokenNoYearWeekdata_ThenShouldReturnNoList()
+        {
+            int ExpectedRecordCount = 0;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-        //////////    int year = DateTime.Now.Year - 1;
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
 
-        //////////    DateTime lastdate = new(year, 12, 31);
+            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
-        //////////    int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
+            Assert.IsEmpty(result);
+            Assert.AreEqual(result.Count, ExpectedRecordCount);
+        }
 
-        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
+        [Test]
+        public async Task WhenGetAllYearWeekIsCalledwithValidToken_ThenShouldReturnYearWeekList()
+        {
+            int ExpectedRecordCount = 3;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-        //////////    Assert.AreEqual(totalWeeks + 1, result.Count);
-        //////////}
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
 
-        //////////[Test]
-        //////////public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
-        //////////{
-        //////////    const int yearsCount = 4;
-        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
-        //////////    Assert.AreEqual(yearsCount, result.Count);
-        //////////}
+            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
-        //////////[Test]
-        //////////public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
-        //////////{
-        //////////    int minYear = DateTime.Now.Year - 2;
-        //////////    List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
-        //////////    Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
-        //////////}
+            Assert.IsNotEmpty(result);
+            Assert.AreEqual(result.Count, ExpectedRecordCount);
+        }
 
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
@@ -317,6 +324,42 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             };
 
             return searchResult;
+        }
+
+        private static Result<BatchAttributesSearchResponse> SetAttributeSearchResult()
+        {
+            Result<BatchAttributesSearchResponse> AttributeSearchResult = new()
+            {
+                Data = new BatchAttributesSearchResponse
+                {
+                    SearchBatchCount = 5,
+                    BatchAttributes = new List<BatchAttributesSearchAttribute> { new BatchAttributesSearchAttribute() {  Key = "Frequency" , Values =  new List<string> { "Weekly","Daily"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Product Type" , Values = new List<string> {"NMTest"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Week Number", Values = new List<string> { "14", "16", "17", } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Year", Values = new List<string> { "2021", "2022" } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> { "2022 / 14", "2022 / 16", "2021 / 15" } }
+                  }
+                }
+            };
+            return AttributeSearchResult;
+        }
+
+        private static Result<BatchAttributesSearchResponse> SetAttributeSearchNoYearWeekData()
+        {
+            Result<BatchAttributesSearchResponse> AttributeSearchResult = new()
+            {
+                Data = new BatchAttributesSearchResponse
+                {
+                    SearchBatchCount = 5,
+                    BatchAttributes = new List<BatchAttributesSearchAttribute> { new BatchAttributesSearchAttribute() {  Key = "Frequency" , Values =  new List<string> { "Weekly","Daily"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Product Type" , Values = new List<string> {"NMTest"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Week Number", Values = new List<string> { "15", "14", "17", } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Year", Values = new List<string> { "2020", "2022" } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> {  } }
+                  }
+                }
+            };
+            return AttributeSearchResult;
         }
 
     }
