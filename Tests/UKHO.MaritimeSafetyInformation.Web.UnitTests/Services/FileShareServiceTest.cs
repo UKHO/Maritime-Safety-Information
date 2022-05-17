@@ -22,9 +22,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IHttpClientFactory _httpClientFactory;
         private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private ILogger<FileShareService> _logger;
-        private FileShareService _fileShareService;
         private IFileShareApiClient _fileShareApiClient;
-        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+        private const string _correlationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+
+        private FileShareService _fileShareService;
 
         public static IConfiguration InitConfiguration()
         {
@@ -50,14 +51,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenFileShareServiceCallsFssBatchSearchAsync_ThenReturnsBatchSearchResponse()
         {
-            string searchText = "";
-            string accessToken = "";
+            const string searchText = "";
+            const string accessToken = "";
 
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
 
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
-            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken, CorrelationId);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken, _correlationId);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
         }
 
@@ -67,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.PageSize = -100;
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync("", "", _correlationId);
             Assert.That(result.IsFaulted, Is.True);
         }
 
@@ -76,7 +77,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
 
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
+            const string fileName = "testfile.pdf";
 
             Stream strm = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
@@ -84,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
                 .Returns(strm);
-            var result = _fileShareService.FSSDownloadFileAsync(batchId,fileName,"", CorrelationId);
+            var result = _fileShareService.FSSDownloadFileAsync(batchId,fileName,"", _correlationId);
             Assert.IsInstanceOf<Task<byte[]>>(result);
 
         }
@@ -96,7 +97,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Returns(stream);
-            var result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId);
+            var result = _fileShareService.FSSDownloadFileAsync("", "", "", _correlationId);
             Assert.That(result.IsFaulted, Is.True);
         }
     }

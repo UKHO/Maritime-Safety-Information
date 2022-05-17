@@ -22,8 +22,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken, string correlationId)
-        {            
-            IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
+        {
+            IResult<BatchSearchResponse> result;
             try
             {
                 string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' " + searchText;
@@ -33,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
                 result = await fileShareApi.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, CancellationToken.None);
                 _logger.LogInformation(EventIds.FSSBatchSearchResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
-                
+
             }
             catch (Exception ex)
             {
@@ -42,8 +42,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
 
             return result;
-
-
         }
 
         public async Task<byte[]> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId)
