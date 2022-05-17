@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[WarningType]
+(
+[Id] INT IDENTITY(1,1)
+,[Name] VARCHAR(32) NOT NULL
+CONSTRAINT [PK_WarningType] PRIMARY KEY CLUSTERED ([Id] ASC)
+);

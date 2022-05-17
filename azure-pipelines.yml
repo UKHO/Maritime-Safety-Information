@@ -26,7 +26,7 @@ variables:
   - name: UKHOAssemblyProduct
     value: "Maritime Safety Information"
   - name: UKHOAssemblyCopyright
-    value: "Copyright © UK Hydrographic Office"
+    value: "Copyright Â© UK Hydrographic Office"
   - name: Container
     value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
   - name: DeploymentPool
@@ -241,19 +241,37 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
+      - job: BuildAndPublishDACPAC
+        workspace:
+          clean: all
+        displayName: "Build And publish DACPAC"
+        steps:
+          - task: VSBuild@1
+            displayName: "Build solution for Maritime Safety Information Database"
+            inputs:
+              solution: "**/UKHO.MaritimeSafetyInformation.Web.Database.sqlproj"
+              configuration: $(BuildConfiguration)
+              platform: $(BuildPlatform)
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Database DACPAC Artifacts"
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
+              ArtifactName: DACPAC
+
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-Dev-TF-Variables"
+      - group: "Maritime-Safety-Information-Dev-Variables"
     jobs:
-      - deployment: DevDeployApp
-        displayName: "Dev - deploy terraform and dotnet App"
+      - deployment: DevDeployTerraform
+        displayName: "Dev - Deploy Terraform and Dotnet App"
         environment: "Maritime-Safety-Information-Dev"
         pool: $(DeploymentPool)
         container: ${{variables.Container}}
         workspace:
           clean: all
-        variables:
-          - group: "Maritime-Safety-Information-Dev-TF-Variables"
-          - group: "Maritime-Safety-Information-Dev-Variables"
         strategy:
           runOnce:
             deploy:
@@ -263,91 +281,137 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
-      - job: FunctionalTest
-        dependsOn: 
+      - deployment: DevDeployApp
+        dependsOn: DevDeployTerraform
+        displayName: "Dev - DACPAC and App Deployment"
+        pool: NautilusBuild
+        environment: "Maritime-Safety-Information-Dev"
+        workspace:
+          clean: all
+        variables:
+          - name: WEB_APP_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: MsiWebUrl
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information Dev - A.008.02"
+
+      - job: FunctionalAndAccessibilityTests
+        dependsOn:
+        - DevDeployTerraform
         - DevDeployApp
         pool: $(WindowsPool)
-        displayName: "Dev Functional Automated Tests"
+        displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
         steps:
-           - checkout: self
+          - template: Deployment/templates/continuous-testing.yml
 
-           - task: NodeTool@0
-             inputs:
-              versionSpec: '14.x'
-             displayName: 'Install Node.js'
+  - stage: QADeploy
+    displayName: "QAdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-QA-TF-Variables"
+      - group: "Maritime-Safety-Information-QA-Variables"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
 
-           - script: |
-              npm ci
-             displayName: 'npm restore'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests'
+      - deployment: QADeployTerraform
+        displayName: "QA - Deploy Terraform and Dotnet App"
+        environment: "Maritime-Safety-Information-QA"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
 
-           - task: FileTransform@1
-             inputs:
-              folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-              fileType: 'json'
-              targetFiles: 'appConfig.json'
+      - deployment: QADeployApp
+        dependsOn: QADeployTerraform
+        displayName: "QA - DACPAC and App Deployment"
+        pool: NautilusBuild
+        environment: "Maritime-Safety-Information-QA"
+        workspace:
+          clean: all
+        variables:
+          - name: WEB_APP_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: MsiWebUrl
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWebUrl']  ]
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
 
-           - script: |
-              npm run test:auto
-             displayName: 'Run Functional Tests'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
-
-           - task: PublishTestResults@2
-             condition: succeededOrFailed()
-             inputs:
-               testRunner: 'JUnit'
-               testResultsFiles: 'results.xml'
-               mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-               testRunTitle: Dev Functional Test Results
-             displayName: 'Publish Functional Test Results'
-
-      - job: AccessibilityTest
-        dependsOn: 
-        - DevDeployApp
+      - job: FunctionalAndAccessibilityTests
+        dependsOn:
+        - QADeployTerraform
+        - QADeployApp
         pool: $(WindowsPool)
-        displayName: "Dev Accessibility Tests"
+        displayName: "QA Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.DevDeployApp.outputs['DevDeployApp.TerraformDeploy.WebsiteURL']  ]
+         url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteURL']  ] 
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
         steps:
-           - checkout: self
+          - template: Deployment/templates/continuous-testing.yml
 
-           - task: NodeTool@0
-             inputs:
-              versionSpec: '14.x'
-             displayName: 'Install Node.js'
+  - stage: Livedeploy
+    displayName: "Livedeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-Live-TF-Variables"
+      - group: "Maritime-Safety-Information-Live-Variables"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
+      - deployment: LiveDeployTerraform
+        displayName: "Live - deploy terraform and dotnet App"
+        environment: "Maritime-Safety-Information-Live"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"
 
-           - script: |
-              npm ci
-             displayName: 'npm restore'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests'
-
-           - task: FileTransform@1
-             inputs:
-              folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-              fileType: 'json'
-              targetFiles: 'appConfig.json'
-
-           - script: |
-              npm run test:a11y
-             displayName: 'Run Accessibility Tests'
-             workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
-          
-           - task: PublishTestResults@2
-             condition: succeededOrFailed()
-             inputs:
-               testRunner: 'JUnit'
-               testResultsFiles: 'results.xml'
-               mergeTestResults: true
-               searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-               testRunTitle: Dev Accessibility Test Results
-             displayName: 'Publish Accessibility Test Results'
-
+      - deployment: LiveDeployApp
+        dependsOn: LiveDeployTerraform
+        displayName: "Live - DACPAC and App Deployment"
+        pool: NautilusBuild
+        environment: "Maritime-Safety-Information-Live"
+        workspace:
+          clean: all
+        variables:
+          - name: WEB_APP_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: MsiWebUrl
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"
