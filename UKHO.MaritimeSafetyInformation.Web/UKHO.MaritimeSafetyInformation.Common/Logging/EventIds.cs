@@ -152,19 +152,24 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         GetSingleWeeklyNMFileCompleted = 910035,
 
         /// <summary>
-        /// 910036 - Request For FSS To Get Single Weekly NM File Started.
+        /// 910036 - Request To Get Single Weekly NM File Failed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileStarted = 910036,
+        GetSingleWeeklyNMFileFailed = 910036,
 
         /// <summary>
-        /// 910037 - Request For FSS To Get Single Weekly NM File Completed.
+        /// 910037 - Request For FSS To Get Single Weekly NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileCompleted = 910037,
+        FSSGetSingleWeeklyNMFileStarted = 910037,
 
         /// <summary>
-        /// 910038 - Request For FSS To Get Single Weekly NM File Failed.
+        /// 910038 - Request For FSS To Get Single Weekly NM File Completed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileResponseFailed = 910038,
+        FSSGetSingleWeeklyNMFileCompleted = 910038,
+
+        /// <summary>
+        /// 910039 - Request For FSS To Get Single Weekly NM File Failed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileResponseFailed = 910039,
     }
 
     public static class EventIdExtensions

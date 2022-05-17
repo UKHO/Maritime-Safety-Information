@@ -79,25 +79,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "testfile.pdf";
 
-            Stream strm = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
-                .Returns(strm);
-            var result = _fileShareService.FSSDownloadFileAsync(batchId,fileName,"", _correlationId);
-            Assert.IsInstanceOf<Task<byte[]>>(result);
+                .Returns(stream);
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId,fileName,"", _correlationId);
+            Assert.IsInstanceOf<Task<Stream>>(result);
 
         }
 
         [Test]
         public void WhenFSSDownloadFileAsyncIsCalled_ThenShouldExecuteCatch()
         {
-            Stream stream = Stream.Null;
-            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
-
-            A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Returns(stream);
-            var result = _fileShareService.FSSDownloadFileAsync("", "", "", _correlationId);
+            _fileShareServiceConfig.Value.BaseUrl = null;
+            A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored));
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", _correlationId);
             Assert.That(result.IsFaulted, Is.True);
         }
     }

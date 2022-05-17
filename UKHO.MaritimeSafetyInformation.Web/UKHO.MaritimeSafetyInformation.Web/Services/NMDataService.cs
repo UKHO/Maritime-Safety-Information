@@ -136,13 +136,28 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId)
         {
-            _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId,fileName,correlationId);
+            byte[] fileBytes;
+            try
+            {
+                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-            string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-            _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-            return await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
+                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
+
+                fileBytes = new byte[stream.Length];
+                stream.Read(fileBytes, 0, fileBytes.Length);
+
+                return fileBytes;
+            }
+            catch (Exception)
+            {
+                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to get single weekly NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                throw;
+            }
+            
         }
     }
 }

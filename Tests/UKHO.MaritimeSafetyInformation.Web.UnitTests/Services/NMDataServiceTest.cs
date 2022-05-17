@@ -4,7 +4,9 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
@@ -193,12 +195,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const string filename = "";
             const string accessToken = "";
 
-            byte[] fileBytes = new byte[100];
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, _correlationId)).Returns(fileBytes);
-            var result = _nMDataService.DownloadFssFileAsync(batchId, filename, _correlationId);
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, _correlationId)).Returns(stream);
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, _correlationId);
             Assert.IsInstanceOf<Task<byte[]>>(result);
+        }
+
+        [Test]
+        public void WhenDownloadFssFileAsyncIsCalled_ThenShouldExecuteCatch()
+        {
+            const string batchId = "";
+            const string filename = "";
+            const string accessToken = "";
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, _correlationId)).ThrowsAsync(new Exception());
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, _correlationId);
+            Assert.That(result.IsFaulted, Is.True);
         }
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
