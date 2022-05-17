@@ -8,4 +8,4 @@
  [ExpiryDate] DATETIME NULL, 
  [IsDeleted] BIT NOT NULL DEFAULT 0, 
  CONSTRAINT [PK_RadioNavigationalWarnings] PRIMARY KEY CLUSTERED ([Id] ASC) ,
- CONSTRAINT [FK_WarningType] FOREIGN KEY ([WarningType]) REFERENCES [dbo].[WarningType]([Id]) ON DELETE CASCADE );
+ CONSTRAINT [FK_WarningType] FOREIGN KEY ([WarningType]) REFERENCES [dbo].[WarningType]([Id]) ON DELETE NO ACTION );
