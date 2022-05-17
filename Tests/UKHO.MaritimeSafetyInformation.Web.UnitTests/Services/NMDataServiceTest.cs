@@ -192,6 +192,62 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(result.Count, ExpectedRecordCount);
         }
 
+        [Test]
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
+        {
+            const int year = 2022, week = 15, expectedShowFilesResponseModelRecordCount = 4, expectedYearAndWeekRecordCount = 3;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeek.Count);
+            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseModel.Count);
+        }
+
+        [Test]
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
+        {
+            const int year = 0, week = 0, expectedShowFilesResponseModelRecordCount = 4, expectedYearAndWeekRecordCount = 3;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeek.Count);
+            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseModel.Count);
+        }
+
+        [Test]
+        public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnException()
+        {
+            const int year = 0, week = 0;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+
+            Result<BatchSearchResponse> searchResult = new();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            Task<ShowWeeklyFilesResponseModel> result = _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.That(result.IsFaulted, Is.True);
+        }
+
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()
@@ -361,6 +417,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             };
             return AttributeSearchResult;
         }
-
     }
 }

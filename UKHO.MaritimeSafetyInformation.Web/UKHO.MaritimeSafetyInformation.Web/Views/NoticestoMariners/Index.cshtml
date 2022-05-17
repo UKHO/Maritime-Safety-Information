@@ -28,10 +28,11 @@
 </ul>
 <div class="tab-content" id="nmTabContent">
     <div class="tab-pane fade show active" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
-        <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
-        <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
+
         @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
         {
+            <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
+            <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
             <div class="row mb-3">
                 <div class="col-md-3 mb-3">
                     <label for="ddlYears" class="form-label">Select Year</label>
@@ -42,7 +43,7 @@
 
                 <div class="col-md-3 mb-3">
                     <label for="ddlWeeks" class="form-label">Select Week</label>
-                    <select class="form-select" id="ddlWeeks" name="week" onchange="this.form.submit();">
+                    <select class="form-select" id="ddlWeeks" name="week">
                         <option selected>Please select week</option>
                     </select>
                 </div>

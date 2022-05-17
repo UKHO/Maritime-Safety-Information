@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -32,7 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
 
             _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
-            
+
             return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 
@@ -48,6 +47,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     _logger.LogInformation(EventIds.ShowWeeklyFilesResponseForYearAndWeekNonZero.ToEventId(), "Maritime safety information request for weekly NM file response for year and week non zero for correlationId:{correlationId}", GetCurrentCorrelationId());
                     showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
+                    ViewData["Year"] = year;
+                    ViewData["Week"] = week;
+                }
+                else if (year == 0 || week == 0)
+                {
+                    showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
                     ViewData["Year"] = year;
                     ViewData["Week"] = week;
                 }

@@ -1,10 +1,12 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System.Threading.Tasks;
+using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
@@ -48,16 +50,38 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenIndexPostIsCalled_ThenShouldReturnsExpectedView()
+        public async Task WhenIndexPostIsCalled_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
             const int year = 2022, week = 20;
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
-            _controller.TempData = new TempDataDictionary(_fakeContextAccessor.HttpContext, _fakeTempDataProvider);
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
+
             IActionResult result = await _controller.IndexAsync(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
+
             string actualView = ((ViewResult)result).ViewName;
+
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
+        }
+
+        [Test]
+        public async Task WhenIndexPostIsCalledWithYearAndWeekZero_ThenShouldReturnsExpectedViewAndViewData()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+            const int year = 0, week = 0, expectedViewCount = 0;
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
+
+            IActionResult result = await _controller.IndexAsync(year, week);
+            Assert.IsInstanceOf<ViewResult>(result);
+
+            string actualView = ((ViewResult)result).ViewName;
+
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(expectedViewCount, ((ViewResult)result).ViewData.Count);
         }
 
         [Test]
@@ -68,7 +92,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
-        }      
+        }
 
         [Test]
         public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
@@ -97,6 +121,83 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<PartialViewResult>(result);
             string actualView = ((PartialViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+        }
+
+        private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
+        {
+            return new()
+            {
+                ShowFilesResponseModel = new()
+                {
+                    new ShowFilesResponseModel()
+                    {
+                        BatchId = "1",
+                        Filename = "aaa.pdf",
+                        FileDescription = "aaa",
+                        FileExtension = ".pdf",
+                        FileSize = 1232,
+                        FileSizeinKB = "1 KB",
+                        MimeType = "PDF",
+                        Links = null
+                    },
+                    new ShowFilesResponseModel()
+                    {
+                        BatchId = "1",
+                        Filename = "bbb.pdf",
+                        FileDescription = "bbb",
+                        FileExtension = ".pdf",
+                        FileSize = 1232,
+                        FileSizeinKB = "1 KB",
+                        MimeType = "PDF",
+                        Links = null
+                    },
+                    new ShowFilesResponseModel()
+                    {
+                        BatchId = "2",
+                        Filename = "ccc.pdf",
+                        FileDescription = "ccc",
+                        FileExtension = ".pdf",
+                        FileSize = 1232,
+                        FileSizeinKB = "1 KB",
+                        MimeType = "PDF",
+                        Links = null
+                    },
+                    new ShowFilesResponseModel()
+                    {
+                        BatchId = "2",
+                        Filename = "ddd.pdf",
+                        FileDescription = "ddd",
+                        FileExtension = ".pdf",
+                        FileSize = 1232,
+                        FileSizeinKB = "1 KB",
+                        MimeType = "PDF",
+                        Links = null
+                    }
+                },
+                YearAndWeek = new()
+                {
+                    new YearWeekModel()
+                    {
+                        Year = 2022,
+                        Week = 17
+                    },
+                    new YearWeekModel()
+                    {
+                        Year = 2022,
+                        Week = 18
+                    },
+                    new YearWeekModel()
+                    {
+                        Year = 2022,
+                        Week = 19
+                    },
+                    new YearWeekModel()
+                    {
+                        Year = 2022,
+                        Week = 20
+                    }
+                }
+            };
         }
     }
 }
