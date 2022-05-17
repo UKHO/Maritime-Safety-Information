@@ -17,7 +17,7 @@ import RadioNavigationalWarnings from '../../pageObject/RadioNavigationalWarning
   };
  
   test.beforeEach(async ({page}) => {
-    await page.goto(app.url);    
+    await page.goto(app.rnwAdminUrl);
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
