@@ -241,6 +241,44 @@ stages:
               PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
               ArtifactName: terraformartifact
 
+      - job: PublishIntegrationTestsArtifacts
+        workspace:
+          clean: all
+        displayName: "Publish Terraform Artifacts"
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore"
+            inputs:
+              command: restore
+              projects: |
+                **/*.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+          - task: DotNetCoreCLI@2
+            displayName: "Publish IntegrationTests test code"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '**/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+              zipAfterPublish: false
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish IntegrationTests test Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+              ArtifactName: IntegrationTests
+
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
     variables:
