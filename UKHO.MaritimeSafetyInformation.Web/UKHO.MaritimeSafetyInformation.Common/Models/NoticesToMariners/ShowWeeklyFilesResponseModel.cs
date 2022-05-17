@@ -1,4 +1,5 @@
-﻿namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+﻿
+namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 {
     public class ShowWeeklyFilesResponseModel
     {

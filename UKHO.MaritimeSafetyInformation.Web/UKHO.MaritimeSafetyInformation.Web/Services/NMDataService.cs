@@ -11,7 +11,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IFileShareService _fileShareService;
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
-        public const string yearandWeek = "YEAR/WEEK";
+        public const string YearandWeek = "YEAR/WEEK";
 
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
@@ -68,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
                     {
-                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == yearandWeek)
+                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == YearandWeek)
                         {
                             List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
 

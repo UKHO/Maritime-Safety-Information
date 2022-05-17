@@ -393,7 +393,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                                                                 new BatchAttributesSearchAttribute() { Key = "Product Type" , Values = new List<string> {"NMTest"} },
                                                                                 new BatchAttributesSearchAttribute() { Key = "Week Number", Values = new List<string> { "14", "16", "17", } },
                                                                                 new BatchAttributesSearchAttribute() { Key = "Year", Values = new List<string> { "2021", "2022" } },
-                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> { "2022 / 14", "2022 / 16", "2021 / 15" } }
+                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> { "2022 / 14", "2022 / 16", "2021 / 15" ,"..." } }
                   }
                 }
             };
