@@ -51,7 +51,8 @@ private async Task Main()
 
 	var config = configQA;
 
-	var fssClient = new FileShareApiAdminClient(new UserAgentClientFactory(), config.BaseAddress, new AuthTokenProvider(config.ClientId, config.TenantId, config.AuthUrl));
+	var fssClient = new FileShareApiAdminClient(new UserAgentClientFactory(), config.BaseAddress,
+		new AuthTokenProvider(config.ClientId, config.TenantId, config.AuthUrl));
 
 	if (REPLACE_ALL_DATA_IN_BUSINESS_UNIT)
 	{
@@ -59,31 +60,33 @@ private async Task Main()
 	}
 
 	await ProcessDailies(fssClient, @"\\hadsprddom04.business.ukho.gov.uk\DFS\Prod_Prod\nms\FILES\NMOutput\Dailies");
-	await ProcessWeeklys(fssClient, @"\\hadsprddom04.business.ukho.gov.uk\DFS\Bus_CorpData\_DATA EXCHANGE\NM Weekly");
+	await ProcessWeeklies(fssClient, @"\\hadsprddom04.business.ukho.gov.uk\DFS\Bus_CorpData\_DATA EXCHANGE\NM Weekly");
 }
 
 private async Task ExpireAllDataInBusinessUnit(FileShareApiAdminClient fssClient, string businessUnit)
 {
 	var query = $"businessUnit eq '{businessUnit}' and $batch(Product Type) eq '{PRODUCT_TYPE_ATTRIBUTE_VALUE}'";
 	var existingData = await fssClient.Search(query);
+
 	while (existingData.Count > 0)
 	{
 		foreach (var existingBatch in existingData.Entries)
 		{
 			await fssClient.SetExpiryDateAsync(existingBatch.BatchId, new BatchExpiryModel() { ExpiryDate = DateTime.Now });
 		}
+
 		existingData = await fssClient.Search(query);
 	}
 }
 
 // Define other methods and classes here
 
-/// <summary>Weeklys folder, probably in the Data Exchange.  Expected to contain sub folders: yyyy/WK xx-yy/Public/  and yyyy/WK xx-yy/Agents</summary>
-private async Task ProcessWeeklys(IFileShareApiAdminClient fssClient, string weeklysFolder)
+/// <summary>Weeklies folder, probably in the Data Exchange.  Expected to contain sub folders: yyyy/WK xx-yy/Public/  and yyyy/WK xx-yy/Agents</summary>
+private async Task ProcessWeeklies(IFileShareApiAdminClient fssClient, string weekliesFolder)
 {
-	var weeklysDirectories = new DirectoryInfo(weeklysFolder);
+	var weekliesDirectories = new DirectoryInfo(weekliesFolder);
 
-	foreach (var yearDirectory in weeklysDirectories.EnumerateDirectories())
+	foreach (var yearDirectory in weekliesDirectories.EnumerateDirectories())
 	{
 		foreach (var weekDirectory in yearDirectory.EnumerateDirectories())
 		{
@@ -98,17 +101,13 @@ private async Task ProcessWeeklys(IFileShareApiAdminClient fssClient, string wee
 			var weekAsInt = int.Parse(weekNameMatch.Groups[1].Value);
 			var weekNumber = new WeekNumber(year, weekAsInt);
 
-			//var yearAttribute = weekNumber.Year.ToString();
-			//var weekNumberAttribute = weekNumber.Week.ToString();
-			//var yearWeekAttribute = $"{weekNumber.Year} / {weekNumber.Week.ToString()}";
-
 			var attributes = new Dictionary<string, string>()
 			{
 				{"Product Type", PRODUCT_TYPE_ATTRIBUTE_VALUE},
-				{"Year", $"{weekNumber.Year}"},
-				{"Week Number", $"{weekNumber.Week}"},
-				{"Year / Week", $"{weekNumber.Year} / {weekNumber.Week}"},
-				{"Frequency", "Weekly"}
+				{"Year",         $"{weekNumber.Year}"},
+				{"Week Number",  $"{weekNumber.Week}"},
+				{"Year / Week",  $"{weekNumber.Year} / {weekNumber.Week}"},
+				{"Frequency",    "Weekly"}
 			};
 
 			await AddPdfsFromPublicFolderToFss(WEEKLY_NMS_RETENTION_PERIOD(weekNumber.Date), weekDirectory, fssClient, attributes);
@@ -165,23 +164,24 @@ private async Task ProcessDailies(IFileShareApiAdminClient fssClient, string dai
 
 					var dataDateAttribute = $"{dayDataFolderNameMatch.Groups[1].Value}-{dayDataFolderNameMatch.Groups[2].Value}-{dayDataFolderNameMatch.Groups[3].Value}";
 					var dayDate = DateTime.ParseExact(dataDateAttribute, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-					var attributes = new Dictionary<string, string>() {
-								{"Product Type", PRODUCT_TYPE_ATTRIBUTE_VALUE},
-								{"Year", $"{weekNumber.Year}",
-								{"Week Number", $"{weekNumber.Week}"},
-								{"Year / Week", $"{weekNumber.Year} / {weekNumber.Week}"},
-								{"Frequency", "Daily"},
-								{"Data Date", dataDateAttribute}
-							};
+					var attributes = new Dictionary<string, string>()
+					{
+						{"Product Type", PRODUCT_TYPE_ATTRIBUTE_VALUE},
+						{"Year",         $"{weekNumber.Year}",
+						{"Week Number",  $"{weekNumber.Week}"},
+						{"Year / Week",  $"{weekNumber.Year} / {weekNumber.Week}"},
+						{"Frequency",    "Daily"},
+						{"Data Date",    dataDateAttribute}
+					};
 
-					await AddPdfsFromPublicFolderToFss(DAILY_NMS_RETENTION_PERIOD(dayDate), dayDataDirectory, fssClient, attributes);
+					await AddPDFsFromPublicFolderToFSS(DAILY_NMS_RETENTION_PERIOD(dayDate), dayDataDirectory, fssClient, attributes);
 				}
 			}
 		}
 	}
 }
 
-private async Task AddPdfsFromPublicFolderToFss(DateTime expiryDate, DirectoryInfo dayDataDirectory, IFileShareApiAdminClient fssClient, Dictionary<string, string> attributes)
+private async Task AddPDFsFromPublicFolderToFSS(DateTime expiryDate, DirectoryInfo dayDataDirectory, IFileShareApiAdminClient fssClient, Dictionary<string, string> attributes)
 {
 	if (expiryDate < DateTime.UtcNow)
 	{
