@@ -33,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeLogger = A.Fake<ILogger<RnwService>>();
             _fakeRnwRepositoryLogger = A.Fake<ILogger<RnwRepository>>();
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
-            _fakeRnwRepository = new RnwRepository(_fakeContext, _fakeRnwRepositoryLogger);
+            _fakeRnwRepository = new RnwRepository(_fakeContext);
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
 
             _rnwService = new RnwService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);

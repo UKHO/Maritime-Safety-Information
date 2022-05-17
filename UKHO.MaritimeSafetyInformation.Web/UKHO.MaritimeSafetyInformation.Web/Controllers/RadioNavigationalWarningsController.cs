@@ -18,13 +18,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index(int warningType = 0, bool reLoadData = true)
+        public async Task<IActionResult> Index()
         {
-            _logger.LogInformation(EventIds.MSIGetRnwDetailStarted.ToEventId(), "Maritime safety information request to get RNW detail for public started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.MSIGetRnwDetailStarted.ToEventId(), "Maritime safety information request to get RNW detail started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(warningType, reLoadData, GetCurrentCorrelationId());
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.MSIGetRnwDetailCompleted.ToEventId(), "Maritime safety information request to get RNW detail for public completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.MSIGetRnwDetailCompleted.ToEventId(), "Maritime safety information request to get RNW detail completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
         }

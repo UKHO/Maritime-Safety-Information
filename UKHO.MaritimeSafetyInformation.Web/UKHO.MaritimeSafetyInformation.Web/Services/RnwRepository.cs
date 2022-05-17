@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
-using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
@@ -10,13 +9,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public class RnwRepository : IRnwRepository
     {
         private readonly RadioNavigationalWarningsContext _context;
-        private readonly ILogger<RnwRepository> _logger;
 
-        public RnwRepository(RadioNavigationalWarningsContext context,
-                            ILogger<RnwRepository> logger)
+        public RnwRepository(RadioNavigationalWarningsContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList()
@@ -42,19 +38,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return radioNavigationalWarningsAdminLists;
         }
 
-        public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList(string correlationId)
+        public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList()
         {
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData
             = await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
-                     where !rnwWarnings.IsDeleted
+                     where !rnwWarnings.IsDeleted && rnwWarnings.ExpiryDate >= DateTime.UtcNow
                      select new RadioNavigationalWarningsData
                      {
                          Reference = rnwWarnings.Reference,
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
                          Description = rnwWarnings.Summary,
                          DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
-                     }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
+                     }).OrderByDescending(a => a.DateTimeGroup)
+                     .ToListAsync();
 
             return radioNavigationalWarningsData;
         }

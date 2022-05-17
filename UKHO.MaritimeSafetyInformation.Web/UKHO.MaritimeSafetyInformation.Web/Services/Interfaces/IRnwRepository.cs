@@ -11,6 +11,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         Task<List<string>> GetYears();
 
-        Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList(string correlationId);
+        Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList();
     }
 }

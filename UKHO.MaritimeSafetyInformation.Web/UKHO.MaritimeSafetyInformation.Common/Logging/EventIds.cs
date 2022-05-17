@@ -132,8 +132,26 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910032 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
         MSIGetRnwForAdminRequestError = 910032,
+        /// <summary> 
+        /// 910033 -  Maritime safety information request to get RNW detail started.
+        /// </summary>
         MSIGetRnwDetailStarted = 910033,
-        MSIGetRnwDetailCompleted = 910034
+        /// <summary> 
+        /// 910034 -  Maritime safety information request to get RNW detail completed.
+        /// </summary>
+        MSIGetRnwDetailCompleted = 910034,
+        /// <summary> 
+        /// 910035 -  Maritime safety information request to get RNW detail from database started.
+        /// </summary>
+        MSIGetRnwDetailFormDatabaseStarted = 910035,
+        /// <summary> 
+        /// 910036 -  Maritime safety information request to get RNW detail from database Completed.
+        /// </summary>
+        MSIGetRnwDetailFormDatabaseCompleted = 910036,
+        /// <summary> 
+        /// 910037 -  Maritime safety information error has occurred in the process to get RNW detail from database.
+        /// </summary>
+        MSIErrorInGetRnwDetailFromDatabase = 910037
     }
 
     public static class EventIdExtensions
