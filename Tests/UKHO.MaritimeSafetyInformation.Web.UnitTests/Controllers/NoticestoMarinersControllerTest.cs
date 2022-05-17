@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexPostIsCalledWithYearAndWeekZero_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-            const int year = 0, week = 0, expectedViewCount = 0;
+            const int year = 0, week = 0, expectedViewCount = 2;
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
@@ -82,6 +82,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             Assert.AreEqual(expectedView, actualView);
             Assert.AreEqual(expectedViewCount, ((ViewResult)result).ViewData.Count);
+        }
+
+        [Test]
+        public async Task WhenIndexPostIsCalledWithWeekOrYearZero_ThenShouldReturnsExpectedViewAndViewData()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+            const int year = 2022, week = 0;
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
+
+            IActionResult result = await _controller.IndexAsync(year, week);
+            Assert.IsInstanceOf<ViewResult>(result);
+
+            string actualView = ((ViewResult)result).ViewName;
+
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
         }
 
         [Test]

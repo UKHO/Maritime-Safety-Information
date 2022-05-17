@@ -231,6 +231,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCountZero()
+        {
+            const int year = 2022, week = 0, expectedShowFilesResponseModelRecordCount = 0, expectedYearAndWeekRecordCount = 3;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FssSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeek.Count);
+            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseModel.Count);
+        }
+
+        [Test]
         public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnException()
         {
             const int year = 0, week = 0;
