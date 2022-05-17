@@ -165,15 +165,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         ShowWeeklyFilesResponseIndexGetCompleted = 910040,
         /// <summary>
-        /// 910041 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// 910041 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Started
         /// </summary>
         GetSearchAttributeRequestDataStarted = 910041,
         /// <summary>
-        /// 910042 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// 910042 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
         /// </summary>
         GetSearchAttributeRequestDataFound = 910042,
         /// <summary>
-        /// 910043 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// 910043 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
         /// </summary>
         GetSearchAttributeRequestDataFailed = 910043,
         /// <summary>
@@ -199,10 +199,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910049 - No data recieved Year Week data from FSS for Notices to Mariners  
         /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910049  ,
-        GetAllYearsStarted = 910050,
-        GetAllWeeksOfYearStarted = 910051
-
+        GetSearchAttributeRequestDataNotFound = 910049
     }
 
     public static class EventIdExtensions
