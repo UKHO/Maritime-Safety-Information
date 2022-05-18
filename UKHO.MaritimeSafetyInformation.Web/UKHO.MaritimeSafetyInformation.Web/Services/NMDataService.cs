@@ -143,12 +143,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
-
                 Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
 
                 fileBytes = new byte[stream.Length];
                 stream.Read(fileBytes, 0, fileBytes.Length);
+
+                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 return fileBytes;
             }
