@@ -86,7 +86,7 @@ export default class RadioNavigationalWarningsList
 
   public async verifyTableColumnWarningTypeData(expectedText:string)
   {
-    const result= await this.page.$$eval('#warningtype' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    const result= await this.page.$$eval('#WarningTypeName' , (matches: any[]) => { return matches.map(option => option.textContent) });
 
     //fail if there are no matching selections
     expect(result.length).toBeGreaterThan(0);
@@ -100,7 +100,7 @@ export default class RadioNavigationalWarningsList
 
   public async verifyTableDateColumnData(yearString:string)
   {
-    const resultYear= await this.page.$$eval('#DateTimeGroupRnwFormats' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
+    const resultYear= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
 
     //fail if there are no matching selections
     expect(resultYear.length).toBeGreaterThan(0);
