@@ -59,7 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenPostInvalidWarningTypeInRequest_ThenReturnFalse()
+        public void WhenPostInvalidWarningTypeInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
@@ -70,7 +70,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenPostInvalidReferenceInRequest_ThenReturnFalse()
+        public void WhenPostInvalidReferenceInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
@@ -81,7 +81,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenPostInvalidSummaryInRequest_ThenReturnFalse()
+        public void WhenPostInvalidSummaryInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
@@ -92,7 +92,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenPostInvalidContentInRequest_ThenReturnFalse()
+        public void WhenPostInvalidContentInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
