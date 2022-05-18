@@ -14,8 +14,5 @@ variable location {
 variable environment {
 }
 
-variable resource_group_name {
-}
-
 variable web_app_name {
 }

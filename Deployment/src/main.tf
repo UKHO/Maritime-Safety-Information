@@ -65,7 +65,6 @@ module "azure-dashboard" {
   location            = azurerm_resource_group.rg.location
   environment         = local.env_name
   resource_group      = azurerm_resource_group.rg
-  resource_group_name = azurerm_resource_group.rg.name
   web_app_name        = local.web_app_name
   tags                = local.tags
 }
