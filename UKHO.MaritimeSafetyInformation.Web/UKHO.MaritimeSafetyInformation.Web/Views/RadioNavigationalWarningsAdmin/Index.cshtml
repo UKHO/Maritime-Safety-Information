@@ -73,31 +73,31 @@
                     {
                         ++@Model.SrNo;
                         <tr>
-                            <td>
+                            <td id="SrNo">
                                 @Model.SrNo.ToString()
                             </td>
-                            <td>
+                            <td id="WarningTypeName">
                                 @Html.DisplayFor(modelItem => item.WarningTypeName)
                             </td>
-                            <td>
+                            <td id="Reference">
                                 @Html.DisplayFor(modelItem => item.Reference)
                             </td>
-                            <td>
+                            <td id="DateTimeGroupRnwFormat">
                                 @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
                             </td>
-                            <td>
+                            <td id="Summary">
                                 @Html.DisplayFor(modelItem => item.Summary)
                             </td>
-                            <td>
+                            <td id="Content">
                                 @Html.DisplayFor(modelItem => item.Content)
                             </td>
-                            <td>
+                            <td id="ExpiryDateRnwFormat">
                                 @Html.DisplayFor(modelItem => item.ExpiryDateRnwFormat)
                             </td>
-                            <td>
+                            <td id="IsDeleted">
                                 @Html.DisplayFor(modelItem => item.IsDeleted)
                             </td>
-                            <td>
+                            <td id="Edit">
                                 <a asp-action="Edit" asp-route-id="@item.Id"  id="Edit_@item.Id" class="disabled-link">Edit</a>
                             </td>
                         </tr>
