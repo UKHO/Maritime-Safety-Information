@@ -170,7 +170,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType= mimeType };
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
-            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
             IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
             
             Assert.IsInstanceOf<FileResult>(result);

@@ -10,10 +10,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         private readonly ILogger<NoticesToMarinersController> _logger;
         private readonly INMDataService _nMDataService;
+        private readonly IHttpContextAccessor _contextAccessor;
         public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Index()
@@ -85,6 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename="+ fileName );
                 return File(fileBytes, mimeType);
             }
             catch (Exception ex)
