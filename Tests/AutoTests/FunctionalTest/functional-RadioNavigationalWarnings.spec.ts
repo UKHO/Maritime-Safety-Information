@@ -22,10 +22,23 @@ test.describe("Goto maritime-safety-information Admin List Page", ()=> {
    })
 
   test('Does the Table data is displayed with Pagination',async ({page}) => {
+   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnFirst,"First");
+   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnLast,"Last");
+   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnNext,"Next");
+   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnPrevious,"Previous");
    await radioNavigationalWarningsList.getTableList();
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnFirst);
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnLast);
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnNext);
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnPrevious);
-})
+  })
+
+  test('Does the table data is displayed for Warning type',async ({page}) => {
+   await radioNavigationalWarningsList.warningTypeData('1','UK Coastal'); 
+  })
+
+  test('Does the table data is displayed for Nav Area',async ({page}) => {
+   await radioNavigationalWarningsList.warningTypeData('2','NAVAREA 1'); 
+  })
+
+  test('Does the Year Drop Down table data displayed for the Year',async ({page}) => {
+   await radioNavigationalWarningsList.yearData();
+   })
+
 });
