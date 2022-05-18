@@ -36,7 +36,7 @@ function LoadData(data) {
     if (yearweekdata != undefined && yearweekdata.length > 0) {
         $('#ddlYears').empty();
         var yeardata = getUniqueYearandWeeks(data, 'Year', 'Y').sort()
-        var defaultYear = '<option value="0" selected>Please select year</option>'
+        var defaultYear = '<option value="0" selected>Select year</option>'
         $(defaultYear).appendTo('#ddlYears');
         for (i = 0; i < yeardata.length; i++) {
             var year = '<option>' + yeardata[i] + '</option>'
@@ -52,7 +52,7 @@ function LoadData(data) {
             $('#ddlYears').val(selectedyear);
         }
         else {
-            $('#ddlYears').val('Please select year');
+            $('#ddlYears').val('Select year');
         }
         GetCorrespondingWeeks(selectedyear, data);
     }
@@ -77,7 +77,7 @@ function GetCorrespondingWeeks(id, data) {
     $('#ddlWeeks').empty();
     var weekdata = getUniqueYearandWeeks(data, id, 'W').sort(function (a, b) { return a - b });
 
-    var defaultweek = '<option value="0" selected>Please select week</option>'
+    var defaultweek = '<option value="0" selected>Select week</option>'
     $(defaultweek).appendTo('#ddlWeeks');
 
     for (i = 0; i < weekdata.length; i++) {

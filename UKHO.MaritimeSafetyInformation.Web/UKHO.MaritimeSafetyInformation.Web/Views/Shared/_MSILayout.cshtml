@@ -5,7 +5,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-2 msi-tabs-container">
             <!--left nav-->
             @if ((string)ViewData["Header"] == "Notice to Mariners")
             {
@@ -18,7 +18,7 @@
             }
 
         </div> <!--right content-->
-        <div class="col-lg-8 col-md-10">
+        <div class="col-lg-8 col-md-10 msi-tabs-content-container">
             <h1 id="headingLevelOne" class="mt-0">@ViewData["Header"]</h1>
             @RenderBody()
         </div>
