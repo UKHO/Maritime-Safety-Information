@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -54,7 +53,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
         [Test]
         public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordNotCreated()
-        private RadioNavigationalWarningsAdminListFilter GetFakeRadioNavigationWarningsForAdmin()
         {
             var httpContext = new DefaultHttpContext();
             var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());

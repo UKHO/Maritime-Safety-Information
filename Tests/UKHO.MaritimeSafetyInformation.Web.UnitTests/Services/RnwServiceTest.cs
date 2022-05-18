@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -119,6 +121,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenRequestToGetWarningTypes_ThenReturnListOfWarningType()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+
+            A.CallTo(() => _fakeRnwRepository.GetWarningTypes()).Returns(new List<WarningType>() { new WarningType {Id=1, Name="test"}});
+
+            List<WarningType> result = await _rnwService.GetWarningTypes();
+
+            Assert.AreEqual("test", result[0].Name);
+        }
+
+        [Test]
         public async Task WhenPostValidRequest_ThenReturnTrue()
         public async Task WhenCallGetRadioNavigationWarningsWithWarningTypeFilter_ThenReturnFilteredList()
         {
@@ -151,6 +166,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public void WhenPostInvalidWarningTypeInRequest_ThenReturnFalse()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarnings.WarningType = 3;
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value recieved for parameter warningType"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenPostInvalidReferenceInRequest_ThenReturnFalse()
         public async Task WhenPostInvalidRequest_ThenReturnFalse()
         public async Task WhenCallGetRadioNavigationWarningsWithValidPageNo_ThenReturnFilteredList()
         {
@@ -163,6 +190,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.SrNo == 3);
         }
 
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value recieved for parameter reference"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenPostInvalidSummaryInRequest_ThenReturnFalse()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarnings.Summary = "";
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value recieved for parameter summary"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenPostInvalidContentInRequest_ThenReturnFalse()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarnings.Content = "";
             bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId);
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenReturnEmptyList()
@@ -171,6 +219,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 0);
         }
 
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value recieved for parameter content"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
             Assert.IsFalse(result);
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithInValidAdminListRecordPerPage_ThenThrowExceptionWithNullObject()
@@ -181,6 +231,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public void WhenPostValidRequestWithException_ThenReturnException()
         public async Task WhenPostValidRequestWithException_ThenReturnFalse()
         public async Task WhenCallGetRadioNavigationWarningsWithNotReloadData_ThenReturnExisitngList()
         {
@@ -202,6 +253,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             await _rnwService.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, false, string.Empty);
             AddRadioNavigationWarningRecord();
 
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+                               async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
             bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId);
             RadioNavigationalWarningsAdminListFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, 0, string.Empty, true, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 5);

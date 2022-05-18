@@ -1,4 +1,5 @@
-﻿namespace UKHO.MaritimeSafetyInformation.Common.Configuration
+﻿
+namespace UKHO.MaritimeSafetyInformation.Common.Configuration
 {
     public static class WarningTypes
     {

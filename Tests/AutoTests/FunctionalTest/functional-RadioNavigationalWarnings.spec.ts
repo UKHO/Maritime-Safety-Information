@@ -11,7 +11,7 @@ test.describe("Create new radio navigational warnings record", ()=> {
 test.describe("Goto maritime-safety-information Home Page", ()=> {
   let RadioNavigationalWarningsList:RadioNavigationalWarningsList;
   test.beforeEach(async ({page}) => {
-    await page.goto(app.url); 
+    await page.goto(app.rnwAdminUrl);
     radioNavigationalWarnings = new RadioNavigationalWarnings(page);
     await radioNavigationalWarnings.clickCreateRadioNavigationalWarningsRecord();
          await page.goto(app.adminurl);  
