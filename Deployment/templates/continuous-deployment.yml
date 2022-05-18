@@ -28,3 +28,7 @@ steps:
       TF_VAR_spoke_rg: $(spokeRG)
       TF_VAR_spoke_vnet_name: $(spokeVnetName)
       TF_VAR_spoke_subnet_name: $(spokeSubnetName)
+      TF_VAR_rnw_db_server: $(RNW_DB_Server)
+      TF_VAR_rnw_db_name: $(RNW_DB_Name)
+      TF_VAR_rnw_db_app_sqluser: $(RNW_DB_App_SQLUser)
+      TF_VAR_rnw_db_app_sqlpass: $(RNW_DB_App_SQLPass)
