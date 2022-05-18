@@ -124,7 +124,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndex_IsDeletedShouldDisplayYesAndNoRespectively()
+        public async Task WhenCallIndex_ThenIsDeletedShouldDisplayYesAndNoRespectively()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, 2020);
@@ -135,7 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenContentLenthGreaterThan300Char_ThenWrapTheContent()
+        public async Task WhenCallIndexWithContentLenthGreaterThan300Char_ThenWrapTheContent()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, 2024);
