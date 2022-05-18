@@ -4,6 +4,12 @@ data "azurerm_subnet" "main_subnet" {
   resource_group_name  = var.spoke_rg
 }
 
+data "azurerm_subnet" "main_subnet" {
+  name                 = var.spoke_subnet_name
+  virtual_network_name = var.spoke_vnet_name
+  resource_group_name  = var.spoke_rg
+}
+
 data "azurerm_subnet" "agent_subnet" {
   provider             = azurerm.build_agent
   name                 = var.agent_subnet_name

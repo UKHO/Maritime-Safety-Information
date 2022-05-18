@@ -254,10 +254,10 @@ stages:
               platform: $(BuildPlatform)
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish Database Dackpac Artifacts"
+            displayName: "Publish Database DACPAC Artifacts"
             inputs:
               PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
-              ArtifactName: Dackpack
+              ArtifactName: DACPAC
 
   - stage: Devdeploy
     displayName: "Devdeploy (inc terraform, webapp deploy)"
@@ -298,6 +298,8 @@ stages:
             deploy:
               steps:
                 - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
       - job: FunctionalAndAccessibilityTests
         dependsOn:
@@ -354,6 +356,8 @@ stages:
             deploy:
               steps:
                 - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
 
       - job: FunctionalAndAccessibilityTests
         dependsOn:
@@ -409,3 +413,5 @@ stages:
             deploy:
               steps:
                 - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"
