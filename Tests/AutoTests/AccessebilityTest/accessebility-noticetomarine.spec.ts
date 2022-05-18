@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
 
 import * as app from "../../Configuration/appConfig.json";
-import noticetomarine from '../../pageObject/noticetomarine.page';
+import noticetomarine from '../../pageObject/newnoticetomarine.page';
 import { injectAxe, getViolations, checkA11y, Options} from 'axe-playwright'
 
 test.describe("MSI Notice to Marine Page Accessibility Test", () => {

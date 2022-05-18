@@ -9,88 +9,137 @@ export default class noticetoMarine
     readonly dropDownWeekly:Locator;
     readonly fileName:Locator;
     readonly fileSize:Locator;
-    
+    readonly menuNoticeToMarine:Locator;
+    readonly menuLeisureFolios:Locator;
+    readonly menuValueAddedResellers:Locator;
+    readonly menuAbout:Locator;
+    readonly tabweekly:Locator;
+    readonly tabdaily:Locator;
+    readonly tabcumulative:Locator;
+    readonly tabannual:Locator;
+  
     constructor(page:Page)
     {
-    this.page = page; 
-    this.noticeMarine =this.page.locator("text=Notices to Mariners");
-    this.dropDownYearly = this.page.locator("#ddlYears");
-    this.dropDownWeekly = this.page.locator("#ddlWeeks");
-    this.fileName=this.page.locator('text=File Name');
-    this.fileSize= this.page.locator('text=File Size');
+     this.page = page; 
+     this.noticeMarine =this.page.locator("text=Notices to Mariners");
+     this.dropDownYearly = this.page.locator("#ddlYears");
+     this.dropDownWeekly = this.page.locator("#ddlWeeks");
+     this.fileName=this.page.locator('text=File Name');
+     this.fileSize= this.page.locator('text=File Size');
+     this.menuNoticeToMarine = this.page.locator('text=Notice to Mariners');
+     this.menuLeisureFolios = this.page.locator('text=Leisure folios');
+     this.menuValueAddedResellers = this.page.locator('text=Value added resellers');
+     this.menuAbout = this.page.locator('text=About');
+     this.tabweekly = this.page.locator('#weekly-tab');
+     this.tabdaily = this.page.locator("#daily-tab");
+     this.tabcumulative = this.page.locator("#cumulative-tab");
+     this.tabannual = this.page.locator("#annual-tab"); 
     }
-
+    
     public async clickToNoticemarine()
     {
-    await this.noticeMarine.click();
+     await this.noticeMarine.click();
     }
 
     public async checkEnabledYearDropDown()
     {      
-    return await this.dropDownYearly.isEnabled();   
+     return await this.dropDownYearly.isEnabled();   
     }
 
     public async checkEnabledWeekDropDown()
     {
-    return await this.dropDownWeekly.isEnabled();
+     return await this.dropDownWeekly.isEnabled();
     }
 
-    public async getFileSizeText()
+    public async checkText(locator:Locator)
     {
-    return (await this.fileSize.textContent()).toString();   
-    }
-    public async getFileNameText()
-    {
-    return (await this.fileName.textContent()).toString();   
+     return locator.textContent().toString();
     }
 
-    public async getTableData()
+    public async checkTableRecordCount()
     {
-    const yearlyCount = (await this.page.$$("#ddlYears option")).length;
+     const yearlylength = (await this.page.$$("#ddlYears option")).length; 
+     const weeklength = (await this.page.$$("#ddlWeeks option")).length;
+     await this.dropDownYearly.selectOption({index:1});
+     await this.dropDownWeekly.selectOption({index:weeklength-1});
+     const result= await this.page.$$eval('#filename' , (matches: any[]) => { return matches.map(option => option.textContent) });
+     return result.length;
+    }
+    public async checkFileSizeText()
+    {
+     return (await this.fileSize.textContent()).toString();   
+    }
+    public async checkFileNameText()
+    {
+     return (await this.fileName.textContent()).toString();   
+    }
+   
+    public async verifyTableContainsDownloadLink()
+    {
+     const downloadLinks= await this.page.$$eval('#download' , (matches: any[]) => { return matches.map(option => option.textContent) });
+     for(let i=0;i<downloadLinks.length;i++)
+     {
+     expect(downloadLinks[i]).toEqual("Download");
+     }
+    }
+
+    public async checkFileNameSort()
+    {
+     const fileNameData = await this.page.$$eval('#filename' , (matches: any[]) => { return matches.map(option => option.textContent) });  
+     const beforeSortFilename= fileNameData;
+     fileNameData.sort();
+     const afterSortFileName = fileNameData;
+     expect(beforeSortFilename).toEqual(afterSortFileName);
+    }
+
+    public async checkFileSizeData()
+    {
+     const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
     for(var year=1;year<=yearlyCount-1;year++)
     {
-    await this.dropDownYearly.selectOption({index:year});
-    const weekCount = (await this.page.$$("#ddlWeeks option")).length;
+     await this.dropDownYearly.selectOption({index:year});
+     const weekCount = (await this.page.$$("#ddlWeeks option")).length;
 
-    for(var week=1;week<=weekCount-1;week++)
-    {
-    await this.dropDownWeekly.selectOption({index:week});
-    await this.page.waitForSelector("td:nth-child(2)");
-    const fileSizeData = await this.page.$$("#divFilesList > table > tbody >tr >td:nth-child(2)");
-    expect(fileSizeData.length).toBeGreaterThan(0); 
-    expect(await this.getFileNameText()).toEqual('File Name');
-    expect(await this.getFileSizeText()).toEqual('File Size');     
-   
-    for await (const table of fileSizeData)
-    {
-    var fileData = (await (await table.innerText()).toString()).split(" ");
+     for(var week=1;week<=weekCount-1;week++)
+     {
+     await this.dropDownWeekly.selectOption({index:week});
+     const fileSizeData = await this.page.$$eval('#filesize' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
+     expect(fileSizeData.length).toBeGreaterThan(0); 
+     expect(await this.checkFileNameText()).toEqual('File Name');
+     expect(await this.checkFileSizeText()).toEqual('File Size');   
+     let boolFileSize = false;  
+     for await (const tableCell of fileSizeData)
+     {
+     var fileData =  await tableCell.trim().split(" ");
            
-    switch(fileData[1])
-    {
-    case "MB":
-    {
-    expect(fileData[1]).toContain("MB"); 
-    break;
+     switch(fileData[1])
+     {
+     case "MB":
+     {
+     boolFileSize=true;
+     break;
+     }
+     case "KB":
+     {
+     boolFileSize=true;
+     break;
+     }
+     case "GB":
+     {
+     boolFileSize=true;
+     break;
+     }
+     case "B":
+     {
+     boolFileSize=true;  
+     break;
+     }
+     }
+     expect(boolFileSize).toBeTruthy();
+     }   
+
     }
-    case "KB":
-    {
-    expect(fileData[1]).toContain("KB"); 
-    break;
     }
-    case "GB":
-    {
-    expect(fileData[1]).toContain("GB"); 
-    break;
-    }
-    case "B":
-    {
-    expect(fileData[1]).toContain("B"); 
-    break;
-    }
-    }
-    }    
-    }
-    }
-   }     
+    }     
 }
