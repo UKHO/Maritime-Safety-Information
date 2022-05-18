@@ -54,7 +54,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.IsNotEmpty(_controller.TempData["message"].ToString());
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
         }
     }
