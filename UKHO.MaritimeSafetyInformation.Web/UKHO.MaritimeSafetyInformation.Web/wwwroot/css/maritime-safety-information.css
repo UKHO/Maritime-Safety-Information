@@ -476,6 +476,7 @@ button:active {
   font-size: 16px;
   padding: 0.5rem;
   color: #09315b;
+  font-weight: 400;
 }
 @media screen and (max-width: 1200px) {
   .msi-page-nav li a {

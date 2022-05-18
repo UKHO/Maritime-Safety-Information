@@ -36,7 +36,7 @@ function LoadData(data) {
     if (yearweekdata != undefined && yearweekdata.length > 0) {
         $('#ddlYears').empty();
         var yeardata = getUniqueYearandWeeks(data, 'Year', 'Y').sort()
-        var defaultYear = '<option value="0" selected> --Please select year-- </option>'
+        var defaultYear = '<option value="0" selected>Please select year</option>'
         $(defaultYear).appendTo('#ddlYears');
         for (i = 0; i < yeardata.length; i++) {
             var year = '<option>' + yeardata[i] + '</option>'
@@ -52,7 +52,7 @@ function LoadData(data) {
             $('#ddlYears').val(selectedyear);
         }
         else {
-            $('#ddlYears').val('--Please select year--');
+            $('#ddlYears').val('Please select year');
         }
         GetCorrespondingWeeks(selectedyear, data);
     }
@@ -74,32 +74,30 @@ function getUniqueYearandWeeks(arr, prop, type) {
 }
 
 function GetCorrespondingWeeks(id, data) {
-    if (id != '0') {
-        $('#ddlWeeks').empty();
-        var weekdata = getUniqueYearandWeeks(data, id, 'W').sort(function (a, b) { return a - b });
+    $('#ddlWeeks').empty();
+    var weekdata = getUniqueYearandWeeks(data, id, 'W').sort(function (a, b) { return a - b });
 
-        var defaultweek = '<option value="0" selected> --Please select week-- </option>'
-        $(defaultweek).appendTo('#ddlWeeks');
+    var defaultweek = '<option value="0" selected>Please select week</option>'
+    $(defaultweek).appendTo('#ddlWeeks');
 
-        for (i = 0; i < weekdata.length; i++) {
-            var week = '<option>' + weekdata[i] + '</option>'
-            $(week).appendTo('#ddlWeeks');
-        }
+    for (i = 0; i < weekdata.length; i++) {
+        var week = '<option>' + weekdata[i] + '</option>'
+        $(week).appendTo('#ddlWeeks');
+    }
 
-        if (onload) {
-            if (ddlselectedweek != undefined && ddlselectedweek != '') {
-                $('#ddlWeeks').val(ddlselectedweek);
-            }
-            else {
-                var selectedweek = weekdata[weekdata.length - 1];
-                $('#ddlWeeks').val(selectedweek);
-            }
-
-            onload = false;
+    if (onload) {
+        if (ddlselectedweek != undefined && ddlselectedweek != '') {
+            $('#ddlWeeks').val(ddlselectedweek);
         }
         else {
-            $('#ddlWeeks').val('0');
+            var selectedweek = weekdata[weekdata.length - 1];
+            $('#ddlWeeks').val(selectedweek);
         }
+
+        onload = false;
+    }
+    else {
+        $('#ddlWeeks').val('0');
     }
 }
 
