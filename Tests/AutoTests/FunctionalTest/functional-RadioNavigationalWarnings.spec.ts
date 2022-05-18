@@ -2,43 +2,53 @@ import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwrig
 import * as app from "../../Configuration/appConfig.json";
 import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWarningsAdminList.page';
 
-test.describe("Goto maritime-safety-information Admin List Page", ()=> {
-   let radioNavigationalWarningsList:RadioNavigationalWarningsList;
-   
-   test.beforeEach(async ({page}) => {
-       await page.goto(app.rnwAdminUrl);
-   radioNavigationalWarningsList = new RadioNavigationalWarningsList(page);
-   });
+test.describe("Goto maritime-safety-information Home Page", ()=> {
+  let rnwList:RadioNavigationalWarningsList;
+  test.beforeEach(async ({page}) => {
+   await page.goto(app.adminurl);  
+   rnwList=new RadioNavigationalWarningsList(page);
+  });
 
-  test('Does the Warning Type,Year Drop Down is enabled and Page Header Text,Create Record Text is Displayed',async ({page}) => {
-   let warningTypeEnable = await radioNavigationalWarningsList.checkEnabledWarningTypeDropDown();
-   expect(warningTypeEnable).toBeTruthy();
-   const yearEnable = await radioNavigationalWarningsList.checkEnabledYearDropDown();
+  test('Does the Warning Type,Year Drop Down is enabled and Page Header Text,Create Record Text is Displayed',async () => {
+   const WarningTypeEnable = await rnwList.checkEnabledWarningTypeDropDown();
+   expect(WarningTypeEnable).toBeTruthy();
+   const yearEnable = await rnwList.checkEnabledYearDropDown();
    expect(yearEnable).toBeTruthy();
-   let createRecordList= await radioNavigationalWarningsList.checkCreateNewrecordText();
-   expect(createRecordList).toEqual("Create New Warning");
-   let pageHeader = await radioNavigationalWarningsList.checkPageHeaderText();
+   const createRecordList= await rnwList.checkCreateNewrecordText();
+   expect(createRecordList).toBeTruthy();
+   const pageHeader = await rnwList.checkPageHeaderText();
    expect(pageHeader).toEqual("Radio Navigational Warnings List");
-   })
+  })
+  
+  test('Dose filter display search result for warning types as "UK Coastal" or  "NAVAREA 1" ', async () => {
+    //search UK Coastal
+    rnwList.searchWithfilter('UK Coastal','2022')
+    rnwList.verifyTableHeader();
+    rnwList.verifyTableColumnWarningTypeData('UK Coastal');
+    rnwList.verifyTableContainsEditLink();
 
-  test('Does the Table data is displayed with Pagination',async ({page}) => {
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnFirst,"First");
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnLast,"Last");
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnNext,"Next");
-   await radioNavigationalWarningsList.pagination(radioNavigationalWarningsList.btnPrevious,"Previous");
-   await radioNavigationalWarningsList.getTableList();
+    //search NAVAREA 1
+    rnwList.searchWithfilter('NAVAREA 1','2022')
+    rnwList.verifyTableHeader();
+    rnwList.verifyTableColumnWarningTypeData('NAVAREA 1');
+    rnwList.verifyTableContainsEditLink();
+
   })
 
-  test('Does the table data is displayed for Warning type',async ({page}) => {
-   await radioNavigationalWarningsList.warningTypeData('1','UK Coastal'); 
+  
+  test('Dose filter display search result sorted in descending order', async () => {
+    rnwList.searchWithfilter('UK Coastal','2022')
+    rnwList.verifyTableHeader();
+    rnwList.verifyTableDateColumnData('2022');
+
   })
 
-  test('Does the table data is displayed for Nav Area',async ({page}) => {
-   await radioNavigationalWarningsList.warningTypeData('2','NAVAREA 1'); 
-  })
-
-  test('Does the Year Drop Down table data displayed for the Year',async ({page}) => {
-   await radioNavigationalWarningsList.yearData();
-   })
-
+  test('Does the Table data is displayed with Pagination',async () => {
+    rnwList.searchWithfilter('UK Coastal','2022')
+    rnwList.verifyTableHeader();
+    rnwList.pagination(rnwList.btnFirst)
+    rnwList.pagination(rnwList.btnLast)
+    rnwList.pagination(rnwList.btnNext)
+    rnwList.pagination(rnwList.btnPrevious)
+})
 });

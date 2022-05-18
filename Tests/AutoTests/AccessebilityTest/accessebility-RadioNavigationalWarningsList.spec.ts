@@ -18,10 +18,12 @@ import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWar
   };
  
   test.beforeEach(async ({page}) => {
-      await page.goto(app.rnwAdminUrl);
+    await page.goto(app.url);    
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
+    const rnwList = new RadioNavigationalWarningsList(page);
+    rnwList.goToCreateRadioNavigationalWarningsRecordList();
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);
