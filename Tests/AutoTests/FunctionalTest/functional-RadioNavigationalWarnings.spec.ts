@@ -6,7 +6,7 @@ test.describe("Goto maritime-safety-information Admin List Page", ()=> {
    let radioNavigationalWarningsList:RadioNavigationalWarningsList;
    
    test.beforeEach(async ({page}) => {
-   await page.goto(app.adminurl);  
+       await page.goto(app.rnwAdminUrl);
    radioNavigationalWarningsList = new RadioNavigationalWarningsList(page);
    });
 
