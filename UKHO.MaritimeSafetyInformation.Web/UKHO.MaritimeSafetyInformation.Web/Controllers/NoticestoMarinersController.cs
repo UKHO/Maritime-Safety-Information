@@ -87,7 +87,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename="+ fileName );
+
                 return File(fileBytes, mimeType);
             }
             catch (Exception ex)
