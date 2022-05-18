@@ -12,7 +12,6 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using UKHO.MaritimeSafetyInformation.Web.Filters;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -68,7 +67,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IRnwService, RnwService>();
             services.AddApplicationInsightsTelemetry();
 
->>>>>>>>> Temporary merge branch 2
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

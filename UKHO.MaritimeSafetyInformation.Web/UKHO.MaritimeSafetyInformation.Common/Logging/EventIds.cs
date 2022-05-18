@@ -137,38 +137,41 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         MSIAddNewRNWRecordCompleted = 910033,
         /// <summary> 
-        /// 910034 -  Maritime safety information add new RNW record to database request error.
+        /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        MSIAddNewRNWRequestError = 910034,
+        MSIErrorInRnwRepositoryProcess = 910034,
         /// <summary> 
         /// 910035 -  Maritime safety information invalid new RNW record request.
         /// </summary>
         MSIInvalidNewRNWRecordRequest = 910035,
         /// <summary> 
-        /// 910036 -  Maritime safety information create new RNW record request failed.
+        /// 910036 -  Maritime safety information invalid value received for parameter warningType.
         /// </summary>
-        MSICreateNewRNWRecordFailed = 910036
-        UnhandledCleanUpException = 910029,
+        MSIInvalidWarningTypeInRequest = 910036,
+        /// <summary> 
+        /// 910037 -  Maritime safety information invalid value received for parameter reference.
+        /// </summary>
+        MSIInvalidReferenceInRequest = 910037,
+        /// <summary> 
+        /// 910038 -  Maritime safety information invalid value received for parameter summary.
+        /// </summary>
+        MSIInvalidSummaryInRequest = 910038,
+        /// <summary> 
+        /// 910039 -  Maritime safety information invalid value received for parameter content.
+        /// </summary>
+        MSIInvalidContentInRequest = 910039,
         /// <summary> 
         /// 910030 -  Maritime safety information request to get RNW records for Admin started.
         /// </summary>
-        MSIGetRnwForAdminStarted = 910030,
+        MSIGetRnwForAdminStarted = 910040,
         /// <summary> 
         /// 910031 -  Maritime safety information request to get RNW records for Admin completed.
         /// </summary>
-        MSIGetRnwForAdminCompleted = 910031,
+        MSIGetRnwForAdminCompleted = 910041,
         /// <summary> 
         /// 910032 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
-        MSIGetRnwForAdminRequestError = 910032,
-        /// <summary> 
-        /// 910033 -  Maritime safety information query to get RNW records for Admin from database started.
-        /// </summary>
-        MSIGetRnwForAdminDatabaseCallStarted = 910033,
-        /// <summary> 
-        /// 910034 -  Maritime safety information query to get RNW records for Admin from database completed.
-        /// </summary>
-        MSIGetRnwForAdminDatabaseCallCompleted = 910034,
+        MSIGetRnwForAdminListError = 910042
     }
 
     public static class EventIdExtensions

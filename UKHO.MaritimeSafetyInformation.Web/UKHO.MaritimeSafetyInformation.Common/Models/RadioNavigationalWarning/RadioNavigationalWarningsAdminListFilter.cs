@@ -18,8 +18,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 
         public int PageCount { get; set; }
 
-        public int WarningType { get; set; }
+        public int? WarningType { get; set; }
 
-        public string Year { get; set; }
+        public int? Year { get; set; }
     }
 }
