@@ -59,3 +59,13 @@ module "key_vault" {
  }
   tags                                                       = local.tags
 }
+
+module "azure-dashboard" {
+  source              = "./Modules/AzureDashboard"
+  name                = "MSI-${local.env_name}-monitoring-dashboard"
+  location            = azurerm_resource_group.rg.location
+  environment         = local.env_name
+  resource_group      = azurerm_resource_group.rg
+  web_app_name        = local.web_app_name
+  tags                = local.tags
+}
