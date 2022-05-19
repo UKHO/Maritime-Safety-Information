@@ -30,14 +30,11 @@ variable "tags" {
 
 }
 
-variable "m_spoke_subnet" {
-  type = string
+variable "allowed_subnet_ids" {
+  type = list
 }
 
 variable "allowed_ips" {
 
 }
 
-variable "agent_subnet" {
-  type = string
-}
