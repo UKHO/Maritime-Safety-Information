@@ -46,9 +46,9 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
   test('Does the Table data is displayed with Pagination',async () => {
     rnwList.searchWithfilter('UK Coastal','2022')
     rnwList.verifyTableHeader();
-    rnwList.pagination(rnwList.btnFirst)
-    rnwList.pagination(rnwList.btnLast)
-    rnwList.pagination(rnwList.btnNext)
-    rnwList.pagination(rnwList.btnPrevious)
+    rnwList.checkPaginationLink(rnwList.btnFirst)
+    rnwList.checkPaginationLink(rnwList.btnLast)
+    rnwList.checkPaginationLink(rnwList.btnNext)
+    rnwList.checkPaginationLink(rnwList.btnPrevious)
 })
 });
