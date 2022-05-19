@@ -122,6 +122,15 @@
                             box-shadow: none;
                         }
                     }
+
+                    &.active {
+                        background-color: $white;
+                        box-shadow: inset 0 -5px $prussian-blue;
+
+                        @media screen and (max-width: $large) {
+                            box-shadow: none;
+                        }
+                    }
                 }
             }
         }
