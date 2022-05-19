@@ -120,56 +120,96 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910029 -  Unhandled Exception Occured.
         /// </summary>
         UnhandledCleanUpException = 910029,
+        /// <summary>
+        /// 910030 -  Maritime safety information create new RNW record request started.
+        /// </summary>
+        CreateNewRNWRecordStart = 910030,
+        /// <summary>
+        /// 910031 -  Maritime safety information create new RNW record request Completed.
+        /// </summary>
+        CreateNewRNWRecordCompleted = 910031,
+        /// <summary>
+        /// 910032 -  Maritime safety information add new RNW record to database request started.
+        /// </summary>
+        AddNewRNWRecordStart = 910032,
+        /// <summary>
+        /// 910033 -  Maritime safety information add new RNW record to database request Completed.
+        /// </summary>
+        AddNewRNWRecordCompleted = 910033,
+        /// <summary> 
+        /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
+        /// </summary>
+        ErrorInRnwRepositoryProcess = 910034,
+        /// <summary> 
+        /// 910035 -  Maritime safety information invalid new RNW record request.
+        /// </summary>
+        InvalidNewRNWRecordRequest = 910035,
+        /// <summary> 
+        /// 910036 -  Maritime safety information invalid value received for parameter warningType.
+        /// </summary>
+        InvalidWarningTypeInRequest = 910036,
+        /// <summary> 
+        /// 910037 -  Maritime safety information invalid value received for parameter reference.
+        /// </summary>
+        InvalidReferenceInRequest = 910037,
+        /// <summary> 
+        /// 910038 -  Maritime safety information invalid value received for parameter summary.
+        /// </summary>
+        InvalidSummaryInRequest = 910038,
+        /// <summary> 
+        /// 910039 -  Maritime safety information invalid value received for parameter content.
+        /// </summary>
+        InvalidContentInRequest = 910039,
 
         /// <summary>
-        /// 910030 -Request For Download Single Weekly NM File Started.
+        /// 910040 -Request For Download Single Weekly NM File Started.
         /// </summary>
-        DownloadSingleWeeklyNMFileStarted = 910030,
+        DownloadSingleWeeklyNMFileStarted = 910040,
 
         /// <summary>
-        /// 910031 -Request For Download Single Weekly NM File Completed.
+        /// 910041 -Request For Download Single Weekly NM File Completed.
         /// </summary>
-        DownloadSingleWeeklyNMFileCompleted= 910031,
+        DownloadSingleWeeklyNMFileCompleted= 910041,
 
         /// <summary>
-        /// 910032 -Download Single Weekly NM File Called With Invalid Arguments.
+        /// 910042 -Download Single Weekly NM File Called With Invalid Arguments.
         /// </summary>
-        DownloadSingleWeeklyNMFileInvalidParameter = 910032,
+        DownloadSingleWeeklyNMFileInvalidParameter = 910042,
 
         /// <summary>
-        /// 910033 -Download Single Weekly NM File Failed.
+        /// 910043 -Download Single Weekly NM File Failed.
         /// </summary>
-        DownloadSingleWeeklyNMFileFailed = 910033,
+        DownloadSingleWeeklyNMFileFailed = 910043,
 
         /// <summary>
-        /// 910034 - Request To Get Single Weekly NM File Started.
+        /// 910044 - Request To Get Single Weekly NM File Started.
         /// </summary>
-        GetSingleWeeklyNMFileStarted = 910034,
+        GetSingleWeeklyNMFileStarted = 910044,
 
         /// <summary>
-        /// 910035 - Request To Get Single Weekly NM File Completed.
+        /// 910045 - Request To Get Single Weekly NM File Completed.
         /// </summary>
-        GetSingleWeeklyNMFileCompleted = 910035,
+        GetSingleWeeklyNMFileCompleted = 910045,
 
         /// <summary>
-        /// 910036 - Request To Get Single Weekly NM File Failed.
+        /// 910046 - Request To Get Single Weekly NM File Failed.
         /// </summary>
-        GetSingleWeeklyNMFileFailed = 910036,
+        GetSingleWeeklyNMFileFailed = 910046,
 
         /// <summary>
-        /// 910037 - Request For FSS To Get Single Weekly NM File Started.
+        /// 910047 - Request For FSS To Get Single Weekly NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileStarted = 910037,
+        FSSGetSingleWeeklyNMFileStarted = 910047,
 
         /// <summary>
-        /// 910038 - Request For FSS To Get Single Weekly NM File Completed.
+        /// 910048 - Request For FSS To Get Single Weekly NM File Completed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileCompleted = 910038,
+        FSSGetSingleWeeklyNMFileCompleted = 910048,
 
         /// <summary>
-        /// 910039 - Request For FSS To Get Single Weekly NM File Failed.
+        /// 910049 - Request For FSS To Get Single Weekly NM File Failed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileResponseFailed = 910039,
+        FSSGetSingleWeeklyNMFileResponseFailed = 910049,
     }
 
     public static class EventIdExtensions
