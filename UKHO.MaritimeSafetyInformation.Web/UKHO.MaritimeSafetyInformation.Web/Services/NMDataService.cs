@@ -160,7 +160,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else if (year == 0 || week == 0)
                 {
-                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with zero with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearOrWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year or week with zero with _X-Correlation-ID:{correlationId}", correlationId);
                     showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
 
                     showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);

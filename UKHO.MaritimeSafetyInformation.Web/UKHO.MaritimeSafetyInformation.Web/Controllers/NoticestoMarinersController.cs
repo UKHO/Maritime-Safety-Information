@@ -52,9 +52,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 }
                 else if (year == 0 || week == 0)
                 {
+                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearOrWeekWithZero.ToEventId(), "Maritime safety information request for weekly NM file response for year or week non zero for correlationId:{correlationId}", GetCurrentCorrelationId());
                     showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
-                        ViewData["Year"] = year;
-                        ViewData["Week"] = week;
+                    ViewData["Year"] = year;
+                    ViewData["Week"] = week;
                 }
             }
             catch (Exception ex)

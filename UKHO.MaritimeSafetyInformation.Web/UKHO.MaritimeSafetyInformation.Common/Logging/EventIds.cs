@@ -199,7 +199,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910049 - No data recieved Year Week data from FSS for Notices to Mariners  
         /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910049
+        GetSearchAttributeRequestDataNotFound = 910049,
+        /// <summary>
+        /// 910050 -  Event data for Retrieval of MSI Show Weekly File Response For Year Or Week Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearOrWeekNonZero = 910050,
+        /// <summary>
+        /// 910051 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
+        /// </summary>
+        GetWeeklyFilesResponseForYearOrWeekWithZero = 910051,
     }
 
     public static class EventIdExtensions
