@@ -33,3 +33,7 @@ steps:
       TF_VAR_agent_subnet_name: $(agentSubnetName)
       TF_VAR_agent_subscription_id: $(agentSubscriptionId)
       TF_VAR_allowed_ips: $(whiteListedIps)
+      TF_VAR_rnw_db_server: $(RNW_DB_Server)
+      TF_VAR_rnw_db_name: $(RNW_DB_Name)
+      TF_VAR_rnw_db_app_sqluser: $(RNW_DB_App_SQLUser)
+      TF_VAR_rnw_db_app_sqlpass: $(RNW_DB_App_SQLPass)

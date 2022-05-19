@@ -64,6 +64,17 @@ module "key_vault" {
   secrets = {
       "EventHubLoggingConfiguration--ConnectionString"       = module.eventhub.log_primary_connection_string
       "EventHubLoggingConfiguration--EntityPath"             = module.eventhub.entity_path
+      "RadioNavigationalWarningsContext--ConnectionString"   = local.rnw_db_connection_string
  }
   tags                                                       = local.tags
+}
+
+module "azure-dashboard" {
+  source              = "./Modules/AzureDashboard"
+  name                = "MSI-${local.env_name}-monitoring-dashboard"
+  location            = azurerm_resource_group.rg.location
+  environment         = local.env_name
+  resource_group      = azurerm_resource_group.rg
+  web_app_name        = local.web_app_name
+  tags                = local.tags
 }
