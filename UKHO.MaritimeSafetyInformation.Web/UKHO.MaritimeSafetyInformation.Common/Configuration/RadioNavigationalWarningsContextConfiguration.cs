@@ -1,10 +1,10 @@
-﻿
+﻿using System.Diagnostics.CodeAnalysis;
+
 namespace UKHO.MaritimeSafetyInformation.Common.Configuration
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class RadioNavigationalWarningsContextConfiguration
     {
-        
         public string ConnectionString { get; set; }
     }
 }
