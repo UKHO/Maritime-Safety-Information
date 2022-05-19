@@ -7,19 +7,19 @@
     <div class="row">
         <div class="col-md-2 msi-tabs-container">
             <!--left nav-->
-            @if ((string)ViewData["Header"] == "Notice to Mariners")
+            @if (Convert.ToString(ViewData["Header"]) == "Notice to Mariners")
             {
                 <partial name="_NMLeftMenu"></partial>
             }
             else
-            if ((string)ViewData["Header"] == "Radio Navigation Warnings")
+            if (Convert.ToString(ViewData["Header"]) == "Radio Navigation Warnings")
             {
                 <partial name="_RNWLeftMenu"></partial>
             }
 
         </div> <!--right content-->
         <div class="col-lg-8 col-md-10 msi-tabs-content-container">
-            <h1 id="headingLevelOne" class="mt-0">@ViewData["Header"]</h1>
+            <h1 id="headingLevelOne" class="mt-0">@Convert.ToString(ViewData["Header"])</h1>
             @RenderBody()
         </div>
     </div>
