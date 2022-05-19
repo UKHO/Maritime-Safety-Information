@@ -6,15 +6,6 @@
     bool isLastPage  = Model.CurrentPageIndex == Model.PageCount ? true : false;
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
-<style>
-    .disabled-link {
-        pointer-events: none;
-    }
-
-    .enabled-link {
-        pointer-events: auto;
-    }
-</style>
 <div class="container-fluid">
     <h1>Radio Navigational Warnings Admin List</h1>
     <div class="row">
@@ -30,7 +21,7 @@
             <button id="BtnFilter" type="button" class="primary inline-btn" onclick="RnwFilterList(1)">Filter</button>
         </div>
         <div class="col mb-3">
-            <a asp-action="Create" id="BtnCreate" class="disabled-link inline-link">Create New Warning</a>
+            @Html.ActionLink("Create New Warning","Create","RadioNavigationalWarningsAdmin",null,new { @class= "inline-link" ,@id="BtnCreate"})
         </div>
     </div>
 
@@ -98,7 +89,7 @@
                                 @Html.DisplayFor(modelItem => item.IsDeleted)
                             </td>
                             <td id="Edit">
-                                <a asp-action="Edit" asp-route-id="@item.Id"  id="Edit_@item.Id" class="disabled-link">Edit</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id"  id="Edit_@item.Id">Edit</a>
                             </td>
                         </tr>
                     }
