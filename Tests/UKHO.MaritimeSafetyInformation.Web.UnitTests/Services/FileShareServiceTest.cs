@@ -56,25 +56,33 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
             Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken, CorrelationId);
-            Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
+            Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);            
         }
 
         [Test]
-        public async Task WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
+        public void WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
-            IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
-            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
+                   .And.Message.EqualTo("Page size must be greater than zero. (Parameter 'pageSize')")
+                    , async delegate { await _fileShareService.FssBatchSearchAsync("", "", CorrelationId); });
         }
 
         [Test]
         public void WhenFileShareServiceCallsFssSearchAttributeAsync_ThenReturnsBatchSearchResponse()
         {
+            int ExpectedStatusCode = 200;
+            bool ExpectedStatus = true;
             IResult<BatchAttributesSearchResponse> expectedResponse = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fileShareApiClient.BatchAttributeSearch("", CancellationToken.None)).Returns(expectedResponse);
+
             Task<IResult<BatchAttributesSearchResponse>> result = _fileShareService.FssSearchAttributeAsync(FakeAccessToken, CorrelationId);
+
             Assert.IsInstanceOf<Task<IResult<BatchAttributesSearchResponse>>>(result);
+            Assert.AreEqual(result.Result.StatusCode, ExpectedStatusCode);
+            Assert.AreEqual(result.Result.IsSuccess, ExpectedStatus);
         }
 
         [Test]
@@ -87,6 +95,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 .And.Message.EqualTo("Invalid URI: The format of the URI could not be determined.")
                 , async delegate { await _fileShareService.FssSearchAttributeAsync("", CorrelationId); });
         }
-
     }
 }

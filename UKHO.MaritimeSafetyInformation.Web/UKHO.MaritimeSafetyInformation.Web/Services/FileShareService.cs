@@ -37,9 +37,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.FSSBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response from FSS with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
             }
-            return result;
-            
+            return result;            
         }
 
         public async Task<IResult<BatchAttributesSearchResponse>> FssSearchAttributeAsync(string accessToken, string correlationId)
