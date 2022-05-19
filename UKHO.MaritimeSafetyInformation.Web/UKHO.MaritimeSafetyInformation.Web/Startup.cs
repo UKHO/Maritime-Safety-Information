@@ -64,8 +64,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddApplicationInsightsTelemetry();
 
 
-            services.AddScoped<IRnwRepository, RnwRepository>();
-            services.AddScoped<IRnwService, RnwService>();
+            services.AddScoped<IRNWRepository, RNWRepository>();
+            services.AddScoped<IRNWService, RNWService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

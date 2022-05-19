@@ -5,13 +5,13 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public class RnwService : IRnwService
+    public class RNWService : IRNWService
     {
-        private readonly IRnwRepository _rnwRepository;
-        private readonly ILogger<RnwService> _logger;
+        private readonly IRNWRepository _rnwRepository;
+        private readonly ILogger<RNWService> _logger;
 
-        public RnwService(IRnwRepository repository,
-                        ILogger<RnwService> logger)
+        public RNWService(IRNWRepository repository,
+                        ILogger<RNWService> logger)
         {
             _rnwRepository = repository;
             _logger = logger;

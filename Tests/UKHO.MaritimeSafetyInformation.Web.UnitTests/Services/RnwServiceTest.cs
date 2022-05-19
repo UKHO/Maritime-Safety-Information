@@ -12,11 +12,11 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
     [TestFixture]
-    public class RnwServiceTest
+    public class RNWServiceTest
     {
-        private ILogger<RnwService> _fakeLogger;
-        private IRnwRepository _fakeRnwRepository;
-        private RnwService _rnwService;
+        private ILogger<RNWService> _fakeLogger;
+        private IRNWRepository _fakeRnwRepository;
+        private RNWService _rnwService;
         private RadioNavigationalWarnings _fakeRadioNavigationalWarnings;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
@@ -28,10 +28,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                                     DateTimeGroup = DateTime.UtcNow,
                                                     Summary = "Test1",
                                                     Content = "test"};
-            _fakeLogger = A.Fake<ILogger<RnwService>>();
-            _fakeRnwRepository = A.Fake<IRnwRepository>();
+            _fakeLogger = A.Fake<ILogger<RNWService>>();
+            _fakeRnwRepository = A.Fake<IRNWRepository>();
 
-            _rnwService = new RnwService(_fakeRnwRepository, _fakeLogger);
+            _rnwService = new RNWService(_fakeRnwRepository, _fakeLogger);
         }
 
         [Test]

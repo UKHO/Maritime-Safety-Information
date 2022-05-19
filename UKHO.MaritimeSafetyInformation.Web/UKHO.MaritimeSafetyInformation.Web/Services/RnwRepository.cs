@@ -5,11 +5,11 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public class RnwRepository : IRnwRepository
+    public class RNWRepository : IRNWRepository
     {
         private readonly RadioNavigationalWarningsContext _context;
 
-        public RnwRepository(RadioNavigationalWarningsContext context)
+        public RNWRepository(RadioNavigationalWarningsContext context)
         {
             _context = context;
         }

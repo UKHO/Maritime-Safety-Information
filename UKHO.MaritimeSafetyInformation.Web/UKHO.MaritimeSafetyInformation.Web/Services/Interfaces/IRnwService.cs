@@ -2,7 +2,7 @@
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
-    public interface IRnwService
+    public interface IRNWService
     {
         Task<bool> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarnings radioNavigationalWarnings, string correlationId);
 

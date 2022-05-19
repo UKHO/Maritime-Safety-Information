@@ -10,9 +10,9 @@ using UKHO.MaritimeSafetyInformation.Web.Services;
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
     [TestFixture]
-    public class RnwRepositoryTest
+    public class RNWRepositoryTest
     {
-        private RnwRepository _rnwRepository;
+        private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
         private RadioNavigationalWarnings _fakeRadioNavigationalWarnings;
 
@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
 
-            _rnwRepository = new RnwRepository(_fakeContext);
+            _rnwRepository = new RNWRepository(_fakeContext);
 
         }
 

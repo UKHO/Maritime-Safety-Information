@@ -17,14 +17,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private RadioNavigationalWarningsAdminController _controller;
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
-        private IRnwService _fakeRnwService;
+        private IRNWService _fakeRnwService;
 
        [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
-            _fakeRnwService = A.Fake<IRnwService>();
+            _fakeRnwService = A.Fake<IRNWService>();
 
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
