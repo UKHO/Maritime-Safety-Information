@@ -26,7 +26,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList()
         {
             List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminLists
-            = await (from rnwWarnings in _context.RadioNavigationalWarning
+            = await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
                      select new RadioNavigationalWarningsAdminList
                      {
@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<string>> GetYears()
         {
-            List<string> years = await (_context.RadioNavigationalWarning
+            List<string> years = await (_context.RadioNavigationalWarnings
                                 .Select(p => p.DateTimeGroup.Year.ToString())
                                 .Distinct().ToListAsync());
             return years;

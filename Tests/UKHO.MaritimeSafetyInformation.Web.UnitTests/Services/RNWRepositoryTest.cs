@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                                                     .UseInMemoryDatabase("msi-ut-db");
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
 
-            _fakeContext.RadioNavigationalWarning.AddRange(GetFakeRadioNavigationalWarningList());
+            _fakeContext.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
             _fakeContext.WarningType.AddRange(GetFakeWarningTypeList());
             _fakeContext.SaveChanges();
         }
@@ -78,7 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             List<RadioNavigationalWarningsAdminList> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.IsTrue(result.Count == 5);
             Assert.AreEqual(5, result[0].Id);
-            Assert.AreEqual("190219 UTC May 22", result[0].DateTimeGroupRnwFormat);
+            Assert.AreEqual("011200 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
             Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
         }
 
@@ -111,7 +111,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [OneTimeTearDown]
         public void GlobalTearDown()
         {
-            _fakeContext.RadioNavigationalWarning.RemoveRange(_fakeContext.RadioNavigationalWarning);
+            _fakeContext.RadioNavigationalWarnings.RemoveRange(_fakeContext.RadioNavigationalWarnings);
             _fakeContext.WarningType.RemoveRange(_fakeContext.WarningType);
             _fakeContext.SaveChanges();
         }
