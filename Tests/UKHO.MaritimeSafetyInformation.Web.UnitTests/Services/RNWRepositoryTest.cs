@@ -89,10 +89,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         #region PrivateMethod
-        private static List<RadioNavigationalWarnings> GetFakeRadioNavigationalWarningList()
+        private static List<RadioNavigationalWarning> GetFakeRadioNavigationalWarningList()
         {
-            List<RadioNavigationalWarnings> radioNavigationalWarningList = new();
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            List<RadioNavigationalWarning> radioNavigationalWarningList = new();
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 1,
                 Reference = "RnwAdminListReferance",
@@ -108,7 +108,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 IsDeleted = true
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 2,
                 Reference = "RnwAdminListReferance",
@@ -117,7 +117,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 1,
                 Reference = "RnwAdminListReferance",
@@ -126,7 +126,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 2,
                 Reference = "RnwAdminListReferance",

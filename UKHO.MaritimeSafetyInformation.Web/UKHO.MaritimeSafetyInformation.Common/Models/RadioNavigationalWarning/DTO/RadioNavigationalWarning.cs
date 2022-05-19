@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO
 {
     [ExcludeFromCodeCoverage]
-    public class RadioNavigationalWarnings
+    public class RadioNavigationalWarning
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
