@@ -50,8 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenPostValidRequest_ThenReturnTrue()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
             bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId);
 
@@ -61,8 +61,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenPostInvalidWarningTypeInRequest_ThenReturnException()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
             _fakeRadioNavigationalWarning.WarningType = 3;
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
@@ -72,8 +72,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenPostInvalidReferenceInRequest_ThenReturnException()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
             _fakeRadioNavigationalWarning.Reference = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
@@ -83,8 +83,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenPostInvalidSummaryInRequest_ThenReturnException()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
             _fakeRadioNavigationalWarning.Summary = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter summary"),
@@ -94,8 +94,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenPostInvalidContentInRequest_ThenReturnException()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
             _fakeRadioNavigationalWarning.Content = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
@@ -105,8 +105,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenPostValidRequestWithException_ThenReturnException()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
             A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarning(A<RadioNavigationalWarning>.Ignored)).Throws(new Exception());
 
