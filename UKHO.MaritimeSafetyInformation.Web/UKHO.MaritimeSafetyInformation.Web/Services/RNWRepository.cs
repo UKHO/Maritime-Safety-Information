@@ -4,22 +4,29 @@ using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public class RnwRepository : IRnwRepository
+    public class RNWRepository : IRNWRepository
     {
         private readonly RadioNavigationalWarningsContext _context;
 
-        public RnwRepository(RadioNavigationalWarningsContext context)
+        public RNWRepository(RadioNavigationalWarningsContext context)
         {
             _context = context;
+        }
+
+        public async Task AddRadioNavigationWarning(RadioNavigationalWarning radioNavigationalWarning)
+        {
+            _context.Add(radioNavigationalWarning);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList()
         {
             List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminLists
-            = await (from rnwWarnings in _context.RadioNavigationalWarnings
+            = await (from rnwWarnings in _context.RadioNavigationalWarning
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
                      select new RadioNavigationalWarningsAdminList
                      {
@@ -46,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<string>> GetYears()
         {
-            List<string> years = await (_context.RadioNavigationalWarnings
+            List<string> years = await (_context.RadioNavigationalWarning
                                 .Select(p => p.DateTimeGroup.Year.ToString())
                                 .Distinct().ToListAsync());
             return years;

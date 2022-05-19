@@ -1,14 +1,13 @@
 ﻿using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
-namespace UKHO.MaritimeSafetyInformation.Web.Services
+namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
-    public interface IRnwRepository
+    public interface IRNWRepository
     {
+        Task AddRadioNavigationWarning(RadioNavigationalWarning radioNavigationalWarning);
         Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList();        
-
         Task<List<WarningType>> GetWarningTypes();
-
         Task<List<string>> GetYears();
     }
 }

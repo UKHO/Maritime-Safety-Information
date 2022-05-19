@@ -17,4 +17,3 @@ output "Website_Url" {
 output "Website_Admin_Url" {
   value = "https://${module.webapp_service.default_site_hostname}/RadioNavigationalWarningsAdmin"
 }
-

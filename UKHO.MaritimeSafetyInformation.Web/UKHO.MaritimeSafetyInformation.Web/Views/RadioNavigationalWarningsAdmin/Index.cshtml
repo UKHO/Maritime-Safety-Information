@@ -3,7 +3,7 @@
 
 @{
     bool isFirstPage = Model.CurrentPageIndex == 1 ? true : false;
-    bool isLastPage  = Model.CurrentPageIndex == Model.PageCount ? true : false;
+    bool isLastPage = Model.CurrentPageIndex == Model.PageCount ? true : false;
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
 <div class="container-fluid">
@@ -89,7 +89,7 @@
                                 @Html.DisplayFor(modelItem => item.IsDeleted)
                             </td>
                             <td id="Edit">
-                                <a asp-action="Edit" asp-route-id="@item.Id"  id="Edit_@item.Id">Edit</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" id="Edit_@item.Id">Edit</a>
                             </td>
                         </tr>
                     }
@@ -111,11 +111,9 @@
     }
     else
     {
-
         <div id="MsgBoxAlert" class="alert alert-primary p-4" role="alert">
             <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
             <h5>No Record Found.</h5>
         </div>
     }
-
 </div>

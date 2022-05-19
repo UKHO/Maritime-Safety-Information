@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
-    
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -50,8 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-            services.AddScoped<IRnwService, RnwService>();
-            services.AddScoped<IRnwRepository, RnwRepository>();
+            services.AddScoped<IRNWService, RNWService>();
+            services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -65,8 +65,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
-
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
