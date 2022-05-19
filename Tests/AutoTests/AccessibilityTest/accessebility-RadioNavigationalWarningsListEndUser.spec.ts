@@ -2,7 +2,9 @@ import { test} from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
 import { checkA11y, injectAxe, Options } from 'axe-playwright';
 
-import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWarningsAdminList.page';
+import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigationalWarningsAdminListEndUser.page';
+
+
 
   test.describe("A11y tests", ()=> {
    const defaultCheckA11yOptions: Options = {
@@ -19,11 +21,12 @@ import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWar
  
   test.beforeEach(async ({page}) => {
     await page.goto(app.url);    
+    const rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
+    await rnwListEndUser.goToRadioWarning();
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
-    const radioNavigationalWarningsList = new RadioNavigationalWarningsList(page);
-    radioNavigationalWarningsList.goToCreateRadioNavigationalWarningsRecordList();
+   
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);

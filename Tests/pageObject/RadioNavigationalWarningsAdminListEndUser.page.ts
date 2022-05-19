@@ -1,0 +1,71 @@
+
+import { expect } from '@playwright/test';
+import type { Locator, Page } from 'playwright';
+
+export default class RadioNavigationalWarningsListEndUser
+{
+    private page:Page;
+    readonly radioNavigationalWarningsPage:Locator;
+    readonly radioNavigationalWarningsEndUser:Locator;
+    readonly radioWarningEndUser:Locator;
+    readonly aboutEndUser:Locator;
+    readonly allWarningEndUser:Locator;
+    readonly navAreaEndUser:Locator;
+    readonly ukCostalEnduser:Locator;
+    constructor(page:Page)
+    {
+         this.page = page; 
+         this.radioNavigationalWarningsPage = this.page.locator('text=Radio Navigational Warnings')
+         this.radioNavigationalWarningsEndUser = this.page.locator('#headingLevelOne')
+         this.radioWarningEndUser = this.page.locator('text=Radio Warnings')
+         this.aboutEndUser = this.page.locator('text=About')
+         this.allWarningEndUser = this.page.locator('#allwarnings-tab')
+         this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
+         this.ukCostalEnduser = this.page.locator('#ukcostal-tab')
+    }
+
+    public async goToRadioWarning()
+    {
+      await this.radioNavigationalWarningsPage.click();
+    } 
+    
+    public async checkText(locator:Locator)
+    {
+     return await locator.innerText();
+    }
+
+    public async verifyTableDateColumnData()
+    {
+      const resultYear= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
+  
+      //fail if there are no matching selections
+      expect(resultYear.length).toBeGreaterThan(0);
+  
+  
+      //Verify Dates are descending order   
+      const resultdate= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
+      expect(this.isDescending(resultdate)).toBeTruthy();
+  
+    }
+  
+    public async verifyTableContainsViewDetailsLink()
+    {
+      const resultLinks= await this.page.$$eval('#Viewdetails' , (matches: any[]) => { return matches.map(option => option.textContent) });
+      for(let i=0;i<resultLinks.length;i++)
+      {
+        expect(resultLinks[i].trim()).toEqual("View details");
+      }
+    }
+  
+    public  isDescending(arr: any[]) { 
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i + 1] > arr[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+     
+   
+
+}
