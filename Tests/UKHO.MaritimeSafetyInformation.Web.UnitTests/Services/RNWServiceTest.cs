@@ -17,13 +17,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private ILogger<RNWService> _fakeLogger;
         private IRNWRepository _fakeRnwRepository;
         private RNWService _rnwService;
-        private RadioNavigationalWarnings _fakeRadioNavigationalWarnings;
+        private RadioNavigationalWarning _fakeRadioNavigationalWarning;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
         {
-            _fakeRadioNavigationalWarnings = new(){ WarningType = 1,
+            _fakeRadioNavigationalWarning = new(){ WarningType = 1,
                                                     Reference = "test",
                                                     DateTimeGroup = DateTime.UtcNow,
                                                     Summary = "Test1",
@@ -37,8 +37,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenRequestToGetWarningTypes_ThenReturnListOfWarningType()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
             A.CallTo(() => _fakeRnwRepository.GetWarningTypes()).Returns(new List<WarningType>() { new WarningType {Id=1, Name="test"}});
 
@@ -51,9 +51,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenPostValidRequest_ThenReturnTrue()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId);
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId);
 
             Assert.IsTrue(result);
         }
@@ -62,56 +62,56 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenPostInvalidWarningTypeInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
-            _fakeRadioNavigationalWarnings.WarningType = 3;
+            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarning.WarningType = 3;
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value recieved for parameter warningType"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostInvalidReferenceInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
-            _fakeRadioNavigationalWarnings.Reference = "";
+            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarning.Reference = "";
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value recieved for parameter reference"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostInvalidSummaryInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
-            _fakeRadioNavigationalWarnings.Summary = "";
+            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarning.Summary = "";
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value recieved for parameter summary"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter summary"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostInvalidContentInRequest_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
-            _fakeRadioNavigationalWarnings.Content = "";
+            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarning.Content = "";
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value recieved for parameter content"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostValidRequestWithException_ThenReturnException()
         {
             DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            _fakeRadioNavigationalWarning.DateTimeGroup = _fakeDateTime;
 
-            A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarnings(A<RadioNavigationalWarnings>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarning(A<RadioNavigationalWarning>.Ignored)).Throws(new Exception());
 
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-                               async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarnings, CorrelationId); });
+                               async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
     }
 }

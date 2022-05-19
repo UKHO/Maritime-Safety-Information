@@ -50,8 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = tempData;
 
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarnings>.Ignored, A<string>.Ignored)).Returns(true);
-            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarnings());
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());

@@ -4,7 +4,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
     public interface IRNWService
     {
-        Task<bool> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarnings radioNavigationalWarnings, string correlationId);
+        Task<bool> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId);
 
         Task<List<WarningType>> GetWarningTypes();
     }

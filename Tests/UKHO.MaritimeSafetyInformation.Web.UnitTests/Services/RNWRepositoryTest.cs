@@ -14,12 +14,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     {
         private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
-        private RadioNavigationalWarnings _fakeRadioNavigationalWarnings;
+        private RadioNavigationalWarning _fakeRadioNavigationalWarning;
 
         [SetUp]
         public void SetUp()
         {
-            _fakeRadioNavigationalWarnings = new(){ WarningType = 1,
+            _fakeRadioNavigationalWarning = new(){ WarningType = 1,
                                                     Reference = "test",
                                                     DateTimeGroup = DateTime.UtcNow,
                                                     Summary = "Test1",
@@ -36,12 +36,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarnings.DateTimeGroup = _fakeDateTime;
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
-            Task result = _rnwRepository.AddRadioNavigationWarnings(_fakeRadioNavigationalWarnings);
+            Task result = _rnwRepository.AddRadioNavigationWarning(_fakeRadioNavigationalWarning);
 
-            Task<RadioNavigationalWarnings> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == _fakeDateTime);
+            Task<RadioNavigationalWarning> data = _fakeContext.RadioNavigationalWarning.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);

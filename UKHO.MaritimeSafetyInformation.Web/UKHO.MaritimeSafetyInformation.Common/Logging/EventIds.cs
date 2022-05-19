@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910030 -  Maritime safety information create new RNW record request started.
         /// </summary>
-        MSICreateNewRNWRecordStart = 910030,
+        CreateNewRNWRecordStart = 910030,
         /// <summary>
         /// 910031 -  Maritime safety information create new RNW record request Completed.
         /// </summary>
