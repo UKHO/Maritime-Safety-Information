@@ -61,6 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssBatchSearchAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.PageSize = -100;
+            _fileShareServiceConfig.Value.BaseUrl = "www.test.com/";
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
