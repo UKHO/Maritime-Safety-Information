@@ -1,6 +1,4 @@
-﻿using FakeItEasy;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -17,7 +15,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     {
         private RnwRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
-        private ILogger<RnwRepository> _fakeLogger;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -34,8 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [SetUp]
         public void SetUp()
         {
-            _fakeLogger = A.Fake<ILogger<RnwRepository>>();
-            _rnwRepository = new RnwRepository(_fakeContext, _fakeLogger);
+            _rnwRepository = new RnwRepository(_fakeContext);
         }
 
         [Test]
