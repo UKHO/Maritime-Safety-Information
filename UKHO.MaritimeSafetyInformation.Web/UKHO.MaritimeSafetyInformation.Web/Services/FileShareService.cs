@@ -43,8 +43,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         public async Task<IResult<BatchAttributesSearchResponse>> FssSearchAttributeAsync(string accessToken, string correlationId)
-        {
-            IResult<BatchAttributesSearchResponse> result = new Result<BatchAttributesSearchResponse>();
+        {            
+            IResult<BatchAttributesSearchResponse> result;
             try
             {
                 string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly'";
@@ -62,7 +62,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 throw;
             }
             return result;
-
         }
     }
 }

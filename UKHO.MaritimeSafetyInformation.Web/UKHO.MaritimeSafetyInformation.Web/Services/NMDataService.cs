@@ -50,7 +50,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 throw;
             }
             return ListshowFilesResponseModels;
-
         }
 
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
@@ -132,9 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
-
             return showDailyFilesResponses;
-
         }
 
         public async Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId)
@@ -143,7 +140,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
             try
             {
-
                 if (year != 0 && week != 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithValue.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with value with _X-Correlation-ID:{correlationId}", correlationId);
@@ -152,7 +148,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 }
-
                 if (year == 0 && week == 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with zero with _X-Correlation-ID:{correlationId}", correlationId);
@@ -178,6 +173,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             return showWeeklyFilesResponses;
         }
-
     }
 }

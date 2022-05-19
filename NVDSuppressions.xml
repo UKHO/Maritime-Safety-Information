@@ -146,25 +146,5 @@
    ]]>
     </notes>
     <cve>CVE-2021-33880</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-    file name: Microsoft.AspNetCore.WebUtilities.dll
-    See https://github.com/dotnet/announcements/issues/94 for MS details on this issue
-    This applies to version of System.Net.Http as deployed as part of .Net core below 2.1.7 or 2.2.1. MSI is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
-   ]]>
-    </notes>
-    <cve>CVE-2019-0545</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-    file name: Microsoft.AspNetCore.WebUtilities.dll
-    See https://github.com/dotnet/announcements/issues/97 for MS details on this CVE.
-    This CVE only applies to .NetCore versions below 2.1.8 and 2.2.2. FSS is pinned to .Net core SDK > 3.1.408 which is not vunerable, and deployed to Azure App Service which will have the security patch applied.
-    ]]>
-    </notes>
-    <cve>CVE-2019-0657</cve>
-  </suppress>
+  </suppress>  
 </suppressions>
