@@ -236,3 +236,17 @@ a:focus, button:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
+
+.form-label {
+  margin-bottom: 0.5rem !important;
+  box-shadow: none;
+}
+
+.form-select, .form-control {
+  border-radius: 0;
+  font-weight: 300;
+}
+
+.form-select option {
+  font-weight: 300;
+}

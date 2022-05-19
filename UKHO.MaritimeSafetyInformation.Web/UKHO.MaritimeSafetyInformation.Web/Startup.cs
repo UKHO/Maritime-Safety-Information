@@ -1,9 +1,11 @@
 ﻿using Azure.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
+using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
@@ -27,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -36,6 +39,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
+            services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
+
+            var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
+            configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
+            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<INMDataService, NMDataService>();
@@ -55,6 +63,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
+
+            services.AddScoped<IRNWRepository, RNWRepository>();
+            services.AddScoped<IRNWService, RNWService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -152,7 +152,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]*'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -309,6 +309,7 @@ stages:
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
          url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
+         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
@@ -366,7 +367,8 @@ stages:
         pool: $(WindowsPool)
         displayName: "QA Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteURL']  ] 
+         url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteURL']  ]
+         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
