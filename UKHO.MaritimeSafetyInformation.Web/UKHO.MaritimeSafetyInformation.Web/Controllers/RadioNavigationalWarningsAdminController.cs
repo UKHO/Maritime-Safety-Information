@@ -30,5 +30,52 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger.LogInformation(EventIds.MSIRnwAdminListCompleted.ToEventId(), "Maritime safety information request to get RNW records for Admin completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             return View(radioNavigationalWarningsAdminFilter);
         }
+
+        // GET: RadioNavigationalWarnings/Edit/5
+        public IActionResult Edit(int id)
+        {
+            
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            RadioNavigationalWarningsAdminList radioNavigationalWarningsAdminList = _rnwService.EditRadioNavigationWarningListForAdmin(id);
+            if (radioNavigationalWarningsAdminList == null)
+            {
+                return NotFound();
+            }
+            return View(radioNavigationalWarningsAdminList);
+        }
+
+        // POST: RadioNavigationalWarnings/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, RadioNavigationalWarningsAdminList radioNavigationalWarningsAdminList)
+        {
+            
+            if (id != radioNavigationalWarningsAdminList.Id)
+            {
+                return NotFound();
+            }
+            
+            if (ModelState.IsValid)
+            {
+               
+                    bool result = await _rnwService.EditNewRadioNavigationWarningsRecord(radioNavigationalWarningsAdminList, GetCurrentCorrelationId());
+                
+                if (result)
+                {
+                    TempData["message"] = "Record updated successfully!";
+                    //_logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                    return RedirectToAction(nameof(Index), new { reLoadData = true });
+                }
+                
+            }
+            return View(radioNavigationalWarningsAdminList);
+        }
     }
 }

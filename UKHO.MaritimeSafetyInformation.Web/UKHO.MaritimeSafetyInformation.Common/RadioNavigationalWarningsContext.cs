@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Common
@@ -12,7 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Common
         {
 
         }
-
+        
         public DbSet<RadioNavigationalWarnings> RadioNavigationalWarnings { get; set; }
         public DbSet<WarningType> WarningType { get; set; }
 

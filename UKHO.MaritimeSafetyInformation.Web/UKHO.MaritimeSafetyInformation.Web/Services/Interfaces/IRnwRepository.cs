@@ -10,5 +10,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         Task<List<WarningType>> GetWarningTypes();
 
         Task<List<string>> GetYears();
+
+        RadioNavigationalWarningsAdminList EditRadioNavigation(int id);
+
+        Task AddRadioNavigationWarning(RadioNavigationalWarningsAdminList radioNavigationalWarning);
     }
 }
