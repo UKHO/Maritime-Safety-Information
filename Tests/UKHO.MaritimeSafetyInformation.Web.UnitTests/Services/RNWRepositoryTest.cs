@@ -52,7 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Task result = _rnwRepository.AddRadioNavigationWarning(_fakeRadioNavigationalWarning);
 
-            Task<RadioNavigationalWarning> data = _fakeContext.RadioNavigationalWarning.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
+            Task<RadioNavigationalWarning> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
