@@ -35,7 +35,7 @@ steps:
     - script: |
        npm run test:a11y
       displayName: 'Run Accessibility Tests'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessebilityTest'
+      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
           
     - task: PublishTestResults@2
       condition: succeededOrFailed()
