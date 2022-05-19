@@ -127,39 +127,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910031 -  Maritime safety information create new RNW record request Completed.
         /// </summary>
-        MSICreateNewRNWRecordCompleted = 910031,
+        CreateNewRNWRecordCompleted = 910031,
         /// <summary>
         /// 910032 -  Maritime safety information add new RNW record to database request started.
         /// </summary>
-        MSIAddNewRNWRecordStart = 910032,
+        AddNewRNWRecordStart = 910032,
         /// <summary>
         /// 910033 -  Maritime safety information add new RNW record to database request Completed.
         /// </summary>
-        MSIAddNewRNWRecordCompleted = 910033,
+        AddNewRNWRecordCompleted = 910033,
         /// <summary> 
         /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        MSIErrorInRnwRepositoryProcess = 910034,
+        ErrorInRnwRepositoryProcess = 910034,
         /// <summary> 
         /// 910035 -  Maritime safety information invalid new RNW record request.
         /// </summary>
-        MSIInvalidNewRNWRecordRequest = 910035,
+        InvalidNewRNWRecordRequest = 910035,
         /// <summary> 
         /// 910036 -  Maritime safety information invalid value received for parameter warningType.
         /// </summary>
-        MSIInvalidWarningTypeInRequest = 910036,
+        InvalidWarningTypeInRequest = 910036,
         /// <summary> 
         /// 910037 -  Maritime safety information invalid value received for parameter reference.
         /// </summary>
-        MSIInvalidReferenceInRequest = 910037,
+        InvalidReferenceInRequest = 910037,
         /// <summary> 
         /// 910038 -  Maritime safety information invalid value received for parameter summary.
         /// </summary>
-        MSIInvalidSummaryInRequest = 910038,
+        InvalidSummaryInRequest = 910038,
         /// <summary> 
         /// 910039 -  Maritime safety information invalid value received for parameter content.
         /// </summary>
-        MSIInvalidContentInRequest = 910039
+        InvalidContentInRequest = 910039
 
     }
 
