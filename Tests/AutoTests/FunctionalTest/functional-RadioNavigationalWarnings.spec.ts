@@ -17,38 +17,38 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
    const createRecordList= await rnwList.checkCreateNewrecordText();
    expect(createRecordList).toBeTruthy();
    const pageHeader = await rnwList.checkPageHeaderText();
-   expect(pageHeader).toEqual("Radio Navigational Warnings List");
+   expect(pageHeader).toEqual("Radio Navigational Warnings Admin List");
   })
   
   test('Dose filter display search result for warning types as "UK Coastal" or  "NAVAREA 1" ', async () => {
     //search UK Coastal
-    rnwList.searchWithfilter('UK Coastal','2022')
-    rnwList.verifyTableHeader();
-    rnwList.verifyTableColumnWarningTypeData('UK Coastal');
-    rnwList.verifyTableContainsEditLink();
+    await rnwList.searchWithfilter('UK Coastal','2022');
+    await rnwList.verifyTableHeader();
+    await rnwList.verifyTableColumnWarningTypeData('UK Coastal');
+    await rnwList.verifyTableContainsEditLink();
 
     //search NAVAREA 1
-    rnwList.searchWithfilter('NAVAREA 1','2022')
-    rnwList.verifyTableHeader();
-    rnwList.verifyTableColumnWarningTypeData('NAVAREA 1');
-    rnwList.verifyTableContainsEditLink();
+    await rnwList.searchWithfilter('NAVAREA 1','2022');
+    await rnwList.verifyTableHeader();
+    await rnwList.verifyTableColumnWarningTypeData('NAVAREA 1');
+    await rnwList.verifyTableContainsEditLink();
 
   })
 
   
   test('Dose filter display search result sorted in descending order', async () => {
-    rnwList.searchWithfilter('UK Coastal','2022')
-    rnwList.verifyTableHeader();
-    rnwList.verifyTableDateColumnData('2022');
+   await rnwList.searchWithfilter('UK Coastal','2022');
+   await rnwList.verifyTableHeader();
+   await rnwList.verifyTableDateColumnData('2022');
 
   })
 
   test('Does the Table data is displayed with Pagination',async () => {
-    rnwList.searchWithfilter('UK Coastal','2022')
-    rnwList.verifyTableHeader();
-    rnwList.checkPaginationLink(rnwList.btnFirst)
-    rnwList.checkPaginationLink(rnwList.btnLast)
-    rnwList.checkPaginationLink(rnwList.btnNext)
-    rnwList.checkPaginationLink(rnwList.btnPrevious)
+    await rnwList.searchWithfilter('UK Coastal','2022');
+    await rnwList.verifyTableHeader();
+    await rnwList.checkPaginationLink(rnwList.btnFirst);
+    await rnwList.checkPaginationLink(rnwList.btnLast);
+    await rnwList.checkPaginationLink(rnwList.btnNext);
+    await rnwList.checkPaginationLink(rnwList.btnPrevious);
 })
 });

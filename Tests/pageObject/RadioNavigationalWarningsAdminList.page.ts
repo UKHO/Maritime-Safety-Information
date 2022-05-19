@@ -31,10 +31,7 @@ export default class RadioNavigationalWarningsList
         
     }
 
-    public async goToCreateRadioNavigationalWarningsRecordList()
-    {
-      this.createNewRecordText.click();
-    } 
+    
     public async checkEnabledWarningTypeDropDown()
     {
         return this.warningType.isEnabled();
@@ -51,7 +48,7 @@ export default class RadioNavigationalWarningsList
 
     public async checkPageHeaderText()
     {
-      return this.headerLocator.innerText().toString();
+        return await this.headerLocator.textContent();
     }
 
     public async checkEnabledFilterButton()
@@ -65,10 +62,11 @@ export default class RadioNavigationalWarningsList
       expect(locator).toBeTruthy();
   }
 
-  public async searchWithfilter(selectWarnings :string, selectYear:string)
+  public async searchWithfilter(selectWarnings:string, selectYear:string)
   {
-    await this.warningType.selectOption(selectWarnings);
-    await this.year.selectOption(selectYear);
+
+    await this.warningType.selectOption({ label: selectWarnings });
+    await this.year.selectOption({ label: selectYear });
     await this.filter.click();
     await expect(this.tableHeader).toBeTruthy();
   }
@@ -122,7 +120,7 @@ export default class RadioNavigationalWarningsList
     const resultLinks= await this.page.$$eval('#Edit' , (matches: any[]) => { return matches.map(option => option.textContent) });
     for(let i=0;i<resultLinks.length;i++)
     {
-      expect(resultLinks[i]).toEqual("Edit");
+      expect(resultLinks[i].trim()).toEqual("Edit");
     }
   }
 
