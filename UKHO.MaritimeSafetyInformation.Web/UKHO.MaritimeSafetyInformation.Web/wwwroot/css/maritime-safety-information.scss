@@ -82,6 +82,14 @@ table {
     clip: rect(1px,1px,1px,1px);
     margin-top: -1px;
 }
+.form-label {
+    margin-bottom: 0.5rem !important;
+    box-shadow: none;
+}
+.form-select, .form-control {
+    border-radius: 0;
+    font-weight: 300;
+}
 
 .form-label {
     margin-bottom: 0.5rem !important;

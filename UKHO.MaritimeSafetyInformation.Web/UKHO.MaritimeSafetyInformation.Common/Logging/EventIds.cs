@@ -207,6 +207,48 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910051 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
         /// </summary>
+        UnhandledCleanUpException = 910029,
+        /// <summary>
+        /// 910030 -  Maritime safety information create new RNW record request started.
+        /// </summary>
+        CreateNewRNWRecordStart = 910030,
+        /// <summary>
+        /// 910031 -  Maritime safety information create new RNW record request Completed.
+        /// </summary>
+        CreateNewRNWRecordCompleted = 910031,
+        /// <summary>
+        /// 910032 -  Maritime safety information add new RNW record to database request started.
+        /// </summary>
+        AddNewRNWRecordStart = 910032,
+        /// <summary>
+        /// 910033 -  Maritime safety information add new RNW record to database request Completed.
+        /// </summary>
+        AddNewRNWRecordCompleted = 910033,
+        /// <summary> 
+        /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
+        /// </summary>
+        ErrorInRnwRepositoryProcess = 910034,
+        /// <summary> 
+        /// 910035 -  Maritime safety information invalid new RNW record request.
+        /// </summary>
+        InvalidNewRNWRecordRequest = 910035,
+        /// <summary> 
+        /// 910036 -  Maritime safety information invalid value received for parameter warningType.
+        /// </summary>
+        InvalidWarningTypeInRequest = 910036,
+        /// <summary> 
+        /// 910037 -  Maritime safety information invalid value received for parameter reference.
+        /// </summary>
+        InvalidReferenceInRequest = 910037,
+        /// <summary> 
+        /// 910038 -  Maritime safety information invalid value received for parameter summary.
+        /// </summary>
+        InvalidSummaryInRequest = 910038,
+        /// <summary> 
+        /// 910039 -  Maritime safety information invalid value received for parameter content.
+        /// </summary>
+        InvalidContentInRequest = 910039
+
         GetWeeklyFilesResponseForYearOrWeekWithZero = 910051,
     }
 
