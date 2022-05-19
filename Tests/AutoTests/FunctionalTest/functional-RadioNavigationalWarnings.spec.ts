@@ -5,7 +5,7 @@ import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWar
 test.describe("Goto maritime-safety-information Home Page", ()=> {
   let rnwList:RadioNavigationalWarningsList;
   test.beforeEach(async ({page}) => {
-   await page.goto(app.adminurl);  
+   await page.goto(app.rnwAdminUrl);  
    rnwList=new RadioNavigationalWarningsList(page);
   });
 
