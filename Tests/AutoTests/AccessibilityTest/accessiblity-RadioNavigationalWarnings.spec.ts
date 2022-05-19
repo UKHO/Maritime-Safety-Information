@@ -21,8 +21,6 @@ import RadioNavigationalWarnings from '../../pageObject/RadioNavigationalWarning
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
-    const radioNavigationalWarnings = new RadioNavigationalWarnings(page);
-    radioNavigationalWarnings.SelectRadioNavigationalWarning();
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);
