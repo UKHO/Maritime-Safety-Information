@@ -50,12 +50,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssBatchSearchAsync_ThenReturnsBatchSearchResponse()
         {
             string searchText = "";
-            string accessToken = "";
-
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
 
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
-            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, accessToken, CorrelationId);
+            Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync(searchText, FakeAccessToken, CorrelationId);
             Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);            
         }
 
@@ -75,6 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             int ExpectedStatusCode = 200;
             bool ExpectedStatus = true;
+            _fileShareServiceConfig.Value.BaseUrl = "https://www.test.com/";
             IResult<BatchAttributesSearchResponse> expectedResponse = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fileShareApiClient.BatchAttributeSearch("", CancellationToken.None)).Returns(expectedResponse);
 
