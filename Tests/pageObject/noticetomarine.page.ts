@@ -62,7 +62,7 @@ export default class noticetoMarine
      await this.dropDownYearly.selectOption({index:1});
      const weeklength = (await this.page.$$("#ddlWeeks option")).length;
      await this.dropDownWeekly.selectOption({index:weeklength-1});
-     const result= await this.page.$$eval('#filename' , (matches: any[]) => { return matches.map(option => option.textContent) });
+     const result= await this.page.$$eval('td[id^=filename]' , (matches: any[]) => { return matches.map(option => option.textContent) });
      return result.length;
     }
     public async checkFileSizeText()
@@ -76,7 +76,7 @@ export default class noticetoMarine
    
     public async verifyTableContainsDownloadLink()
     {
-     const downloadLinks= await this.page.$$eval('#download' , (matches: any[]) => { return matches.map(option => option.textContent) });
+     const downloadLinks= await this.page.$$eval('td[id^=download]' , (matches: any[]) => { return matches.map(option => option.textContent) });
      for(let i=0;i<downloadLinks.length;i++)
      {
      expect(downloadLinks[i]).toEqual("Download");
@@ -90,7 +90,7 @@ export default class noticetoMarine
      const weeklength = (await this.page.$$("#ddlWeeks option")).length;
      await this.dropDownWeekly.selectOption({index:weeklength-1});
       
-     const fileNameData = await this.page.$$eval('#filename' , (matches: any[]) => { return matches.map(option => option.textContent) });  
+     const fileNameData = await this.page.$$eval('td[id^=filename]' , (matches: any[]) => { return matches.map(option => option.textContent) });  
      const beforeSortFilename= fileNameData;
      fileNameData.sort();
      const afterSortFileName = fileNameData;
@@ -109,7 +109,7 @@ export default class noticetoMarine
      for(var week=1;week<=weekCount-1;week++)
      {
      await this.dropDownWeekly.selectOption({index:week});
-     const fileSizeData = await this.page.$$eval('#filesize' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
+     const fileSizeData = await this.page.$$eval('td[id^=filesize]' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
      expect(fileSizeData.length).toBeGreaterThan(0); 
      expect(await this.checkFileNameText()).toEqual('File Name');
      expect(await this.checkFileSizeText()).toEqual('File Size');   
