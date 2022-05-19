@@ -32,7 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
                          DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
                          Summary = rnwWarnings.Summary,
-                         Content = rnwWarnings.Content != null ? rnwWarnings.Content.Length > 300 ? string.Concat(rnwWarnings.Content.Substring(0, 300), "...") : rnwWarnings.Content : string.Empty,
+                         Content = FormatContent(rnwWarnings.Content),
                          ExpiryDate = rnwWarnings.ExpiryDate,
                          ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
                          IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
@@ -53,6 +53,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                 .Select(p => p.DateTimeGroup.Year.ToString())
                                 .Distinct().ToListAsync());
             return years;
+        }
+
+        private static string FormatContent(string content)
+        {
+            if(!string.IsNullOrEmpty(content))
+            {
+                return content.Length > 300 ? string.Concat(content.Substring(0, 300), "...") : content;
+            }
+            return string.Empty;
         }
     }
 }
