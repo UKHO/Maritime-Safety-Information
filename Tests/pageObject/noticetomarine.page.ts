@@ -26,7 +26,7 @@ export default class noticetoMarine
      this.dropDownWeekly = this.page.locator("#ddlWeeks");
      this.fileName=this.page.locator('text=File Name');
      this.fileSize= this.page.locator('text=File Size');
-     this.menuNoticeToMarine = this.page.locator('text=Notice to Mariners');
+     this.menuNoticeToMarine = this.page.locator('text=Notices to Mariners');
      this.menuLeisureFolios = this.page.locator('text=Leisure folios');
      this.menuValueAddedResellers = this.page.locator('text=Value added resellers');
      this.menuAbout = this.page.locator('text=About');
@@ -53,14 +53,14 @@ export default class noticetoMarine
 
     public async checkText(locator:Locator)
     {
-     return locator.textContent().toString();
+     return (await locator.textContent()).toString();
     }
 
     public async checkTableRecordCount()
     {
      const yearlylength = (await this.page.$$("#ddlYears option")).length; 
-     const weeklength = (await this.page.$$("#ddlWeeks option")).length;
      await this.dropDownYearly.selectOption({index:1});
+     const weeklength = (await this.page.$$("#ddlWeeks option")).length;
      await this.dropDownWeekly.selectOption({index:weeklength-1});
      const result= await this.page.$$eval('#filename' , (matches: any[]) => { return matches.map(option => option.textContent) });
      return result.length;
@@ -85,6 +85,11 @@ export default class noticetoMarine
 
     public async checkFileNameSort()
     {
+     const yearlylength = (await this.page.$$("#ddlYears option")).length; 
+     await this.dropDownYearly.selectOption({index:1});
+     const weeklength = (await this.page.$$("#ddlWeeks option")).length;
+     await this.dropDownWeekly.selectOption({index:weeklength-1});
+      
      const fileNameData = await this.page.$$eval('#filename' , (matches: any[]) => { return matches.map(option => option.textContent) });  
      const beforeSortFilename= fileNameData;
      fileNameData.sort();
@@ -92,12 +97,12 @@ export default class noticetoMarine
      expect(beforeSortFilename).toEqual(afterSortFileName);
     }
 
-    public async checkFileSizeData()
-    {
+     public async checkFileSizeData()
+     {
      const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
-    for(var year=1;year<=yearlyCount-1;year++)
-    {
+     for(var year=1;year<=yearlyCount-1;year++)
+     {
      await this.dropDownYearly.selectOption({index:year});
      const weekCount = (await this.page.$$("#ddlWeeks option")).length;
 
@@ -139,7 +144,7 @@ export default class noticetoMarine
      expect(boolFileSize).toBeTruthy();
      }   
 
-    }
-    }
-    }     
+     }
+     }
+     }     
 }
