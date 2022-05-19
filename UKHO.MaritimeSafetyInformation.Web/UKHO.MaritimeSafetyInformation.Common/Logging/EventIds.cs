@@ -105,151 +105,149 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         UnhandledCleanUpException = 910025,
         /// <summary>
-        /// 910026 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910026 -  Maritime safety information create new RNW record request started.
         /// </summary>
-        GetWeeklyFilesResponseStarted = 910026,
+        CreateNewRNWRecordStart = 910026,
         /// <summary>
-        /// 910027 -  Event data for Retrieval of MSI Get Weekly File Response For Year With Value And Week With Zero.
+        /// 910027 -  Maritime safety information create new RNW record request Completed.
         /// </summary>
-        GetWeeklyFilesResponseForYearValueAndWeekZero = 910027,
+        CreateNewRNWRecordCompleted = 910027,
         /// <summary>
-        /// 910028 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Value.
+        /// 910028 -  Maritime safety information add new RNW record to database request started.
         /// </summary>
-        GetWeeklyFilesResponseForYearAndWeekWithValue = 910028,
+        AddNewRNWRecordStart = 910028,
         /// <summary>
-        /// 910029 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Zero.
+        /// 910029 -  Maritime safety information add new RNW record to database request Completed.
         /// </summary>
-        GetWeeklyFilesResponseForYearAndWeekWithZero = 910029,
-        /// <summary>
-        /// 910030 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
-        /// </summary>
-        GetWeeklyFilesResponseFailed = 910030,
-        /// <summary>
-        /// 910031 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
-        /// </summary>
-        ShowWeeklyFilesIndexGetFailed = 910031,
-        /// <summary>
-        /// 910032 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
-        /// </summary>
-        ShowWeeklyFilesIndexPostFailed = 910032,
-        /// <summary>
-        /// 910033 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Not Null.
-        /// </summary>
-        ShowWeeklyFilesResponseForYearAndWeekNotNullForIndexGet = 910033,
-        /// <summary>
-        /// 910034 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
-        /// </summary>
-        ShowWeeklyFilesResponseStartIndexPost = 910034,
-        /// <summary>
-        /// 910035 -  Event data for Retrieval of MSI Show Weekly File Response For Year Non Zero.
-        /// </summary>
-        ShowWeeklyFilesResponseForYearNonZero = 910035,
-        /// <summary>
-        /// 910036 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
-        /// </summary>
-        ShowWeeklyFilesResponseForYearAndWeekNonZero = 910036,
-        /// <summary>
-        /// 910037 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
-        /// </summary>
-        ShowWeeklyFilesResponseForYearNonZeroAndWeekWithZero = 910037,
-        /// <summary>
-        /// 910038 -  Event data for Retrieval of MSI Show Weekly File Response TempData For Year And Week Is Not Null.
-        /// </summary>
-        ShowWeeklyFilesResponseForTempDataYearAndWeekNotNull = 910038,
-        /// <summary>
-        /// 910039 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
-        /// </summary>
-        ShowWeeklyFilesResponsetIndexPostCompleted = 910039,
-        /// <summary>
-        /// 910040 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
-        /// </summary>
-        ShowWeeklyFilesResponseIndexGetCompleted = 910040,
-        /// <summary>
-        /// 910041 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Started
-        /// </summary>
-        GetSearchAttributeRequestDataStarted = 910041,
-        /// <summary>
-        /// 910042 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
-        /// </summary>
-        GetSearchAttributeRequestDataFound = 910042,
-        /// <summary>
-        /// 910043 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
-        /// </summary>
-        GetSearchAttributeRequestDataFailed = 910043,
-        /// <summary>
-        /// 910044 -  Search Attribute Response Started for File Share Service Client
-        /// </summary>
-        FSSSearchAttributeResponseStarted = 910044,
-        /// <summary>
-        /// 910045 -  Search Attribute Response Completed for File Share Service Client
-        /// </summary>
-        FSSSearchAttributeResponseCompleted = 910045,
-        /// <summary>
-        /// 910046 - Search Attribute Response threw an exception in case of errors for File Share Service Client
-        /// </summary>
-        FSSSearchAttributeResponseError = 910046,
-        /// <summary>
-        /// 910047 - Get All weeks and Year data for Notices to Mariners Started 
-        /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksStarted = 910047,
-        /// <summary>
-        /// 910048 - Get All weeks and Year data for Notices to Mariners Completed
-        /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksCompleted = 910048,
-        /// <summary>
-        /// 910049 - No data recieved Year Week data from FSS for Notices to Mariners  
-        /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910049,
-        /// <summary>
-        /// 910050 -  Event data for Retrieval of MSI Show Weekly File Response For Year Or Week Non Zero.
-        /// </summary>
-        ShowWeeklyFilesResponseForYearOrWeekNonZero = 910050,
-        /// <summary>
-        /// 910051 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
-        /// </summary>
-        UnhandledCleanUpException = 910029,
-        /// <summary>
-        /// 910030 -  Maritime safety information create new RNW record request started.
-        /// </summary>
-        CreateNewRNWRecordStart = 910030,
-        /// <summary>
-        /// 910031 -  Maritime safety information create new RNW record request Completed.
-        /// </summary>
-        CreateNewRNWRecordCompleted = 910031,
-        /// <summary>
-        /// 910032 -  Maritime safety information add new RNW record to database request started.
-        /// </summary>
-        AddNewRNWRecordStart = 910032,
-        /// <summary>
-        /// 910033 -  Maritime safety information add new RNW record to database request Completed.
-        /// </summary>
-        AddNewRNWRecordCompleted = 910033,
+        AddNewRNWRecordCompleted = 910029,
         /// <summary> 
-        /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
+        /// 910030 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        ErrorInRnwRepositoryProcess = 910034,
+        ErrorInRnwRepositoryProcess = 910030,
         /// <summary> 
-        /// 910035 -  Maritime safety information invalid new RNW record request.
+        /// 910031 -  Maritime safety information invalid new RNW record request.
         /// </summary>
-        InvalidNewRNWRecordRequest = 910035,
+        InvalidNewRNWRecordRequest = 910031,
         /// <summary> 
-        /// 910036 -  Maritime safety information invalid value received for parameter warningType.
+        /// 910032 -  Maritime safety information invalid value received for parameter warningType.
         /// </summary>
-        InvalidWarningTypeInRequest = 910036,
+        InvalidWarningTypeInRequest = 910032,
         /// <summary> 
-        /// 910037 -  Maritime safety information invalid value received for parameter reference.
+        /// 910033 -  Maritime safety information invalid value received for parameter reference.
         /// </summary>
-        InvalidReferenceInRequest = 910037,
+        InvalidReferenceInRequest = 910033,
         /// <summary> 
-        /// 910038 -  Maritime safety information invalid value received for parameter summary.
+        /// 910034 -  Maritime safety information invalid value received for parameter summary.
         /// </summary>
-        InvalidSummaryInRequest = 910038,
+        InvalidSummaryInRequest = 910034,
         /// <summary> 
-        /// 910039 -  Maritime safety information invalid value received for parameter content.
+        /// 910035 -  Maritime safety information invalid value received for parameter content.
         /// </summary>
-        InvalidContentInRequest = 910039
-
-        GetWeeklyFilesResponseForYearOrWeekWithZero = 910051,
+        InvalidContentInRequest = 910035,
+        /// <summary>
+        /// 910036 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// </summary>
+        GetWeeklyFilesResponseStarted = 910036,
+        /// <summary>
+        /// 910037 -  Event data for Retrieval of MSI Get Weekly File Response For Year With Value And Week With Zero.
+        /// </summary>
+        GetWeeklyFilesResponseForYearValueAndWeekZero = 910037,
+        /// <summary>
+        /// 910038 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Value.
+        /// </summary>
+        GetWeeklyFilesResponseForYearAndWeekWithValue = 910038,
+        /// <summary>
+        /// 910039 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Zero.
+        /// </summary>
+        GetWeeklyFilesResponseForYearAndWeekWithZero = 910039,
+        /// <summary>
+        /// 910040 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
+        /// </summary>
+        GetWeeklyFilesResponseFailed = 910040,
+        /// <summary>
+        /// 910041 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
+        /// </summary>
+        ShowWeeklyFilesIndexGetFailed = 910041,
+        /// <summary>
+        /// 910042 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
+        /// </summary>
+        ShowWeeklyFilesIndexPostFailed = 910042,
+        /// <summary>
+        /// 910043 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Not Null.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearAndWeekNotNullForIndexGet = 910043,
+        /// <summary>
+        /// 910044 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
+        /// </summary>
+        ShowWeeklyFilesResponseStartIndexPost = 910044,
+        /// <summary>
+        /// 910045 -  Event data for Retrieval of MSI Show Weekly File Response For Year Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearNonZero = 910045,
+        /// <summary>
+        /// 910046 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearAndWeekNonZero = 910046,
+        /// <summary>
+        /// 910047 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearNonZeroAndWeekWithZero = 910047,
+        /// <summary>
+        /// 910048 -  Event data for Retrieval of MSI Show Weekly File Response TempData For Year And Week Is Not Null.
+        /// </summary>
+        ShowWeeklyFilesResponseForTempDataYearAndWeekNotNull = 910048,
+        /// <summary>
+        /// 910049 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
+        /// </summary>
+        ShowWeeklyFilesResponsetIndexPostCompleted = 910049,
+        /// <summary>
+        /// 910050 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// </summary>
+        ShowWeeklyFilesResponseIndexGetCompleted = 910050,
+        /// <summary>
+        /// 910051 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Started
+        /// </summary>
+        GetSearchAttributeRequestDataStarted = 910051,
+        /// <summary>
+        /// 910052 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
+        /// </summary>
+        GetSearchAttributeRequestDataFound = 910052,
+        /// <summary>
+        /// 910053 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
+        /// </summary>
+        GetSearchAttributeRequestDataFailed = 910053,
+        /// <summary>
+        /// 910054 -  Search Attribute Response Started for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseStarted = 910054,
+        /// <summary>
+        /// 910055 -  Search Attribute Response Completed for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseCompleted = 910055,
+        /// <summary>
+        /// 910056 - Search Attribute Response threw an exception in case of errors for File Share Service Client
+        /// </summary>
+        FSSSearchAttributeResponseError = 910056,
+        /// <summary>
+        /// 910057 - Get All weeks and Year data for Notices to Mariners Started 
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksStarted = 910057,
+        /// <summary>
+        /// 910058 - Get All weeks and Year data for Notices to Mariners Completed
+        /// </summary>
+        NoticesToMarinersGetAllYearsandWeeksCompleted = 910058,
+        /// <summary>
+        /// 910059 - No data recieved Year Week data from FSS for Notices to Mariners  
+        /// </summary>
+        GetSearchAttributeRequestDataNotFound = 910059,
+        /// <summary>
+        /// 910060 -  Event data for Retrieval of MSI Show Weekly File Response For Year Or Week Non Zero.
+        /// </summary>
+        ShowWeeklyFilesResponseForYearOrWeekNonZero = 910060,
+        /// <summary>
+        /// 910061 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
+        /// </summary>
+        GetWeeklyFilesResponseForYearOrWeekWithZero = 910061
     }
 
     public static class EventIdExtensions
