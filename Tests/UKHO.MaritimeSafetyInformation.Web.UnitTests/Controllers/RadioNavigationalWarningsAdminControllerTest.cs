@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -15,13 +16,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     [TestFixture]
     public class RadioNavigationalWarningsAdminControllerTest
     {
+        private RadioNavigationalWarningsAdminController _controller;
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWService _fakeRnwService;
+                
 
-        private RadioNavigationalWarningsAdminController _controller;
-
-        [SetUp]
+       [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
@@ -47,10 +48,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
 
+        [Test]
+        public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
+        {
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
+            _controller.TempData = tempData;
+
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
+        }
+
         private RadioNavigationalWarningsAdminListFilter GetFakeRadioNavigationWarningsForAdmin()
         {
             return new RadioNavigationalWarningsAdminListFilter
-            {
+        {
                 WarningTypes = new List<WarningType>() { new WarningType { Id = 1, Name = "Test" } },
                 Years = new List<string>() { "2020", "2021" },
             };

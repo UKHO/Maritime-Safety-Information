@@ -42,6 +42,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
+            services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
+
+            var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
+            configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
+            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<INMDataService, NMDataService>();
