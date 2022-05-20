@@ -4,6 +4,13 @@ data "azurerm_subnet" "main_subnet" {
   resource_group_name  = var.spoke_rg
 }
 
+data "azurerm_subnet" "agent_subnet" {
+  provider             = azurerm.build_agent
+  name                 = var.agent_subnet_name
+  virtual_network_name = var.agent_vnet_name
+  resource_group_name  = var.agent_rg
+}
+
 module "app_insights" {
   source              = "./Modules/AppInsights"
   name                = "${local.service_name}-${local.env_name}-insights"
@@ -48,6 +55,8 @@ module "key_vault" {
   resource_group_name = azurerm_resource_group.rg.name
   env_name            = local.env_name
   tenant_id           = module.webapp_service.web_app_tenant_id
+  allowed_ips         = var.allowed_ips
+  allowed_subnet_ids  = [data.azurerm_subnet.main_subnet.id,data.azurerm_subnet.agent_subnet.id]
   location            = azurerm_resource_group.rg.location
   read_access_objects = {
      "webapp_service" = module.webapp_service.web_app_object_id
@@ -58,4 +67,14 @@ module "key_vault" {
       "RadioNavigationalWarningsContext--ConnectionString"   = local.rnw_db_connection_string
  }
   tags                                                       = local.tags
+}
+
+module "azure-dashboard" {
+  source              = "./Modules/AzureDashboard"
+  name                = "MSI-${local.env_name}-monitoring-dashboard"
+  location            = azurerm_resource_group.rg.location
+  environment         = local.env_name
+  resource_group      = azurerm_resource_group.rg
+  web_app_name        = local.web_app_name
+  tags                = local.tags
 }
