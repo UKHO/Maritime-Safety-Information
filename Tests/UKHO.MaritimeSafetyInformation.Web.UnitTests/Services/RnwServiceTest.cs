@@ -14,20 +14,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class RnwServiceTest
     {
-        private RnwService _rnwService;
-        private IRnwRepository _fakeRnwRepository;
-        private ILogger<RnwService> _fakeLogger;
+        private RNWService _rnwService;
+        private IRNWRepository _fakeRnwRepository;
+        private ILogger<RNWService> _fakeLogger;
         private IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
 
         [SetUp]
         public void SetUp()
         {
-            _fakeLogger = A.Fake<ILogger<RnwService>>();
+            _fakeLogger = A.Fake<ILogger<RNWService>>();
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
-            _fakeRnwRepository = A.Fake<IRnwRepository>();
+            _fakeRnwRepository = A.Fake<IRNWRepository>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
 
-            _rnwService = new RnwService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);
+            _rnwService = new RNWService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);
 
         }
 

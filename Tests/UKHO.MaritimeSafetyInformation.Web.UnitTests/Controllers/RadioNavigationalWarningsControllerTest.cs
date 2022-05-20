@@ -16,7 +16,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     {
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsController> _fakeLogger;
-        private IRnwService _fakeRnwService;
+        private IRNWService _fakeRnwService;
 
         private RadioNavigationalWarningsController _controller;
 
@@ -25,7 +25,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsController>>();
-            _fakeRnwService = A.Fake<IRnwService>();
+            _fakeRnwService = A.Fake<IRNWService>();
 
             _controller = new RadioNavigationalWarningsController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }

@@ -7,12 +7,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
     public class RadioNavigationalWarningsController : BaseController<RadioNavigationalWarningsController>
     {
-        private readonly IRnwService _rnwService;
+        private readonly IRNWService _rnwService;
         private readonly ILogger<RadioNavigationalWarningsController> _logger;
 
         public RadioNavigationalWarningsController(IHttpContextAccessor contextAccessor,
                                                    ILogger<RadioNavigationalWarningsController> logger,
-                                                   IRnwService rnwService) : base(contextAccessor, logger)
+                                                   IRNWService rnwService) : base(contextAccessor, logger)
         {
             _rnwService = rnwService;
             _logger = logger;

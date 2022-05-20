@@ -47,8 +47,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-            services.AddScoped<IRnwService, RnwService>();
-            services.AddScoped<IRnwRepository, RnwRepository>();
+            services.AddScoped<IRNWService, RNWService>();
+            services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>

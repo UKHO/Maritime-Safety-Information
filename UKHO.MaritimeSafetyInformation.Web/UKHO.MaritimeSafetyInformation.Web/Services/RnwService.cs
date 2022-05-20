@@ -6,16 +6,16 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public class RnwService : IRnwService
+    public class RNWService : IRNWService
     {
-        private readonly IRnwRepository _rnwRepository;
+        private readonly IRNWRepository _rnwRepository;
         private readonly IOptions<RadioNavigationalWarningConfiguration> _radioNavigationalWarningConfiguration;
-        private readonly ILogger<RnwService> _logger;
+        private readonly ILogger<RNWService> _logger;
         private static List<RadioNavigationalWarningsAdminList> s_allRadioNavigationalWarningsAdminList;
 
-        public RnwService(IRnwRepository repository,
+        public RNWService(IRNWRepository repository,
                         IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration,
-                        ILogger<RnwService> logger)
+                        ILogger<RNWService> logger)
         {
             _rnwRepository = repository;
             _radioNavigationalWarningConfiguration = radioNavigationalWarningConfiguration;

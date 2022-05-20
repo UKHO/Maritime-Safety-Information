@@ -3,7 +3,7 @@ using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    public interface IRnwRepository
+    public interface IRNWRepository
     {
         Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList();        
 

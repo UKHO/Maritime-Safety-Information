@@ -11,9 +11,9 @@ using UKHO.MaritimeSafetyInformation.Web.Services;
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
     [TestFixture]
-    public class RnwRepositoryTest
+    public class RNWRepositoryTest
     {
-        private RnwRepository _rnwRepository;
+        private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
         [SetUp]
         public void SetUp()
@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
 
-            _rnwRepository = new RnwRepository(_fakeContext);
+            _rnwRepository = new RNWRepository(_fakeContext);
 
             _fakeContext.RadioNavigationalWarnings.RemoveRange(_fakeContext.RadioNavigationalWarnings);
             _fakeContext.WarningType.RemoveRange(_fakeContext.WarningType);
