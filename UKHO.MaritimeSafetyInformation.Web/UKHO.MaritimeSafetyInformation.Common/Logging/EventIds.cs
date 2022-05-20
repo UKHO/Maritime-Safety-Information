@@ -259,7 +259,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910061 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
         /// </summary>
-        GetWeeklyFilesResponseForYearOrWeekWithZero = 910061
+        GetWeeklyFilesResponseForYearOrWeekWithZero = 910061,
+        /// <summary>
+        /// 910062 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// </summary>
+        GetWeeklyFilesResponseCompleted = 910062,
     }
 
     public static class EventIdExtensions

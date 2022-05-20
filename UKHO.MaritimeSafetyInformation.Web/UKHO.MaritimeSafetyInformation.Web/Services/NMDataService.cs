@@ -11,7 +11,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IFileShareService _fileShareService;
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
-        private const string YearandWeek = "YEAR/WEEK";
+        private const string YearAndWeek = "YEAR/WEEK";
 
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
         {
@@ -67,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
                     {
-                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == YearandWeek)
+                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == YearAndWeek)
                         {
                             List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
 
@@ -144,19 +144,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
                 if (year == 0 && week == 0)
                 {
-                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with zero with _X-Correlation-ID:{correlationId}", correlationId);
-
                     year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
                     week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Week).Select(x => x.Week).FirstOrDefault());
                 }
                 showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
-
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.GetWeeklyFilesResponseFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
+
+            _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+
             return showWeeklyFilesResponses;
         }
     }
