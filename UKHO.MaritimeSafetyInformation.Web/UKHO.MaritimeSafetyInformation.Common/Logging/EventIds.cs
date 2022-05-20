@@ -215,31 +215,27 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
         /// </summary>
-        GetWeeklyFilesResponseCompleted = 910053
+        GetWeeklyFilesResponseCompleted = 910053,        
         /// <summary> 
-        /// 910042 -  Maritime safety information get RNW records for Admin from database request error.
+        /// 910054 -  Maritime safety information request to get RNW detail started.
         /// </summary>
-        RNWAdminListError = 910042,
+        RNWListDetailStarted = 910054,
         /// <summary> 
-        /// 910043 -  Maritime safety information request to get RNW detail started.
+        /// 910055 -  Maritime safety information request to get RNW detail completed.
         /// </summary>
-        RNWListDetailStarted = 910043,
+        RNWListDetailCompleted = 910055,
         /// <summary> 
-        /// 910044 -  Maritime safety information request to get RNW detail completed.
+        /// 910056 -  Maritime safety information request to get RNW detail from database started.
         /// </summary>
-        RNWListDetailCompleted = 910044,
+        RNWListDetailFormDatabaseStarted = 910056,
         /// <summary> 
-        /// 910045 -  Maritime safety information request to get RNW detail from database started.
+        /// 910057 -  Maritime safety information request to get RNW detail from database Completed.
         /// </summary>
-        RNWListDetailFormDatabaseStarted = 910045,
+        RNWListDetailFormDatabaseCompleted = 910057,
         /// <summary> 
-        /// 910046 -  Maritime safety information request to get RNW detail from database Completed.
+        /// 910058 -  Maritime safety information error has occurred in the process to get RNW detail from database.
         /// </summary>
-        RNWListDetailFormDatabaseCompleted = 910046,
-        /// <summary> 
-        /// 910047 -  Maritime safety information error has occurred in the process to get RNW detail from database.
-        /// </summary>
-        ErrorInRNWListDetailFromDatabase = 910047
+        ErrorInRNWListDetailFromDatabase = 910058
     }
 
     public static class EventIdExtensions
