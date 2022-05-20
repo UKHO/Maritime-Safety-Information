@@ -161,109 +161,61 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetWeeklyFilesResponseStarted = 910039,
         /// <summary>
-        /// 910040 -  Event data for Retrieval of MSI Get Weekly File Response For Year With Value And Week With Zero.
+        /// 910040 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
         /// </summary>
-        GetWeeklyFilesResponseForYearValueAndWeekZero = 910040,
+        GetWeeklyFilesResponseFailed = 910040,
         /// <summary>
-        /// 910041 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Value.
+        /// 910041 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
         /// </summary>
-        GetWeeklyFilesResponseForYearAndWeekWithValue = 910041,
+        ShowWeeklyFilesIndexGetFailed = 910041,
         /// <summary>
-        /// 910042 -  Event data for Retrieval of MSI Get Weekly File Response For Year And Week With Zero.
+        /// 910042 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
         /// </summary>
-        GetWeeklyFilesResponseForYearAndWeekWithZero = 910042,
+        ShowWeeklyFilesIndexPostFailed = 910042,
         /// <summary>
-        /// 910043 -  Event data for Retrieval of MSI Get Weekly File Response Failed.
+        /// 910043 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
         /// </summary>
-        GetWeeklyFilesResponseFailed = 910043,
+        ShowWeeklyFilesResponseStartIndexPost = 910043,
         /// <summary>
-        /// 910044 -  Event data for Retrieval of MSI Get Weekly File Index Get Response Failed.
+        /// 910044 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
         /// </summary>
-        ShowWeeklyFilesIndexGetFailed = 910044,
+        ShowWeeklyFilesResponsetIndexPostCompleted = 910044,
         /// <summary>
-        /// 910045 -  Event data for Retrieval of MSI Get Weekly File Index Post Response Failed.
+        /// 910045 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
         /// </summary>
-        ShowWeeklyFilesIndexPostFailed = 910045,
+        ShowWeeklyFilesResponseIndexGetCompleted = 910045,
         /// <summary>
-        /// 910046 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Not Null.
+        /// 910046 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Started
         /// </summary>
-        ShowWeeklyFilesResponseForYearAndWeekNotNullForIndexGet = 910046,
+        GetSearchAttributeRequestDataStarted = 910046,
         /// <summary>
-        /// 910047 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Started.
+        /// 910047 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
         /// </summary>
-        ShowWeeklyFilesResponseStartIndexPost = 910047,
+        GetSearchAttributeRequestDataFound = 910047,
         /// <summary>
-        /// 910048 -  Event data for Retrieval of MSI Show Weekly File Response For Year Non Zero.
+        /// 910048 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
         /// </summary>
-        ShowWeeklyFilesResponseForYearNonZero = 910048,
+        GetSearchAttributeRequestDataFailed = 910048,
         /// <summary>
-        /// 910049 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// 910049 -  Search Attribute Response Started for File Share Service Client
         /// </summary>
-        ShowWeeklyFilesResponseForYearAndWeekNonZero = 910049,
+        FSSSearchAttributeResponseStarted = 910049,
         /// <summary>
-        /// 910050 -  Event data for Retrieval of MSI Show Weekly File Response For Year And Week Non Zero.
+        /// 910050 -  Search Attribute Response Completed for File Share Service Client
         /// </summary>
-        ShowWeeklyFilesResponseForYearNonZeroAndWeekWithZero = 910050,
+        FSSSearchAttributeResponseCompleted = 910050,
         /// <summary>
-        /// 910051 -  Event data for Retrieval of MSI Show Weekly File Response TempData For Year And Week Is Not Null.
+        /// 910051 - Search Attribute Response threw an exception in case of errors for File Share Service Client
         /// </summary>
-        ShowWeeklyFilesResponseForTempDataYearAndWeekNotNull = 910051,
+        FSSSearchAttributeResponseError = 910051,
         /// <summary>
-        /// 910052 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
+        /// 910052 - No data recieved Year Week data from FSS for Notices to Mariners  
         /// </summary>
-        ShowWeeklyFilesResponsetIndexPostCompleted = 910052,
+        GetSearchAttributeRequestDataNotFound = 910052,
         /// <summary>
-        /// 910053 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
+        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
         /// </summary>
-        ShowWeeklyFilesResponseIndexGetCompleted = 910053,
-        /// <summary>
-        /// 910054 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Started
-        /// </summary>
-        GetSearchAttributeRequestDataStarted = 910054,
-        /// <summary>
-        /// 910055 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
-        /// </summary>
-        GetSearchAttributeRequestDataFound = 910055,
-        /// <summary>
-        /// 910056 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
-        /// </summary>
-        GetSearchAttributeRequestDataFailed = 910056,
-        /// <summary>
-        /// 910057 -  Search Attribute Response Started for File Share Service Client
-        /// </summary>
-        FSSSearchAttributeResponseStarted = 910057,
-        /// <summary>
-        /// 910058 -  Search Attribute Response Completed for File Share Service Client
-        /// </summary>
-        FSSSearchAttributeResponseCompleted = 910058,
-        /// <summary>
-        /// 910059 - Search Attribute Response threw an exception in case of errors for File Share Service Client
-        /// </summary>
-        FSSSearchAttributeResponseError = 910059,
-        /// <summary>
-        /// 910060 - Get All weeks and Year data for Notices to Mariners Started 
-        /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksStarted = 910060,
-        /// <summary>
-        /// 910061 - Get All weeks and Year data for Notices to Mariners Completed
-        /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksCompleted = 910061,
-        /// <summary>
-        /// 910062 - No data recieved Year Week data from FSS for Notices to Mariners  
-        /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910062,
-        /// <summary>
-        /// 910063 -  Event data for Retrieval of MSI Show Weekly File Response For Year Or Week Non Zero.
-        /// </summary>
-        ShowWeeklyFilesResponseForYearOrWeekNonZero = 910063,
-        /// <summary>
-        /// 910064 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
-        /// </summary>
-        GetWeeklyFilesResponseForYearOrWeekWithZero = 910064,
-        /// <summary>
-        /// 910065 -  Event data for Retrieval of MSI Get Weekly File Response Started.
-        /// </summary>
-        GetWeeklyFilesResponseCompleted = 910065
+        GetWeeklyFilesResponseCompleted = 910053
     }
 
     public static class EventIdExtensions
