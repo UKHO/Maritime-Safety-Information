@@ -1,6 +1,5 @@
 ﻿using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
-using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
