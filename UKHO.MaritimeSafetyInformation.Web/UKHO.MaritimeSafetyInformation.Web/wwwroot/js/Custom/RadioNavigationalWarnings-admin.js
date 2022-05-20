@@ -23,11 +23,11 @@ function RnwFilterList(pageSelectedIndex) {
     }
     var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacePageSelectedIndex"
                 +"&warningType=ReplaceWarningTypeSelectedValue"
-                +"&year=ReplaceYeareSelectedValue";
+                +"&year=ReplaceYearSelectedValue";
 
     rnwUrl = rnwUrl.replace("ReplacePageSelectedIndex", pageSelectedIndex).trim();
     rnwUrl = rnwUrl.replace("ReplaceWarningTypeSelectedValue", warningTypeSelectedValue).trim();
-    rnwUrl = rnwUrl.replace("ReplaceYeareSelectedValue", yearSelectedValue).trim();
+    rnwUrl = rnwUrl.replace("ReplaceYearSelectedValue", yearSelectedValue).trim();
     rnwUrl = rnwUrl.replace("amp;", "");
     window.location.href = rnwUrl;
 }
