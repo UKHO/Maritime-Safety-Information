@@ -8,6 +8,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId);
         List<KeyValuePair<string, string>> GetAllYears(string correlationId);
         List<KeyValuePair<string, string>> GetAllWeeksOfYear(int year, string correlationId);
-        Task<byte[]> DownloadFssFileAsync(string batchId, string filename, string correlationId);
+        Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId);
     }
 }

@@ -104,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
             var result =  _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
 
@@ -115,7 +115,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
             var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = null;
             string mimeType = "application/pdf";
             var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
 
@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = String.Empty;
             string mimeType = "application/pdf";
             var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = "testfile.pdf";
             string mimeType = null;
             var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
 
@@ -157,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = "testfile.pdf";
             string mimeType = String.Empty;
             var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
             var result =  _controller.DownloadWeeklyFile(batchId, fileName, "wrongmime");
             
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
     }
 }

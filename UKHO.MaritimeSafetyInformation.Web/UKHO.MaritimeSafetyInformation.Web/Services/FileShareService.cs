@@ -46,7 +46,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId)
         {
-            ////byte[] fileBytes;
             try
             {
                 _logger.LogInformation(EventIds.FSSGetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
@@ -62,7 +61,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.FSSGetSingleWeeklyNMFileResponseFailed.ToEventId(), "Failed to get single weekly NM file from FSS for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}",batchId,fileName, ex.Message, correlationId);
                 throw;
             }
-            ////return fileBytes;
         }
     }
 }

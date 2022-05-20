@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -65,20 +66,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
         {
-            if (string.IsNullOrEmpty(batchId)) { 
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(), "Maritime safety information download single weekly NM files called with invalid argument batchId:{batchId} for _X-Correlation-ID:{correlationId}", batchId, GetCurrentCorrelationId());
-                throw new ArgumentNullException("Invalid value recieved for parameter batchId", new Exception());
-            }
-            if (string.IsNullOrEmpty(fileName))
+            NMHelper.ValidateParametersForDownloadSingleFile(new()
             {
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(), "Maritime safety information download single weekly NM files called with invalid argument FileName:{fileName} for _X-Correlation-ID:{correlationId}", fileName, GetCurrentCorrelationId());
-                throw new ArgumentNullException("Invalid value recieved for parameter fileName", new Exception());
-            }
-            if (string.IsNullOrEmpty(mimeType))
-            {
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(), "Maritime safety information download single weekly NM files called with invalid argument MIME Type:{mimeType} for _X-Correlation-ID:{correlationId}", mimeType, GetCurrentCorrelationId());
-                throw new ArgumentNullException("Invalid value recieved for parameter mimeType", new Exception());
-            }
+                new KeyValuePair<string, string>("BatchId", batchId),
+                new KeyValuePair<string, string>("FileName", fileName),
+                new KeyValuePair<string, string>("MimeType", mimeType)
+            },GetCurrentCorrelationId(),_logger);
+
             byte[] fileBytes;
             try
             {
@@ -88,7 +82,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename="+ fileName );
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename=" + fileName);
 
                 return File(fileBytes, mimeType);
             }
@@ -97,8 +91,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 _logger.LogError(EventIds.DownloadSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to download single weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
                 throw;
             }
-            
-            
         }
+
+        
     }
 }

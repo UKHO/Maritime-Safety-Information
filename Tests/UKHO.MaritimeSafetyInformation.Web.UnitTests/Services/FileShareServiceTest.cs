@@ -69,7 +69,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
             A.CallTo(() => _fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored));
             Task<IResult<BatchSearchResponse>> result = _fileShareService.FssBatchSearchAsync("", "", CorrelationId);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = null;
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored));
             Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
     }
 }

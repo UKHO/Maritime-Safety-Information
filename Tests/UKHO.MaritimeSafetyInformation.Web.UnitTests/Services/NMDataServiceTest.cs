@@ -87,7 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Task<List<ShowFilesResponseModel>> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Task<List<ShowDailyFilesResponseModel>> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, CorrelationId)).ThrowsAsync(new Exception());
             Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
