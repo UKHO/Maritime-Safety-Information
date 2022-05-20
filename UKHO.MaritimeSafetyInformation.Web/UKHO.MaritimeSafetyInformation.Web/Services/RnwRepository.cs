@@ -57,8 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList()
         {
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData
-            = await (from rnwWarnings in _context.RadioNavigationalWarnings
+            return await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
                      where !rnwWarnings.IsDeleted && rnwWarnings.ExpiryDate >= DateTime.UtcNow
                      select new RadioNavigationalWarningsData
@@ -69,8 +68,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
                      }).OrderByDescending(a => a.DateTimeGroup)
                      .ToListAsync();
-
-            return radioNavigationalWarningsData;
         }
     }
 }

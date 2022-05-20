@@ -115,17 +115,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.MSIGetRnwDetailFormDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW detail from database started for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.RNWListDetailFormDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW detail from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList();
 
-                _logger.LogInformation(EventIds.MSIGetRnwDetailFormDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW detail from database completed for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.RNWListDetailFormDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW detail from database completed for _X-Correlation-ID:{correlationId}", correlationId);
 
                 return radioNavigationalWarningsData;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.MSIErrorInGetRnwDetailFromDatabase.ToEventId(), ex, "Maritime safety information error has occurred in the process to get RNW detail from database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.ErrorInRNWListDetailFromDatabase.ToEventId(), ex, "Maritime safety information error has occurred in the process to get RNW detail from database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
         }

@@ -20,11 +20,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation(EventIds.MSIGetRnwDetailStarted.ToEventId(), "Maritime safety information request to get RNW detail started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW detail started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.MSIGetRnwDetailCompleted.ToEventId(), "Maritime safety information request to get RNW detail completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.RNWListDetailCompleted.ToEventId(), "Maritime safety information request to get RNW detail completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
         }

@@ -102,10 +102,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetYears_ThenReturnListAsync()
         {
             List<string> result = await _rnwRepository.GetYears();
-            Assert.AreEqual(3,result.Count);
+            Assert.AreEqual(3, result.Count);
             Assert.AreEqual("2020", result[0]);
             Assert.AreEqual("2021", result[1]);
             Assert.AreEqual("2022", result[2]);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWornings()
+        {
+            List<RadioNavigationalWarningsData> result = await _rnwRepository.GetRadioNavigationalWarningsDataList();
+            Assert.AreEqual(1, result.Count);
         }
 
         [OneTimeTearDown]
@@ -141,7 +148,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2020, 1, 1)
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
@@ -150,7 +158,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2021, 1, 1)
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
@@ -159,7 +168,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2099, 1, 1)
             });
             return radioNavigationalWarningList;
         }
