@@ -16,18 +16,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _nMDataService = nMDataService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
-            ShowWeeklyFilesResponseModel showWeeklyFiles = new ShowWeeklyFilesResponseModel();
+            ShowWeeklyFilesResponseModel showWeeklyFiles = new();
             try
             {
-                _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ShowWeeklyFilesIndexGetFailed.ToEventId(), "Maritime safety information request to get daily NM weekly files index get failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ShowWeeklyFilesIndexGetFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
             }
 
             _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
@@ -36,27 +36,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(int year, int week)
+        public async Task<IActionResult> Index(int year, int week)
         {
-            ShowWeeklyFilesResponseModel showWeeklyFiles = new ShowWeeklyFilesResponseModel();
+            ShowWeeklyFilesResponseModel showWeeklyFiles = new();
             try
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
-                if (year != 0 && week != 0)
-                {
-                    _logger.LogInformation(EventIds.ShowWeeklyFilesResponseForYearAndWeekNonZero.ToEventId(), "Maritime safety information request for weekly NM file response for year and week non zero for correlationId:{correlationId}", GetCurrentCorrelationId());
-                    showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
-                    ViewData["Year"] = year;
-                    ViewData["Week"] = week;
-                }
-                else if (year == 0 || week == 0)
-                {
-                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearOrWeekWithZero.ToEventId(), "Maritime safety information request for weekly NM file response for year or week non zero for correlationId:{correlationId}", GetCurrentCorrelationId());
-                    showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
-                    ViewData["Year"] = year;
-                    ViewData["Week"] = week;
-                }
+                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseForYearAndWeekNonZero.ToEventId(), "Maritime safety information request for weekly NM file response for year and week non zero for correlationId:{correlationId}", GetCurrentCorrelationId());
+                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
+
+                ViewData["Year"] = year;
+                ViewData["Week"] = week;
+
             }
             catch (Exception ex)
             {

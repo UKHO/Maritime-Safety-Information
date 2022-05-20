@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -19,7 +18,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private INMDataService _fakeNMService;
         private ILogger<NoticesToMarinersController> _fakeLogger;
         private IHttpContextAccessor _fakeContextAccessor;
-        private ITempDataProvider _fakeTempDataProvider;
         private INMDataService _fakeNMDataService;
 
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
@@ -30,7 +28,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeNMService = A.Fake<INMDataService>();
             _fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeTempDataProvider = A.Fake<ITempDataProvider>();
             _fakeNMDataService = A.Fake<INMDataService>();
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
             _controller = new NoticesToMarinersController(_fakeNMService, _fakeContextAccessor, _fakeLogger);
@@ -43,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
-            IActionResult result = await _controller.IndexAsync();
+            IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
@@ -57,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.IndexAsync(year, week);
+            IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;
@@ -75,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
-            IActionResult result = await _controller.IndexAsync(year, week);
+            IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;
@@ -92,7 +89,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.IndexAsync(year, week);
+            IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;

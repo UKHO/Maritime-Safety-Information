@@ -4,28 +4,33 @@ var ddlselectedyear;
 var ddlselectedweek;
 
 $(function () {
-    if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
-        ddlselectedyear = document.getElementById('hdnYear').value;
+
+    if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Daily") {
+        ShowDailyFilesAsync();
     }
+    else {
+        if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
+            ddlselectedyear = document.getElementById('hdnYear').value;
+        }
 
-    if (document.getElementById('hdnWeek').value != undefined && document.getElementById('hdnWeek').value != null && document.getElementById('hdnWeek').value != '') {
-        ddlselectedweek = document.getElementById('hdnWeek').value;
+        if (document.getElementById('hdnWeek').value != undefined && document.getElementById('hdnWeek').value != null && document.getElementById('hdnWeek').value != '') {
+            ddlselectedweek = document.getElementById('hdnWeek').value;
+        }
+
+        if ((ddlselectedyear != undefined && ddlselectedyear != '') && (ddlselectedweek != undefined && ddlselectedweek != '')) {
+            LoadData(yearweekdata)
+        }
+        $('#ddlYears').change(function () {
+            GetCorrespondingWeeks($('#ddlYears').val(), yearweekdata);
+        });
+
+        $('#ddlWeeks').change(function () {
+            if (document.getElementById('ddlYears').selectedIndex != 0)
+                this.form.submit();
+            else
+                return false;
+        });
     }
-
-    if ((ddlselectedyear != undefined && ddlselectedyear != '') && (ddlselectedweek != undefined && ddlselectedweek != '')) {
-        LoadData(yearweekdata)
-    }
-    $('#ddlYears').change(function () {
-        GetCorrespondingWeeks($('#ddlYears').val(), yearweekdata);
-    });
-
-    $('#ddlWeeks').change(function () {
-        if (document.getElementById('ddlYears').selectedIndex != 0)
-            this.form.submit();
-        else
-            return false;
-    });
-
 });
 
 function LoadData(data) {
@@ -104,4 +109,18 @@ function GetCorrespondingWeeks(id, data) {
 function YearValueChange(year) {
     yearSelectedValue = $(year).val();
     document.getElementById('week').selectedIndex = 0;
+}
+
+function ShowDailyFilesAsync() {
+
+    $.ajax({
+        url: '/NoticesToMariners/ShowDailyFiles',
+        type: "GET",
+        success: function (data) {
+            $('#divFilesList').html(data);
+        },
+        error: function (error) {
+            console.log(`Error ${error}`);
+        }
+    });
 }
