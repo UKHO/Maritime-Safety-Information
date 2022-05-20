@@ -328,6 +328,16 @@ table td {
 
 .form-label {
   margin-bottom: 0.5rem !important;
+  box-shadow: none;
+}
+
+.form-select, .form-control {
+  border-radius: 0;
+  font-weight: 300;
+}
+
+.form-label {
+  margin-bottom: 0.5rem !important;
   font-size: 16px;
   font-weight: 400;
 }

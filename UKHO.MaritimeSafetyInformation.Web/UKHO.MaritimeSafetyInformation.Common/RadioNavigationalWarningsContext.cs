@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.Common
 {
+    [ExcludeFromCodeCoverage]
     public class RadioNavigationalWarningsContext : DbContext
     {
         public RadioNavigationalWarningsContext(DbContextOptions<RadioNavigationalWarningsContext> options)
@@ -13,5 +15,6 @@ namespace UKHO.MaritimeSafetyInformation.Common
 
         public DbSet<RadioNavigationalWarning> RadioNavigationalWarnings { get; set; }
         public DbSet<WarningType> WarningType { get; set; }
+
     }
 }
