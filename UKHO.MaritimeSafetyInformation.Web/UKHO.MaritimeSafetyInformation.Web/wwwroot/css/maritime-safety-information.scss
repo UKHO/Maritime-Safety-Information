@@ -1,15 +1,86 @@
 ﻿@import "variables";
 @import "header";
 @import "footer";
+@import "table";
+
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
 %focus {
     outline: 0;
     box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
-a, button{
-    &:focus{
+a, button, .form-select, .form-control {
+    &:focus {
         @extend %focus;
     }
+}
+.alert {
+    padding: 20px 30px 30px;    
+    border-radius: 0;
+    border: 0;
+
+    .alert-head {
+        display: inline-block;
+        margin-left: 10px;
+        margin-bottom: 0;
+        font-weight: normal;
+        font-size: 21px;
+        line-height: 30px;
+    }
+
+    p {
+        margin-bottom: 0;
+        margin-top: 5px;
+    }
+}
+.alert-primary {
+    background-color: $azurish-white;
+    border-left: 6px solid $ocean-boat-blue;
+    color: $prussian-blue;
+
+    .alert-head {
+        color: $prussian-blue;
+    }
+}
+
+.alert-danger {
+    background-color: #F7E1E1;
+    border-left: 6px solid #E20D0D;
+    color: $prussian-blue;
+
+    i.bi {
+        font-size: 26px;
+        position: relative;
+        top: 4px;
+        left: -10px;
+    }
+
+    .alert-head {
+        color: $prussian-blue;
+        margin-left:-10px;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    thead{
+        tr th{
+            border-bottom:0;
+        }
+    }
+
+    td {
+        border-bottom: 1px solid $light-silver !important;
+        border-right: 1px solid $light-silver !important;
+    }
+}
+
+.hidden-caption {
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px,1px,1px,1px);
+    margin-top: -1px;
 }
 .form-label {
     margin-bottom: 0.5rem !important;
@@ -20,6 +91,245 @@ a, button{
     font-weight: 300;
 }
 
+.form-label {
+    margin-bottom: 0.5rem !important;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+button {
+    height: auto;
+    min-width: auto;
+    font-size: 18px;
+    padding: 12px 18px;
+
+    &:active {
+        background-color: $prussian-blue;
+    }
+}
+
+.inline-btn {
+    margin-top: 2rem;
+
+    @media screen and (max-width: $small) {
+        margin-top: 0;
+    }
+}
+
+.inline-link {
+    display: inline-block;
+    margin-top: 2.2rem;
+
+    @media screen and (max-width: $small) {
+        margin-top: 0;
+    }
+}
+
+.form-select, .form-control {
+    border-radius: 0;
+    border: 2px solid $eerie-black;
+    font-size:21px;
+    color:$black;
+
+    &:focus {
+        border-color: $eerie-black;
+    }
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231C1F22' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-size: 1.2rem 1.2rem;
+}
+
 .form-select option {
     font-weight: 300;
+    font-size: 16px;
 }
+
+.pagination {
+    margin: 0;
+
+    li {
+        padding-right: 0;
+        transform: none;
+
+        a {
+            color: $prussian-blue;
+            border-radius: 0 !important;
+            cursor: pointer;
+            font-weight: 400;
+            border-color: $light-silver;
+            border-width: 1.5px;
+
+            &:hover, &:focus {
+                background-color: $prussian-blue;
+                border-color: $prussian-blue;
+                color: $white;
+            }
+        }
+
+        &:before {
+            content: none;
+        }
+    }
+}
+.main-content{
+    padding:2rem 0;
+}
+.table-scroll {
+    display: block;
+    empty-cells: show;
+    border-spacing: 0;
+
+    &.small-first-col {
+        td, th {
+            &:first-child {
+                word-break: break-all;
+            }
+        }
+    }
+
+    thead {
+        background-color: #f1f1f1;
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    tbody {
+        display: block;
+        position: relative;
+        width: 100%;
+        overflow-y: scroll;
+
+        &.scroll-content {
+            max-height: 54vh;
+            padding-right: 4px;
+        }
+
+        td{
+            a{
+                font-weight:300;
+            }
+        }
+    }
+
+    tr {
+        width: 100%;
+        display: flex;
+    }
+
+    td, th {
+        flex-basis: 100%;
+        flex-grow: 2;
+        display: flex;
+        align-items: center;
+    }
+}
+.scroll-bar {
+    scrollbar-color: $davys-grey $lavender-gray;
+}
+.scroll-bar {
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: $davys-grey; //forground dark color
+        border-radius: 50px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: $lavender-gray; //background light color
+        border-radius: 50px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 30px rgb(89, 89, 89); //forground dark color
+        border-radius: 5px;
+    }
+}
+.msi-page-nav {
+
+    li {
+        transform: none;
+        padding: 0;
+        margin: 0;
+
+        &:before {
+            content: none;
+        }
+
+        a {
+            font-size: 16px;
+            padding: 0.5rem;
+            color: $prussian-blue;
+            font-weight:400;
+            display:inline-block;
+
+            @media screen and (max-width: $x-large) {
+                font-size: 14px;
+            }
+
+            &.active {
+                background-color: $prussian-blue;
+                color: $white;
+                border-radius: 2px;
+
+                &:focus {
+                    color: $white;
+                }
+            }
+
+            &:focus {
+                color: $prussian-blue;
+            }
+        }
+    }
+}
+.msi-tabs-content-container {
+    padding-left: 16px;
+
+    @media screen and (max-width: $large) {
+        width: 100%;
+    }
+}
+.msi-tabs-container {
+    border-right: 1px solid #D0D0D0;
+    margin-top: 91px;
+    width: 18%;
+    margin-bottom: -2rem;
+
+    @media screen and (max-width: $large) {
+        width: 100%;
+        margin-top: 0;
+        border-right: 0;
+        margin-bottom: 0;
+    }
+}
+.msi-tabs {
+    margin-bottom: 20px;
+
+    li {
+        transform: none;
+        margin: 0;
+        padding: 0;
+
+        &:before {
+            content: none;
+        }
+
+        .nav-link {
+            color: $prussian-blue;
+            border-width: 0 0 5px 0;
+            border-color: transparent;
+            padding:0.5rem 1.5rem;
+            border-radius:0;
+
+            &.active {
+                border-color: $prussian-blue;
+            }
+        }
+    }
+}
+
+
+
+

@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken, string correlationId)
+        public async Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string accessToken, string correlationId)
         {
             IResult<BatchSearchResponse> result;
             try
@@ -40,7 +40,28 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.FSSBatchSearchResponseFailed.ToEventId(), "Failed to get batch search response from FSS with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
+            return result;            
+        }
 
+        public async Task<IResult<BatchAttributesSearchResponse>> FSSSearchAttributeAsync(string accessToken, string correlationId)
+        {            
+            IResult<BatchAttributesSearchResponse> result;
+            try
+            {
+                string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly'";
+
+                _logger.LogInformation(EventIds.FSSSearchAttributeResponseStarted.ToEventId(), "Maritime safety information request for FSS to get NM batch search attribute response started for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
+
+                FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                result = await fileShareApi.BatchAttributeSearch(searchQuery, CancellationToken.None);
+
+                _logger.LogInformation(EventIds.FSSSearchAttributeResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search attribute response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.FSSSearchAttributeResponseError.ToEventId(), "Failed to get NM batch search attribute with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
             return result;
         }
 

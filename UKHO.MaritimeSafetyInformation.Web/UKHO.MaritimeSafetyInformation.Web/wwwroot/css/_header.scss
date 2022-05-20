@@ -54,6 +54,10 @@
                 padding: 0;
                 margin: 0;
 
+                @media screen and (max-width: $x-large) {
+                    width: 8rem;
+                }
+
                 @media screen and (max-width: $medium) {
                     width: 7rem;
                 }
@@ -85,7 +89,7 @@
         }
 
         @media screen and (max-width: $xx-small) {
-            top: 83px;
+            top: 63px;
         }
 
         .navbar-nav {
@@ -101,6 +105,10 @@
                 a {
                     padding: 2rem 1rem;
 
+                    @media screen and (max-width: $x-large) {
+                        font-size: 14px;
+                    }
+
                     @media screen and (max-width: $large) {
                         padding: 0.5rem 1rem;
                         border-bottom: 1px solid #dee2e6 !important;
@@ -108,6 +116,15 @@
 
                     &:hover {
                         background-color: $anti-flash-white;
+                        box-shadow: inset 0 -5px $prussian-blue;
+
+                        @media screen and (max-width: $large) {
+                            box-shadow: none;
+                        }
+                    }
+
+                    &.active {
+                        background-color: $white;
                         box-shadow: inset 0 -5px $prussian-blue;
 
                         @media screen and (max-width: $large) {
@@ -141,7 +158,7 @@
         color: $prussian-blue;
         text-decoration: none !important;
 
-        @media screen and (max-width: $medium) {
+        @media screen and (max-width: $x-large) {
             font-size: 24px;
         }
 
@@ -152,7 +169,7 @@
         }
 
         @media screen and (max-width: $xx-small) {
-            flex-basis: 70%;
+            flex-basis: 90%;
         }
     }
 }

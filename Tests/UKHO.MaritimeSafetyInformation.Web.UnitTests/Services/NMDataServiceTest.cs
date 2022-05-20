@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForWeekly();
 
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
 
             const int expectedRecordCount = 4;
 
@@ -64,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
             const int expectedRecordCount = 0;
 
@@ -83,7 +83,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
             Task<List<ShowFilesResponseModel>> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -97,7 +97,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
 
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int dailyFilesDataCount = 2;
@@ -112,11 +112,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldReturnZeroFiles()
         {
-            
+
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
             const int expectedRecordCount = 0;
 
@@ -132,7 +132,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FssBatchSearchAsync("", "", CorrelationId)).Returns(res);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync("", "", CorrelationId)).Returns(res);
 
             Task<List<ShowDailyFilesResponseModel>> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
@@ -140,52 +140,144 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetAllWeeksofYearIsCalled_ThenForCurrentYearShouldReturnWeeksPassedTillNow()
+        public void WhenGetAllYearWeekIsCalledWithInvalidToken_ThenShouldReturnException()
         {
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
 
-            Calendar calender = dateTimeFormatInfo.Calendar;
+            IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
 
-            int year = DateTime.Now.Year;
-
-            int totalWeeks = calender.GetWeekOfYear(new DateTime(year, DateTime.Now.Month, DateTime.Now.Day), dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
-
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
-
-            Assert.AreEqual(totalWeeks + 1, result.Count);
-        }
-        [Test]
-        public void WhenGetAllWeeksofYearIsCalled_ThenForPastYearShouldReturnAllWeeksThatYear()
-        {
-            DateTimeFormatInfo dateTimeFormatInfo = DateTimeFormatInfo.CurrentInfo;
-
-            Calendar calender = dateTimeFormatInfo.Calendar;
-
-            int year = DateTime.Now.Year - 1;
-
-            DateTime lastdate = new(year, 12, 31);
-
-            int totalWeeks = calender.GetWeekOfYear(lastdate, dateTimeFormatInfo.CalendarWeekRule, dateTimeFormatInfo.FirstDayOfWeek);
-
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllWeeksOfYear(year, CorrelationId);
-
-            Assert.AreEqual(totalWeeks + 1, result.Count);
+            Task<List<YearWeekModel>> result = _nMDataService.GetAllYearWeek(CorrelationId);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
-        public void WhenGetAllYearsIsCalled_ThenShouldReturn4Records()
+        public async Task WhenGetAllYearWeekIsCalledWithValidTokenandNodata_ThenShouldReturnCountZero()
         {
-            const int yearsCount = 4;
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
-            Assert.AreEqual(yearsCount, result.Count);
+            int ExpectedRecordCount = 0;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            Assert.IsEmpty(result);
+            Assert.AreEqual(result.Count, ExpectedRecordCount);
         }
 
         [Test]
-        public void WhenGetAllYearsIsCalled_ThenShouldCheckMinYear()
+        public async Task WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldReturnNoList()
         {
-            int minYear = DateTime.Now.Year - 2;
-            List<KeyValuePair<string, string>> result = _nMDataService.GetAllYears(CorrelationId);
-            Assert.AreEqual(minYear.ToString(), result.LastOrDefault().Value);
+            int ExpectedRecordCount = 0;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
+
+            Assert.IsEmpty(result);
+            Assert.AreEqual(result.Count, ExpectedRecordCount);
+        }
+
+        [Test]
+        public async Task WhenGetAllYearWeekIsCalledWithValidToken_ThenShouldReturnYearWeekList()
+        {
+            int ExpectedRecordCount = 3;
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
+
+            Assert.IsNotEmpty(result);
+            Assert.AreEqual(result.Count, ExpectedRecordCount);
+        }
+
+        [Test]
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
+        {
+            const int year = 2022;
+            const int week = 15;
+            const int expectedShowFilesResponseModelRecordCount = 4;
+            const int expectedYearAndWeekRecordCount = 3;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
+            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+        }
+
+        [Test]
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
+        {
+            const int year = 0;
+            const int week = 0;
+            const int expectedShowFilesResponseModelRecordCount = 4;
+            const int expectedYearAndWeekRecordCount = 3;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
+            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+        }
+
+        [Test]
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCountZero()
+        {
+            const int year = 2022;
+            const int week = 0;
+            const int expectedShowFilesResponseModelRecordCount = 0;
+            const int expectedYearAndWeekRecordCount = 3;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = new();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
+            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+        }
+
+        [Test]
+        public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnException()
+        {
+            const int year = 0;
+            const int week = 0;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+
+            Result<BatchSearchResponse> searchResult = new();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, CorrelationId)).Returns(searchResult);
+
+            IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync("", CorrelationId)).Returns(res);
+
+            Task<ShowWeeklyFilesResponseModel> result = _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.That(result.IsFaulted, Is.True);
         }
 
         [Test]
@@ -349,5 +441,40 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             return searchResult;
         }
 
+        private static Result<BatchAttributesSearchResponse> SetAttributeSearchResult()
+        {
+            Result<BatchAttributesSearchResponse> attributeSearchResult = new()
+            {
+                Data = new BatchAttributesSearchResponse
+                {
+                    SearchBatchCount = 5,
+                    BatchAttributes = new List<BatchAttributesSearchAttribute> { new BatchAttributesSearchAttribute() {  Key = "Frequency" , Values =  new List<string> { "Weekly","Daily"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Product Type" , Values = new List<string> {"NMTest"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Week Number", Values = new List<string> { "14", "16", "17", } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Year", Values = new List<string> { "2021", "2022" } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> { "2022 / 14", "2022 / 16", "2021 / 15" ,"..." } }
+                  }
+                }
+            };
+            return attributeSearchResult;
+        }
+
+        private static Result<BatchAttributesSearchResponse> SetAttributeSearchNoYearWeekData()
+        {
+            Result<BatchAttributesSearchResponse> attributeSearchResult = new()
+            {
+                Data = new BatchAttributesSearchResponse
+                {
+                    SearchBatchCount = 5,
+                    BatchAttributes = new List<BatchAttributesSearchAttribute> { new BatchAttributesSearchAttribute() {  Key = "Frequency" , Values =  new List<string> { "Weekly","Daily"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Product Type" , Values = new List<string> {"NMTest"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Week Number", Values = new List<string> { "15", "14", "17", } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Year", Values = new List<string> { "2020", "2022" } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> {  } }
+                  }
+                }
+            };
+            return attributeSearchResult;
+        }
     }
 }

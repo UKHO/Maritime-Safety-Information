@@ -38,6 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
 
@@ -49,7 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-
+            services.AddScoped<IRNWService, RNWService>();
+            services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -63,9 +65,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
-
-            services.AddScoped<IRNWRepository, RNWRepository>();
-            services.AddScoped<IRNWService, RNWService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
