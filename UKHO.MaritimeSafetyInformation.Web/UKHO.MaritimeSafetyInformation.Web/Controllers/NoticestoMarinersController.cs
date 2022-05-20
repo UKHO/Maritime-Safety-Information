@@ -43,7 +43,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseForYearAndWeekNonZero.ToEventId(), "Maritime safety information request for weekly NM file response for year and week non zero for correlationId:{correlationId}", GetCurrentCorrelationId());
                 showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
                 ViewData["Year"] = year;

@@ -25,7 +25,7 @@ $(function () {
         });
 
         $('#ddlWeeks').change(function () {
-            if (document.getElementById('ddlYears').selectedIndex != 0)
+            if (document.getElementById('ddlYears').selectedIndex != 0 && document.getElementById('ddlWeeks').selectedIndex != 0)
                 this.form.submit();
             else
                 return false;
@@ -104,11 +104,6 @@ function GetCorrespondingWeeks(id, data) {
     else {
         $('#ddlWeeks').val('0');
     }
-}
-
-function YearValueChange(year) {
-    yearSelectedValue = $(year).val();
-    document.getElementById('week').selectedIndex = 0;
 }
 
 function ShowDailyFilesAsync() {

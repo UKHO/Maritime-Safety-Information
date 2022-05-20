@@ -141,31 +141,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
             try
             {
-                if (year != 0 && week != 0)
-                {
-                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithValue.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with value with _X-Correlation-ID:{correlationId}", correlationId);
-
-                    showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
-
-                    showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
-                }
+                showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
                 if (year == 0 && week == 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearAndWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year and week with zero with _X-Correlation-ID:{correlationId}", correlationId);
-                    showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
 
                     year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
                     week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Week).Select(x => x.Week).FirstOrDefault());
-
-                    showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 }
-                else if (year == 0 || week == 0)
-                {
-                    _logger.LogInformation(EventIds.GetWeeklyFilesResponseForYearOrWeekWithZero.ToEventId(), "Maritime safety information request to get weekly NM files response for year or week with zero with _X-Correlation-ID:{correlationId}", correlationId);
-                    showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
+                showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
 
-                    showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
-                }
             }
             catch (Exception ex)
             {
