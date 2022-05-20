@@ -29,7 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
-            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(configuration.GetConnectionString("RadioNavigationalWarningsContext")));
 
             services.AddLogging(loggingBuilder =>
             {
@@ -39,16 +38,20 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
-            
+            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
+            services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
+
+            var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
+            configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
+            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-            services.AddScoped<IRnwService, RnwService>();
-            services.AddScoped<IRnwRepository, RnwRepository>();
+            services.AddScoped<IRNWService, RNWService>();
+            services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>

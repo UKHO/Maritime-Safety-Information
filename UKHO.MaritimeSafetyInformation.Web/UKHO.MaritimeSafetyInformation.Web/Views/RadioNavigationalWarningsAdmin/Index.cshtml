@@ -1,9 +1,9 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
-@model RadioNavigationalWarningsAdminListFilter
+@model RadioNavigationalWarningsAdminFilter
 
 @{
-    bool isFirstPage = Model.CurrentPageIndex == 1 ? true : false;
-    bool isLastPage  = Model.CurrentPageIndex == Model.PageCount ? true : false;
+    bool isFirstPage = Model.CurrentPageIndex == 1;
+    bool isLastPage = Model.CurrentPageIndex == Model.PageCount;
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
 <style>
@@ -30,7 +30,7 @@
             <button id="BtnFilter" type="button" class="primary inline-btn" onclick="RnwFilterList(1)">Filter</button>
         </div>
         <div class="col mb-3">
-            <a asp-action="Create" id="BtnCreate" class="disabled-link inline-link">Create New Warning</a>
+            @Html.ActionLink("Create New Warning","Create","RadioNavigationalWarningsAdmin",null,new { @class= "inline-link" ,@id="BtnCreate"})
         </div>
     </div>
 
@@ -73,32 +73,32 @@
                     {
                         ++@Model.SrNo;
                         <tr>
-                            <td>
+                            <td id="SrNo">
                                 @Model.SrNo.ToString()
                             </td>
-                            <td>
+                            <td id="WarningTypeName">
                                 @Html.DisplayFor(modelItem => item.WarningTypeName)
                             </td>
-                            <td>
+                            <td id="Reference">
                                 @Html.DisplayFor(modelItem => item.Reference)
                             </td>
-                            <td>
+                            <td id="DateTimeGroupRnwFormat">
                                 @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
                             </td>
-                            <td>
+                            <td id="Summary">
                                 @Html.DisplayFor(modelItem => item.Summary)
                             </td>
-                            <td>
+                            <td id="Content">
                                 @Html.DisplayFor(modelItem => item.Content)
                             </td>
-                            <td>
+                            <td id="ExpiryDateRnwFormat">
                                 @Html.DisplayFor(modelItem => item.ExpiryDateRnwFormat)
                             </td>
-                            <td>
+                            <td id="IsDeleted">
                                 @Html.DisplayFor(modelItem => item.IsDeleted)
                             </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id"  id="Edit_@item.Id" class="disabled-link">Edit</a>
+                            <td id="Edit">
+                                <a asp-action="Edit" asp-route-id="@item.Id" id="Edit_@item.Id">Edit</a>
                             </td>
                         </tr>
                     }

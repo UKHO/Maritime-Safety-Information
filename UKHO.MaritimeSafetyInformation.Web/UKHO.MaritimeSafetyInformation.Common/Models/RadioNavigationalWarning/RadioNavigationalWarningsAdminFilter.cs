@@ -4,11 +4,11 @@ using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
     [ExcludeFromCodeCoverage]
-    public class RadioNavigationalWarningsAdminListFilter
+    public class RadioNavigationalWarningsAdminFilter
     {
         public int SrNo { get; set; }
 
-        public List<RadioNavigationalWarningsAdminList> RadioNavigationalWarningsAdminList { get; set; }
+        public List<RadioNavigationalWarningsAdmin> RadioNavigationalWarningsAdminList { get; set; }
 
         public List<WarningType> WarningTypes { get; set; }
 

@@ -20,8 +20,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
         public IHttpContextAccessor _fakeHttpContextAccessor;
         public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
-        public ILogger<RnwRepository> _fakeLoggerRnwRepository;
-        public ILogger<RnwService> _fakeLoggerRnwService;
+        public ILogger<RNWRepository> _fakeLoggerRnwRepository;
+        public ILogger<RNWService> _fakeLoggerRnwService;
 
         public RnwTestsHelper()
         {
@@ -31,15 +31,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
-            _fakeLoggerRnwRepository = A.Fake<ILogger<RnwRepository>>();
-            _fakeLoggerRnwService = A.Fake<ILogger<RnwService>>();
+            _fakeLoggerRnwRepository = A.Fake<ILogger<RNWRepository>>();
+            _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
 
         #region DBMethods
-        public async Task SeedRadioNavigationalWarnings(List<RadioNavigationalWarnings> radioNavigationalWarnings)
+        public async Task SeedRadioNavigationalWarnings(List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> radioNavigationalWarning)
         {
-            _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarnings);
+            _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarning);
             await _fakeContext.SaveChangesAsync();
         }
 
@@ -51,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
         public async Task DeSeedRadioNavigationalWarnings()
         {
-            DbSet<RadioNavigationalWarnings> warnings = _fakeContext.RadioNavigationalWarnings;
+            DbSet<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> warnings = _fakeContext.RadioNavigationalWarnings;
             _fakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
             await _fakeContext.SaveChangesAsync();
         }
@@ -64,11 +64,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         #endregion DBMethods
-        public static List<RadioNavigationalWarnings> GetRadioNavigationalWarnings()
+        public static List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> GetRadioNavigationalWarnings()
         {
-            List<RadioNavigationalWarnings> radioNavigationalWarningList = new();
+            List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> radioNavigationalWarningList = new();
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 1,
                 Reference = "RnwAdminListReferance",
@@ -78,7 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 IsDeleted = true,
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 2,
                 Reference = "RnwAdminListReferance",
@@ -87,7 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 1,
                 Reference = "RnwAdminListReferance",
@@ -96,7 +96,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 1,
                 Reference = "RnwAdminListReferance",
@@ -105,7 +105,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 2,
                 Reference = "RnwAdminListReferance",
@@ -114,7 +114,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 2,
                 Reference = "RnwAdminListReferance",
@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Content = "RnwAdminListContent"
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 1,
                 Reference = "RnwAdminListReferance",
@@ -132,7 +132,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224.",
             });
 
-            radioNavigationalWarningList.Add(new RadioNavigationalWarnings()
+            radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
             {
                 WarningType = 2,
                 Reference = "RnwAdminListReferance",

@@ -1,95 +1,137 @@
 
 import { expect } from '@playwright/test';
-import type { Locator, Page } from 'playwright';
+import { Locator, Page } from 'playwright';
 
 export default class RadioNavigationalWarningsList
-   {
-       private page:Page;
-       readonly warningType:Locator;
-       readonly year:Locator;
-       readonly filter:Locator;
-       readonly createNewRecordText:Locator;
-       readonly btnFirst:Locator;
-       readonly btnPrevious:Locator;
-       readonly btnNext:Locator;
-       readonly btnLast:Locator;
-       readonly pageHeaderText:Locator;
-       constructor(page:Page)
-       {
+{
+    private page:Page;
+    readonly warningType:Locator;
+    readonly year:Locator;
+    readonly filter:Locator;
+    readonly createNewRecordText:Locator;
+    readonly btnFirst:Locator;
+    readonly btnPrevious:Locator;
+    readonly btnNext:Locator;
+    readonly btnLast:Locator;
+    readonly headerLocator:Locator;
+    readonly tableHeader:Locator
+    readonly tableHeaderText =['Sr No.','Warning Type','Reference','Date/Time','Description','Text','Expiry Date','Deleted'];
+    constructor(page:Page)
+    {
         this.page = page; 
         this.warningType = this.page.locator("#WarningType");
         this.year= this.page.locator("#Year");
         this.filter = this.page.locator("#BtnFilter");
-        this.createNewRecordText= this.page.locator("text=Create New Warning");
-        this.pageHeaderText=this.page.locator("text=Radio Navigational Warnings List");
+        this.createNewRecordText= this.page.locator("#BtnCreate");
         this.btnFirst= this.page.locator("#BtnFirst");
         this.btnPrevious =this.page.locator("#BtnPrevious");
         this.btnNext= this.page.locator("#BtnNext");
         this.btnLast =this.page.locator("#BtnLast");
-       }
+        this.headerLocator=this.page.locator(".container-fluid >h1");
+        this.tableHeader=this.page.locator(".table>thead>tr>th");
+        
+    }
+
     
-       public async checkEnabledWarningTypeDropDown()
-       {
+    public async checkEnabledWarningTypeDropDown()
+    {
         return this.warningType.isEnabled();
-       }
-       public async checkEnabledYearDropDown()
-       {
-       return  this.year.isEnabled();
-       }
+    }
+    public async checkEnabledYearDropDown()
+    {
+        return this.year.isEnabled();
+    }
 
-       public async checkCreateNewrecordText()
-       {
-       return this.createNewRecordText.textContent();
-       }
+    public async checkCreateNewrecordText()
+    {
+        return this.createNewRecordText.innerText().toString();
+    }
 
-       public async checkPageHeaderText()
-       {
-       return await this.pageHeaderText.textContent();
-       }
+    public async checkPageHeaderText()
+    {
+        return await this.headerLocator.textContent();
+    }
 
-       public async checkEnabledFilterButton()
-       {
-       return await this.filter.isEnabled();
-       }
+    public async checkEnabledFilterButton()
+    {
+      return this.filter.isEnabled();
+    }   
     
-       public async getTableList()
-       {
+  
+  public async checkPaginationLink(locator:Locator)
+  {   
+      expect(locator).toBeTruthy();
+  }
 
-       const warningTypeCount = (await this.page.$$("#WarningType option")).length;
-       const yearCount = (await this.page.$$("#Year option")).length;
+  public async searchWithfilter(selectWarnings:string, selectYear:string)
+  {
 
-       for(var warningType=1;warningType<=warningTypeCount-1;warningType++)
-       {
-       await this.warningType.selectOption({index:warningType});
-    
-       for(var year=1;year<=yearCount-1;year++)
-       {
-       await this.year.selectOption({index:year});
-       await this.filter.click();
-      
-       const fileSizeData = await this.page.$$("table > tbody > tr >td:nth-child(2)");
-       const edit = await this.page.$$("table > tbody > tr >td:nth-child(9)");
-      
-       expect(fileSizeData.length).toBeLessThanOrEqual(20);
-       for await (const table of fileSizeData)
-       {
-       const warning =await table.innerText();
-       if(warning=="UK Coastal" || warning=="NAVAREA 1")
-       {
-        expect(warning).toBeTruthy();
-       }
-       else throw new Error("No Warning Type");
-       }
-       for await (const tableEdit of edit)
-       {
-       expect((await tableEdit.innerText()).toString()).toEqual("Edit");
-       }      
-       }
-       }
-       }
-       public async pagination(locator:Locator)
-       {  
-       expect(locator.isEnabled).toBeTruthy();
-       } 
+    await this.warningType.selectOption({ label: selectWarnings });
+    await this.year.selectOption({ label: selectYear });
+    await this.filter.click();
+    await expect(this.tableHeader).toBeTruthy();
+  }
 
+  public async verifyTableHeader()
+  {
+    let tableColsHeader = await this.page.$$eval('.table>thead>tr>th', (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    tableColsHeader=tableColsHeader.filter(Boolean);
+    var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
+      return element === tableColsHeader[index];
+    });
+
+    expect(match).toBeTruthy();
+  }
+
+  public async verifyTableColumnWarningTypeData(expectedText:string)
+  {
+    const result= await this.page.$$eval('#WarningTypeName' , (matches: any[]) => { return matches.map(option => option.textContent) });
+
+    //fail if there are no matching selections
+    expect(result.length).toBeGreaterThan(0);
+
+    for(let i=0;i<result.length;i++)
+       {
+         expect(result[i].trim()).toEqual(expectedText);
+       }
+
+  }
+
+  public async verifyTableDateColumnData(yearString:string)
+  {
+    const resultYear= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
+
+    //fail if there are no matching selections
+    expect(resultYear.length).toBeGreaterThan(0);
+
+    //Verify records belongs to selected year
+    for(let i=0;i<resultYear.length;i++)
+       {
+         expect(resultYear[i]).toEqual(yearString.slice(-2));
+       }
+
+    //Verify Dates are descending order   
+    const resultdate= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
+    expect(this.isDescending(resultdate)).toBeTruthy();
+
+  }
+
+  public async verifyTableContainsEditLink()
+  {
+    const resultLinks= await this.page.$$eval('#Edit' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    for(let i=0;i<resultLinks.length;i++)
+    {
+      expect(resultLinks[i].trim()).toEqual("Edit");
+    }
+  }
+
+  public  isDescending(arr: any[]) { 
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i + 1] > arr[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+ 
 }
