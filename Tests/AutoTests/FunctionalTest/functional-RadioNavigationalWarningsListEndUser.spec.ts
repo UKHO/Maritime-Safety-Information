@@ -13,7 +13,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     
   });
 
-  test('Does the Menu , Tabs and Page Header Text is displayed',async () => { 
+  test('Does the Menu , Tabs and Page Text is displayed',async () => { 
     expect(await rnwListEndUser.checkText(rnwListEndUser.radioNavigationalWarningsEndUser)).toEqual("Radio Navigation Warnings");
     expect(await rnwListEndUser.checkText(rnwListEndUser.radioWarningEndUser)).toEqual("Radio Warnings");
     expect(await rnwListEndUser.checkText(rnwListEndUser.aboutEndUser)).toEqual("About");
@@ -22,9 +22,11 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     expect(await rnwListEndUser.checkText(rnwListEndUser.ukCostalEnduser)).toEqual("UK Costal");
    })
 
-   test('Does the Warning Type,Year Drop Down is enabled and Page Header Text,Create Record Text is Displayed',async () => {
+   test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async () => {
+    await rnwListEndUser.verifyTableHeader();
     await rnwListEndUser.verifyTableContainsViewDetailsLink();
     await rnwListEndUser.verifyTableDateColumnData();
+
   })
  
 });

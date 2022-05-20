@@ -12,6 +12,8 @@ export default class RadioNavigationalWarningsListEndUser
     readonly allWarningEndUser:Locator;
     readonly navAreaEndUser:Locator;
     readonly ukCostalEnduser:Locator;
+    readonly tableHeader:Locator;
+    readonly tableHeaderText =['Reference','Date Time Group','Description','Select all','Select'];
     constructor(page:Page)
     {
          this.page = page; 
@@ -22,6 +24,7 @@ export default class RadioNavigationalWarningsListEndUser
          this.allWarningEndUser = this.page.locator('#allwarnings-tab')
          this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
          this.ukCostalEnduser = this.page.locator('#ukcostal-tab')
+         
     }
 
     public async goToRadioWarning()
@@ -56,6 +59,18 @@ export default class RadioNavigationalWarningsListEndUser
         expect(resultLinks[i].trim()).toEqual("View details");
       }
     }
+
+    public async verifyTableHeader()
+    {
+      let tableColsHeader = await this.page.$$eval('.table>thead>tr>th', (options: any[]) => { return options.map(option => option.textContent.trim()) });
+      tableColsHeader=tableColsHeader.filter(Boolean);
+      var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
+        return element === tableColsHeader[index];
+      });
+  
+      expect(match).toBeTruthy();
+    }
+  
   
     public  isDescending(arr: any[]) { 
       for (let i = 0; i < arr.length; i++) {
