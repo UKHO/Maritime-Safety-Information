@@ -1,4 +1,5 @@
-﻿.site-header .navbar {
+﻿@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+.site-header .navbar {
   padding: 0;
   border: 2px solid transparent;
 }
@@ -232,7 +233,7 @@
   clear: both;
 }
 
-a:focus, button:focus {
+a:focus, button:focus, .form-select:focus, .form-control:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
@@ -249,4 +250,99 @@ a:focus, button:focus {
 
 .form-select option {
   font-weight: 300;
+}
+
+.alert {
+  padding: 30px;
+  background-color: #E0ECF3;
+  border-radius: 0;
+  border: 0;
+  border-left: 6px solid #0177C1;
+  color: #09315b;
+}
+.alert h5 {
+  display: inline-block;
+  margin-left: 10px;
+}
+.alert p {
+  margin-bottom: 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+table td {
+  border-bottom: 1px solid #d8d8d8 !important;
+  border-right: 1px solid #d8d8d8 !important;
+}
+
+.form-label {
+  margin-bottom: 0.5rem !important;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+button {
+  height: auto;
+  min-width: auto;
+  font-size: 18px;
+  padding: 7px 18px;
+}
+button:active {
+  background-color: #09315b;
+}
+
+.inline-btn {
+  margin-top: 2rem;
+}
+@media screen and (max-width: 576px) {
+  .inline-btn {
+    margin-top: 0;
+  }
+}
+
+.inline-link {
+  display: inline-block;
+  margin-top: 2.2rem;
+}
+@media screen and (max-width: 576px) {
+  .inline-link {
+    margin-top: 0;
+  }
+}
+
+.form-select, .form-control {
+  border-radius: 0;
+  border: 2px solid #1C1F22;
+}
+.form-select:focus, .form-control:focus {
+  border-color: #1C1F22;
+}
+
+.form-select option {
+  font-weight: 300;
+}
+
+.pagination {
+  margin: 0;
+}
+.pagination li {
+  padding-right: 0;
+  transform: none;
+}
+.pagination li a {
+  color: #09315b;
+  border-radius: 0 !important;
+  cursor: pointer;
+  font-weight: 400;
+  border-color: #d8d8d8;
+  border-width: 1.5px;
+}
+.pagination li a:hover, .pagination li a:focus {
+  background-color: #09315b;
+  border-color: #09315b;
+  color: #ffffff;
+}
+.pagination li:before {
+  content: none;
 }

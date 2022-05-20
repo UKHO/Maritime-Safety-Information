@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -19,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWService _fakeRnwService;
 
-       [SetUp]
+        [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
@@ -55,6 +57,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
+        }
+
+        [Test]
+        public void WhenICallIndexViewWithParameters_ThenReturnView()
+        {
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+        }
+
+        private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()
+        {
+            return new RadioNavigationalWarningsAdminFilter
+            {
+                WarningTypes = new List<WarningType>() { new WarningType { Id = 1, Name = "Test" } },
+                Years = new List<string>() { "2020", "2021" },
+            };
         }
     }
 }

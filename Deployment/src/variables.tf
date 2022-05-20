@@ -25,12 +25,12 @@ locals {
   rnw_db_connection_string = "Server=${var.rnw_db_server};Initial Catalog=${var.rnw_db_name};Persist Security Info=False;User ID=${var.rnw_db_app_sqluser};Password=${var.rnw_db_app_sqlpass};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
   tags = {
-    SERVICE          = "Maritime Safety Information"
-    ENVIRONMENT      = local.env_name
-    SERVICE_OWNER    = "UKHO"
-    RESPONSIBLE_TEAM = "Mastek"
-    CALLOUT_TEAM     = "On-Call_N/A"
-    COST_CENTRE      = "A.008.02"
+    SERVICE                   = "Maritime Safety Information"
+    ENVIRONMENT               = local.env_name
+    SERVICE_OWNER             = "UKHO"
+    RESPONSIBLE_TEAM          = "Mastek"
+    CALLOUT_TEAM              = "On-Call_N/A"
+    COST_CENTRE               = "A.008.02"
   }
 }
 
