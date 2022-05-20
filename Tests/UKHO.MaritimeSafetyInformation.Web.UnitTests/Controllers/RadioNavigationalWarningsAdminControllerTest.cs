@@ -20,9 +20,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWService _fakeRnwService;
-                
 
-       [SetUp]
+        [SetUp]
         public void Setup()
         {
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
@@ -32,19 +31,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
 
+
         [Test]
         public void WhenICallIndexView_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
             Task<IActionResult> result = _controller.Index();
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
 
         [Test]
-        public void WhenICallIndexViewWithParameters_ThenReturnView()
+        public void WhenICallCreateView_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, false, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
-            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            Task<IActionResult> result = _controller.Create();
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
 
@@ -62,10 +60,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
         }
 
-        private RadioNavigationalWarningsAdminListFilter GetFakeRadioNavigationWarningsForAdmin()
+        [Test]
+        public void WhenICallIndexViewWithParameters_ThenReturnView()
         {
-            return new RadioNavigationalWarningsAdminListFilter
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+        }
+
+        private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()
         {
+            return new RadioNavigationalWarningsAdminFilter
+            {
                 WarningTypes = new List<WarningType>() { new WarningType { Id = 1, Name = "Test" } },
                 Years = new List<string>() { "2020", "2021" },
             };

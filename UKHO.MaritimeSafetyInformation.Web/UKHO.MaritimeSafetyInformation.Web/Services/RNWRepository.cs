@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -19,20 +20,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task AddRadioNavigationWarning(RadioNavigationalWarning radioNavigationalWarning)
         {
             _context.Add(radioNavigationalWarning);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<List<WarningType>> GetWarningTypes()
+        public async Task<List<RadioNavigationalWarningsAdmin>> GetRadioNavigationWarningsAdminList()
         {
-            return await _context.WarningType.ToListAsync();
-        }
-
-        public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList()
-        {
-            List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminLists
-            = await (from rnwWarnings in _context.RadioNavigationalWarnings
+            return await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
-                     select new RadioNavigationalWarningsAdminList
+                     select new RadioNavigationalWarningsAdmin
                      {
                          Id = rnwWarnings.Id,
                          WarningType = rnwWarnings.WarningType,
@@ -40,16 +35,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
                          DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
                          Summary = rnwWarnings.Summary,
-                         Content = rnwWarnings.Content != null ? rnwWarnings.Content.Length > 300 ? string.Concat(rnwWarnings.Content.Substring(0, 300), "...") : rnwWarnings.Content : string.Empty,
+                         Content = RnwHelper.FormatContent(rnwWarnings.Content),
                          ExpiryDate = rnwWarnings.ExpiryDate,
                          ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
                          IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
                          WarningTypeName = warning.Name
                      }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
-
-            return radioNavigationalWarningsAdminLists;
         }
 
+        public async Task<List<WarningType>> GetWarningTypes()
+        {
+            return await _context.WarningType.ToListAsync();
+        }
+
+        public async Task<List<string>> GetYears()
+        {
+            return await _context.RadioNavigationalWarnings
+                                .Select(p => p.DateTimeGroup.Year.ToString())
+                                .Distinct().ToListAsync();
+        }
 
         public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList()
         {
@@ -67,14 +71,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      .ToListAsync();
 
             return radioNavigationalWarningsData;
-        }
-
-        public async Task<List<string>> GetYears()
-        {
-            List<string> years = await (_context.RadioNavigationalWarnings
-                                .Select(p => p.DateTimeGroup.Year.ToString())
-                                .Distinct().ToListAsync());
-            return years;
         }
     }
 }

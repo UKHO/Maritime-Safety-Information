@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
     [ExcludeFromCodeCoverage]
-    public class RadioNavigationalWarningsAdminList
+    public class RadioNavigationalWarningsAdmin
     {
         public int Id { get; set; }
 

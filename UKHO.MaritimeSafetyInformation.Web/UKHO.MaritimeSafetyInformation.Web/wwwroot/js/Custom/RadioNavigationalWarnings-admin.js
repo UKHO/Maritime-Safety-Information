@@ -21,11 +21,13 @@ function RnwFilterList(pageSelectedIndex) {
     if (warningTypeSelectedValue == undefined) {
         warningTypeSelectedValue = null;
     }
-    var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacepageSelectedIndex&warningType=ReplaceWarningTypeSelectedValue&year=ReplacYeareSelectedValue&reLoadData=ReplacReLoadData";
-    rnwUrl = rnwUrl.replace("ReplacepageSelectedIndex", pageSelectedIndex).trim();
+    var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacePageSelectedIndex"
+                +"&warningType=ReplaceWarningTypeSelectedValue"
+                +"&year=ReplaceYearSelectedValue";
+
+    rnwUrl = rnwUrl.replace("ReplacePageSelectedIndex", pageSelectedIndex).trim();
     rnwUrl = rnwUrl.replace("ReplaceWarningTypeSelectedValue", warningTypeSelectedValue).trim();
-    rnwUrl = rnwUrl.replace("ReplacYeareSelectedValue", yearSelectedValue).trim();
-    rnwUrl = rnwUrl.replace("ReplacReLoadData", "false").trim();
+    rnwUrl = rnwUrl.replace("ReplaceYearSelectedValue", yearSelectedValue).trim();
     rnwUrl = rnwUrl.replace("amp;", "");
-    window.location.href = rnwUrl.replace("amp;", "");
+    window.location.href = rnwUrl;
 }

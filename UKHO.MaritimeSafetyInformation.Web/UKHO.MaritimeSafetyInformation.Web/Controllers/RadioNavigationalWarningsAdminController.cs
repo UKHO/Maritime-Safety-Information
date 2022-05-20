@@ -20,16 +20,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index(int pageIndex = 1, int? warningType = null, int? year = null, bool reLoadData = true)
+        // GET: RadioNavigationalWarnings/Create
+        public async Task<IActionResult> Create()
         {
-            _logger.LogInformation(EventIds.MSIGetRnwForAdminStarted.ToEventId(), "Maritime safety information request to get RNW records for Admin started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            ViewBag.WarningType = await _rnwService.GetWarningTypes();
 
-            RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminFilter = await _rnwService.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year, reLoadData, GetCurrentCorrelationId());
-            ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
-            ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
-                    
-            _logger.LogInformation(EventIds.MSIGetRnwForAdminCompleted.ToEventId(), "Maritime safety information request to get RNW records for Admin completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-            return View(radioNavigationalWarningsAdminFilter);
             return View();
         }
 
@@ -48,12 +43,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 {
                     TempData["message"] = "Record created successfully!";
                     _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-                    
+
                     return RedirectToAction(nameof(Index), new { reLoadData = true });
                 }
             }
 
             return View(radioNavigationalWarning);
+        }
+
+
+        public async Task<IActionResult> Index(int pageIndex = 1, int? warningType = null, int? year = null)
+        {
+            _logger.LogInformation(EventIds.RNWAdminListStarted.ToEventId(), "Maritime safety information request to get RNW records for Admin started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            RadioNavigationalWarningsAdminFilter radioNavigationalWarningsAdminFilter = await _rnwService.GetRadioNavigationWarningsForAdmin(pageIndex, warningType, year, GetCurrentCorrelationId());
+            ViewBag.WarningTypes = new SelectList(radioNavigationalWarningsAdminFilter.WarningTypes, "Id", "Name");
+            ViewBag.Years = new SelectList(radioNavigationalWarningsAdminFilter.Years);
+                    
+            _logger.LogInformation(EventIds.RNWAdminListCompleted.ToEventId(), "Maritime safety information request to get RNW records for Admin completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            return View(radioNavigationalWarningsAdminFilter);
         }
     }
 }

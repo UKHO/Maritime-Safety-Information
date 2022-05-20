@@ -161,38 +161,37 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         InvalidContentInRequest = 910039,
         /// <summary> 
-        /// 910030 -  Maritime safety information request to get RNW records for Admin started.
+        /// 910040 -  Maritime safety information request to get RNW records for Admin started.
         /// </summary>
-        MSIGetRnwForAdminStarted = 910030,
+        RNWAdminListStarted = 910040,
         /// <summary> 
-        /// 910031 -  Maritime safety information request to get RNW records for Admin completed.
+        /// 910041 -  Maritime safety information request to get RNW records for Admin completed.
         /// </summary>
-        MSIGetRnwForAdminCompleted = 910031,
+        RNWAdminListCompleted = 910041,
         /// <summary> 
-        /// 910032 -  Maritime safety information get RNW records for Admin from database request error.
+        /// 910042 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
-        MSIGetRnwForAdminRequestError = 910032,
+        RNWAdminListError = 910042,
         /// <summary> 
-        /// 910033 -  Maritime safety information request to get RNW detail started.
+        /// 910043 -  Maritime safety information request to get RNW detail started.
         /// </summary>
-        MSIGetRnwDetailStarted = 910033,
+        MSIGetRnwDetailStarted = 910043,
         /// <summary> 
-        /// 910034 -  Maritime safety information request to get RNW detail completed.
+        /// 910044 -  Maritime safety information request to get RNW detail completed.
         /// </summary>
-        MSIGetRnwDetailCompleted = 910034,
+        MSIGetRnwDetailCompleted = 910044,
         /// <summary> 
-        /// 910035 -  Maritime safety information request to get RNW detail from database started.
+        /// 910045 -  Maritime safety information request to get RNW detail from database started.
         /// </summary>
-        MSIGetRnwDetailFormDatabaseStarted = 910035,
+        MSIGetRnwDetailFormDatabaseStarted = 910045,
         /// <summary> 
-        /// 910036 -  Maritime safety information request to get RNW detail from database Completed.
+        /// 910046 -  Maritime safety information request to get RNW detail from database Completed.
         /// </summary>
-        MSIGetRnwDetailFormDatabaseCompleted = 910036,
+        MSIGetRnwDetailFormDatabaseCompleted = 910046,
         /// <summary> 
-        /// 910037 -  Maritime safety information error has occurred in the process to get RNW detail from database.
+        /// 910047 -  Maritime safety information error has occurred in the process to get RNW detail from database.
         /// </summary>
-        MSIErrorInGetRnwDetailFromDatabase = 910037
-
+        MSIErrorInGetRnwDetailFromDatabase = 910047
     }
 
     public static class EventIdExtensions

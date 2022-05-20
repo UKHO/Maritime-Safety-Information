@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -26,13 +27,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [SetUp]
         public void Setup()
         {
-            _fakeRadioNavigationalWarning = new(){ WarningType = 1,
-                                                    Reference = "test",
-                                                    DateTimeGroup = DateTime.UtcNow,
-                                                    Summary = "Test1",
-                                                    Content = "test"};
+            _fakeRadioNavigationalWarning = new()
+            {
+                WarningType = 1,
+                Reference = "test",
+                DateTimeGroup = DateTime.UtcNow,
+                Summary = "Test1",
+                Content = "test"
+            };
+
             _fakeLogger = A.Fake<ILogger<RNWService>>();
+            _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeRnwRepository = A.Fake<IRNWRepository>();
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
 
             _rnwService = new RNWService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);
@@ -44,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
-            A.CallTo(() => _fakeRnwRepository.GetWarningTypes()).Returns(new List<WarningType>() { new WarningType {Id=1, Name="test"}});
+            A.CallTo(() => _fakeRnwRepository.GetWarningTypes()).Returns(new List<WarningType>() { new WarningType { Id = 1, Name = "test" } });
 
             List<WarningType> result = await _rnwService.GetWarningTypes();
 
@@ -116,6 +123,121 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
                                async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, string.Empty);
+            Assert.Greater(result.RadioNavigationalWarningsAdminList.Count, 0);
+            Assert.AreEqual(2, result.PageCount);
+            Assert.AreEqual(0, result.SrNo);
+            Assert.AreEqual(1, result.CurrentPageIndex);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationWarningsWithWarningTypeFilter_ThenReturnFilteredListAsync()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, 1, null, string.Empty);
+            Assert.AreEqual(2, result.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(1, result.PageCount);
+            Assert.AreEqual(0, result.SrNo);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationWarningsWithYearFilter_ThenReturnFilteredListAsync()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, 2022, string.Empty);
+            Assert.AreEqual(1, result.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(1, result.PageCount);
+            Assert.AreEqual(0, result.SrNo);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationWarningsWithWarningTypeAndYearFilter_ThenReturnFilteredListAsync()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, 2, 2020, string.Empty);
+            Assert.AreEqual(1, result.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(1, result.PageCount);
+            Assert.AreEqual(0, result.SrNo);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationWarningsWithValidPageNo_ThenReturnFilteredListAsync()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(2, null, null, string.Empty);
+            Assert.AreEqual(1, result.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(2, result.PageCount);
+            Assert.AreEqual(3, result.SrNo);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenReturnEmptyListAsync()
+        {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(4, null, null, string.Empty);
+            Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 0);
+        }
+
+        [Test]
+        public void WhenCallGetRadioNavigationWarningsWithInValidAdminListRecordPerPage_ThenThrowDivideByZeroException()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 0;
+            Assert.ThrowsAsync(Is.TypeOf<DivideByZeroException>(),
+                           async delegate { await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, string.Empty); });
+        }
+
+        private static List<RadioNavigationalWarningsAdmin> GetFakeRadioNavigationalWarningList()
+        {
+            List<RadioNavigationalWarningsAdmin> radioNavigationalWarningList = new();
+            radioNavigationalWarningList.Add(new RadioNavigationalWarningsAdmin()
+            {
+                WarningType = 1,
+                Reference = "RnwAdminListReference",
+                DateTimeGroup = new DateTime(2020, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+
+            radioNavigationalWarningList.Add(new RadioNavigationalWarningsAdmin()
+            {
+                WarningType = 2,
+                Reference = "RnwAdminListReference",
+                DateTimeGroup = new DateTime(2020, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+
+            radioNavigationalWarningList.Add(new RadioNavigationalWarningsAdmin()
+            {
+                WarningType = 1,
+                Reference = "RnwAdminListReference",
+                DateTimeGroup = new DateTime(2021, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+
+            radioNavigationalWarningList.Add(new RadioNavigationalWarningsAdmin()
+            {
+                WarningType = 2,
+                Reference = "RnwAdminListReference",
+                DateTimeGroup = new DateTime(2022, 1, 1),
+                Summary = "RnwAdminListSummary",
+                Content = "RnwAdminListContent"
+            });
+            return radioNavigationalWarningList;
         }
     }
 }

@@ -10,8 +10,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Extensions
         [Test]
         public void WhenCallRnwDateFormat_ThenReturnValidRnwDateFormat()
         {
-            DateTime _fakeDateTime = new(2022, 12, 31, 01, 30, 40);
-            string result = DateTimeExtensions.ToRnwDateFormat(_fakeDateTime);
+            DateTime dateTime = new(2022, 12, 31, 01, 30, 40);
+            string result = DateTimeExtensions.ToRnwDateFormat(dateTime);
             Assert.AreEqual("310130 UTC Dec 22", result);
         }
 

@@ -11,15 +11,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     {
         private readonly IRNWRepository _rnwRepository;
         private readonly IOptions<RadioNavigationalWarningConfiguration> _radioNavigationalWarningConfiguration;
-
         private readonly ILogger<RNWService> _logger;
-        private static List<RadioNavigationalWarningsAdminList> s_allRadioNavigationalWarningsAdminList;
-
 
         public RNWService(IRNWRepository repository,
-                         IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration, ILogger<RNWService> logger)
+                        IOptions<RadioNavigationalWarningConfiguration> radioNavigationalWarningConfiguration,
+                        ILogger<RNWService> logger)
         {
-            _rnwRepository = repository;           
+            _rnwRepository = repository;
             _radioNavigationalWarningConfiguration = radioNavigationalWarningConfiguration;
             _logger = logger;
         }
@@ -66,26 +64,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return true;
         }
 
-        public async Task<List<WarningType>> GetWarningTypes()
-        {
-           return await _rnwRepository.GetWarningTypes();
-        }
-
-        public async Task<RadioNavigationalWarningsAdminListFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, bool reLoadData, string correlationId)
+        public async Task<RadioNavigationalWarningsAdminFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, string correlationId)
         {
             try
             {
-                RadioNavigationalWarningsAdminListFilter radioNavigationalWarningsAdminListFilter = new();
-
                 int rnwAdminListRecordPerPage = _radioNavigationalWarningConfiguration.Value.AdminListRecordPerPage;
                 int srNo = (pageIndex - 1) * rnwAdminListRecordPerPage;
 
-                if (s_allRadioNavigationalWarningsAdminList == null || reLoadData)
-                {
-                    s_allRadioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-                }
-
-                List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminList = s_allRadioNavigationalWarningsAdminList;
+                List<RadioNavigationalWarningsAdmin> radioNavigationalWarningsAdminList = await _rnwRepository.GetRadioNavigationWarningsAdminList();
 
                 if (warningType != null)
                 {
@@ -100,21 +86,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 double pageCount = (double)(radioNavigationalWarningsAdminList.Count / Convert.ToDecimal(rnwAdminListRecordPerPage));
                 radioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList.Skip(srNo).Take(rnwAdminListRecordPerPage).ToList();
 
-                radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList;
-                radioNavigationalWarningsAdminListFilter.PageCount = (int)Math.Ceiling(pageCount);
-                radioNavigationalWarningsAdminListFilter.CurrentPageIndex = pageIndex;
-                radioNavigationalWarningsAdminListFilter.WarningTypes = await _rnwRepository.GetWarningTypes();
-                radioNavigationalWarningsAdminListFilter.Years = await _rnwRepository.GetYears();
-                radioNavigationalWarningsAdminListFilter.WarningType = warningType;
-                radioNavigationalWarningsAdminListFilter.Year = year;
-                radioNavigationalWarningsAdminListFilter.SrNo = srNo;
+                RadioNavigationalWarningsAdminFilter radioNavigationalWarningsAdminListFilter = new()
+                {
+                    RadioNavigationalWarningsAdminList = radioNavigationalWarningsAdminList,
+                    PageCount = (int)Math.Ceiling(pageCount),
+                    CurrentPageIndex = pageIndex,
+                    WarningTypes = await _rnwRepository.GetWarningTypes(),
+                    Years = await _rnwRepository.GetYears(),
+                    WarningType = warningType,
+                    Year = year,
+                    SrNo = srNo,
+                };
                 return radioNavigationalWarningsAdminListFilter;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.MSIGetRnwForAdminRequestError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.RNWAdminListError.ToEventId(), ex, "Maritime safety information request failed to get RNW records for Admin from database with exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
+        }
+
+        public async Task<List<WarningType>> GetWarningTypes()
+        {
+            return await _rnwRepository.GetWarningTypes();
         }
 
         public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsData(string correlationId)
