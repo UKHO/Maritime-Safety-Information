@@ -221,49 +221,49 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetSearchAttributeRequestDataStarted = 910054,
         /// <summary>
-        /// 910052 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
+        /// 910055 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Not found
         /// </summary>
-        GetSearchAttributeRequestDataFound = 910052,
+        GetSearchAttributeRequestDataFound = 910055,
         /// <summary>
-        /// 910053 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
+        /// 910056 - Event data for Get Search Attribute data from FSS for GetAllYearWeek Failed
         /// </summary>
-        GetSearchAttributeRequestDataFailed = 910053,
+        GetSearchAttributeRequestDataFailed = 910056,
         /// <summary>
-        /// 910054 -  Search Attribute Response Started for File Share Service Client
+        /// 910057 -  Search Attribute Response Started for File Share Service Client
         /// </summary>
-        FSSSearchAttributeResponseStarted = 910054,
+        FSSSearchAttributeResponseStarted = 910057,
         /// <summary>
-        /// 910055 -  Search Attribute Response Completed for File Share Service Client
+        /// 910058 -  Search Attribute Response Completed for File Share Service Client
         /// </summary>
-        FSSSearchAttributeResponseCompleted = 910055,
+        FSSSearchAttributeResponseCompleted = 910058,
         /// <summary>
-        /// 910056 - Search Attribute Response threw an exception in case of errors for File Share Service Client
+        /// 910059 - Search Attribute Response threw an exception in case of errors for File Share Service Client
         /// </summary>
-        FSSSearchAttributeResponseError = 910056,
+        FSSSearchAttributeResponseError = 910059,
         /// <summary>
-        /// 910057 - Get All weeks and Year data for Notices to Mariners Started 
+        /// 910060 - Get All weeks and Year data for Notices to Mariners Started 
         /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksStarted = 910057,
+        NoticesToMarinersGetAllYearsandWeeksStarted = 910060,
         /// <summary>
-        /// 910058 - Get All weeks and Year data for Notices to Mariners Completed
+        /// 910061 - Get All weeks and Year data for Notices to Mariners Completed
         /// </summary>
-        NoticesToMarinersGetAllYearsandWeeksCompleted = 910058,
+        NoticesToMarinersGetAllYearsandWeeksCompleted = 910061,
         /// <summary>
-        /// 910059 - No data recieved Year Week data from FSS for Notices to Mariners  
+        /// 910062 - No data recieved Year Week data from FSS for Notices to Mariners  
         /// </summary>
-        GetSearchAttributeRequestDataNotFound = 910059,
+        GetSearchAttributeRequestDataNotFound = 910062,
         /// <summary>
-        /// 910060 -  Event data for Retrieval of MSI Show Weekly File Response For Year Or Week Non Zero.
+        /// 910063 -  Event data for Retrieval of MSI Show Weekly File Response For Year Or Week Non Zero.
         /// </summary>
-        ShowWeeklyFilesResponseForYearOrWeekNonZero = 910060,
+        ShowWeeklyFilesResponseForYearOrWeekNonZero = 910063,
         /// <summary>
-        /// 910061 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
+        /// 910064 -  Event data for Retrieval of MSI Get Weekly File Response For Year Or Week With Zero.
         /// </summary>
-        GetWeeklyFilesResponseForYearOrWeekWithZero = 910061,
+        GetWeeklyFilesResponseForYearOrWeekWithZero = 910064,
         /// <summary>
-        /// 910062 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910065 -  Event data for Retrieval of MSI Get Weekly File Response Started.
         /// </summary>
-        GetWeeklyFilesResponseCompleted = 910062,
+        GetWeeklyFilesResponseCompleted = 910065
     }
 
     public static class EventIdExtensions
