@@ -14,25 +14,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     public class RNWRepositoryTest
     {
         private RNWRepository _rnwRepository;
-        private RadioNavigationalWarningsContext _fakeContext;
-        private RadioNavigationalWarning _fakeRadioNavigationalWarning;
+        private RadioNavigationalWarningsContext _context;
+        private RadioNavigationalWarning _radioNavigationalWarning;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                                     .UseInMemoryDatabase("msi-ut-db");
-            _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
+            _context = new RadioNavigationalWarningsContext(builder.Options);
 
-            _fakeContext.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
-            _fakeContext.WarningType.AddRange(GetFakeWarningTypeList());
-            _fakeContext.SaveChanges();
+            _context.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
+            _context.WarningType.AddRange(GetFakeWarningTypeList());
+            _context.SaveChanges();
         }
 
         [SetUp]
         public void SetUp()
         {
-            _fakeRadioNavigationalWarning = new()
+            _radioNavigationalWarning = new()
             {
                 WarningType = 1,
                 Reference = "test",
@@ -41,18 +41,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "test"
             };
 
-            _rnwRepository = new RNWRepository(_fakeContext);
+            _rnwRepository = new RNWRepository(_context);
         }
 
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
             DateTime dateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            _radioNavigationalWarning.DateTimeGroup = dateTime;
 
-            Task result = _rnwRepository.AddRadioNavigationWarning(_fakeRadioNavigationalWarning);
+            Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);
 
-            Task<RadioNavigationalWarning> data = _fakeContext.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
+            Task<RadioNavigationalWarning> data = _context.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
@@ -63,8 +63,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             WarningType warningType = new() { Name = "test" };
 
-            _fakeContext.WarningType.Add(warningType);
-            await _fakeContext.SaveChangesAsync();
+            _context.WarningType.Add(warningType);
+            await _context.SaveChangesAsync();
 
             Task<List<WarningType>> warningTypeList = _rnwRepository.GetWarningTypes();
 
@@ -75,8 +75,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
-            List<RadioNavigationalWarningsAdminList> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.IsTrue(result.Count == 5);
+            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.AreEqual(5, result.Count);
             Assert.AreEqual(5, result[0].Id);
             Assert.AreEqual("011200 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
             Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
@@ -85,15 +85,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarnings_ThenIsDeletedShouldDisplayYesAndNoRespectively()
         {
-            List<RadioNavigationalWarningsAdminList> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.IsTrue(result[0].IsDeleted == "No");
-            Assert.IsTrue(result[3].IsDeleted == "Yes");
+            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.AreEqual("No", result[0].IsDeleted);
+            Assert.AreEqual("Yes", result[3].IsDeleted);
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationWarningWithContentLenthGreaterThan300Char_ThenWrapTheContent()
         {
-            List<RadioNavigationalWarningsAdminList> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
+            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.IsTrue(result[3].Content.Length <= 303);
             Assert.IsTrue(result[3].Content.Contains("..."));
         }
@@ -102,7 +102,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetYears_ThenReturnListAsync()
         {
             List<string> result = await _rnwRepository.GetYears();
-            Assert.IsTrue(result.Count == 3);
+            Assert.AreEqual(3,result.Count);
             Assert.AreEqual("2020", result[0]);
             Assert.AreEqual("2021", result[1]);
             Assert.AreEqual("2022", result[2]);
@@ -111,12 +111,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [OneTimeTearDown]
         public void GlobalTearDown()
         {
-            _fakeContext.RadioNavigationalWarnings.RemoveRange(_fakeContext.RadioNavigationalWarnings);
-            _fakeContext.WarningType.RemoveRange(_fakeContext.WarningType);
-            _fakeContext.SaveChanges();
+            _context.RadioNavigationalWarnings.RemoveRange(_context.RadioNavigationalWarnings);
+            _context.WarningType.RemoveRange(_context.WarningType);
+            _context.SaveChanges();
         }
 
-        #region PrivateMethod
         private static List<RadioNavigationalWarning> GetFakeRadioNavigationalWarningList()
         {
             List<RadioNavigationalWarning> radioNavigationalWarningList = new();
@@ -181,6 +180,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             });
             return warningTypeList;
         }
-        #endregion
     }
 }

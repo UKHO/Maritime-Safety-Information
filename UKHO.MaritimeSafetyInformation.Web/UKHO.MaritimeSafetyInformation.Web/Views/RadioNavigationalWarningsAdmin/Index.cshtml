@@ -1,9 +1,9 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
-@model RadioNavigationalWarningsAdminListFilter
+@model RadioNavigationalWarningsAdminFilter
 
 @{
-    bool isFirstPage = Model.CurrentPageIndex == 1 ? true : false;
-    bool isLastPage = Model.CurrentPageIndex == Model.PageCount ? true : false;
+    bool isFirstPage = Model.CurrentPageIndex == 1;
+    bool isLastPage = Model.CurrentPageIndex == Model.PageCount;
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
 <div class="container-fluid">

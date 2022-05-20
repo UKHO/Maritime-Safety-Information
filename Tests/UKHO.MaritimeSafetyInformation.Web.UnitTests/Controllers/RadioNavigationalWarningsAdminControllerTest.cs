@@ -67,9 +67,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<Task<IActionResult>>(result);
         }
 
-        private static RadioNavigationalWarningsAdminListFilter GetFakeRadioNavigationWarningsForAdmin()
+        private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()
         {
-            return new RadioNavigationalWarningsAdminListFilter
+            return new RadioNavigationalWarningsAdminFilter
             {
                 WarningTypes = new List<WarningType>() { new WarningType { Id = 1, Name = "Test" } },
                 Years = new List<string>() { "2020", "2021" },

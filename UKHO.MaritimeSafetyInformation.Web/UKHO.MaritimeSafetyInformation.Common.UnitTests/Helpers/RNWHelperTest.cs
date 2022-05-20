@@ -8,9 +8,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
     {
 
         [Test]
-        public void WhenCallFormatContentWithContentLenthGreaterThan300Char_ThenWrapTheContent()
+        public void WhenCallFormatContentWithContentLengthGreaterThan300Char_ThenWrapTheContent()
         {
-            string content = "1. NAVAREA I WARNINGS IN FORCE AT 221000 UTC APR 22:     2021 SERIES: 031.  2022 SERIES: 033, 041, 043, 044."
+            const string content = "1. NAVAREA I WARNINGS IN FORCE AT 221000 UTC APR 22:     2021 SERIES: 031.  2022 SERIES: 033, 041, 043, 044."
                  + "NOTES:  A. Texts of NAVAREA I Warnings issued each week are published in weekly editions of the ADMIRALTY Notices to"
                  + "Mariners bulletin (ANMB).  B. NAVAREA I Warnings less than 42 days old (033/22 onward) are promulgated via Enhanced"
                  + "Group Call (EGC) and/or relevant NAVTEX transmitters.  C. The complete texts of all in-force NAVAREA I warnings,"
@@ -24,21 +24,26 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenCallFormatContentWithContentLenthLessThan300Char_ThenDoNotWrapTheContent()
+        public void WhenCallFormatContentWithContentLengthLessThan300Char_ThenDoNotWrapTheContent()
         {
-            string content = "Test Content String";
-
+            const string content = "Test Content String";
             string result = RnwHelper.FormatContent(content);
-            Assert.AreEqual(result.Length,19);
+            Assert.AreEqual(content, result);
+            Assert.IsTrue(!result.Contains("..."));
+        }
+        [Test]
+        public void WhenCallFormatContentWithContentLengthEqual300Char_ThenDoNotWrapTheContent()
+        {
+            string content = new('x', 300);
+            string result = RnwHelper.FormatContent(content);
+            Assert.AreEqual(300, result.Length);
             Assert.IsTrue(!result.Contains("..."));
         }
 
         [Test]
         public void WhenCallFormatContentWithNullContent_ThenReturnEmptyContent()
         {
-            string content = null;
-
-            string result = RnwHelper.FormatContent(content);
+            string result = RnwHelper.FormatContent(null);
             Assert.IsEmpty(result);
         }
     }

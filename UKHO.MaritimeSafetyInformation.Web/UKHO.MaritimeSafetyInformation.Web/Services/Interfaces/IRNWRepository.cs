@@ -6,7 +6,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
     public interface IRNWRepository
     {
         Task AddRadioNavigationWarning(RadioNavigationalWarning radioNavigationalWarning);
-        Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList();        
+        Task<List<RadioNavigationalWarningsAdmin>> GetRadioNavigationWarningsAdminList();        
         Task<List<WarningType>> GetWarningTypes();
         Task<List<string>> GetYears();
     }

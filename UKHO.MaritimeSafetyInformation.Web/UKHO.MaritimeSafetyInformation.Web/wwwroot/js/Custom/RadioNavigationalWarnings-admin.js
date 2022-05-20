@@ -21,13 +21,13 @@ function RnwFilterList(pageSelectedIndex) {
     if (warningTypeSelectedValue == undefined) {
         warningTypeSelectedValue = null;
     }
-    var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacepageSelectedIndex"
+    var rnwUrl = "RadioNavigationalWarningsAdmin?pageIndex=ReplacePageSelectedIndex"
                 +"&warningType=ReplaceWarningTypeSelectedValue"
-                +"&year=ReplacYeareSelectedValue";
+                +"&year=ReplaceYeareSelectedValue";
 
-    rnwUrl = rnwUrl.replace("ReplacepageSelectedIndex", pageSelectedIndex).trim();
+    rnwUrl = rnwUrl.replace("ReplacePageSelectedIndex", pageSelectedIndex).trim();
     rnwUrl = rnwUrl.replace("ReplaceWarningTypeSelectedValue", warningTypeSelectedValue).trim();
-    rnwUrl = rnwUrl.replace("ReplacYeareSelectedValue", yearSelectedValue).trim();
+    rnwUrl = rnwUrl.replace("ReplaceYeareSelectedValue", yearSelectedValue).trim();
     rnwUrl = rnwUrl.replace("amp;", "");
     window.location.href = rnwUrl;
 }

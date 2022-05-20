@@ -163,15 +163,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910040 -  Maritime safety information request to get RNW records for Admin started.
         /// </summary>
-        RnwAdminListStarted = 910040,
+        RNWAdminListStarted = 910040,
         /// <summary> 
         /// 910041 -  Maritime safety information request to get RNW records for Admin completed.
         /// </summary>
-        RnwAdminListCompleted = 910041,
+        RNWAdminListCompleted = 910041,
         /// <summary> 
         /// 910042 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
-        RnwAdminListError = 910042
+        RNWAdminListError = 910042
     }
 
     public static class EventIdExtensions

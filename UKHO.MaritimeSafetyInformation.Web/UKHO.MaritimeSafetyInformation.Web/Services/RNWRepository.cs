@@ -23,12 +23,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<RadioNavigationalWarningsAdminList>> GetRadioNavigationWarningsAdminList()
+        public async Task<List<RadioNavigationalWarningsAdmin>> GetRadioNavigationWarningsAdminList()
         {
-            List<RadioNavigationalWarningsAdminList> radioNavigationalWarningsAdminLists
-            = await (from rnwWarnings in _context.RadioNavigationalWarnings
+            return await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
-                     select new RadioNavigationalWarningsAdminList
+                     select new RadioNavigationalWarningsAdmin
                      {
                          Id = rnwWarnings.Id,
                          WarningType = rnwWarnings.WarningType,
@@ -42,8 +41,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                          IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
                          WarningTypeName = warning.Name
                      }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
-
-            return radioNavigationalWarningsAdminLists;
         }
 
         public async Task<List<WarningType>> GetWarningTypes()
@@ -53,10 +50,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<string>> GetYears()
         {
-            List<string> years = await (_context.RadioNavigationalWarnings
+            return await _context.RadioNavigationalWarnings
                                 .Select(p => p.DateTimeGroup.Year.ToString())
-                                .Distinct().ToListAsync());
-            return years;
+                                .Distinct().ToListAsync();
         }
     }
 }
