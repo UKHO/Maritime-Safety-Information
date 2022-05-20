@@ -66,11 +66,32 @@ a, button, .form-select, .form-control, .form-check-input {
 
 table {
     border-collapse: collapse;
+    thead{
+        tr th{
+            border-bottom:0;
+        }
+    }
 
     td {
         border-bottom: 1px solid $light-silver !important;
         border-right: 1px solid $light-silver !important;
     }
+}
+
+.hidden-caption {
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px,1px,1px,1px);
+    margin-top: -1px;
+}
+.form-label {
+    margin-bottom: 0.5rem !important;
+    box-shadow: none;
+}
+.form-select, .form-control {
+    border-radius: 0;
+    font-weight: 300;
 }
 
 .hidden-caption {
@@ -124,6 +145,11 @@ button {
     &:focus {
         border-color: $eerie-black;
     }
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231C1F22' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-size: 1.2rem 1.2rem;
 }
 
 .form-select option {
