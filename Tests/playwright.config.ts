@@ -16,6 +16,7 @@ const config: PlaywrightTestConfig = {
   use: {
     actionTimeout: 0,
     trace: 'on-first-retry',
+    headless: false,
   },
   projects: [
     {
