@@ -179,7 +179,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910044 -  Event data for Retrieval of MSI Show Weekly File Response For Index Post Completed.
         /// </summary>
-        ShowWeeklyFilesResponsetIndexPostCompleted = 910044,
+        ShowWeeklyFilesResponseIndexPostCompleted = 910044,
         /// <summary>
         /// 910045 -  Event data for Retrieval of MSI Show Weekly File Response For Index Get Completed.
         /// </summary>
@@ -209,7 +209,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSSearchAttributeResponseError = 910051,
         /// <summary>
-        /// 910052 - No data recieved Year Week data from FSS for Notices to Mariners  
+        /// 910052 - No data received Year Week data from FSS for Notices to Mariners  
         /// </summary>
         GetSearchAttributeRequestDataNotFound = 910052,
         /// <summary>

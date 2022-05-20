@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<IResult<BatchSearchResponse>> FssBatchSearchAsync(string searchText, string accessToken, string correlationId)
+        public async Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string accessToken, string correlationId)
         {            
             IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
             try
@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return result;            
         }
 
-        public async Task<IResult<BatchAttributesSearchResponse>> FssSearchAttributeAsync(string accessToken, string correlationId)
+        public async Task<IResult<BatchAttributesSearchResponse>> FSSSearchAttributeAsync(string accessToken, string correlationId)
         {            
             IResult<BatchAttributesSearchResponse> result;
             try

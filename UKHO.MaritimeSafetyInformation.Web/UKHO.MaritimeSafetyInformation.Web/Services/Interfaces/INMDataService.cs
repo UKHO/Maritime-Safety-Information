@@ -7,7 +7,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
     {
         Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId);
         Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId);
-        Task<List<YearWeekModel>> GetAllYearWeek(string correlationId);
         Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId);
     }
 }

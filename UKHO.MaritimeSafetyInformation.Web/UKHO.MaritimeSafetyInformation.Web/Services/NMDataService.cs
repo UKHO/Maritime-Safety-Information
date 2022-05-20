@@ -30,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-                IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId);
 
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
@@ -61,15 +61,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FssSearchAttributeAsync(accessToken, correlationId);
+                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId);
 
                 if (searchAttributes.Data != null)
                 {
-                    for (int i = 0; i < searchAttributes.Data.BatchAttributes.Count; i++)
+                    foreach (var attribute in searchAttributes.Data.BatchAttributes)
                     {
-                        if (searchAttributes.Data.BatchAttributes[i].Key.Replace(" ", string.Empty) == YearAndWeek)
+                        if (attribute.Key.Replace(" ", string.Empty) == YearAndWeek)
                         {
-                            List<string> yearWeekList = searchAttributes.Data.BatchAttributes[i].Values;
+                            List<string> yearWeekList = attribute.Values;
 
                             if (yearWeekList != null && yearWeekList.Count != 0)
                             {
@@ -113,7 +113,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
                 const string searchText = $" and $batch(Frequency) eq 'Daily'";
-                IResult<BatchSearchResponse> result = await _fileShareService.FssBatchSearchAsync(searchText, accessToken, correlationId);
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId);
 
                 BatchSearchResponse searchResult = result.Data;
 
@@ -141,13 +141,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
             try
             {
-                showWeeklyFilesResponses.YearAndWeek = await GetAllYearWeek(correlationId);
+                showWeeklyFilesResponses.YearAndWeekList = await GetAllYearWeek(correlationId);
                 if (year == 0 && week == 0)
                 {
-                    year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
-                    week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeek.OrderByDescending(x => x.Week).Select(x => x.Week).FirstOrDefault());
+                    year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
+                    week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Week).Select(x => x.Week).FirstOrDefault());
                 }
-                showWeeklyFilesResponses.ShowFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
+                showWeeklyFilesResponses.ShowFilesResponseList = await GetWeeklyBatchFiles(year, week, correlationId);
             }
             catch (Exception ex)
             {

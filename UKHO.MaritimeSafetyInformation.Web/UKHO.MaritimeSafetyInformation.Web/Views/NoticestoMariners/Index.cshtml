@@ -51,9 +51,9 @@
         }
         <div class="row">
             <div class="col">
-                @if (@Model != null && @Model.ShowFilesResponseModel != null)
+                @if (@Model != null && @Model.ShowFilesResponseList != null)
                 {
-                    <partial name="ShowWeeklyFilesList" model="@Model.ShowFilesResponseModel" />
+                    <partial name="ShowWeeklyFilesList" model="@Model.ShowFilesResponseList" />
                 }
             </div>
         </div>
@@ -61,7 +61,7 @@
 </div>
 
 <script type="text/javascript">
-    var serverData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.YearAndWeek));
+    var serverData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.YearAndWeekList));
     window.onload = function () {
         LoadData(serverData);
     }

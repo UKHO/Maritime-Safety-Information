@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogError(EventIds.ShowWeeklyFilesIndexPostFailed.ToEventId(), "Maritime safety information request to get daily NM weekly files index post failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
             }
-            _logger.LogInformation(EventIds.ShowWeeklyFilesResponsetIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for correlationId:{correlationId}", GetCurrentCorrelationId());
             return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 

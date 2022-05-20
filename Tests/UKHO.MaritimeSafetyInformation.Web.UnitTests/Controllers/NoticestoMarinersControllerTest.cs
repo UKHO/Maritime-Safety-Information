@@ -50,7 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexPostIsCalled_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-            const int year = 2022, week = 20;
+            const int year = 2022;
+            const int week = 20;
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
@@ -68,7 +69,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexPostIsCalledWithYearAndWeekZero_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-            const int year = 0, week = 0, expectedViewCount = 2;
+            const int year = 0;
+            const int week = 0;
+            const int expectedViewCount = 2;
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
@@ -85,7 +88,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexPostIsCalledWithWeekOrYearZero_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-            const int year = 2022, week = 0;
+            const int year = 2022;
+            const int week = 0;
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
@@ -142,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             return new()
             {
-                ShowFilesResponseModel = new()
+                ShowFilesResponseList = new()
                 {
                     new ShowFilesResponseModel()
                     {
@@ -189,7 +193,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
                         Links = null
                     }
                 },
-                YearAndWeek = new()
+                YearAndWeekList = new()
                 {
                     new YearWeekModel()
                     {
