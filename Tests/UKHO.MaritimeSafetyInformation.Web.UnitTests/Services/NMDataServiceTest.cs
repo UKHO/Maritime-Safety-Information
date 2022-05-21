@@ -296,7 +296,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenDownloadFssFileAsyncIsCalled_ThenShouldExecuteCatch()
+        public void WhenDownloadFssFileAsyncIsThrowsException_ThenShouldExecuteCatch()
         {
             const string batchId = "";
             const string filename = "";

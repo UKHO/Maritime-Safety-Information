@@ -118,10 +118,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenFSSDownloadFileAsyncIsCalled_ThenShouldExecuteCatch()
+        public void WhenFSSDownloadFileAsyncThrowsException_ThenShouldExecuteCatch()
         {
             _fileShareServiceConfig.Value.BaseUrl = null;
-            A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Throws(new Exception());
             Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId);
             Assert.IsTrue(result.IsFaulted);
         }

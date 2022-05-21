@@ -217,9 +217,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 new KeyValuePair<string, string>("MimeType", "application/pdf")
             };
 
-            ILogger<NMHelperTest> _fakeLogger = A.Fake<ILogger<NMHelperTest>>();
+            ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
             
-            Assert.Throws<ArgumentNullException>(() =>NMHelper.ValidateParametersForDownloadSingleFile(parameters, String.Empty, _fakeLogger));
+            Assert.Throws<ArgumentNullException>(() =>NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
         }
 
         [Test]
@@ -232,9 +232,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 new KeyValuePair<string, string>("MimeType", "application/pdf")
             };
 
-            ILogger<NMHelperTest> _fakeLogger = A.Fake<ILogger<NMHelperTest>>();
+            ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
 
-            Assert.DoesNotThrow(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, String.Empty, _fakeLogger));
+            Assert.DoesNotThrow(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()

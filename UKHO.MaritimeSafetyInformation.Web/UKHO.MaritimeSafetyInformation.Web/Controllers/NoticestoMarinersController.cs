@@ -99,12 +99,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 new KeyValuePair<string, string>("MimeType", mimeType)
             },GetCurrentCorrelationId(),_logger);
 
-            byte[] fileBytes;
             try
             {
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download single weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
+                byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 

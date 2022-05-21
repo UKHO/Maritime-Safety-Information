@@ -161,7 +161,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
         public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId)
         {
-            byte[] fileBytes;
             try
             {
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
@@ -170,8 +169,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
 
-                fileBytes = new byte[stream.Length];
-                stream.Read(fileBytes, 0, fileBytes.Length);
+                byte[] fileBytes = new byte[stream.Length];
+                await stream.ReadAsync(fileBytes);
 
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 

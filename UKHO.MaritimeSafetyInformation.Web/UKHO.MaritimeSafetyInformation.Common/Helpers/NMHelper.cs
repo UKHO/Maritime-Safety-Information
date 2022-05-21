@@ -84,13 +84,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         }
 
 
-        public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters,string correlationId, ILogger _logger)
+        public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters,string correlationId, ILogger logger)
         {
             foreach (var parameter in parameters)
             {
                 if (string.IsNullOrEmpty(parameter.Value))
                 {
-                    _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(), $"Maritime safety information download single NM files called with invalid argument {parameter.Key}:{{{parameter.Key}}} for _X-Correlation-ID:{{correlationId}}", parameter.Value, correlationId);
+                    string message = $"Maritime safety information download single NM files called with invalid argument {parameter.Key}:{{{parameter.Key}}} for _X-Correlation-ID:{{correlationId}}";
+                    logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
+                                          message,
+                                          parameter.Value,
+                                          correlationId);
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
             }
