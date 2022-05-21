@@ -20,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeContextAccessor;
         private INMDataService _fakeNMDataService;
 
-        private const string _correlationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
@@ -134,7 +134,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/ShowDailyFilesList.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(_correlationId));
+            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId));
 
             IActionResult result = await _controller.ShowDailyFilesAsync();
             Assert.IsInstanceOf<PartialViewResult>(result);

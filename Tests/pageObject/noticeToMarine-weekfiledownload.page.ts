@@ -25,8 +25,8 @@ export default class noticeToMarineWeekDownload
     {
      await this.year.selectOption('2022');
      await this.week.selectOption('17');
-     await this.page.waitForSelector('td:nth-child(1)');
-     const result = this.page.$$eval('td:nth-child(1)', (options : any[]) => {return options.map( option=>option.textContent.trim())}); 
+     await this.page.waitForSelector("[id^='filename']");
+     const result = this.page.$$eval("[id^='filename']", (options : any[]) => {return options.map( option=>option.textContent.trim())}); 
      return result; 
      }
    } 
