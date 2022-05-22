@@ -17,7 +17,7 @@ export default class RadioNavigationalWarningsListEndUser
     constructor(page:Page)
     {
          this.page = page; 
-         this.radioNavigationalWarningsPage = this.page.locator('text=Radio Navigational Warnings')
+         this.radioNavigationalWarningsPage = this.page.locator('text=Radio Navigation Warnings')
          this.radioNavigationalWarningsEndUser = this.page.locator('#headingLevelOne')
          this.radioWarningEndUser = this.page.locator('text=Radio Warnings')
          this.aboutEndUser = this.page.locator('text=About')
