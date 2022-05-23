@@ -40,7 +40,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeRnwRepository = A.Fake<IRNWRepository>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-            _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
 
             _rnwService = new RNWService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);
         }

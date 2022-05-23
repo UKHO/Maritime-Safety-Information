@@ -59,13 +59,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetWarningTypeMethod_ThenReturnWarningType()
+        public void WhenCallGetWarningTypeMethod_ThenReturnWarningType()
         {
-            WarningType warningType = new() { Name = "test" };
-
-            _context.WarningType.Add(warningType);
-            await _context.SaveChangesAsync();
-
             Task<List<WarningType>> warningTypeList = _rnwRepository.GetWarningTypes();
 
             Assert.IsNotNull(warningTypeList);
@@ -112,7 +107,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWornings()
         {
             List<RadioNavigationalWarningsData> result = await _rnwRepository.GetRadioNavigationalWarningsDataList();
-            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(2, result.Count);
         }
 
         [OneTimeTearDown]

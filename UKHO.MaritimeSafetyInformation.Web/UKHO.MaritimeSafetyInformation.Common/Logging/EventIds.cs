@@ -227,11 +227,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910056 -  Maritime safety information request to get RNW detail from database started.
         /// </summary>
-        RNWListDetailFormDatabaseStarted = 910056,
+        RNWListDetailFromDatabaseStarted = 910056,
         /// <summary> 
         /// 910057 -  Maritime safety information request to get RNW detail from database Completed.
         /// </summary>
-        RNWListDetailFormDatabaseCompleted = 910057,
+        RNWListDetailFromDatabaseCompleted = 910057,
         /// <summary> 
         /// 910058 -  Maritime safety information error has occurred in the process to get RNW detail from database.
         /// </summary>

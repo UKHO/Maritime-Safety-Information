@@ -115,11 +115,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.RNWListDetailFormDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW detail from database started for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.RNWListDetailFromDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW details from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList();
 
-                _logger.LogInformation(EventIds.RNWListDetailFormDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW detail from database completed for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.RNWListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW details from database completed for _X-Correlation-ID:{correlationId}", correlationId);
 
                 return radioNavigationalWarningsData;
             }

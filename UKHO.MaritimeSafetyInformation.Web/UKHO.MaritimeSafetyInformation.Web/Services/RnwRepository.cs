@@ -59,8 +59,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
                      join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
-                     where !rnwWarnings.IsDeleted && rnwWarnings.ExpiryDate >= DateTime.UtcNow
-                     select new RadioNavigationalWarningsData
+                     where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
+                          select new RadioNavigationalWarningsData
                      {
                          Reference = rnwWarnings.Reference,
                          DateTimeGroup = rnwWarnings.DateTimeGroup,
