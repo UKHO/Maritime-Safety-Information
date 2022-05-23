@@ -3,7 +3,7 @@ import type { Page } from 'playwright';
 
 
 
-export default class noticeToMarineWeekDownload
+export default class noticeToMarinerWeekDownload
 {
     private page:Page;
     readonly noticeToMarine;
@@ -17,7 +17,7 @@ export default class noticeToMarineWeekDownload
         this.week =this.page.locator('#ddlWeeks')
     }
 
-    public async goToNoticeToMarine()
+    public async goToNoticeToMariner()
     {
       await this.noticeToMarine.click();
     } 
