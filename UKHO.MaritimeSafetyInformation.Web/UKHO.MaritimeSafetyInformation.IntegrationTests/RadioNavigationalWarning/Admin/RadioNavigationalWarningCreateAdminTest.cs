@@ -1,7 +1,7 @@
 ﻿
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
-    public class RadioNavigationalWarningCreateAdminTests
+    public class RadioNavigationalWarningCreateAdminTest
     {
     }
 }
