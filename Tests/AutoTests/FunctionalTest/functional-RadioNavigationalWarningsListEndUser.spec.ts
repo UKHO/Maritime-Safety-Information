@@ -19,7 +19,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     expect(await rnwListEndUser.checkText(rnwListEndUser.aboutEndUser)).toEqual("About");
     expect(await rnwListEndUser.checkText(rnwListEndUser.allWarningEndUser)).toEqual("All warnings");
     expect(await rnwListEndUser.checkText(rnwListEndUser.navAreaEndUser)).toEqual("NAVAREA 1");
-    expect(await rnwListEndUser.checkText(rnwListEndUser.ukCostalEnduser)).toEqual("UK Costal");
+    expect(await rnwListEndUser.checkText(rnwListEndUser.ukCostalEnduser)).toEqual("UK Coastal");
    })
 
    test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async () => {

@@ -23,7 +23,7 @@ export default class RadioNavigationalWarningsListEndUser
          this.aboutEndUser = this.page.locator('text=About')
          this.allWarningEndUser = this.page.locator('#allwarnings-tab')
          this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
-         this.ukCostalEnduser = this.page.locator('#ukcostal-tab')
+         this.ukCostalEnduser = this.page.locator('ukcoastal-tab')
          
     }
 
