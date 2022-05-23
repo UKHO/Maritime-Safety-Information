@@ -215,7 +215,57 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
         /// </summary>
-        GetWeeklyFilesResponseCompleted = 910053
+        GetWeeklyFilesResponseCompleted = 910053,
+
+        /// <summary>
+        /// 910054 -Request For Download Single Weekly NM File Started.
+        /// </summary>
+        DownloadSingleWeeklyNMFileStarted = 910054,
+
+        /// <summary>
+        /// 910055 -Request For Download Single Weekly NM File Completed.
+        /// </summary>
+        DownloadSingleWeeklyNMFileCompleted= 910055,
+
+        /// <summary>
+        /// 910056 -Download Single Weekly NM File Called With Invalid Arguments.
+        /// </summary>
+        DownloadSingleWeeklyNMFileInvalidParameter = 910056,
+
+        /// <summary>
+        /// 910057 -Download Single Weekly NM File Failed.
+        /// </summary>
+        DownloadSingleWeeklyNMFileFailed = 910057,
+
+        /// <summary>
+        /// 910058 - Request To Get Single Weekly NM File Started.
+        /// </summary>
+        GetSingleWeeklyNMFileStarted = 910058,
+
+        /// <summary>
+        /// 910059 - Request To Get Single Weekly NM File Completed.
+        /// </summary>
+        GetSingleWeeklyNMFileCompleted = 910059,
+
+        /// <summary>
+        /// 910060 - Request To Get Single Weekly NM File Failed.
+        /// </summary>
+        GetSingleWeeklyNMFileFailed = 910060,
+
+        /// <summary>
+        /// 910061 - Request For FSS To Get Single Weekly NM File Started.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileStarted = 910061,
+
+        /// <summary>
+        /// 910062 - Request For FSS To Get Single Weekly NM File Completed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileCompleted = 910062,
+
+        /// <summary>
+        /// 910063 - Request For FSS To Get Single Weekly NM File Failed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileResponseFailed = 910063,
     }
 
     public static class EventIdExtensions

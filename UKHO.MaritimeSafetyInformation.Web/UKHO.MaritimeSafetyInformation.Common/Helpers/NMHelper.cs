@@ -1,11 +1,14 @@
-﻿using System.Globalization;
+﻿using Microsoft.Extensions.Logging;
+using System.Globalization;
 using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
     public static class NMHelper
     {
+
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
@@ -78,6 +81,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 return date.ToString("dd-MM-yy");
 
             return string.Empty;
+        }
+
+
+        public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters,string correlationId, ILogger logger)
+        {
+            foreach (var parameter in parameters)
+            {
+                if (string.IsNullOrEmpty(parameter.Value))
+                {
+                    logger.LogInformation(
+                        EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
+                        "Maritime safety information download single NM files called with invalid argument "+ parameter.Key + ":{" + parameter.Key +"} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
+                    throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
+                }
+            }
         }
     }
 }
