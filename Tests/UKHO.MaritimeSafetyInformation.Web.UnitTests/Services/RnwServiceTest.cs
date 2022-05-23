@@ -17,10 +17,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class RNWServiceTest
     {
-        private RNWService _rnwService;
-        private IRNWRepository _fakeRnwRepository;
         private ILogger<RNWService> _fakeLogger;
+        private IRNWRepository _fakeRnwRepository;
         private IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
+        private RNWService _rnwService;
         private RadioNavigationalWarning _fakeRadioNavigationalWarning;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
@@ -127,6 +127,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
             RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, string.Empty);
             Assert.Greater(result.RadioNavigationalWarningsAdminList.Count, 0);
@@ -138,6 +139,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithWarningTypeFilter_ThenReturnFilteredListAsync()
         {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
             RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, 1, null, string.Empty);
             Assert.AreEqual(2, result.RadioNavigationalWarningsAdminList.Count);
@@ -148,6 +150,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithYearFilter_ThenReturnFilteredListAsync()
         {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
             RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, 2022, string.Empty);
             Assert.AreEqual(1, result.RadioNavigationalWarningsAdminList.Count);
@@ -158,6 +161,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithWarningTypeAndYearFilter_ThenReturnFilteredListAsync()
         {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
             RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(1, 2, 2020, string.Empty);
             Assert.AreEqual(1, result.RadioNavigationalWarningsAdminList.Count);
@@ -168,6 +172,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithValidPageNo_ThenReturnFilteredListAsync()
         {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
             RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(2, null, null, string.Empty);
             Assert.AreEqual(1, result.RadioNavigationalWarningsAdminList.Count);
@@ -178,6 +183,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenReturnEmptyListAsync()
         {
+            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
             RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(4, null, null, string.Empty);
             Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 0);

@@ -4,7 +4,9 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
@@ -20,8 +22,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IFileShareService _fakefileShareService;
         private ILogger<NMDataService> _fakeLogger;
         private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
+        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+
         private NMDataService _nMDataService;
-        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
@@ -84,7 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Task<List<ShowFilesResponseModel>> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -133,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Task<List<ShowDailyFilesResponseModel>> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.That(result.IsFaulted, Is.True);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
@@ -275,6 +278,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Task<ShowWeeklyFilesResponseModel> result = _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
             Assert.That(result.IsFaulted, Is.True);
+        }
+
+        [Test]
+        public void WhenDownloadFssFileAsyncIsCalled_ThenShouldReturnByteArray()
+        {
+            const string batchId = "";
+            const string filename = "";
+            const string accessToken = "";
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, CorrelationId)).Returns(stream);
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            Assert.IsInstanceOf<Task<byte[]>>(result);
+        }
+
+        [Test]
+        public void WhenDownloadFssFileAsyncThrowsException_ThenShouldExecuteCatch()
+        {
+            const string batchId = "";
+            const string filename = "";
+            const string accessToken = "";
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, CorrelationId)).ThrowsAsync(new Exception());
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            Assert.IsTrue(result.IsFaulted);
         }
 
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()

@@ -9,13 +9,15 @@
     outline: 0;
     box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
-a, button, .form-select, .form-control {
+
+a, button, .form-select, .form-control, .form-check-input {
     &:focus {
         @extend %focus;
     }
 }
+
 .alert {
-    padding: 20px 30px 30px;    
+    padding: 20px 30px 30px;
     border-radius: 0;
     border: 0;
 
@@ -33,6 +35,7 @@ a, button, .form-select, .form-control {
         margin-top: 5px;
     }
 }
+
 .alert-primary {
     background-color: $azurish-white;
     border-left: 6px solid $ocean-boat-blue;
@@ -57,7 +60,7 @@ a, button, .form-select, .form-control {
 
     .alert-head {
         color: $prussian-blue;
-        margin-left:-10px;
+        margin-left: -10px;
     }
 }
 
@@ -89,6 +92,14 @@ table {
 .form-select, .form-control {
     border-radius: 0;
     font-weight: 300;
+}
+
+.hidden-caption {
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px,1px,1px,1px);
+    margin-top: -1px;
 }
 
 .form-label {
@@ -128,8 +139,8 @@ button {
 .form-select, .form-control {
     border-radius: 0;
     border: 2px solid $eerie-black;
-    font-size:21px;
-    color:$black;
+    font-size: 21px;
+    color: $black;
 
     &:focus {
         border-color: $eerie-black;
@@ -144,6 +155,30 @@ button {
 .form-select option {
     font-weight: 300;
     font-size: 16px;
+}
+
+.form-check-input {
+    width: 30px;
+    height: 30px;
+    border: 2px solid $prussian-blue;
+
+    &[type=checkbox] {
+        border-radius: 0;
+    }
+
+    &:checked {
+        background-color: $white;
+        border-color: $prussian-blue;
+        color: $prussian-blue;
+
+        &[type=checkbox] {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2309315b' class='bi bi-check' viewBox='0 0 16 16'%3E%3Cpath d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z'/%3E%3C/svg%3E");
+        }
+    }
+
+    &:focus {
+        border-color: $prussian-blue;
+    }
 }
 
 .pagination {
@@ -173,9 +208,11 @@ button {
         }
     }
 }
-.main-content{
-    padding:2rem 0;
+
+.main-content {
+    padding: 2rem 0;
 }
+
 .table-scroll {
     display: block;
     empty-cells: show;
@@ -200,17 +237,11 @@ button {
         display: block;
         position: relative;
         width: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
 
         &.scroll-content {
             max-height: 54vh;
-            padding-right: 4px;
-        }
-
-        td{
-            a{
-                font-weight:300;
-            }
+            padding-right: 2px;
         }
     }
 
@@ -226,9 +257,11 @@ button {
         align-items: center;
     }
 }
+
 .scroll-bar {
     scrollbar-color: $davys-grey $lavender-gray;
 }
+
 .scroll-bar {
     &::-webkit-scrollbar {
         width: 10px;
@@ -246,6 +279,7 @@ button {
         border-radius: 5px;
     }
 }
+
 .msi-page-nav {
 
     li {
@@ -261,8 +295,7 @@ button {
             font-size: 16px;
             padding: 0.5rem;
             color: $prussian-blue;
-            font-weight:400;
-            display:inline-block;
+            display: inline-block;
 
             @media screen and (max-width: $x-large) {
                 font-size: 14px;
@@ -284,6 +317,7 @@ button {
         }
     }
 }
+
 .msi-tabs-content-container {
     padding-left: 16px;
 
@@ -291,6 +325,7 @@ button {
         width: 100%;
     }
 }
+
 .msi-tabs-container {
     border-right: 1px solid #D0D0D0;
     margin-top: 91px;
@@ -304,6 +339,7 @@ button {
         margin-bottom: 0;
     }
 }
+
 .msi-tabs {
     margin-bottom: 20px;
 
@@ -320,8 +356,8 @@ button {
             color: $prussian-blue;
             border-width: 0 0 5px 0;
             border-color: transparent;
-            padding:0.5rem 1.5rem;
-            border-radius:0;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0;
 
             &.active {
                 border-color: $prussian-blue;
@@ -329,7 +365,3 @@ button {
         }
     }
 }
-
-
-
-

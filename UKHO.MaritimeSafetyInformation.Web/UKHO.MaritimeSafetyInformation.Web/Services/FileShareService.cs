@@ -22,8 +22,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         public async Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string accessToken, string correlationId)
-        {            
-            IResult<BatchSearchResponse> result = new Result<BatchSearchResponse>();
+        {
+            IResult<BatchSearchResponse> result;
             try
             {
                 string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' " + searchText;
@@ -33,6 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
                 result = await fileShareApi.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, CancellationToken.None);
                 _logger.LogInformation(EventIds.FSSBatchSearchResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
+
             }
             catch (Exception ex)
             {
@@ -62,6 +63,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 throw;
             }
             return result;
+        }
+
+        public async Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId)
+        {
+            try
+            {
+                _logger.LogInformation(EventIds.FSSGetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+
+                FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                Stream  stream = await fileShareApi.DownloadFileAsync(batchId, fileName);
+              
+                _logger.LogInformation(EventIds.FSSGetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                return stream;  
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.FSSGetSingleWeeklyNMFileResponseFailed.ToEventId(), "Failed to get single weekly NM file from FSS for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}",batchId,fileName, ex.Message, correlationId);
+                throw;
+            }
         }
     }
 }
