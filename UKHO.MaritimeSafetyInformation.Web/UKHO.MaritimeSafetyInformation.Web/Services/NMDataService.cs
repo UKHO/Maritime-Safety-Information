@@ -175,7 +175,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 int numBytesRead = 0;
                 do
                 {
-                    int n = stream.Read(fileBytes, numBytesRead, 10);
+                    int n = await stream.ReadAsync(fileBytes.AsMemory(numBytesRead, 10));
                     numBytesRead += n;
                     numBytesToRead -= n;
                 } while (numBytesToRead > 0);
