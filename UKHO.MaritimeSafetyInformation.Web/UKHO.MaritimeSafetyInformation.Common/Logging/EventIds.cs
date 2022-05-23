@@ -131,7 +131,56 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910032 -  Maritime safety information get RNW records for Admin from database request error.
         /// </summary>
-        MSIRnwAdminListError = 910032
+        MSIRnwAdminListError = 910032,
+        /// <summary> 
+        /// 910034 -  Maritime safety information error has occurred in the process to add new RNW record to database.
+        /// </summary>
+        ErrorInRnwRepositoryProcess = 910034,
+        /// <summary> 
+        /// 910035 -  Maritime safety information invalid new RNW record request.
+        /// </summary>
+        InvalidNewRNWRecordRequest = 910035,
+        /// <summary> 
+        /// 910036 -  Maritime safety information invalid value received for parameter warningType.
+        /// </summary>
+        InvalidWarningTypeInRequest = 910036,
+        /// <summary> 
+        /// 910037 -  Maritime safety information invalid value received for parameter reference.
+        /// </summary>
+        InvalidReferenceInRequest = 910037,
+        /// <summary> 
+        /// 910038 -  Maritime safety information invalid value received for parameter summary.
+        /// </summary>
+        InvalidSummaryInRequest = 910038,
+        /// <summary> 
+        /// 910039 -  Maritime safety information invalid value received for parameter content.
+        /// </summary>
+        InvalidContentInRequest = 910039,
+        /// <summary> 
+        /// 910051 -  Maritime safety information Edit RNW records for Admin completed.
+        /// </summary>
+        EditRNWRecordCompleted = 910051,
+        /// <summary> 
+        /// 910052 -  Maritime safety information Edit RNW record started.
+        /// </summary>
+        EditRNWRecordStart = 910052,
+        /// <summary> 
+        /// 910053 - Maritime safety information edit RNW record Id not found.
+        /// </summary>
+        EditRNWRecordIDNotFound = 910053,
+        /// <summary> 
+        /// 910054 - Maritime safety information edit RNW record Id mismatch.
+        /// </summary>
+        EditRNWRecordIdMismatch = 910054,
+        /// <summary> 
+        /// 910055 - Maritime safety information edit RNW list is null.
+        /// </summary>
+        EditRNWListIsNull = 910055,
+        /// <summary> 
+        /// 910056 - Maritime safety information Error in retrieving RNW record.
+        /// </summary>
+        ErrorInRetrievingRNWRecord = 910056
+
     }
 
     public static class EventIdExtensions

@@ -32,48 +32,45 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         // GET: RadioNavigationalWarnings/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             
             if (id == null)
             {
+                _logger.LogInformation(EventIds.EditRNWRecordIDNotFound.ToEventId(), "Maritime safety information edit RNW record id not found for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return NotFound();
             }
 
-            RadioNavigationalWarningsAdminList radioNavigationalWarningsAdminList = _rnwService.EditRadioNavigationWarningListForAdmin(id);
+            RadioNavigationalWarningsAdminList radioNavigationalWarningsAdminList = _rnwService.EditRadioNavigationWarningListForAdmin(id, GetCurrentCorrelationId());
             if (radioNavigationalWarningsAdminList == null)
             {
+                _logger.LogInformation(EventIds.EditRNWListIsNull.ToEventId(), "Maritime safety information edit RNW list is null for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return NotFound();
             }
             return View(radioNavigationalWarningsAdminList);
         }
 
-        // POST: RadioNavigationalWarnings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, RadioNavigationalWarningsAdminList radioNavigationalWarningsAdminList)
         {
-            
+            _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
             if (id != radioNavigationalWarningsAdminList.Id)
             {
+                _logger.LogInformation(EventIds.EditRNWRecordIdMismatch.ToEventId(), "Maritime safety information edit RNW record id mismatched for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return NotFound();
             }
             
-            if (ModelState.IsValid)
+            else if (ModelState.IsValid)
             {
-               
-                    bool result = await _rnwService.EditNewRadioNavigationWarningsRecord(radioNavigationalWarningsAdminList, GetCurrentCorrelationId());
-                
-                if (result)
+               bool result = await _rnwService.EditRadioNavigationWarningsRecord(radioNavigationalWarningsAdminList, GetCurrentCorrelationId());
+               if (result)
                 {
                     TempData["message"] = "Record updated successfully!";
-                    //_logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-
+                    _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record request updated successfully for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                     return RedirectToAction(nameof(Index), new { reLoadData = true });
                 }
-                
             }
             return View(radioNavigationalWarningsAdminList);
         }

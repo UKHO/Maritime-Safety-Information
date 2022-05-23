@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
@@ -18,14 +19,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IRnwRepository _fakeRnwRepository;
         private ILogger<RnwService> _fakeLogger;
         private IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
+        private RadioNavigationalWarningsAdminList _fakeRadioNavigationalWarningsAdminList;
+        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void SetUp()
         {
+            _fakeRadioNavigationalWarningsAdminList = new()
+            {
+                WarningType = 1,
+                Reference = "test",
+                DateTimeGroup = DateTime.UtcNow,
+                Summary = "Test1",
+                Content = "test",
+                WarningTypeName = "NavArea"
+            };
             _fakeLogger = A.Fake<ILogger<RnwService>>();
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeRnwRepository = A.Fake<IRnwRepository>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
+            
 
             _rnwService = new RnwService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);
         }
@@ -142,5 +155,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
         #endregion
 
+
+        #region Edit Radio Navigational Warning
+        [Test]
+        public async Task WhenPostValidRequest_ThenReturnTrue()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarningsAdminList.DateTimeGroup = _fakeDateTime;
+            A.CallTo(() => _fakeRnwRepository.GetWarningType(_fakeRadioNavigationalWarningsAdminList)).Returns(1);
+            bool result = await _rnwService.EditRadioNavigationWarningsRecord(_fakeRadioNavigationalWarningsAdminList, CorrelationId);
+
+            Assert.IsTrue(result);
+        }
+        #endregion
     }
 }

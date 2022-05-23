@@ -14,5 +14,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         RadioNavigationalWarningsAdminList EditRadioNavigation(int id);
 
         Task AddRadioNavigationWarning(RadioNavigationalWarningsAdminList radioNavigationalWarning);
+
+        int GetWarningType(RadioNavigationalWarningsAdminList radioNavigationalWarning);
     }
 }

@@ -52,55 +52,48 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return years;
         }
 
+        #region Edit Radio Navigational Warning
         public RadioNavigationalWarningsAdminList EditRadioNavigation(int id)
         {
-            try
-            {
-                var rnwWarnings = _context.Set<RadioNavigationalWarnings>().Find(id);
+                RadioNavigationalWarnings rnwWarnings = _context.Set<RadioNavigationalWarnings>().Find(id);
                 RadioNavigationalWarningsAdminList rnwList = new RadioNavigationalWarningsAdminList();
                 rnwList.Id = rnwWarnings.Id;
-                var WarningName = _context.WarningType.Where(x => x.Id == rnwWarnings.WarningType).FirstOrDefault().Name;
+                string WarningName = _context.WarningType.Where(x => x.Id == rnwWarnings.WarningType).FirstOrDefault().Name;
                 rnwList.WarningTypeName = WarningName;
                 rnwList.Reference = rnwWarnings.Reference;
                 rnwList.DateTimeGroup = rnwWarnings.DateTimeGroup;
-                 rnwList.DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup);
+                rnwList.DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup);
                 rnwList.Summary = rnwWarnings.Summary;
                 rnwList.Content = RnwHelper.FormatContent(rnwWarnings.Content);
                 rnwList.ExpiryDate = rnwWarnings.ExpiryDate;
-                 rnwList.ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate);
-                rnwList.IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No";
-                
-                return rnwList;
-            }
-            catch (Exception ex)
-            {
+                rnwList.ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate);
+                rnwList.IsDeleted = rnwWarnings.IsDeleted ? "true" : "false";
 
-                throw;
-            }
-            
-                      
+                return rnwList;
         }
 
         public async Task AddRadioNavigationWarning(RadioNavigationalWarningsAdminList radioNavigationalWarningAdminList)
         {
-            RadioNavigationalWarnings rnwList = new RadioNavigationalWarnings();
-            rnwList.Id = radioNavigationalWarningAdminList.Id;
-            //var WarningName = _context.WarningType.Where(x => x.Id == rnwWarnings.WarningType).FirstOrDefault().Name;
-            var warningType = _context.WarningType.Where(x=>x.Name == radioNavigationalWarningAdminList.WarningTypeName).FirstOrDefault().Id;
-            rnwList.WarningType = warningType;
-            rnwList.Reference = radioNavigationalWarningAdminList.Reference;
-            rnwList.DateTimeGroup = radioNavigationalWarningAdminList.DateTimeGroup;
-            //rnwList.DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(radioNavigationalWarningAdminList.DateTimeGroup);
-            rnwList.Summary = radioNavigationalWarningAdminList.Summary;
-            rnwList.Content = RnwHelper.FormatContent(radioNavigationalWarningAdminList.Content);
-            rnwList.ExpiryDate = radioNavigationalWarningAdminList.ExpiryDate;
-            //rnwList.ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate);
-            //rnwList.IsDeleted = radioNavigationalWarningAdminList.IsDeleted ? "Yes" : "No";
-            _context.Update(rnwList);
-           
-            
-            await _context.SaveChangesAsync();
+                RadioNavigationalWarnings rnwList = new RadioNavigationalWarnings();
+                rnwList.Id = radioNavigationalWarningAdminList.Id;
+                int warningType = _context.WarningType.Where(x => x.Name == radioNavigationalWarningAdminList.WarningTypeName).FirstOrDefault().Id;
+                rnwList.WarningType = warningType;
+                rnwList.Reference = radioNavigationalWarningAdminList.Reference;
+                rnwList.DateTimeGroup = radioNavigationalWarningAdminList.DateTimeGroup;
+                rnwList.Summary = radioNavigationalWarningAdminList.Summary;
+                rnwList.Content = RnwHelper.FormatContent(radioNavigationalWarningAdminList.Content);
+                rnwList.ExpiryDate = radioNavigationalWarningAdminList.ExpiryDate;
+                rnwList.IsDeleted = bool.Parse(radioNavigationalWarningAdminList.IsDeleted);
+                _context.Update(rnwList);
+                await _context.SaveChangesAsync();
         }
+
+        public int GetWarningType(RadioNavigationalWarningsAdminList radioNavigationalWarningAdminList)
+        {
+            var x = _context.WarningType.Select(x => x.Name).ToList();
+            return _context.WarningType.Where(x => x.Name == radioNavigationalWarningAdminList.WarningTypeName).FirstOrDefault().Id;
+        }
+        #endregion Edit Radio Navigational Warning
 
 
     }

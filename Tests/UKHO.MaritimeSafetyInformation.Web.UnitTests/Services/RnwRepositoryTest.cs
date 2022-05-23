@@ -15,6 +15,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     {
         private RnwRepository _rnwRepository;
         private RadioNavigationalWarningsContext _fakeContext;
+        private RadioNavigationalWarningsAdminList _fakeRadioNavigationalWarningAdminList;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -32,6 +33,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void SetUp()
         {
             _rnwRepository = new RnwRepository(_fakeContext);
+            _fakeRadioNavigationalWarningAdminList = new()
+            {
+                Id = 1,
+                WarningType = 1,
+                WarningTypeName = "NAVAREA 1",
+                Reference = "test",
+                DateTimeGroup = DateTime.UtcNow,
+                Summary = "Test1",
+                Content = "test",
+                IsDeleted = "false",
+            };
+           
         }
 
         [Test]
@@ -154,5 +167,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             return warningTypeList;
         }
         #endregion
+
+        #region Edit Radio Navigation Warning
+        [Test]
+        public void WhenCallEditRadioNavigationWarningsMethod_ThenUpdateRNWRecord()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarningAdminList.DateTimeGroup = dateTime;
+            Task result = _rnwRepository.AddRadioNavigationWarning(_fakeRadioNavigationalWarningAdminList);
+            Assert.IsTrue(result.IsCompleted);
+        }
+
+        #endregion Edit Radio Navigation Warning
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -55,5 +56,30 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
                 Years = new List<string>() { "2020", "2021" },
             };
         }
+
+        #region Edit RadioNavigation
+        [Test]
+        public void WhenICallEditView_ThenReturnView()
+        {
+            int id = 5;
+            Task<IActionResult> result = _controller.Edit(id);
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+        }
+
+        [Test]
+        public void WhenEditRadioNavigationWarningsReturnTrueInRequest_ThenRecordIsUpdated()
+        {
+            int id = 5;
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
+            _controller.TempData = tempData;
+
+            A.CallTo(() => _fakeRnwService.EditRadioNavigationWarningsRecord(A<RadioNavigationalWarningsAdminList>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Edit(id, new RadioNavigationalWarningsAdminList( ) { Id = 5});
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());
+        }
+        #endregion
     }
 }
