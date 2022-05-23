@@ -58,7 +58,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList()
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
-                     join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
+                     join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
                      where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
                      {
