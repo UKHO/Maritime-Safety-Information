@@ -62,7 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddHttpClient();
 
             services.AddHealthChecks()
-                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
         }
