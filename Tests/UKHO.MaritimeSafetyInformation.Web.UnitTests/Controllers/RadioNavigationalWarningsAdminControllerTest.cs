@@ -31,6 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
 
+
         [Test]
         public void WhenICallIndexView_ThenReturnView()
         {

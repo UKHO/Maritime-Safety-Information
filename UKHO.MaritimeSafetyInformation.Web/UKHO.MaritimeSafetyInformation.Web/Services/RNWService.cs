@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
@@ -109,6 +109,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<WarningType>> GetWarningTypes()
         {
             return await _rnwRepository.GetWarningTypes();
+        }
+
+        public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsData(string correlationId)
+        {
+            try
+            {
+                _logger.LogInformation(EventIds.RNWListDetailFromDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW details from database started for _X-Correlation-ID:{correlationId}", correlationId);
+
+                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList();
+
+                _logger.LogInformation(EventIds.RNWListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW details from database completed for _X-Correlation-ID:{correlationId}", correlationId);
+
+                return radioNavigationalWarningsData;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ErrorInRNWListDetailFromDatabase.ToEventId(), ex, "Maritime safety information error has occurred in the process to get RNW detail from database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                throw;
+            }
         }
     }
 }

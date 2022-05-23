@@ -117,3 +117,10 @@
         </div>
     }
 </div>
+@{
+    if (TempData["message"] != null) {
+    <script type="text/javascript">
+        alert(@Html.Raw(Json.Serialize(TempData["message"])));
+    </script>
+        }
+}

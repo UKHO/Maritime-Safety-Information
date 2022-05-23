@@ -266,6 +266,26 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910063 - Request For FSS To Get Single Weekly NM File Failed.
         /// </summary>
         FSSGetSingleWeeklyNMFileResponseFailed = 910063,
+        /// <summary> 
+        /// 910064 -  Maritime safety information request to get RNW detail started.
+        /// </summary>
+        RNWListDetailStarted = 910064,
+        /// <summary> 
+        /// 910065 -  Maritime safety information request to get RNW detail completed.
+        /// </summary>
+        RNWListDetailCompleted = 910065,
+        /// <summary> 
+        /// 910066 -  Maritime safety information request to get RNW detail from database started.
+        /// </summary>
+        RNWListDetailFromDatabaseStarted = 910066,
+        /// <summary> 
+        /// 910067 -  Maritime safety information request to get RNW detail from database Completed.
+        /// </summary>
+        RNWListDetailFromDatabaseCompleted = 910067,
+        /// <summary> 
+        /// 910068 -  Maritime safety information error has occurred in the process to get RNW detail from database.
+        /// </summary>
+        ErrorInRNWListDetailFromDatabase = 910068
     }
 
     public static class EventIdExtensions

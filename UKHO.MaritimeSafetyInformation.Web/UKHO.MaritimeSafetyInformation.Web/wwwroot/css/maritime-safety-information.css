@@ -259,7 +259,38 @@
   flex-basis: 35%;
 }
 
-a:focus, button:focus, .form-select:focus, .form-control:focus {
+.rnw-allwarnings-table thead tr th.th-1 {
+  flex-basis: 64%;
+}
+.rnw-allwarnings-table thead tr th.th-2 {
+  flex-basis: 94%;
+}
+.rnw-allwarnings-table thead tr th.th-4 {
+  flex-basis: 77%;
+}
+.rnw-allwarnings-table thead tr th.th-5 {
+  flex-basis: 38%;
+}
+.rnw-allwarnings-table tbody tr td.td-1 {
+  flex-basis: 60%;
+}
+.rnw-allwarnings-table tbody tr td.td-2 {
+  flex-basis: 90%;
+}
+.rnw-allwarnings-table tbody tr td.td-4 {
+  flex-basis: 70%;
+}
+.rnw-allwarnings-table tbody tr td.td-5 {
+  flex-basis: 30%;
+}
+.rnw-allwarnings-table tbody tr td a {
+  font-weight: 300;
+}
+.rnw-allwarnings-table tbody.scroll-content {
+  max-height: 88vh !important;
+}
+
+a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
@@ -336,6 +367,14 @@ table td {
   font-weight: 300;
 }
 
+.hidden-caption {
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  margin-top: -1px;
+}
+
 .form-label {
   margin-bottom: 0.5rem !important;
   font-size: 16px;
@@ -391,6 +430,26 @@ button:active {
   font-size: 16px;
 }
 
+.form-check-input {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #09315b;
+}
+.form-check-input[type=checkbox] {
+  border-radius: 0;
+}
+.form-check-input:checked {
+  background-color: #ffffff;
+  border-color: #09315b;
+  color: #09315b;
+}
+.form-check-input:checked[type=checkbox] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2309315b' class='bi bi-check' viewBox='0 0 16 16'%3E%3Cpath d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z'/%3E%3C/svg%3E");
+}
+.form-check-input:focus {
+  border-color: #09315b;
+}
+
 .pagination {
   margin: 0;
 }
@@ -437,14 +496,11 @@ button:active {
   display: block;
   position: relative;
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .table-scroll tbody.scroll-content {
   max-height: 54vh;
-  padding-right: 4px;
-}
-.table-scroll tbody td a {
-  font-weight: 300;
+  padding-right: 2px;
 }
 .table-scroll tr {
   width: 100%;
@@ -487,7 +543,6 @@ button:active {
   font-size: 16px;
   padding: 0.5rem;
   color: #09315b;
-  font-weight: 400;
   display: inline-block;
 }
 @media screen and (max-width: 1200px) {

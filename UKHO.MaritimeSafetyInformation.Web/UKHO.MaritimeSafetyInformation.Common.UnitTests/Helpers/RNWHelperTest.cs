@@ -31,6 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.AreEqual(content, result);
             Assert.IsTrue(!result.Contains("..."));
         }
+
         [Test]
         public void WhenCallFormatContentWithContentLengthEqual300Char_ThenDoNotWrapTheContent()
         {

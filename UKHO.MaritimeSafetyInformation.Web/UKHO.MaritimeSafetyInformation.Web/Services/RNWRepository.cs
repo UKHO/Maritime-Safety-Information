@@ -54,5 +54,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                 .Select(p => p.DateTimeGroup.Year.ToString())
                                 .Distinct().ToListAsync();
         }
+
+        public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList()
+        {
+            return await (from rnwWarnings in _context.RadioNavigationalWarnings
+                     join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
+                     where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
+                          select new RadioNavigationalWarningsData
+                     {
+                         Reference = rnwWarnings.Reference,
+                         DateTimeGroup = rnwWarnings.DateTimeGroup,
+                         Description = rnwWarnings.Summary,
+                         DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
+                     }).OrderByDescending(a => a.DateTimeGroup)
+                     .ToListAsync();
+        }
     }
 }
