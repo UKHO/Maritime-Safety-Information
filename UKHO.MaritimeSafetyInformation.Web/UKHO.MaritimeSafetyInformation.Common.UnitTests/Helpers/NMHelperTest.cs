@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 {
     public class NMHelperTest
     {
+
         [Test]
         public void WhenNMHelperCallsListFilesResponse_ThenConversionIsCorrect()
         {
@@ -193,6 +196,45 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             string actualDate = NMHelper.GetFormattedDate(strDate);
             const string expectedDate = "26-05-22";
             Assert.AreEqual(expectedDate, actualDate);
+        }
+
+        [Test]
+        public void WhenGetFormattedDateIsCalled_ThenShouldReturnEmptyString()
+        {
+            const string strDate = "";
+            string actualDate = NMHelper.GetFormattedDate(strDate);
+            const string expectedDate = "";
+            Assert.AreEqual(expectedDate, actualDate);
+        }
+
+        [Test]
+        public void  WhenValidateParametersForDownloadSingleFileIsCalled_ThenShouldThrowException()
+        {
+            List<KeyValuePair<string, string>> parameters = new()
+            {
+                new KeyValuePair<string, string>("BatchId", null),
+                new KeyValuePair<string, string>("FileName", "test.txt"),
+                new KeyValuePair<string, string>("MimeType", "application/pdf")
+            };
+
+            ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
+            
+            Assert.Throws<ArgumentNullException>(() =>NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
+        }
+
+        [Test]
+        public void WhenValidateParametersForDownloadSingleFileIsCalled_ThenShouldNotThrowException()
+        {
+            List<KeyValuePair<string, string>> parameters = new()
+            {
+                new KeyValuePair<string, string>("BatchId", "Affsd-asd-asda"),
+                new KeyValuePair<string, string>("FileName", "test.txt"),
+                new KeyValuePair<string, string>("MimeType", "application/pdf")
+            };
+
+            ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
+
+            Assert.DoesNotThrow(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()

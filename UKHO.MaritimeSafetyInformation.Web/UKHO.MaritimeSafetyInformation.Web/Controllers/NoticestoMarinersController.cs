@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -10,10 +11,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         private readonly ILogger<NoticesToMarinersController> _logger;
         private readonly INMDataService _nMDataService;
+        private readonly IHttpContextAccessor _contextAccessor;
         public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<IActionResult> Index()
@@ -86,5 +89,35 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", showDailyFilesResponseModels);
 
         }
+
+        public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
+        {
+            NMHelper.ValidateParametersForDownloadSingleFile(new()
+            {
+                new KeyValuePair<string, string>("BatchId", batchId),
+                new KeyValuePair<string, string>("FileName", fileName),
+                new KeyValuePair<string, string>("MimeType", mimeType)
+            },GetCurrentCorrelationId(),_logger);
+
+            try
+            {
+                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download single weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename=" + fileName);
+
+                return File(fileBytes, mimeType);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.DownloadSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to download single weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
+            }
+        }
+
+        
     }
 }

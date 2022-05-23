@@ -215,27 +215,77 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
         /// </summary>
-        GetWeeklyFilesResponseCompleted = 910053,        
-        /// <summary> 
-        /// 910054 -  Maritime safety information request to get RNW detail started.
+        GetWeeklyFilesResponseCompleted = 910053,
+
+        /// <summary>
+        /// 910054 -Request For Download Single Weekly NM File Started.
         /// </summary>
-        RNWListDetailStarted = 910054,
-        /// <summary> 
-        /// 910055 -  Maritime safety information request to get RNW detail completed.
+        DownloadSingleWeeklyNMFileStarted = 910054,
+
+        /// <summary>
+        /// 910055 -Request For Download Single Weekly NM File Completed.
         /// </summary>
-        RNWListDetailCompleted = 910055,
-        /// <summary> 
-        /// 910056 -  Maritime safety information request to get RNW detail from database started.
+        DownloadSingleWeeklyNMFileCompleted= 910055,
+
+        /// <summary>
+        /// 910056 -Download Single Weekly NM File Called With Invalid Arguments.
         /// </summary>
-        RNWListDetailFromDatabaseStarted = 910056,
-        /// <summary> 
-        /// 910057 -  Maritime safety information request to get RNW detail from database Completed.
+        DownloadSingleWeeklyNMFileInvalidParameter = 910056,
+
+        /// <summary>
+        /// 910057 -Download Single Weekly NM File Failed.
         /// </summary>
-        RNWListDetailFromDatabaseCompleted = 910057,
-        /// <summary> 
-        /// 910058 -  Maritime safety information error has occurred in the process to get RNW detail from database.
+        DownloadSingleWeeklyNMFileFailed = 910057,
+
+        /// <summary>
+        /// 910058 - Request To Get Single Weekly NM File Started.
         /// </summary>
-        ErrorInRNWListDetailFromDatabase = 910058
+        GetSingleWeeklyNMFileStarted = 910058,
+
+        /// <summary>
+        /// 910059 - Request To Get Single Weekly NM File Completed.
+        /// </summary>
+        GetSingleWeeklyNMFileCompleted = 910059,
+
+        /// <summary>
+        /// 910060 - Request To Get Single Weekly NM File Failed.
+        /// </summary>
+        GetSingleWeeklyNMFileFailed = 910060,
+
+        /// <summary>
+        /// 910061 - Request For FSS To Get Single Weekly NM File Started.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileStarted = 910061,
+
+        /// <summary>
+        /// 910062 - Request For FSS To Get Single Weekly NM File Completed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileCompleted = 910062,
+
+        /// <summary>
+        /// 910063 - Request For FSS To Get Single Weekly NM File Failed.
+        /// </summary>
+        FSSGetSingleWeeklyNMFileResponseFailed = 910063,
+        /// <summary> 
+        /// 910064 -  Maritime safety information request to get RNW detail started.
+        /// </summary>
+        RNWListDetailStarted = 910064,
+        /// <summary> 
+        /// 910065 -  Maritime safety information request to get RNW detail completed.
+        /// </summary>
+        RNWListDetailCompleted = 910065,
+        /// <summary> 
+        /// 910066 -  Maritime safety information request to get RNW detail from database started.
+        /// </summary>
+        RNWListDetailFromDatabaseStarted = 910066,
+        /// <summary> 
+        /// 910067 -  Maritime safety information request to get RNW detail from database Completed.
+        /// </summary>
+        RNWListDetailFromDatabaseCompleted = 910067,
+        /// <summary> 
+        /// 910068 -  Maritime safety information error has occurred in the process to get RNW detail from database.
+        /// </summary>
+        ErrorInRNWListDetailFromDatabase = 910068
     }
 
     public static class EventIdExtensions
