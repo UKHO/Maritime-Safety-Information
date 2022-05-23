@@ -19,7 +19,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public readonly RadioNavigationalWarningsContext _fakeContext;
         public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
         public IHttpContextAccessor _fakeHttpContextAccessor;
-        public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         public ILogger<RNWRepository> _fakeLoggerRnwRepository;
         public ILogger<RNWService> _fakeLoggerRnwService;
 
@@ -30,7 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
             _fakeLoggerRnwRepository = A.Fake<ILogger<RNWRepository>>();
             _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
@@ -76,6 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
                 IsDeleted = true,
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -84,7 +83,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2019, 1, 1),
+
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -93,7 +94,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -102,7 +104,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -111,7 +114,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -120,7 +124,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
-                Content = "RnwAdminListContent"
+                Content = "RnwAdminListContent",
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -130,6 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 DateTimeGroup = new DateTime(2023, 1, 1),
                 Summary = "NORTHEAST ATLANTIC. Outer Hebrides Westwards. Live weapons firing in progress.",
                 Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224.",
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
 
             radioNavigationalWarningList.Add(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning()
@@ -145,6 +151,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                  + "including those which are no longer being broadcast, are reprinted in Section III of ANMB in weeks 1, 13, 26 and 39"
                  + "and are also available from the UKHO website at: www.admiralty.co.uk/RNW.  Alternatively, these may be requested by"
                  + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22.",
+                ExpiryDate = new DateTime(2099, 1, 1),
             });
             return radioNavigationalWarningList;
         }

@@ -1,5 +1,7 @@
 ﻿
+using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
@@ -10,9 +12,10 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
-    [TestFixture()]
-    public class RadioNavigationalWarningsAdminTests : RNWTestHelper
+    [TestFixture]
+    public class RadioNavigationalWarningAdminTests : RNWTestHelper
     {
+        public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
 
@@ -28,6 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         [SetUp]
         public void Setup()
         {
+            _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
             _rnwRepository = new RNWRepository(_fakeContext);
             _rnwService = new RNWService(_rnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
 
@@ -110,10 +114,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
             IActionResult result = await _controller.Index(1, null, null);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(5,adminListFilter.RadioNavigationalWarningsAdminList.Count);
-            Assert.AreEqual(2,adminListFilter.PageCount);
-            Assert.AreEqual(0,adminListFilter.SrNo);
-            Assert.AreEqual(1,adminListFilter.CurrentPageIndex);
+            Assert.AreEqual(5, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(2, adminListFilter.PageCount);
+            Assert.AreEqual(0, adminListFilter.SrNo);
+            Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
         }
 
         [Test]
@@ -130,9 +134,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, 2020);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(2,adminListFilter.RadioNavigationalWarningsAdminList.Count);
-            Assert.AreEqual("Yes",adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
-            Assert.AreEqual("No",adminListFilter.RadioNavigationalWarningsAdminList[1].IsDeleted);
+            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual("Yes", adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
+            Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[1].IsDeleted);
         }
 
         [Test]
