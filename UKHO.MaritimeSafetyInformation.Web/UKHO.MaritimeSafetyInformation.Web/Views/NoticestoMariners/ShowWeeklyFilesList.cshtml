@@ -3,33 +3,38 @@
 @{
     var a = Model;
 }
-<table class="table table-striped">
 
-    @if (Model != null && Model.Count > 0)
-    {
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
+        <caption class="hidden-caption">Notice to Mariners Weekly Updates</caption>
         <thead>
             <tr>
-                <td>File Name</td>
-                <td>File Size</td>
+                <th>File Name</th>
+                <th>File Size</th>
+                <th class="th-3"><span class="visually-hidden">Action</span></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
+        <tbody class="scroll-content scroll-bar">
+            @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
-                    <td><a href="#">@item.FileDescription</a></td>
-                    <td>@item.FileSizeinKB (@item.FileExtension)</td>
+                    <td id="filename_@i">@Model[i].FileDescription</td>
+                    <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
+                    <td class="td-3 justify-content-center" id="download_@i"><a href="#">Download</a></td>
                 </tr>
             }
         </tbody>
-    }
-    else
-    {
-        <tbody>
-            <tr>
-                <td colspan='3'>No data found!!!</td>
-            </tr>
-        </tbody>
-    }
+    </table>
+}
+else
+{
+    <div class="alert alert-danger" role="alert" aria-atomic="true">
+        <i class="bi bi-exclamation-lg" aria-hidden="true"></i>
+        <div class="alert-head">There’s a problem</div>
+        <p>It looks like there might be a problem with our system. We’re sorry for the inconvenience. If the problem persists contact <a href="mailto:customerservices@ukho.gov.uk">customerservices@ukho.gov.uk</a></p>
+    </div>
+}
 
-</table>
+
+

@@ -1,83 +1,108 @@
-﻿//Document ready 
+﻿var yearweekdata;
+let onload = false;
+var ddlselectedyear;
+var ddlselectedweek;
+
 $(function () {
 
-    if ($('#hdnRequestType').val() === "Daily") {
+    if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Daily") {
         ShowDailyFilesAsync();
     }
     else {
-        LoadYears();
-        $("#ddlYears").change(function () {
-            LoadWeeks($("#ddlYears").val());
+        if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
+            ddlselectedyear = document.getElementById('hdnYear').value;
+        }
+
+        if (document.getElementById('hdnWeek').value != undefined && document.getElementById('hdnWeek').value != null && document.getElementById('hdnWeek').value != '') {
+            ddlselectedweek = document.getElementById('hdnWeek').value;
+        }
+
+        if ((ddlselectedyear != undefined && ddlselectedyear != '') && (ddlselectedweek != undefined && ddlselectedweek != '')) {
+            LoadData(yearweekdata)
+        }
+        $('#ddlYears').change(function () {
+            GetCorrespondingWeeks($('#ddlYears').val(), yearweekdata);
         });
-        $("#ddlWeeks").change(function () {
-            ShowWeeklyFilesAsync();
+
+        $('#ddlWeeks').change(function () {
+            if (document.getElementById('ddlYears').selectedIndex != 0 && document.getElementById('ddlWeeks').selectedIndex != 0)
+                this.form.submit();
+            else
+                return false;
         });
     }
 });
 
-function LoadYears() {
-    $.ajax({
-        url: '/NoticesToMariners/LoadYears',
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-            $('#ddlYears').empty();
-            $.each(data, function (i, data) {
-                var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
-                $(div_data).appendTo('#ddlYears');
-                let curYear = new Date().getFullYear()
-                $('#ddlYears').val(curYear);
-                LoadWeeks(curYear);
+function LoadData(data) {
+    yearweekdata = data;
+    onload = true;
+    var selectedyear;
 
-            });
-        },
-        error: function (error) {
-            console.log(`Error ${error}`);
+    if (yearweekdata != undefined && yearweekdata.length > 0) {
+        $('#ddlYears').empty();
+        var yeardata = getUniqueYearandWeeks(data, 'Year', 'Y').sort()
+        var defaultYear = '<option value="0" selected>Select year</option>'
+        $(defaultYear).appendTo('#ddlYears');
+        for (i = 0; i < yeardata.length; i++) {
+            var year = '<option>' + yeardata[i] + '</option>'
+            $(year).appendTo('#ddlYears');
         }
-    });
-}
-
-function LoadWeeks(selectedYear) {
-    if (selectedYear != "") {
-        $.ajax({
-            url: '/NoticesToMariners/LoadWeeks',
-            type: "POST",
-            data: {
-                year: parseInt(selectedYear)
-            },
-            dataType: "json",
-            success: function (data) {
-                $('#ddlWeeks').empty();
-                $.each(data, function (i, data) {
-                    var div_data = "<option value=" + data.value + ">" + data.key + "</option>";
-                    $(div_data).appendTo('#ddlWeeks');
-                });
-            },
-            error: function (error) {
-                console.log(`Error ${error}`);
+        if (onload) {
+            if (ddlselectedyear != undefined && ddlselectedyear != '') {
+                selectedyear = ddlselectedyear;
             }
-        });
+            else {
+                selectedyear = yeardata[yeardata.length - 1];
+            }
+            $('#ddlYears').val(selectedyear);
+        }
+        else {
+            $('#ddlYears').val('Select year');
+        }
+        GetCorrespondingWeeks(selectedyear, data);
     }
 }
 
-function ShowWeeklyFilesAsync() {
-    let selectedYear = $('#ddlYears').val();
-    let selectedWeek = $('#ddlWeeks').val();
-    if (selectedYear != "" && selectedWeek != "") {
-        $.ajax({
-            url: '/NoticesToMariners/ShowWeeklyFiles',
-            type: "POST",
-            data: {
-                year: parseInt(selectedYear),
-                week: parseInt(selectedWeek)
-            },
-            success: function (data) {
-                $('#divFilesList').html(data);
-            },
-            error: function (error) {
-                console.log(`Error ${error}`);
-            }
-        });
+function getUniqueYearandWeeks(arr, prop, type) {
+    if (type == 'Y') {
+        return arr.reduce((a, d) => {
+            if (!a.includes(d[prop])) { a.push(d[prop]); }
+            return a;
+        }, []);
+    }
+    else if (type == 'W') {
+        return arr.reduce((a, d) => {
+            if (d.Year == prop) { a.push(d.Week); }
+            return a;
+        }, []);
+    }
+}
+
+function GetCorrespondingWeeks(id, data) {
+    $('#ddlWeeks').empty();
+    var weekdata = getUniqueYearandWeeks(data, id, 'W').sort(function (a, b) { return a - b });
+
+    var defaultweek = '<option value="0" selected>Select week</option>'
+    $(defaultweek).appendTo('#ddlWeeks');
+
+    for (i = 0; i < weekdata.length; i++) {
+        var week = '<option>' + weekdata[i] + '</option>'
+        $(week).appendTo('#ddlWeeks');
+    }
+
+    if (onload) {
+        if (ddlselectedweek != undefined && ddlselectedweek != '') {
+            $('#ddlWeeks').val(ddlselectedweek);
+        }
+        else {
+            var selectedweek = weekdata[weekdata.length - 1];
+            $('#ddlWeeks').val(selectedweek);
+        }
+
+        onload = false;
+    }
+    else {
+        $('#ddlWeeks').val('0');
     }
 }
 
@@ -94,4 +119,3 @@ function ShowDailyFilesAsync() {
         }
     });
 }
-
