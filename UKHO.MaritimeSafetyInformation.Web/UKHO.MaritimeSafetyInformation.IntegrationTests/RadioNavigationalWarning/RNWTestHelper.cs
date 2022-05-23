@@ -14,7 +14,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning
 {
-    public class RnwTestsHelper
+    public class RNWTestHelper
     {
         public readonly RadioNavigationalWarningsContext _fakeContext;
         public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public ILogger<RNWRepository> _fakeLoggerRnwRepository;
         public ILogger<RNWService> _fakeLoggerRnwService;
 
-        public RnwTestsHelper()
+        public RNWTestHelper()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                                     .UseInMemoryDatabase("msi-in-db");

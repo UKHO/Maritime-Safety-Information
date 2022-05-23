@@ -11,7 +11,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
     [TestFixture()]
-    public class RadioNavigationalWarningsAdminTests : RnwTestsHelper
+    public class RadioNavigationalWarningsAdminTests : RNWTestHelper
     {
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
