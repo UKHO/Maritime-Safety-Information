@@ -169,13 +169,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
 
-                byte[] fileBytes = new byte[stream.Length];
-                int receivedFileBytes =  await stream.ReadAsync(fileBytes);
+                byte[] fileBytes = new byte[stream.Length + 10];
+                //int receivedFileBytes =  await stream.ReadAsync(fileBytes);
 
-                if (receivedFileBytes < stream.Length)
+                int numBytesToRead = (int)stream.Length;
+                int numBytesRead = 0;
+                do
                 {
-                    throw new InvalidDataException("Incomplete Data received.", new Exception());
-                }
+                    int n = stream.Read(fileBytes, numBytesRead, 10);
+                    numBytesRead += n;
+                    numBytesToRead -= n;
+                } while (numBytesToRead > 0);
+                stream.Close();
 
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
