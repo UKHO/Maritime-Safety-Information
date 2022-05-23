@@ -63,6 +63,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             Task<List<WarningType>> warningTypeList = _rnwRepository.GetWarningTypes();
 
+            Assert.IsNotNull(warningTypeList);
+            Assert.IsInstanceOf(typeof(Task<List<WarningType>>), warningTypeList);
             Assert.AreEqual(1, warningTypeList.Result[0].Id);
             Assert.AreEqual("NAVAREA 1", warningTypeList.Result[0].Name);
         }
