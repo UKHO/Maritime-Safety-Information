@@ -6,15 +6,6 @@
     bool isLastPage = Model.CurrentPageIndex == Model.PageCount;
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
-<style>
-    .disabled-link {
-        pointer-events: none;
-    }
-
-    .enabled-link {
-        pointer-events: auto;
-    }
-</style>
 <div class="container-fluid">
     <h1>Radio Navigational Warnings Admin List</h1>
     <div class="row">
@@ -120,13 +111,11 @@
     }
     else
     {
-
         <div id="MsgBoxAlert" class="alert alert-primary p-4" role="alert">
             <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
             <h5>No Record Found.</h5>
         </div>
     }
-
 </div>
 @{
     if (TempData["message"] != null) {
