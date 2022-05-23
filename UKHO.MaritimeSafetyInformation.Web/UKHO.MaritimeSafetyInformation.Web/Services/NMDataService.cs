@@ -170,7 +170,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
 
                 byte[] fileBytes = new byte[stream.Length + 10];
-                //int receivedFileBytes =  await stream.ReadAsync(fileBytes);
 
                 int numBytesToRead = (int)stream.Length;
                 int numBytesRead = 0;
