@@ -368,7 +368,7 @@ stages:
         displayName: "QA Functional Automated And Accessibility Tests"
         variables: 
          url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteURL']  ]
-         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
+         rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
