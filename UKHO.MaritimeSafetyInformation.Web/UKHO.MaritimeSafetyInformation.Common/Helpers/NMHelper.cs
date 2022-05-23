@@ -90,11 +90,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 if (string.IsNullOrEmpty(parameter.Value))
                 {
-                    string message = $"Maritime safety information download single NM files called with invalid argument {parameter.Key}:{{{parameter.Key}}} for _X-Correlation-ID:{{correlationId}}";
-                    logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
-                                          message,
-                                          parameter.Value,
-                                          correlationId);
+                    logger.LogInformation(
+                        EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
+                        "Maritime safety information download single NM files called with invalid argument "+ parameter.Key + ":{" + parameter.Key +"} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
             }

@@ -296,7 +296,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenDownloadFssFileAsyncIsThrowsException_ThenShouldExecuteCatch()
+        public void WhenDownloadFssFileAsyncThrowsException_ThenShouldExecuteCatch()
         {
             const string batchId = "";
             const string filename = "";
@@ -307,6 +307,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
             Assert.IsTrue(result.IsFaulted);
         }
+
+        [Test]
+        public void WhenDownloadFssFileAsyncThrowsIncompleteDataException_ThenShouldExecuteCatch()
+        {
+            const string batchId = "";
+            const string filename = "";
+            const string accessToken = "";
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(batchId, filename, accessToken, CorrelationId)).Returns(stream);
+
+            byte[] fileBytes = new byte[stream.Length];
+            int receivedFileBytes =  stream.Read(fileBytes)-1;
+
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            Assert.IsTrue(result.IsFaulted);
+        }
+
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()
