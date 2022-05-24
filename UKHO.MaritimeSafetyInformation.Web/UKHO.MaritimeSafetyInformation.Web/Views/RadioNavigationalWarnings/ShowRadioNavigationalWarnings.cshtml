@@ -50,7 +50,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="scroll-content scroll-bar">
+                <tbody class="scroll-content scroll-bar accordianTable" id="accordionAllwarning">
                     @foreach (var item in Model) {
                         <tr>
                             <td id="Reference" class="td-1">
@@ -63,10 +63,18 @@
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td id="Viewdetails" class="td-4 justify-content-center">
-                                @Html.ActionLink("View details", "View details", new { /* id=item.PrimaryKey */ })
+                                @*@Html.ActionLink("View details", "View details", new { /* id=item.PrimaryKey */ })*@
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_0" aria-expanded="true" aria-controls="collapse_0">
+                                    details
+                                </button>
                             </td>
                             <td id="checkbox" class="td-5 justify-content-center">
                                 <input type="checkbox" name="name2" class="form-check-input" aria-label="Select" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" id="collapse_0" class="accordion-collapse collapse" data-bs-parent="#accordionAllwarning">
+                                Data binding here
                             </td>
                         </tr>
                     }
