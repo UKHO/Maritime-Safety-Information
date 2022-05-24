@@ -22,6 +22,7 @@ steps:
       DeploymentAction: "Publish"
       IpDetectionMethod: "AutoDetect"
       DacpacFile: $(Build.SourcesDirectory)/DACPAC/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
+      additionalArguments: '/p:BlockOnPossibleDataLoss=false'
 
   - task: DownloadPipelineArtifact@2
     displayName: "Download App service Artifact"
