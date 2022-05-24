@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
@@ -16,19 +17,22 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
-    class NoticeToMarinersControllersTest : NmTestsHelper
+    class NoticeToMarinersControllersTest : NMTestHelper
     {
-        private INMDataService _nMDataService;
+       ////// private INMDataService _nMDataService;
 
         private NoticesToMarinersController _nMController;
-
+        private Configuration TestConfig { get; set; }
+        private FileShareServiceApiClient fileShareServiceApiClient;
         [SetUp]
         public void Setup()
         {
-            _nMDataService = new NMDataService(_fakeFileShareService, _fakeLoggerNMDataService, _fakeAuthFssTokenProvider);
-            //////// _nMController = new NoticesToMarinersController(_nMDataService, _fakeHttpContextAccessor, _fakeLogger);
-            IServiceCollection serviceCollection = BuildDefaultServiceCollection();
+             ////// _nMDataService = new NMDataService(_fakeFileShareService, _fakeLoggerNMDataService, _fakeAuthFssTokenProvider);
+            TestConfig = new Configuration();
 
+            fileShareServiceApiClient = new FileShareServiceApiClient(TestConfig.BaseUrl);
+            IServiceCollection serviceCollection = BuildDefaultServiceCollection();
+            
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(serviceProvider);
         }
@@ -43,7 +47,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ////////{
             ////////    HttpContext = context
             ////////};
-
+            Task<IResult<BatchAttributesSearchResponse>> fssResponse = fileShareServiceApiClient.BatchAttributeSearch(TestConfig.BaseUrl, TestConfig.BusinessUnit, TestConfig.ProductType);
+            Console.WriteLine(fssResponse.Result);
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showWeeklyFiles != null);
