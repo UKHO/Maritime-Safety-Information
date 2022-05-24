@@ -6,15 +6,15 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <!--<ItemGroup>
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>-->
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="7.3.1" />

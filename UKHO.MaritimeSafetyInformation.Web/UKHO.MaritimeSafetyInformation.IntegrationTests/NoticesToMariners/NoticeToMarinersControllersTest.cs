@@ -7,42 +7,49 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
+using UKHO.MaritimeSafetyInformation.Web;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
-    class NoticeToMarinersControllersTest : NMTestHelper
+    class NoticeToMarinersControllersTest 
     {
-       ////// private INMDataService _nMDataService;
+        readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
 
         private NoticesToMarinersController _nMController;
-        private Configuration TestConfig { get; set; }
-        private FileShareServiceApiClient fileShareServiceApiClient;
+       
         [SetUp]
         public void Setup()
-        {
-             ////// _nMDataService = new NMDataService(_fakeFileShareService, _fakeLoggerNMDataService, _fakeAuthFssTokenProvider);
-            TestConfig = new Configuration();
+        {         
+                     
+            _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);   
+        }
 
-            fileShareServiceApiClient = new FileShareServiceApiClient(TestConfig.BaseUrl);
-            IServiceCollection serviceCollection = BuildDefaultServiceCollection();
-            
-            ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(serviceProvider);
-            //////////A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            //////////_controller = new NoticesToMarinersController(_fakeNMService, _fakeContextAccessor, _fakeLogger);
+        [Test]
+        public async Task WhenCallIndexOnLoad_ThenReturnList()
+        {
+            _nMController.ControllerContext.HttpContext = new DefaultHttpContext();            
+            IActionResult result = await _nMController.Index();
+            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsTrue(showWeeklyFiles != null);
         }
 
         [Test]
         public async Task WhenCallIndex_ThenReturnList()
         {
             _nMController.ControllerContext.HttpContext = new DefaultHttpContext();
-            
-         //////   Task<IResult<BatchAttributesSearchResponse>> fssResponse = fileShareServiceApiClient.BatchAttributeSearch(TestConfig.BusinessUnit, TestConfig.ProductType);
-            
-            IActionResult result = await _nMController.Index();
+            IActionResult result = await _nMController.Index(2021, 30);
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showWeeklyFiles != null);
+        }
+
+        [Test]
+        public async Task WhenCallIndexWithIncorrectData_ThenReturnList()
+        {
+            _nMController.ControllerContext.HttpContext = new DefaultHttpContext();
+            IActionResult result = await _nMController.Index(2021, 08);
+            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsTrue(showWeeklyFiles.ShowFilesResponseList.Count == 0);
         }
     }
 }
