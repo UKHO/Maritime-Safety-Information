@@ -283,6 +283,12 @@
 .rnw-allwarnings-table tbody tr td.td-5 {
   flex-basis: 30%;
 }
+.rnw-allwarnings-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+.rnw-allwarnings-table tbody tr:nth-child(4n-1) {
+  background-color: #eef3f4;
+}
 .rnw-allwarnings-table tbody.scroll-content {
   max-height: 88vh !important;
 }
@@ -293,6 +299,7 @@
   display: inline-block;
   text-decoration: underline;
   color: #09315b;
+  background-color: transparent;
 }
 .accordianTable .accordion-button:hover, .accordianTable .accordion-button:active {
   border: 0;
@@ -313,6 +320,9 @@
 }
 .accordianTable .accordion-button::after {
   content: none;
+}
+.accordianTable tr td.accordion-collapse {
+  border-right: 0 !important;
 }
 
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
