@@ -118,6 +118,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
         }
 
-        
+        [HttpGet]
+        public IActionResult Leisure()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Resellers()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult About()
+        {
+            return View();
+        }
     }
 }

@@ -1,14 +1,31 @@
-﻿<ul class="nav flex-column msi-page-nav">
+﻿@using Microsoft.EntityFrameworkCore.Infrastructure.Internal
+<ul class="nav flex-column msi-page-nav">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Notices to Mariners</a>
+        <a href="@Url.Action("Index", "NoticesToMariners")"
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "true" : "")">
+            Notices to Mariners
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Leisure folios</a>
+        <a href="@Url.Action("Leisure", "NoticesToMariners")"
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" ? "true" : "")">
+            Leisure folios
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Value added resellers</a>
+        <a href="@Url.Action("Resellers", "NoticesToMariners")"
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" ? "true" : "")">
+            Value Added Resellers
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+        <a href="@Url.Action("About", "NoticesToMariners")"
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "true" : "")">
+            About
+        </a>
     </li>
 </ul>

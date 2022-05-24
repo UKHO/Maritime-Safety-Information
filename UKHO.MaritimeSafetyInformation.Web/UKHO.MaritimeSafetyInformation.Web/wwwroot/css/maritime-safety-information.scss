@@ -280,6 +280,19 @@ button {
     }
 }
 
+.callout {
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 0px solid;
+    border-left-width: .4rem;
+    background-color: $azurish-white;
+}
+
+.callout-important {
+    border-left-color: $ocean-boat-blue;
+}
+
 .msi-page-nav {
 
     li {
