@@ -62,11 +62,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
                      {
-                         Reference = rnwWarnings.Reference,
-                         DateTimeGroup = rnwWarnings.DateTimeGroup,
-                         Description = rnwWarnings.Summary,
-                         DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
-                     }).OrderByDescending(a => a.DateTimeGroup)
+                        Reference = rnwWarnings.Reference,
+                        DateTimeGroup = rnwWarnings.DateTimeGroup,
+                        Description = rnwWarnings.Summary,
+                        DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
+                        Detail = warningType.Name + ' '+ rnwWarnings.Reference  + ' ' + DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup) + ' ' + rnwWarnings.Summary + ' ' + rnwWarnings.Content
+                        }).OrderByDescending(a => a.DateTimeGroup)
                      .ToListAsync();
         }
     }
