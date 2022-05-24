@@ -22,6 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
         private RNWService _rnwService;
         private RadioNavigationalWarning _fakeRadioNavigationalWarning;
+        private RadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningsAdmin;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
@@ -34,6 +35,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 DateTimeGroup = DateTime.UtcNow,
                 Summary = "Test1",
                 Content = "test"
+            };
+
+            _fakeRadioNavigationalWarningsAdmin = new()
+            {
+                WarningType = 1,
+                Reference = "test",
+                DateTimeGroup = DateTime.UtcNow,
+                Summary = "Test1",
+                Content = "test",
+                WarningTypeName = "NavArea"
             };
 
             _fakeLogger = A.Fake<ILogger<RNWService>>();
@@ -238,5 +249,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             });
             return radioNavigationalWarningList;
         }
+
+        #region Edit Radio Navigational Warning
+        [Test]
+        public async Task WhenPostValidEditRequest_ThenReturnTrue()
+        {
+            DateTime _fakeDateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarningsAdmin.DateTimeGroup = _fakeDateTime;
+            A.CallTo(() => _fakeRnwRepository.GetWarningType(_fakeRadioNavigationalWarningsAdmin)).Returns(1);
+            bool result = await _rnwService.EditRadioNavigationWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId);
+
+            Assert.IsTrue(result);
+        }
+        #endregion
     }
 }
