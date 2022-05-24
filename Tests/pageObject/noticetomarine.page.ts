@@ -26,10 +26,10 @@ export default class noticetoMarine
      this.dropDownWeekly = this.page.locator("#ddlWeeks");
      this.fileName=this.page.locator('text=File Name');
      this.fileSize= this.page.locator('text=File Size');
-     this.menuNoticeToMarine = this.page.locator('#headingLevelOne:has-text=("Notices to Mariners")');
-     this.menuLeisureFolios = this.page.locator('#headingLevelOne:has-text=("Leisure Folios")');
-     this.menuValueAddedResellers = this.page.locator('#headingLevelOne:has-text=("Value Added Resellers")');
-     this.menuAbout = this.page.locator('#headingLevelOne:has-text=("About")');
+     this.menuNoticeToMarine = this.page.locator('a:has-text=("Notices to Mariners")');
+     this.menuLeisureFolios = this.page.locator('a:has-text=("Leisure Folios")');
+     this.menuValueAddedResellers = this.page.locator('a:has-text=("Value Added Resellers")');
+     this.menuAbout = this.page.locator('a:has-text=("About")');
      this.tabweekly = this.page.locator('#weekly-tab');
      this.tabdaily = this.page.locator("#daily-tab");
      this.tabcumulative = this.page.locator("#cumulative-tab");
