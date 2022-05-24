@@ -13,6 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         [DisplayName("Date Time Group")]
         public string DateTimeGroupRnwFormat { get; set; }
 
-        public string Detail { get; set; }
+        public string Content { get; set; }
+        public string WarningType { get; set; }
     }
 }

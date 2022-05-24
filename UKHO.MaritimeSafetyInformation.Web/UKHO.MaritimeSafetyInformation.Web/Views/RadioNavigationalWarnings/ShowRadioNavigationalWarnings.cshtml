@@ -75,7 +75,21 @@
                         </tr>
                         <tr>
                             <td colspan="5" id="collapse_@i" class="accordion-collapse collapse" data-bs-parent="#accordionAllwarning">
-                               @Html.DisplayFor(modelItem => item.Detail)
+                              @* @Html.DisplayFor(modelItem => item.Detail)*@
+                                <div>
+                                    <id="WarningType_@i" class="td-1">
+                                        @Html.DisplayFor(modelItem => item.WarningType)
+                                    <br>
+                                    <id="Reference_@i" class="td-1">
+                                        @Html.DisplayFor(modelItem => item.Reference)
+                                    <br>
+                                    <id="DateTimeGroupRnwFormat_@i" class="td-2">
+                                        @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
+                                    <br>
+                                    <id="Description_@i">
+                                        @Html.DisplayFor(modelItem => item.Content)
+                                    <br>
+                                </div>
                             </td>
                         </tr>
                         i++;
