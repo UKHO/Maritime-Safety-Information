@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
@@ -128,6 +129,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.ErrorInRNWListDetailFromDatabase.ToEventId(), ex, "Maritime safety information error has occurred in the process to get RNW detail from database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
+        }
+
+        public async Task<string> GetRadioNavigationalWarningsLastModifiedDateTime(string correlationId)
+        {
+            _logger.LogInformation(EventIds.RNWLastModifiedDateTimeFromDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW last modified date time from database started for _X-Correlation-ID:{correlationId}", correlationId);
+
+            DateTime lastUpdatedDateTime = await _rnwRepository.GetRadioNavigationalWarningLastModifiedDateTime();
+
+            _logger.LogInformation(EventIds.RNWLastModifiedDateTimeFromDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW last modified date time from database completed for _X-Correlation-ID:{correlationId}", correlationId);
+
+            return DateTimeExtensions.ToRnwDateFormat(lastUpdatedDateTime);
         }
     }
 }

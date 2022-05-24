@@ -38,5 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
         public DateTime? ExpiryDate { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public DateTime LastModified { get; set; } = DateTime.UtcNow;
     }
 }

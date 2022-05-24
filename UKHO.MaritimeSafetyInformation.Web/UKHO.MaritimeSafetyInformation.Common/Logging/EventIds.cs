@@ -285,7 +285,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910068 -  Maritime safety information error has occurred in the process to get RNW detail from database.
         /// </summary>
-        ErrorInRNWListDetailFromDatabase = 910068
+        ErrorInRNWListDetailFromDatabase = 910068,
+        /// <summary> 
+        /// 910069 -  Maritime safety information request to get last modified date time from database started.
+        /// </summary>
+        RNWLastModifiedDateTimeFromDatabaseStarted = 910069,
+        /// <summary> 
+        /// 910070 -  Maritime safety information request to get last modified date time from database completed.
+        /// </summary>
+        RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
+
     }
 
     public static class EventIdExtensions

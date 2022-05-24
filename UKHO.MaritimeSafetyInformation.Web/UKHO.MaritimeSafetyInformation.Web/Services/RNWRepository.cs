@@ -26,21 +26,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<RadioNavigationalWarningsAdmin>> GetRadioNavigationWarningsAdminList()
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
-                     join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
-                     select new RadioNavigationalWarningsAdmin
-                     {
-                         Id = rnwWarnings.Id,
-                         WarningType = rnwWarnings.WarningType,
-                         Reference = rnwWarnings.Reference,
-                         DateTimeGroup = rnwWarnings.DateTimeGroup,
-                         DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
-                         Summary = rnwWarnings.Summary,
-                         Content = RnwHelper.FormatContent(rnwWarnings.Content),
-                         ExpiryDate = rnwWarnings.ExpiryDate,
-                         ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
-                         IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
-                         WarningTypeName = warning.Name
-                     }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
+                          join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
+                          select new RadioNavigationalWarningsAdmin
+                          {
+                              Id = rnwWarnings.Id,
+                              WarningType = rnwWarnings.WarningType,
+                              Reference = rnwWarnings.Reference,
+                              DateTimeGroup = rnwWarnings.DateTimeGroup,
+                              DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
+                              Summary = rnwWarnings.Summary,
+                              Content = RnwHelper.FormatContent(rnwWarnings.Content),
+                              ExpiryDate = rnwWarnings.ExpiryDate,
+                              ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
+                              IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
+                              WarningTypeName = warning.Name
+                          }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
         }
 
         public async Task<List<WarningType>> GetWarningTypes()
@@ -58,16 +58,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList()
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
-                     join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
-                     where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
+                          join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
+                          where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
-                     {
-                         Reference = rnwWarnings.Reference,
-                         DateTimeGroup = rnwWarnings.DateTimeGroup,
-                         Description = rnwWarnings.Summary,
-                         DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
-                     }).OrderByDescending(a => a.DateTimeGroup)
+                          {
+                              Reference = rnwWarnings.Reference,
+                              DateTimeGroup = rnwWarnings.DateTimeGroup,
+                              Description = rnwWarnings.Summary,
+                              DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
+                          }).OrderByDescending(a => a.DateTimeGroup)
                      .ToListAsync();
+        }
+
+        public async Task<DateTime> GetRadioNavigationalWarningLastModifiedDateTime()
+        {
+            return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
         }
     }
 }
