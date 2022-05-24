@@ -73,22 +73,24 @@
                                 <input type="checkbox" name="name2" class="form-check-input" aria-label="Select" />
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="5" id="collapse_@i" class="accordion-collapse collapse" data-bs-parent="#accordionAllwarning">
-                              @* @Html.DisplayFor(modelItem => item.Detail)*@
-                                <div>
-                                    <id="WarningType_@i" class="td-1">
-                                        @Html.DisplayFor(modelItem => item.WarningType)
-                                    <br>
-                                    <id="Reference_@i" class="td-1">
-                                        @Html.DisplayFor(modelItem => item.Reference)
-                                    <br>
-                                    <id="DateTimeGroupRnwFormat_@i" class="td-2">
-                                        @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
-                                    <br>
-                                    <id="Description_@i">
-                                        @Html.DisplayFor(modelItem => item.Content)
-                                    <br>
+                        <tr id="collapse_@i" class="accordion-collapse collapse" data-bs-parent="#accordionAllwarning">
+                            <td colspan="5">
+                              @* @Html.DisplayFor(modelItem => item.Detail)*@                              
+                                <div class="warning-detail">
+                                    <section>
+                                        <h1 id="Details_WarningType_@i" class="warning-type">
+                                            @Html.DisplayFor(modelItem => item.WarningType)
+                                        </h1>
+                                        <h2 id="Details_Reference_@i" class="warning-reference">
+                                            @Html.DisplayFor(modelItem => item.Reference)
+                                        </h2>
+                                        <h3 id="Details_DateTimeGroupRnwFormat_@i" class="warning-date-time">
+                                            @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
+                                        </h3>
+                                        <p id="Details_Description_@i" class="warning-description">
+                                            @Html.DisplayFor(modelItem => item.Content)
+                                        </p>
+                                    </section>
                                 </div>
                             </td>
                         </tr>

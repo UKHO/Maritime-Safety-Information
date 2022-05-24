@@ -324,6 +324,24 @@
 .accordianTable tr td.accordion-collapse {
   border-right: 0 !important;
 }
+.accordianTable .warning-detail {
+  font-size: 18px;
+  color: #000000;
+}
+.accordianTable .warning-detail h1, .accordianTable .warning-detail h2, .accordianTable .warning-detail h3 {
+  color: #000000;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.accordianTable .warning-detail p {
+  margin-bottom: 0;
+}
+.accordianTable .warning-detail .warning-type {
+  font-weight: 400;
+}
 
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
   outline: 0;
@@ -346,6 +364,7 @@ a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-inpu
 .alert p {
   margin-bottom: 0;
   margin-top: 5px;
+  line-height: 1.8rem;
 }
 
 .alert-primary {
