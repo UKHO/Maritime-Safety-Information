@@ -1,5 +1,4 @@
-﻿
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
@@ -109,7 +108,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithWithValidAdminListRecordPerPage_ThenReturnValidRecordPerPageAsync()
+        public async Task WhenCallIndexWithValidAdminListRecordPerPage_ThenReturnValidRecordPerPageAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
             IActionResult result = await _controller.Index(1, null, null);
