@@ -531,19 +531,6 @@ button:active {
   border-radius: 5px;
 }
 
-.callout {
-  padding: 1.25rem;
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-  border: 0px solid;
-  border-left-width: 0.4rem;
-  background-color: #E0ECF3;
-}
-
-.callout-important {
-  border-left-color: #0177C1;
-}
-
 .msi-page-nav li {
   transform: none;
   padding: 0;
