@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -9,11 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using UKHO.FileShareClient.Models;
-using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
@@ -35,20 +29,17 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(serviceProvider);
+            //////////A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
+            //////////_controller = new NoticesToMarinersController(_fakeNMService, _fakeContextAccessor, _fakeLogger);
         }
 
         [Test]
         public async Task WhenCallIndex_ThenReturnList()
         {
             _nMController.ControllerContext.HttpContext = new DefaultHttpContext();
-
-            ////////A.CallTo(() => _fakeHttpContextAccessor.HttpContext).Returns(context);
-            ////////_nMController.ControllerContext = new ControllerContext()
-            ////////{
-            ////////    HttpContext = context
-            ////////};
-            Task<IResult<BatchAttributesSearchResponse>> fssResponse = fileShareServiceApiClient.BatchAttributeSearch(TestConfig.BaseUrl, TestConfig.BusinessUnit, TestConfig.ProductType);
-            Console.WriteLine(fssResponse.Result);
+            
+         //////   Task<IResult<BatchAttributesSearchResponse>> fssResponse = fileShareServiceApiClient.BatchAttributeSearch(TestConfig.BusinessUnit, TestConfig.ProductType);
+            
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showWeeklyFiles != null);
