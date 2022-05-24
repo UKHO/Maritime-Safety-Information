@@ -2,35 +2,23 @@
 @model ShowWeeklyFilesResponseModel
 @{
     Layout = "~/Views/Shared/_MSILayout.cshtml";
+    ViewData["Header"] = "Notice to Mariners";
+    ViewData["PageName"] = "Weekly";
 }
 
 @section Scripts
     {
-<script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
     }
-@{
-    ViewData["Header"] = "Notice to Mariners";
-}
 <!--tabs-->
-<ul class="nav nav-tabs msi-tabs" id="nmTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab" aria-controls="weekly" aria-selected="true">Weekly</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily" type="button" role="tab" aria-controls="daily" aria-selected="false" tabindex="-1">Daily</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="cumulative-tab" data-bs-toggle="tab" data-bs-target="#cumulative" type="button" role="tab" aria-controls="cumulative" aria-selected="false" tabindex="-1">Cumulative</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="annual-tab" data-bs-toggle="tab" data-bs-target="#annual" type="button" role="tab" aria-controls="annual" aria-selected="false" tabindex="-1">Annual</button>
-    </li>
-</ul>
+<partial name="_NMHorizontalTab" />
+
 <div class="tab-content" id="nmTabContent">
     <div class="tab-pane fade show active" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
 
         @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
         {
+            <input type="hidden" id="hdnRequestType" value="Weekly" />
             <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
             <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
             <div class="row mb-3">

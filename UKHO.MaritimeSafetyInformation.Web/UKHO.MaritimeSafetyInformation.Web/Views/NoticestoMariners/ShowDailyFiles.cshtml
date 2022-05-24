@@ -1,17 +1,25 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 
 @model List<ShowDailyFilesResponseModel>
+@{
+    Layout = "~/Views/Shared/_MSILayout.cshtml";
+    ViewData["Header"] = "Notice to Mariners";
+    ViewData["PageName"] = "Daily";
+}
+
 @section Scripts
 {
-    <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
 }
-@*<partial name="ShowDailyFilesList" />*@
-<input type="hidden" id = "hdnRequestType" value="Daily"/>
+<partial name="_NMHorizontalTab" />
+<input type="hidden" id="hdnRequestType" value="Daily" />
 
 <div class="row">
     <div class="col">
-        <div class="table-responsive" id="divFilesList">
-        </div>
+        @if (@Model != null)
+        {
+            <partial name="ShowDailyFilesList" model="@Model" />
+        }
     </div>
 </div>
 
