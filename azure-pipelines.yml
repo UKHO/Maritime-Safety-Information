@@ -104,6 +104,7 @@ stages:
               packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packages'
 
           - task: CmdLine@1
+            continueOnError: true
             displayName: "Run OWASP Dependency Checker"
             inputs:
               filename: 'dependency-check.bat'
