@@ -1,14 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
-namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
+namespace UKHO.MaritimeSafetyInformation.IntegrationTests
 {
     public class Configuration
-    {       
+    {
         protected IConfigurationRoot ConfigurationRoot;
 
         public string BusinessUnit;
         public string ProductType;
         public string BaseUrl;
+        public string PageSize;
+        public string Start;
 
         public Configuration()
         {
@@ -19,6 +26,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             BusinessUnit = ConfigurationRoot.GetValue<string>("FileShareService:BusinessUnit");
             ProductType = ConfigurationRoot.GetValue<string>("FileShareService:ProductType");
             BaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:BaseUrl");
+            PageSize = ConfigurationRoot.GetValue<string>("FileShareService:PageSize");
+            Start = ConfigurationRoot.GetValue<string>("FileShareService:Start");
         }
     }
 }
