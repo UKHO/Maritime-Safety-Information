@@ -130,15 +130,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
+        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnsExpectedView()
         {
-            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFilesList.cshtml";
+            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
 
             A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId));
 
             IActionResult result = await _controller.ShowDailyFilesAsync();
-            Assert.IsInstanceOf<PartialViewResult>(result);
-            string actualView = ((PartialViewResult)result).ViewName;
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
         }
 
@@ -148,7 +148,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string batchId = null;
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
-            var result =  _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
             Assert.IsTrue(result.IsFaulted);
         }
 
@@ -212,11 +212,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
 
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType= mimeType };
+            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            
+
             Assert.IsInstanceOf<FileResult>(result);
         }
 
@@ -231,9 +231,85 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
-            var result =  _controller.DownloadWeeklyFile(batchId, fileName, "wrongmime");
-            
+            var result = _controller.DownloadWeeklyFile(batchId, fileName, "wrongmime");
+
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalledWithNullBatchID_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = null;
+            string expected = "ShowDailyFiles";
+            string mimeType = "application/gzip";
+            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            string actualView = ((RedirectToActionResult)result).ActionName;
+            Assert.AreEqual(expected, actualView);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalledWithEmptyBatchID_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = "";
+            string expected = "ShowDailyFiles";
+            string mimeType = "application/gzip";
+            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            string actualView = ((RedirectToActionResult)result).ActionName;
+            Assert.AreEqual(expected, actualView);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalledWithNullMimeType_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string expected = "ShowDailyFiles";
+            string mimeType = null;
+            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            string actualView = ((RedirectToActionResult)result).ActionName;
+            Assert.AreEqual(expected, actualView);
+        }
+
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalledWithEmptyMimeType_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string expected = "ShowDailyFiles";
+            string mimeType = "";
+            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            string actualView = ((RedirectToActionResult)result).ActionName;
+            Assert.AreEqual(expected, actualView);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalled_ThenShouldRetunFileResult()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string mimeType = "application/pdf";
+
+            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
+
+            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+
+            Assert.IsInstanceOf<FileResult>(result);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalled_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string mimeType = "application/pdf";
+            string expected = "ShowDailyFiles";
+
+            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
+
+            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            string actualView = ((RedirectToActionResult)result).ActionName;
+            Assert.AreEqual(expected, actualView);
+
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
