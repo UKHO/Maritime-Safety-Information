@@ -115,7 +115,7 @@
         }
     }
 
-    tr td.accordion-collapse {
+    tr.accordion-collapse td {
         border-right: 0 !important;
     }
 
@@ -131,12 +131,22 @@
             margin-bottom: 0;
             margin-top: 0;
         }
-        p{
-            margin-bottom:0;
+
+        p {
+            margin-bottom: 0;
         }
 
         .warning-type {
             font-weight: 400;
+        }
+
+        pre {
+            width: 100%;
+            overflow: hidden;
+            font-family: JohnstonITC, Helvetica, sans-serif;
+            font-size: 18px;
+            white-space: pre-line;
+            word-break: break-word;
         }
     }
 }

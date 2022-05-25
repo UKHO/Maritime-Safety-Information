@@ -321,7 +321,7 @@
 .accordianTable .accordion-button::after {
   content: none;
 }
-.accordianTable tr td.accordion-collapse {
+.accordianTable tr.accordion-collapse td {
   border-right: 0 !important;
 }
 .accordianTable .warning-detail {
@@ -341,6 +341,14 @@
 }
 .accordianTable .warning-detail .warning-type {
   font-weight: 400;
+}
+.accordianTable .warning-detail pre {
+  width: 100%;
+  overflow: hidden;
+  font-family: JohnstonITC, Helvetica, sans-serif;
+  font-size: 18px;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
