@@ -37,23 +37,22 @@ export default class RadioNavigationalWarningsListEndUser
      return await locator.innerText();
     }
 
-    public async verifyTableDateColumnData()
+    public async verifyTableNewDateColumnData()
     {
-      const resultYear= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
-  
+      const resultYear= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
+      
       //fail if there are no matching selections
       expect(resultYear.length).toBeGreaterThan(0);
-  
-  
+
       //Verify Dates are descending order   
-      const resultdate= await this.page.$$eval('#DateTimeGroupRnwFormat' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
-      expect(this.isDescending(resultdate)).toBeTruthy();
-  
+      const resultNewdate= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
+      const sortedDesc = resultNewdate.sort((objA, objB) => objB.date - objA.date , );
+      expect(sortedDesc).toBeTruthy();
     }
   
     public async verifyTableContainsViewDetailsLink()
     {
-      const resultLinks= await this.page.$$eval('#Viewdetails' , (matches: any[]) => { return matches.map(option => option.textContent) });
+      const resultLinks= await this.page.$$eval("[id^='Viewdetails']" , (matches: any[]) => { return matches.map(option => option.textContent) });
       for(let i=0;i<resultLinks.length;i++)
       {
         expect(resultLinks[i].trim()).toEqual("View details");
@@ -67,20 +66,6 @@ export default class RadioNavigationalWarningsListEndUser
       var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
         return element === tableColsHeader[index];
       });
-  
       expect(match).toBeTruthy();
-    }
-  
-  
-    public  isDescending(arr: any[]) { 
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i + 1] > arr[i]) {
-          return false;
-        }
-      }
-      return true;
-    }
-     
-   
-
+    }   
 }
