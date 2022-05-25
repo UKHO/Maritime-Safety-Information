@@ -3,6 +3,7 @@ import type { Locator, Page } from 'playwright';
 
 export default class RadioNavigationalWarnings
 {
+    
     private page:Page;
     readonly reference:Locator;
     readonly datetime:Locator;
@@ -16,6 +17,11 @@ export default class RadioNavigationalWarnings
     readonly datetimeError:Locator;
     readonly summaryError:Locator;
     readonly contentError:Locator;
+    readonly editNewRecord:Locator;
+    readonly warningType:Locator;
+    readonly year:Locator;
+    readonly filter:Locator;
+    readonly delete:Locator;
     constructor(page:Page)
     {
         this.page = page; 
@@ -31,6 +37,11 @@ export default class RadioNavigationalWarnings
         this.datetimeError= this.page.locator("#DateTimeGroup-error");
         this.summaryError= this.page.locator("#Summary-error");
         this.contentError=this.page.locator("#Content-error");
+        this.editNewRecord = this.page.locator("#btnEdit");
+        this.warningType = this.page.locator("#WarningType");
+        this.year= this.page.locator("#Year");
+        this.filter = this.page.locator("#BtnFilter");
+        this.delete = this.page.locator('#IsDeleted');
     }
 
     public async SelectRadioNavigationalWarning()
@@ -42,6 +53,12 @@ export default class RadioNavigationalWarnings
     public async createRNW()
     {
         await  this.create.click();
+    }
+
+    public async isDelete()
+    {
+        await this.delete.uncheck();
+        await expect(this.warning).toBeTruthy();
     }
 
     public async getDialogText(text:string)
@@ -68,4 +85,44 @@ export default class RadioNavigationalWarnings
         await this.description.fill("testdata");
         await this.content.fill(content);
     }
+    public async clearInput(locator:Locator)
+    {
+        const input = await locator;
+        await input.click({ clickCount: 3 })
+        await this.page.keyboard.press('Backspace')     
+    }
+    public async editRNW()
+    {
+       await this.editNewRecord.click();
+    }
+
+    public async getEditUrl()
+    {
+        const newEdit = await this.page.$("[id^='Edit'] > a");
+        await newEdit.click(); 
+    }
+    public async pageLoad()
+    {
+        const [response] = await Promise.all([
+           this.page.waitForNavigation(), 
+           this.createNewRecord.click(),
+           ]);
+    }
+    public async searchListWithfilter(selectWarnings:string)
+    {
+  
+      await this.warningType.selectOption({ label: selectWarnings });
+      await this.filter.click();
+     
+    }
+    public async fillEditFormWithValidDetails(content:string)
+    {
+        await this.reference.fill("reference");
+        await this.page.waitForTimeout(3000);
+        await this.datetime.type("05072022 05533");
+        await this.page.keyboard.press("ArrowDown");
+        await this.description.fill("testdata");
+        await this.content.type(content);
+    }
+  
 }

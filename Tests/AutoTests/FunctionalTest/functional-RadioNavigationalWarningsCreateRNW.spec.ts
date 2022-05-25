@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
 import RadioNavigationalWarnings from '../../pageObject/RadioNavigationalWarnings.page';
 
@@ -8,13 +8,12 @@ test.describe("Create new radio navigational warnings record", ()=> {
 
   test.beforeEach(async ({page}) => {
     await page.goto(app.rnwAdminUrl); 
-    radioNavigationalWarnings = new RadioNavigationalWarnings(page);
-    await radioNavigationalWarnings.SelectRadioNavigationalWarning();
+    radioNavigationalWarnings = new RadioNavigationalWarnings(page);  
   });
 
-  test('Without entered input fields',async({page})=>{ 
-    await radioNavigationalWarnings.createRNW(); 
-    await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.warningError,"The Warning Type field is required.") ;
+  test('Without entered input fields',async({page})=>{
+    await radioNavigationalWarnings.pageLoad();
+    await radioNavigationalWarnings.createRNW();   
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.warningError,"The Warning Type field is required.") ;
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.referenceEror,"The Reference field is required.");
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.contentError,'The Text field is required.');
@@ -24,21 +23,59 @@ test.describe("Create new radio navigational warnings record", ()=> {
   })  
 
    test('With content text as blank',async({page})=>{   
+    await radioNavigationalWarnings.pageLoad();
     await radioNavigationalWarnings.fillFormWithValidDetails("1","");  
     await radioNavigationalWarnings.createRNW();
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.contentError,'The Text field is required.'); 
   }) 
  
    test('With valid input details with Navarea',async({page})=>{   
+    await radioNavigationalWarnings.pageLoad();
     await radioNavigationalWarnings.fillFormWithValidDetails("1","testdata");  
     await radioNavigationalWarnings.createRNW(); 
     await radioNavigationalWarnings.getDialogText('Record created successfully!')    
   })
 
-   test('With valid input details with UK costal',async({page})=>{   
+   test('With valid input details with UK costal',async({page})=>{     
+    await radioNavigationalWarnings.pageLoad();
     await radioNavigationalWarnings.fillFormWithValidDetails("2","testdata");  
     await radioNavigationalWarnings.createRNW(); 
     await radioNavigationalWarnings.getDialogText('Record created successfully!')    
   })
+
+  test('Update With summary text as blank',async({page})=>{       
+    await radioNavigationalWarnings.getEditUrl();
+    await radioNavigationalWarnings.clearInput(radioNavigationalWarnings.description);
+    await radioNavigationalWarnings.clearInput(radioNavigationalWarnings.reference);
+    await radioNavigationalWarnings.clearInput(radioNavigationalWarnings.content);
+    await radioNavigationalWarnings.editRNW();
+    await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.summaryError,'The Description field is required.'); 
+    await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.referenceEror,"The Reference field is required.");
+    await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.contentError,'The Text field is required.');
+   
+  }) 
  
+   test('Update With valid input details with Navarea',async({page})=>{   
+    await radioNavigationalWarnings.searchListWithfilter('UK Coastal');
+    await radioNavigationalWarnings.getEditUrl();
+    await radioNavigationalWarnings.isDelete();
+    await radioNavigationalWarnings.fillEditFormWithValidDetails("testdata");  
+    await radioNavigationalWarnings.editRNW(); 
+    await radioNavigationalWarnings.getDialogText('Record updated successfully!')    
+  })
+
+   test('Update With valid input details with UK costal',async({page})=>{  
+    await radioNavigationalWarnings.searchListWithfilter('NAVAREA 1');
+    await radioNavigationalWarnings.getEditUrl();
+    await radioNavigationalWarnings.isDelete();
+    await radioNavigationalWarnings.fillEditFormWithValidDetails("testdata");  
+    await radioNavigationalWarnings.editRNW(); 
+    await radioNavigationalWarnings.getDialogText('Record updated successfully!')    
+  })
+
 });
+  
+
+  
+
+

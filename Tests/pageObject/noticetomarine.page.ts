@@ -53,7 +53,7 @@ export default class noticetoMarine
 
     public async checkText(locator:Locator)
     {
-     return (await locator.textContent()).toString();
+     return (await locator.innerText()).toString();
     }
 
     public async checkTableRecordCount()
