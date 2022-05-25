@@ -110,16 +110,16 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallShowDailyFilesAsyncWithInvalidData_ThenReturnException()
+        public async Task WhenCallShowDailyFilesAsyncWithInvalidData_ThenReturnFile()
         {
-            string batchId = "8b1963a8-6372-4d69-9346-dededb666fe8";
-            string filename = "Daily .zip";
-            string mimeType = "application/gzip";
+            string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            string filename = "21snii22_week_W2020_14.pdf";
+            string mimeType = "application/pdf";
 
-            Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
-               .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
-
+            FileResult result = await _nMController.DownloadWeeklyFile(batchId, filename, mimeType);
+            Assert.IsTrue(result != null);
+            Assert.AreEqual("application/pdf", result.ContentType);
+            Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);           
         }
     }
 }
