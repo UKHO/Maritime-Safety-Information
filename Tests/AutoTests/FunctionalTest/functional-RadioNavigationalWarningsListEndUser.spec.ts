@@ -25,8 +25,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
    test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async () => {
     await rnwListEndUser.verifyTableHeader();
     await rnwListEndUser.verifyTableContainsViewDetailsLink();
-    await rnwListEndUser.verifyTableDateColumnData();
-
+    await rnwListEndUser.verifyTableNewDateColumnData();
   })
  
 });
