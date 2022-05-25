@@ -1,4 +1,4 @@
-﻿@model UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.RadioNavigationalWarningsAdmin
+﻿@model UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.EditRadioNavigationalWarningsAdmin
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,11 +12,10 @@
             <form asp-action="Edit" autocomplete="off">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="mb-3">
-                    <label asp-for="WarningTypeName" class="form-label"></label>
+                    <label asp-for="WarningType" class="form-label"></label>
                     <span class="text-danger">*</span>
-                    <input asp-for="WarningTypeName" class="form-control" />
-
-                    <span asp-validation-for="WarningTypeName" class="text-danger"></span>
+                    <select name="WarningType" class="form-control" asp-items="@ViewBag.WarningType"></select>
+                    <span asp-validation-for="WarningType" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="Reference" class="form-label"></label>

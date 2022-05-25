@@ -131,11 +131,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         #region Edit Radio Navigational Warning
-        public RadioNavigationalWarningsAdmin EditRadioNavigationWarningListForAdmin(int id, string correlationId)
+        public EditRadioNavigationalWarningsAdmin EditRadioNavigationWarningListForAdmin(int id, string correlationId)
         {
             try
             {
-                RadioNavigationalWarningsAdmin radioNavigationalWarningsAdminList = _rnwRepository.EditRadioNavigation(id);
+                EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdminList = _rnwRepository.EditRadioNavigation(id);
                 return radioNavigationalWarningsAdminList;
             }
             catch (Exception ex)
@@ -145,10 +145,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<bool> EditRadioNavigationWarningsRecord(RadioNavigationalWarningsAdmin radioNavigationalWarning, string correlationId)
+        public async Task<bool> EditRadioNavigationWarningsRecord(EditRadioNavigationalWarningsAdmin radioNavigationalWarning, string correlationId)
         {
-            int warningType = _rnwRepository.GetWarningType(radioNavigationalWarning);
-            if (warningType != WarningTypes.UK_Coastal && warningType != WarningTypes.NAVAREA_1)
+            if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {
                 await Task.CompletedTask;
                 _logger.LogInformation(EventIds.InvalidWarningTypeInRequest.ToEventId(), "Maritime safety information invalid value received for parameter warningType for the _X-Correlation-ID:{correlationId}", correlationId);

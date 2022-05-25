@@ -94,8 +94,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = tempData;
 
-            A.CallTo(() => _fakeRnwService.EditRadioNavigationWarningsRecord(A<RadioNavigationalWarningsAdmin>.Ignored, A<string>.Ignored)).Returns(true);
-            Task<IActionResult> result = _controller.Edit(id, new RadioNavigationalWarningsAdmin() { Id = 5 });
+            A.CallTo(() => _fakeRnwService.EditRadioNavigationWarningsRecord(A<EditRadioNavigationalWarningsAdmin>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Edit(id, new EditRadioNavigationalWarningsAdmin() { Id = 5 });
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());

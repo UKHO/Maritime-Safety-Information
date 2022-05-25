@@ -75,19 +75,43 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 return NotFound();
             }
 
-            RadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin = _rnwService.EditRadioNavigationWarningListForAdmin(id, GetCurrentCorrelationId());
+            EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin = _rnwService.EditRadioNavigationWarningListForAdmin(id, GetCurrentCorrelationId());
             if (radioNavigationalWarningsAdmin == null)
             {
                 _logger.LogInformation(EventIds.EditRNWListIsNull.ToEventId(), "Maritime safety information edit RNW list is null for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return NotFound();
             }
+            
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            foreach (var item in await _rnwService.GetWarningTypes())
+            {
+                if (item.Name == radioNavigationalWarningsAdmin.WarningTypeName)
+                {
+                    list.Add(new SelectListItem()
+                    {
+                        Text = item.Name,
+                        Value = Convert.ToString(item.Id),
+                        Selected = true
+                    });
+                }
+                else
+                {
+                    list.Add(new SelectListItem()
+                    {
+                        Text = item.Name,
+                        Value = Convert.ToString(item.Id),
+                    });
+                }
+            }
+            ViewBag.WarningType = list;
             return View(radioNavigationalWarningsAdmin);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, RadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin)
+        public async Task<IActionResult> Edit(int id, EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin)
         {
             _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 

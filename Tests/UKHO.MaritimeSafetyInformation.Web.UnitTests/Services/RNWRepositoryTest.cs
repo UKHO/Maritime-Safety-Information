@@ -16,7 +16,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _context;
         private RadioNavigationalWarning _radioNavigationalWarning;
-        private RadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningAdmin;
+        private EditRadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningAdmin;
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {

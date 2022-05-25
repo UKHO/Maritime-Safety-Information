@@ -71,10 +71,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         #region Edit Radio Navigational Warning
-        public RadioNavigationalWarningsAdmin EditRadioNavigation(int id)
+        public EditRadioNavigationalWarningsAdmin EditRadioNavigation(int id)
         {
             RadioNavigationalWarning rnwWarnings = _context.Set<RadioNavigationalWarning>().Find(id);
-            RadioNavigationalWarningsAdmin rnwList = new RadioNavigationalWarningsAdmin();
+            EditRadioNavigationalWarningsAdmin rnwList = new EditRadioNavigationalWarningsAdmin();
             rnwList.Id = rnwWarnings.Id;
             string WarningName = _context.WarningType.Where(x => x.Id == rnwWarnings.WarningType).FirstOrDefault().Name;
             rnwList.WarningTypeName = WarningName;
@@ -86,16 +86,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             rnwList.ExpiryDate = rnwWarnings.ExpiryDate;
             rnwList.ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate);
             rnwList.IsDeleted = rnwWarnings.IsDeleted ? "true" : "false";
-
             return rnwList;
         }
 
-        public async Task AddRadioNavigationWarning(RadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
+        public async Task AddRadioNavigationWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
         {
             RadioNavigationalWarning rnwList = new RadioNavigationalWarning();
             rnwList.Id = radioNavigationalWarningAdmin.Id;
-            int warningType = _context.WarningType.Where(x => x.Name == radioNavigationalWarningAdmin.WarningTypeName).FirstOrDefault().Id;
-            rnwList.WarningType = warningType;
+            rnwList.WarningType = radioNavigationalWarningAdmin.WarningType;
             rnwList.Reference = radioNavigationalWarningAdmin.Reference;
             rnwList.DateTimeGroup = radioNavigationalWarningAdmin.DateTimeGroup;
             rnwList.Summary = radioNavigationalWarningAdmin.Summary;
@@ -106,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             await _context.SaveChangesAsync();
         }
 
-        public int GetWarningType(RadioNavigationalWarningsAdmin radioNavigationalWarningAdminList)
+        public int GetWarningType(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdminList)
         {
             var x = _context.WarningType.Select(x => x.Name).ToList();
             return _context.WarningType.Where(x => x.Name == radioNavigationalWarningAdminList.WarningTypeName).FirstOrDefault().Id;

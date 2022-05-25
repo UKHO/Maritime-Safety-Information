@@ -22,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
         private RNWService _rnwService;
         private RadioNavigationalWarning _fakeRadioNavigationalWarning;
-        private RadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningsAdmin;
+        private EditRadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningsAdmin;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
