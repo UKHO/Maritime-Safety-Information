@@ -19,6 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task AddRadioNavigationWarning(RadioNavigationalWarning radioNavigationalWarning)
         {
+            radioNavigationalWarning.LastModified = DateTime.UtcNow;
             _context.Add(radioNavigationalWarning);
             await _context.SaveChangesAsync();
         }
@@ -70,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      .ToListAsync();
         }
 
-        public async Task<DateTime> GetRadioNavigationalWarningLastModifiedDateTime()
+        public async Task<DateTime> GetRadioNavigationalWarningsLastModifiedDateTime()
         {
             return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
         }

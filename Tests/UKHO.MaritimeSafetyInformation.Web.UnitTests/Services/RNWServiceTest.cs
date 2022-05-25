@@ -198,6 +198,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                            async delegate { await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, string.Empty); });
         }
 
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime()).Returns(new DateTime(2020, 01, 01, 13, 14, 15));
+            string result = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(string.Empty);
+            Assert.AreEqual("010114 UTC Jan 20", result);
+        }
+
         private static List<RadioNavigationalWarningsAdmin> GetFakeRadioNavigationalWarningList()
         {
             List<RadioNavigationalWarningsAdmin> radioNavigationalWarningList = new();

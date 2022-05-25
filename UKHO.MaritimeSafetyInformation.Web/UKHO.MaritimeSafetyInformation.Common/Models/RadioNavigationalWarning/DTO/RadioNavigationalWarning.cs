@@ -39,6 +39,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.
 
         public bool IsDeleted { get; set; }
 
-        public DateTime LastModified { get; set; } = DateTime.UtcNow;
+        public DateTime LastModified { get; set; }
     }
 }

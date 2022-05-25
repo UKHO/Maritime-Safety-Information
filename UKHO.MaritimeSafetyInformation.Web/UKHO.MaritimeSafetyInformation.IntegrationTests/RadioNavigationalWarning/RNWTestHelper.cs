@@ -151,6 +151,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                  + "and are also available from the UKHO website at: www.admiralty.co.uk/RNW.  Alternatively, these may be requested by"
                  + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22.",
                 ExpiryDate = new DateTime(2099, 1, 1),
+                LastModified = new DateTime(2019, 08, 15, 14, 15, 16),
             });
             return radioNavigationalWarningList;
         }

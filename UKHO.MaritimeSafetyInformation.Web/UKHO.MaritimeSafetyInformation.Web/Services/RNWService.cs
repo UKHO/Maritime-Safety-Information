@@ -135,7 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             _logger.LogInformation(EventIds.RNWLastModifiedDateTimeFromDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW last modified date time from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
-            DateTime lastUpdatedDateTime = await _rnwRepository.GetRadioNavigationalWarningLastModifiedDateTime();
+            DateTime lastUpdatedDateTime = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
 
             _logger.LogInformation(EventIds.RNWLastModifiedDateTimeFromDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW last modified date time from database completed for _X-Correlation-ID:{correlationId}", correlationId);
 

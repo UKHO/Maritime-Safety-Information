@@ -56,6 +56,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
+            Assert.IsNotNull(data.Result.LastModified < DateTime.UtcNow);
         }
 
         [Test]
@@ -110,6 +111,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             List<RadioNavigationalWarningsData> result = await _rnwRepository.GetRadioNavigationalWarningsDataList();
             Assert.AreEqual(2, result.Count);
+        }
+
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
+        {
+            DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+            Assert.IsTrue(result < DateTime.UtcNow);
         }
 
         [OneTimeTearDown]
