@@ -285,7 +285,28 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910068 -  Maritime safety information error has occurred in the process to get RNW detail from database.
         /// </summary>
-        ErrorInRNWListDetailFromDatabase = 910068
+        ErrorInRNWListDetailFromDatabase = 910068,
+
+        /// <summary>
+        /// 910069 -Request For Download Daily NM File Started.
+        /// </summary>
+        DownloadDailyNMFileStarted = 910069,
+
+        /// <summary>
+        /// 910070 -Request For Download Daily NM File Started.
+        /// </summary>
+        DownloadDailyNMFileCompleted = 910070,
+
+        /// <summary>
+        /// 910071 -Request For Download Daily NM File Started.
+        /// </summary>
+        DownloadDailyNMFileFailed = 910071,
+
+        /// <summary>
+        /// 910072 -Download Daily NM File Called With Invalid Arguments.
+        /// </summary>
+        DownloadDailyNMFileInvalidParameter = 910072,
+
     }
 
     public static class EventIdExtensions

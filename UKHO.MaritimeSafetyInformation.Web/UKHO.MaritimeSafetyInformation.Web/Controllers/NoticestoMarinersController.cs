@@ -118,32 +118,33 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
         }
 
-        public async Task<FileResult> DownloadFile(string batchId, string fileName, string mimeType)
+        public async Task<FileResult> DownloadDailyFile(string batchId, string mimeType)
         {
-            NMHelper.ValidateParametersForDownloadSingleFile(new()
-            {
-                new KeyValuePair<string, string>("BatchId", batchId),
-                new KeyValuePair<string, string>("FileName", fileName),
-                new KeyValuePair<string, string>("MimeType", mimeType)
-            }, GetCurrentCorrelationId(), _logger);
-
+            byte[] fileBytes = Array.Empty<byte>();
             try
             {
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download single weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-                fileName = batchId + ".zip";
-                byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadDailyNMFileStarted.ToEventId(), "Maritime safety information request to download daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                string fileName = batchId + ".zip";
+
+                NMHelper.ValidateParametersForDownloadSingleFile(new()
+                {
+                    new KeyValuePair<string, string>("BatchId", batchId),
+                    new KeyValuePair<string, string>("MimeType", mimeType)
+                }, GetCurrentCorrelationId(), _logger);
+
+                fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, String.Empty, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename=" + fileName);
 
-                return File(fileBytes, mimeType);
+                _logger.LogInformation(EventIds.DownloadDailyNMFileCompleted.ToEventId(), "Maritime safety information request to download daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.DownloadSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to download single weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
-                throw;
+                _logger.LogError(EventIds.DownloadDailyNMFileFailed.ToEventId(), "Maritime safety information request to download daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
             }
+            return File(fileBytes, mimeType);
         }
 
     }

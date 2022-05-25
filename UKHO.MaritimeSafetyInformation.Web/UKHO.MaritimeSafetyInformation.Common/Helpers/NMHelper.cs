@@ -97,5 +97,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
             }
         }
+
+        public static void ValidateParametersForDailyFile(List<KeyValuePair<string, string>> parameters, string correlationId, ILogger logger)
+        {
+            foreach (var parameter in parameters)
+            {
+                if (string.IsNullOrEmpty(parameter.Value))
+                {
+                    logger.LogInformation(
+                        EventIds.DownloadDailyNMFileInvalidParameter.ToEventId(),
+                        "Maritime safety information download daily NM files called with invalid argument " + parameter.Key + ":{" + parameter.Key + "} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
+                    throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
+                }
+            }
+        }
     }
 }
