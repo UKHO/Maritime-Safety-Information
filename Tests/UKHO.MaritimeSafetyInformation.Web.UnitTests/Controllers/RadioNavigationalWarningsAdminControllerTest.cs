@@ -95,7 +95,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(A<int>.Ignored, A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(GetFakeRadioNavigationWarningsForAdmin());
 
             IActionResult result = await _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsInstanceOf<IActionResult>(result);
             Assert.AreNotEqual(null, ((ViewResult)result).ViewData["WarningTypes"]);
             Assert.AreNotEqual(null, ((ViewResult)result).ViewData["Years"]);
         }
