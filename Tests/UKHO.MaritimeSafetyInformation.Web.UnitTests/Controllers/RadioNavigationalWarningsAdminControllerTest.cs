@@ -72,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.AreEqual(null, _controller.TempData["message"]);
+            Assert.IsNull(_controller.TempData["message"]);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.AreEqual(null, _controller.TempData["message"]);
+            Assert.IsNull(_controller.TempData["message"]);
         }
 
         [Test]
@@ -96,8 +96,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             IActionResult result = await _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
             Assert.IsInstanceOf<IActionResult>(result);
-            Assert.AreNotEqual(null, ((ViewResult)result).ViewData["WarningTypes"]);
-            Assert.AreNotEqual(null, ((ViewResult)result).ViewData["Years"]);
+            Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
+            Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
         }
 
         private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()
