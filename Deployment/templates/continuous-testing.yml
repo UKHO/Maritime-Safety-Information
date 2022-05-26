@@ -7,6 +7,11 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
+    - bash: echo "##vso[task.setvariable variable=FileShareService.BusinessUnit]MaritimeSafetyInformationIntegrationTest"
+      name: printvar
+
+    - script: echo $(FileShareService.BusinessUnit)
+
     - task: FileTransform@1
       displayName: "File Transform: integrationtests"
       inputs:
