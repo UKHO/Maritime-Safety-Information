@@ -41,7 +41,7 @@ steps:
       inputs:
        targetType: 'inline'
        script: |
-         echo "##vso[task.setvariable variable=FileShareService.BusinessUnit]$(FileShareService.BusinessUnit)"
+         echo "##vso[task.setvariable variable=FileShareService.BusinessUnit]$(FileShareService.BusinessUnitFunctionTest)"
 
     - checkout: self
 
