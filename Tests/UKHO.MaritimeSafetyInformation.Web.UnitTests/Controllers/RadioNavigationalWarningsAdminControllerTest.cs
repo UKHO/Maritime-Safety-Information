@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -20,6 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWService _fakeRnwService;
+        public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
@@ -100,6 +102,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());
         }
+
+        [Test]
+        public void WhenICallRadioNavigationWarningListForAdmin_ThenReturnView()
+        {
+            int id = 5;
+            A.CallTo(() => _fakeRnwService.EditRadioNavigationWarningListForAdmin(5, CorrelationId)).Returns(EditFakeRadioNavigationWarningListForAdmin());
+            Task<IActionResult> result = _controller.Edit(id);
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+        }
+
+        private static EditRadioNavigationalWarningsAdmin EditFakeRadioNavigationWarningListForAdmin()
+        {
+            return new EditRadioNavigationalWarningsAdmin
+            {
+                WarningType = 1,
+                Reference = "test",
+                DateTimeGroup = DateTime.UtcNow,
+                Summary = "Test1",
+                Content = "test",
+                WarningTypeName = "NavArea"
+            };
+        }
+
         #endregion
     }
 }

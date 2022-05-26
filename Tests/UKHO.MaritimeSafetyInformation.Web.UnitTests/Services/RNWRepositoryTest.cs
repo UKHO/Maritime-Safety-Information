@@ -27,6 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _context.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
             _context.WarningType.AddRange(GetFakeWarningTypeList());
             _context.SaveChanges();
+           
         }
 
         [SetUp]
@@ -206,6 +207,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarningAdmin.DateTimeGroup = dateTime;
             Task result = _rnwRepository.AddRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
             Assert.IsTrue(result.IsCompleted);
+        }
+
+        [Test]
+        public void WhenCallEditRadioNavigation_ThenReturnListAsync()
+        {
+            int id = 1;
+            EditRadioNavigationalWarningsAdmin result = _rnwRepository.EditRadioNavigation(id);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Id);
+            Assert.AreEqual("NAVAREA 1", result.WarningTypeName);
         }
 
         #endregion Edit Radio Navigation Warning

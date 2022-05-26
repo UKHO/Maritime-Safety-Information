@@ -80,6 +80,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             rnwList.WarningTypeName = WarningName;
             rnwList.Reference = rnwWarnings.Reference;
             rnwList.DateTimeGroup = rnwWarnings.DateTimeGroup;
+
             rnwList.DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup);
             rnwList.Summary = rnwWarnings.Summary;
             rnwList.Content = RnwHelper.FormatContent(rnwWarnings.Content);
