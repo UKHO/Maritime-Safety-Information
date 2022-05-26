@@ -55,6 +55,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual("RnwAdminListContent", adminListFilter.RadioNavigationalWarningsAdminList[2].Content);
             Assert.AreEqual(new DateTime(2099, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].ExpiryDate);
             Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[2].IsDeleted);
+            Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
+            Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
         }
 
         [Test]
