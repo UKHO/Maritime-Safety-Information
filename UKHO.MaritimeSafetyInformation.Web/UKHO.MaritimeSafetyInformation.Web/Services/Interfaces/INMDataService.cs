@@ -9,5 +9,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId);
         Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId);
         Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId);
+        Task<byte[]> DownloadZipFssFile(string batchId, string correlationId);
     }
 }

@@ -132,7 +132,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     new KeyValuePair<string, string>("MimeType", mimeType)
                 }, GetCurrentCorrelationId(), _logger);
 
-                byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, String.Empty, GetCurrentCorrelationId());
+                byte[] fileBytes = await _nMDataService.DownloadZipFssFile(batchId, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename=" + fileName);
 

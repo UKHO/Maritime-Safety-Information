@@ -308,6 +308,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.IsFaulted);
         }
 
+        [Test]
+        public void WhenDownloadZipFssFileIsCalled_ThenShouldReturnByteArray()
+        {
+            string batchId = Guid.NewGuid().ToString();
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadZipFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(stream);
+
+            Task<byte[]> result = _nMDataService.DownloadZipFssFile(batchId, CorrelationId);
+
+            Assert.IsInstanceOf<Task<byte[]>>(result);
+        }
+
+        [Test]
+        public void WhenDownloadZipFssFileThrowsException_ThenShouldExecuteCatch()
+        {
+            string batchId = Guid.NewGuid().ToString();
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSDownloadZipFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+
+            Task<byte[]> result = _nMDataService.DownloadZipFssFile(batchId, CorrelationId);
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()

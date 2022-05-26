@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
             Task<IResult<BatchSearchResponse>> result = _fileShareService.FSSBatchSearchAsync(searchText, FakeAccessToken, CorrelationId);
-            Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);            
+            Assert.IsInstanceOf<Task<IResult<BatchSearchResponse>>>(result);
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
                 .Returns(stream);
-            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId,fileName,"", CorrelationId);
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId, fileName, "", CorrelationId);
             Assert.IsInstanceOf<Task<Stream>>(result);
 
         }
@@ -125,5 +125,36 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId);
             Assert.IsTrue(result.IsFaulted);
         }
+
+        [Test]
+        public void WhenFSSDownloadZipFileIsCalled_ThenShouldReturnByteArray()
+        {
+            string batchId = Guid.NewGuid().ToString();
+
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+
+            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
+
+            A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None)).Returns(stream);
+
+            Task<Stream> result = _fileShareService.FSSDownloadZipFile(batchId, FakeAccessToken, CorrelationId);
+
+            Assert.IsInstanceOf<Task<Stream>>(result);
+        }
+
+        [Test]
+        public void WhenFSSDownloadZipFileThrowsException_ThenShouldExecuteCatch()
+        {
+            string batchId = Guid.NewGuid().ToString();
+
+            _fileShareServiceConfig.Value.BaseUrl = null;
+
+            A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(A<string>.Ignored, CancellationToken.None)).Throws(new Exception());
+
+            Task<Stream> result = _fileShareService.FSSDownloadZipFile(batchId, FakeAccessToken, CorrelationId);
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
     }
 }

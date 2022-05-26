@@ -285,7 +285,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenDownloadDailyFileIsCalled_ThenShouldRetunFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
-            string mimeType = "application/pdf";
+            string mimeType = "application/gzip";
 
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
@@ -299,7 +299,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenDownloadDailyFileIsCalled_ThenShouldReturnShowDailyFilesAction()
         {
             string batchId = Guid.NewGuid().ToString();
-            string mimeType = "application/pdf";
+            string mimeType = "application/gzip";
             string expected = "ShowDailyFiles";
 
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
