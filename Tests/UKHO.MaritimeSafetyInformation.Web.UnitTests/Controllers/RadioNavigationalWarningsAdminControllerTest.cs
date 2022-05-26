@@ -90,11 +90,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenICallIndexViewWithParameters_ThenReturnView()
+        public async Task WhenICallIndexViewWithParameters_ThenReturnView()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
-            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(A<int>.Ignored, A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+
+            IActionResult result = await _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            Assert.AreNotEqual(null, ((ViewResult)result).ViewData["WarningTypes"]);
+            Assert.AreNotEqual(null, ((ViewResult)result).ViewData["Years"]);
         }
 
         private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()

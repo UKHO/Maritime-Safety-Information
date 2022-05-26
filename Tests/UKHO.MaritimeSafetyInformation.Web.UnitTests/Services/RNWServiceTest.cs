@@ -198,6 +198,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                            async delegate { await _rnwService.GetRadioNavigationWarningsForAdmin(1, null, null, string.Empty); });
         }
 
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnWarnings()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Returns(GetFakeRadioNavigationalWarningsDataList());
+            List<RadioNavigationalWarningsData> result = await _rnwService.GetRadioNavigationalWarningsData(string.Empty);
+            Assert.AreEqual(1, result.Count);
+        }
+
         private static List<RadioNavigationalWarningsAdmin> GetFakeRadioNavigationalWarningList()
         {
             List<RadioNavigationalWarningsAdmin> radioNavigationalWarningList = new();
@@ -237,6 +245,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "RnwAdminListContent"
             });
             return radioNavigationalWarningList;
+        }
+
+        private static List<RadioNavigationalWarningsData> GetFakeRadioNavigationalWarningsDataList()
+        {
+            return new List<RadioNavigationalWarningsData> () { new RadioNavigationalWarningsData() };
         }
     }
 }
