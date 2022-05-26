@@ -96,6 +96,7 @@
 }
 .site-header .navbar-collapse .navbar-nav li a {
   padding: 2rem 1rem;
+  color: #09315b !important;
 }
 @media screen and (max-width: 1200px) {
   .site-header .navbar-collapse .navbar-nav li a {
@@ -685,7 +686,9 @@ button:active {
   border-color: transparent;
   padding: 0.5rem 1.5rem;
   border-radius: 0;
+  font-weight: 400;
 }
 .msi-tabs li .nav-link.active {
   border-color: #09315b;
+  color: #09315b;
 }

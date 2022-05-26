@@ -1,16 +1,18 @@
 ﻿<ul class="nav nav-tabs msi-tabs" id="nmTab" role="tablist">
     <li class="nav-item" role="presentation">
         @*<button class="nav-link active" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab" aria-controls="weekly" aria-selected="true">Weekly</button>*@
-        <a class="nav-link @(Convert.ToString(ViewData["PageName"])=="Weekly" ? "active":"")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners">Weekly</a>
+        <a class="nav-link @(Convert.ToString(ViewData["PageName"])=="Weekly" ? "active":"")" tabindex="@(Convert.ToString(ViewData["PageName"])=="Weekly" ? "0":"-1")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners">Weekly</a>
     </li>
     <li class="nav-item" role="presentation">
         @*<button class="nav-link" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily" type="button" role="tab" aria-controls="daily" aria-selected="false" tabindex="-1">Daily</button>*@
-        <a class="nav-link @(Convert.ToString(ViewData["PageName"])=="Daily" ? "active":"")" id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners">Daily</a>
+        <a class="nav-link @(Convert.ToString(ViewData["PageName"])=="Daily" ? "active":"")" tabindex="@(Convert.ToString(ViewData["PageName"])=="Daily" ? "0":"-1")" id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners">Daily</a>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="cumulative-tab" data-bs-toggle="tab" data-bs-target="#cumulative" type="button" role="tab" aria-controls="cumulative" aria-selected="false" tabindex="-1">Cumulative</button>
+        @*<button class="nav-link" id="cumulative-tab" data-bs-toggle="tab" data-bs-target="#cumulative" type="button" role="tab" aria-controls="cumulative" aria-selected="false" tabindex="-1">Cumulative</button>*@
+        <a class="nav-link" id="cumulative-tab" tabindex="-1" href="#">Cumulative</a>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="annual-tab" data-bs-toggle="tab" data-bs-target="#annual" type="button" role="tab" aria-controls="annual" aria-selected="false" tabindex="-1">Annual</button>
+        @*<button class="nav-link" id="annual-tab" data-bs-toggle="tab" data-bs-target="#annual" type="button" role="tab" aria-controls="annual" aria-selected="false" tabindex="-1">Annual</button>*@
+        <a class="nav-link" id="annual-tab" tabindex="-1" href="#">Annual</a>
     </li>
 </ul>
