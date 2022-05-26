@@ -11,11 +11,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-             .ConfigureAppConfiguration((ctx, bld) =>
-             {
-                 bld.AddJsonFile("appsettings.IntegrationTest.json");
-             })
+            Host.CreateDefaultBuilder(args)            
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
