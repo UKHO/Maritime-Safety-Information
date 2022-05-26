@@ -83,6 +83,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
 
             app.UseRouting();
 
@@ -93,6 +98,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHealthChecks("/health");
             });
+
+            app.Run(context => throw new Exception("error"));
         }
 
         protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)

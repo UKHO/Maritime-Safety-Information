@@ -1,5 +1,8 @@
-namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+using System.Diagnostics.CodeAnalysis;
+
+namespace UKHO.MaritimeSafetyInformation.Common.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ErrorViewModel
     {
         public string RequestId { get; set; }

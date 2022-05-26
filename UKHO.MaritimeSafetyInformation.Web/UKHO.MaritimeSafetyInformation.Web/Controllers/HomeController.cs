@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
+using UKHO.MaritimeSafetyInformation.Common.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
