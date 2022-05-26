@@ -12,22 +12,22 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
         protected IConfigurationRoot ConfigurationRoot;
 
         public string BusinessUnit;
-        public string ProductType;
-        public string BaseUrl;
-        public string PageSize;
-        public string Start;
+        //////////public string ProductType;
+        //////////public string BaseUrl;
+        //////////public string PageSize;
+        //////////public string Start;
 
         public Configuration()
         {
-            ConfigurationRoot = new ConfigurationBuilder()
-                                .AddJsonFile("appsettings.json", false)
+            ConfigurationRoot = new ConfigurationBuilder()                                
+                                .AddJsonFile("appsettings.IntegrationTest.json", false)
                                 .Build();
 
             BusinessUnit = ConfigurationRoot.GetValue<string>("FileShareService:BusinessUnit");
-            ProductType = ConfigurationRoot.GetValue<string>("FileShareService:ProductType");
-            BaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:BaseUrl");
-            PageSize = ConfigurationRoot.GetValue<string>("FileShareService:PageSize");
-            Start = ConfigurationRoot.GetValue<string>("FileShareService:Start");
+            //////////////ProductType = ConfigurationRoot.GetValue<string>("FileShareService:ProductType");
+            //////////////BaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:BaseUrl");
+            //////////////PageSize = ConfigurationRoot.GetValue<string>("FileShareService:PageSize");
+            //////////////Start = ConfigurationRoot.GetValue<string>("FileShareService:Start");
         }
     }
 }
