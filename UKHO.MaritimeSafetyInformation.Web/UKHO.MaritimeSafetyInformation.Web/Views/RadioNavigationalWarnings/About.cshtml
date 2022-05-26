@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_MSILayout.cshtml";
+}
+@{
+    ViewData["Header"] = "About";
+}
+<p>
+    We act as the NAVAREA I (NE Atlantic) Coordinator for the International Maritime Organisation (IMO) and International Hydrographic Organization (IHO) Worldwide Navigational Warning
+    Service (WWNWS) and also as the United Kingdom National Coordinator for issuing coastal navigational warnings.
+</p>
+<p>
+    Whilst the UKHO will attempt to keep this site up-to-date by adding and cancelling navigational warnings in real time, for reasons beyond its control, this may not always be possible.
+</p>
+<p>
+    The approved method of receiving Maritime Safety Information (MSI) is via the appropriate IMO, Global Maritime Distress and Safety System (GMDSS) broadcast systems as defined by the WWNWS.
+</p>
+<div class="alert alert-primary p-4" role="alert">
+    <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+    <div class="alert-head">
+        Important information
+    </div>
+    <p>
+        The displayed NAVAREA 1 and UK Coastal Warnings (WZs) were in force at: @ViewBag.LastModifiedDateTime
+    </p>
+</div>
+<h4>
+    Important Safety Notice
+</h4>
+<p>
+    The provision of navigational warnings on this website is not intended to be a substitute for, or an alternative to, the International Enhanced Group Call (EGC) Services or the
+    International NAVTEX service, and does not relieve Masters/Captains of their responsibility to monitor MSI broadcasts in accordance with the provisions of SOLAS.
+</p>
+<p>
+    Many warnings are of a temporary nature, but others may remain in force for several weeks and may be superseded by Notices to Mariners.
+</p>
+<p>
+    The IHO WWNWS-SC web page allows direct access to all the NAVAREA Coordinators around the world who have made their NAVAREA warnings available on the web.
+    You can visit the IHO WWNWS-SC web page <a href="https://iho.int/navigation-warnings-on-the-web" target="_blank">here</a>.
+</p>

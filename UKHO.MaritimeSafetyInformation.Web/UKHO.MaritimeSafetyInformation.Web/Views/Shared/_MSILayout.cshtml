@@ -7,15 +7,11 @@
     <div class="row">
         <div class="col-md-2 msi-tabs-container">
             <!--left nav-->
-            @if (Convert.ToString(ViewData["Header"]) == "Notices to Mariners" ||
-                 Convert.ToString(ViewData["Header"]) == "Leisure Folios" ||
-                 Convert.ToString(ViewData["Header"]) == "Value Added Resellers" ||
-                 Convert.ToString(ViewData["Header"]) == "About")
+            @if (ViewContext.RouteData.Values["controller"]?.ToString() == "NoticesToMariners")
             {
                 <partial name="_NMLeftMenu"></partial>
             }
-            else
-            if (Convert.ToString(ViewData["Header"]) == "Radio Navigational Warnings")
+            else if (ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings")
             {
                 <partial name="_RNWLeftMenu"></partial>
             }
