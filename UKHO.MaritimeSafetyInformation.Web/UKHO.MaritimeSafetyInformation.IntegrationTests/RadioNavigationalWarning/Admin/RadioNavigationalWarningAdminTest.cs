@@ -48,6 +48,13 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
+            Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList[2].WarningType);
+            Assert.AreEqual("RnwAdminListReferance", adminListFilter.RadioNavigationalWarningsAdminList[2].Reference);
+            Assert.AreEqual(new DateTime(2022, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].DateTimeGroup);
+            Assert.AreEqual("RnwAdminListSummary", adminListFilter.RadioNavigationalWarningsAdminList[2].Summary);
+            Assert.AreEqual("RnwAdminListContent", adminListFilter.RadioNavigationalWarningsAdminList[2].Content);
+            Assert.AreEqual(new DateTime(2099, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].ExpiryDate);
+            Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[2].IsDeleted);
         }
 
         [Test]

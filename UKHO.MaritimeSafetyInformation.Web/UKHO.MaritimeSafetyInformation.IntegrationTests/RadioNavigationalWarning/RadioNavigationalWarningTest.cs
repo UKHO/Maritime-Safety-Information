@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -43,6 +44,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             IActionResult result = await _controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
             Assert.AreEqual(6, warningsData.Count);
+            Assert.AreEqual("RnwAdminListReferance", warningsData[2].Reference);
+            Assert.AreEqual("RnwAdminListSummary", warningsData[2].Description);
+            Assert.AreEqual(new DateTime(2022, 1, 1), warningsData[2].DateTimeGroup);
+            Assert.AreEqual("011200 UTC Jan 22", warningsData[2].DateTimeGroupRnwFormat);
         }
 
         [OneTimeTearDown]
