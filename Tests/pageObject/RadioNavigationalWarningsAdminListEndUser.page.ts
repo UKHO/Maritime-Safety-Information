@@ -17,7 +17,7 @@ export default class RadioNavigationalWarningsListEndUser
     constructor(page:Page)
     {
          this.page = page; 
-         this.radioNavigationalWarningsPage = this.page.locator('text=Radio Navigational Warnings')
+         this.radioNavigationalWarningsPage = this.page.locator('a:has-text("Radio Navigational Warnings")')
          this.radioNavigationalWarningsEndUser = this.page.locator('#headingLevelOne')
          this.radioWarningEndUser = this.page.locator('text=Radio Warnings')
          this.aboutEndUser = this.page.locator('text=About')
@@ -37,7 +37,7 @@ export default class RadioNavigationalWarningsListEndUser
      return await locator.innerText();
     }
 
-    public async verifyTableNewDateColumnData()
+    public async verifyTableDateColumnData()
     {
       const resultYear= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
       
