@@ -84,7 +84,7 @@ export default class RadioNavigationalWarningsList
 
   public async verifyTableColumnWarningTypeData(expectedText:string)
   {
-    const result= await this.page.$$eval('#WarningTypeName' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    const result= await this.page.$$eval('[id^="WarningTypeName"]' , (matches: any[]) => { return matches.map(option => option.textContent) });
 
     //fail if there are no matching selections
     expect(result.length).toBeGreaterThan(0);
@@ -123,5 +123,7 @@ export default class RadioNavigationalWarningsList
     {
       expect(resultLinks[i].trim()).toEqual("Edit");
     }
-  } 
+  }
+
 }
+

@@ -1,3 +1,101 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style type="text/css">
+    #home-text {
+    }
+    #home-text h3 {
+        font-size: 145%;
+    }
+    #home-nav {
+        margin-top: 30px;
+    }
+    #home-nav h1,
+    #home-nav h2,
+    #home-nav h3,
+    #home-nav h4
+    {
+        color: #fff;
+    }
+    #home-nav p
+    {
+    }
+    #home-nav .panel {
+        color: #fff;
+        position: relative;
+        min-height: 400px;
+        padding: 0 25px;
+    }
+    #nm-home {
+        background-color: #09315b;
+    }
+    #rnw-home {
+        background-color: #007e97;
+    }
+    #home-nav .title {
+        margin-top: 20px;
+    }
+    #home-nav .text {
+        
+    }
+    #home-nav .cta {
+        position: absolute;
+        bottom: 15px;
+        right: 25px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="home-text" class="row">
+                <div class="col-md-12">
+                    <h1 class="mt-0">
+                        Maritime Safety Information
+                    </h1>
+                    <h3>
+                        View the latest safety-critical navigational information
+                    </h3>
+                    <h3>
+                        If you are an ADMIRALTY Distributor, please sign in to see more content
+                    </h3>
+                </div>
+            </div>
+            <div id="home-nav" class="row">
+                <div id="nm-home" class="panel col-md-6">
+                    <a href="@Url.Action("Index", "NoticesToMariners")" class="stretched-link"></a>
+
+                    <div class="title">
+                        <h2>Notices to Mariners (NMs)</h2>
+                    </div>
+
+                    <p class="text">
+                        Weekly updates that provide bridge crews with the latest safety-critical navigational information.
+                        They can be downloaded for free here, or purchased as weekly bulletins from your ADMIRALTY Distributor.
+                    </p>
+
+                    <div class="cta">
+                        <h4>Go to Notices to Mariners</h4>
+                    </div>
+                </div>
+                <div id="rnw-home" class="panel col-md-6">
+                    <a href="@Url.Action("Index", "RadioNavigationalWarnings")" class="stretched-link"></a>
+
+                    <div class="title">
+                        <h2>Radio Navigational Warnings (RNWs)</h2>
+                    </div>
+
+                    <p class="text">
+                        NAVAREA I and UK Coastal navigational warnings reproduced online.
+                    </p>
+
+                    <div class="cta">
+                        <h4>Go to Radio Navigational Warnings</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
