@@ -33,7 +33,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
 
-        #region DBMethods
         public async Task SeedRadioNavigationalWarnings(List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> radioNavigationalWarning)
         {
             _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarning);
@@ -60,8 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             await _fakeContext.SaveChangesAsync();
         }
 
-        #endregion DBMethods
-        public static List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> GetRadioNavigationalWarnings()
+        public static List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> GetFakeRadioNavigationalWarnings()
         {
             List<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> radioNavigationalWarningList = new();
 
@@ -155,7 +153,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             return radioNavigationalWarningList;
         }
 
-        public static List<WarningType> GetWarningTypes()
+        public static List<WarningType> GetFakeWarningTypes()
         {
             List<WarningType> warningTypes = new();
             warningTypes.Add(new WarningType()
