@@ -312,13 +312,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenDownloadZipFssFileIsCalled_ThenShouldReturnByteArray()
         {
             string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadZipFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(stream);
+            A.CallTo(() => _fakefileShareService.FSSDownloadZipFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(stream);
 
-            Task<byte[]> result = _nMDataService.DownloadZipFssFile(batchId, CorrelationId);
+            Task<byte[]> result = _nMDataService.DownloadZipFssFile(batchId, fileName, CorrelationId);
 
             Assert.IsInstanceOf<Task<byte[]>>(result);
         }
@@ -327,11 +328,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenDownloadZipFssFileThrowsException_ThenShouldExecuteCatch()
         {
             string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadZipFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => _fakefileShareService.FSSDownloadZipFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
-            Task<byte[]> result = _nMDataService.DownloadZipFssFile(batchId, CorrelationId);
+            Task<byte[]> result = _nMDataService.DownloadZipFssFile(batchId, fileName, CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }

@@ -193,15 +193,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public async Task<byte[]> DownloadZipFssFile(string batchId, string correlationId)
+        public async Task<byte[]> DownloadZipFssFile(string batchId, string fileName, string correlationId)
         {
             try
             {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} with _X-Correlation-ID:{correlationId}", batchId, correlationId);
+                _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-                Stream stream = await _fileShareService.FSSDownloadZipFile(batchId, accessToken, correlationId);
+                Stream stream = await _fileShareService.FSSDownloadZipFile(batchId, fileName, accessToken, correlationId);
 
                 byte[] fileBytes = new byte[stream.Length + 10];
 
@@ -215,13 +215,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 } while (numBytesToRead > 0);
                 stream.Close();
 
-                _logger.LogInformation(EventIds.GetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request to get daily zip NM file completed for batchId:{batchId} with _X-Correlation-ID:{correlationId}", batchId, correlationId);
+                _logger.LogInformation(EventIds.GetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 return fileBytes;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileFailed.ToEventId(), "Maritime safety information request to get daily zip NM file failed for batchId:{batchId} with _X-Correlation-ID:{correlationId}", batchId, correlationId);
+                _logger.LogInformation(EventIds.GetDailyZipNMFileFailed.ToEventId(), "Maritime safety information request to get daily zip NM file failed for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{correlationId}", batchId, fileName, ex.Message, correlationId);
                 throw;
             }
 

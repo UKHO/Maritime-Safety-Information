@@ -239,22 +239,30 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public async Task WhenDownloadDailyFileIsCalledWithNullBatchID_ThenShouldReturnShowDailyFilesAction()
         {
-            string batchId = null;
-            string expected = "ShowDailyFiles";
-            string mimeType = "application/gzip";
-            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            const string batchId = null;
+            const string fileName = "Daily 16-05-22.zip";
+            const string expected = "ShowDailyFiles";
+            const string mimeType = "application/gzip";
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
             string actualView = ((RedirectToActionResult)result).ActionName;
+
             Assert.AreEqual(expected, actualView);
         }
 
         [Test]
         public async Task WhenDownloadDailyFileIsCalledWithEmptyBatchID_ThenShouldReturnShowDailyFilesAction()
         {
-            string batchId = "";
+            const string batchId = "";
+            const string fileName = "Daily 16-05-22.zip";
             string expected = "ShowDailyFiles";
             string mimeType = "application/gzip";
-            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
             string actualView = ((RedirectToActionResult)result).ActionName;
+
             Assert.AreEqual(expected, actualView);
         }
 
@@ -262,22 +270,60 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenDownloadDailyFileIsCalledWithNullMimeType_ThenShouldReturnShowDailyFilesAction()
         {
             string batchId = Guid.NewGuid().ToString();
-            string expected = "ShowDailyFiles";
-            string mimeType = null;
-            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            const string fileName = "Daily 16-05-22.zip";
+            const string expected = "ShowDailyFiles";
+            const string mimeType = null;
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
             string actualView = ((RedirectToActionResult)result).ActionName;
+
+            Assert.AreEqual(expected, actualView);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalledWithNullFileName_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = null;
+            const string expected = "ShowDailyFiles";
+            const string mimeType = null;
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
+            string actualView = ((RedirectToActionResult)result).ActionName;
+
             Assert.AreEqual(expected, actualView);
         }
 
 
         [Test]
+        public async Task WhenDownloadDailyFileIsCalledWithEmptyFileName_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            string fileName = string.Empty;
+            const string expected = "ShowDailyFiles";
+            const string mimeType = null;
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
+            string actualView = ((RedirectToActionResult)result).ActionName;
+
+            Assert.AreEqual(expected, actualView);
+        }
+
+        [Test]
         public async Task WhenDownloadDailyFileIsCalledWithEmptyMimeType_ThenShouldReturnShowDailyFilesAction()
         {
             string batchId = Guid.NewGuid().ToString();
-            string expected = "ShowDailyFiles";
-            string mimeType = "";
-            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            const string fileName = "Daily 16-05-22.zip";
+            const string expected = "ShowDailyFiles";
+            const string mimeType = "";
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
             string actualView = ((RedirectToActionResult)result).ActionName;
+
             Assert.AreEqual(expected, actualView);
         }
 
@@ -285,12 +331,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenDownloadDailyFileIsCalled_ThenShouldRetunFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
-            string mimeType = "application/gzip";
+            const string fileName = "Daily 16-05-22.zip";
+            const string mimeType = "application/gzip";
 
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
-            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
-            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+            A.CallTo(() => _fakeNMDataService.DownloadZipFssFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
 
             Assert.IsInstanceOf<FileResult>(result);
         }
@@ -299,15 +346,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenDownloadDailyFileIsCalled_ThenShouldReturnShowDailyFilesAction()
         {
             string batchId = Guid.NewGuid().ToString();
-            string mimeType = "application/gzip";
-            string expected = "ShowDailyFiles";
+            const string fileName = "Daily 16-05-22.zip";
+            const string mimeType = "application/gzip";
+            const string expected = "ShowDailyFiles";
 
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
-            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => _fakeNMDataService.DownloadZipFssFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
-            IActionResult result = await _controller.DownloadDailyFile(batchId, mimeType);
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
             string actualView = ((RedirectToActionResult)result).ActionName;
+
             Assert.AreEqual(expected, actualView);
 
         }

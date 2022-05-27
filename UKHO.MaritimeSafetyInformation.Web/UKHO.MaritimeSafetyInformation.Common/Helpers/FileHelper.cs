@@ -13,7 +13,7 @@
                 number /= 1024;
                 counter++;
             }
-            return $"{Convert.ToInt32(Math.Round(number))} {suffixes[counter]}";
+            return $"{Convert.ToInt32(Math.Round(number))}{suffixes[counter]}";
         }
     }
 }

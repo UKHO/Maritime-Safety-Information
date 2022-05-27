@@ -130,6 +130,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFSSDownloadZipFileIsCalled_ThenShouldReturnByteArray()
         {
             string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
@@ -137,7 +138,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None)).Returns(stream);
 
-            Task<Stream> result = _fileShareService.FSSDownloadZipFile(batchId, FakeAccessToken, CorrelationId);
+            Task<Stream> result = _fileShareService.FSSDownloadZipFile(batchId,fileName, FakeAccessToken, CorrelationId);
 
             Assert.IsInstanceOf<Task<Stream>>(result);
         }
@@ -146,12 +147,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFSSDownloadZipFileThrowsException_ThenShouldExecuteCatch()
         {
             string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
 
             _fileShareServiceConfig.Value.BaseUrl = null;
 
             A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(A<string>.Ignored, CancellationToken.None)).Throws(new Exception());
 
-            Task<Stream> result = _fileShareService.FSSDownloadZipFile(batchId, FakeAccessToken, CorrelationId);
+            Task<Stream> result = _fileShareService.FSSDownloadZipFile(batchId,fileName, FakeAccessToken, CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }

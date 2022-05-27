@@ -27,7 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "aaa",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1 KB",
+                    FileSizeinKB = "1KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -38,7 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "bbb",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1 KB",
+                    FileSizeinKB = "1KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -49,7 +49,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "ccc",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1 KB",
+                    FileSizeinKB = "1KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -60,7 +60,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "ddd",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1 KB",
+                    FileSizeinKB = "1KB",
                     MimeType = "PDF",
                     Links = null
                 }
@@ -243,7 +243,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             List<KeyValuePair<string, string>> parameters = new()
             {
                 new KeyValuePair<string, string>("BatchId", null),
-                new KeyValuePair<string, string>("MimeType", "application/pdf")
+                new KeyValuePair<string, string>("FileName", "Daily 16-05-22.zip"),
+                new KeyValuePair<string, string>("MimeType", "application/gzip")
             };
 
             ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
@@ -257,7 +258,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             List<KeyValuePair<string, string>> parameters = new()
             {
                 new KeyValuePair<string, string>("BatchId", "Affsd-asd-asda"),
-                new KeyValuePair<string, string>("MimeType", "application/pdf")
+                new KeyValuePair<string, string>("FileName", "Daily 16-05-22.zip"),
+                new KeyValuePair<string, string>("MimeType", "application/gzip")
             };
 
             ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();

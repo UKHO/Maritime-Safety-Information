@@ -84,21 +84,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<Stream> FSSDownloadZipFile(string batchId, string accessToken, string correlationId)
+        public async Task<Stream> FSSDownloadZipFile(string batchId, string fileName, string accessToken, string correlationId)
         {
             try
             {
-                _logger.LogInformation(EventIds.FSSGetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file started for batchId:{batchId} with _X-Correlation-ID:{correlationId}", batchId, correlationId);
+                _logger.LogInformation(EventIds.FSSGetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
                 Stream stream = await fileShareApi.DownloadZipFileAsync(batchId, CancellationToken.None);
 
-                _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} with _X-Correlation-ID:{correlationId}", batchId, correlationId);
+                _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
                 return stream;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSGetDailyZipNMFileResponseFailed.ToEventId(), "Failed to get daily zip NM file from FSS for batchId:{batchId} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSGetDailyZipNMFileResponseFailed.ToEventId(), "Failed to get daily zip NM file from FSS for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, ex.Message, fileName, correlationId);
                 throw;
             }
         }
