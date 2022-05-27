@@ -12,7 +12,7 @@ export default class noticeToMarinerWeekDownload
     constructor(page:Page)
     {
         this.page = page; 
-        this.noticeToMarine = this.page.locator("text=Notices to Mariners");
+        this.noticeToMarine = this.page.locator('a:has-text("Notices to Mariners")');
         this.year = this.page.locator('#ddlYears');
         this.week =this.page.locator('#ddlWeeks')
     }

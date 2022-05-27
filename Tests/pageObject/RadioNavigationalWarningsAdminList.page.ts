@@ -125,6 +125,5 @@ export default class RadioNavigationalWarningsList
     }
   }
 
-
- 
 }
+
