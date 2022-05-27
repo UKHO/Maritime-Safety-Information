@@ -44,7 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     TempData["message"] = "Record created successfully!";
                     _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                    return RedirectToAction(nameof(Index), new { reLoadData = true });
+                    return RedirectToAction(nameof(Index));
                 }
             }
 

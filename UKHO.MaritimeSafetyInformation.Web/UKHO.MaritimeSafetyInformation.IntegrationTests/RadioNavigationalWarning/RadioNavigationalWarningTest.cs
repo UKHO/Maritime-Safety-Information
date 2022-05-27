@@ -23,8 +23,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
         {
-            await SeedRadioNavigationalWarnings(GetRadioNavigationalWarnings());
-            await SeedWarningType(GetWarningTypes());
+            await SeedRadioNavigationalWarnings(GetFakeRadioNavigationalWarnings());
+            await SeedWarningType(GetFakeWarningTypes());
         }
 
         [SetUp]
@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             IActionResult result = await _controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
-            Assert.AreEqual(6, warningsData.Count);
+            Assert.AreEqual(7, warningsData.Count);
         }
 
         [OneTimeTearDown]
