@@ -174,13 +174,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             try
             {
-                _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information edit RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
                 await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
-                _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ErrorInRnwRepositoryProcess.ToEventId(), ex, "Maritime safety information error has occurred in the process to add new RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.ErrorInRnwRepositoryProcess.ToEventId(), ex, "Maritime safety information error has occurred in the process to edit RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
 

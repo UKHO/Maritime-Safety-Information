@@ -74,13 +74,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public EditRadioNavigationalWarningsAdmin EditRadioNavigation(int id)
         {
             RadioNavigationalWarning rnwWarnings = _context.Set<RadioNavigationalWarning>().Find(id);
-            EditRadioNavigationalWarningsAdmin rnwList = new EditRadioNavigationalWarningsAdmin();
+            EditRadioNavigationalWarningsAdmin rnwList = new();
             rnwList.Id = rnwWarnings.Id;
             string WarningName = _context.WarningType.Where(x => x.Id == rnwWarnings.WarningType).FirstOrDefault().Name;
             rnwList.WarningTypeName = WarningName;
             rnwList.Reference = rnwWarnings.Reference;
             rnwList.DateTimeGroup = rnwWarnings.DateTimeGroup;
-
             rnwList.DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup);
             rnwList.Summary = rnwWarnings.Summary;
             rnwList.Content = RnwHelper.FormatContent(rnwWarnings.Content);
@@ -92,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task AddRadioNavigationWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
         {
-            RadioNavigationalWarning rnwList = new RadioNavigationalWarning();
+            RadioNavigationalWarning rnwList = new();
             rnwList.Id = radioNavigationalWarningAdmin.Id;
             rnwList.WarningType = radioNavigationalWarningAdmin.WarningType;
             rnwList.Reference = radioNavigationalWarningAdmin.Reference;

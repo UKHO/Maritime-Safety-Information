@@ -68,7 +68,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         // GET: RadioNavigationalWarnings/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-
             if (id == null)
             {
                 _logger.LogInformation(EventIds.EditRNWRecordIDNotFound.ToEventId(), "Maritime safety information edit RNW record id not found for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
@@ -82,9 +81,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 return NotFound();
             }
             
-            List<SelectListItem> list = new List<SelectListItem>();
+            List<SelectListItem> list = new();
 
-            foreach (var item in await _rnwService.GetWarningTypes())
+            foreach (WarningType item in await _rnwService.GetWarningTypes())
             {
                 if (item.Name == radioNavigationalWarningsAdmin.WarningTypeName)
                 {
@@ -113,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin)
         {
-            _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information create new RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information Edit RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             if (id != radioNavigationalWarningsAdmin.Id)
             {
