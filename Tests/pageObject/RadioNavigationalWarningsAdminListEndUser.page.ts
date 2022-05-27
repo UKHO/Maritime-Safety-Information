@@ -78,6 +78,8 @@ export default class RadioNavigationalWarningsListEndUser
       const viewDetails= await this.page.$('[id^="Viewdetails"] >> text=details');
       const beforeRefrence= await (await this.page.$('[id^="Reference"]')).innerText();
       const beforeDatetime = await (await this.page.$('[id^="DateTimeGroupRnwFormat"]')).innerText();
+      const beforeViewDetails = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
+      expect(beforeViewDetails).toEqual("false");
       await viewDetails.click({force:true});
       const newDetails = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
       expect(newDetails).toBeTruthy();
