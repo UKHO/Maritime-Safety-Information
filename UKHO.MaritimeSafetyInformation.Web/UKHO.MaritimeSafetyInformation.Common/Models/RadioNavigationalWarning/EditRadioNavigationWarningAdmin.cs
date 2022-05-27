@@ -16,7 +16,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         public int WarningType { get; set; }
 
         [DisplayName("Warning Type")]
-        //[Required]
         public string WarningTypeName { get; set; }
 
         [Required]
