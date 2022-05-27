@@ -37,7 +37,7 @@ export default class RadioNavigationalWarningsListEndUser
      return await locator.innerText();
     }
 
-    public async verifyTableNewDateColumnData()
+    public async verifyTableDateColumnData()
     {
       const resultYear= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
       

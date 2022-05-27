@@ -55,7 +55,7 @@ test.describe("Create new radio navigational warnings record", ()=> {
    
   }) 
  
-   test('Update With valid input details with Navarea',async({page})=>{   
+   test('Update With valid input details with UK Coastal',async({page})=>{   
     await radioNavigationalWarnings.searchListWithfilter('UK Coastal');
     await radioNavigationalWarnings.getEditUrl();
     await radioNavigationalWarnings.isDelete();
@@ -64,7 +64,7 @@ test.describe("Create new radio navigational warnings record", ()=> {
     await radioNavigationalWarnings.getDialogText('Record updated successfully!')    
   })
 
-   test('Update With valid input details with UK costal',async({page})=>{  
+   test('Update With valid input details with NAVAREA',async({page})=>{  
     await radioNavigationalWarnings.searchListWithfilter('NAVAREA 1');
     await radioNavigationalWarnings.getEditUrl();
     await radioNavigationalWarnings.isDelete();
