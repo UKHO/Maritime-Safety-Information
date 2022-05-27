@@ -336,6 +336,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910078 - Request For FSS To Get DailyZ ip NM File Failed.
         /// </summary>
         FSSGetDailyZipNMFileResponseFailed = 910078,
+
+        /// <summary>
+        /// 910079-  Event data for Retrieval of MSI Show Daily File Failed.
+        /// </summary>
+        ShowDailyFilesFailed = 910079
     }
 
     public static class EventIdExtensions

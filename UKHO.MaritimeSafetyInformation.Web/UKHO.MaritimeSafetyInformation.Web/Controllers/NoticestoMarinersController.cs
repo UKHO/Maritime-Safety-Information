@@ -80,11 +80,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
-            _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = new();
+            try
+            {
+                _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowDailyFilesFailed.ToEventId(), "Maritime safety information request to show daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+            }
 
             return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels);
 
