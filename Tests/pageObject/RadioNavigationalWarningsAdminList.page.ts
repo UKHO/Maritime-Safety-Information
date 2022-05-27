@@ -123,4 +123,6 @@ export default class RadioNavigationalWarningsList
       expect(resultLinks[i].trim()).toEqual("Edit");
     }
   }
+
 }
+

@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="Configuration\**" />
+    <Compile Remove="Logs\**" />
     <Content Remove="Configuration\**" />
+    <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="Logs\**" />
     <None Remove="Configuration\**" />
+    <None Remove="Logs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,7 +65,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logs\" />
+    <Folder Include="wwwroot\nms\cumulative\" />
+    <Folder Include="wwwroot\nms\annual\" />
+    <Folder Include="wwwroot\nms\leisure\" />
   </ItemGroup>
 
 </Project>

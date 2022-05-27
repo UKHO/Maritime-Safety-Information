@@ -16,8 +16,8 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
          expect(notice.checkEnabledYearDropDown()).toBeTruthy();
          expect(notice.checkEnabledWeekDropDown()).toBeTruthy();
          expect(await notice.checkText(notice.menuNoticeToMarine)).toEqual("Notices to Mariners");
-         expect(await notice.checkText(notice.menuLeisureFolios)).toEqual("Leisure folios");
-         expect(await notice.checkText(notice.menuValueAddedResellers)).toEqual("Value added resellers");
+         expect(await notice.checkText(notice.menuLeisureFolios)).toEqual("Leisure Folios");
+         expect(await notice.checkText(notice.menuValueAddedResellers)).toEqual("Value Added Resellers");
          expect(await notice.checkText(notice.menuAbout)).toEqual("About");
          expect(await notice.checkText(notice.tabweekly)).toEqual("Weekly");
          expect(await notice.checkText(notice.tabdaily)).toEqual("Daily");

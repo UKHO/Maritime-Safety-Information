@@ -17,7 +17,7 @@ export default class RadioNavigationalWarningsListEndUser
     constructor(page:Page)
     {
          this.page = page; 
-         this.radioNavigationalWarningsPage = this.page.locator('text=Radio Navigation Warnings')
+         this.radioNavigationalWarningsPage = this.page.locator('a:has-text("Radio Navigational Warnings")')
          this.radioNavigationalWarningsEndUser = this.page.locator('#headingLevelOne')
          this.radioWarningEndUser = this.page.locator('text=Radio Warnings')
          this.aboutEndUser = this.page.locator('text=About')
@@ -40,11 +40,10 @@ export default class RadioNavigationalWarningsListEndUser
     public async verifyTableDateColumnData()
     {
       const resultYear= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
-  
+      
       //fail if there are no matching selections
       expect(resultYear.length).toBeGreaterThan(0);
-  
-  
+
       //Verify Dates are descending order   
       const resultdate= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
       const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date , );
@@ -69,7 +68,6 @@ export default class RadioNavigationalWarningsListEndUser
       var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
         return element === tableColsHeader[index];
       });
-  
       expect(match).toBeTruthy();
     }
   
