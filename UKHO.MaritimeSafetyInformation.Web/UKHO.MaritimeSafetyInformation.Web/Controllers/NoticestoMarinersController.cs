@@ -118,6 +118,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult Leisure()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Resellers()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult About()
+        {
+            return View();
+        }
         public async Task<ActionResult> DownloadDailyFile(string batchId, string fileName, string mimeType)
         {
             try
