@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             IActionResult result = await _controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
-            var lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
+            string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
             Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
             Assert.AreEqual(6, warningsData.Count);
         }
