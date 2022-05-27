@@ -28,5 +28,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
         }
+
+        [HttpGet]
+        public IActionResult About()
+        {
+            ViewBag.LastModifiedDateTime = "261613 UTC May 22";
+            //TODO
+            //ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
+            return View();
+        }
     }
 }

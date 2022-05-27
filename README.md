@@ -4,9 +4,9 @@
 
 The UKHO have embarked on a project to create a new Admiralty Customer portal that separates Admiralty Products from our hydrographic duties (including SOLAS).
 
-Marine Safety Information (Notice to Mariners and Radio Navigation Warnings) are no longer part of this new portal, but unfortunately the underlying SharePoint service is no longer supported. Therefore, a new service will be required to ensure our customers can still download the necessary NMs created each week and review new RNWs.
+Marine Safety Information (Notices to Mariners and Radio Navigational Warnings) are no longer part of this new portal, but unfortunately the underlying SharePoint service is no longer supported. Therefore, a new service will be required to ensure our customers can still download the necessary NMs created each week and review new RNWs.
 
-Both the NM Web Search and the Notice to Mariners Web pages offer the public and our distributors the ability to retrieve the latest changes to our (UKHO) products. However, the mechanisms they use to achieve this are entirely separate. Therefore, a new service will be required to ensure our customers can still download the necessary NMs created each week without having to use the NM Web Search portal.
+Both the NM Web Search and the Notices to Mariners Web pages offer the public and our distributors the ability to retrieve the latest changes to our (UKHO) products. However, the mechanisms they use to achieve this are entirely separate. Therefore, a new service will be required to ensure our customers can still download the necessary NMs created each week without having to use the NM Web Search portal.
 
 The removal of SharePoint and the web service will also affect RNWs, this will also require a new portal for customers to review RNWs and print if required as well as a new data store to store the information.
 
@@ -47,8 +47,8 @@ The NMs and RNW solution will be hosted in the cloud (likely Azure as this is th
 | ---- | ---------- |
 | FSS | File Share Service, a UKHO service that provides APIs to allow searching for and downloading of files. See <https://github.com/UKHO/file-share-service> and <https://fss.admiralty.co.uk/> |
 | MSI | Marine Safety Information |
-| NMs | Notice to Mariners - ADMIRALTY Notices to Mariners are weekly updates that provide bridge crews with the latest safety-critical navigational information. |
-| RNW | Radio Navigation Warnings - Radio Navigational Warnings provide early information of important incidents which may constitute a danger to navigation. Many navigational warnings are of a temporary nature, but others remain in force for several weeks and may be succeeded by Notice to Mariners (NMs). |
+| NMs | Notices to Mariners - ADMIRALTY Notices to Mariners are weekly updates that provide bridge crews with the latest safety-critical navigational information. |
+| RNW | Radio Navigational Warnings - Radio Navigational Warnings provide early information of important incidents which may constitute a danger to navigation. Many navigational warnings are of a temporary nature, but others remain in force for several weeks and may be succeeded by Notices to Mariners (NMs). |
 | SOLAS | The International Convention for the Safety of Life at Sea (SOLAS) is an international maritime treaty that sets minimum safety standards in the construction, equipment and operation of merchant ships. |
 | SNC | Standard Nautical Chart - A paper chart. |
 | Tracings | A PDF representation of corrections that need to be applied to a paper chart. |
