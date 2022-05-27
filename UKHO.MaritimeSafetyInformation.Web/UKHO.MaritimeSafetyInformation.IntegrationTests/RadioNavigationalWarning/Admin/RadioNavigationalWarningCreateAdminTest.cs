@@ -56,6 +56,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
             Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
             Assert.AreEqual(1, _fakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
+            Assert.IsTrue(_fakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
         }
 
         [Test]

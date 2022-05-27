@@ -100,6 +100,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             rnwList.Content = RnwHelper.FormatContent(radioNavigationalWarningAdmin.Content);
             rnwList.ExpiryDate = radioNavigationalWarningAdmin.ExpiryDate;
             rnwList.IsDeleted = bool.Parse(radioNavigationalWarningAdmin.IsDeleted);
+            rnwList.LastModified = DateTime.UtcNow;
             _context.Update(rnwList);
             await _context.SaveChangesAsync();
         }
