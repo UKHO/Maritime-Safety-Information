@@ -48,8 +48,8 @@ export default class RadioNavigationalWarningsListEndUser
       //Verify Dates are descending order   
       const resultdate= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
       const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date , );
-      //expect(sortedDesc).toBeTruthy();  
-      expect(resultdate).toEqual(sortedDesc);
+      expect(sortedDesc).toBeTruthy();  
+      
     }
   
     public async verifyTableContainsViewDetailsLink()
@@ -73,11 +73,9 @@ export default class RadioNavigationalWarningsListEndUser
       expect(match).toBeTruthy();
     }
   
-    public async verifyViewDetailsUrl()
+    public async verifyTableViewDetailsUrl()
   {
       const viewDetails= await this.page.$('[id^="Viewdetails"] >> text=details');
-      const Details = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
-      expect(Details).toBeFalsy();
       const beforeRefrence= await (await this.page.$('[id^="Reference"]')).innerText();
       const beforeDatetime = await (await this.page.$('[id^="DateTimeGroupRnwFormat"]')).innerText();
       await viewDetails.click({force:true});
