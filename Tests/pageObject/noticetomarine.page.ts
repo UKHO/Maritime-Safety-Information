@@ -24,8 +24,8 @@ export default class noticetoMarine
      this.noticeMarine =this.page.locator('a:has-text("Notices to Mariners")');
      this.dropDownYearly = this.page.locator("#ddlYears");
      this.dropDownWeekly = this.page.locator("#ddlWeeks");
-     this.fileName=this.page.locator('text=File Name');
-     this.fileSize= this.page.locator('text=File Size');
+     this.fileName=this.page.locator('#weekly >> text=File Name');
+     this.fileSize= this.page.locator('#weekly >> text=File Size');
      this.menuNoticeToMarine = this.page.locator('#navbarSupportedContent >> text=Notices to Mariners');
      this.menuLeisureFolios = this.page.locator('text=Leisure Folios');
      this.menuValueAddedResellers = this.page.locator('text=Value Added Resellers');
