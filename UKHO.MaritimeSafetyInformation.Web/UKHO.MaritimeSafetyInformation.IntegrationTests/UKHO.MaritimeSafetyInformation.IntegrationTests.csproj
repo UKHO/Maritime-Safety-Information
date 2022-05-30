@@ -8,6 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="7.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
@@ -20,6 +32,10 @@
   <ItemGroup>
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NoticeToMariners\" />
   </ItemGroup>
 
 </Project>
