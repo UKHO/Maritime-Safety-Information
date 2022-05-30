@@ -92,11 +92,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
                 IResult<Stream> stream = await fileShareApi.DownloadZipFileAsync(batchId, CancellationToken.None);
-                if(stream.IsSuccess)
+                if (stream.IsSuccess)
                 {
-                    _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} with _X-Correlation-ID:{correlationId}", batchId, correlationId);
+                    _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
                     return stream.Data;
-                }                
+                }
+                else
+                {
+                    _logger.LogInformation(EventIds.FSSGetDailyZipNMFileReturnIsSuccessFalse.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file returns IsSuccess false with StatusCode {StatusCode} for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", stream.StatusCode, batchId, fileName, correlationId);
+
+                    if (stream.Errors.Count > 0)
+                    {
+                        string error = "";
+                        foreach (var item in stream.Errors)
+                            error += item.Description + "\n";
+
+                        _logger.LogInformation(EventIds.FSSDownloadZipFileAsyncHasError.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file has error for batchId:{batchId} and fileName:{fileName} with error:{error} for _X-Correlation-ID:{correlationId}", batchId, fileName, error, correlationId);
+                        throw new Exception(error);
+                    }
+                }
             }
             catch (Exception ex)
             {

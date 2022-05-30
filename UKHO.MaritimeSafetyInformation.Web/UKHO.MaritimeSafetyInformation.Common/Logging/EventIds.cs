@@ -340,7 +340,18 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910079-  Event data for Retrieval of MSI Show Daily File Failed.
         /// </summary>
-        ShowDailyFilesFailed = 910079
+        ShowDailyFilesFailed = 910079,
+
+        /// <summary>
+        /// 910080-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
+        /// </summary>
+        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910080,
+
+        /// <summary>
+        /// 910081-  Request For FSS To Get Daily Zip NM File Has Error.
+        /// </summary>
+        FSSDownloadZipFileAsyncHasError = 910081,
+
     }
 
     public static class EventIdExtensions
