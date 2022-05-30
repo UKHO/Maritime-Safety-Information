@@ -283,11 +283,72 @@
 .rnw-allwarnings-table tbody tr td.td-5 {
   flex-basis: 30%;
 }
-.rnw-allwarnings-table tbody tr td a {
-  font-weight: 300;
+.rnw-allwarnings-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+.rnw-allwarnings-table tbody tr:nth-child(4n-1) {
+  background-color: #eef3f4;
 }
 .rnw-allwarnings-table tbody.scroll-content {
   max-height: 88vh !important;
+}
+
+.accordianTable .accordion-button {
+  padding: 0;
+  width: auto;
+  display: inline-block;
+  text-decoration: underline;
+  color: #09315b;
+  background-color: transparent;
+}
+.accordianTable .accordion-button:hover, .accordianTable .accordion-button:active {
+  border: 0;
+  background-color: transparent;
+}
+.accordianTable .accordion-button.collapsed::before {
+  content: "View ";
+}
+.accordianTable .accordion-button:not(.collapsed) {
+  background-color: transparent;
+  box-shadow: none;
+}
+.accordianTable .accordion-button:not(.collapsed)::before {
+  content: "Hide ";
+}
+.accordianTable .accordion-button::before {
+  white-space: pre;
+}
+.accordianTable .accordion-button::after {
+  content: none;
+}
+.accordianTable tr.accordion-collapse td {
+  border-right: 0 !important;
+}
+.accordianTable .warning-detail {
+  font-size: 18px;
+  color: #000000;
+}
+.accordianTable .warning-detail h1, .accordianTable .warning-detail h2, .accordianTable .warning-detail h3 {
+  color: #000000;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.accordianTable .warning-detail p {
+  margin-bottom: 0;
+}
+.accordianTable .warning-detail .warning-type {
+  font-weight: 400;
+}
+.accordianTable .warning-detail pre {
+  width: 100%;
+  overflow: hidden;
+  font-family: JohnstonITC, Helvetica, sans-serif;
+  font-size: 18px;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
@@ -311,6 +372,7 @@ a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-inpu
 .alert p {
   margin-bottom: 0;
   margin-top: 5px;
+  line-height: 1.8rem;
 }
 
 .alert-primary {
@@ -348,6 +410,9 @@ table td {
   border-bottom: 1px solid #d8d8d8 !important;
   border-right: 1px solid #d8d8d8 !important;
 }
+table td a {
+  font-weight: 300;
+}
 
 .hidden-caption {
   height: 1px;
@@ -360,11 +425,6 @@ table td {
 .form-label {
   margin-bottom: 0.5rem !important;
   box-shadow: none;
-}
-
-.form-select, .form-control {
-  border-radius: 0;
-  font-weight: 300;
 }
 
 .hidden-caption {
@@ -544,6 +604,7 @@ button:active {
   padding: 0.5rem;
   color: #09315b;
   display: inline-block;
+  font-weight: 400;
 }
 @media screen and (max-width: 1200px) {
   .msi-page-nav li a {

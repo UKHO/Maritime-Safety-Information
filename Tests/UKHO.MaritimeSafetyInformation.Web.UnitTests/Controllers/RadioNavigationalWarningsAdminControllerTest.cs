@@ -60,12 +60,40 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
         }
 
+
         [Test]
-        public void WhenICallIndexViewWithParameters_ThenReturnView()
+        public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordIsNotCreated()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
-            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            _controller.TempData = _tempData;
+
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(false);
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
+
             Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNull(_controller.TempData["message"]);
+        }
+
+        [Test]
+        public void WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
+        {
+            _controller.TempData = _tempData;
+
+            _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNull(_controller.TempData["message"]);
+        }
+
+        [Test]
+        public async Task WhenICallGetRadioNavigationWarningsForAdmin_ThenReturnViewAndViewData()
+        {
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(A<int>.Ignored, A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+
+            IActionResult result = await _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            Assert.IsInstanceOf<IActionResult>(result);
+            Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
+            Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
         }
 
         private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()

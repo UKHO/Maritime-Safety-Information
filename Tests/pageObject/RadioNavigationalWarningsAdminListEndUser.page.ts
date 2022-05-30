@@ -48,14 +48,16 @@ export default class RadioNavigationalWarningsListEndUser
       const resultdate= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
       const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date , );
       expect(sortedDesc).toBeTruthy();  
+      
     }
   
     public async verifyTableContainsViewDetailsLink()
     {
-      const resultLinks= await this.page.$$eval('[id^="Viewdetails"]' , (matches: any[]) => { return matches.map(option => option.textContent) });
+      const resultLinks= await this.page.$$eval('[id^="Viewdetails"] > button' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
+     
       for(let i=0;i<resultLinks.length;i++)
       {
-        expect(resultLinks[i].trim()).toEqual("View details");
+        expect(resultLinks[i].trim()).toEqual("details");
       }
     }
 
@@ -69,4 +71,19 @@ export default class RadioNavigationalWarningsListEndUser
       expect(match).toBeTruthy();
     }
   
+    public async verifyTableViewDetailsUrl()
+  {
+      const viewDetails= await this.page.$('[id^="Viewdetails"] >> text=details');
+      const beforeRefrence= await (await this.page.$('[id^="Reference"]')).innerText();
+      const beforeDatetime = await (await this.page.$('[id^="DateTimeGroupRnwFormat"]')).innerText();
+      const beforeViewDetails = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
+      expect(beforeViewDetails).toEqual("false");
+      await viewDetails.click({force:true});
+      const newDetails = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
+      expect(newDetails).toBeTruthy();
+      const afterRefrence = await (await this.page.$('[id^="Details_Reference"]')).innerText();
+      const afterDateTime = await (await this.page.$('[id^="Details_DateTimeGroupRnwFormat"]')).innerText();
+      expect(beforeRefrence).toEqual(afterRefrence);
+      expect(beforeDatetime).toEqual(afterDateTime);   
+}
 }
