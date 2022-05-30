@@ -62,12 +62,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                           join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
                           where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
-                          {
-                              Reference = rnwWarnings.Reference,
-                              DateTimeGroup = rnwWarnings.DateTimeGroup,
-                              Description = rnwWarnings.Summary,
-                              DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup)
-                          }).OrderByDescending(a => a.DateTimeGroup)
+                     {
+                        WarningType = warningType.Name,
+                        Reference = rnwWarnings.Reference,
+                        DateTimeGroup = rnwWarnings.DateTimeGroup,
+                        Description = rnwWarnings.Summary,
+                        DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
+                        Content = rnwWarnings.Content
+                     }).OrderByDescending(a => a.DateTimeGroup)
                      .ToListAsync();
         }
 

@@ -50,26 +50,49 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="scroll-content scroll-bar">
-                    @foreach (var item in Model)
-                    {
+                <tbody class="scroll-content scroll-bar accordianTable" id="accordionAllwarning">
+                    @{int i = 0;}
+                    @foreach (var item in Model) {
                         <tr>
-                            <td id="Reference" class="td-1">
+                            <td id="Reference_@i" class="td-1">
                                 @Html.DisplayFor(modelItem => item.Reference)
                             </td>
-                            <td id="DateTimeGroupRnwFormat" class="td-2">
+                            <td id="DateTimeGroupRnwFormat_@i" class="td-2">
                                 @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
                             </td>
-                            <td id="Description">
+                            <td id="Description_@i">
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
-                            <td id="Viewdetails" class="td-4 justify-content-center">
-                                @Html.ActionLink("View details", "View details", new { /* id=item.PrimaryKey */ })
+                            <td id="Viewdetails_@i" class="td-4 justify-content-center">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@i" aria-expanded="false" aria-controls="collapse_@i">
+                                    details
+                                </button>
                             </td>
-                            <td id="checkbox" class="td-5 justify-content-center">
+                            <td id="checkbox_@i" class="td-5 justify-content-center">
                                 <input type="checkbox" name="name2" class="form-check-input" aria-label="Select" />
                             </td>
                         </tr>
+                        <tr id="collapse_@i" class="accordion-collapse collapse" data-bs-parent="#accordionAllwarning">
+                            <td colspan="5">                          
+                                <div class="warning-detail">
+                                    <section>
+                                        <h1 id="Details_WarningType_@i" class="warning-type">
+                                            @Html.DisplayFor(modelItem => item.WarningType)
+                                        </h1>
+                                        <h2 id="Details_Reference_@i" class="warning-reference">
+                                            @Html.DisplayFor(modelItem => item.Reference)
+                                        </h2>
+                                        <h3 id="Details_DateTimeGroupRnwFormat_@i" class="warning-date-time">
+                                            @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
+                                        </h3>
+                                        <pre id="Details_Description_@i" class="warning-description">
+                                            @Html.DisplayFor(modelItem => item.Content)
+                                        </pre>
+                                    </section>
+                                </div>
+                            </td>
+                        </tr>
+                        i++;
                     }
                 </tbody>
             </table>

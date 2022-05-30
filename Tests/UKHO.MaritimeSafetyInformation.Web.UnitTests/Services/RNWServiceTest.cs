@@ -199,6 +199,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnWarnings()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Returns(GetFakeRadioNavigationalWarningsDataList());
+            List<RadioNavigationalWarningsData> result = await _rnwService.GetRadioNavigationalWarningsData(string.Empty);
+            Assert.AreEqual(1, result.Count);
+        }
+
+        [Test]
+        public void WhenCallGetRadioNavigationalWarningsDataListWithException_ThenReturnException()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Throws(new Exception());
+
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+                               async delegate { await _rnwService.GetRadioNavigationalWarningsData(string.Empty); });
+        }
+
+        [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime()).Returns(new DateTime(2020, 01, 01, 13, 14, 15));
@@ -245,6 +262,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "RnwAdminListContent"
             });
             return radioNavigationalWarningList;
+        }
+
+        private static List<RadioNavigationalWarningsData> GetFakeRadioNavigationalWarningsDataList()
+        {
+            return new List<RadioNavigationalWarningsData>() { new RadioNavigationalWarningsData() };
         }
     }
 }

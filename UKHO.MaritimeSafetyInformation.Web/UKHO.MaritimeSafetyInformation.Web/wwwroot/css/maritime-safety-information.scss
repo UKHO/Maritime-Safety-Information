@@ -33,6 +33,7 @@ a, button, .form-select, .form-control, .form-check-input {
     p {
         margin-bottom: 0;
         margin-top: 5px;
+        line-height:1.8rem;
     }
 }
 
@@ -75,6 +76,9 @@ table {
     td {
         border-bottom: 1px solid $light-silver !important;
         border-right: 1px solid $light-silver !important;
+        a{
+            font-weight:300;
+        }
     }
 }
 
@@ -88,10 +92,6 @@ table {
 .form-label {
     margin-bottom: 0.5rem !important;
     box-shadow: none;
-}
-.form-select, .form-control {
-    border-radius: 0;
-    font-weight: 300;
 }
 
 .hidden-caption {
@@ -296,6 +296,7 @@ button {
             padding: 0.5rem;
             color: $prussian-blue;
             display: inline-block;
+            font-weight:400;
 
             @media screen and (max-width: $x-large) {
                 font-size: 14px;
