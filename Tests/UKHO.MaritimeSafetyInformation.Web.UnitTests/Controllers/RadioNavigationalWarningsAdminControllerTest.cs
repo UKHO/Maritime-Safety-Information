@@ -21,6 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWService _fakeRnwService;
+        private TempDataDictionary _tempData;
         public const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
@@ -29,6 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
             _fakeRnwService = A.Fake<IRNWService>();
+            _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
 
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
@@ -51,9 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
         {
-            var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
-            _controller.TempData = tempData;
+            _controller.TempData = _tempData;
 
             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
@@ -62,12 +62,40 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
         }
 
+
         [Test]
-        public void WhenICallIndexViewWithParameters_ThenReturnView()
+        public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordIsNotCreated()
         {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(1, 0, null, string.Empty)).Returns(GetFakeRadioNavigationWarningsForAdmin());
-            Task<IActionResult> result = _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            _controller.TempData = _tempData;
+
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(false);
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
+
             Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNull(_controller.TempData["message"]);
+        }
+
+        [Test]
+        public void WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
+        {
+            _controller.TempData = _tempData;
+
+            _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNull(_controller.TempData["message"]);
+        }
+
+        [Test]
+        public async Task WhenICallGetRadioNavigationWarningsForAdmin_ThenReturnViewAndViewData()
+        {
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationWarningsForAdmin(A<int>.Ignored, A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(GetFakeRadioNavigationWarningsForAdmin());
+
+            IActionResult result = await _controller.Index(pageIndex: 1, warningType: 1, year: 2020);
+            Assert.IsInstanceOf<IActionResult>(result);
+            Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
+            Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
         }
 
         private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()

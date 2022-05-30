@@ -21,14 +21,14 @@ export default class noticetoMarine
     constructor(page:Page)
     {
      this.page = page; 
-     this.noticeMarine =this.page.locator("text=Notices to Mariners");
+     this.noticeMarine =this.page.locator('a:has-text("Notices to Mariners")');
      this.dropDownYearly = this.page.locator("#ddlYears");
      this.dropDownWeekly = this.page.locator("#ddlWeeks");
-     this.fileName=this.page.locator('text=File Name');
-     this.fileSize= this.page.locator('text=File Size');
-     this.menuNoticeToMarine = this.page.locator('text=Notices to Mariners');
-     this.menuLeisureFolios = this.page.locator('text=Leisure folios');
-     this.menuValueAddedResellers = this.page.locator('text=Value added resellers');
+     this.fileName=this.page.locator('#weekly >> text=File Name');
+     this.fileSize= this.page.locator('#weekly >> text=File Size');
+     this.menuNoticeToMarine = this.page.locator('#navbarSupportedContent >> text=Notices to Mariners');
+     this.menuLeisureFolios = this.page.locator('text=Leisure Folios');
+     this.menuValueAddedResellers = this.page.locator('text=Value Added Resellers');
      this.menuAbout = this.page.locator('text=About');
      this.tabweekly = this.page.locator('#weekly-tab');
      this.tabdaily = this.page.locator("#daily-tab");

@@ -56,7 +56,6 @@ export default class RadioNavigationalWarningsList
       return this.filter.isEnabled();
     }   
     
-  
   public async checkPaginationLink(locator:Locator)
   {   
       expect(locator).toBeTruthy();
@@ -113,6 +112,7 @@ export default class RadioNavigationalWarningsList
     const resultdate= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
     const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date , );
     expect(sortedDesc).toBeTruthy();
+
   }
 
   public async verifyTableContainsEditLink()
@@ -123,5 +123,6 @@ export default class RadioNavigationalWarningsList
       expect(resultLinks[i].trim()).toEqual("Edit");
     }
   }
- 
+
 }
+
