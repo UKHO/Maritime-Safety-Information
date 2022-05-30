@@ -39,10 +39,27 @@ export default class noticeToMarinerWeekDownload
 
      public async checkDailyFileDownload()
      {
-
       await this.page.waitForSelector("[id^='filename']");
       const dailyfileName = this.page.$$eval("[id^='filename']", (options : any[]) => {return options.map( option=>option.textContent.trim())}); 
-      return dailyfileName; 
+        
+      if ((await dailyfileName).length > 0) {
+        const fileName = dailyfileName[0];
+        var dailyPageUrl = await (await (await this.page.$("[id^='download'] > a")).getAttribute('href')).trim().split("&");
+        const newDailyPageUrl = dailyPageUrl[1].replace(/%20/g, " ");
+        return newDailyPageUrl;
+      }
+      else {
+        throw new Error("No download File Found")
+      }
+
+     }
+
+     public async getFirstDailyFileName()
+     {
+      await this.page.waitForSelector("[id^='filename']");
+      const dailyfileName = await this.page.$$eval("[id^='filename']", (options : any[]) => {return options.map( option=>option.textContent.trim())}); 
+      const fileName = dailyfileName[0];
+      return fileName;
      }
    } 
      
