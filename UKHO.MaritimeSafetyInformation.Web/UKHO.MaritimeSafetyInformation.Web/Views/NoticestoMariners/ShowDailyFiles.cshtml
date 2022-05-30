@@ -4,7 +4,6 @@
 @{
     Layout = "~/Views/Shared/_MSILayout.cshtml";
     ViewData["Header"] = "Notices to Mariners";
-    ViewData["PageName"] = "Daily";
 }
 
 @section Scripts
@@ -12,14 +11,20 @@
 <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
 }
 <partial name="_NMHorizontalTab" />
-<input type="hidden" id="hdnRequestType" value="Daily" />
 
-<div class="row">
-    <div class="col">
+<div class="tab-content" id="nmTabContent">
+    <div class="tab-pane fade show active" id="daily" role="tabpanel" aria-labelledby="daily-tab">
+        <input type="hidden" id="hdnRequestType" value="Daily" />
         @if (@Model != null)
         {
             <partial name="ShowDailyFilesList" model="@Model" />
         }
+    </div>
+    <div class="tab-pane fade" id="cumulative" role="tabpanel" aria-labelledby="cumulative-tab">
+        <partial name="ShowCumulativeNMs" />
+    </div>
+    <div class="tab-pane fade" id="annual" role="tabpanel" aria-labelledby="annual-tab">
+        <partial name="ShowAnnualNMs" />
     </div>
 </div>
 
