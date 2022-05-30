@@ -87,8 +87,6 @@ export default class RadioNavigationalWarningsListEndUser
       expect(beforeRefrence).toEqual(afterRefrence);
       expect(beforeDatetime).toEqual(afterDateTime);   
 }
-}
-    }
 
     public async verifyImportantBlock()
     {
