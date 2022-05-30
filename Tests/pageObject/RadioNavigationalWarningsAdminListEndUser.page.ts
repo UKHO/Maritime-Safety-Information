@@ -80,7 +80,7 @@ export default class RadioNavigationalWarningsListEndUser
       expect(newrnw).toContain("NAVAREA 1 and UK Coastal");
       var todayDateTime=DateTime.now().toFormat('ddhhmm MMM yy').trim();
       const rnwDateTime = rnw[1].replace('UTC',"").trim();
-      console.log(todayDateTime)
+      
       if(rnwDateTime<todayDateTime)
       {
       expect(rnwDateTime).toBeTruthy();
