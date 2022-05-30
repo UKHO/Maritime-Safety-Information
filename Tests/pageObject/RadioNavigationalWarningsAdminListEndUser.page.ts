@@ -1,6 +1,7 @@
 
 import { expect } from '@playwright/test';
 import type { Locator, Page } from 'playwright';
+import { DateTime } from 'luxon';
 
 export default class RadioNavigationalWarningsListEndUser
 {
@@ -65,20 +66,28 @@ export default class RadioNavigationalWarningsListEndUser
       let tableColsHeader = await this.page.$$eval('.table>thead>tr>th', (options: any[]) => { return options.map(option => option.textContent.trim()) });
       tableColsHeader=tableColsHeader.filter(Boolean);
       var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
-        return element === tableColsHeader[index];
+      return element === tableColsHeader[index];
       });
       expect(match).toBeTruthy();
     }
-  
-  
-     
-   
 
-}        }
+    public async verifyImportantBlock()
+    {
+      var newRnw=this.page.locator("#rnwInfo > p").innerText();
+      const rnw = (await newRnw).split(":");
+
+      var newrnw = rnw[0];
+      expect(newrnw).toContain("NAVAREA 1 and UK Coastal");
+      var todayDateTime=DateTime.now().toFormat('ddhhmm MMM yy').trim();
+      const rnwDateTime = rnw[1].replace('UTC',"").trim();
+      console.log(todayDateTime)
+      if(rnwDateTime<todayDateTime)
+      {
+      expect(rnwDateTime).toBeTruthy();
       }
-      return true;
+      else
+      {
+      expect(rnwDateTime).toBeFalsy();
+      } 
     }
-     
-   
-
-}
+}  
