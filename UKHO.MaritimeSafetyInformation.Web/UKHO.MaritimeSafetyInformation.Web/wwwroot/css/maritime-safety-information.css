@@ -352,27 +352,6 @@
   word-break: break-word;
 }
 
-.caption-table {
-  margin-top: 45px;
-  position: relative;
-}
-.caption-table .table-caption {
-  display: block;
-  font-weight: 400;
-  font-size: 21px;
-  color: #000000;
-  padding: 1rem 0;
-  position: absolute;
-  width: 100%;
-  top: -50px;
-}
-
-.daily-table-container {
-  max-height: 78vh !important;
-  overflow-y: auto;
-  padding-right: 2px;
-}
-
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;

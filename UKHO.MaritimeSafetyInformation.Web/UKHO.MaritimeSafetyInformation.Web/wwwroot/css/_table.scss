@@ -92,6 +92,81 @@
             border: 0;
             background-color: transparent;
         }
+            }
+        }
+
+        tr:nth-child(even) {
+            background-color: $white;
+        }
+
+        tr:nth-child(4n-1) {
+            background-color: rgb(238, 243, 244);
+        }
+
+        &.collapsed::before {
+            content: "View ";
+        }
+
+        &:not(.collapsed) {
+            background-color: transparent;
+            box-shadow: none;
+
+            &::before {
+                content: "Hide ";
+            }
+        }
+
+        &::before {
+            white-space: pre;
+        }
+
+        &::after {
+            content: none;
+        }
+    }
+
+    tr.accordion-collapse td {
+        border-right: 0 !important;
+    }
+
+    .warning-detail {
+        font-size: 18px;
+        color: $black;
+
+        h1, h2, h3 {
+            color: $black;
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 24px;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+
+        .warning-type {
+            font-weight: 400;
+        }
+        &.scroll-content {
+            max-height: 88vh !important;
+        }
+    }
+}
+.accordianTable {
+    .accordion-button {
+        padding: 0;
+        width: auto;
+        display: inline-block;
+        text-decoration: underline;
+        color: $prussian-blue;
+        background-color: transparent;
+
+        &:hover, &:active {
+            border: 0;
+            background-color: transparent;
+        }
 
         &.collapsed::before {
             content: "View ";
@@ -154,6 +229,15 @@
     margin-top: 45px;
     position: relative;
 
+        pre {
+            width: 100%;
+            overflow: hidden;
+            font-family: JohnstonITC, Helvetica, sans-serif;
+            font-size: 18px;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+    }
     .table-caption {
         display: block;
         font-weight: 400;
