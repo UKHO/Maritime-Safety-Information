@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using radioNavigationalWarningDto = UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
         private TempDataDictionary _tempData;
-        private Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning _fakeRadioNavigationalWarning;
+        private radioNavigationalWarningDto.RadioNavigationalWarning _fakeRadioNavigationalWarning;
 
 
         private RadioNavigationalWarningsAdminController _controller;
