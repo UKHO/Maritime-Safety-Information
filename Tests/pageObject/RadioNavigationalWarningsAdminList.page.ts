@@ -56,7 +56,6 @@ export default class RadioNavigationalWarningsList
       return this.filter.isEnabled();
     }   
     
-  
   public async checkPaginationLink(locator:Locator)
   {   
       expect(locator).toBeTruthy();
