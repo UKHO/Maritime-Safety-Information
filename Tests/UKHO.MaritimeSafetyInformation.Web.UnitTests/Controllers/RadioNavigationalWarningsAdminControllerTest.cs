@@ -20,6 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeHttpContextAccessor;
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWService _fakeRnwService;
+        private TempDataDictionary _tempData;
 
         [SetUp]
         public void Setup()
@@ -27,6 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
             _fakeRnwService = A.Fake<IRNWService>();
+            _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
 
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
         }
@@ -49,9 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
         {
-            var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
-            _controller.TempData = tempData;
+            _controller.TempData = _tempData;
 
             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
