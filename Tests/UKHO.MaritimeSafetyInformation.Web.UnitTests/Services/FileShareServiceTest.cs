@@ -132,7 +132,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
 
-            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+            IResult<Stream> stream = new Result<Stream>
+            {
+                Data = new MemoryStream(Encoding.UTF8.GetBytes("test stream"))
+            };
 
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
 
