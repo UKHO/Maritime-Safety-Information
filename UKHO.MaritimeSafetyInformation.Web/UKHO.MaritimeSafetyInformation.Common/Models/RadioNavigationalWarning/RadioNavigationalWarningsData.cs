@@ -14,6 +14,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         public string DateTimeGroupRnwFormat { get; set; }
 
         public string Content { get; set; }
+
         public string WarningType { get; set; }
     }
 }
