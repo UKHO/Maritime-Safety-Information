@@ -23,8 +23,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
         {
-            await SeedRadioNavigationalWarnings(GetRadioNavigationalWarnings());
-            await SeedWarningType(GetWarningTypes());
+            await SeedRadioNavigationalWarnings(GetFakeRadioNavigationalWarnings());
+            await SeedWarningType(GetFakeWarningTypes());
         }
 
         [SetUp]
