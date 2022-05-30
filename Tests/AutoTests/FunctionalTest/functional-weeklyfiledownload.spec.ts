@@ -10,14 +10,29 @@ test.describe("Goto maritime-safety-information Notice To Marine Page", ()=> {
   noticeFileDownload = new noticeToMarinerWeekDownload(page);
   });
 
-  test('Should Goto Notice to Mariner Page',async({page,context})=>{   
+  test('Should Goto Notice to Mariner Page for Weekly Download',async({page,context})=>{   
   await noticeFileDownload.goToNoticeToMariner();
+
   const name=await noticeFileDownload.checkFileDownload();
     
   expect((await name).length).toBeGreaterThan(0);
   var fileName = name[0];
     
-  const newPageUrl = await (await page.$("#frmDownloadFile > a")).getAttribute('href');
+  const newPageUrl = await (await page.$("[id^='download'] > a")).getAttribute('href');
   expect(newPageUrl).toContain(`NoticesToMariners/DownloadWeeklyFile?fileName=${fileName}`);
   } )   
+
+  test('Should Goto Notice to Mariner Page for Daily download File',async({page,context})=>{   
+    await noticeFileDownload.goToNoticeToMariner();
+    await noticeFileDownload.goToDailyFile();
+    const dailyName=await noticeFileDownload.checkDailyFileDownload();
+      
+    expect((await dailyName).length).toBeGreaterThan(0);
+    const fileName = dailyName[0];
+    
+    var dailyPageUrl = await (await (await page.$("[id^='download'] > a")).getAttribute('href')).trim().split("&");    
+    const newDailyPageUrl=dailyPageUrl[1].replace(/%20/g, " ");
+    expect(newDailyPageUrl).toContain(`fileName=${fileName}`);
+
+    } )   
 });
