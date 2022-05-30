@@ -51,8 +51,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
         {
-            var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = _tempData;
 
             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
@@ -66,8 +64,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordIsNotCreated()
         {
-            var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = _tempData;
 
             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(false);
@@ -80,8 +76,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
         {
-            var httpContext = new DefaultHttpContext();
-            var tempData = new TempDataDictionary(httpContext, A.Fake<ITempDataProvider>());
             _controller.TempData = _tempData;
 
             _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
