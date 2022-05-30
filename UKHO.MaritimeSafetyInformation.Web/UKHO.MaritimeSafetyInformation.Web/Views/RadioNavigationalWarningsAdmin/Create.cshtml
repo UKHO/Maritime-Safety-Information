@@ -5,7 +5,7 @@
 }
 <div class="container-fluid">
 
-<h1>Create Radio Navigational Warnings</h1>
+<h1 id="headingLevelOne" class="mt-0">Create Radio Navigational Warnings</h1>
 
 <div class="row">
     <div class="col-md-4">
@@ -15,7 +15,7 @@
                 <label asp-for="WarningType" class="form-label"></label>
                 <span class="text-danger">*</span>
                 <select asp-for="WarningType" asp-items="@(new SelectList(ViewBag.WarningType,"Id","Name"))" class="form-select">
-                    <option value="" selected disabled hidden>--Select Warning Type--</option>
+                    <option value="" selected disabled hidden>Select Warning Type</option>
                 </select>
                 <span asp-validation-for="WarningType" class="text-danger"></span>
             </div>

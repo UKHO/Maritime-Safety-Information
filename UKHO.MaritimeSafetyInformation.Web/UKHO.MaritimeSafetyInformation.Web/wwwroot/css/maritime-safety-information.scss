@@ -33,6 +33,7 @@ a, button, .form-select, .form-control, .form-check-input {
     p {
         margin-bottom: 0;
         margin-top: 5px;
+        line-height:1.8rem;
     }
 }
 
@@ -75,6 +76,9 @@ table {
     td {
         border-bottom: 1px solid $light-silver !important;
         border-right: 1px solid $light-silver !important;
+        a{
+            font-weight:300;
+        }
     }
 }
 
@@ -88,10 +92,6 @@ table {
 .form-label {
     margin-bottom: 0.5rem !important;
     box-shadow: none;
-}
-.form-select, .form-control {
-    border-radius: 0;
-    font-weight: 300;
 }
 
 .hidden-caption {
@@ -129,7 +129,7 @@ button {
 
 .inline-link {
     display: inline-block;
-    margin-top: 2.2rem;
+    margin-top: 2.7rem;
 
     @media screen and (max-width: $small) {
         margin-top: 0;
@@ -155,6 +155,13 @@ button {
 .form-select option {
     font-weight: 300;
     font-size: 16px;
+}
+
+.form-check-label{
+    margin-top:10px;
+    margin-left:10px;
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .form-check-input {
@@ -296,6 +303,7 @@ button {
             padding: 0.5rem;
             color: $prussian-blue;
             display: inline-block;
+            font-weight:400;
 
             @media screen and (max-width: $x-large) {
                 font-size: 14px;
@@ -358,9 +366,11 @@ button {
             border-color: transparent;
             padding: 0.5rem 1.5rem;
             border-radius: 0;
+            font-weight: 400;
 
             &.active {
                 border-color: $prussian-blue;
+                color: $prussian-blue;
             }
         }
     }
