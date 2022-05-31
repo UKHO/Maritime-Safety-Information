@@ -18,7 +18,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public readonly RadioNavigationalWarningsContext _fakeContext;
         public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
         public IHttpContextAccessor _fakeHttpContextAccessor;
-        public ILogger<RNWRepository> _fakeLoggerRnwRepository;
         public ILogger<RNWService> _fakeLoggerRnwService;
 
         public BaseRNWTest()
@@ -28,7 +27,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeLoggerRnwRepository = A.Fake<ILogger<RNWRepository>>();
             _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
@@ -47,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
         public async Task DeSeedRadioNavigationalWarnings()
         {
-            DbSet<Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning> warnings = _fakeContext.RadioNavigationalWarnings;
+            DbSet<radioNavigationalWarningDto.RadioNavigationalWarning> warnings = _fakeContext.RadioNavigationalWarnings;
             _fakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
             await _fakeContext.SaveChangesAsync();
         }
