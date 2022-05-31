@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             return new EditRadioNavigationalWarningsAdmin()
             {
-                Id = 5,
+                Id = 9,
                 WarningType = 1,
                 Reference = "ReferenceTest",
                 DateTimeGroup = new DateTime(2022, 12, 30),
