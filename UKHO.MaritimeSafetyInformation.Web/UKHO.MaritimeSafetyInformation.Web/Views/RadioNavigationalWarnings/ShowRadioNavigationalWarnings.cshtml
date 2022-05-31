@@ -42,8 +42,8 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
-                         <th class="th-4 justify-content-center">
-                            @Html.ActionLink("Select all", "View details", new { /* id=item.PrimaryKey */ })
+                        <th class="th-4 justify-content-center">
+                            <input type="button" id="toggle" value="Select all" onClick="do_Selection()"/>
                         </th>
                         <th class="th-5 justify-content-center">
                             Select
@@ -64,7 +64,7 @@
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td id="Viewdetails_@i" class="td-4 justify-content-center">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@i" aria-expanded="false" aria-controls="collapse_@i">
+                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@i" aria-expanded="false" aria-controls="collapse_@i">
                                     details
                                 </button>
                             </td>
@@ -97,6 +97,9 @@
                 </tbody>
             </table>
         </div>        
+    </div>
+    <div class="col-md-auto mb-3">
+        <button id="BtnShowSelection" type="button" >Show selection</button>
     </div>
     <div class="tab-pane fade" id="NAVAREA1" role="tabpanel" aria-labelledby="NAVAREA1-tab">
         NAVAREA 1

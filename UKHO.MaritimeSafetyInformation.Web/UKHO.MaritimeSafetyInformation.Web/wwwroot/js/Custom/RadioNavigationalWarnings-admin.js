@@ -31,3 +31,21 @@ function RnwFilterList(pageSelectedIndex) {
     rnwUrl = rnwUrl.replace("amp;", "");
     window.location.href = rnwUrl;
 }
+
+function do_Selection() {
+
+    var checkboxes = document.getElementsByName('name2');
+    var button = document.getElementById('toggle');
+
+    if (button.value == 'Select all') {
+        for (var i in checkboxes) {
+            checkboxes[i].checked = 'FALSE';
+        }
+        button.value = 'Clear all'
+    } else {
+        for (var i in checkboxes) {
+            checkboxes[i].checked = '';
+        }
+        button.value = 'Select all';
+    }
+}
