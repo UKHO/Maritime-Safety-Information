@@ -48,8 +48,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(8, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
-            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.CurrentPageIndex);
-            Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList[2].WarningType);
+            Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
+            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.RadioNavigationalWarningsAdminList[2].WarningType);
             Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[2].WarningTypeName);
             Assert.AreEqual("RnwAdminListReferance", adminListFilter.RadioNavigationalWarningsAdminList[2].Reference);
             Assert.AreEqual(new DateTime(2022, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].DateTimeGroup);
