@@ -62,6 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
                      {
+                        Id = rnwWarnings.Id,
                         WarningType = warningType.Name,
                         Reference = rnwWarnings.Reference,
                         DateTimeGroup = rnwWarnings.DateTimeGroup,

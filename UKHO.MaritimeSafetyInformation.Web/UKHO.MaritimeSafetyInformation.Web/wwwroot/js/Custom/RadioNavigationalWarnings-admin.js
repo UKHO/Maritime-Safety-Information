@@ -34,8 +34,8 @@ function RnwFilterList(pageSelectedIndex) {
 
 function do_Selection() {
 
-    var checkboxes = document.getElementsByName('name2');
-    var button = document.getElementById('toggle');
+    var checkboxes = document.getElementsByName('checkbox');
+    var button = document.getElementById('select_button');
 
     if (button.value == 'Select all') {
         for (var i in checkboxes) {

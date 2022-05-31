@@ -1,0 +1,47 @@
+﻿@model IEnumerable<UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.RadioNavigationalWarningsData>
+
+@{
+    Layout = "~/Views/Shared/_MSILayout.cshtml";
+}
+@{
+    ViewData["Header"] = "Radio Navigational Warnings";
+}
+<div id="rnwInfo" class="alert alert-primary p-4" role="alert">
+    <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+    <div class="alert-head">Important information</div>
+    <p>The following NAVAREA 1 and UK Coastal Warnings (WZs) were in force at: 141009 UTC April 22</p>
+</div>
+<div class="row">
+    <div class="col text-end">
+        <a href="@Url.Action("Index", "RadioNavigationalWarnings")" type="button">Back to all warnings </a>
+    </div>
+</div>
+    @{int i = 0;}
+    @foreach (var item in Model) {
+        <tr>
+            <td>                          
+                <div>
+                    <section>
+                        <h4 id="Details_WarningType_@i">
+                            @Html.DisplayFor(modelItem => item.WarningType)
+                        </h4>
+                        <h4 id="Details_Reference_@i">
+                            @Html.DisplayFor(modelItem => item.Reference)
+                        </h4>
+                        <h4 id="Details_DateTimeGroupRnwFormat_@i">
+                            @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
+                        </h4>
+                        <h4 id="Details_Description_@i">
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </h4>
+                    </section>
+                </div>
+            </td>
+        </tr>
+        i++;
+    }
+<div class="row">
+    <div class="col text-end">
+        <button id="Print" type="button" >Print</button>
+    </div>
+</div>
