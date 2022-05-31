@@ -8,63 +8,63 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
-using radioNavigationalWarningDto = UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
-namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning
+namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings
 {
     public class BaseRNWTest
     {
-        public readonly RadioNavigationalWarningsContext _fakeContext;
-        public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
-        public IHttpContextAccessor _fakeHttpContextAccessor;
-        public ILogger<RNWService> _fakeLoggerRnwService;
+        protected readonly RadioNavigationalWarningsContext FakeContext;
+        protected readonly IOptions<RadioNavigationalWarningConfiguration> FakeRadioNavigationalWarningConfiguration;
+        protected readonly IHttpContextAccessor FakeHttpContextAccessor;
+        protected readonly ILogger<RNWService> FakeLoggerRnwService;
 
         public BaseRNWTest()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                                     .UseInMemoryDatabase("msi-in-db");
-            _fakeContext = new RadioNavigationalWarningsContext(builder.Options);
-            _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
-            _fakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
-            _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
+            FakeContext = new RadioNavigationalWarningsContext(builder.Options);
+            FakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
+            FakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
+            FakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
+            FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
 
-        public async Task SeedRadioNavigationalWarnings(List<radioNavigationalWarningDto.RadioNavigationalWarning> radioNavigationalWarning)
+        protected async Task SeedRadioNavigationalWarnings(List<RadioNavigationalWarning> radioNavigationalWarning)
         {
-            _fakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarning);
-            await _fakeContext.SaveChangesAsync();
+            FakeContext.RadioNavigationalWarnings.AddRange(radioNavigationalWarning);
+            await FakeContext.SaveChangesAsync();
         }
 
-        public async Task SeedWarningType(List<radioNavigationalWarningDto.WarningType> warningTypes)
+        protected async Task SeedWarningType(List<WarningType> warningTypes)
         {
-            _fakeContext.WarningType.AddRange(warningTypes);
-            await _fakeContext.SaveChangesAsync();
+            FakeContext.WarningType.AddRange(warningTypes);
+            await FakeContext.SaveChangesAsync();
         }
 
-        public async Task DeSeedRadioNavigationalWarnings()
+        protected async Task DeSeedRadioNavigationalWarnings()
         {
-            DbSet<radioNavigationalWarningDto.RadioNavigationalWarning> warnings = _fakeContext.RadioNavigationalWarnings;
-            _fakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
-            await _fakeContext.SaveChangesAsync();
+            DbSet<RadioNavigationalWarning> warnings = FakeContext.RadioNavigationalWarnings;
+            FakeContext.RadioNavigationalWarnings.RemoveRange(warnings);
+            await FakeContext.SaveChangesAsync();
         }
 
-        public async Task DeSeedWarningType()
+        protected async Task DeSeedWarningType()
         {
-            DbSet<radioNavigationalWarningDto.WarningType> warningType = _fakeContext.WarningType;
-            _fakeContext.WarningType.RemoveRange(warningType);
-            await _fakeContext.SaveChangesAsync();
+            DbSet<WarningType> warningType = FakeContext.WarningType;
+            FakeContext.WarningType.RemoveRange(warningType);
+            await FakeContext.SaveChangesAsync();
         }
 
-        public static List<radioNavigationalWarningDto.RadioNavigationalWarning> GetFakeRadioNavigationalWarnings()
+        protected static List<RadioNavigationalWarning> GetFakeRadioNavigationalWarnings()
         {
-            List<radioNavigationalWarningDto.RadioNavigationalWarning> radioNavigationalWarningList = new();
+            List<RadioNavigationalWarning> radioNavigationalWarningList = new();
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.NAVAREA_1,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
@@ -72,10 +72,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.UK_Coastal,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
@@ -83,60 +83,60 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.NAVAREA_1,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.NAVAREA_1,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.UK_Coastal,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.UK_Coastal,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.NAVAREA_1,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2023, 1, 1),
                 Summary = "NORTHEAST ATLANTIC. Outer Hebrides Westwards. Live weapons firing in progress.",
                 Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224.",
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
-            radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
+            radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = WarningTypes.UK_Coastal,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2024, 1, 1),
                 Summary = "DOVER STRAIT, EASTERN PART. Sandettie Bank North-westwards. Inter Bank light-buoy, Racon inoperative.",
                 Content = "1. NAVAREA I WARNINGS IN FORCE AT 221000 UTC APR 22:     2021 SERIES: 031.  2022 SERIES: 033, 041, 043, 044."
@@ -151,16 +151,16 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             return radioNavigationalWarningList;
         }
 
-        public static List<radioNavigationalWarningDto.WarningType> GetFakeWarningTypes()
+        protected static List<WarningType> GetFakeWarningTypes()
         {
-            List<radioNavigationalWarningDto.WarningType> warningTypes = new();
-            warningTypes.Add(new radioNavigationalWarningDto.WarningType()
+            List<WarningType> warningTypes = new();
+            warningTypes.Add(new WarningType()
             {
                 Id = 1,
                 Name = "NAVAREA 1"
             });
 
-            warningTypes.Add(new radioNavigationalWarningDto.WarningType()
+            warningTypes.Add(new WarningType()
             {
                 Id = 2,
                 Name = "UK Coastal"
