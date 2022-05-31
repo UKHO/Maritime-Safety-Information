@@ -31,7 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
                 IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId);
-               
+
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
@@ -145,7 +145,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 if (year == 0 && week == 0)
                 {
                     year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
-                    week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Week).Select(x => x.Week).FirstOrDefault());
+                    week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Week).Where(x => x.Year == year).Select(x => x.Week).FirstOrDefault());
                 }
                 showWeeklyFilesResponses.ShowFilesResponseList = await GetWeeklyBatchFiles(year, week, correlationId);
             }
@@ -190,7 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to get single weekly NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
                 throw;
             }
-            
+
         }
     }
 }
