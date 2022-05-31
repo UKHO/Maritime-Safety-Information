@@ -22,6 +22,7 @@ export default class RadioNavigationalWarnings
     readonly year:Locator;
     readonly filter:Locator;
     readonly delete:Locator;
+    readonly edit:Locator;
     constructor(page:Page)
     {
         this.page = page; 
@@ -42,6 +43,7 @@ export default class RadioNavigationalWarnings
         this.year= this.page.locator("#Year");
         this.filter = this.page.locator("#BtnFilter");
         this.delete = this.page.locator('#IsDeleted');
+        this.edit=this.page.locator("[id^='Edit'] > a");
     }
 
     public async SelectRadioNavigationalWarning()
@@ -89,6 +91,7 @@ export default class RadioNavigationalWarnings
     {
         const input = await locator;
         await input.click({ clickCount: 3 })
+        await this.page.keyboard.press('Control+A')   
         await this.page.keyboard.press('Backspace')     
     }
     public async editRNW()
@@ -98,7 +101,7 @@ export default class RadioNavigationalWarnings
 
     public async getEditUrl()
     {
-        const newEdit = await this.page.$("[id^='Edit'] > a");
+        const newEdit = await this.edit.first();
         await newEdit.click(); 
     }
     public async pageLoad()
