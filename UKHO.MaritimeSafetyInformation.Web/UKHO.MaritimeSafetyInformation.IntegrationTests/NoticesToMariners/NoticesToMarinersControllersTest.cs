@@ -36,13 +36,13 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showWeeklyFiles != null);
-            Assert.AreEqual(4, showWeeklyFiles.YearAndWeekList.Count);
-            Assert.AreEqual(4, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
+            Assert.AreEqual(9, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(2022, showWeeklyFiles.YearAndWeekList[3].Year);
-            Assert.AreEqual(11, showWeeklyFiles.YearAndWeekList[3].Week);
-            Assert.AreEqual("application/text", showWeeklyFiles.ShowFilesResponseList[3].MimeType);
+            Assert.AreEqual(05, showWeeklyFiles.YearAndWeekList[3].Week);
+            Assert.AreEqual("image/jpg", showWeeklyFiles.ShowFilesResponseList[3].MimeType);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showWeeklyFiles != null);
             Assert.AreEqual(4, showWeeklyFiles.ShowFilesResponseList.Count);
-            Assert.AreEqual(4, showWeeklyFiles.YearAndWeekList.Count);
+            Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual("msi_img_W2021_30.jpg", showWeeklyFiles.ShowFilesResponseList[1].Filename);
@@ -105,12 +105,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsTrue(showFiles != null);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(4, showFiles[0].DailyFilesData.Count);
-            Assert.AreEqual("22", showFiles[0].WeekNumber);
-            Assert.AreEqual("2021", showFiles[0].Year);
+            Assert.AreEqual(8, showFiles[0].DailyFilesData.Count);
+            Assert.AreEqual("07", showFiles[0].WeekNumber);
+            Assert.AreEqual("2020", showFiles[0].Year);
             Assert.AreEqual("Daily .zip", showFiles[0].DailyFilesData[0].Filename);
             Assert.AreEqual("1 MB", showFiles[0].DailyFilesData[0].FileSizeInKB);
-            Assert.AreEqual("155e7fe4-5866-4a31-9994-113beca0dce1", showFiles[0].DailyFilesData[0].BatchId);
+            Assert.AreEqual("a29f76e4-ab80-4cfd-8236-59d0e3fc8f2a", showFiles[0].DailyFilesData[0].BatchId);
         }
 
         [Test]
