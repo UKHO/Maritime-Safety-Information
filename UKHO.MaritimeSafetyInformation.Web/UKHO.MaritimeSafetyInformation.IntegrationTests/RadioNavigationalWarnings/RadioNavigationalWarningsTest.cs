@@ -10,12 +10,12 @@ using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
-namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning
+namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings
 {
     [TestFixture]
-    public class RadioNavigationalWarningTest : BaseRNWTest
+    internal class RadioNavigationalWarningsTest : BaseRNWTest
     {
-        public ILogger<RadioNavigationalWarningsController> _fakeLogger;
+        private ILogger<RadioNavigationalWarningsController> _fakeLogger;
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
 
@@ -32,10 +32,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsController>>();
-            _rnwRepository = new RNWRepository(_fakeContext);
-            _rnwService = new RNWService(_rnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
+            _rnwRepository = new RNWRepository(FakeContext);
+            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
 
-            _controller = new RadioNavigationalWarningsController(_fakeHttpContextAccessor, _fakeLogger, _rnwService);
+            _controller = new RadioNavigationalWarningsController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             IActionResult result = await _controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
             Assert.AreEqual(6, warningsData.Count);
-            Assert.AreEqual("RnwAdminListReferance", warningsData[2].Reference);
+            Assert.AreEqual("RnwAdminListReference", warningsData[2].Reference);
             Assert.AreEqual("RnwAdminListSummary", warningsData[2].Description);
             Assert.AreEqual(new DateTime(2022, 1, 1), warningsData[2].DateTimeGroup);
             Assert.AreEqual("011200 UTC Jan 22", warningsData[2].DateTimeGroupRnwFormat);
