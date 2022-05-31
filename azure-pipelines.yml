@@ -262,7 +262,7 @@ stages:
       - job: PublishIntegrationTestsArtifacts
         workspace:
           clean: all
-        displayName: "Publish Terraform Artifacts"
+        displayName: "Publish Integration Test Artifacts"
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
