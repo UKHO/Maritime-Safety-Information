@@ -11,7 +11,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
         public string BaseUrl { get; set; }
         public string FssClientId { get; set; }
         public int PageSize { get; set; }
-        public string Start { get; set; }
+        public int Start { get; set; }
 
         public Configuration()
         {
@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
             BaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:BaseUrl");
             FssClientId = ConfigurationRoot.GetValue<string>("FileShareService:FssClientId");
             PageSize = ConfigurationRoot.GetValue<int>("FileShareService:PageSize");
-            Start = ConfigurationRoot.GetValue<string>("FileShareService:Start");
+            Start = ConfigurationRoot.GetValue<int>("FileShareService:Start");
         }
     }
 }
