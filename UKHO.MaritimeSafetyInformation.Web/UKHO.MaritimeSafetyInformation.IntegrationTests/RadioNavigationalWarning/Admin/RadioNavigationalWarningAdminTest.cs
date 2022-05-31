@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
@@ -12,7 +13,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
     [TestFixture]
-    public class RadioNavigationalWarningAdminTest : RNWTestHelper
+    public class RadioNavigationalWarningAdminTest : BaseRNWTest
     {
         public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;
@@ -64,7 +65,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallIndexWithWarningTypeFilter_ThenReturnFilteredListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, 1, null);
+            IActionResult result = await _controller.Index(1, WarningTypes.NAVAREA_1, null);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.AreEqual(4, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
@@ -90,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallIndexWithWarningTypeAndYearFilter_ThenReturnFilteredListAsync()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, 2, 2024);
+            IActionResult result = await _controller.Index(1, WarningTypes.UK_Coastal, 2024);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
