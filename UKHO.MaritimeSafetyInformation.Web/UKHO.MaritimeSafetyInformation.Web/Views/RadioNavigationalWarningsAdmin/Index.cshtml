@@ -66,31 +66,31 @@
                     {
                         ++@Model.SrNo;
                         <tr>
-                            <td id="SrNo">
+                            <td id="SrNo_@Model.SrNo">
                                 @Model.SrNo.ToString()
                             </td>
-                            <td id="WarningTypeName">
+                            <td id="WarningTypeName_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.WarningTypeName)
                             </td>
-                            <td id="Reference">
+                            <td id="Reference_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.Reference)
                             </td>
-                            <td id="DateTimeGroupRnwFormat">
+                            <td id="DateTimeGroupRnwFormat_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
                             </td>
-                            <td id="Summary">
+                            <td id="Summary_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.Summary)
                             </td>
-                            <td id="Content">
+                            <td id="Content_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.Content)
                             </td>
-                            <td id="ExpiryDateRnwFormat">
+                            <td id="ExpiryDateRnwFormat_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.ExpiryDateRnwFormat)
                             </td>
-                            <td id="IsDeleted">
+                            <td id="IsDeleted_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.IsDeleted)
                             </td>
-                            <td id="Edit">
+                            <td id="Edit_@Model.SrNo">
                                 <a asp-action="Edit" asp-route-id="@item.Id" id="Edit_@item.Id">Edit</a>
                             </td>
                         </tr>
