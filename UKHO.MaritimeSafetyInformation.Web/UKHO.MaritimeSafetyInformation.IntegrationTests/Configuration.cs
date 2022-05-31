@@ -6,12 +6,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
     {
         protected IConfigurationRoot ConfigurationRoot;
 
-        public string BusinessUnit;
-        public string ProductType;
-        public string BaseUrl;
-        public string FssClientId;
-        public string PageSize;
-        public string Start;
+        public string BusinessUnit { get; set; }
+        public string ProductType { get; set; }
+        public string BaseUrl { get; set; }
+        public string FssClientId { get; set; }
+        public int PageSize { get; set; }
+        public string Start { get; set; }
 
         public Configuration()
         {
@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
             ProductType = ConfigurationRoot.GetValue<string>("FileShareService:ProductType");
             BaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:BaseUrl");
             FssClientId = ConfigurationRoot.GetValue<string>("FileShareService:FssClientId");
-            PageSize = ConfigurationRoot.GetValue<string>("FileShareService:PageSize");
+            PageSize = ConfigurationRoot.GetValue<int>("FileShareService:PageSize");
             Start = ConfigurationRoot.GetValue<string>("FileShareService:Start");
         }
     }

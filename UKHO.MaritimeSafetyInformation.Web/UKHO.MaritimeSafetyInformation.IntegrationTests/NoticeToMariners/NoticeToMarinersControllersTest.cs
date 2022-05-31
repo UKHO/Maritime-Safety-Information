@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
@@ -13,22 +13,19 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
     class NoticeToMarinersControllersTest
     {
-        readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+        private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
 
-        private NoticesToMarinersController _nMController;
-
-        private IHttpContextAccessor _contextAccessor;
-        private HttpContext _context;
+        private NoticesToMarinersController _nMController;        
+        
         private Configuration Config { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();
-            _context = new DefaultHttpContext();
-            _contextAccessor = new HttpContextAccessor
+            Config = new Configuration();          
+            _ = new HttpContextAccessor
             {
-                HttpContext = _context
+                HttpContext = new DefaultHttpContext()
             };
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
@@ -109,7 +106,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowDailyFilesAsyncWithInvalidData_ThenReturnFile()
+        public async Task WhenCallDownloadWeeklyFile_ThenReturnFile()
         {
             string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             string filename = "21snii22_week_W2020_14.pdf";
@@ -118,7 +115,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             FileResult result = await _nMController.DownloadWeeklyFile(batchId, filename, mimeType);
             Assert.IsTrue(result != null);
             Assert.AreEqual("application/pdf", result.ContentType);
-           Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);           
+           Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
+            Assert.AreEqual(1072222, ((FileContentResult)result).FileContents.Length);
         }
     }
 }
