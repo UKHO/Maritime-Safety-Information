@@ -12,7 +12,7 @@ using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
-    class NoticeToMarinersControllersTest
+   internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
         private NoticesToMarinersController _nMController;
@@ -88,7 +88,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowWeeklyFilesAsyncwithInvalidData_ThenReturnNull()
+        public async Task WhenCallShowWeeklyFilesAsyncWithInvalidData_ThenReturnNull()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2022, 6);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
@@ -116,9 +116,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallDownloadWeeklyFile_ThenReturnFile()
         {
-            string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
-            string filename = "21snii22_week_W2020_14.pdf";
-            string mimeType = "application/pdf";
+            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string filename = "21snii22_week_W2020_14.pdf";
+            const string mimeType = "application/pdf";
 
             FileResult result = await _nMController.DownloadWeeklyFile(batchId, filename, mimeType);
             Assert.IsTrue(result != null);
@@ -130,9 +130,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public void WhenCallDownloadWeeklyFileWithInvalidData_ThenReturnException()
         {
-            string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
-            string filename = "Test.txt";
-            string mimeType = "application/txt";
+            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string filename = "Test.txt";
+            const string mimeType = "application/txt";
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")

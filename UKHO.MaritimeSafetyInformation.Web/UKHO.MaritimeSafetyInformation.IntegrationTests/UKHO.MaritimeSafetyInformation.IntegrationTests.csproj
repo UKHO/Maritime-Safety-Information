@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NoticeToMariners\" />
+    <Folder Include="NoticesToMariners\" />
   </ItemGroup>
 
 </Project>
