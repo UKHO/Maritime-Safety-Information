@@ -6,49 +6,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
     [TestFixture]
     public class FileHelperTest
     {
-        [Test]
-        public void WhenFormatSizeIsCalled_ThenShouldReturnSizeInBytes()
+        [TestCase(100, ExpectedResult = "100Bytes", Description = "When FormatSize Is Called Then Should Return Size In Bytes")]
+        [TestCase(1232, ExpectedResult = "1KB", Description = "When FormatSize Is Called Then Should Return Size In KB")]
+        [TestCase(1234567, ExpectedResult = "1MB", Description = "When FormatSize Is Called Then Should Return Size In MB")]
+        [TestCase(1834567, ExpectedResult = "2MB", Description = "When FormatSize Is Called Then Should Round Up Value")]
+        [TestCase(1434567, ExpectedResult = "1MB", Description = "When FormatSize Is Called Then Should Round Down Value")]
+        public string WhenFormatSizeIsCalled_ThenShouldReturnSizeInBytes(long bytes)
         {
-            const long bytes = 100;
-            const string expected = "100Bytes";
-            string result = FileHelper.FormatSize(bytes);
-            Assert.AreEqual(expected, result);
-        }
-
-        [Test]
-        public void WhenFormatSizeIsCalled_ThenShouldReturnSizeInKB()
-        {
-            const long bytes = 1232;
-            const string expected = "1KB";
-            string result = FileHelper.FormatSize(bytes);
-            Assert.AreEqual(expected, result);
-        }
-
-        [Test]
-        public void WhenFormatSizeIsCalled_ThenShouldReturnSizeInMB()
-        {
-            const long bytes = 1234567;
-            const string expected = "1MB";
-            string result = FileHelper.FormatSize(bytes);
-            Assert.AreEqual(expected, result);
-        }
-
-        [Test]
-        public void WhenFormatSizeIsCalled_ThenShouldRoundUpValue()
-        {
-            const long bytes = 1834567;
-            const string expected = "2MB";
-            string result = FileHelper.FormatSize(bytes);
-            Assert.AreEqual(expected, result);
-        }
-
-        [Test]
-        public void WhenFormatSizeIsCalled_ThenShouldRoundDownValue()
-        {
-            const long bytes = 1434567;
-            const string expected = "1MB";
-            string result = FileHelper.FormatSize(bytes);
-            Assert.AreEqual(expected, result);
+            return FileHelper.FormatSize(bytes);
         }
     }
 }

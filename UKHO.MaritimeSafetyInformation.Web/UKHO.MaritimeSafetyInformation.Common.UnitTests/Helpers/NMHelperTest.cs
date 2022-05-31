@@ -237,36 +237,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.DoesNotThrow(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
         }
 
-        [Test]
-        public void WhenValidateParametersForDownloadDailyFileIsCalled_ThenShouldThrowException()
-        {
-            List<KeyValuePair<string, string>> parameters = new()
-            {
-                new KeyValuePair<string, string>("BatchId", null),
-                new KeyValuePair<string, string>("FileName", "Daily 16-05-22.zip"),
-                new KeyValuePair<string, string>("MimeType", "application/gzip")
-            };
-
-            ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
-
-            Assert.Throws<ArgumentNullException>(() => NMHelper.ValidateParametersForDailyFile(parameters, string.Empty, fakeLogger));
-        }
-
-        [Test]
-        public void WhenValidateParametersForDownloadDailyFileIsCalled_ThenShouldNotThrowException()
-        {
-            List<KeyValuePair<string, string>> parameters = new()
-            {
-                new KeyValuePair<string, string>("BatchId", "Affsd-asd-asda"),
-                new KeyValuePair<string, string>("FileName", "Daily 16-05-22.zip"),
-                new KeyValuePair<string, string>("MimeType", "application/gzip")
-            };
-
-            ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
-
-            Assert.DoesNotThrow(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
-        }
-
         private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse searchResult = new()

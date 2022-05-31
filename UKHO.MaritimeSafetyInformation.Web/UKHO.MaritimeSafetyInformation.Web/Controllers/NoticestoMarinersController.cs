@@ -60,12 +60,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 
-        public IActionResult DailyFiles()
-        {
-            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-            return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml");
-        }
-
         [HttpPost]
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
@@ -144,6 +138,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             return View();
         }
+
         public async Task<ActionResult> DownloadDailyFile(string batchId, string fileName, string mimeType)
         {
             try

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Text;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -103,12 +104,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     if (stream.Errors.Count > 0)
                     {
-                        string error = "";
-                        foreach (var item in stream.Errors)
-                            error += item.Description + "\n";
+                        StringBuilder error = new();
+                        foreach (Error item in stream.Errors)
+                            error.AppendLine(item.Description);
 
                         _logger.LogInformation(EventIds.FSSDownloadZipFileAsyncHasError.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file has error for batchId:{batchId} and fileName:{fileName} with error:{error} for _X-Correlation-ID:{correlationId}", batchId, fileName, error, correlationId);
-                        throw new Exception(error);
+                        throw new AggregateException(error.ToString());
                     }
                 }
             }

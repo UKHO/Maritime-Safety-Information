@@ -303,54 +303,49 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         DownloadDailyNMFileFailed = 910071,
 
         /// <summary>
-        /// 910072 -Download Daily NM File Called With Invalid Arguments.
+        /// 910072 - Request To Get Daily Zip NM File Started.
         /// </summary>
-        DownloadDailyNMFileInvalidParameter = 910072,
+        GetDailyZipNMFileStarted = 910072,
 
         /// <summary>
-        /// 910073 - Request To Get Daily Zip NM File Started.
+        /// 910073 - Request To Get Daily Zip NM File Completed.
         /// </summary>
-        GetDailyZipNMFileStarted = 910073,
+        GetDailyZipNMFileCompleted = 910073,
 
         /// <summary>
-        /// 910074 - Request To Get Daily Zip NM File Completed.
+        /// 910074 - Request To Get Daily Zip NM File Failed.
         /// </summary>
-        GetDailyZipNMFileCompleted = 910074,
+        GetDailyZipNMFileFailed = 910074,
 
         /// <summary>
-        /// 910075 - Request To Get Daily Zip NM File Failed.
+        /// 910075 - Request For FSS To Get Daily Zip NM File Started.
         /// </summary>
-        GetDailyZipNMFileFailed = 910075,
+        FSSGetDailyZipNMFileStarted = 910075,
 
         /// <summary>
-        /// 910076 - Request For FSS To Get Daily Zip NM File Started.
+        /// 910076 - Request For FSS To Get Daily Zip NM File Completed.
         /// </summary>
-        FSSGetDailyZipNMFileStarted = 910076,
+        FSSGetDailyZipNMFileCompleted = 910076,
 
         /// <summary>
-        /// 910077 - Request For FSS To Get Daily Zip NM File Completed.
+        /// 910077 - Request For FSS To Get Daily Zip NM File Failed.
         /// </summary>
-        FSSGetDailyZipNMFileCompleted = 910077,
+        FSSGetDailyZipNMFileResponseFailed = 910077,
 
         /// <summary>
-        /// 910078 - Request For FSS To Get DailyZ ip NM File Failed.
+        /// 910078-  Event data for Retrieval of MSI Show Daily File Failed.
         /// </summary>
-        FSSGetDailyZipNMFileResponseFailed = 910078,
+        ShowDailyFilesFailed = 910078,
 
         /// <summary>
-        /// 910079-  Event data for Retrieval of MSI Show Daily File Failed.
+        /// 910079-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
         /// </summary>
-        ShowDailyFilesFailed = 910079,
+        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910079,
 
         /// <summary>
-        /// 910080-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
+        /// 910080-  Request For FSS To Get Daily Zip NM File Has Error.
         /// </summary>
-        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910080,
-
-        /// <summary>
-        /// 910081-  Request For FSS To Get Daily Zip NM File Has Error.
-        /// </summary>
-        FSSDownloadZipFileAsyncHasError = 910081,
+        FSSDownloadZipFileAsyncHasError = 910080,
 
     }
 
