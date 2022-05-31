@@ -48,7 +48,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(8, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
-            Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
+            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.CurrentPageIndex);
             Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList[2].WarningType);
             Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[2].WarningTypeName);
             Assert.AreEqual("RnwAdminListReferance", adminListFilter.RadioNavigationalWarningsAdminList[2].Reference);
@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
-            Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
+            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
             Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
         }
 
@@ -97,7 +97,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
-            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
+            Assert.AreEqual(WarningTypes.UK_Coastal, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
             Assert.AreEqual("UK Coastal", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
             Assert.AreEqual(2024, adminListFilter.RadioNavigationalWarningsAdminList[0].DateTimeGroup.Year);
         }
