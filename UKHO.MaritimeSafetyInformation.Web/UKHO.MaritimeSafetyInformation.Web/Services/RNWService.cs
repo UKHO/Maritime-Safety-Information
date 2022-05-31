@@ -175,7 +175,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
                 _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information edit RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
-                await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
+                await _rnwRepository.UpdateRadioNavigationWarning(radioNavigationalWarning);
                 _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
             }
             catch (Exception ex)
