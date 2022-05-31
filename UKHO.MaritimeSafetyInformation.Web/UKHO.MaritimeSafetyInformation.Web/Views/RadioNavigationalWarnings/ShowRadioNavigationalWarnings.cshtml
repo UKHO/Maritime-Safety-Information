@@ -43,7 +43,7 @@
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
                         <th class="th-4 justify-content-center">
-                            <input type="button" id="toggle" value="Select all" onClick="do_Selection()"/>
+                            <input type="button" id="toggle" class="select-all-button" value="Select all" onClick="do_Selection()"/>
                         </th>
                         <th class="th-5 justify-content-center">
                             Select
@@ -98,8 +98,10 @@
             </table>
         </div>        
     </div>
-    <div class="col-md-auto mb-3">
-        <button id="BtnShowSelection" type="button" >Show selection</button>
+    <div class="row">
+        <div class="col text-end">
+            <button id="BtnShowSelection" type="button" >Show selection</button>
+        </div>
     </div>
     <div class="tab-pane fade" id="NAVAREA1" role="tabpanel" aria-labelledby="NAVAREA1-tab">
         NAVAREA 1

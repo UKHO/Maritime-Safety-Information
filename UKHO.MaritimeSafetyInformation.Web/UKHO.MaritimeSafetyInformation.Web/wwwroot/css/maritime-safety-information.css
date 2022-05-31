@@ -96,6 +96,7 @@
 }
 .site-header .navbar-collapse .navbar-nav li a {
   padding: 2rem 1rem;
+  color: #09315b !important;
 }
 @media screen and (max-width: 1200px) {
   .site-header .navbar-collapse .navbar-nav li a {
@@ -252,10 +253,10 @@
   clear: both;
 }
 
-.notice-to-mariners-weekly-table thead tr th.th-3 {
+.notice-to-mariners-weekly-table thead tr th.th-3, .notice-to-mariners-daily-table thead tr th.th-3 {
   flex-basis: 35%;
 }
-.notice-to-mariners-weekly-table tbody tr td.td-3 {
+.notice-to-mariners-weekly-table tbody tr td.td-3, .notice-to-mariners-daily-table tbody tr td.td-3 {
   flex-basis: 35%;
 }
 
@@ -351,7 +352,28 @@
   word-break: break-word;
 }
 
-a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
+.caption-table {
+  margin-top: 45px;
+  position: relative;
+}
+.caption-table .table-caption {
+  display: block;
+  font-weight: 400;
+  font-size: 21px;
+  color: #000000;
+  padding: 1rem 0;
+  position: absolute;
+  width: 100%;
+  top: -50px;
+}
+
+.daily-table-container {
+  max-height: 78vh !important;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus, input[type=button]:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
@@ -402,6 +424,7 @@ a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-inpu
 
 table {
   border-collapse: collapse;
+  margin-bottom: 30px !important;
 }
 table thead tr th {
   border-bottom: 0;
@@ -441,14 +464,22 @@ table td a {
   font-weight: 400;
 }
 
-button {
+button, input[type=submit].primary {
   height: auto;
   min-width: auto;
   font-size: 18px;
   padding: 12px 18px;
+  display: inline-block;
 }
-button:active {
+button:active, input[type=submit].primary:active {
   background-color: #09315b;
+}
+
+input[type=submit].primary {
+  background-color: #09315b;
+  color: #fff;
+  border: 2px solid #09315b;
+  white-space: nowrap;
 }
 
 .inline-btn {
@@ -462,7 +493,7 @@ button:active {
 
 .inline-link {
   display: inline-block;
-  margin-top: 2.2rem;
+  margin-top: 2.7rem;
 }
 @media screen and (max-width: 576px) {
   .inline-link {
@@ -488,6 +519,13 @@ button:active {
 .form-select option {
   font-weight: 300;
   font-size: 16px;
+}
+
+.form-check-label {
+  margin-top: 10px;
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .form-check-input {
@@ -664,7 +702,21 @@ button:active {
   border-color: transparent;
   padding: 0.5rem 1.5rem;
   border-radius: 0;
+  font-weight: 400;
 }
 .msi-tabs li .nav-link.active {
   border-color: #09315b;
+  color: #09315b;
+}
+
+input[type=button].select-all-button {
+  height: auto;
+  padding: 0;
+  background-color: transparent;
+  color: #09315b;
+  min-width: auto;
+  border: 0;
+  text-decoration: underline;
+  font-size: 18px;
+  border-radius: 0;
 }

@@ -10,7 +10,7 @@
     box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
 
-a, button, .form-select, .form-control, .form-check-input {
+a, button, .form-select, .form-control, .form-check-input, input[type="submit"], input[type="button"] {
     &:focus {
         @extend %focus;
     }
@@ -67,6 +67,7 @@ a, button, .form-select, .form-control, .form-check-input {
 
 table {
     border-collapse: collapse;
+    margin-bottom:30px!important;
     thead{
         tr th{
             border-bottom:0;
@@ -108,15 +109,22 @@ table {
     font-weight: 400;
 }
 
-button {
+button, input[type="submit"].primary {
     height: auto;
     min-width: auto;
     font-size: 18px;
     padding: 12px 18px;
+    display: inline-block;
 
     &:active {
         background-color: $prussian-blue;
     }
+}
+input[type="submit"].primary {
+    background-color: #09315b;
+    color: #fff;
+    border: 2px solid #09315b;
+    white-space: nowrap;
 }
 
 .inline-btn {
@@ -129,7 +137,7 @@ button {
 
 .inline-link {
     display: inline-block;
-    margin-top: 2.2rem;
+    margin-top: 2.7rem;
 
     @media screen and (max-width: $small) {
         margin-top: 0;
@@ -155,6 +163,13 @@ button {
 .form-select option {
     font-weight: 300;
     font-size: 16px;
+}
+
+.form-check-label{
+    margin-top:10px;
+    margin-left:10px;
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .form-check-input {
@@ -359,10 +374,23 @@ button {
             border-color: transparent;
             padding: 0.5rem 1.5rem;
             border-radius: 0;
+            font-weight: 400;
 
             &.active {
                 border-color: $prussian-blue;
+                color: $prussian-blue;
             }
         }
     }
+}
+input[type="button"].select-all-button{
+    height:auto;
+    padding:0;
+    background-color:transparent;
+    color:$prussian-blue;
+    min-width:auto;
+    border:0;
+    text-decoration:underline;
+    font-size:18px;
+    border-radius:0;
 }

@@ -1,6 +1,6 @@
 ﻿@import "variables";
 
-.notice-to-mariners-weekly-table {
+.notice-to-mariners-weekly-table, .notice-to-mariners-daily-table {
     thead {
         tr {
             th {
@@ -149,4 +149,24 @@
             word-break: break-word;
         }
     }
+}
+.caption-table {
+    margin-top: 45px;
+    position: relative;
+
+    .table-caption {
+        display: block;
+        font-weight: 400;
+        font-size: 21px;
+        color: $black;
+        padding: 1rem 0;
+        position: absolute;
+        width: 100%;
+        top: -50px;
+    }
+}
+.daily-table-container {
+    max-height: 78vh !important;
+    overflow-y: auto;
+    padding-right: 2px;
 }
