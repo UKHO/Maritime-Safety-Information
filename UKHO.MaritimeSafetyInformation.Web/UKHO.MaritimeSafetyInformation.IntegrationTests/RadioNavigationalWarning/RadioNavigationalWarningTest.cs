@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             IActionResult result = await _controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
-            Assert.AreEqual(7, warningsData.Count);
+            Assert.AreEqual(6, warningsData.Count);
         }
 
         [OneTimeTearDown]

@@ -42,8 +42,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 if (result)
                 {
                     TempData["message"] = "Record created successfully!";
-                    _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-
+                    _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed successfully with record " +
+                      " WarningType = " + radioNavigationalWarning.WarningType + "," +
+                      " Reference = " + radioNavigationalWarning.Reference + "," +
+                      " DateTime = " + radioNavigationalWarning.DateTimeGroup + "," +
+                      " Description = " + radioNavigationalWarning.Summary + "," +
+                      " Text = " + radioNavigationalWarning.Content + "," +
+                      " Expiry Date = " + radioNavigationalWarning.ExpiryDate + "," +
+                      " Deleted = " + radioNavigationalWarning.IsDeleted + "," +
+                      " for _X-Correlation-ID:{ correlationId}," +
+                      GetCurrentCorrelationId());
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -126,7 +134,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 if (result)
                 {
                     TempData["message"] = "Record updated successfully!";
-                    _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record request updated successfully for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                    _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record request updated successfully with record " +
+                        " WarningType = " + radioNavigationalWarningsAdmin.WarningType + "," +
+                        " Reference = " + radioNavigationalWarningsAdmin.Reference + "," +
+                        " DateTime = " + radioNavigationalWarningsAdmin.DateTimeGroup + "," +
+                        " Description = " + radioNavigationalWarningsAdmin.Summary + "," +
+                        " Text = " + radioNavigationalWarningsAdmin.Content + "," +
+                        " Expiry Date = " + radioNavigationalWarningsAdmin.ExpiryDate + "," +
+                        " Deleted = " + radioNavigationalWarningsAdmin.IsDeleted + "," +
+                        " for _X-Correlation-ID:{ correlationId}," +
+                        GetCurrentCorrelationId());
                     return RedirectToAction(nameof(Index), new { reLoadData = true });
                 }
             }

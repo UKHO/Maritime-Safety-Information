@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -17,7 +16,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
     [TestFixture]
-    public class RadioNavigationalWarningEditAdminTest : RNWTestHelper
+    public class RadioNavigationalWarningEditAdminTest : BaseRNWTest
     {
         public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;
@@ -61,11 +60,78 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             Assert.IsInstanceOf<IActionResult>(result);
             Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());
-            Assert.AreEqual("Edit", ((RedirectToActionResult)result).ActionName);
-            //Assert.AreEqual(1, _fakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
-            //Assert.IsTrue(_fakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
+            Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
+            Assert.IsTrue(_fakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
         }
 
+        [Test]
+        public void WhenEditRadioNavigationWarningsWithInValidValue_ThenRecordIsNotUpdated()
+        {
+            _controller.TempData = _tempData;
+            _fakeEditRadioNavigationalWarningsAdmin = GetFakeEditRadioNavigationalWarningsAdmin();
+            _fakeEditRadioNavigationalWarningsAdmin.Reference = string.Empty;
+
+            Task<IActionResult> result = _controller.Edit(_fakeEditRadioNavigationalWarningsAdmin.Id, _fakeEditRadioNavigationalWarningsAdmin);
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNull(_controller.TempData["message"]);
+        }
+
+        [Test]
+        public void WhenEditRadioNavigationWarningsWithInValidModel_ThenRecordIsNotUpdated()
+        {
+            _controller.TempData = _tempData;
+
+            _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
+            Task<IActionResult> result = _controller.Edit(5, new EditRadioNavigationalWarningsAdmin());
+
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.IsNull(_controller.TempData["message"]);
+        }
+        [Test]
+        public void WhenEditRadioNavigationWarningsWithInValidWarningType_ThenReturnInValidDataException()
+        {
+            _controller.TempData = _tempData;
+            _fakeEditRadioNavigationalWarningsAdmin = GetFakeEditRadioNavigationalWarningsAdmin();
+            _fakeEditRadioNavigationalWarningsAdmin.WarningType = 3;
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>(),
+                                async delegate { await _controller.Edit(_fakeEditRadioNavigationalWarningsAdmin.Id, _fakeEditRadioNavigationalWarningsAdmin); });
+        }
+
+
+        [Test]
+        public void WhenEditRadioNavigationWarningsWithInValidReference_ThenReturnArgumentNullException()
+        {
+            _controller.TempData = _tempData;
+            _fakeEditRadioNavigationalWarningsAdmin = GetFakeEditRadioNavigationalWarningsAdmin();
+            _fakeEditRadioNavigationalWarningsAdmin.Reference = string.Empty;
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
+                                async delegate { await _controller.Edit(_fakeEditRadioNavigationalWarningsAdmin.Id, _fakeEditRadioNavigationalWarningsAdmin); });
+        }
+
+        [Test]
+        public void WhenEditRadioNavigationWarningsWithInValidSummary_ThenReturnArgumentNullException()
+        {
+            _controller.TempData = _tempData;
+            _fakeEditRadioNavigationalWarningsAdmin = GetFakeEditRadioNavigationalWarningsAdmin();
+            _fakeEditRadioNavigationalWarningsAdmin.Summary = string.Empty;
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
+                                async delegate { await _controller.Edit(_fakeEditRadioNavigationalWarningsAdmin.Id, _fakeEditRadioNavigationalWarningsAdmin); });
+        }
+
+        [Test]
+        public void WhenEditRadioNavigationWarningsWithInValidContent_ThenReturnArgumentNullException()
+        {
+            _controller.TempData = _tempData;
+            _fakeEditRadioNavigationalWarningsAdmin = GetFakeEditRadioNavigationalWarningsAdmin();
+            _fakeEditRadioNavigationalWarningsAdmin.Content = string.Empty;
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
+                                async delegate { await _controller.Edit(_fakeEditRadioNavigationalWarningsAdmin.Id, _fakeEditRadioNavigationalWarningsAdmin); });
+        }
         public EditRadioNavigationalWarningsAdmin GetFakeEditRadioNavigationalWarningsAdmin()
         {
             return new EditRadioNavigationalWarningsAdmin()
