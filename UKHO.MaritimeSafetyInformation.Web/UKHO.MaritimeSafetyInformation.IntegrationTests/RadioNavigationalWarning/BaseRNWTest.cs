@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -74,7 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 2,
+                WarningType = WarningTypes.UK_Coastal,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -85,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -95,7 +95,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -105,7 +105,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 2,
+                WarningType = WarningTypes.UK_Coastal,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -115,7 +115,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 2,
+                WarningType = WarningTypes.UK_Coastal,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -125,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2023, 1, 1),
                 Summary = "NORTHEAST ATLANTIC. Outer Hebrides Westwards. Live weapons firing in progress.",
@@ -135,7 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()
             {
-                WarningType = 2,
+                WarningType = WarningTypes.UK_Coastal,
                 Reference = "RnwAdminListReferance",
                 DateTimeGroup = new DateTime(2024, 1, 1),
                 Summary = "DOVER STRAIT, EASTERN PART. Sandettie Bank North-westwards. Inter Bank light-buoy, Racon inoperative.",
