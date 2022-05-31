@@ -13,7 +13,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings
 {
-    public class BaseRNWTest
+    internal class BaseRNWTest
     {
         protected readonly RadioNavigationalWarningsContext FakeContext;
         protected readonly IOptions<RadioNavigationalWarningConfiguration> FakeRadioNavigationalWarningConfiguration;
