@@ -44,11 +44,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             IActionResult result = await _controller.Index(1, null, null);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
 
-            Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.Count == 8);
+            Assert.AreEqual(8, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
             Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList[2].WarningType);
+            Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[2].WarningTypeName);
             Assert.AreEqual("RnwAdminListReferance", adminListFilter.RadioNavigationalWarningsAdminList[2].Reference);
             Assert.AreEqual(new DateTime(2022, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].DateTimeGroup);
             Assert.AreEqual("RnwAdminListSummary", adminListFilter.RadioNavigationalWarningsAdminList[2].Summary);
@@ -69,6 +70,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
+            Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
+            Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
         }
 
         [Test]
@@ -93,6 +96,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
+            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
+            Assert.AreEqual("UK Coastal", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
+            Assert.AreEqual(2024, adminListFilter.RadioNavigationalWarningsAdminList[0].DateTimeGroup.Year);
         }
 
         [Test]
