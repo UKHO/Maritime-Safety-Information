@@ -10,11 +10,11 @@
     <h1 id="headingLevelOne" class="mt-0">Radio Navigational Warnings Admin List</h1>
     <div class="row">
         <div class="col-md-auto mb-3">
-            <label class="form-label">Warning Type</label>
+            <label class="form-label" for="WarningType">Warning Type</label>
             @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"Select Warning Type", new { @class = "form-select", @onchange="WarningTypeValueChange(this)"} )
         </div>
         <div class="col-md-auto mb-3">
-            <label class="form-label">Year</label>
+            <label class="form-label" for="Year">Year</label>
             @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"Select Year",  new { @class = "form-select", @onchange="YearValueChange(this)"} )
         </div>
         <div class="col-md-auto mb-3">
@@ -56,7 +56,9 @@
                         <th>
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().IsDeleted)
                         </th>
-                        <th></th>
+                        <th>
+                            <span class="visually-hidden">Action</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,10 +101,10 @@
 
         <div>
             <ul class="pagination">
-                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnFirst" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(1)">First</a></li>
-                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnPrevious" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)">Previous</a></li>
-                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnNext" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
-                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnLast" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
+                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnFirst" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(1)" role="button">First</a></li>
+                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnPrevious" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)" role="button">Previous</a></li>
+                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnNext" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)" role="button">Next</a></li>
+                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnLast" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.PageCount)" role="button">Last</a></li>
             </ul>
             <div>
                 Page @Model.CurrentPageIndex of @Model.PageCount

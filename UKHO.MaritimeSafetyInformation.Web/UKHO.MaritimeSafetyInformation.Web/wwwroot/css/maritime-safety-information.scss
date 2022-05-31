@@ -108,20 +108,22 @@ table {
     font-weight: 400;
 }
 
-.primary {
+button, input[type="submit"].primary {
     height: auto;
     min-width: auto;
     font-size: 18px;
     padding: 12px 18px;
     display: inline-block;
-    background-color: #09315b;
-    color: #fff;
-    border: 2px solid #09315b;
-    white-space: nowrap;
 
     &:active {
         background-color: $prussian-blue;
     }
+}
+input[type="submit"].primary {
+    background-color: #09315b;
+    color: #fff;
+    border: 2px solid #09315b;
+    white-space: nowrap;
 }
 
 .inline-btn {
