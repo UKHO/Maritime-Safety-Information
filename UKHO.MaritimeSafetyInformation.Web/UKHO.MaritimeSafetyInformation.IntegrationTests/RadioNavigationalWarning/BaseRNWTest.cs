@@ -13,7 +13,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning
 {
-    public class RNWTestHelper
+    public class BaseRNWTest
     {
         public readonly RadioNavigationalWarningsContext _fakeContext;
         public IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public ILogger<RNWRepository> _fakeLoggerRnwRepository;
         public ILogger<RNWService> _fakeLoggerRnwService;
 
-        public RNWTestHelper()
+        public BaseRNWTest()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                                     .UseInMemoryDatabase("msi-in-db");
@@ -135,6 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Summary = "NORTHEAST ATLANTIC. Outer Hebrides Westwards. Live weapons firing in progress.",
                 Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224.",
                 ExpiryDate = new DateTime(2099, 1, 1),
+                LastModified = new DateTime(2019, 08, 15, 13, 14, 15),
             });
 
             radioNavigationalWarningList.Add(new radioNavigationalWarningDto.RadioNavigationalWarning()

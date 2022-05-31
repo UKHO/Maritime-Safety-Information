@@ -118,7 +118,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
-            Assert.IsTrue(result < DateTime.UtcNow);
+            Assert.AreEqual(new DateTime(2099, 02, 03), result);
         }
 
         [OneTimeTearDown]
@@ -165,7 +165,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
-                ExpiryDate = new DateTime(2021, 1, 1)
+                ExpiryDate = new DateTime(2021, 1, 1),
+                LastModified = new DateTime(2099, 02, 03)
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
@@ -175,7 +176,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
-                ExpiryDate = new DateTime(2099, 1, 1)
+                ExpiryDate = new DateTime(2099, 1, 1),
+                LastModified = new DateTime(2099, 01, 02)
             });
             return radioNavigationalWarningList;
         }
