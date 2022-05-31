@@ -91,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return rnwList;
         }
 
-        public async Task AddRadioNavigationWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
+        public async Task UpdateRadioNavigationWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
         {
             RadioNavigationalWarning rnwList = new();
             rnwList.Id = radioNavigationalWarningAdmin.Id;

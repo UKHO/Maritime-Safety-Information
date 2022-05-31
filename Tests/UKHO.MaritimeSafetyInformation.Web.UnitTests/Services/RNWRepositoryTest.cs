@@ -205,7 +205,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarningAdmin.DateTimeGroup = dateTime;
-            Task result = _rnwRepository.AddRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
+            Task result = _rnwRepository.UpdateRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
             Assert.IsTrue(result.IsCompleted);
         }
 
