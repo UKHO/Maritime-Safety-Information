@@ -12,7 +12,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
     [TestFixture]
-    public class RadioNavigationalWarningAdminTest : RNWTestHelper
+    public class RadioNavigationalWarningAdminTest : BaseRNWTest
     {
         public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;

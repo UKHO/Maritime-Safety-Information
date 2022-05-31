@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using radioNavigationalWarningDto = UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using radioNavigationalWarningDto = UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarning.Admin
 {
     [TestFixture]
-    public class RadioNavigationalWarningCreateAdminTest : RNWTestHelper
+    public class RadioNavigationalWarningCreateAdminTest : BaseRNWTest
     {
         public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;
@@ -79,7 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _controller.TempData = _tempData;
 
             _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
-            Task<IActionResult> result = _controller.Create(new Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning());
+            Task<IActionResult> result = _controller.Create(new radioNavigationalWarningDto.RadioNavigationalWarning());
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.IsNull(_controller.TempData["message"]);
