@@ -14,7 +14,7 @@
                 <div class="mb-3">
                     <label asp-for="WarningType" class="form-label"></label>
                     <span class="text-danger">*</span>
-                    <select name="WarningType" class="form-control" asp-items="@ViewBag.WarningType"></select>
+                    <select name="WarningType" class="form-control" asp-items="@ViewBag.WarningType" id="WarningType"></select>
                     <span asp-validation-for="WarningType" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
