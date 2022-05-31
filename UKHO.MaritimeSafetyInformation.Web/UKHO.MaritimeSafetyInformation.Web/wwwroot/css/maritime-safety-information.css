@@ -373,7 +373,7 @@
   padding-right: 2px;
 }
 
-a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
+a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
@@ -463,13 +463,18 @@ table td a {
   font-weight: 400;
 }
 
-button {
+.primary {
   height: auto;
   min-width: auto;
   font-size: 18px;
   padding: 12px 18px;
+  display: inline-block;
+  background-color: #09315b;
+  color: #fff;
+  border: 2px solid #09315b;
+  white-space: nowrap;
 }
-button:active {
+.primary:active {
   background-color: #09315b;
 }
 
