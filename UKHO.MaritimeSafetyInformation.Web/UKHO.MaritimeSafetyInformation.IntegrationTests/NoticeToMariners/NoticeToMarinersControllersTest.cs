@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(2022, showWeeklyFiles.YearAndWeekList[3].Year);
             Assert.AreEqual(11, showWeeklyFiles.YearAndWeekList[3].Week);
-            Assert.AreEqual("application/pdf", showWeeklyFiles.ShowFilesResponseList[3].MimeType);
+            Assert.AreEqual("application/text", showWeeklyFiles.ShowFilesResponseList[3].MimeType);
         }
 
         [Test]
