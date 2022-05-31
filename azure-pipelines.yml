@@ -292,7 +292,7 @@ stages:
               zipAfterPublish: false
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish IntegrationTests test Artifact"
+            displayName: "Publish Integration Test Results"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
               ArtifactName: IntegrationTests
