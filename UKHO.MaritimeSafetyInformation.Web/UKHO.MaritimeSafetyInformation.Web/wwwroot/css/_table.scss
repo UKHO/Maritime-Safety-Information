@@ -117,8 +117,9 @@
 
     tr.accordion-collapse td {
         border-right: 0 !important;
-    }
-
+    }    
+}
+.accordianTable, .selection-details {
     .warning-detail {
         font-size: 18px;
         color: $black;
@@ -150,6 +151,20 @@
         }
     }
 }
+.selection-details {
+    max-height: 60vh !important;
+    overflow-y: auto;
+    margin:30px 0;
+    padding-right:2px;
+
+    .warning-detail {
+        padding: 18px 0;
+        border-top: 1px solid $american-silver;
+        h1{
+            font-size:21px;
+        }
+    }
+}
 .caption-table {
     margin-top: 45px;
     position: relative;
@@ -169,4 +184,27 @@
     max-height: 78vh !important;
     overflow-y: auto;
     padding-right: 2px;
+}
+.rnw-list-table {
+    thead {
+        tr {
+            th {
+                &.th-1 {
+                    width: 65px;
+                }
+
+                &.th-2 {
+                    width: 125px;
+                }
+
+                &.th-3 {
+                    width: 112px;
+                }
+
+                &.th-4, &.th-7 {
+                    width: 175px;
+                }
+            }
+        }
+    }
 }

@@ -325,11 +325,12 @@
 .accordianTable tr.accordion-collapse td {
   border-right: 0 !important;
 }
-.accordianTable .warning-detail {
+
+.accordianTable .warning-detail, .selection-details .warning-detail {
   font-size: 18px;
   color: #000000;
 }
-.accordianTable .warning-detail h1, .accordianTable .warning-detail h2, .accordianTable .warning-detail h3 {
+.accordianTable .warning-detail h1, .accordianTable .warning-detail h2, .accordianTable .warning-detail h3, .selection-details .warning-detail h1, .selection-details .warning-detail h2, .selection-details .warning-detail h3 {
   color: #000000;
   font-weight: 300;
   font-size: 18px;
@@ -337,19 +338,33 @@
   margin-bottom: 0;
   margin-top: 0;
 }
-.accordianTable .warning-detail p {
+.accordianTable .warning-detail p, .selection-details .warning-detail p {
   margin-bottom: 0;
 }
-.accordianTable .warning-detail .warning-type {
+.accordianTable .warning-detail .warning-type, .selection-details .warning-detail .warning-type {
   font-weight: 400;
 }
-.accordianTable .warning-detail pre {
+.accordianTable .warning-detail pre, .selection-details .warning-detail pre {
   width: 100%;
   overflow: hidden;
   font-family: JohnstonITC, Helvetica, sans-serif;
   font-size: 18px;
   white-space: pre-line;
   word-break: break-word;
+}
+
+.selection-details {
+  max-height: 60vh !important;
+  overflow-y: auto;
+  margin: 30px 0;
+  padding-right: 2px;
+}
+.selection-details .warning-detail {
+  padding: 18px 0;
+  border-top: 1px solid #D0D0D0;
+}
+.selection-details .warning-detail h1 {
+  font-size: 21px;
 }
 
 .caption-table {
@@ -373,7 +388,20 @@
   padding-right: 2px;
 }
 
-a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus {
+.rnw-list-table thead tr th.th-1 {
+  width: 65px;
+}
+.rnw-list-table thead tr th.th-2 {
+  width: 125px;
+}
+.rnw-list-table thead tr th.th-3 {
+  width: 112px;
+}
+.rnw-list-table thead tr th.th-4, .rnw-list-table thead tr th.th-7 {
+  width: 175px;
+}
+
+a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus, input[type=button]:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
@@ -424,6 +452,7 @@ a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-inpu
 
 table {
   border-collapse: collapse;
+  margin-bottom: 30px !important;
 }
 table thead tr th {
   border-bottom: 0;
@@ -463,18 +492,19 @@ table td a {
   font-weight: 400;
 }
 
-button, input[type=submit].primary {
+button, input[type=submit].primary, a.primary {
   height: auto;
   min-width: auto;
   font-size: 18px;
-  padding: 12px 18px;
+  padding: 12px 40px;
   display: inline-block;
+  text-decoration: none;
 }
-button:active, input[type=submit].primary:active {
+button:active, input[type=submit].primary:active, a.primary:active {
   background-color: #09315b;
 }
 
-input[type=submit].primary {
+input[type=submit].primary, a.primary {
   background-color: #09315b;
   color: #fff;
   border: 2px solid #09315b;
@@ -706,4 +736,20 @@ input[type=submit].primary {
 .msi-tabs li .nav-link.active {
   border-color: #09315b;
   color: #09315b;
+}
+
+input[type=button].select-all-button {
+  height: auto;
+  padding: 0;
+  background-color: transparent;
+  color: #09315b;
+  min-width: auto;
+  border: 0;
+  text-decoration: underline;
+  font-size: 18px;
+  border-radius: 0;
+}
+
+.bold-icon {
+  -webkit-text-stroke: 2px;
 }

@@ -10,7 +10,7 @@
     box-shadow: 0 0 0 0.14rem #fd0 !important;
 }
 
-a, button, .form-select, .form-control, .form-check-input, input[type="submit"] {
+a, button, .form-select, .form-control, .form-check-input, input[type="submit"], input[type="button"] {
     &:focus {
         @extend %focus;
     }
@@ -67,6 +67,7 @@ a, button, .form-select, .form-control, .form-check-input, input[type="submit"] 
 
 table {
     border-collapse: collapse;
+    margin-bottom:30px!important;
     thead{
         tr th{
             border-bottom:0;
@@ -108,18 +109,19 @@ table {
     font-weight: 400;
 }
 
-button, input[type="submit"].primary {
+button, input[type="submit"].primary, a.primary {
     height: auto;
     min-width: auto;
     font-size: 18px;
-    padding: 12px 18px;
+    padding: 12px 40px;
     display: inline-block;
+    text-decoration: none;
 
     &:active {
         background-color: $prussian-blue;
     }
 }
-input[type="submit"].primary {
+input[type="submit"].primary, a.primary {
     background-color: #09315b;
     color: #fff;
     border: 2px solid #09315b;
@@ -381,4 +383,18 @@ input[type="submit"].primary {
             }
         }
     }
+}
+input[type="button"].select-all-button{
+    height:auto;
+    padding:0;
+    background-color:transparent;
+    color:$prussian-blue;
+    min-width:auto;
+    border:0;
+    text-decoration:underline;
+    font-size:18px;
+    border-radius:0;
+}
+.bold-icon {
+    -webkit-text-stroke: 2px;
 }
