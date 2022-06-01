@@ -84,9 +84,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.AreEqual(5, result.Count);
-            Assert.AreEqual(5, result[0].Id);
-            Assert.AreEqual("011200 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
+            Assert.AreEqual(6, result.Count);
+            Assert.AreEqual(6, result[0].Id);
+            Assert.AreEqual("011200 UTC Jan 21", result[3].DateTimeGroupRnwFormat);
             Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
         }
 
@@ -95,15 +95,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.AreEqual("No", result[0].IsDeleted);
-            Assert.AreEqual("Yes", result[3].IsDeleted);
+            Assert.AreEqual("Yes", result[4].IsDeleted);
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationWarningWithContentLenthGreaterThan300Char_ThenWrapTheContent()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.IsTrue(result[3].Content.Length <= 303);
-            Assert.IsTrue(result[3].Content.Contains("..."));
+            Assert.IsTrue(result[4].Content.Length <= 303);
+            Assert.IsTrue(result[4].Content.Contains("..."));
         }
 
         [Test]
@@ -120,7 +120,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
         {
             List<RadioNavigationalWarningsData> result = await _rnwRepository.GetRadioNavigationalWarningsDataList();
-            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(3, result.Count);
+        }
+
+        [Test]
+        public void WhenCallEditRadioNavigationWarningsMethod_ThenUpdateRNWRecord()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarningAdmin.DateTimeGroup = dateTime;
+            Task result = _rnwRepository.UpdateRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
+            Assert.IsTrue(result.IsCompleted);
+        }
+
+        [Test]
+        public void WhenCallEditRadioNavigation_ThenReturnListAsync()
+        {
+            int id = 1;
+            EditRadioNavigationalWarningsAdmin result = _rnwRepository.EditRadioNavigation(id);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Id);
+            Assert.AreEqual("NAVAREA 1", result.WarningTypeName);
         }
 
         [OneTimeTearDown]
@@ -198,27 +217,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             });
             return warningTypeList;
         }
-
-        #region Edit Radio Navigation Warning
-        [Test]
-        public void WhenCallEditRadioNavigationWarningsMethod_ThenUpdateRNWRecord()
-        {
-            DateTime dateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarningAdmin.DateTimeGroup = dateTime;
-            Task result = _rnwRepository.UpdateRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
-            Assert.IsTrue(result.IsCompleted);
-        }
-
-        [Test]
-        public void WhenCallEditRadioNavigation_ThenReturnListAsync()
-        {
-            int id = 1;
-            EditRadioNavigationalWarningsAdmin result = _rnwRepository.EditRadioNavigation(id);
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Id);
-            Assert.AreEqual("NAVAREA 1", result.WarningTypeName);
-        }
-
-        #endregion Edit Radio Navigation Warning
     }
 }
