@@ -12,34 +12,32 @@
     <p>The following NAVAREA 1 and UK Coastal Warnings (WZs) were in force at: 141009 UTC April 22</p>
 </div>
 <div class="row">
-    <div class="col text-end">
-        <a href="@Url.Action("Index", "RadioNavigationalWarnings")" type="button">Back to all warnings </a>
+    <div class="col text-start mt-3 mb-3">
+        <i class="bi bi-chevron-left bold-icon me-2" aria-hidden="true"></i> <a href="@Url.Action("Index", "RadioNavigationalWarnings")" type="button">Back to all warnings </a>
     </div>
 </div>
+<div class="selection-details scroll-bar">
     @{int i = 0;}
     @foreach (var item in Model) {
-        <tr>
-            <td>                          
-                <div>
-                    <section>
-                        <h4 id="Details_WarningType_@i">
-                            @Html.DisplayFor(modelItem => item.WarningType)
-                        </h4>
-                        <h4 id="Details_Reference_@i">
-                            @Html.DisplayFor(modelItem => item.Reference)
-                        </h4>
-                        <h4 id="Details_DateTimeGroupRnwFormat_@i">
-                            @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
-                        </h4>
-                        <h4 id="Details_Description_@i">
-                            @Html.DisplayFor(modelItem => item.Content)
-                        </h4>
-                    </section>
-                </div>
-            </td>
-        </tr>
+        <div class="warning-detail">
+            <section>
+                <h1 id="Details_WarningType_@i" class="warning-type">
+                    @Html.DisplayFor(modelItem => item.WarningType)
+                </h1>
+                <h2 id="Details_Reference_@i" class="warning-reference">
+                    @Html.DisplayFor(modelItem => item.Reference)
+                </h2>
+                <h3 id="Details_DateTimeGroupRnwFormat_@i" class="warning-date-time">
+                    @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
+                </h3>
+                <pre id="Details_Description_@i" class="warning-description">
+                    @Html.DisplayFor(modelItem => item.Content)
+                </pre>
+            </section>
+        </div>
         i++;
     }
+</div>
 <div class="row">
     <div class="col text-end">
         <button id="Print" type="button" >Print</button>

@@ -117,8 +117,9 @@
 
     tr.accordion-collapse td {
         border-right: 0 !important;
-    }
-
+    }    
+}
+.accordianTable, .selection-details {
     .warning-detail {
         font-size: 18px;
         color: $black;
@@ -147,6 +148,20 @@
             font-size: 18px;
             white-space: pre-line;
             word-break: break-word;
+        }
+    }
+}
+.selection-details {
+    max-height: 60vh !important;
+    overflow-y: auto;
+    margin:30px 0;
+    padding-right:2px;
+
+    .warning-detail {
+        padding: 18px 0;
+        border-top: 1px solid $american-silver;
+        h1{
+            font-size:21px;
         }
     }
 }
