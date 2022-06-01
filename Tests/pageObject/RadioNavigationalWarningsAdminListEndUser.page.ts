@@ -40,7 +40,7 @@ export default class RadioNavigationalWarningsListEndUser
     public async verifyTableDateColumnData()
     {
       const resultYear= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
-      
+  
       //fail if there are no matching selections
       expect(resultYear.length).toBeGreaterThan(0);
 
