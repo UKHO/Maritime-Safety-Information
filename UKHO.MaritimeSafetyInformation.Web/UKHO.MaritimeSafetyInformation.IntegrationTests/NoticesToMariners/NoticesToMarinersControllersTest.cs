@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("07", showFiles[0].WeekNumber);
             Assert.AreEqual("2020", showFiles[0].Year);
             Assert.AreEqual("Daily .zip", showFiles[0].DailyFilesData[0].Filename);
-            Assert.AreEqual("1MB", showFiles[0].DailyFilesData[0].FileSizeInKB);
+            Assert.AreEqual("1 MB", showFiles[0].DailyFilesData[0].FileSizeInKB);
             Assert.AreEqual("a29f76e4-ab80-4cfd-8236-59d0e3fc8f2a", showFiles[0].DailyFilesData[0].BatchId);
         }
 
