@@ -32,11 +32,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult About()
+        public async Task<IActionResult>  About()
         {
-            ViewBag.LastModifiedDateTime = "261613 UTC May 22";
-            //TODO
-            //ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
 
             return View();
         }

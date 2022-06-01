@@ -52,6 +52,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
         }
 
+        [Test]
+        public async Task WhenCallAbout_ThenReturnLastModifiedDateTime()
+        {
+            IActionResult result = await _controller.About();
+            string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
+            Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
+        }
+
         [OneTimeTearDown]
         public async Task GlobalTearDown()
         {
