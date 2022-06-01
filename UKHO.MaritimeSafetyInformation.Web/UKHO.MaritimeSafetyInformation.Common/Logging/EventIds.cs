@@ -286,66 +286,74 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910068 -  Maritime safety information error has occurred in the process to get RNW detail from database.
         /// </summary>
         ErrorInRNWListDetailFromDatabase = 910068,
-
-        /// <summary>
-        /// 910069 -Request For Download Daily NM File Started.
+        /// <summary> 
+        /// 910069 -  Maritime safety information request to get last modified date time from database started.
         /// </summary>
-        DownloadDailyNMFileStarted = 910069,
-
-        /// <summary>
-        /// 910070 -Request For Download Daily NM File Started.
+        RNWLastModifiedDateTimeFromDatabaseStarted = 910069,
+        /// <summary> 
+        /// 910070 -  Maritime safety information request to get last modified date time from database completed.
         /// </summary>
-        DownloadDailyNMFileCompleted = 910070,
+        RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
 
         /// <summary>
         /// 910071 -Request For Download Daily NM File Started.
         /// </summary>
-        DownloadDailyNMFileFailed = 910071,
+        DownloadDailyNMFileStarted = 910071,
 
         /// <summary>
-        /// 910072 - Request To Get Daily Zip NM File Started.
+        /// 910072 -Request For Download Daily NM File Started.
         /// </summary>
-        GetDailyZipNMFileStarted = 910072,
+        DownloadDailyNMFileCompleted = 910072,
 
         /// <summary>
-        /// 910073 - Request To Get Daily Zip NM File Completed.
+        /// 910073 -Request For Download Daily NM File Started.
         /// </summary>
-        GetDailyZipNMFileCompleted = 910073,
+        DownloadDailyNMFileFailed = 910073,
 
         /// <summary>
-        /// 910074 - Request To Get Daily Zip NM File Failed.
+        /// 910074 - Request To Get Daily Zip NM File Started.
         /// </summary>
-        GetDailyZipNMFileFailed = 910074,
+        GetDailyZipNMFileStarted = 910074,
 
         /// <summary>
-        /// 910075 - Request For FSS To Get Daily Zip NM File Started.
+        /// 910075 - Request To Get Daily Zip NM File Completed.
         /// </summary>
-        FSSGetDailyZipNMFileStarted = 910075,
+        GetDailyZipNMFileCompleted = 910075,
 
         /// <summary>
-        /// 910076 - Request For FSS To Get Daily Zip NM File Completed.
+        /// 910076 - Request To Get Daily Zip NM File Failed.
         /// </summary>
-        FSSGetDailyZipNMFileCompleted = 910076,
+        GetDailyZipNMFileFailed = 910076,
 
         /// <summary>
-        /// 910077 - Request For FSS To Get Daily Zip NM File Failed.
+        /// 910077 - Request For FSS To Get Daily Zip NM File Started.
         /// </summary>
-        FSSGetDailyZipNMFileResponseFailed = 910077,
+        FSSGetDailyZipNMFileStarted = 910077,
 
         /// <summary>
-        /// 910078-  Event data for Retrieval of MSI Show Daily File Failed.
+        /// 910078 - Request For FSS To Get Daily Zip NM File Completed.
         /// </summary>
-        ShowDailyFilesFailed = 910078,
+        FSSGetDailyZipNMFileCompleted = 910078,
 
         /// <summary>
-        /// 910079-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
+        /// 910079 - Request For FSS To Get Daily Zip NM File Failed.
         /// </summary>
-        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910079,
+        FSSGetDailyZipNMFileResponseFailed = 910079,
 
         /// <summary>
-        /// 910080-  Request For FSS To Get Daily Zip NM File Has Error.
+        /// 910080-  Event data for Retrieval of MSI Show Daily File Failed.
         /// </summary>
-        FSSDownloadZipFileAsyncHasError = 910080,
+        ShowDailyFilesFailed = 910080,
+
+        /// <summary>
+        /// 910081-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
+        /// </summary>
+        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910081,
+
+        /// <summary>
+        /// 910082-  Request For FSS To Get Daily Zip NM File Has Error.
+        /// </summary>
+        FSSDownloadZipFileAsyncHasError = 910082,
 
     }
 
