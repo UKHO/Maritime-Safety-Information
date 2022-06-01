@@ -232,7 +232,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
-            A.CallTo(() => _fakeNMDataService.DownloadZipFssFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
 
             Assert.IsInstanceOf<FileResult>(result);
@@ -248,7 +248,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
-            A.CallTo(() => _fakeNMDataService.DownloadZipFssFile(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 

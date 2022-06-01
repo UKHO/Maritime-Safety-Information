@@ -96,5 +96,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
             }
         }
+
+        public static async Task<byte[]> GetFileBytesFromStream(Stream stream)
+        {
+            byte[] fileBytes = new byte[stream.Length + 10];
+
+            int numBytesToRead = (int)stream.Length;
+            int numBytesRead = 0;
+            do
+            {
+                int n = await stream.ReadAsync(fileBytes, numBytesRead, numBytesToRead);
+                numBytesRead += n;
+                numBytesToRead -= n;
+            } while (numBytesToRead > 0);
+            stream.Close();
+            return fileBytes;
+        }
     }
 }
