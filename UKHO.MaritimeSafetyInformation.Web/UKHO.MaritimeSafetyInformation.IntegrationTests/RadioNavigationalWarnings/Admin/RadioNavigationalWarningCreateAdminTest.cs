@@ -18,12 +18,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
     [TestFixture]
     internal class RadioNavigationalWarningCreateAdminTest : BaseRNWTest
     {
-        public ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
+        private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
         private TempDataDictionary _tempData;
         private RadioNavigationalWarning _fakeRadioNavigationalWarning;
-
 
         private RadioNavigationalWarningsAdminController _controller;
 
