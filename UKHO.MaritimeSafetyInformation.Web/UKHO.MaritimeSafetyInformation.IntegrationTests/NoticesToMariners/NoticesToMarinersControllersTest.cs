@@ -1,5 +1,4 @@
-﻿using FakeItEasy;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -154,9 +153,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
 
-        [Test]
-      
-        public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnException()
+        [Test]      
+        public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
         {
             const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
             const string filename = "Test.txt";
