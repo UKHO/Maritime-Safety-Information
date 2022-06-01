@@ -262,7 +262,7 @@ stages:
       - job: PublishIntegrationTestsArtifacts
         workspace:
           clean: all
-        displayName: "Publish Terraform Artifacts"
+        displayName: "Publish Integration Test Artifacts"
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
@@ -283,7 +283,7 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
 
           - task: DotNetCoreCLI@2
-            displayName: "Publish IntegrationTests test code"
+            displayName: "Publish Integration Test Code"
             inputs:
               command: "publish"
               publishWebProjects: false
@@ -292,7 +292,7 @@ stages:
               zipAfterPublish: false
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish IntegrationTests test Artifact"
+            displayName: "Publish Integration Test Results"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
               ArtifactName: IntegrationTests
