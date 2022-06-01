@@ -128,5 +128,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
                                 async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
         }
+
+        [OneTimeTearDown]
+        public async Task GlobalTearDown()
+        {
+            await DeSeedRadioNavigationalWarnings();
+            await DeSeedWarningType();
+        }
     }
 }
