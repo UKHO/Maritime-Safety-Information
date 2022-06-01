@@ -84,9 +84,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.AreEqual(6, result.Count);
-            Assert.AreEqual(6, result[0].Id);
-            Assert.AreEqual("011200 UTC Jan 21", result[3].DateTimeGroupRnwFormat);
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(5, result[0].Id);
+            Assert.AreEqual("011200 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
             Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
         }
 
@@ -95,15 +95,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.AreEqual("No", result[0].IsDeleted);
-            Assert.AreEqual("Yes", result[4].IsDeleted);
+            Assert.AreEqual("Yes", result[3].IsDeleted);
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationWarningWithContentLenthGreaterThan300Char_ThenWrapTheContent()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.IsTrue(result[4].Content.Length <= 303);
-            Assert.IsTrue(result[4].Content.Contains("..."));
+            Assert.IsTrue(result[3].Content.Length <= 303);
+            Assert.IsTrue(result[3].Content.Contains("..."));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
         {
             List<RadioNavigationalWarningsData> result = await _rnwRepository.GetRadioNavigationalWarningsDataList();
-            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(2, result.Count);
         }
 
         [Test]
