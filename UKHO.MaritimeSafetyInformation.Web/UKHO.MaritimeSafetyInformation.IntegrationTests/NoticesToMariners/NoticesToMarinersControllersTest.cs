@@ -106,7 +106,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsTrue(showFiles != null);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(8, showFiles[0].DailyFilesData.Count);
+            Assert.AreEqual(7, showFiles[0].DailyFilesData.Count);
             Assert.AreEqual("07", showFiles[0].WeekNumber);
             Assert.AreEqual("2020", showFiles[0].Year);
             Assert.AreEqual("Daily .zip", showFiles[0].DailyFilesData[0].Filename);
