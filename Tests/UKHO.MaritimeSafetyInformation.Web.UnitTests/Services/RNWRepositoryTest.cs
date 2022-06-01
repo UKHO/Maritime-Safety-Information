@@ -137,7 +137,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 1,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "1. NAVAREA I WARNINGS IN FORCE AT 221000 UTC APR 22:     2021 SERIES: 031.  2022 SERIES: 033, 041, 043, 044."
@@ -153,7 +153,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 2,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
@@ -163,7 +163,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 1,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
@@ -173,7 +173,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
                 WarningType = 2,
-                Reference = "RnwAdminListReferance",
+                Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
