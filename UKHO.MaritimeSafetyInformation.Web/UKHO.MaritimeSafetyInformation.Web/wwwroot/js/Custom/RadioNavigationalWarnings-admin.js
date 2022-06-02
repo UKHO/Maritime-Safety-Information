@@ -33,7 +33,6 @@ function RnwFilterList(pageSelectedIndex) {
 }
 
 function do_Selection() {
-
     var checkboxes = document.getElementsByName('checkbox');
     var button = document.getElementById('select_button');
 
@@ -47,5 +46,22 @@ function do_Selection() {
             checkboxes[i].checked = '';
         }
         button.value = 'Select all';
+    }
+}
+
+function showSelection_() {
+    var checkboxes = document.getElementsByName('checkbox');
+    var arr = [];
+
+    try {
+        for (var i in checkboxes) {
+            if (checkboxes[i].checked) {
+                arr.push(((document.getElementById("Id_" + i)).innerHTML).trim());
+            }
+        }
+        document.getElementById('showSelectionId').value = arr
+    }
+    catch (err) {
+        document.getElementById('showSelectionId').value = arr
     }
 }

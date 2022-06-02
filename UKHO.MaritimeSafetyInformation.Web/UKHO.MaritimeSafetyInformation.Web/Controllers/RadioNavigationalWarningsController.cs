@@ -39,11 +39,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View();
         }
 
-
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ShowSelection()
         {
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(GetCurrentCorrelationId());
+            string data = Request.Form["showSelectionId"];
+            int[] nums = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(GetCurrentCorrelationId(), nums);
 
             return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);
         }

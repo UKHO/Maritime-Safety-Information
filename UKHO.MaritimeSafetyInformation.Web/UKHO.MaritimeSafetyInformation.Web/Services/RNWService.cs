@@ -130,11 +130,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsData(string correlationId)
+        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsData(string correlationId, int[] data)
         {
             try
             {
-                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList();
+                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.ShowRadioNavigationalWarningsDataList(data);
 
                 return radioNavigationalWarningsData;
             }
