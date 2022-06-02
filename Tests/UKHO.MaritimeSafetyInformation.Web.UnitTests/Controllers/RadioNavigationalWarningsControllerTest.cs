@@ -53,5 +53,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
                                async delegate { await _controller.Index(); });
         }
+
+        [Test]
+        public async Task WhenCallAbout_ThenReturnView()
+        {
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningsData(A<string>.Ignored)).Returns(new List<RadioNavigationalWarningsData>());
+
+            IActionResult result = await _controller.About();
+
+            Assert.IsInstanceOf<IActionResult>(result);
+        }
     }
 }

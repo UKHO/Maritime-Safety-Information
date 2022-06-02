@@ -131,6 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 Summary = "NORTHEAST ATLANTIC. Outer Hebrides Westwards. Live weapons firing in progress.",
                 Content = "ENGLAND, EAST COAST.   Holy Island Eastwards.   1. Plough Seat light buoy, 55-40.4N 001-45.0W, unlit.  2. Cancel WZ 224.",
                 ExpiryDate = new DateTime(2099, 1, 1),
+                LastModified = new DateTime(2019, 08, 15, 13, 14, 15),
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
@@ -147,6 +148,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                  + "and are also available from the UKHO website at: www.admiralty.co.uk/RNW.  Alternatively, these may be requested by"
                  + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22.",
                 ExpiryDate = new DateTime(2099, 1, 1),
+                LastModified = new DateTime(2019, 08, 15, 14, 15, 16),
             });
             return radioNavigationalWarningList;
         }

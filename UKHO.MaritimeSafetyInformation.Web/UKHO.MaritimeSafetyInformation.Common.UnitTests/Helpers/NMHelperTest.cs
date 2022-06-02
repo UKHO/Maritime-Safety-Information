@@ -3,7 +3,10 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -27,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "aaa",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -38,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "bbb",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -49,7 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "ccc",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 },
@@ -60,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileDescription = "ddd",
                     FileExtension = ".pdf",
                     FileSize = 1232,
-                    FileSizeinKB = "1KB",
+                    FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
                 }
@@ -208,7 +211,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         }
 
         [Test]
-        public void  WhenValidateParametersForDownloadSingleFileIsCalled_ThenShouldThrowException()
+        public void WhenValidateParametersForDownloadSingleFileIsCalled_ThenShouldThrowException()
         {
             List<KeyValuePair<string, string>> parameters = new()
             {
@@ -218,8 +221,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             };
 
             ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
-            
-            Assert.Throws<ArgumentNullException>(() =>NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
+
+            Assert.Throws<ArgumentNullException>(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
         }
 
         [Test]
@@ -235,6 +238,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             ILogger<NMHelperTest> fakeLogger = A.Fake<ILogger<NMHelperTest>>();
 
             Assert.DoesNotThrow(() => NMHelper.ValidateParametersForDownloadSingleFile(parameters, string.Empty, fakeLogger));
+        }
+
+        [Test]
+        public async Task WhenGetFileBytesFromStreamIsCalled_ThenShouldReturnByte()
+        {
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+            var result = await NMHelper.GetFileBytesFromStream(stream);
+            Assert.IsInstanceOf(typeof(byte[]), result);
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()

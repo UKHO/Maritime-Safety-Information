@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallIndex_ThenReturnYearWeek()
+        public async Task WhenCallIndexWithYearWeek_ThenReturnList()
         {
             IActionResult result = await _nMController.Index(2021, 30);
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallIndexWithIncorrectData_ThenReturnNoData()
+        public async Task WhenCallIndexForWeekWithNoData_ThenReturnNoData()
         {
             IActionResult result = await _nMController.Index(2021, 08);
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
@@ -88,7 +88,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowWeeklyFilesAsyncWithInvalidData_ThenReturnNull()
+        public async Task WhenCallShowWeeklyFilesAsyncWithNoData_ThenReturnEmptyList()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2022, 6);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
@@ -105,11 +105,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsTrue(showFiles != null);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(8, showFiles[0].DailyFilesData.Count);
+            Assert.AreEqual(7, showFiles[0].DailyFilesData.Count);
             Assert.AreEqual("07", showFiles[0].WeekNumber);
             Assert.AreEqual("2020", showFiles[0].Year);
             Assert.AreEqual("Daily .zip", showFiles[0].DailyFilesData[0].Filename);
-            Assert.AreEqual("1MB", showFiles[0].DailyFilesData[0].FileSizeInKB);
+            Assert.AreEqual("1 MB", showFiles[0].DailyFilesData[0].FileSizeInKB);
             Assert.AreEqual("a29f76e4-ab80-4cfd-8236-59d0e3fc8f2a", showFiles[0].DailyFilesData[0].BatchId);
         }
 
@@ -137,6 +137,32 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
                , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
+        }
+
+        [Test]
+        public async Task WhenCallDownloadDailyFile_ThenReturnFile()
+        {
+            const string batchId = "44e8cce6-e69d-46bd-832d-6fd3d4ef8740";
+            const string filename = "SERIAL_D2022_18.txt";
+            const string mimeType = "application/text";
+
+            ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
+            Assert.IsTrue(((FileContentResult)result) != null);
+            Assert.AreEqual("application/text",((FileContentResult)result).ContentType);            
+            Assert.AreEqual(1229033, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
+        }
+
+        [Test]      
+        public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
+        {
+            const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
+            const string filename = "Test.txt";
+            const string mimeType = "application/txt";
+
+            ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
+            Assert.AreEqual(false,((RedirectToActionResult)result).PreserveMethod);
+            Assert.AreEqual("ShowDailyFiles", ((RedirectToActionResult)result).ActionName);
         }
     }
 }
