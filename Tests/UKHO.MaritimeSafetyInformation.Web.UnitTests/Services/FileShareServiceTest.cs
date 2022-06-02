@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -185,6 +186,31 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Task<Stream> result = _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId, _fileShareApiClient);
 
             Assert.IsNull(result.Result);
+        }
+
+        [Test]
+        public void WhenFSSDownloadZipFileAsyncIsCalled_ThenShouldThrowAggregateException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
+
+            IResult<Stream> stream = new Result<Stream>
+            {
+                Data = new MemoryStream(Encoding.UTF8.GetBytes("test stream")),
+                IsSuccess = false
+            };
+            stream.Errors = new List<Error>() { new Error() { Source = "Test", Description = "Test" } };
+
+            StringBuilder error = new();
+            foreach (Error item in stream.Errors)
+            {
+                error.AppendLine(item.Description);
+            }
+
+            A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(A<string>.Ignored, CancellationToken.None)).Returns(stream);
+
+            Assert.ThrowsAsync(Is.TypeOf<AggregateException>().And.Message.EqualTo(error.ToString()),
+                async delegate { await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId, _fileShareApiClient); });
         }
     }
 }
