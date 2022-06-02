@@ -13,7 +13,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     {
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private readonly ILogger<FileShareService> _logger;
-        private IFileShareApiClient _fileShareApiClient;
 
         public FileShareService(IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<FileShareService> logger)
         {
@@ -29,8 +28,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' " + searchText;
 
                 _logger.LogInformation(EventIds.FSSBatchSearchResponseStarted.ToEventId(), "Maritime safety information request for FSS to get NM batch search response started for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
-                _fileShareApiClient = fileShareApiClient;
-                result = await _fileShareApiClient.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, CancellationToken.None);
+
+                result = await fileShareApiClient.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, CancellationToken.None);
+
                 _logger.LogInformation(EventIds.FSSBatchSearchResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
 
             }
@@ -50,8 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 string searchQuery = $"BusinessUnit eq '{_fileShareServiceConfig.Value.BusinessUnit}' and $batch(Product Type) eq '{_fileShareServiceConfig.Value.ProductType}' and $batch(Frequency) eq 'Weekly'";
 
                 _logger.LogInformation(EventIds.FSSSearchAttributeResponseStarted.ToEventId(), "Maritime safety information request for FSS to get NM batch search attribute response started for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
-                _fileShareApiClient = fileShareApiClient;
-                result = await _fileShareApiClient.BatchAttributeSearch(searchQuery, CancellationToken.None);
+
+                result = await fileShareApiClient.BatchAttributeSearch(searchQuery, CancellationToken.None);
 
                 _logger.LogInformation(EventIds.FSSSearchAttributeResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search attribute response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
             }
@@ -69,8 +69,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.FSSGetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                _fileShareApiClient = fileShareApiClient;
-                Stream stream = await _fileShareApiClient.DownloadFileAsync(batchId, fileName);
+                Stream stream = await fileShareApiClient.DownloadFileAsync(batchId, fileName);
 
                 _logger.LogInformation(EventIds.FSSGetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
                 return stream;
@@ -88,8 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.FSSGetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                _fileShareApiClient = fileShareApiClient;
-                IResult<Stream> stream = await _fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None);
+                IResult<Stream> stream = await fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None);
                 if (stream.IsSuccess)
                 {
                     _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
