@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
@@ -35,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _radioNavigationalWarning = new()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "test",
                 DateTimeGroup = new DateTime(2019, 1, 1),
                 Summary = "Test1",
@@ -67,6 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsTrue(result.IsCompleted);
             Assert.IsNotNull(data.Result.Summary);
+            Assert.IsNotNull(data.Result.LastModified < DateTime.UtcNow);
         }
 
         [Test]
@@ -76,7 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsNotNull(warningTypeList);
             Assert.IsInstanceOf(typeof(Task<List<WarningType>>), warningTypeList);
-            Assert.AreEqual(1, warningTypeList.Result[0].Id);
+            Assert.AreEqual(WarningTypes.NAVAREA_1, warningTypeList.Result[0].Id);
             Assert.AreEqual("NAVAREA 1", warningTypeList.Result[0].Name);
         }
 
@@ -123,6 +125,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(2, result.Count);
         }
 
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
+        {
+            DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+            Assert.AreEqual(new DateTime(2099, 02, 03), result);
+        }
+
         [Test]
         public void WhenCallEditRadioNavigationWarningsMethod_ThenUpdateRNWRecord()
         {
@@ -155,7 +165,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             List<RadioNavigationalWarning> radioNavigationalWarningList = new();
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -171,7 +181,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
-                WarningType = 2,
+                WarningType = WarningTypes.UK_Coastal,
                 Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
@@ -181,22 +191,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
-                WarningType = 1,
+                WarningType = WarningTypes.NAVAREA_1,
                 Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2021, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
-                ExpiryDate = new DateTime(2021, 1, 1)
+                ExpiryDate = new DateTime(2021, 1, 1),
+                LastModified = new DateTime(2099, 02, 03)
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()
             {
-                WarningType = 2,
+                WarningType = WarningTypes.UK_Coastal,
                 Reference = "RnwAdminListReference",
                 DateTimeGroup = new DateTime(2022, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
-                ExpiryDate = new DateTime(2099, 1, 1)
+                ExpiryDate = new DateTime(2099, 1, 1),
+                LastModified = new DateTime(2099, 01, 02)
             });
             return radioNavigationalWarningList;
         }

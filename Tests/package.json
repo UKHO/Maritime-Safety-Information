@@ -11,9 +11,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-    "devDependencies": {
-        "@playwright/test": "^1.21.0",
-        "playwright": "^1.21.1",
-        "axe-playwright": "1.1.11"
-    }
+  "devDependencies": {
+    "@playwright/test": "^1.21.0",
+    "@types/luxon": "^2.3.2",
+    "axe-playwright": "1.1.11",
+    "luxon": "^2.4.0",
+    "playwright": "^1.21.1"
+  }
 }

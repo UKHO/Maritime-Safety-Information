@@ -73,6 +73,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      .ToListAsync();
         }
 
+        public async Task<DateTime> GetRadioNavigationalWarningsLastModifiedDateTime()
+        {
+            return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+        }
+
         #region Edit Radio Navigational Warning
         public EditRadioNavigationalWarningsAdmin EditRadioNavigation(int id)
         {

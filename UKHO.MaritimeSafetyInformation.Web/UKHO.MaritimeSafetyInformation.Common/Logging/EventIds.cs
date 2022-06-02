@@ -287,29 +287,38 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         ErrorInRNWListDetailFromDatabase = 910068,
         /// <summary> 
-        /// 910069 -  Maritime safety information Edit RNW records for Admin completed.
+        /// 910069 -  Maritime safety information request to get last modified date time from database started.
         /// </summary>
-        EditRNWRecordCompleted = 910069,
+        RNWLastModifiedDateTimeFromDatabaseStarted = 910069,
         /// <summary> 
-        /// 910070 -  Maritime safety information Edit RNW record started.
+        /// 910070 -  Maritime safety information request to get last modified date time from database completed.
         /// </summary>
-        EditRNWRecordStart = 910070,
+        RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
         /// <summary> 
-        /// 910071 - Maritime safety information edit RNW record Id not found.
+        /// 910071 -  Maritime safety information Edit RNW records for Admin completed.
         /// </summary>
-        EditRNWRecordIDNotFound = 910071,
+        EditRNWRecordCompleted = 910071,
         /// <summary> 
-        /// 910072 - Maritime safety information edit RNW record Id mismatch.
+        /// 910072 -  Maritime safety information Edit RNW record started.
         /// </summary>
-        EditRNWRecordIdMismatch = 910072,
+        EditRNWRecordStart = 910072,
         /// <summary> 
-        /// 910073 - Maritime safety information edit RNW list is null.
+        /// 910073 - Maritime safety information edit RNW record Id not found.
         /// </summary>
-        EditRNWListIsNull = 910073,
+        EditRNWRecordIDNotFound = 910073,
         /// <summary> 
-        /// 910074 - Maritime safety information Error in retrieving RNW record.
+        /// 910074 - Maritime safety information edit RNW record Id mismatch.
         /// </summary>
-        ErrorInRetrievingRNWRecord = 910074
+        EditRNWRecordIdMismatch = 910074,
+        /// <summary> 
+        /// 910075 - Maritime safety information edit RNW list is null.
+        /// </summary>
+        EditRNWListIsNull = 910075,
+        /// <summary> 
+        /// 910076 - Maritime safety information Error in retrieving RNW record.
+        /// </summary>
+        ErrorInRetrievingRNWRecord = 910076
+
     }
 
     public static class EventIdExtensions
