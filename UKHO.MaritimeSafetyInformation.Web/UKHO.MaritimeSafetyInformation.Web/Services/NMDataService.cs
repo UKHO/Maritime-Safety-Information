@@ -37,7 +37,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
-                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId);
+
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
 
                 BatchSearchResponse SearchResult = result.Data;
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
@@ -68,7 +71,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId);
+                FileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
 
                 if (searchAttributes.Data != null)
                 {
@@ -120,7 +125,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
                 const string searchText = $" and $batch(Frequency) eq 'Daily'";
-                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId);
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
 
                 BatchSearchResponse searchResult = result.Data;
 
@@ -174,8 +181,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
-
-                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId);
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient);
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
