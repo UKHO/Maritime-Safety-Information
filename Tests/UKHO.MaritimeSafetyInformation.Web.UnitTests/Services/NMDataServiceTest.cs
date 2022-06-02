@@ -293,7 +293,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const string batchId = "";
             const string filename = "";
-            const string accessToken = "";
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
@@ -308,7 +307,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const string batchId = "";
             const string filename = "";
-            const string accessToken = "";
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).ThrowsAsync(new Exception());
