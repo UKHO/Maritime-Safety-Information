@@ -133,14 +133,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenFSSDownloadZipAsyncFileIsCalled_ThenShouldReturnByteArray()
+        public void WhenFSSDownloadZipFileAsyncIsCalled_ThenShouldReturnByteArray()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
 
             IResult<Stream> stream = new Result<Stream>
             {
-                Data = new MemoryStream(Encoding.UTF8.GetBytes("test stream"))
+                Data = new MemoryStream(Encoding.UTF8.GetBytes("test stream")),
+                IsSuccess = true
             };
 
             _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
