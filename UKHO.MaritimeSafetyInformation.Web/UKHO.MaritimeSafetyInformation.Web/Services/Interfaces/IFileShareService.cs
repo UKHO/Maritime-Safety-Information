@@ -1,4 +1,5 @@
-﻿using UKHO.FileShareClient.Models;
+﻿using UKHO.FileShareClient;
+using UKHO.FileShareClient.Models;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
@@ -7,6 +8,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string accessToken, string correlationId);
         Task<IResult<BatchAttributesSearchResponse>> FSSSearchAttributeAsync(string accessToken, string correlationId);
         Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId);
-        Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string accessToken, string correlationId);
+        Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient);
     }
 }

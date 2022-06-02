@@ -1,4 +1,7 @@
-﻿using UKHO.FileShareClient.Models;
+﻿using Microsoft.Extensions.Options;
+using UKHO.FileShareClient;
+using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -12,12 +15,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly ILogger<NMDataService> _logger;
         private readonly IAuthFssTokenProvider _authFssTokenProvider;
         private const string YearAndWeek = "YEAR/WEEK";
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
 
-        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider)
+        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig)
         {
             _fileShareService = fileShareService;
             _logger = logger;
             _authFssTokenProvider = authFssTokenProvider;
+            _fileShareServiceConfig = fileShareServiceConfig;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
@@ -190,8 +197,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
-
-                Stream stream = await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, accessToken, correlationId);
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                Stream stream = await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient);
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 

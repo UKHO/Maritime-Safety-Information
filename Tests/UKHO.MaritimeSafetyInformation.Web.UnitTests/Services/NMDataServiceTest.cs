@@ -1,14 +1,18 @@
 ﻿using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services;
@@ -22,6 +26,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IFileShareService _fakefileShareService;
         private ILogger<NMDataService> _fakeLogger;
         private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
+        private IHttpClientFactory _httpClientFactory;
+        private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         private NMDataService _nMDataService;
@@ -32,8 +38,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakefileShareService = A.Fake<IFileShareService>();
             _fakeLogger = A.Fake<ILogger<NMDataService>>();
             _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
-
-            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider);
+            _httpClientFactory = A.Fake<IHttpClientFactory>();
+            _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
+            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig);
         }
 
         [Test]
@@ -313,11 +320,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
-
+            _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
+            IFileShareApiClient fileShareApiClient = A.Fake<IFileShareApiClient>();
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(stream);
+            A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, fileShareApiClient)).Returns(stream);
 
             Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
 
@@ -329,9 +337,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
+            _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
+            IFileShareApiClient fileShareApiClient = A.Fake<IFileShareApiClient>();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, fileShareApiClient)).Throws(new Exception());
 
             Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
 

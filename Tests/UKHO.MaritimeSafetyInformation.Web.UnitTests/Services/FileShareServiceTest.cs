@@ -141,7 +141,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None)).Returns(stream);
 
-            Task<Stream> result = _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId);
+            Task<Stream> result = _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId, _fileShareApiClient);
 
             Assert.IsInstanceOf<Task<Stream>>(result);
         }
@@ -156,9 +156,30 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(A<string>.Ignored, CancellationToken.None)).Throws(new Exception());
 
-            Task<Stream> result = _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId);
+            Task<Stream> result = _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId, _fileShareApiClient);
 
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public void WhenFSSDownloadZipFileAsyncIsCalled_ThenShouldReturnNull()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
+
+            IResult<Stream> stream = new Result<Stream>
+            {
+                Data = new MemoryStream(Encoding.UTF8.GetBytes("test stream")),
+                IsSuccess = false
+            };
+
+            _fileShareServiceConfig.Value.BaseUrl = null;
+
+            A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(A<string>.Ignored, CancellationToken.None));
+
+            Task<Stream> result = _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId, _fileShareApiClient);
+
+            Assert.IsNull(result.Result);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private readonly ILogger<FileShareService> _logger;
+        private IFileShareApiClient _fileShareApiClient;
 
         public FileShareService(IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<FileShareService> logger)
         {
@@ -85,14 +86,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string accessToken, string correlationId)
+        public async Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient)
         {
             try
             {
                 _logger.LogInformation(EventIds.FSSGetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                FileShareApiClient fileShareApi = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
-                IResult<Stream> stream = await fileShareApi.DownloadZipFileAsync(batchId, CancellationToken.None);
+                _fileShareApiClient = fileShareApiClient;
+
+                IResult<Stream> stream = await _fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None);
                 if (stream.IsSuccess)
                 {
                     _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
