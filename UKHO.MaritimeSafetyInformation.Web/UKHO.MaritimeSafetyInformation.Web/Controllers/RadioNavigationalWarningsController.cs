@@ -42,8 +42,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowSelection()
         {
+            int[] nums = Array.Empty<int>();
             string data = Request.Form["showSelectionId"];
-            int[] nums = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+            if (!string.IsNullOrWhiteSpace(data))
+            {
+                nums = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+            }
 
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(GetCurrentCorrelationId(), nums);
 
