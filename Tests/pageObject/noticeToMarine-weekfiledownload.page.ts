@@ -30,8 +30,8 @@ export default class noticeToMarinerWeekDownload {
     await this.daily.click();
   }
   public async checkFileDownload() {
-    await this.year.selectOption('2022');
-    await this.week.selectOption('17');
+    await this.year.selectOption({index:1});
+    await this.week.selectOption({index:1});
     await this.page.waitForSelector("[id^='filename']");
     const result = this.page.$$eval("[id^='filename']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
     return result;
