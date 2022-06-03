@@ -244,7 +244,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         public async Task WhenGetFileBytesFromStreamIsCalled_ThenShouldReturnByte()
         {
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
-            var result = await NMHelper.GetFileBytesFromStream(stream);
+            byte[] result = await NMHelper.GetFileBytesFromStream(stream);
             Assert.IsInstanceOf(typeof(byte[]), result);
         }
 

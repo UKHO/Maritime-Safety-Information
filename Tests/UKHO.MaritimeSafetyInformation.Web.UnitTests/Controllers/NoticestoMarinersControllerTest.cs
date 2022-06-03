@@ -133,18 +133,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldReturnException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldReturnArgumentNullException()
         {
             string batchId = null;
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
-           
+
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
                 async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldReturnException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldReturnArgumentNullException()
         {
             string batchId = string.Empty;
             string fileName = "testfile.pdf";
@@ -154,7 +154,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldReturnException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = null;
@@ -164,7 +164,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldReturnException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = string.Empty;
@@ -174,7 +174,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldReturnException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = "testfile.pdf";
@@ -184,7 +184,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldReturnException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = "testfile.pdf";
@@ -200,8 +200,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
 
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
-
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
 
@@ -213,13 +211,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
-
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
+            string mimeType = "wrongmime";
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, "wrongmime");
+
+            Task<FileResult> result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -230,8 +227,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
             const string mimeType = "application/gzip";
-
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
             A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
@@ -246,8 +241,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "Daily 16-05-22.zip";
             const string mimeType = "application/gzip";
             const string expected = "ShowDailyFiles";
-
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
 
             A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 

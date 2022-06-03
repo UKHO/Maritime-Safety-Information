@@ -301,12 +301,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         DownloadDailyNMFileStarted = 910071,
 
         /// <summary>
-        /// 910072 -Request For Download Daily NM File Started.
+        /// 910072 -Request For Download Daily NM File Completed.
         /// </summary>
         DownloadDailyNMFileCompleted = 910072,
 
         /// <summary>
-        /// 910073 -Request For Download Daily NM File Started.
+        /// 910073 -Request For Download Daily NM File Failed.
         /// </summary>
         DownloadDailyNMFileFailed = 910073,
 

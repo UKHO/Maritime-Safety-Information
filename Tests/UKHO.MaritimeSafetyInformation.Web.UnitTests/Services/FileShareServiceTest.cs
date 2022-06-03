@@ -6,7 +6,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private ILogger<FileShareService> _logger;
         private IFileShareApiClient _fileShareApiClient;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
-        public const string FakeAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyIsImtpZCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyJ9.eyJhdWQiOiI4MDViZTAyNC1hMjA4LTQwZmItYWI2Zi0zOTljMjY0N2QzMzQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UvIiwiaWF0IjoxNjUyNjg3OTM3LCJuYmYiOjE2NTI2ODc5MzcsImV4cCI6MTY1MjY5MTg4MCwiYWNyIjoiMSIsImFpbyI6IkFYUUFpLzhUQUFBQTVtN2xmWW5CTFhNMURycVI4ZU1DTVJSZGpGTUxBeTdhSjVtSm9OQ1RGNzNCZFNiQUZ2YlMrNGI3S1NKUXFqSlRHemhyR3RKTW5HTXcxQ1I3VWZndmgvck9aTVB0OTh3U1VaVnNBZmozWXU4VEhVQUhXRTFLbDN4ZmFGb25WRVRCdXNhYjJFRXVjdlRtbCtnZG40VHFCUT09IiwiYW1yIjpbInB3ZCIsInJzYSJdLCJhcHBpZCI6IjgwNWJlMDI0LWEyMDgtNDBmYi1hYjZmLTM5OWMyNjQ3ZDMzNCIsImFwcGlkYWNyIjoiMCIsImVtYWlsIjoiU2hpcmluMTQ5MjZAbWFzdGVrLmNvbSIsImZhbWlseV9uYW1lIjoiVGFsYXdkZWthciIsImdpdmVuX25hbWUiOiJTaGlyaW4iLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hZGQxYzUwMC1hNmQ3LTRkYmQtYjg5MC03ZjhjYjZmN2Q4NjEvIiwiaXBhZGRyIjoiNDkuMzIuMTMyLjE0IiwibmFtZSI6IlNoaXJpbiBUYWxhd2Rla2FyIiwib2lkIjoiM2JjMTlhMzEtMGQ4Zi00ZmIwLWJjZTctYzkwOTcwYzAwOGU5IiwicmgiOiIwLkFWTUFTTW8wa1QxbUJVcVdpakdrTHdydFBpVGdXNEFJb3Z0QXEyODVuQ1pIMHpRQ0FPVS4iLCJyb2xlcyI6WyJCYXRjaENyZWF0ZSJdLCJzY3AiOiJVc2VyLlJlYWQiLCJzdWIiOiIzQWhSWENMS1lzZGZMNEtMdlZfb05SQUtXX3ZCdWY2N21yZVNwcXFKQmlJIiwidGlkIjoiOTEzNGNhNDgtNjYzZC00YTA1LTk2OGEtMzFhNDJmMGFlZDNlIiwidW5pcXVlX25hbWUiOiJTaGlyaW4xNDkyNkBtYXN0ZWsuY29tIiwidXRpIjoicWN6MDNyVVRVa3FUcFJiZDVUZGtBQSIsInZlciI6IjEuMCJ9.MwYFvGm7ZrfCYdxDmFeocmTYhuqdcMBJJBAKoMlMLmG7HY-IoRFE3al1E2-WEy1zLzsawA9tqqzp0Pr7cYilOaYTylKKqOnaxQfjVdwzjinUtWl0E8y2YtVSS-SxdjuWz0f-wHpPDlm615PFXlkApUTAxrHRsZKUAR6yGDrrndL_lEnGxVIpFKt5-GSptLyzQmBXanxLpuQqvViUSRizOWFmKCeWsGqGDCkvdT9Mn3ogtGFxVd-pec0e323U55VPtk94JJCEumTIvMANXxWMJjtA2CPnuIKWROAY5HxPE2kgYCSdUfArX-5mNs3zuQrzerKyzcMD_tMQISfQ8Tr9lg";
+        private const string FakeAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyIsImtpZCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyJ9.eyJhdWQiOiI4MDViZTAyNC1hMjA4LTQwZmItYWI2Zi0zOTljMjY0N2QzMzQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC85MTM0Y2E0OC02NjNkLTRhMDUtOTY4YS0zMWE0MmYwYWVkM2UvIiwiaWF0IjoxNjUyNjg3OTM3LCJuYmYiOjE2NTI2ODc5MzcsImV4cCI6MTY1MjY5MTg4MCwiYWNyIjoiMSIsImFpbyI6IkFYUUFpLzhUQUFBQTVtN2xmWW5CTFhNMURycVI4ZU1DTVJSZGpGTUxBeTdhSjVtSm9OQ1RGNzNCZFNiQUZ2YlMrNGI3S1NKUXFqSlRHemhyR3RKTW5HTXcxQ1I3VWZndmgvck9aTVB0OTh3U1VaVnNBZmozWXU4VEhVQUhXRTFLbDN4ZmFGb25WRVRCdXNhYjJFRXVjdlRtbCtnZG40VHFCUT09IiwiYW1yIjpbInB3ZCIsInJzYSJdLCJhcHBpZCI6IjgwNWJlMDI0LWEyMDgtNDBmYi1hYjZmLTM5OWMyNjQ3ZDMzNCIsImFwcGlkYWNyIjoiMCIsImVtYWlsIjoiU2hpcmluMTQ5MjZAbWFzdGVrLmNvbSIsImZhbWlseV9uYW1lIjoiVGFsYXdkZWthciIsImdpdmVuX25hbWUiOiJTaGlyaW4iLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hZGQxYzUwMC1hNmQ3LTRkYmQtYjg5MC03ZjhjYjZmN2Q4NjEvIiwiaXBhZGRyIjoiNDkuMzIuMTMyLjE0IiwibmFtZSI6IlNoaXJpbiBUYWxhd2Rla2FyIiwib2lkIjoiM2JjMTlhMzEtMGQ4Zi00ZmIwLWJjZTctYzkwOTcwYzAwOGU5IiwicmgiOiIwLkFWTUFTTW8wa1QxbUJVcVdpakdrTHdydFBpVGdXNEFJb3Z0QXEyODVuQ1pIMHpRQ0FPVS4iLCJyb2xlcyI6WyJCYXRjaENyZWF0ZSJdLCJzY3AiOiJVc2VyLlJlYWQiLCJzdWIiOiIzQWhSWENMS1lzZGZMNEtMdlZfb05SQUtXX3ZCdWY2N21yZVNwcXFKQmlJIiwidGlkIjoiOTEzNGNhNDgtNjYzZC00YTA1LTk2OGEtMzFhNDJmMGFlZDNlIiwidW5pcXVlX25hbWUiOiJTaGlyaW4xNDkyNkBtYXN0ZWsuY29tIiwidXRpIjoicWN6MDNyVVRVa3FUcFJiZDVUZGtBQSIsInZlciI6IjEuMCJ9.MwYFvGm7ZrfCYdxDmFeocmTYhuqdcMBJJBAKoMlMLmG7HY-IoRFE3al1E2-WEy1zLzsawA9tqqzp0Pr7cYilOaYTylKKqOnaxQfjVdwzjinUtWl0E8y2YtVSS-SxdjuWz0f-wHpPDlm615PFXlkApUTAxrHRsZKUAR6yGDrrndL_lEnGxVIpFKt5-GSptLyzQmBXanxLpuQqvViUSRizOWFmKCeWsGqGDCkvdT9Mn3ogtGFxVd-pec0e323U55VPtk94JJCEumTIvMANXxWMJjtA2CPnuIKWROAY5HxPE2kgYCSdUfArX-5mNs3zuQrzerKyzcMD_tMQISfQ8Tr9lg";
 
         private IFileShareService _fileShareService;
 
@@ -43,7 +42,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _logger = A.Fake<ILogger<FileShareService>>();
             IConfiguration config = InitConfiguration().GetSection("FileShareService");
-            _fileShareServiceConfig = Options.Create(config.Get<FileShareServiceConfiguration>());
             _fileShareApiClient = A.Fake<IFileShareApiClient>();
             _fileShareService = new FileShareService( _fileShareServiceConfig, _logger);
 
@@ -83,8 +81,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 StatusCode= 200
             };
 
-            //IFileShareService _fileShareService = new FileShareService(_httpClientFactory, _fileShareServiceConfig, _logger);
-
             A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, CancellationToken.None)).Returns(expectedResponse);
 
             Task<IResult<BatchAttributesSearchResponse>> actualResult = _fileShareService.FSSSearchAttributeAsync(FakeAccessToken, CorrelationId, _fileShareApiClient);
@@ -114,7 +110,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
-            _fileShareServiceConfig.Value.BaseUrl = "https://filesqa.admiralty.co.uk";
+            _fileShareServiceConfig.Value.BaseUrl = "https://www.test.com/";
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
                 .Returns(stream);
@@ -173,12 +169,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
-
-            IResult<Stream> stream = new Result<Stream>
-            {
-                Data = new MemoryStream(Encoding.UTF8.GetBytes("test stream")),
-                IsSuccess = false
-            };
 
             _fileShareServiceConfig.Value.BaseUrl = null;
 
