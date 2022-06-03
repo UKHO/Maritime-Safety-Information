@@ -79,7 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         #region Edit Radio Navigational Warning
-        public EditRadioNavigationalWarningsAdmin EditRadioNavigation(int id)
+        public EditRadioNavigationalWarningsAdmin EditRadioNavigation(int? id)
         {
             RadioNavigationalWarning rnwWarnings = _context.Set<RadioNavigationalWarning>().Find(id);
             EditRadioNavigationalWarningsAdmin rnwList = new();

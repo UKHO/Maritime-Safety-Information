@@ -143,7 +143,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
         #region Edit Radio Navigational Warning
-        public EditRadioNavigationalWarningsAdmin EditRadioNavigationWarningListForAdmin(int id, string correlationId)
+        public EditRadioNavigationalWarningsAdmin EditRadioNavigationWarningListForAdmin(int? id, string correlationId)
         {
             try
             {

@@ -295,13 +295,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenEditRadioNavigationalInRequest_ThenReturnException()
         {
-           
             _fakeRadioNavigationalWarningsAdmin.Id = 0;
             A.CallTo(() => _fakeRnwRepository.EditRadioNavigation(A<int>.Ignored)).Throws(new Exception()); 
-            
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-            async delegate { _rnwService.EditRadioNavigationWarningListForAdmin(_fakeRadioNavigationalWarningsAdmin.Id, CorrelationId); });
-
+            delegate { _rnwService.EditRadioNavigationWarningListForAdmin(_fakeRadioNavigationalWarningsAdmin.Id, CorrelationId); return Task.CompletedTask; });
         }
 
         [Test]
@@ -310,7 +307,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarningsAdmin.Id = 0;
             A.CallTo(() => _fakeRnwRepository.EditRadioNavigation(A<int>.Ignored)).Throws(new Exception());
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-            async delegate { _rnwService.EditRadioNavigationWarningListForAdmin(_fakeRadioNavigationalWarningsAdmin.Id, CorrelationId); });
+            delegate { _rnwService.EditRadioNavigationWarningListForAdmin(_fakeRadioNavigationalWarningsAdmin.Id, CorrelationId); return Task.CompletedTask; });
         }
 
 
