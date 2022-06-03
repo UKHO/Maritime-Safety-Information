@@ -149,7 +149,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, 2020);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(3, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual("Yes", adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
             Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[1].IsDeleted);
         }

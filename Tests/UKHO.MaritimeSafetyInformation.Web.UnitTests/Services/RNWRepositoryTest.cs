@@ -44,15 +44,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             };
             _fakeRadioNavigationalWarningAdmin = new()
             {
-                Id = 1,
                 WarningType = 1,
                 WarningTypeName = "NAVAREA 1",
-                Reference = "test",
-                DateTimeGroup = DateTime.UtcNow,
-                Summary = "Test1",
-                Content = "test",
+                Reference = "edittest",
+                DateTimeGroup = new DateTime(2019, 1, 1),
+                Summary = "editsummary",
+                Content = "editcontent",
                 IsDeleted = "false",
-            };
+
+             };
             _rnwRepository = new RNWRepository(_context);
         }
 
@@ -137,9 +137,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenCallEditRadioNavigationWarningsMethod_ThenUpdateRNWRecord()
         {
             DateTime dateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarningAdmin.DateTimeGroup = dateTime;
-            Task result = _rnwRepository.UpdateRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
-            Assert.IsTrue(result.IsCompleted);
+            _radioNavigationalWarning.DateTimeGroup = dateTime;
+            Task result1 = _rnwRepository.UpdateRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
+            Assert.IsTrue(result1.IsCompleted);
         }
 
         [Test]

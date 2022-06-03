@@ -99,7 +99,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task UpdateRadioNavigationWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
         {
-            RadioNavigationalWarning rnwList = new();
+            RadioNavigationalWarning rnwList = await _context.RadioNavigationalWarnings.FirstOrDefaultAsync(r => r.Id == radioNavigationalWarningAdmin.Id);
             rnwList.WarningType = radioNavigationalWarningAdmin.WarningType;
             rnwList.Reference = radioNavigationalWarningAdmin.Reference;
             rnwList.DateTimeGroup = radioNavigationalWarningAdmin.DateTimeGroup;
