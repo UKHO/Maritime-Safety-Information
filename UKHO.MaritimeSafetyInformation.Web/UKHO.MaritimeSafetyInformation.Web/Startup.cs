@@ -4,6 +4,9 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -37,6 +40,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
+
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
+
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
@@ -52,7 +58,13 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddMicrosoftIdentityUI();
+
+            //Configuring appsettings section AzureAdB2C, into IOptions
+            services.AddOptions();
+            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAdB2C"));
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
@@ -85,6 +97,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

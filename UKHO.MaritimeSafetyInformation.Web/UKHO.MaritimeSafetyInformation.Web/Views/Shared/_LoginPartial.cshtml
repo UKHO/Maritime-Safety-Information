@@ -1,0 +1,14 @@
+@using Microsoft.Identity.Web
+@if (User.Identity.IsAuthenticated)
+{
+    <ul>
+        <li>Hello @User.GetDisplayName()!</li>
+        <li><a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a></li>
+    </ul>
+}
+else
+{
+    <ul>
+        <li><a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
+    </ul>
+}
