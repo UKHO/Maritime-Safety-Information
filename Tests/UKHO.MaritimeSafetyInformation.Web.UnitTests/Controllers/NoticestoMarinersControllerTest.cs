@@ -133,20 +133,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldReturnException()
         {
             string batchId = null;
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+           
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
                 async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldReturnException()
         {
-            string batchId = String.Empty;
+            string batchId = string.Empty;
             string fileName = "testfile.pdf";
             string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
@@ -154,7 +154,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldReturnException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = null;
@@ -164,17 +164,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldReturnException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = String.Empty;
+            string fileName = string.Empty;
             string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldReturnException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = "testfile.pdf";
@@ -184,17 +184,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldReturnException()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = "testfile.pdf";
-            string mimeType = String.Empty;
+            string mimeType = string.Empty;
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldRetunFileResult()
+        public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldReturnFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
             string fileName = "testfile.pdf";
@@ -225,7 +225,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenDownloadDailyFileIsCalled_ThenShouldRetunFileResult()
+        public async Task WhenDownloadDailyFileIsCalled_ThenShouldReturnFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
