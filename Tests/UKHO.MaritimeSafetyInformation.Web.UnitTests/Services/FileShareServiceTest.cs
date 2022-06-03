@@ -28,29 +28,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
         private IFileShareService _fileShareService;
 
-        public static IConfiguration InitConfiguration()
-        {
-            IConfigurationRoot config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-            return config;
-        }
-
         [SetUp]
         public void Setup()
         {
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _logger = A.Fake<ILogger<FileShareService>>();
-            IConfiguration config = InitConfiguration().GetSection("FileShareService");
             _fileShareApiClient = A.Fake<IFileShareApiClient>();
-            _fileShareService = new FileShareService( _fileShareServiceConfig, _logger);
+            _fileShareService = new FileShareService(_fileShareServiceConfig, _logger);
 
         }
 
         [Test]
         public void WhenFileShareServiceCallsFssBatchSearchAsync_ThenReturnsBatchSearchResponse()
         {
-            string searchText = "";
+            const string searchText = "";
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
 
             A.CallTo(() => _fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
@@ -76,9 +67,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedStatusCode = 200;
             const bool expectedStatus = true;
             _fileShareServiceConfig.Value.BaseUrl = "https://www.test.com/";
-            IResult<BatchAttributesSearchResponse> expectedResponse = new Result<BatchAttributesSearchResponse>() {
+            IResult<BatchAttributesSearchResponse> expectedResponse = new Result<BatchAttributesSearchResponse>()
+            {
                 IsSuccess = true,
-                StatusCode= 200
+                StatusCode = 200
             };
 
             A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, CancellationToken.None)).Returns(expectedResponse);

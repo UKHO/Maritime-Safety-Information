@@ -135,9 +135,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldReturnArgumentNullException()
         {
-            string batchId = null;
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
+            const string batchId = null;
+            const string fileName = "testfile.pdf";
+            const string mimeType = "application/pdf";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
                 async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
@@ -146,9 +146,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldReturnArgumentNullException()
         {
-            string batchId = string.Empty;
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
+            const string batchId = "";
+            const string fileName = "testfile.pdf";
+            const string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
                 async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
@@ -157,8 +157,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = null;
-            string mimeType = "application/pdf";
+            const string fileName = null;
+            const string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
                 async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
@@ -167,8 +167,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = string.Empty;
-            string mimeType = "application/pdf";
+            const string fileName = "";
+            const string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
@@ -177,8 +177,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = null;
+            const string fileName = "testfile.pdf";
+            const string mimeType = null;
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
@@ -187,8 +187,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = string.Empty;
+            const string fileName = "testfile.pdf";
+            const string mimeType = "";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
@@ -197,8 +197,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldReturnFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
+            const string fileName = "testfile.pdf";
+            const string mimeType = "application/pdf";
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
@@ -210,8 +210,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenDownloadWeeklyFileIsCalled_ThenShouldExecuteCatch()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = "wrongmime";
+            const string fileName = "testfile.pdf";
+            const string mimeType = "wrongmime";
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
