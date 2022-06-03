@@ -315,7 +315,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenDownloadFSSZipFileAsyncIsCalled_ThenShouldReturnByteArray()
+        public void WhenDownloadFSSZipFileAsyncIsCalled_ThenShouldReturnFileByteArray()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
