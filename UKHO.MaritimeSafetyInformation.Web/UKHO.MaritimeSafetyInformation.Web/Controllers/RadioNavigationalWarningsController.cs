@@ -49,6 +49,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 nums = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
             }
 
+            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(GetCurrentCorrelationId(), nums);
 
             return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);

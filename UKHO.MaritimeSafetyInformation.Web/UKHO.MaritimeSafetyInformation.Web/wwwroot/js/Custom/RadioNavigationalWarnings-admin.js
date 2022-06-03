@@ -39,11 +39,13 @@ function do_Selection() {
     if (button.value == 'Select all') {
         for (var i in checkboxes) {
             checkboxes[i].checked = 'FALSE';
+            document.getElementById("BtnShowSelection").disabled = false;
         }
         button.value = 'Clear all'
     } else {
         for (var i in checkboxes) {
             checkboxes[i].checked = '';
+            document.getElementById("BtnShowSelection").disabled = true;
         }
         button.value = 'Select all';
     }
@@ -63,5 +65,15 @@ function showSelection_() {
     }
     catch (err) {
         document.getElementById('showSelectionId').value = arr
+    }
+}
+
+function terms_changed() {
+    var checkboxes = document.getElementsByName('checkbox');
+    document.getElementById("BtnShowSelection").disabled = true;
+        for (var i in checkboxes) {
+            if (checkboxes[i].checked && i != "entries") {
+                document.getElementById("BtnShowSelection").disabled = false;
+            }
     }
 }
