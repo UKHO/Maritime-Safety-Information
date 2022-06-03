@@ -301,6 +301,7 @@
   text-decoration: underline;
   color: #09315b;
   background-color: transparent;
+  font-weight: 300;
 }
 .accordianTable .accordion-button:hover, .accordianTable .accordion-button:active {
   border: 0;
@@ -386,6 +387,19 @@
   max-height: 78vh !important;
   overflow-y: auto;
   padding-right: 2px;
+}
+
+.rnw-list-table thead tr th.th-1 {
+  width: 65px;
+}
+.rnw-list-table thead tr th.th-2 {
+  width: 125px;
+}
+.rnw-list-table thead tr th.th-3 {
+  width: 112px;
+}
+.rnw-list-table thead tr th.th-4, .rnw-list-table thead tr th.th-7 {
+  width: 175px;
 }
 
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus, input[type=button]:focus {
@@ -739,4 +753,11 @@ input[type=button].select-all-button {
 
 .bold-icon {
   -webkit-text-stroke: 2px;
+}
+
+button:disabled, input[type=button]:disabled {
+  cursor: not-allowed;
+}
+button:disabled:active, input[type=button]:disabled:active {
+  background-color: #adadad;
 }

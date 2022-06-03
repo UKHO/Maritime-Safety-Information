@@ -398,3 +398,9 @@ input[type="button"].select-all-button{
 .bold-icon {
     -webkit-text-stroke: 2px;
 }
+button:disabled, input[type=button]:disabled {
+    cursor:not-allowed;
+    &:active {
+        background-color: #adadad;
+    }
+}
