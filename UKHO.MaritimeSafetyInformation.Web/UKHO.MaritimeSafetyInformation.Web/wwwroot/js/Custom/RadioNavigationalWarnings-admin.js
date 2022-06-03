@@ -53,27 +53,25 @@ function do_Selection() {
 
 function showSelection_() {
     var checkboxes = document.getElementsByName('checkbox');
+    var len_ = checkboxes.length;
     var arr = [];
 
-    try {
-        for (var i in checkboxes) {
-            if (checkboxes[i].checked) {
-                arr.push(((document.getElementById("Id_" + i)).innerHTML).trim());
-            }
+    for (var i in checkboxes) {
+        if (checkboxes[i].checked && i < len_) {
+            arr.push(((document.getElementById("Id_" + i)).innerHTML).trim());
         }
-        document.getElementById('showSelectionId').value = arr
     }
-    catch (err) {
-        document.getElementById('showSelectionId').value = arr
-    }
+    document.getElementById('showSelectionId').value = arr
 }
 
 function terms_changed() {
     var checkboxes = document.getElementsByName('checkbox');
+    var len_ = checkboxes.length;
     document.getElementById("BtnShowSelection").disabled = true;
-        for (var i in checkboxes) {
-            if (checkboxes[i].checked && i != "entries") {
-                document.getElementById("BtnShowSelection").disabled = false;
-            }
+
+    for (var i in checkboxes) {
+        if (checkboxes[i].checked && i < len_) {
+            document.getElementById("BtnShowSelection").disabled = false;
+        }
     }
 }
