@@ -63,5 +63,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             Assert.IsInstanceOf<IActionResult>(result);
         }
+
+        [Test]
+        public async Task WhenCallShowSelection_ThenReturnView()
+        {
+            int[] nums = Array.Empty<int>();
+            DefaultHttpContext httpContext = new();
+            const string expectedView = "~/Views/RadioNavigationalWarnings/ShowSelection.cshtml";
+            FormCollection formCol = new(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+                                        {
+                                            {"showSelectionId", "1,2,3" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+            A.CallTo(() => _fakeRnwService.ShowRadioNavigationalWarningsData(A<string>.Ignored, nums)).Returns(new List<RadioNavigationalWarningsData>());
+            
+            IActionResult result = await _controller.ShowSelection();
+
+            Assert.IsInstanceOf<IActionResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
     }
 }
