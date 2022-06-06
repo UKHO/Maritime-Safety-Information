@@ -216,6 +216,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenCallShowRadioNavigationalWarningsDataList_ThenReturnWarnings()
+        {
+            int[] data = Array.Empty<int>();
+            A.CallTo(() => _fakeRnwRepository.ShowRadioNavigationalWarningsDataList(data)).Returns(GetFakeRadioNavigationalWarningsDataList());
+            List<RadioNavigationalWarningsData> result = await _rnwService.ShowRadioNavigationalWarningsData(string.Empty, data);
+            Assert.AreEqual(1, result.Count);
+        }
+
+        [Test]
+        public void WhenCallShowRadioNavigationalWarningsDataListWithException_ThenReturnException()
+        {
+            int[] data = Array.Empty<int>();
+            A.CallTo(() => _fakeRnwRepository.ShowRadioNavigationalWarningsDataList(data)).Throws(new Exception());
+
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+                               async delegate { await _rnwService.ShowRadioNavigationalWarningsData(string.Empty, data); });
+        }
+
+        [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime()).Returns(new DateTime(2020, 01, 01, 13, 14, 15));
