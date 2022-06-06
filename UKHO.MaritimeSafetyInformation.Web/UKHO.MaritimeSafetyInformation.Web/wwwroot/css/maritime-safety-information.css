@@ -737,19 +737,3 @@ input[type=submit].primary, a.primary {
   border-color: #09315b;
   color: #09315b;
 }
-
-input[type=button].select-all-button {
-  height: auto;
-  padding: 0;
-  background-color: transparent;
-  color: #09315b;
-  min-width: auto;
-  border: 0;
-  text-decoration: underline;
-  font-size: 18px;
-  border-radius: 0;
-}
-
-.bold-icon {
-  -webkit-text-stroke: 2px;
-}

@@ -3,7 +3,8 @@ import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwrig
 import * as app from "../../Configuration/appConfig.json";
 
 import { injectAxe, getViolations, checkA11y, Options} from 'axe-playwright'
-
+import noticeToMarinerWeekDownload from '../../pageObject/noticeToMarine-weekfiledownload.page';
+let noticeFileDownload:noticeToMarinerWeekDownload;
 test.describe("A11y tests", ()=> {
   const defaultCheckA11yOptions: Options = {
    axeOptions: {
@@ -26,5 +27,15 @@ test.describe("A11y tests", ()=> {
    await checkA11y(page, undefined, defaultCheckA11yOptions);
    
  })
+
+ test('Notice To Mariner page should be accessible for daily file', async ({page}) => {
+  noticeFileDownload = new noticeToMarinerWeekDownload(page);
+  await noticeFileDownload.goToNoticeToMariner();
+  await noticeFileDownload.goToDailyFile();
+
+  await injectAxe(page);
+  await checkA11y(page, undefined, defaultCheckA11yOptions);
+  
+})
 
 });

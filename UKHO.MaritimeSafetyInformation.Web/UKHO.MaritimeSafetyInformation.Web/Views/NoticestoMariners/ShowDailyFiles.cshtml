@@ -1,17 +1,30 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 
 @model List<ShowDailyFilesResponseModel>
+@{
+    Layout = "~/Views/Shared/_MSILayout.cshtml";
+    ViewData["Header"] = "Notices to Mariners";
+}
+
 @section Scripts
 {
-    <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
 }
-@*<partial name="ShowDailyFilesList" />*@
-<input type="hidden" id = "hdnRequestType" value="Daily"/>
+<partial name="_NMHorizontalTab" />
 
-<div class="row">
-    <div class="col">
-        <div class="table-responsive" id="divFilesList">
-        </div>
+<div class="tab-content" id="nmTabContent">
+    <div class="tab-pane fade show active" id="daily" role="tabpanel" aria-labelledby="daily-tab">
+        <input type="hidden" id="hdnRequestType" value="Daily" />
+        @if (@Model != null)
+        {
+            <partial name="ShowDailyFilesList" model="@Model" />
+        }
+    </div>
+    <div class="tab-pane fade" id="cumulative" role="tabpanel" aria-labelledby="cumulative-tab">
+        <partial name="ShowCumulativeNMs" />
+    </div>
+    <div class="tab-pane fade" id="annual" role="tabpanel" aria-labelledby="annual-tab">
+        <partial name="ShowAnnualNMs" />
     </div>
 </div>
 
