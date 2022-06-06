@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             int[] nums = Array.Empty<int>();
             DefaultHttpContext httpContext = new();
             const string expectedView = "~/Views/RadioNavigationalWarnings/ShowSelection.cshtml";
-            FormCollection formCol = new(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+            FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"showSelectionId", "1,2,3" }
                                         });
