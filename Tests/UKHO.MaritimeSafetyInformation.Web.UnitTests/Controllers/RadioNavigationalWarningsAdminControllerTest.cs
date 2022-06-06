@@ -43,10 +43,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenICallCreateView_ThenReturnView()
+        public async Task WhenICallCreateView_ThenReturnView()
         {
-            Task<IActionResult> result = _controller.Create();
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Create.cshtml";
+            IActionResult result = await _controller.Create();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
 
         [Test]
@@ -109,12 +112,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenICallRadioNavigationWarningListForAdmin_ThenReturnView()
+        public async Task WhenICallRadioNavigationWarningListForAdmin_ThenReturnView()
         {
             const int id = 5;
+            const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Edit.cshtml";
             A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningById(5, CorrelationId)).Returns(EditFakeRadioNavigationWarningListForAdmin());
-            Task<IActionResult> result = _controller.Edit(id);
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            IActionResult result = await _controller.Edit(id);
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
 
         private static RadioNavigationalWarningsAdminFilter GetFakeRadioNavigationWarningsForAdmin()

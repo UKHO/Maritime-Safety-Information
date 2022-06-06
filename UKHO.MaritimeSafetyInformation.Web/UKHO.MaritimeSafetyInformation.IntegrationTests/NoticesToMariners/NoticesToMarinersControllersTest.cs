@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
-            Assert.IsTrue(showWeeklyFiles != null);
+            Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
             Assert.AreEqual(9, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
@@ -50,7 +50,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             IActionResult result = await _nMController.Index(2021, 30);
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
-            Assert.IsTrue(showWeeklyFiles != null);
+            Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(4, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
@@ -77,7 +77,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
-            Assert.IsTrue(listFiles != null);
+            Assert.IsNotNull(listFiles);
             Assert.AreEqual(4, listFiles.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
@@ -102,7 +102,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             IActionResult result = await _nMController.ShowDailyFilesAsync();
             List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((PartialViewResult)result).Model;
-            Assert.IsTrue(showFiles != null);
+            Assert.IsNotNull(showFiles);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(7, showFiles[0].DailyFilesData.Count);
@@ -121,7 +121,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string mimeType = "application/pdf";
 
             FileResult result = await _nMController.DownloadWeeklyFile(batchId, filename, mimeType);
-            Assert.IsTrue(result != null);
+            Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
             Assert.AreEqual(1072222, ((FileContentResult)result).FileContents.Length);

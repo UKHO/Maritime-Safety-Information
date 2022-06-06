@@ -72,16 +72,16 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public void WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
+        public async Task WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
         {
             _controller.TempData = _tempData;
-
+            const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Create.cshtml";
             _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
-            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
-
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.IsNull(_controller.TempData["message"]);
-            
+            IActionResult result = await _controller.Create(new RadioNavigationalWarning());
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsFalse(((ViewResult)result).ViewData.ModelState.IsValid);
         }
 
         [Test]
