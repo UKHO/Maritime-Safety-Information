@@ -78,8 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
         }
 
-        #region Edit Radio Navigational Warning
-        public EditRadioNavigationalWarningsAdmin EditRadioNavigation(int? id)
+        public EditRadioNavigationalWarningsAdmin GetRadioNavigationalWarningById(int id)
         {
             RadioNavigationalWarning rnwWarnings = _context.Set<RadioNavigationalWarning>().Find(id);
             EditRadioNavigationalWarningsAdmin rnwList = new();
@@ -88,25 +87,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             rnwList.WarningTypeName = WarningName;
             rnwList.Reference = rnwWarnings.Reference;
             rnwList.DateTimeGroup = rnwWarnings.DateTimeGroup;
-            rnwList.DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup);
             rnwList.Summary = rnwWarnings.Summary;
-            rnwList.Content = RnwHelper.FormatContent(rnwWarnings.Content);
+            rnwList.Content = rnwWarnings.Content;
             rnwList.ExpiryDate = rnwWarnings.ExpiryDate;
-            rnwList.ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate);
-            rnwList.IsDeleted = rnwWarnings.IsDeleted ? "true" : "false";
+            rnwList.IsDeleted = rnwWarnings.IsDeleted;
             return rnwList;
         }
 
-        public async Task UpdateRadioNavigationWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
+        public async Task UpdateRadioNavigationalWarning(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdmin)
         {
             RadioNavigationalWarning rnwList = await _context.RadioNavigationalWarnings.FirstOrDefaultAsync(r => r.Id == radioNavigationalWarningAdmin.Id);
             rnwList.WarningType = radioNavigationalWarningAdmin.WarningType;
             rnwList.Reference = radioNavigationalWarningAdmin.Reference;
             rnwList.DateTimeGroup = radioNavigationalWarningAdmin.DateTimeGroup;
             rnwList.Summary = radioNavigationalWarningAdmin.Summary;
-            rnwList.Content = RnwHelper.FormatContent(radioNavigationalWarningAdmin.Content);
+            rnwList.Content = radioNavigationalWarningAdmin.Content;
             rnwList.ExpiryDate = radioNavigationalWarningAdmin.ExpiryDate;
-            rnwList.IsDeleted = bool.Parse(radioNavigationalWarningAdmin.IsDeleted);
+            rnwList.IsDeleted = radioNavigationalWarningAdmin.IsDeleted;
             rnwList.LastModified = DateTime.UtcNow;
             _context.Update(rnwList);
             await _context.SaveChangesAsync();
@@ -117,6 +114,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             var x = _context.WarningType.Select(x => x.Name).ToList();
             return _context.WarningType.Where(x => x.Name == radioNavigationalWarningAdminList.WarningTypeName).FirstOrDefault().Id;
         }
-        #endregion Edit Radio Navigational Warning
+
     }
 }

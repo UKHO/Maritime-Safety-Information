@@ -170,7 +170,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             return warningTypes;
         }
 
-        public static RadioNavigationalWarning GetFakeRadioNavigationalWarning()
+        protected static RadioNavigationalWarning GetFakeRadioNavigationalWarning()
         {
             return new RadioNavigationalWarning()
             {

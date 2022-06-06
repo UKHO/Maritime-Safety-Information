@@ -58,7 +58,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ErrorInRnwRepositoryProcess.ToEventId(), ex, "Maritime safety information error has occurred in the process to add new RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.EditRNWRecordException.ToEventId(), ex, "Maritime safety information error has occurred in the process to add new RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
 
@@ -142,13 +142,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return DateTimeExtensions.ToRnwDateFormat(lastUpdatedDateTime);
         }
 
-        #region Edit Radio Navigational Warning
-        public EditRadioNavigationalWarningsAdmin EditRadioNavigationWarningListForAdmin(int? id, string correlationId)
+       
+        public EditRadioNavigationalWarningsAdmin GetRadioNavigationalWarningById(int id, string correlationId)
         {
             try
             {
-                EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdminList = _rnwRepository.EditRadioNavigation(id);
-                return radioNavigationalWarningsAdminList;
+                EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdminRecord = _rnwRepository.GetRadioNavigationalWarningById(id);
+                return radioNavigationalWarningsAdminRecord;
             }
             catch (Exception ex)
             {
@@ -157,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<bool> EditRadioNavigationWarningsRecord(EditRadioNavigationalWarningsAdmin radioNavigationalWarning, string correlationId)
+        public async Task<bool> EditRadioNavigationalWarningsRecord(EditRadioNavigationalWarningsAdmin radioNavigationalWarning, string correlationId)
         {
             if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {
@@ -186,19 +186,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             try
             {
-                _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information edit RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
-                await _rnwRepository.UpdateRadioNavigationWarning(radioNavigationalWarning);
-                _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.EditRNWRecordStarted.ToEventId(), "Maritime safety information edit RNW record to database request started for Record:{id}, _X-Correlation-ID:{correlationId}", radioNavigationalWarning.Id, correlationId);
+                await _rnwRepository.UpdateRadioNavigationalWarning(radioNavigationalWarning);
+                _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record to database request completed for Record:{id}, _X-Correlation-ID:{correlationId}", radioNavigationalWarning.Id, correlationId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ErrorInRnwRepositoryProcess.ToEventId(), ex, "Maritime safety information error has occurred in the process to edit RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.EditRNWRecordException.ToEventId(), ex, "Maritime safety information request to update RNW record to database failed with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
 
             return true;
         }
 
-        #endregion Edit Radio Navigational Warning
     }
 }

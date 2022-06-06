@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910030 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        ErrorInRnwRepositoryProcess = 910030,
+        EditRNWRecordException = 910030,
         /// <summary> 
         /// 910031 -  Maritime safety information invalid new RNW record request.
         /// </summary>
@@ -301,7 +301,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910072 -  Maritime safety information Edit RNW record started.
         /// </summary>
-        EditRNWRecordStart = 910072,
+        EditRNWRecordStarted = 910072,
         /// <summary> 
         /// 910073 - Maritime safety information edit RNW record Id not found.
         /// </summary>
@@ -313,7 +313,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910075 - Maritime safety information edit RNW list is null.
         /// </summary>
-        EditRNWListIsNull = 910075,
+        EditRNWRecordNotFound = 910075,
         /// <summary> 
         /// 910076 - Maritime safety information Error in retrieving RNW record.
         /// </summary>

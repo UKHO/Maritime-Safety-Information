@@ -26,9 +26,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         [DisplayName("Date/Time")]
         public DateTime DateTimeGroup { get; set; }
 
-        [DisplayName("Date/Time")]
-        public string DateTimeGroupRnwFormat { get; set; }
-
+        
         [DisplayName("Description")]
         [Required]
         [StringLength(256, ErrorMessage = "Summary cannot be longer than 256 characters.")]
@@ -42,10 +40,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         [DisplayName("Expiry Date")]
         public DateTime? ExpiryDate { get; set; }
 
-        [DisplayName("Expiry Date")]
-        public string ExpiryDateRnwFormat { get; set; }
-
+        
         [DisplayName("Deleted")]
-        public string IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

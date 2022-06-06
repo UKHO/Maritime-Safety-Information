@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallAddRadioNavigationWarnings_ThenNewRecordIsCreated()
+        public async Task WhenCallAddRadioNavigationalWarnings_ThenNewRecordIsCreated()
         {
             _controller.TempData = _tempData;
 
@@ -60,7 +60,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public void WhenAddRadioNavigationWarningsWithInValidValue_ThenNewRecordIsNotCreated()
+        public void WhenAddRadioNavigationalWarningsWithInValidValue_ThenNewRecordIsNotCreated()
         {
             _controller.TempData = _tempData;
             _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
@@ -91,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
             _fakeRadioNavigationalWarning.WarningType = 3;
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>(),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
                                 async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
         }
 
@@ -101,9 +101,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _controller.TempData = _tempData;
             _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
             _fakeRadioNavigationalWarning.Reference = string.Empty;
-
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
-                                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
+                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
         }
 
         [Test]

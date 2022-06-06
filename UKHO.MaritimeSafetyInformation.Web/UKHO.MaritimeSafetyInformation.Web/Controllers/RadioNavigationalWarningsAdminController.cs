@@ -42,16 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 if (result)
                 {
                     TempData["message"] = "Record created successfully!";
-                    _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed successfully with record " +
-                      " WarningType = " + radioNavigationalWarning.WarningType + "," +
-                      " Reference = " + radioNavigationalWarning.Reference + "," +
-                      " DateTime = " + radioNavigationalWarning.DateTimeGroup + "," +
-                      " Description = " + radioNavigationalWarning.Summary + "," +
-                      " Text = " + radioNavigationalWarning.Content + "," +
-                      " Expiry Date = " + radioNavigationalWarning.ExpiryDate + "," +
-                      " Deleted = " + radioNavigationalWarning.IsDeleted + "," +
-                      " for _X-Correlation-ID:{ correlationId}," +
-                      GetCurrentCorrelationId());
+                    _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Maritime safety information create new RNW record request completed successfully with record as WarningType:{WarningType}, Reference:{Reference}, DateTime:{DateTime}, Description:{Description}, Text:{Text}, Expiry Date:{ExpiryDate} for _X-Correlation-ID:{correlationId}", radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference, radioNavigationalWarning.DateTimeGroup, radioNavigationalWarning.Summary, radioNavigationalWarning.Content, radioNavigationalWarning.ExpiryDate, GetCurrentCorrelationId());
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -72,20 +63,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View(radioNavigationalWarningsAdminFilter);
         }
 
-        #region Edit Radio Navigation Warning
+       
         // GET: RadioNavigationalWarnings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                _logger.LogInformation(EventIds.EditRNWRecordIDNotFound.ToEventId(), "Maritime safety information edit RNW record id not found for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-                return NotFound();
-            }
-
-            EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin = _rnwService.EditRadioNavigationWarningListForAdmin(id, GetCurrentCorrelationId());
+            EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin = _rnwService.GetRadioNavigationalWarningById(id, GetCurrentCorrelationId());
             if (radioNavigationalWarningsAdmin == null)
             {
-                _logger.LogInformation(EventIds.EditRNWListIsNull.ToEventId(), "Maritime safety information edit RNW list is null for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.EditRNWRecordNotFound.ToEventId(), "Maritime safety information edit RNW record not found for id:{id} with _X-Correlation-ID:{correlationId}", id, GetCurrentCorrelationId());
                 return NotFound();
             }
             
@@ -111,44 +96,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     });
                 }
             }
-            ViewBag.WarningType = list;
+            ViewBag.WarningType = list;//await _rnwService.GetWarningTypes(); 
             return View(radioNavigationalWarningsAdmin);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin)
+        public async Task<IActionResult> Edit(EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdmin)
         {
-            _logger.LogInformation(EventIds.EditRNWRecordStart.ToEventId(), "Maritime safety information Edit RNW record request started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.EditRNWRecordStarted.ToEventId(), "Maritime safety information Edit RNW record request started for id:{id} with _X-Correlation-ID:{correlationId}", radioNavigationalWarningsAdmin.Id, GetCurrentCorrelationId());
 
-            if (id != radioNavigationalWarningsAdmin.Id)
+            if (ModelState.IsValid)
             {
-                _logger.LogInformation(EventIds.EditRNWRecordIdMismatch.ToEventId(), "Maritime safety information edit RNW record id mismatched for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-                return NotFound();
-            }
-
-            else if (ModelState.IsValid)
-            {
-                bool result = await _rnwService.EditRadioNavigationWarningsRecord(radioNavigationalWarningsAdmin, GetCurrentCorrelationId());
+                bool result = await _rnwService.EditRadioNavigationalWarningsRecord(radioNavigationalWarningsAdmin, GetCurrentCorrelationId());
                 if (result)
                 {
                     TempData["message"] = "Record updated successfully!";
-                    _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record request updated successfully with record " +
-                        " WarningType = " + radioNavigationalWarningsAdmin.WarningType + "," +
-                        " Reference = " + radioNavigationalWarningsAdmin.Reference + "," +
-                        " DateTime = " + radioNavigationalWarningsAdmin.DateTimeGroup + "," +
-                        " Description = " + radioNavigationalWarningsAdmin.Summary + "," +
-                        " Text = " + radioNavigationalWarningsAdmin.Content + "," +
-                        " Expiry Date = " + radioNavigationalWarningsAdmin.ExpiryDate + "," +
-                        " Deleted = " + radioNavigationalWarningsAdmin.IsDeleted + "," +
-                        " for _X-Correlation-ID:{ correlationId}," +
-                        GetCurrentCorrelationId());
-                    return RedirectToAction(nameof(Index), new { reLoadData = true });
+                    _logger.LogInformation(EventIds.EditRNWRecordCompleted.ToEventId(), "Maritime safety information edit RNW record request updated successfully with record as WarningType:{WarningType}, Reference:{Reference}, DateTime:{DateTime}, Description:{Description}, Text:{Text}, Expiry Date:{ExpiryDate}, Deleted:{IsDeleted} for _X-Correlation-ID:{correlationId}", radioNavigationalWarningsAdmin.WarningType, radioNavigationalWarningsAdmin.Reference, radioNavigationalWarningsAdmin.DateTimeGroup, radioNavigationalWarningsAdmin.Summary, radioNavigationalWarningsAdmin.Content, radioNavigationalWarningsAdmin.ExpiryDate, radioNavigationalWarningsAdmin.IsDeleted, GetCurrentCorrelationId());
+                    return RedirectToAction(nameof(Index));
                 }
             }
             return View(radioNavigationalWarningsAdmin);
         }
-        #endregion
+       
     }
 }

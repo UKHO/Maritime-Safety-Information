@@ -50,7 +50,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 DateTimeGroup = new DateTime(2019, 1, 1),
                 Summary = "editsummary",
                 Content = "editcontent",
-                IsDeleted = "false",
+                IsDeleted = false,
 
              };
             _rnwRepository = new RNWRepository(_context);
@@ -134,19 +134,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenCallEditRadioNavigationWarningsMethod_ThenUpdateRNWRecord()
+        public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
-            DateTime dateTime = DateTime.UtcNow;
-            _radioNavigationalWarning.DateTimeGroup = dateTime;
-            Task result1 = _rnwRepository.UpdateRadioNavigationWarning(_fakeRadioNavigationalWarningAdmin);
+            Task result1 = _rnwRepository.UpdateRadioNavigationalWarning(_fakeRadioNavigationalWarningAdmin);
             Assert.IsTrue(result1.IsCompleted);
         }
 
         [Test]
-        public void WhenCallEditRadioNavigation_ThenReturnListAsync()
+        public void WhenCallEditRadioNavigationalWarningsRecord_ThenReturnRecordForGivenId()
         {
-            int id = 1;
-            EditRadioNavigationalWarningsAdmin result = _rnwRepository.EditRadioNavigation(id);
+            const int id = 1;
+            EditRadioNavigationalWarningsAdmin result = _rnwRepository.GetRadioNavigationalWarningById(id);
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Id);
             Assert.AreEqual("NAVAREA 1", result.WarningTypeName);
