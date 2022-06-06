@@ -281,17 +281,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenPostValidEditRequest_ThenReturnTrue()
-        {
-            DateTime _fakeDateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarningsAdmin.DateTimeGroup = DateTime.UtcNow; 
-            A.CallTo(() => _fakeRnwRepository.GetWarningType(_fakeRadioNavigationalWarningsAdmin)).Returns(1);
-            bool result = await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId);
-
-            Assert.IsTrue(result);
-        }
-
-        [Test]
         public void WhenEditRadioNavigationalRecordWithInvalidRecordId_ThenReturnException()
         {
             _fakeRadioNavigationalWarningsAdmin.Id = 0;

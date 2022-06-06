@@ -101,7 +101,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenEditRadioNavigationalWarningsRecordReturnTrueInRequest_ThenRecordIsUpdated()
         {
-            const int id = 5;
             _controller.TempData = _tempData;
             A.CallTo(() => _fakeRnwService.EditRadioNavigationalWarningsRecord(A<EditRadioNavigationalWarningsAdmin>.Ignored, A<string>.Ignored)).Returns(true);
             Task<IActionResult> result = _controller.Edit(new EditRadioNavigationalWarningsAdmin() { Id = 5 });

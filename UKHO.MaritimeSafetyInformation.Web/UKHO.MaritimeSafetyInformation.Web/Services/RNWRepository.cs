@@ -109,11 +109,5 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             await _context.SaveChangesAsync();
         }
 
-        public int GetWarningType(EditRadioNavigationalWarningsAdmin radioNavigationalWarningAdminList)
-        {
-            var x = _context.WarningType.Select(x => x.Name).ToList();
-            return _context.WarningType.Where(x => x.Name == radioNavigationalWarningAdminList.WarningTypeName).FirstOrDefault().Id;
-        }
-
     }
 }
