@@ -152,7 +152,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ErrorInRetrievingRNWRecord.ToEventId(), ex, "Maritime safety information error has occurred while retrieving a RNW record from database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.ErrorInRetrievingRNWRecord.ToEventId(), ex, "Maritime safety information error has occurred while retrieving a RNW record from database for Record:{id} with Exception:{ex} and _X-Correlation-ID:{correlationId}", id, ex.Message, correlationId);
                 throw;
             }
         }

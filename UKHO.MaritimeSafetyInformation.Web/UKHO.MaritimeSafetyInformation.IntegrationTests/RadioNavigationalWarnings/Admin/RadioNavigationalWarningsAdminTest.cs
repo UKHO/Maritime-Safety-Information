@@ -18,6 +18,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
+        private const int _year2024 = 2024;
+        private const int _year2020 = 2020;
 
         private RadioNavigationalWarningsAdminController _controller;
 
@@ -79,7 +81,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallIndexWithYearFilter_ThenReturnFilteredListAsync()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, 2020);
+            IActionResult result = await _controller.Index(1, null, _year2020);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
@@ -91,7 +93,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallIndexWithWarningTypeAndYearFilter_ThenReturnFilteredListAsync()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, WarningTypes.UK_Coastal, 2024);
+            IActionResult result = await _controller.Index(1, WarningTypes.UK_Coastal, _year2024);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
@@ -99,7 +101,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
             Assert.AreEqual(WarningTypes.UK_Coastal, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
             Assert.AreEqual("UK Coastal", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
-            Assert.AreEqual(2024, adminListFilter.RadioNavigationalWarningsAdminList[0].DateTimeGroup.Year);
+            Assert.AreEqual(_year2024, adminListFilter.RadioNavigationalWarningsAdminList[0].DateTimeGroup.Year);
         }
 
         [Test]
@@ -147,7 +149,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallIndex_ThenIsDeletedShouldDisplayYesAndNoRespectively()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, 2020);
+            IActionResult result = await _controller.Index(1, null, _year2020);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual("Yes", adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
@@ -158,7 +160,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallIndexWithContentLengthGreaterThan300Char_ThenWrapTheContent()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, 2024);
+            IActionResult result = await _controller.Index(1, null, _year2024);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].Content.Length <= 303);
             Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].Content.Contains("..."));

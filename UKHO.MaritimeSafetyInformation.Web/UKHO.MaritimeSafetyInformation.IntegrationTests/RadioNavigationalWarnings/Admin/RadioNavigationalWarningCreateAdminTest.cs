@@ -65,11 +65,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _controller.TempData = _tempData;
             _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
             _fakeRadioNavigationalWarning.Reference = string.Empty;
-
             Task<IActionResult> result = _controller.Create(_fakeRadioNavigationalWarning);
-
             Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.IsNull(_controller.TempData["message"]);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
+                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
         }
 
         [Test]
@@ -82,6 +81,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.IsNull(_controller.TempData["message"]);
+            
         }
 
         [Test]

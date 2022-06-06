@@ -18,6 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RadioNavigationalWarningsContext _context;
         private RadioNavigationalWarning _radioNavigationalWarning;
         private EditRadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningAdmin;
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -136,8 +137,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
-            Task result1 = _rnwRepository.UpdateRadioNavigationalWarning(_fakeRadioNavigationalWarningAdmin);
-            Assert.IsTrue(result1.IsCompleted);
+            Task result = _rnwRepository.UpdateRadioNavigationalWarning(_fakeRadioNavigationalWarningAdmin);
+            Assert.IsTrue(result.IsCompleted);
         }
 
         [Test]

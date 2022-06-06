@@ -58,9 +58,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenRequestToGetWarningTypes_ThenReturnListOfWarningType()
         {
-            DateTime dateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
-
             A.CallTo(() => _fakeRnwRepository.GetWarningTypes()).Returns(new List<WarningType>() { new WarningType { Id = 1, Name = "test" } });
 
             List<WarningType> result = await _rnwService.GetWarningTypes();
@@ -234,6 +231,42 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual("010114 UTC Jan 20", result);
         }
 
+        [Test]
+        public void WhenEditRadioNavigationalRecordWithInvalidRecordId_ThenReturnException()
+        {
+            _fakeRadioNavigationalWarningsAdmin.Id = 0;
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningById(A<int>.Ignored)).Throws(new Exception()); 
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+            delegate { _rnwService.GetRadioNavigationalWarningById(_fakeRadioNavigationalWarningsAdmin.Id, CorrelationId); return Task.CompletedTask; });
+        }
+
+        [Test]
+        public void WhenPostInvalidWarningTypeInRequestForEdit_ThenReturnInvalidDataException()
+        {
+            _fakeRadioNavigationalWarningsAdmin.WarningType = 3;
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenPostInvalidReferenceInRequestForEdit_ThenReturnArgumentNullException()
+        {
+            _fakeRadioNavigationalWarningsAdmin.Reference = "";
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenPostInvalidContentInRequestForEdit_ThenReturnException()
+        {
+            _fakeRadioNavigationalWarningsAdmin.Content = "";
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
+        }
+
         private static List<RadioNavigationalWarningsAdmin> GetFakeRadioNavigationalWarningList()
         {
             List<RadioNavigationalWarningsAdmin> radioNavigationalWarningList = new();
@@ -278,51 +311,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private static List<RadioNavigationalWarningsData> GetFakeRadioNavigationalWarningsDataList()
         {
             return new List<RadioNavigationalWarningsData>() { new RadioNavigationalWarningsData() };
-        }
-
-        [Test]
-        public void WhenEditRadioNavigationalRecordWithInvalidRecordId_ThenReturnException()
-        {
-            _fakeRadioNavigationalWarningsAdmin.Id = 0;
-            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningById(A<int>.Ignored)).Throws(new Exception()); 
-            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-            delegate { _rnwService.GetRadioNavigationalWarningById(_fakeRadioNavigationalWarningsAdmin.Id, CorrelationId); return Task.CompletedTask; });
-        }
-
-        [Test]
-        public void WhenPostInvalidWarningTypeInRequestForEdit_ThenReturnInvalidDataException()
-        {
-            _fakeRadioNavigationalWarningsAdmin.WarningType = 3;
-
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
-        }
-
-        [Test]
-        public void WhenPostInvalidReferenceInRequestForEdit_ThenReturnException()
-        {
-            _fakeRadioNavigationalWarningsAdmin.Reference = "";
-
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
-        }
-
-        [Test]
-        public void WhenPostInvalidReferenceInRequestForEdit_ThenReturnArgumentNullException()
-        {
-            _fakeRadioNavigationalWarningsAdmin.Summary = "";
-
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter summary"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
-        }
-
-        [Test]
-        public void WhenPostInvalidContentInRequestForEdit_ThenReturnException()
-        {
-            _fakeRadioNavigationalWarningsAdmin.Content = "";
-
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
         }
     }
 }
