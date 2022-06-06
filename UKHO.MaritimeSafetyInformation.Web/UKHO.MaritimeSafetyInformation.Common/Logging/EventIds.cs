@@ -317,7 +317,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910076 - Maritime safety information Error in retrieving RNW record.
         /// </summary>
-        ErrorInRetrievingRNWRecord = 910076
+        ErrorInRetrievingRNWRecord = 910076,
 
         /// <summary>
         /// 910071 -Request For Download Daily NM File Started.
