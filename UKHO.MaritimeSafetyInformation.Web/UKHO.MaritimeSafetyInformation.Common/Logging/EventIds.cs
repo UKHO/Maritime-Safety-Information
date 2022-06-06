@@ -354,27 +354,27 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSDownloadZipFileAsyncHasError = 910082,
         /// <summary> 
-        /// 910071 -  Maritime safety information Edit RNW records for Admin completed.
+        /// 910083 -  Maritime safety information Edit RNW records for Admin completed.
         /// </summary>
         EditRNWRecordCompleted = 910083,
         /// <summary> 
-        /// 910072 -  Maritime safety information Edit RNW record started.
+        /// 910084 -  Maritime safety information Edit RNW record started.
         /// </summary>
         EditRNWRecordStarted = 910084,
         /// <summary> 
-        /// 910073 - Maritime safety information edit RNW record Id not found.
+        /// 910085 - Maritime safety information edit RNW record Id not found.
         /// </summary>
         EditRNWRecordIDNotFound = 910085,
         /// <summary> 
-        /// 910074 - Maritime safety information edit RNW record Id mismatch.
+        /// 910086 - Maritime safety information edit RNW record Id mismatch.
         /// </summary>
         EditRNWRecordIdMismatch = 910086,
         /// <summary> 
-        /// 910075 - Maritime safety information edit RNW list is null.
+        /// 910087 - Maritime safety information edit RNW list is null.
         /// </summary>
         EditRNWRecordNotFound = 910087,
         /// <summary> 
-        /// 910076 - Maritime safety information Error in retrieving RNW record.
+        /// 910088 - Maritime safety information Error in retrieving RNW record.
         /// </summary>
         ErrorInRetrievingRNWRecord = 910088
 
