@@ -359,9 +359,11 @@ button {
             border-color: transparent;
             padding: 0.5rem 1.5rem;
             border-radius: 0;
+            font-weight: 400;
 
             &.active {
                 border-color: $prussian-blue;
+                color: $prussian-blue;
             }
         }
     }

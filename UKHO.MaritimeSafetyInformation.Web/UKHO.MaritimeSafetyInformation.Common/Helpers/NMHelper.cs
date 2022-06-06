@@ -83,7 +83,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return string.Empty;
         }
 
-
         public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters,string correlationId, ILogger logger)
         {
             foreach (var parameter in parameters)
@@ -96,6 +95,22 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
             }
+        }
+
+        public static async Task<byte[]> GetFileBytesFromStream(Stream stream)
+        {
+            byte[] fileBytes = new byte[stream.Length + 10];
+
+            int numBytesToRead = (int)stream.Length;
+            int numBytesRead = 0;
+            do
+            {
+                int n = await stream.ReadAsync(fileBytes, numBytesRead, numBytesToRead);
+                numBytesRead += n;
+                numBytesToRead -= n;
+            } while (numBytesToRead > 0);
+            stream.Close();
+            return fileBytes;
         }
     }
 }
