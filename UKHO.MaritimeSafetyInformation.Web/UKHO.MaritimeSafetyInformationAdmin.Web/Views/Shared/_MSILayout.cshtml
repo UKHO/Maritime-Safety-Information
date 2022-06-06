@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 msi-tabs-container">
+            <!--left nav-->
+            @if (ViewContext.RouteData.Values["controller"]?.ToString() == "NoticesToMariners")
+            {
+                <partial name="_NMLeftMenu"></partial>
+            }
+            else if (ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings")
+            {
+                <partial name="_RNWLeftMenu"></partial>
+            }
+
+        </div> <!--right content-->
+        <div class="col-lg-8 col-md-10 msi-tabs-content-container">
+            <h1 id="headingLevelOne" class="mt-0">@Convert.ToString(ViewData["Header"])</h1>
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @await RenderSectionAsync("Scripts", required: false)
+}
