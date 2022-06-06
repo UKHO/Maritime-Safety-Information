@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
-  
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -38,7 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
+            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
 
@@ -52,6 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
+            services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -62,7 +63,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddHttpClient();
 
             services.AddHealthChecks()
-                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
+                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
         }

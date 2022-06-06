@@ -294,6 +294,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910070 -  Maritime safety information request to get last modified date time from database completed.
         /// </summary>
         RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
+        /// <summary>
+        /// 910071 - Radio Navigational Warning database for Maritime safety information is healthy.
+        /// </summary>
+        RNWDatabaseIsHealthy = 910071,
+        /// <summary>
+        /// 910072 - Radio Navigational Warning database for Maritime safety information is unhealthy.
+        /// </summary>
+        RNWDatabaseIsUnHealthy = 910072,
 
     }
 
