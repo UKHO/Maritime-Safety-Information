@@ -76,26 +76,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             
             List<SelectListItem> list = new();
 
-            foreach (WarningType item in await _rnwService.GetWarningTypes())
+            list.AddRange((await _rnwService.GetWarningTypes()).Select(item => new SelectListItem()
             {
-                if (item.Name == radioNavigationalWarningsAdmin.WarningTypeName)
-                {
-                    list.Add(new SelectListItem()
-                    {
-                        Text = item.Name,
-                        Value = Convert.ToString(item.Id),
-                        Selected = true
-                    });
-                }
-                else
-                {
-                    list.Add(new SelectListItem()
-                    {
-                        Text = item.Name,
-                        Value = Convert.ToString(item.Id),
-                    });
-                }
-            }
+                Text = item.Name,
+                Value = Convert.ToString(item.Id),
+                Selected = item.Name == radioNavigationalWarningsAdmin.WarningTypeName,
+            }));
+
             ViewBag.WarningType = list;
             return View("~/Views/RadioNavigationalWarningsAdmin/Edit.cshtml", radioNavigationalWarningsAdmin);
         }
