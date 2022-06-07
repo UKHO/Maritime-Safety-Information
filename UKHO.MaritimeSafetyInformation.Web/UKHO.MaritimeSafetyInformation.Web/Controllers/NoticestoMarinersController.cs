@@ -60,12 +60,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 
-        public IActionResult DailyFiles()
-        {
-            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-            return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml");
-        }
-
         [HttpPost]
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
@@ -80,13 +74,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
-            _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = new();
+            try
+            {
+                _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            return PartialView("~/Views/NoticesToMariners/ShowDailyFilesList.cshtml", showDailyFilesResponseModels);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowDailyFilesFailed.ToEventId(), "Maritime safety information request to show daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+            }
+
+            return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels);
 
         }
 
@@ -97,7 +100,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 new KeyValuePair<string, string>("BatchId", batchId),
                 new KeyValuePair<string, string>("FileName", fileName),
                 new KeyValuePair<string, string>("MimeType", mimeType)
-            },GetCurrentCorrelationId(),_logger);
+            }, GetCurrentCorrelationId(), _logger);
 
             try
             {
@@ -107,7 +110,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename=" + fileName);
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
 
                 return File(fileBytes, mimeType);
             }
@@ -135,5 +138,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             return View();
         }
+
+        public async Task<ActionResult> DownloadDailyFile(string batchId, string fileName, string mimeType)
+        {
+            try
+            {
+                _logger.LogInformation(EventIds.DownloadDailyNMFileStarted.ToEventId(), "Maritime safety information request to download daily NM files started with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
+
+                NMHelper.ValidateParametersForDownloadSingleFile(new()
+                {
+                    new KeyValuePair<string, string>("BatchId", batchId),
+                    new KeyValuePair<string, string>("FileName", fileName),
+                    new KeyValuePair<string, string>("MimeType", mimeType)
+                }, GetCurrentCorrelationId(), _logger);
+
+                byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, GetCurrentCorrelationId());
+
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={batchId}.zip");
+
+                _logger.LogInformation(EventIds.DownloadDailyNMFileCompleted.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} is completed for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
+
+                return File(fileBytes, mimeType);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.DownloadDailyNMFileFailed.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} has failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, fileName, ex.Message, GetCurrentCorrelationId());
+                return RedirectToAction("ShowDailyFiles");
+            }
+        }
+
     }
 }

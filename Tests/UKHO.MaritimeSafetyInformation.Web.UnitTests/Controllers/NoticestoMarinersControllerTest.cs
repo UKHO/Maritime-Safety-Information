@@ -104,16 +104,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDailyFilesIsCalled_ThenShouldReturnsExpectedView()
-        {
-            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
-            IActionResult result = _controller.DailyFiles();
-            Assert.IsInstanceOf<ViewResult>(result);
-            string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-        }
-
-        [Test]
         public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
         {
             const int year = 2022;
@@ -130,93 +120,89 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
+        public async Task WhenShowDailyFilesAsyncIsCalled_ThenShouldReturnsExpectedView()
         {
-            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFilesList.cshtml";
+            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
 
             A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId));
 
             IActionResult result = await _controller.ShowDailyFilesAsync();
-            Assert.IsInstanceOf<PartialViewResult>(result);
-            string actualView = ((PartialViewResult)result).ViewName;
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldReturnArgumentNullException()
         {
-            string batchId = null;
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
-            var result =  _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.IsTrue(result.IsFaulted);
-        }
+            const string batchId = null;
+            const string fileName = "testfile.pdf";
+            const string mimeType = "application/pdf";
 
-
-        [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldRetunException()
-        {
-            string batchId = String.Empty;
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.IsTrue(result.IsFaulted);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
+                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldReturnArgumentNullException()
+        {
+            const string batchId = "";
+            const string fileName = "testfile.pdf";
+            const string mimeType = "application/pdf";
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
+                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+        }
+
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = null;
-            string mimeType = "application/pdf";
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.IsTrue(result.IsFaulted);
-        }
-
-
-        [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldRetunException()
-        {
-            string batchId = Guid.NewGuid().ToString();
-            string fileName = String.Empty;
-            string mimeType = "application/pdf";
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.IsTrue(result.IsFaulted);
+            const string fileName = null;
+            const string mimeType = "application/pdf";
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
+                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldRetunException()
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = null;
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.IsTrue(result.IsFaulted);
-        }
-
-
-        [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldRetunException()
-        {
-            string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = String.Empty;
-            var result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            Assert.IsTrue(result.IsFaulted);
+            const string fileName = "";
+            const string mimeType = "application/pdf";
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
+               async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
         }
 
         [Test]
-        public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldRetunFileResult()
+        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
+            const string fileName = "testfile.pdf";
+            const string mimeType = null;
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
+               async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+        }
 
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType= mimeType };
+        [Test]
+        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldReturnArgumentNullException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "testfile.pdf";
+            const string mimeType = "";
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
+               async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+        }
+
+        [Test]
+        public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldReturnFileResult()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "testfile.pdf";
+            const string mimeType = "application/pdf";
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
-            
+
             Assert.IsInstanceOf<FileResult>(result);
         }
 
@@ -224,16 +210,61 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenDownloadWeeklyFileIsCalled_ThenShouldExecuteCatch()
         {
             string batchId = Guid.NewGuid().ToString();
-            string fileName = "testfile.pdf";
-            string mimeType = "application/pdf";
-
-            ShowFilesResponseModel showFilesResponseModel = new() { MimeType = mimeType };
+            const string fileName = "testfile.pdf";
+            const string mimeType = "wrongmime";
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
-            var result =  _controller.DownloadWeeklyFile(batchId, fileName, "wrongmime");
-            
+
+            Task<FileResult> result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalled_ThenShouldReturnFileResult()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
+            const string mimeType = "application/gzip";
+
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
+            Assert.IsInstanceOf<FileResult>(result);
+        }
+
+        [Test]
+        public async Task WhenDownloadDailyFileIsCalled_ThenShouldReturnShowDailyFilesAction()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "Daily 16-05-22.zip";
+            const string mimeType = "application/gzip";
+            const string expected = "ShowDailyFiles";
+
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+
+            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
+            string actualView = ((RedirectToActionResult)result).ActionName;
+
+            Assert.AreEqual(expected, actualView);
+
+        }
+
+        [TestCase(null, "Daily 16-05-22.zip", "application/gzip", ExpectedResult = "ShowDailyFiles", Description = "When Download Daily File Is Called With Null BatchID Then Should Return ShowDailyFiles Action")]
+        [TestCase("", "Daily 16-05-22.zip", "application/gzip", ExpectedResult = "ShowDailyFiles", Description = "When Download Daily File Is Called With Empty BatchID Then Should Return ShowDailyFiles Action")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d1", "Daily 16-05-22.zip", null, ExpectedResult = "ShowDailyFiles", Description = "When Download Daily File Is Called With Null Mime Type Then Should Return ShowDailyFiles Action")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d2", "Daily 16-05-22.zip", "", ExpectedResult = "ShowDailyFiles", Description = "When Download Daily File Is Called With Empty Mime Type Then Should Return ShowDailyFiles Action")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d3", null, "application/gzip", ExpectedResult = "ShowDailyFiles", Description = "When Download Daily File Is Called With Null File Name Then Should Return ShowDailyFiles Action")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "", "application/gzip", ExpectedResult = "ShowDailyFiles", Description = "When Download Daily File Is Called With Empty File Name Then Should Return ShowDailyFiles Action")]
+        public async Task<string> WhenDownloadDailyFileIsCalledWithEmptyBatchID_ThenShouldReturnShowDailyFilesAction(string batchId, string fileName, string mimeType)
+        {
+            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+
+            return ((RedirectToActionResult)result).ActionName;
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
