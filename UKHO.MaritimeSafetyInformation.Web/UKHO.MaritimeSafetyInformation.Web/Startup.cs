@@ -61,8 +61,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
 
-            services.AddRazorPages();
-
             //Configuring appsettings section AzureAdB2C, into IOptions
             services.AddOptions();
             services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAdB2C"));
@@ -108,7 +106,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHealthChecks("/health");
-                endpoints.MapRazorPages();
             });
         }
 
