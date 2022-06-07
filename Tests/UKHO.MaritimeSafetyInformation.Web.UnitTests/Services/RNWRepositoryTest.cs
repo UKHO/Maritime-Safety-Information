@@ -17,7 +17,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _context;
         private RadioNavigationalWarning _radioNavigationalWarning;
-        private EditRadioNavigationalWarningsAdmin _fakeRadioNavigationalWarningAdmin;
+        private EditRadioNavigationalWarningAdmin _fakeRadioNavigationalWarningAdmin;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -146,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenCallEditRadioNavigationalWarningsRecord_ThenReturnRecordForGivenId()
         {
             const int id = 1;
-            EditRadioNavigationalWarningsAdmin result = _rnwRepository.GetRadioNavigationalWarningById(id);
+            EditRadioNavigationalWarningAdmin result = _rnwRepository.GetRadioNavigationalWarningById(id);
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Id);
             Assert.AreEqual("NAVAREA 1", result.WarningTypeName);

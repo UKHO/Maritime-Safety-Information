@@ -6,7 +6,7 @@ using UKHO.MaritimeSafetyInformation.Common.Configuration;
 namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
     [ExcludeFromCodeCoverage]
-    public class EditRadioNavigationalWarningsAdmin
+    public class EditRadioNavigationalWarningAdmin
     {
         public int Id { get; set; }
 

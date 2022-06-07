@@ -58,7 +58,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.EditRNWRecordException.ToEventId(), ex, "Maritime safety information error has occurred in the process to add new RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.CreateRNWRecordException.ToEventId(), ex, "Maritime safety information error has occurred in the process to add new RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
 
@@ -143,11 +143,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
        
-        public EditRadioNavigationalWarningsAdmin GetRadioNavigationalWarningById(int id, string correlationId)
+        public EditRadioNavigationalWarningAdmin GetRadioNavigationalWarningById(int id, string correlationId)
         {
             try
             {
-                EditRadioNavigationalWarningsAdmin radioNavigationalWarningsAdminRecord = _rnwRepository.GetRadioNavigationalWarningById(id);
+                EditRadioNavigationalWarningAdmin radioNavigationalWarningsAdminRecord = _rnwRepository.GetRadioNavigationalWarningById(id);
                 return radioNavigationalWarningsAdminRecord;
             }
             catch (Exception ex)
@@ -157,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<bool> EditRadioNavigationalWarningsRecord(EditRadioNavigationalWarningsAdmin radioNavigationalWarning, string correlationId)
+        public async Task<bool> EditRadioNavigationalWarningsRecord(EditRadioNavigationalWarningAdmin radioNavigationalWarning, string correlationId)
         {
             if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {

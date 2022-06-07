@@ -108,8 +108,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenEditRadioNavigationalWarningsRecordReturnTrueInRequest_ThenRecordIsUpdated()
         {
             _controller.TempData = _tempData;
-            A.CallTo(() => _fakeRnwService.EditRadioNavigationalWarningsRecord(A<EditRadioNavigationalWarningsAdmin>.Ignored, A<string>.Ignored)).Returns(true);
-            Task<IActionResult> result = _controller.Edit(new EditRadioNavigationalWarningsAdmin() { Id = 5 });
+            A.CallTo(() => _fakeRnwService.EditRadioNavigationalWarningsRecord(A<EditRadioNavigationalWarningAdmin>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Edit(new EditRadioNavigationalWarningAdmin() { Id = 5 });
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());
         }
@@ -119,7 +119,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const int id = 5;
             const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Edit.cshtml";
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningById(5, CorrelationId)).Returns(EditFakeRadioNavigationWarningListForAdmin());
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningById(5, CorrelationId)).Returns(GetEditFakeRadioNavigationWarningForAdmin());
             IActionResult result = await _controller.Edit(id);
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
@@ -135,9 +135,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             };
         }
 
-        private static EditRadioNavigationalWarningsAdmin EditFakeRadioNavigationWarningListForAdmin()
+        private static EditRadioNavigationalWarningAdmin GetEditFakeRadioNavigationWarningForAdmin()
         {
-            return new EditRadioNavigationalWarningsAdmin
+            return new EditRadioNavigationalWarningAdmin
             {
                 WarningType = 1,
                 Reference = "test",

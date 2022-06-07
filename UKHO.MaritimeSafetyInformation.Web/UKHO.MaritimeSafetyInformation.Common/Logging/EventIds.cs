@@ -376,7 +376,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910088 - Maritime safety information Error in retrieving RNW record.
         /// </summary>
-        ErrorInRetrievingRNWRecord = 910088
+        ErrorInRetrievingRNWRecord = 910088,
+        /// <summary> 
+        /// 910089 - Maritime safety information Error in Creating RNW record.
+        /// </summary>
+        CreateRNWRecordException = 910089
 
     }
 

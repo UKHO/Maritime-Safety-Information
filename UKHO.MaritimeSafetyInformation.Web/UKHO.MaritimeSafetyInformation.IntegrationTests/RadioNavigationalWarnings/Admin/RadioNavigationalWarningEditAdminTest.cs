@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
         private TempDataDictionary _tempData;
-        private EditRadioNavigationalWarningsAdmin _fakeEditRadioNavigationalWarningsAdmin;
+        private EditRadioNavigationalWarningAdmin _fakeEditRadioNavigationalWarningsAdmin;
         private RadioNavigationalWarningsAdminController _controller;
 
         [OneTimeSetUp]
@@ -106,9 +106,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                                 async delegate { await _controller.Edit(_fakeEditRadioNavigationalWarningsAdmin); });
         }
 
-        private static EditRadioNavigationalWarningsAdmin GetFakeEditRadioNavigationalWarningsAdmin()
+        private static EditRadioNavigationalWarningAdmin GetFakeEditRadioNavigationalWarningsAdmin()
         {
-            return new EditRadioNavigationalWarningsAdmin()
+            return new EditRadioNavigationalWarningAdmin()
             {
                 Id = 9,
                 WarningType = 1,
