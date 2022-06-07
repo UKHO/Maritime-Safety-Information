@@ -33,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
                 string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
-                //// await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
@@ -151,6 +151,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
+
+                    DateTime batchDate;
+                    for (int i = 0; i < searchResult.Entries.Count; i++)
+                    {
+                        for (int j = 1; j < searchResult.Entries.Count; j++)
+                        {
+                            if (searchResult.Entries[i].Attributes[5].Value == searchResult.Entries[j].Attributes[5].Value)
+                            {
+                                if (searchResult.Entries[i].Attributes[0].Value == searchResult.Entries[j].Attributes[0].Value)
+                                {
+                                    batchDate = (searchResult.Entries[i].BatchPublishedDate >= searchResult.Entries[j].BatchPublishedDate) ? searchResult.Entries[i].BatchPublishedDate.Value : searchResult.Entries[j].BatchPublishedDate.Value;
+                                    BatchSearchResponse result1 = new()
+                                    {
+                                        Count = 1,
+                                        Entries = new List<BatchDetails> { searchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault() },
+                                        Links = searchResult.Links,
+                                        Total = 1,
+                                    };
+                                }
+                            }
+                        }
+                    }
+
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
                     showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
                 }
