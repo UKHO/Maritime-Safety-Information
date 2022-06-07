@@ -51,3 +51,26 @@ steps:
       targetType: filePath
       filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
       arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
+
+  - task: DownloadPipelineArtifact@2
+    displayName: "Download Admin App service Artifact"
+    inputs:
+      source: "current"
+      artifact: "MaritimeSafetyInformation"
+      path: $(Build.SourcesDirectory)/MaritimeSafetyInformationAdmin
+
+  - task: FileTransform@1
+    displayName: "File Transform: WebAppSettings"
+    inputs:
+      folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
+      fileType: 'json'
+      targetFiles: '**/appsettings.json'
+
+  - task: AzureWebApp@1
+    displayName: "Azure App Deploy: msi-$(Environment)-webapp"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      appType: webApp
+      appName: "$(ADMIN_WEB_APP_NAME)"
+      package: "$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformation.Web.zip"
+
