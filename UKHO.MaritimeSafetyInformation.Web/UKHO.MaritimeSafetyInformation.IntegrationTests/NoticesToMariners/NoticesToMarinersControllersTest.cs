@@ -105,12 +105,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(showFiles);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(18, showFiles[0].DailyFilesData.Count);
-            Assert.AreEqual("44", showFiles[0].WeekNumber);
+            Assert.AreEqual(17, showFiles[0].DailyFilesData.Count);
+            Assert.AreEqual("33", showFiles[0].WeekNumber);
             Assert.AreEqual("2021", showFiles[0].Year);
-            Assert.AreEqual("Daily .zip", showFiles[0].DailyFilesData[0].Filename);
-            Assert.AreEqual("1 MB", showFiles[0].DailyFilesData[0].FileSizeInKB);
-            Assert.AreEqual("155e7fe4-5866-4a31-9994-113beca0dce1", showFiles[0].DailyFilesData[0].BatchId);
+            Assert.AreEqual("Daily 02-10-20.zip", showFiles[0].DailyFilesData[0].Filename);
+            Assert.AreEqual("416 KB", showFiles[0].DailyFilesData[0].FileSizeInKB);
+            Assert.AreEqual("74806230-3041-4dbf-b32b-1c099aa8285c", showFiles[0].DailyFilesData[0].BatchId);
         }
 
         [Test]
