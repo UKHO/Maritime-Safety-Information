@@ -142,14 +142,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallDownloadDailyFile_ThenReturnFile()
         {
-            const string batchId = "44e8cce6-e69d-46bd-832d-6fd3d4ef8740";
-            const string filename = "SERIAL_D2022_18.txt";
-            const string mimeType = "application/text";
+            const string batchId = "1882c04c-bc05-41b7-bf9b-11aeb5c5bd4a";
+            const string filename = "DNM_Text.pdf";
+            const string mimeType = "application/pdf";
 
             ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
             Assert.IsTrue(((FileContentResult)result) != null);
-            Assert.AreEqual("application/text",((FileContentResult)result).ContentType);            
-            Assert.AreEqual(1229033, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual("application/pdf",((FileContentResult)result).ContentType);            
+            Assert.AreEqual(425612, ((FileContentResult)result).FileContents.Length);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
 
