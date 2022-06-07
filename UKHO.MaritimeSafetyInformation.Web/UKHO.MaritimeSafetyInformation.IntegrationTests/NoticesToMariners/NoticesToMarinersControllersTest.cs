@@ -148,7 +148,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
             Assert.IsTrue(((FileContentResult)result) != null);
-            Assert.AreEqual("application/pdf", ((FileContentResult)result).ContentType);
+            Assert.AreEqual("application/pdf",((FileContentResult)result).ContentType);            
             Assert.AreEqual(425612, ((FileContentResult)result).FileContents.Length);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
