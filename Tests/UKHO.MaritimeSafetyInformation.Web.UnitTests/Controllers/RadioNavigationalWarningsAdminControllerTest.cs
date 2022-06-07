@@ -94,11 +94,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenICallEditView_ThenReturnView()
+        public async Task WhenICallEditView_ThenReturnView()
         {
             const int id = 5;
-            Task<IActionResult> result = _controller.Edit(id);
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Edit.cshtml";
+            IActionResult result = await _controller.Edit(id);
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
 
         [Test]

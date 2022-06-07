@@ -44,7 +44,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 DateTimeGroup = DateTime.UtcNow,
                 Summary = "Test1",
                 Content = "test",
-                WarningTypeName = "NavArea"
+                WarningTypeName = "NavArea",
+                IsDeleted = true
             };
 
             _fakeLogger = A.Fake<ILogger<RNWService>>();
@@ -265,6 +266,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
                              async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenPostInvalidSummaryInRequestForEdit_ThenReturnException()
+        {
+            _fakeRadioNavigationalWarningsAdmin.Summary = "";
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter summary"),
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
+        }
+
+        [Test]
+        public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
+        {
+            Task result = _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId);
+            Assert.IsTrue(result.IsCompleted);
+        }
+
+        [Test]
+        public void WhenEditValidRequestWithException_ThenReturnException()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarningsAdmin.DateTimeGroup = dateTime;
+            A.CallTo(() => _fakeRnwRepository.UpdateRadioNavigationalWarning(A<EditRadioNavigationalWarningsAdmin>.Ignored)).Throws(new Exception());
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+                               async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningsAdmin, CorrelationId); });
         }
 
         private static List<RadioNavigationalWarningsAdmin> GetFakeRadioNavigationalWarningList()
