@@ -29,7 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
         {
-            List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
@@ -46,13 +45,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
+                    List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                     ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
+                    return ListshowFilesResponseModels;
                 }
                 else
                 {
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                    throw new ArgumentNullException("Invalid data received for weekly NM files");
                 }
             }
             catch (Exception ex)
@@ -60,7 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.GetWeeklyNMFilesRequestFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}, year:{year} and week:{week}", ex.Message, correlationId, year, week);
                 throw;
             }
-            return ListshowFilesResponseModels;
+            
         }
 
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)

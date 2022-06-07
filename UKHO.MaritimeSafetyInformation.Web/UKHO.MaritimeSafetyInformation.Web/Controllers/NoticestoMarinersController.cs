@@ -21,21 +21,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ShowWeeklyFilesResponseModel showWeeklyFiles = new();
+
             try
             {
+                ShowWeeklyFilesResponseModel showWeeklyFiles = new();
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowWeeklyFilesIndexGetFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
             }
-
-            _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
-
-            return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 
         [HttpPost]
@@ -51,13 +53,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 ViewData["Year"] = year;
                 ViewData["Week"] = week;
 
+                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+                return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowWeeklyFilesIndexPostFailed.ToEventId(), "Maritime safety information request to get daily NM weekly files index post failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
             }
-            _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for correlationId:{correlationId}", GetCurrentCorrelationId());
-            return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
+           
         }
 
         [HttpPost]
