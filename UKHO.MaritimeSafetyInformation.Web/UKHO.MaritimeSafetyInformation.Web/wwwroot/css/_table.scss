@@ -1,6 +1,6 @@
 ﻿@import "variables";
 
-.notice-to-mariners-weekly-table {
+.notice-to-mariners-weekly-table, .notice-to-mariners-daily-table {
     thead {
         tr {
             th {
@@ -87,6 +87,7 @@
         text-decoration: underline;
         color: $prussian-blue;
         background-color: transparent;
+        font-weight:300;
 
         &:hover, &:active {
             border: 0;
@@ -117,8 +118,9 @@
 
     tr.accordion-collapse td {
         border-right: 0 !important;
-    }
-
+    }    
+}
+.accordianTable, .selection-details {
     .warning-detail {
         font-size: 18px;
         color: $black;
@@ -149,4 +151,38 @@
             word-break: break-word;
         }
     }
+}
+.selection-details {
+    max-height: 60vh !important;
+    overflow-y: auto;
+    margin:30px 0;
+    padding-right:2px;
+
+    .warning-detail {
+        padding: 18px 0;
+        border-top: 1px solid $american-silver;
+        h1{
+            font-size:21px;
+        }
+    }
+}
+.caption-table {
+    margin-top: 45px;
+    position: relative;
+
+    .table-caption {
+        display: block;
+        font-weight: 400;
+        font-size: 21px;
+        color: $black;
+        padding: 1rem 0;
+        position: absolute;
+        width: 100%;
+        top: -50px;
+    }
+}
+.daily-table-container {
+    max-height: 78vh !important;
+    overflow-y: auto;
+    padding-right: 2px;
 }
