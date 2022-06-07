@@ -222,6 +222,23 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
               ArtifactName: MaritimeSafetyInformation
 
+          - task: DotNetCoreCLI@2
+            displayName: "Publish WebApp"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '**/*UKHO.MaritimeSafetyInformationAdmin.Web.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
+              zipAfterPublish: true
+              modifyOutputPath: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Web Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
+              ArtifactName: MaritimeSafetyInformationAdmin
+
+
       - job: PublishTerraformArtifacts
         workspace:
           clean: all
