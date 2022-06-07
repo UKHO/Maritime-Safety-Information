@@ -45,6 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             };
             _fakeRadioNavigationalWarningAdmin = new()
             {
+                Id = 1,
                 WarningType = 1,
                 WarningTypeName = "NAVAREA 1",
                 Reference = "edittest",
