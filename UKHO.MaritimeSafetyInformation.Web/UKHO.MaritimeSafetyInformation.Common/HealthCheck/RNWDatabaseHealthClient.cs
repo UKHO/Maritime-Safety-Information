@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
@@ -19,11 +18,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
             {
                 await _context.WarningType.ToListAsync();
 
-                return HealthCheckResult.Healthy("Radio Navigational Warning database is healthy");
+                return HealthCheckResult.Healthy("Radio navigational warning database is healthy");
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy("Radio Navigational Warning database is unhealthy", new Exception(ex.Message));
+                return HealthCheckResult.Unhealthy("Radio navigational warning database is unhealthy", new Exception(ex.Message));
             }      
         }
     }
