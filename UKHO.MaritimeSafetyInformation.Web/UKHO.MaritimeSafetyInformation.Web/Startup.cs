@@ -58,6 +58,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
+            services.AddScoped<IUserService, UserService>();
+
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
 
