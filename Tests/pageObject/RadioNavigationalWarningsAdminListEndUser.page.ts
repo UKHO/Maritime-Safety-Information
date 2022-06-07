@@ -14,6 +14,14 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly navAreaEndUser: Locator;
   readonly ukCostalEnduser: Locator;
   readonly tableHeader: Locator;
+  readonly selectCheckBox:Locator;
+  readonly btnShowSelection:Locator;
+  readonly selectAll:Locator;
+  readonly backToAllWarning:Locator;
+  readonly refrence:Locator;
+  readonly dateTimeGroupRnwFormat:Locator;
+  readonly detailsReference:Locator;
+  readonly detailsDateTimeGroupRnwFormat:Locator;
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
   constructor(page: Page) {
     this.page = page;
@@ -24,7 +32,14 @@ export default class RadioNavigationalWarningsListEndUser {
     this.allWarningEndUser = this.page.locator('#allwarnings-tab')
     this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
     this.ukCostalEnduser = this.page.locator('#ukcoastal-tab')
-
+    this.selectCheckBox = this.page.locator("[id^='checkbox'] > input")
+    this.btnShowSelection = this.page.locator("#BtnShowSelection")
+    this.selectAll = this.page.locator('#select_button')
+    this.backToAllWarning = this.page.locator('text=Back to all warnings')
+    this.refrence = this.page.locator('[id^="Reference"]')
+    this.dateTimeGroupRnwFormat =this.page.locator('[id^="DateTimeGroupRnwFormat"]')
+    this.detailsReference = this.page.locator('[id^="Details_Reference"]')
+    this.detailsDateTimeGroupRnwFormat = this.page.locator('[id^="Details_DateTimeGroupRnwFormat"]')
   }
 
   public async goToRadioWarning() {
@@ -102,4 +117,27 @@ export default class RadioNavigationalWarningsListEndUser {
     }
     expect(compareDate).toBeTruthy();
   }
+
+  public async verifySelectOption() {
+    expect(await this.selectAll.inputValue()).toEqual("Select all") ;
+    await this.selectAll.click({force:true});
+    expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
+    await this.page.waitForLoadState('domcontentloaded')
+    expect(await this.selectAll.inputValue()).toEqual("Clear all") ;
+    await this.selectAll.click({force:true});
+
+    expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
+    const detailsRefrence = await this.refrence.first().innerText();
+    expect(detailsRefrence.length).toBeGreaterThan(0);
+    const beforeDetailsRefrence = await (await this.refrence.first().innerText()).trim();
+    const beforeDetailsDateTimeGroupRnwFormat = await (await this.dateTimeGroupRnwFormat.first().innerText()).trim();
+    await this.selectCheckBox.first().click();
+    await this.btnShowSelection.click();
+    const afterDetailsRefrence = await (await this.detailsReference.first().innerText()).trim();
+    const afterDetailsDateTimeGroupRnwFormat = await (await this.detailsDateTimeGroupRnwFormat.first().innerText()).trim();
+    expect(beforeDetailsDateTimeGroupRnwFormat).toEqual(afterDetailsDateTimeGroupRnwFormat);
+    expect(beforeDetailsRefrence).toEqual(afterDetailsRefrence);
+    await this.backToAllWarning.click();
+  }
+
 }  

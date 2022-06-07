@@ -28,5 +28,6 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     await rnwListEndUser.verifyTableDateColumnData();
     await rnwListEndUser.verifyTableViewDetailsUrl();
     await rnwListEndUser.verifyImportantBlock();
+    await rnwListEndUser.verifySelectOption();
   })
 });
