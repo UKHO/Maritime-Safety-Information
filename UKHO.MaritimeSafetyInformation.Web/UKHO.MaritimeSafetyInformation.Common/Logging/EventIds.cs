@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910030 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        ErrorInRnwRepositoryProcess = 910030,
+        EditRNWRecordException = 910030,
         /// <summary> 
         /// 910031 -  Maritime safety information invalid new RNW record request.
         /// </summary>
@@ -294,7 +294,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910070 -  Maritime safety information request to get last modified date time from database completed.
         /// </summary>
         RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
-
         /// <summary>
         /// 910071 -Request For Download Daily NM File Started.
         /// </summary>
@@ -354,6 +353,34 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910082-  Request For FSS To Get Daily Zip NM File Has Error.
         /// </summary>
         FSSDownloadZipFileAsyncHasError = 910082,
+        /// <summary> 
+        /// 910083 -  Maritime safety information Edit RNW records for Admin completed.
+        /// </summary>
+        EditRNWRecordCompleted = 910083,
+        /// <summary> 
+        /// 910084 -  Maritime safety information Edit RNW record started.
+        /// </summary>
+        EditRNWRecordStarted = 910084,
+        /// <summary> 
+        /// 910085 - Maritime safety information edit RNW record Id not found.
+        /// </summary>
+        EditRNWRecordIDNotFound = 910085,
+        /// <summary> 
+        /// 910086 - Maritime safety information edit RNW record Id mismatch.
+        /// </summary>
+        EditRNWRecordIdMismatch = 910086,
+        /// <summary> 
+        /// 910087 - Maritime safety information edit RNW list is null.
+        /// </summary>
+        EditRNWRecordNotFound = 910087,
+        /// <summary> 
+        /// 910088 - Maritime safety information Error in retrieving RNW record.
+        /// </summary>
+        ErrorInRetrievingRNWRecord = 910088,
+        /// <summary> 
+        /// 910089 - Maritime safety information Error in Creating RNW record.
+        /// </summary>
+        CreateRNWRecordException = 910089
 
     }
 
