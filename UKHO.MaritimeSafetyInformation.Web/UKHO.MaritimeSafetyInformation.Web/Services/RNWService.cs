@@ -143,12 +143,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         }
 
        
-        public EditRadioNavigationalWarningAdmin GetRadioNavigationalWarningById(int id, string correlationId)
+        public RadioNavigationalWarning GetRadioNavigationalWarningById(int id, string correlationId)
         {
             try
             {
-                EditRadioNavigationalWarningAdmin radioNavigationalWarningsAdminRecord = _rnwRepository.GetRadioNavigationalWarningById(id);
-                return radioNavigationalWarningsAdminRecord;
+                RadioNavigationalWarning radioNavigationalWarningRecord = _rnwRepository.GetRadioNavigationalWarningById(id);
+                return radioNavigationalWarningRecord;
             }
             catch (Exception ex)
             {
@@ -157,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<bool> EditRadioNavigationalWarningsRecord(EditRadioNavigationalWarningAdmin radioNavigationalWarning, string correlationId)
+        public async Task<bool> EditRadioNavigationalWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId)
         {
             if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {
