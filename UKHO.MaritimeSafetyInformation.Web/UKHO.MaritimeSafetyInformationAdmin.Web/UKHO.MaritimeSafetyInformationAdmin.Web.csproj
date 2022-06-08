@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net6.0</TargetFramework>    
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -37,7 +36,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.4" />
-    <PackageReference Include="runtime.native.System" Version="4.3.1" />
+    <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
