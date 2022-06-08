@@ -14,8 +14,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 List<BatchDetails> BatchDetailsList = new();
 
-                BatchDetails res = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                BatchDetailsList.Add(res);
+                BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                BatchDetailsList.Add(batchDetail);
                 SearchResult.Entries = BatchDetailsList;
                 SearchResult.Count = BatchDetailsList.Count;
                 SearchResult.Total = BatchDetailsList.Count;
@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
         {
-            var distinctList = searchResult.Entries.Select(entry => new { YearWeek = entry.Attributes[5].Value, Date = entry.Attributes[0].Value, BatchPublishedDate = entry.BatchPublishedDate, BatchId = entry.BatchId }).ToList().OrderByDescending(x => x.BatchPublishedDate);
+            var distinctList = searchResult.Entries.Select(entry => new { YearWeek = entry.Attributes[5].Value, Date = entry.Attributes[0].Value, BatchPublishedDate = entry.BatchPublishedDate, BatchId = entry.BatchId }).OrderByDescending(x => x.BatchPublishedDate).ToList();
             var groupDailyList = distinctList.GroupBy(entry => new { entry.YearWeek, entry.Date }).Select(x => x.First()).ToList();
 
             List<BatchDetails> BatchDetailsList = new();
