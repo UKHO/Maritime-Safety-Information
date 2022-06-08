@@ -65,6 +65,7 @@ module "key_vault" {
       "EventHubLoggingConfiguration--ConnectionString"       = module.eventhub.log_primary_connection_string
       "EventHubLoggingConfiguration--EntityPath"             = module.eventhub.entity_path
       "RadioNavigationalWarningsContext--ConnectionString"   = local.rnw_db_connection_string
+      "RadioNavigationalWarningsAdminContext--ConnectionString"   = local.rnw_db_admin_connection_string
  }
   tags                                                       = local.tags
 }
