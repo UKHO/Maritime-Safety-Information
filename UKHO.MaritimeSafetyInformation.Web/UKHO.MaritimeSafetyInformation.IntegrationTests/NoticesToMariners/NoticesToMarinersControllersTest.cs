@@ -143,6 +143,20 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
+        public async Task WhenCallDownloadDailyFile_ThenReturnFile()
+        {
+            const string batchId = "1882c04c-bc05-41b7-bf9b-11aeb5c5bd4a";
+            const string filename = "DNM_Text.pdf";
+            const string mimeType = "application/pdf";
+
+            ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
+            Assert.IsTrue(((FileContentResult)result) != null);
+            Assert.AreEqual("application/pdf", ((FileContentResult)result).ContentType);
+            Assert.AreEqual(425612, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
+        }
+
+        [Test]
         public void WhenCallDownloadWeeklyFileWithInvalidData_ThenReturnException()
         {
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
@@ -152,19 +166,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
                , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
-        }
-       
-
-        [Test]      
-        public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
-        {
-            const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
-            const string filename = "Test.txt";
-            const string mimeType = "application/txt";
-
-            ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
-            Assert.AreEqual(false,((RedirectToActionResult)result).PreserveMethod);
-            Assert.AreEqual("ShowDailyFiles", ((RedirectToActionResult)result).ActionName);
         }
     }
 }
