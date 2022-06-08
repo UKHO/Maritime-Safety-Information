@@ -95,7 +95,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 new ShowDailyFilesResponseModel
                 {
-                    YearWeek = "2022 / 17",
+                    YearWeek = "2022/17",
                     WeekNumber = "17",
                     Year = "2022",
                     DailyFilesData = new()
@@ -128,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 },
                 new ShowDailyFilesResponseModel
                 {
-                    YearWeek = "2022 / 18",
+                    YearWeek = "2022/18",
                     WeekNumber = "18",
                     Year = "2022",
                     DailyFilesData = new()
@@ -317,7 +317,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Week Number","17"),
                                 new BatchDetailsAttributes("Year","2022"),
-                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+                                new BatchDetailsAttributes("Year / Week","2022/17"),
 
                             },
                             BusinessUnit = "TEST",
@@ -349,7 +349,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Week Number","17"),
                                 new BatchDetailsAttributes("Year","2022"),
-                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+                                new BatchDetailsAttributes("Year / Week","2022/17"),
 
                             },
                             BusinessUnit = "TEST",

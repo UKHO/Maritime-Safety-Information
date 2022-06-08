@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
                 Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
-                YearWeek = item.Attributes.Where(x => x.Key.Equals("Year / Week")).Select(x => x.Value).FirstOrDefault(),
+                YearWeek = item.Attributes.Where(x => x.Key.Equals("Year / Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize
             }).ToList();
 
