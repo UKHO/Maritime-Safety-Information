@@ -54,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 else
                 {
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
-                    throw new ArgumentNullException("Invalid data received for weekly NM files");
+                    throw new ArgumentNullException("Invalid data received for weekly NM files", new Exception());
                 }
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.GetWeeklyNMFilesRequestFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}, year:{year} and week:{week}", ex.Message, correlationId, year, week);
                 throw;
             }
-            
+
         }
 
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
@@ -120,9 +120,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
         {
-            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
             try
             {
+                List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
@@ -143,24 +143,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 else
                 {
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new ArgumentNullException("Invalid data received for daily NM files", new Exception());
                 }
+
+                return showDailyFilesResponses;
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
-            return showDailyFilesResponses;
         }
 
         public async Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId)
         {
-            _logger.LogInformation(EventIds.GetWeeklyFilesResponseStarted.ToEventId(), "Maritime safety information request to get weekly NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
-
-            ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
-
             try
             {
+                _logger.LogInformation(EventIds.GetWeeklyFilesResponseStarted.ToEventId(), "Maritime safety information request to get weekly NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
+
                 showWeeklyFilesResponses.YearAndWeekList = await GetAllYearWeek(correlationId);
                 if (year == 0 && week == 0)
                 {
@@ -168,16 +170,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Week).Where(x => x.Year == year).Select(x => x.Week).FirstOrDefault());
                 }
                 showWeeklyFilesResponses.ShowFilesResponseList = await GetWeeklyBatchFiles(year, week, correlationId);
+
+
+                _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+
+                return showWeeklyFilesResponses;
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.GetWeeklyFilesResponseFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
-
-            _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
-
-            return showWeeklyFilesResponses;
         }
 
         public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId)

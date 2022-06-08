@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestStarted = 910006,
         /// <summary>
-        /// 910007 -  Notices To Mariners Weekly File Request Started.
+        /// 910007 -  Notices To Mariners Weekly File Request Completed.
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestCompleted = 910007,
         /// <summary>
@@ -380,7 +380,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910089 - Maritime safety information Error in Creating RNW record.
         /// </summary>
-        CreateRNWRecordException = 910089
+        CreateRNWRecordException = 910089,
+        /// <summary>
+        /// 910090 -  Notices To Mariners Weekly File Request failed.
+        /// </summary>
+        NoticesToMarinersWeeklyFilesRequestFailed = 910090
 
     }
 
