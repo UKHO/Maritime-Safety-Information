@@ -19,5 +19,5 @@ output "Website_Admin_Url" {
 }
 
 output "admin_webapp_name" {
-   value = "module.webapp_service.admin_webapp_name"
+   value = module.webapp_service.admin_webapp_name
 }
