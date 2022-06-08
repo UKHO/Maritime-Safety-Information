@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "test",
                 IsDeleted = false,
             };
-           _rnwRepository = new RNWRepository(_context);
+            _rnwRepository = new RNWRepository(_context);
         }
 
         [Test]
@@ -126,8 +126,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
-            Task result = _rnwRepository.UpdateRadioNavigationalWarning(_radioNavigationalWarning);
+            Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);
+            Task isUpdate = _rnwRepository.UpdateRadioNavigationalWarning(_radioNavigationalWarning);
             Assert.IsTrue(result.IsCompleted);
+            Assert.IsTrue(isUpdate.IsCompleted);
         }
 
         [Test]
