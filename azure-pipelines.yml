@@ -223,7 +223,7 @@ stages:
               ArtifactName: MaritimeSafetyInformation
 
           - task: DotNetCoreCLI@2
-            displayName: "Publish WebApp"
+            displayName: "Publish Admin WebApp"
             inputs:
               command: "publish"
               publishWebProjects: false
@@ -233,7 +233,7 @@ stages:
               modifyOutputPath: true
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish Web Artifact"
+            displayName: "Publish Admin Web Artifact"
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
               ArtifactName: MaritimeSafetyInformationAdmin
@@ -244,7 +244,6 @@ stages:
           clean: all
         displayName: "Publish Terraform Artifacts"
         steps:
-
           - task: CopyFiles@2
             displayName: Copy MaritimeSafetyInformationService Config
             inputs:
@@ -378,7 +377,6 @@ stages:
       - group: "Maritime-Safety-Information-QA-Variables"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
-
       - deployment: QADeployTerraform
         displayName: "QA - Deploy Terraform and Dotnet App"
         environment: "Maritime-Safety-Information-QA"
