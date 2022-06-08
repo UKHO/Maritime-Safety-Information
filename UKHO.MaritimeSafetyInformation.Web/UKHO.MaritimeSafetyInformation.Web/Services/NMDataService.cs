@@ -32,8 +32,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             try
             {
-                string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
-                
+                string accessToken =await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
@@ -47,24 +47,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+
                     /// add logic for duplicate files filter
                     if (SearchResult.Entries.Count > 1)
                     {
-                        BatchSearchResponse searchResult = new()
-                        {
-                            Count = 1,
-                            Entries = new List<BatchDetails> { SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault() },
-                            Links = SearchResult.Links,
-                            Total = 1,
-                        };
+                        List<BatchDetails> BatchDetailsList = new();
+
+                        BatchDetails res = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                        BatchDetailsList.Add(res);
+                        SearchResult.Entries = BatchDetailsList;
+                        SearchResult.Count = BatchDetailsList.Count;
+                        SearchResult.Total = BatchDetailsList.Count;
 
                         _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
-                        ListshowFilesResponseModels = NMHelper.ListFilesResponse(searchResult).OrderBy(e => e.FileDescription).ToList();
-                    }
-                    else
-                    {
-                        ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
-                    }
+                     }
+                    ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
                 }
                 else
                 {
@@ -84,7 +81,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             List<YearWeekModel> yearWeekModelList = new();
             try
             {
-                string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken =await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -137,7 +134,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
             try
             {
-                string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -151,28 +148,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
+                    var distinctList = searchResult.Entries.Select(entry => new { YearWeek = entry.Attributes[5].Value, Date = entry.Attributes[0].Value, BatchPublishedDate = entry.BatchPublishedDate, BatchId = entry.BatchId }).ToList().OrderByDescending(x => x.BatchPublishedDate);
+                    var groupDailyList = distinctList.GroupBy(entry => new { entry.YearWeek, entry.Date }).Select(x => x.First()).ToList();
 
-                    DateTime batchDate;
-                    for (int i = 0; i < searchResult.Entries.Count; i++)
+                    List<BatchDetails> BatchDetailsList = new();
+                    foreach (BatchDetails item in searchResult.Entries)
                     {
-                        for (int j = 1; j < searchResult.Entries.Count; j++)
+                        foreach (var innerItem in groupDailyList)
                         {
-                            if (searchResult.Entries[i].Attributes[5].Value == searchResult.Entries[j].Attributes[5].Value)
+                            if (innerItem.BatchId == item.BatchId)
                             {
-                                if (searchResult.Entries[i].Attributes[0].Value == searchResult.Entries[j].Attributes[0].Value)
-                                {
-                                    batchDate = (searchResult.Entries[i].BatchPublishedDate >= searchResult.Entries[j].BatchPublishedDate) ? searchResult.Entries[i].BatchPublishedDate.Value : searchResult.Entries[j].BatchPublishedDate.Value;
-                                    BatchSearchResponse result1 = new()
-                                    {
-                                        Count = 1,
-                                        Entries = new List<BatchDetails> { searchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault() },
-                                        Links = searchResult.Links,
-                                        Total = 1,
-                                    };
-                                }
+                                BatchDetailsList.Add(item);
+                                break;
                             }
                         }
                     }
+                    searchResult.Count = BatchDetailsList.Count;
+                    searchResult.Total = BatchDetailsList.Count;
+                    searchResult.Entries = BatchDetailsList;
 
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
                     showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
@@ -223,7 +216,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken =await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -249,7 +242,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken =await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
