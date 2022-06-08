@@ -22,7 +22,24 @@ resource "azurerm_windows_web_app" "webapp_service" {
     always_on  = true
     ftps_state = "Disabled"
 
+    ip_restriction {
+      virtual_network_subnet_id = var.agent_id
+    }
+
+    ip_restriction {
+      virtual_network_subnet_id = var.subnet_id
+    }
+
+    dynamic "ip_restriction" {
+      for_each = var.allowed_ips
+      content {
+          ip_address  = length(split("/",ip_restriction.value)) > 1 ? ip_restriction.value : "${ip_restriction.value}/32"
+      }
+    }
+
    }
+
+  
   app_settings = var.app_settings
 
   identity {

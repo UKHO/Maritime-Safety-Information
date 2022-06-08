@@ -29,3 +29,11 @@ variable "env_name" {
 variable "subnet_id" {
   type = string
 }
+
+variable "allowed_ips" {
+
+}
+
+variable "agent_id" {
+  type = string
+}
