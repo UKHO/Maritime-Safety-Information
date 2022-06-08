@@ -60,17 +60,17 @@ steps:
       path: $(Build.SourcesDirectory)/MaritimeSafetyInformationAdmin
 
   - task: FileTransform@1
-    displayName: "File Transform: WebAppSettings"
+    displayName: "File Transform: Admin-WebAppSettings"
     inputs:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
       fileType: 'json'
       targetFiles: '**/appsettings.json'
 
   - task: AzureWebApp@1
-    displayName: "Azure App Deploy: msi-$(Environment)-webapp"
+    displayName: "Azure App Deploy: msi-$(Environment)-Admin-webapp"
     inputs:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(ADMIN_WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformation.Web.zip"
+      package: "$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformationAdmin.Web.zip"
 
