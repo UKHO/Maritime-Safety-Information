@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910030 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        ErrorInRnwRepositoryProcess = 910030,
+        EditRNWRecordException = 910030,
         /// <summary> 
         /// 910031 -  Maritime safety information invalid new RNW record request.
         /// </summary>
@@ -225,7 +225,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910055 -Request For Download Single Weekly NM File Completed.
         /// </summary>
-        DownloadSingleWeeklyNMFileCompleted= 910055,
+        DownloadSingleWeeklyNMFileCompleted = 910055,
 
         /// <summary>
         /// 910056 -Download Single Weekly NM File Called With Invalid Arguments.
@@ -294,6 +294,93 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910070 -  Maritime safety information request to get last modified date time from database completed.
         /// </summary>
         RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
+        /// <summary>
+        /// 910071 -Request For Download Daily NM File Started.
+        /// </summary>
+        DownloadDailyNMFileStarted = 910071,
+
+        /// <summary>
+        /// 910072 -Request For Download Daily NM File Completed.
+        /// </summary>
+        DownloadDailyNMFileCompleted = 910072,
+
+        /// <summary>
+        /// 910073 -Request For Download Daily NM File Failed.
+        /// </summary>
+        DownloadDailyNMFileFailed = 910073,
+
+        /// <summary>
+        /// 910074 - Request To Get Daily Zip NM File Started.
+        /// </summary>
+        GetDailyZipNMFileStarted = 910074,
+
+        /// <summary>
+        /// 910075 - Request To Get Daily Zip NM File Completed.
+        /// </summary>
+        GetDailyZipNMFileCompleted = 910075,
+
+        /// <summary>
+        /// 910076 - Request To Get Daily Zip NM File Failed.
+        /// </summary>
+        GetDailyZipNMFileFailed = 910076,
+
+        /// <summary>
+        /// 910077 - Request For FSS To Get Daily Zip NM File Started.
+        /// </summary>
+        FSSGetDailyZipNMFileStarted = 910077,
+
+        /// <summary>
+        /// 910078 - Request For FSS To Get Daily Zip NM File Completed.
+        /// </summary>
+        FSSGetDailyZipNMFileCompleted = 910078,
+
+        /// <summary>
+        /// 910079 - Request For FSS To Get Daily Zip NM File Failed.
+        /// </summary>
+        FSSGetDailyZipNMFileResponseFailed = 910079,
+
+        /// <summary>
+        /// 910080-  Event data for Retrieval of MSI Show Daily File Failed.
+        /// </summary>
+        ShowDailyFilesFailed = 910080,
+
+        /// <summary>
+        /// 910081-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
+        /// </summary>
+        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910081,
+
+        /// <summary>
+        /// 910082-  Request For FSS To Get Daily Zip NM File Has Error.
+        /// </summary>
+        FSSDownloadZipFileAsyncHasError = 910082,
+        /// <summary> 
+        /// 910083 -  Maritime safety information Edit RNW records for Admin completed.
+        /// </summary>
+        EditRNWRecordCompleted = 910083,
+        /// <summary> 
+        /// 910084 -  Maritime safety information Edit RNW record started.
+        /// </summary>
+        EditRNWRecordStarted = 910084,
+        /// <summary> 
+        /// 910085 - Maritime safety information edit RNW record Id not found.
+        /// </summary>
+        EditRNWRecordIDNotFound = 910085,
+        /// <summary> 
+        /// 910086 - Maritime safety information edit RNW record Id mismatch.
+        /// </summary>
+        EditRNWRecordIdMismatch = 910086,
+        /// <summary> 
+        /// 910087 - Maritime safety information edit RNW list is null.
+        /// </summary>
+        EditRNWRecordNotFound = 910087,
+        /// <summary> 
+        /// 910088 - Maritime safety information Error in retrieving RNW record.
+        /// </summary>
+        ErrorInRetrievingRNWRecord = 910088,
+        /// <summary> 
+        /// 910089 - Maritime safety information Error in Creating RNW record.
+        /// </summary>
+        CreateRNWRecordException = 910089
 
     }
 
