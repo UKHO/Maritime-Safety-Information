@@ -389,19 +389,6 @@
   padding-right: 2px;
 }
 
-.rnw-list-table thead tr th.th-1 {
-  width: 65px;
-}
-.rnw-list-table thead tr th.th-2 {
-  width: 125px;
-}
-.rnw-list-table thead tr th.th-3 {
-  width: 112px;
-}
-.rnw-list-table thead tr th.th-4, .rnw-list-table thead tr th.th-7 {
-  width: 175px;
-}
-
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus, input[type=button]:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
@@ -449,42 +436,6 @@ a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-inpu
 .alert-danger .alert-head {
   color: #09315b;
   margin-left: -10px;
-}
-
-table {
-  border-collapse: collapse;
-  margin-bottom: 30px !important;
-}
-table thead tr th {
-  border-bottom: 0;
-}
-table td {
-  border-bottom: 1px solid #d8d8d8 !important;
-  border-right: 1px solid #d8d8d8 !important;
-}
-table td a {
-  font-weight: 300;
-}
-
-.hidden-caption {
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  margin-top: -1px;
-}
-
-.form-label {
-  margin-bottom: 0.5rem !important;
-  box-shadow: none;
-}
-
-.hidden-caption {
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  margin-top: -1px;
 }
 
 .form-label {
@@ -578,34 +529,62 @@ input[type=submit].primary, a.primary {
   border-color: #09315b;
 }
 
-.pagination {
-  margin: 0;
-}
-.pagination li {
-  padding-right: 0;
-  transform: none;
-}
-.pagination li a {
-  color: #09315b;
-  border-radius: 0 !important;
-  cursor: pointer;
-  font-weight: 400;
-  border-color: #d8d8d8;
-  border-width: 1.5px;
-}
-.pagination li a:hover, .pagination li a:focus {
-  background-color: #09315b;
-  border-color: #09315b;
-  color: #ffffff;
-}
-.pagination li:before {
-  content: none;
-}
-
 .main-content {
   padding: 2rem 0;
 }
 
+.bold-icon {
+  -webkit-text-stroke: 2px;
+}
+
+button:disabled, input[type=button]:disabled {
+  cursor: not-allowed;
+}
+button:disabled:active, input[type=button]:disabled:active {
+  background-color: #adadad;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 30px !important;
+}
+table thead tr th {
+  border-bottom: 0;
+}
+table td {
+  border-bottom: 1px solid #d8d8d8 !important;
+  border-right: 1px solid #d8d8d8 !important;
+}
+table td a {
+  font-weight: 300;
+}
+
+.hidden-caption {
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  margin-top: -1px;
+}
+
+@media print {
+  button#Print, .msi-tabs-container, .back-btn-container, .footer-links {
+    display: none;
+  }
+
+  .selection-details {
+    overflow-y: hidden;
+    max-height: 100% !important;
+  }
+  .selection-details .warning-detail pre {
+    line-height: 22px;
+    font-size: 16px;
+  }
+
+  .footer-text {
+    margin-top: 0 !important;
+  }
+}
 .table-scroll {
   display: block;
   empty-cells: show;
@@ -751,13 +730,15 @@ input[type=button].select-all-button {
   border-radius: 0;
 }
 
-.bold-icon {
-  -webkit-text-stroke: 2px;
+.intro-text {
+  font-size: 28px;
+  line-height: 36px;
+  color: #000000;
 }
 
-button:disabled, input[type=button]:disabled {
-  cursor: not-allowed;
+.custom-error .paragraph {
+  color: #000000;
 }
-button:disabled:active, input[type=button]:disabled:active {
-  background-color: #adadad;
+.custom-error .paragraph a {
+  color: #000000;
 }

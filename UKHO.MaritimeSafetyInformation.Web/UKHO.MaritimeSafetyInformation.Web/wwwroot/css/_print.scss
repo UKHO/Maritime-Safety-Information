@@ -1,0 +1,17 @@
+﻿@media print {
+    button#Print, .msi-tabs-container, .back-btn-container, .footer-links {
+        display: none;
+    }
+
+    .selection-details {
+        overflow-y: hidden;
+        max-height: 100% !important;
+        .warning-detail pre{
+            line-height:22px;
+            font-size:16px;
+        }
+    }
+    .footer-text{
+        margin-top:0!important;
+    }
+}
