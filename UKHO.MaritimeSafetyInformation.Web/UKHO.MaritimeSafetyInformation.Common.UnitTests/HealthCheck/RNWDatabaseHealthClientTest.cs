@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NUnit.Framework;
-using System;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 

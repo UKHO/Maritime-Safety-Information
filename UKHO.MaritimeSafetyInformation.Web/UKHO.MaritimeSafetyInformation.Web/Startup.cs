@@ -53,6 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
+            services.AddScoped<IFSSHealthClient, FSSHealthClient>();
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -64,7 +65,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
-                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck");
+                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck")
+                .AddCheck<FSSHealthCheck>("FSSHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
         }

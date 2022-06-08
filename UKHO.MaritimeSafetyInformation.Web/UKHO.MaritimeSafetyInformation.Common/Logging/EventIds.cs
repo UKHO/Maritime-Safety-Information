@@ -388,7 +388,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910072 - Radio Navigational Warning database for Maritime safety information is unhealthy.
         /// </summary>
-        RNWDatabaseIsUnHealthy = 910091
+        RNWDatabaseIsUnHealthy = 910091,
+        /// <summary>
+        /// 910092 - FSS for Maritime safety information is healthy.
+        /// </summary>
+        FssIsHealthy = 910092,
+        /// <summary>
+        /// 910093 - FSS for Maritime safety information is unhealthy.
+        /// </summary>
+        FssIsUnHealthy = 910093
 
     }
 
