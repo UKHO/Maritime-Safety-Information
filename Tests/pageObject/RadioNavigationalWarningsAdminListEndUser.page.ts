@@ -74,6 +74,8 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifyTableHeader() {
     let tableColsHeader = await this.page.$$eval('.table>thead>tr>th', (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    let selectAllHeader = await this.selectAll.inputValue();
+    tableColsHeader.splice(3,0,selectAllHeader);
     tableColsHeader = tableColsHeader.filter(Boolean);
     var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
       return element === tableColsHeader[index];
