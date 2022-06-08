@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _context.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
             _context.WarningType.AddRange(GetFakeWarningTypeList());
             _context.SaveChanges();
-           
+
         }
 
         [SetUp]
@@ -91,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetRadioNavigationWarningWithContentLenthGreaterThan300Char_ThenWrapTheContent()
+        public async Task WhenCallGetRadioNavigationWarningWithContentLengthGreaterThan300Char_ThenWrapTheContent()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.IsTrue(result[3].Content.Length <= 303);
@@ -115,12 +115,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(2, result.Count);
         }
 
-
         [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
             Assert.AreEqual(new DateTime(2099, 02, 03), result);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTimeWhenNoWarnings_ThenReturnDateTimeMin()
+        {
+            RadioNavigationalWarningsContext emptyContext = new(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseInMemoryDatabase("msi-ut-empty-db").Options);
+            await emptyContext.SaveChangesAsync();
+            RNWRepository rnwRepository = new(emptyContext);
+
+            DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+
+            Assert.AreEqual(new DateTime(1, 1, 1), result);
         }
 
         [Test]

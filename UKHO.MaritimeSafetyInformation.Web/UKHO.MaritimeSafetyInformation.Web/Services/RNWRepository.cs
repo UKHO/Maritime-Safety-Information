@@ -75,7 +75,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<DateTime> GetRadioNavigationalWarningsLastModifiedDateTime()
         {
-            return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+            if (_context.RadioNavigationalWarnings.Any())
+            {
+                return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+            }
+
+            return DateTime.MinValue;
         }
 
         public RadioNavigationalWarning GetRadioNavigationalWarningById(int id)
