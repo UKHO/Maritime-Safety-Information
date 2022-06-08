@@ -45,22 +45,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 BatchSearchResponse SearchResult = result.Data;
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
-                {
+                {          
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
-
-                    /// add logic for duplicate files filter
-                    if (SearchResult.Entries.Count > 1)
-                    {
-                        List<BatchDetails> BatchDetailsList = new();
-
-                        BatchDetails res = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                        BatchDetailsList.Add(res);
-                        SearchResult.Entries = BatchDetailsList;
-                        SearchResult.Count = BatchDetailsList.Count;
-                        SearchResult.Total = BatchDetailsList.Count;
-
-                        _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
-                     }
+                     
                     ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
                 }
                 else
@@ -148,25 +135,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
-                    var distinctList = searchResult.Entries.Select(entry => new { YearWeek = entry.Attributes[5].Value, Date = entry.Attributes[0].Value, BatchPublishedDate = entry.BatchPublishedDate, BatchId = entry.BatchId }).ToList().OrderByDescending(x => x.BatchPublishedDate);
-                    var groupDailyList = distinctList.GroupBy(entry => new { entry.YearWeek, entry.Date }).Select(x => x.First()).ToList();
-
-                    List<BatchDetails> BatchDetailsList = new();
-                    foreach (BatchDetails item in searchResult.Entries)
-                    {
-                        foreach (var innerItem in groupDailyList)
-                        {
-                            if (innerItem.BatchId == item.BatchId)
-                            {
-                                BatchDetailsList.Add(item);
-                                break;
-                            }
-                        }
-                    }
-                    searchResult.Count = BatchDetailsList.Count;
-                    searchResult.Total = BatchDetailsList.Count;
-                    searchResult.Entries = BatchDetailsList;
-
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
                     showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
                 }

@@ -10,6 +10,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     {
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
+            if (SearchResult.Entries.Count > 1)
+            {
+                List<BatchDetails> BatchDetailsList = new();
+
+                BatchDetails res = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                BatchDetailsList.Add(res);
+                SearchResult.Entries = BatchDetailsList;
+                SearchResult.Count = BatchDetailsList.Count;
+                SearchResult.Total = BatchDetailsList.Count;
+            }
             List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
             foreach (BatchDetails item in SearchResult.Entries)
             {
@@ -32,7 +42,26 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         }
 
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
-        {     
+        {
+            var distinctList = searchResult.Entries.Select(entry => new { YearWeek = entry.Attributes[5].Value, Date = entry.Attributes[0].Value, BatchPublishedDate = entry.BatchPublishedDate, BatchId = entry.BatchId }).ToList().OrderByDescending(x => x.BatchPublishedDate);
+            var groupDailyList = distinctList.GroupBy(entry => new { entry.YearWeek, entry.Date }).Select(x => x.First()).ToList();
+
+            List<BatchDetails> BatchDetailsList = new();
+            foreach (BatchDetails item in searchResult.Entries)
+            {
+                foreach (var innerItem in groupDailyList)
+                {
+                    if (innerItem.BatchId == item.BatchId)
+                    {
+                        BatchDetailsList.Add(item);
+                        break;
+                    }
+                }
+            }
+            searchResult.Count = BatchDetailsList.Count;
+            searchResult.Total = BatchDetailsList.Count;
+            searchResult.Entries = BatchDetailsList;
+         
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new ();
             List<AttributesModel> attributes = searchResult.Entries.Where(x => x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
             {
@@ -40,8 +69,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
                 Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
-                YearWeek = item.Attributes.Where(x => x.Key.Equals("Year / Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
-                AllFilesZipSize = (long)item.AllFilesZipSize
+                YearWeek = item.Attributes.Where(x => x.Key.Replace(" ","").Equals("Year / Week".Replace(" ", ""))).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
+                 AllFilesZipSize = (long)item.AllFilesZipSize
             }).ToList();
 
             IEnumerable<IGrouping<string, AttributesModel>> grouped = attributes.GroupBy(x => x.YearWeek);

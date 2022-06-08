@@ -120,12 +120,31 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(showFiles);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(12, showFiles[0].DailyFilesData.Count);
-            Assert.AreEqual("33", showFiles[0].WeekNumber);
-            Assert.AreEqual("2021", showFiles[0].Year);
-            Assert.AreEqual("Daily 02-10-20.zip", showFiles[0].DailyFilesData[0].Filename);
+            Assert.AreEqual(1, showFiles[3].DailyFilesData.Count);
+            Assert.AreEqual("33", showFiles[3].WeekNumber);
+            Assert.AreEqual("2021", showFiles[3].Year);
+            Assert.AreEqual("2021/33", showFiles[3].YearWeek);
+            Assert.AreEqual("2021-08-14", showFiles[3].DailyFilesData[0].DataDate);
+            Assert.AreEqual("Daily 14-08-21.zip", showFiles[3].DailyFilesData[0].Filename);
+            Assert.AreEqual("416 KB", showFiles[3].DailyFilesData[0].FileSizeInKB);
+            Assert.AreEqual("977e771c-1ed6-4345-8d01-fff728952f1b", showFiles[3].DailyFilesData[0].BatchId);
+        }
+
+        [Test]
+        public async Task WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles()
+        {
+            IActionResult result = await _nMController.ShowDailyFilesAsync();
+            List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(5, showFiles[0].DailyFilesData.Count);
+            Assert.AreEqual("21", showFiles[0].WeekNumber);
+            Assert.AreEqual("2022", showFiles[0].Year);
+            Assert.AreEqual("2022-05-24", showFiles[0].DailyFilesData[0].DataDate);
+            Assert.AreEqual("Daily 24-05-22.zip", showFiles[0].DailyFilesData[0].Filename);
             Assert.AreEqual("416 KB", showFiles[0].DailyFilesData[0].FileSizeInKB);
-            Assert.AreEqual("74806230-3041-4dbf-b32b-1c099aa8285c", showFiles[0].DailyFilesData[0].BatchId);
+            Assert.AreEqual("a8d14b93-42ab-455b-a4ed-39effecb8536", showFiles[0].DailyFilesData[0].BatchId);
         }
 
         [Test]
@@ -143,6 +162,18 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
+        public void WhenCallDownloadWeeklyFileWithInvalidData_ThenReturnException()
+        {
+            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string filename = "Test.txt";
+            const string mimeType = "application/txt";
+
+            Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
+               .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
+               , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
+        }
+
+        [Test]
         public async Task WhenCallDownloadDailyFile_ThenReturnFile()
         {
             const string batchId = "1882c04c-bc05-41b7-bf9b-11aeb5c5bd4a";
@@ -157,15 +188,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallDownloadWeeklyFileWithInvalidData_ThenReturnException()
+        public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
         {
-            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
 
-            Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
-               .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
+            ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
+            Assert.AreEqual(false, ((RedirectToActionResult)result).PreserveMethod);
+            Assert.AreEqual("ShowDailyFiles", ((RedirectToActionResult)result).ActionName);
         }
     }
 }
