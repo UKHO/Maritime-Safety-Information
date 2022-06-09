@@ -27,7 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(Guid.NewGuid().ToString());
-                FileShareApiClient fileShareApiClient = new (_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                FileShareApiClient fileShareApiClient = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
                 IResult<BatchSearchResponse> result = await FSSSearchAsync(fileShareApiClient);
 
@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
                 }
                 else
                 {
-                    return HealthCheckResult.Unhealthy("File share service is unhealthy");
+                    return HealthCheckResult.Unhealthy("File share service is unhealthy", new Exception("Batch search response is not success, Please check configuration."));
                 }
             }
             catch (Exception ex)
