@@ -68,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"showSelectionId", "3" }
+                                            {"showSelectionId", "20" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -83,7 +83,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual("011200 UTC Jan 21", warningsData[0].DateTimeGroupRnwFormat);
             Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
         }
-
 
         [OneTimeTearDown]
         public async Task GlobalTearDown()
