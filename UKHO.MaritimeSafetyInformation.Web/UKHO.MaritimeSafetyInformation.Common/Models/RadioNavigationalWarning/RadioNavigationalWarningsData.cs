@@ -4,6 +4,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 {
     public class RadioNavigationalWarningsData
     {
+        public int Id { get; set; }
+
         public string Reference { get; set; }
        
         public DateTime DateTimeGroup { get; set; }
