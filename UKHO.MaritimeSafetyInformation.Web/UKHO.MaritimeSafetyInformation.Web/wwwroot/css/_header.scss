@@ -97,6 +97,11 @@
                 margin: 0;
                 padding: 0;
                 transform: none;
+                display: flex;
+
+                @media screen and (max-width: $large) {
+                    display: block;
+                }
 
                 &:before {
                     content: none;
@@ -104,6 +109,7 @@
 
                 a {
                     padding: 2rem 1rem;
+                    color: $prussian-blue !important;
 
                     @media screen and (max-width: $x-large) {
                         font-size: 14px;
@@ -111,7 +117,7 @@
 
                     @media screen and (max-width: $large) {
                         padding: 0.5rem 1rem;
-                        border-bottom: 1px solid #dee2e6 !important;
+                        border-bottom: 1px solid $platinum !important;
                     }
 
                     &:hover {
@@ -129,6 +135,33 @@
 
                         @media screen and (max-width: $large) {
                             box-shadow: none;
+                        }
+                    }
+                }
+
+                &.dropdown {
+
+                    .dropdown-menu[data-bs-popper] {
+                        padding: 0;
+                        border-radius: 0;
+                        width: 300px;
+                        right: 0;
+                        left: inherit;
+                        border-top: 0;
+
+                        @media screen and (max-width: $large) {
+                            width: 100%;
+                            border: 0;
+                        }
+
+                        .dropdown-item {
+                            padding: 0.5rem 1rem;
+                            border-top: 1px solid $platinum !important;
+                            box-shadow: none;
+
+                            @media screen and (max-width: $large) {
+                                border-top:0!important;
+                            }
                         }
                     }
                 }
