@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ViewResult> Index(int year, int week)
+        public async Task<IActionResult> Index(int year, int week)
         {
 
             try
