@@ -42,16 +42,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowSelection()
         {
-            int[] nums = Array.Empty<int>();
+            int[] selectedIds = Array.Empty<int>();
             string data = Request.Form["showSelectionId"];
             if (!string.IsNullOrWhiteSpace(data))
             {
-                nums = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                selectedIds = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
             }
 
             ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
 
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(GetCurrentCorrelationId(), nums);
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
 
             return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);
         }

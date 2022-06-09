@@ -4,6 +4,11 @@
     Layout = "~/Views/Shared/_MSILayout.cshtml";
 }
 
+@section Scripts
+{
+<script type="text/javascript" src="@Url.Content("~/js/Custom/RadioNavigationalWarnings.js")"></script>
+}
+
 @{
     ViewData["Header"] = "Radio Navigational Warnings";
 }
@@ -72,7 +77,7 @@
                                 </button>
                             </td>
                             <td id="checkbox_@i" class="td-5 justify-content-center">
-                                <input type="checkbox" name="checkbox" class="form-check-input" aria-label="Select" onchange="terms_changed()" />
+                                <input type="checkbox" name="checkbox" class="form-check-input" aria-label="Select" onchange="enableDisableShowSelection()" />
                             </td>
                         </tr>
                         <tr id="collapse_@i" class="accordion-collapse collapse" data-bs-parent="#accordionAllwarning">
@@ -107,7 +112,7 @@
             @using (Html.BeginForm("ShowSelection", "RadioNavigationalWarnings", FormMethod.Post))
             {
                 <input type="hidden" id="showSelectionId" name="showSelectionId" value="">
-                <button disabled="disabled" id="BtnShowSelection" type="submit" onclick = "showSelection_()" >Show selection</button>
+                <button disabled="disabled" id="BtnShowSelection" type="submit" onclick = "showSelection()" >Show selection</button>
             }
 
         </div>

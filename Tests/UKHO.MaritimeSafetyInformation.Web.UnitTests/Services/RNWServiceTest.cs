@@ -227,20 +227,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenCallShowRadioNavigationalWarningsDataList_ThenReturnWarnings()
         {
-            int[] data = Array.Empty<int>();
-            A.CallTo(() => _fakeRnwRepository.ShowRadioNavigationalWarningsDataList(data)).Returns(GetFakeRadioNavigationalWarningsDataList());
-            List<RadioNavigationalWarningsData> result = await _rnwService.ShowRadioNavigationalWarningsData(string.Empty, data);
+            A.CallTo(() => _fakeRnwRepository.ShowRadioNavigationalWarningsDataList(Array.Empty<int>())).Returns(GetFakeRadioNavigationalWarningsDataList());
+            List<RadioNavigationalWarningsData> result = await _rnwService.ShowRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty);
             Assert.AreEqual(1, result.Count);
         }
 
         [Test]
         public void WhenCallShowRadioNavigationalWarningsDataListWithException_ThenReturnException()
         {
-            int[] data = Array.Empty<int>();
-            A.CallTo(() => _fakeRnwRepository.ShowRadioNavigationalWarningsDataList(data)).Throws(new Exception());
+            A.CallTo(() => _fakeRnwRepository.ShowRadioNavigationalWarningsDataList(Array.Empty<int>())).Throws(new Exception());
 
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-                               async delegate { await _rnwService.ShowRadioNavigationalWarningsData(string.Empty, data); });
+                               async delegate { await _rnwService.ShowRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty); });
         }
 
         [Test]

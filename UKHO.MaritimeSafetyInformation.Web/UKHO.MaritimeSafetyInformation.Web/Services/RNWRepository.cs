@@ -74,11 +74,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      .ToListAsync();
         }
 
-        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsDataList(int[] data)
+        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsDataList(int[] selectedIds)
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
                           join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
-                          where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow) && data.Contains(rnwWarnings.Id)
+                          where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow) && selectedIds.Contains(rnwWarnings.Id)
                           select new RadioNavigationalWarningsData
                           {
                               Id = rnwWarnings.Id,

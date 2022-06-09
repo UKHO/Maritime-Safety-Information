@@ -68,7 +68,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public async Task WhenCallShowSelection_ThenReturnView()
         {
-            int[] nums = Array.Empty<int>();
             DefaultHttpContext httpContext = new();
             const string expectedView = "~/Views/RadioNavigationalWarnings/ShowSelection.cshtml";
             FormCollection formCol = new(new Dictionary<string, StringValues>
@@ -78,7 +77,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
 
-            A.CallTo(() => _fakeRnwService.ShowRadioNavigationalWarningsData(A<string>.Ignored, nums)).Returns(new List<RadioNavigationalWarningsData>());
+            A.CallTo(() => _fakeRnwService.ShowRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty)).Returns(new List<RadioNavigationalWarningsData>());
             
             IActionResult result = await _controller.ShowSelection();
 
