@@ -17,6 +17,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _context;
         private RadioNavigationalWarning _radioNavigationalWarning;
+        private EditRadioNavigationalWarningAdmin _fakeRadioNavigationalWarningAdmin;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -28,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _context.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
             _context.WarningType.AddRange(GetFakeWarningTypeList());
             _context.SaveChanges();
+
         }
 
         [SetUp]
@@ -41,7 +43,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Summary = "Test1",
                 Content = "test"
             };
+            _fakeRadioNavigationalWarningAdmin = new()
+            {
+                Id = 1,
+                WarningType = 1,
+                WarningTypeName = "NAVAREA 1",
+                Reference = "edittest",
+                DateTimeGroup = new DateTime(2019, 1, 1),
+                Summary = "editsummary",
+                Content = "editcontent",
+                IsDeleted = false,
 
+             };
             _rnwRepository = new RNWRepository(_context);
         }
 
@@ -90,7 +103,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetRadioNavigationWarningWithContentLenthGreaterThan300Char_ThenWrapTheContent()
+        public async Task WhenCallGetRadioNavigationWarningWithContentLengthGreaterThan300Char_ThenWrapTheContent()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.IsTrue(result[3].Content.Length <= 303);
@@ -114,12 +127,48 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(2, result.Count);
         }
 
+        [Test]
+        public async Task WhenCallGetSelectedRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
+        {
+            int[] data = { 4 };
+            List<RadioNavigationalWarningsData> result = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(data);
+            Assert.AreEqual(1, result.Count);
+        }
 
         [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
             Assert.AreEqual(new DateTime(2099, 02, 03), result);
+        }
+
+        [Test]
+        public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTimeWhenNoWarnings_ThenReturnDateTimeMin()
+        {
+            RadioNavigationalWarningsContext emptyContext = new(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseInMemoryDatabase("msi-ut-empty-db").Options);
+            await emptyContext.SaveChangesAsync();
+            RNWRepository rnwRepository = new(emptyContext);
+
+            DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+
+            Assert.AreEqual(new DateTime(1, 1, 1), result);
+        }
+
+        [Test]
+        public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
+        {
+            Task result = _rnwRepository.UpdateRadioNavigationalWarning(_fakeRadioNavigationalWarningAdmin);
+            Assert.IsTrue(result.IsCompleted);
+        }
+
+        [Test]
+        public void WhenCallEditRadioNavigationalWarningsRecord_ThenReturnRecordForGivenId()
+        {
+            const int id = 1;
+            EditRadioNavigationalWarningAdmin result = _rnwRepository.GetRadioNavigationalWarningById(id);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Id);
+            Assert.AreEqual("NAVAREA 1", result.WarningTypeName);
         }
 
         [OneTimeTearDown]

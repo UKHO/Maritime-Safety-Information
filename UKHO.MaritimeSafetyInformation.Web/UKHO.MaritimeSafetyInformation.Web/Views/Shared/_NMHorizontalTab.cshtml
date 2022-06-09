@@ -1,0 +1,14 @@
+﻿<ul class="nav nav-tabs msi-tabs" id="nmTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString()=="Index" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString()=="Index" ? "0":"-1")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners" role="tab">Weekly</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "0":"-1")" id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners" role="tab">Daily</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="" class="nav-link" id="cumulative-tab" data-bs-toggle="tab" data-bs-target="#cumulative" role="tab" aria-controls="cumulative" aria-selected="false" tabindex="-1">Cumulative</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="" class="nav-link" id="annual-tab" data-bs-toggle="tab" data-bs-target="#annual" role="tab" aria-controls="annual" aria-selected="false" tabindex="-1">Annual</a>
+    </li>
+</ul>

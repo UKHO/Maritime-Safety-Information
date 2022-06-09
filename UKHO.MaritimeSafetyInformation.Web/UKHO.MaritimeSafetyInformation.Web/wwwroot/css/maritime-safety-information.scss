@@ -5,118 +5,115 @@
 @import "common";
 @import "print";
 
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+.rnw-list-table thead tr th.th-2 {
+    width: 125px;
+}
 
 .table-scroll {
     display: block;
     empty-cells: show;
     border-spacing: 0;
+}
 
-    &.small-first-col {
-        td, th {
-            &:first-child {
-                word-break: break-all;
-            }
-        }
-    }
+.table-scroll.small-first-col td:first-child, .table-scroll.small-first-col th:first-child {
+    word-break: break-all;
+}
 
-    thead {
-        background-color: #f1f1f1;
-        position: relative;
-        display: block;
-        width: 100%;
-    }
+.table-scroll thead {
+    background-color: #f1f1f1;
+    position: relative;
+    display: block;
+    width: 100%;
+}
 
-    tbody {
-        display: block;
-        position: relative;
-        width: 100%;
-        overflow-y: auto;
+.table-scroll tbody {
+    display: block;
+    position: relative;
+    width: 100%;
+    overflow-y: auto;
+}
 
-        &.scroll-content {
-            max-height: 54vh;
-            padding-right: 2px;
-        }
-    }
+.table-scroll tbody.scroll-content {
+    max-height: 54vh;
+    padding-right: 2px;
+}
 
-    tr {
-        width: 100%;
-        display: flex;
-    }
+.table-scroll tr {
+    width: 100%;
+    display: flex;
+}
 
-    td, th {
-        flex-basis: 100%;
-        flex-grow: 2;
-        display: flex;
-        align-items: center;
-    }
+.table-scroll td, .table-scroll th {
+    flex-basis: 100%;
+    flex-grow: 2;
+    display: flex;
+    align-items: center;
 }
 
 .scroll-bar {
-    scrollbar-color: $davys-grey $lavender-gray;
+    scrollbar-color: #595959 #C4C4CA;
 }
 
-.scroll-bar {
-    &::-webkit-scrollbar {
-        width: 10px;
-        background-color: $davys-grey; //forground dark color
-        border-radius: 50px;
-    }
+.scroll-bar::-webkit-scrollbar {
+    width: 10px;
+    background-color: #595959;
+    border-radius: 50px;
+}
 
-    &::-webkit-scrollbar-track {
-        background-color: $lavender-gray; //background light color
-        border-radius: 50px;
-    }
+.scroll-bar::-webkit-scrollbar-track {
+    background-color: #C4C4CA;
+    border-radius: 50px;
+}
 
-    &::-webkit-scrollbar-thumb {
-        box-shadow: inset 0 0 30px rgb(89, 89, 89); //forground dark color
-        border-radius: 5px;
+.scroll-bar::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 30px #595959;
+    border-radius: 5px;
+}
+
+.msi-page-nav li {
+    transform: none;
+    padding: 0;
+    margin: 0;
+}
+
+.msi-page-nav li:before {
+    content: none;
+}
+
+.msi-page-nav li a {
+    font-size: 16px;
+    padding: 0.5rem;
+    color: #09315b;
+    display: inline-block;
+    font-weight: 400;
+}
+
+@media screen and (max-width: 1200px) {
+    .msi-page-nav li a {
+        font-size: 14px;
     }
 }
 
-.msi-page-nav {
+.msi-page-nav li a.active {
+    background-color: #09315b;
+    color: #ffffff;
+    border-radius: 2px;
+}
 
-    li {
-        transform: none;
-        padding: 0;
-        margin: 0;
+.msi-page-nav li a.active:focus {
+    color: #ffffff;
+}
 
-        &:before {
-            content: none;
-        }
-
-        a {
-            font-size: 16px;
-            padding: 0.5rem;
-            color: $prussian-blue;
-            display: inline-block;
-            font-weight:400;
-
-            @media screen and (max-width: $x-large) {
-                font-size: 14px;
-            }
-
-            &.active {
-                background-color: $prussian-blue;
-                color: $white;
-                border-radius: 2px;
-
-                &:focus {
-                    color: $white;
-                }
-            }
-
-            &:focus {
-                color: $prussian-blue;
-            }
-        }
-    }
+.msi-page-nav li a:focus {
+    color: #09315b;
 }
 
 .msi-tabs-content-container {
     padding-left: 16px;
+}
 
-    @media screen and (max-width: $large) {
+@media screen and (max-width: 992px) {
+    .msi-tabs-content-container {
         width: 100%;
     }
 }
@@ -126,8 +123,10 @@
     margin-top: 91px;
     width: 18%;
     margin-bottom: -2rem;
+}
 
-    @media screen and (max-width: $large) {
+@media screen and (max-width: 992px) {
+    .msi-tabs-container {
         width: 100%;
         margin-top: 0;
         border-right: 0;
@@ -137,15 +136,17 @@
 
 .msi-tabs {
     margin-bottom: 20px;
+}
 
-    li {
-        transform: none;
-        margin: 0;
-        padding: 0;
+.msi-tabs li {
+    transform: none;
+    margin: 0;
+    padding: 0;
+}
 
-        &:before {
-            content: none;
-        }
+.msi-tabs li:before {
+    content: none;
+}
 
         .nav-link {
             color: $prussian-blue;

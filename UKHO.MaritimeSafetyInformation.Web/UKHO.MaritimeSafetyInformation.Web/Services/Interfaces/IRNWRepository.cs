@@ -11,5 +11,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<List<RadioNavigationalWarningsData>> GetRadioNavigationalWarningsDataList();
         Task<List<string>> GetYears();
         Task<DateTime> GetRadioNavigationalWarningsLastModifiedDateTime();
+        EditRadioNavigationalWarningAdmin GetRadioNavigationalWarningById(int id);
+        Task UpdateRadioNavigationalWarning(EditRadioNavigationalWarningAdmin radioNavigationalWarning);
+        Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsDataList(int[] selectedIds);
     }
 }

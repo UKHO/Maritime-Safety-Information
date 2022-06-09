@@ -5,10 +5,8 @@ var ddlselectedweek;
 
 $(function () {
 
-    if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Daily") {
-        ShowDailyFilesAsync();
-    }
-    else {
+    if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Weekly") {
+
         if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
             ddlselectedyear = document.getElementById('hdnYear').value;
         }
@@ -20,16 +18,17 @@ $(function () {
         if ((ddlselectedyear != undefined && ddlselectedyear != '') && (ddlselectedweek != undefined && ddlselectedweek != '')) {
             LoadData(yearweekdata)
         }
-        $('#ddlYears').change(function () {
-            GetCorrespondingWeeks($('#ddlYears').val(), yearweekdata);
-        });
 
-        $('#ddlWeeks').change(function () {
+        document.getElementById('ddlYears').onchange = function () {
+            GetCorrespondingWeeks(this.value, yearweekdata);
+        }
+
+        document.getElementById('ddlWeeks').onchange = function () {
             if (document.getElementById('ddlYears').selectedIndex != 0 && document.getElementById('ddlWeeks').selectedIndex != 0)
                 this.form.submit();
             else
                 return false;
-        });
+        }
     }
 });
 
@@ -39,13 +38,13 @@ function LoadData(data) {
     var selectedyear;
 
     if (yearweekdata != undefined && yearweekdata.length > 0) {
-        $('#ddlYears').empty();
+        document.getElementById('ddlYears').length = 0;
         var yeardata = getUniqueYearandWeeks(data, 'Year', 'Y').sort()
         var defaultYear = '<option value="0" selected>Select year</option>'
-        $(defaultYear).appendTo('#ddlYears');
+        document.getElementById('ddlYears').innerHTML = defaultYear;
         for (i = 0; i < yeardata.length; i++) {
             var year = '<option>' + yeardata[i] + '</option>'
-            $(year).appendTo('#ddlYears');
+            document.getElementById('ddlYears').innerHTML += year;
         }
         if (onload) {
             if (ddlselectedyear != undefined && ddlselectedyear != '') {
@@ -54,10 +53,10 @@ function LoadData(data) {
             else {
                 selectedyear = yeardata[yeardata.length - 1];
             }
-            $('#ddlYears').val(selectedyear);
+            document.getElementById('ddlYears').value = selectedyear;
         }
         else {
-            $('#ddlYears').val('Select year');
+            document.getElementById('ddlYears').value = 'Select year';
         }
         GetCorrespondingWeeks(selectedyear, data);
     }
@@ -79,43 +78,29 @@ function getUniqueYearandWeeks(arr, prop, type) {
 }
 
 function GetCorrespondingWeeks(id, data) {
-    $('#ddlWeeks').empty();
+    document.getElementById('ddlWeeks').length = 0;
     var weekdata = getUniqueYearandWeeks(data, id, 'W').sort(function (a, b) { return a - b });
 
     var defaultweek = '<option value="0" selected>Select week</option>'
-    $(defaultweek).appendTo('#ddlWeeks');
+    document.getElementById('ddlWeeks').innerHTML = defaultweek;
 
     for (i = 0; i < weekdata.length; i++) {
         var week = '<option>' + weekdata[i] + '</option>'
-        $(week).appendTo('#ddlWeeks');
+        document.getElementById('ddlWeeks').innerHTML += week;
     }
 
     if (onload) {
         if (ddlselectedweek != undefined && ddlselectedweek != '') {
-            $('#ddlWeeks').val(ddlselectedweek);
+            document.getElementById('ddlWeeks').value = ddlselectedweek;
         }
         else {
             var selectedweek = weekdata[weekdata.length - 1];
-            $('#ddlWeeks').val(selectedweek);
+            document.getElementById('ddlWeeks').value = selectedweek;
         }
 
         onload = false;
     }
     else {
-        $('#ddlWeeks').val('0');
+        document.getElementById('ddlWeeks').value = '0';
     }
-}
-
-function ShowDailyFilesAsync() {
-
-    $.ajax({
-        url: '/NoticesToMariners/ShowDailyFiles',
-        type: "GET",
-        success: function (data) {
-            $('#divFilesList').html(data);
-        },
-        error: function (error) {
-            console.log(`Error ${error}`);
-        }
-    });
 }

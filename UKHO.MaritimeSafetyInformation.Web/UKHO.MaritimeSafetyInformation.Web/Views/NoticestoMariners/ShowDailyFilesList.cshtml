@@ -1,36 +1,43 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 
 @model List<ShowDailyFilesResponseModel>
-<div class="container-fluid">
-    <div class="table-responsive-sm">
-        @if (Model != null && Model.Count > 0)
+<div class="daily-table-container scroll-bar">
+    @if (Model != null && Model.Count > 0)
+    {
+        @for (int i = 0; i < Model.Count; i++)
         {
-            @foreach (var item in Model)
-            {
-                <table class="table table-responsive caption-top table-striped">
-                    <caption>@item.Year, Week @item.WeekNumber</caption>
+            <div class="table-responsive-sm">
+                <table class="table table-scroll small-first-col notice-to-mariners-daily-table caption-table">
+                    <caption class="table-caption" id="caption_@i">@Model[i].Year, week @Model[i].WeekNumber</caption>
                     <thead>
                         <tr>
                             <th scope="col">File name</th>
                             <th scope="col">File size</th>
+                            <th class="th-3"><span class="visually-hidden">Action</span></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var file in item.DailyFilesData)
+                        @for (int j = 0; j < Model[i].DailyFilesData.Count; j++)
                         {
                             <tr>
-                                <td><a href="#">@file.FileDescription</a></td>
-                                <td>@file.FileSizeInKB (@file.FileExtension)</td>
+                                <td id="filename_@j">@Model[i].DailyFilesData[j].FileDescription</td>
+                                <td id="filesize_@j">@Model[i].DailyFilesData[j].FileSizeInKB (@Model[i].DailyFilesData[j].FileExtension)</td>
+                                <td class="td-3 justify-content-center" id="download_@j">
+                                    <a href="@Url.Action("DownloadDailyFile", "NoticesToMariners", new { batchId = @Model[i].DailyFilesData[j].BatchId,fileName=@Model[i].DailyFilesData[j].Filename, mimeType = @Model[i].DailyFilesData[j].MimeType })">Download</a>
+                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-            }
+            </div>
         }
-        else
-        {
-            <p>No data found!!!</p>
-        }
-
-    </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert" aria-atomic="true">
+            <i class="bi bi-exclamation-lg" aria-hidden="true"></i>
+            <div class="alert-head">There’s a problem</div>
+            <p>It looks like there might be a problem with our system. We’re sorry for the inconvenience. If the problem persists contact <a href="mailto:customerservices@ukho.gov.uk">customerservices@ukho.gov.uk</a></p>
+        </div>
+    }
 </div>
