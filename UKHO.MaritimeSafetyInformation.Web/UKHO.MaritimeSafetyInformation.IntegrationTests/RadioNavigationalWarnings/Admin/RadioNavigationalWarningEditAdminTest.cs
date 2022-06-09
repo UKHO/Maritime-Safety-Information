@@ -1,18 +1,20 @@
-﻿using FakeItEasy;
+﻿extern alias MSIAdminProjectAlias;
+
+using FakeItEasy;
 using NUnit.Framework;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
-using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings.Admin
 {
@@ -25,6 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private TempDataDictionary _tempData;
         private EditRadioNavigationalWarningAdmin _fakeEditRadioNavigationalWarningsAdmin;
         private RadioNavigationalWarningsAdminController _controller;
+        private ILogger<RNWService> _fakeLoggerRnwService;
 
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
@@ -37,8 +40,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
+            _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
             _rnwRepository = new RNWRepository(FakeContext);
-            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
+            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
             _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
             _controller = new RadioNavigationalWarningsAdminController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
         }

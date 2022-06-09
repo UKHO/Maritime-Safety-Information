@@ -25,5 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj" />
+    <ProjectReference Include="..\..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformationAdmin.Web\UKHO.MaritimeSafetyInformationAdmin.Web.csproj">
+      <Aliases>MSIAdminProjectAlias</Aliases>
+    </ProjectReference>
   </ItemGroup>
 </Project>
