@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910030 -  Maritime safety information error has occurred in the process to add new RNW record to database.
         /// </summary>
-        ErrorInRnwRepositoryProcess = 910030,
+        EditRNWRecordException = 910030,
         /// <summary> 
         /// 910031 -  Maritime safety information invalid new RNW record request.
         /// </summary>
@@ -294,7 +294,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910070 -  Maritime safety information request to get last modified date time from database completed.
         /// </summary>
         RNWLastModifiedDateTimeFromDatabaseCompleted = 910070,
-
         /// <summary>
         /// 910071 -Request For Download Daily NM File Started.
         /// </summary>
@@ -355,17 +354,45 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSDownloadZipFileAsyncHasError = 910082,
         /// <summary> 
-        /// 910083 -  Maritime safety information request to show RNW details from database started.
+        /// 910083 -  Maritime safety information Edit RNW records for Admin completed.
         /// </summary>
-        RNWShowListDetailFromDatabaseStarted = 910083,
+        EditRNWRecordCompleted = 910083,
         /// <summary> 
-        /// 910084 -  Maritime safety information request to show RNW details from database completed.
+        /// 910084 -  Maritime safety information Edit RNW record started.
         /// </summary>
-        RNWShowListDetailFromDatabaseCompleted = 910084,
+        EditRNWRecordStarted = 910084,
         /// <summary> 
-        /// 910085 -  Maritime safety information error has occurred in the process to show RNW detail from database.
+        /// 910085 - Maritime safety information edit RNW record Id not found.
         /// </summary>
-        ErrorInRNWShowListDetailFromDatabase = 910085
+        EditRNWRecordIDNotFound = 910085,
+        /// <summary> 
+        /// 910086 - Maritime safety information edit RNW record Id mismatch.
+        /// </summary>
+        EditRNWRecordIdMismatch = 910086,
+        /// <summary> 
+        /// 910087 - Maritime safety information edit RNW list is null.
+        /// </summary>
+        EditRNWRecordNotFound = 910087,
+        /// <summary> 
+        /// 910088 - Maritime safety information Error in retrieving RNW record.
+        /// </summary>
+        ErrorInRetrievingRNWRecord = 910088,
+        /// <summary> 
+        /// 910089 - Maritime safety information Error in Creating RNW record.
+        /// </summary>
+        CreateRNWRecordException = 910089,
+        /// <summary> 
+        /// 910090 -  Maritime safety information request to show RNW details from database started.
+        /// </summary>
+        RNWShowListDetailFromDatabaseStarted = 910090,
+        /// <summary> 
+        /// 910091 -  Maritime safety information request to show RNW details from database completed.
+        /// </summary>
+        RNWShowListDetailFromDatabaseCompleted = 910091,
+        /// <summary> 
+        /// 910092 -  Maritime safety information error has occurred in the process to show RNW detail from database.
+        /// </summary>
+        ErrorInRNWShowListDetailFromDatabase = 910092
 
     }
 

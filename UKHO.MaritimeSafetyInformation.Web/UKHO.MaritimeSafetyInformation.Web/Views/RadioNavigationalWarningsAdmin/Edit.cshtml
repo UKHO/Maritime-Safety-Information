@@ -1,22 +1,20 @@
-﻿@model UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning
+﻿@model UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.EditRadioNavigationalWarningAdmin
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 <div class="container-fluid">
 
-    <h1 id="headingLevelOne" class="mt-0">Create Radio Navigational Warnings</h1>
+    <h1 id="headingLevelOne" class="mt-0">Edit Radio Navigational Warnings</h1>
 
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Create" autocomplete="off">
+            <form asp-action="Edit" autocomplete="off">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="mb-3">
                     <label asp-for="WarningType" class="form-label"></label>
                     <span class="text-danger">*</span>
-                    <select asp-for="WarningType" asp-items="@(new SelectList(ViewBag.WarningType,"Id","Name"))" class="form-select">
-                        <option value="" selected disabled hidden>Select Warning Type</option>
-                    </select>
+                    <select name="WarningType" class="form-select" asp-items="@ViewBag.WarningType" id="WarningType"></select>
                     <span asp-validation-for="WarningType" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
@@ -47,8 +45,15 @@
                     <label asp-for="ExpiryDate" class="form-label">Expiry date and time</label>
                     <input asp-for="ExpiryDate" class="form-control" />
                 </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="IsDeleted" />
+                    <label class="form-check-label" asp-for="IsDeleted">
+                         @Html.DisplayNameFor(model => model.IsDeleted)
+                    </label>
+                     
+                  </div>
                 <div class="mb-3">
-                    <input type="submit" value="Create" id="btnCreate" class="primary me-4" />
+                    <input type="submit" value="Submit" id="btnEdit" class="primary me-4" />
                     <a asp-action="Index">Back to List</a>
                 </div>
             </form>
@@ -57,5 +62,8 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
+}
+

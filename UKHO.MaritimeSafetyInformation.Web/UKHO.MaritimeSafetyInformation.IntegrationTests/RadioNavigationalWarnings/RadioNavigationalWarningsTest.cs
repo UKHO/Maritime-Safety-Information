@@ -1,6 +1,8 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -57,6 +59,28 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             IActionResult result = await _controller.About();
             string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
+            Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
+        }
+
+        [Test]
+        public async Task WhenCallShowRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
+        {
+            DefaultHttpContext httpContext = new();
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"showSelectionId", "20" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+            IActionResult result = await _controller.ShowSelection();
+            List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
+            string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
+            Assert.AreEqual(1, warningsData.Count);
+            Assert.AreEqual("RnwAdminListReference", warningsData[0].Reference);
+            Assert.AreEqual("RnwAdminListSummary", warningsData[0].Description);
+            Assert.AreEqual(new DateTime(2021, 1, 1), warningsData[0].DateTimeGroup);
+            Assert.AreEqual("011200 UTC Jan 21", warningsData[0].DateTimeGroupRnwFormat);
             Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
         }
 

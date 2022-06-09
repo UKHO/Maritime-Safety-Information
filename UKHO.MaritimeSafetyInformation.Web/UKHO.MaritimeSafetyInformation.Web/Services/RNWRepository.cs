@@ -62,23 +62,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                           join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
                           where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
-                     {
-                        Id = rnwWarnings.Id,
-                        WarningType = warningType.Name,
-                        Reference = rnwWarnings.Reference,
-                        DateTimeGroup = rnwWarnings.DateTimeGroup,
-                        Description = rnwWarnings.Summary,
-                        DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
-                        Content = rnwWarnings.Content
-                     }).OrderByDescending(a => a.DateTimeGroup)
+                          {
+                              Id = rnwWarnings.Id,
+                              WarningType = warningType.Name,
+                              Reference = rnwWarnings.Reference,
+                              DateTimeGroup = rnwWarnings.DateTimeGroup,
+                              Description = rnwWarnings.Summary,
+                              DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
+                              Content = rnwWarnings.Content
+                          }).OrderByDescending(a => a.DateTimeGroup)
                      .ToListAsync();
         }
 
-        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsDataList(int[] data)
+        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsDataList(int[] selectedIds)
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
                           join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
-                          where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow) && data.Contains(rnwWarnings.Id)
+                          where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow) && selectedIds.Contains(rnwWarnings.Id)
                           select new RadioNavigationalWarningsData
                           {
                               Id = rnwWarnings.Id,
@@ -94,7 +94,44 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<DateTime> GetRadioNavigationalWarningsLastModifiedDateTime()
         {
-            return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+            if (_context.RadioNavigationalWarnings.Any())
+            {
+                return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+            }
+
+            return DateTime.MinValue;
         }
+
+        public EditRadioNavigationalWarningAdmin GetRadioNavigationalWarningById(int id)
+        {
+            RadioNavigationalWarning rnwWarning = _context.Set<RadioNavigationalWarning>().Find(id);
+            EditRadioNavigationalWarningAdmin rnw = new();
+            rnw.Id = rnwWarning.Id;
+            string warningName = _context.WarningType.FirstOrDefault(x => x.Id == rnwWarning.WarningType).Name;
+            rnw.WarningTypeName = warningName;
+            rnw.Reference = rnwWarning.Reference;
+            rnw.DateTimeGroup = rnwWarning.DateTimeGroup;
+            rnw.Summary = rnwWarning.Summary;
+            rnw.Content = rnwWarning.Content;
+            rnw.ExpiryDate = rnwWarning.ExpiryDate;
+            rnw.IsDeleted = rnwWarning.IsDeleted;
+            return rnw;
+        }
+
+        public async Task UpdateRadioNavigationalWarning(EditRadioNavigationalWarningAdmin radioNavigationalWarningAdmin)
+        {
+            RadioNavigationalWarning rnw = await _context.RadioNavigationalWarnings.FirstOrDefaultAsync(r => r.Id == radioNavigationalWarningAdmin.Id);
+            rnw.WarningType = radioNavigationalWarningAdmin.WarningType;
+            rnw.Reference = radioNavigationalWarningAdmin.Reference;
+            rnw.DateTimeGroup = radioNavigationalWarningAdmin.DateTimeGroup;
+            rnw.Summary = radioNavigationalWarningAdmin.Summary;
+            rnw.Content = radioNavigationalWarningAdmin.Content;
+            rnw.ExpiryDate = radioNavigationalWarningAdmin.ExpiryDate;
+            rnw.IsDeleted = radioNavigationalWarningAdmin.IsDeleted;
+            rnw.LastModified = DateTime.UtcNow;
+            _context.Update(rnw);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

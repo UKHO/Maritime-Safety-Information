@@ -7,14 +7,14 @@
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
 <div class="container-fluid">
-    <h1>Radio Navigational Warnings Admin List</h1>
+    <h1 id="headingLevelOne" class="mt-0">Radio Navigational Warnings Admin List</h1>
     <div class="row">
         <div class="col-md-auto mb-3">
-            <label class="form-label">Warning Type</label>
+            <label class="form-label" for="WarningType">Warning Type</label>
             @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"Select Warning Type", new { @class = "form-select", @onchange="WarningTypeValueChange(this)"} )
         </div>
         <div class="col-md-auto mb-3">
-            <label class="form-label">Year</label>
+            <label class="form-label" for="Year">Year</label>
             @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"Select Year",  new { @class = "form-select", @onchange="YearValueChange(this)"} )
         </div>
         <div class="col-md-auto mb-3">
@@ -29,34 +29,36 @@
     {
 
         <div class="table-responsive-md">
-            <table class="table">
+            <table class="table rnw-list-table">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="th-1">
                             Sr No.
                         </th>
-                        <th>
+                        <th class="th-2">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().WarningTypeName)
                         </th>
-                        <th>
+                        <th class="th-3">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().Reference)
                         </th>
-                        <th>
+                        <th class="th-4">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().DateTimeGroupRnwFormat)
                         </th>
-                        <th>
+                        <th class="th-5">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().Summary)
                         </th>
-                        <th>
+                        <th class="th-6">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().Content)
                         </th>
-                        <th>
+                        <th class="th-7">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().ExpiryDateRnwFormat)
                         </th>
-                        <th>
+                        <th class="th-8">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().IsDeleted)
                         </th>
-                        <th></th>
+                        <th class="th-9">
+                            <span class="visually-hidden">Action</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,31 +66,31 @@
                     {
                         ++@Model.SrNo;
                         <tr>
-                            <td id="SrNo">
+                            <td id="SrNo_@Model.SrNo">
                                 @Model.SrNo.ToString()
                             </td>
-                            <td id="WarningTypeName">
+                            <td id="WarningTypeName_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.WarningTypeName)
                             </td>
-                            <td id="Reference">
+                            <td id="Reference_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.Reference)
                             </td>
-                            <td id="DateTimeGroupRnwFormat">
+                            <td id="DateTimeGroupRnwFormat_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.DateTimeGroupRnwFormat)
                             </td>
-                            <td id="Summary">
+                            <td id="Summary_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.Summary)
                             </td>
-                            <td id="Content">
+                            <td id="Content_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.Content)
                             </td>
-                            <td id="ExpiryDateRnwFormat">
+                            <td id="ExpiryDateRnwFormat_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.ExpiryDateRnwFormat)
                             </td>
-                            <td id="IsDeleted">
+                            <td id="IsDeleted_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.IsDeleted)
                             </td>
-                            <td id="Edit">
+                            <td id="Edit_@Model.SrNo">
                                 <a asp-action="Edit" asp-route-id="@item.Id" id="Edit_@item.Id">Edit</a>
                             </td>
                         </tr>
@@ -99,10 +101,10 @@
 
         <div>
             <ul class="pagination">
-                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnFirst" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(1)">First</a></li>
-                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnPrevious" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)">Previous</a></li>
-                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnNext" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)">Next</a></li>
-                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnLast" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.PageCount)">Last</a></li>
+                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnFirst" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(1)" role="button">First</a></li>
+                <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnPrevious" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex-1)" role="button">Previous</a></li>
+                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnNext" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.CurrentPageIndex+1)" role="button">Next</a></li>
+                <li class="page-item  @(isLastPage  ? "disabled" : "")"><a id="BtnLast" class="page-link" tabindex="@(isLastPage  ? "-1" : "0")" onclick="RnwFilterList(@Model.PageCount)" role="button">Last</a></li>
             </ul>
             <div>
                 Page @Model.CurrentPageIndex of @Model.PageCount
