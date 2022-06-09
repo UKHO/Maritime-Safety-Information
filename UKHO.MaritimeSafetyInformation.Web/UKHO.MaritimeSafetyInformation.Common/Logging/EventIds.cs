@@ -392,11 +392,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910092 - FSS for Maritime safety information is healthy.
         /// </summary>
-        FssIsHealthy = 910092,
+        FileShareServiceIsHealthy = 910092,
         /// <summary>
         /// 910093 - FSS for Maritime safety information is unhealthy.
         /// </summary>
-        FssIsUnHealthy = 910093
+        FileShareServiceIsUnHealthy = 910093
 
     }
 

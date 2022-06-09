@@ -2,7 +2,7 @@
 
 namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
 {
-    public interface IFSSHealthClient
+    public interface IFileShareServiceHealthClient
     {
         Task<HealthCheckResult> CheckHealthAsync();
     }

@@ -20,11 +20,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
             HealthCheckResult healthCheckResult = await _rnwDatabaseHealthClient.CheckHealthAsync();
             if (healthCheckResult.Status == HealthStatus.Healthy)
             {
-                _logger.LogDebug(EventIds.RNWDatabaseIsHealthy.ToEventId(), "Radio navigational Warning database for maritime safety information is healthy");
+                _logger.LogDebug(EventIds.RNWDatabaseIsHealthy.ToEventId(), "Radio navigational Warning database is healthy");
             }
             else
             {
-                _logger.LogError(EventIds.RNWDatabaseIsUnHealthy.ToEventId(), healthCheckResult.Exception, "Radio mavigational warning database for maritime safety information is unhealthy responded with error {Message}", healthCheckResult.Exception.Message);
+                _logger.LogError(EventIds.RNWDatabaseIsUnHealthy.ToEventId(), healthCheckResult.Exception, "Radio mavigational warning database is unhealthy responded with error {Message}", healthCheckResult.Exception.Message);
             }
             return healthCheckResult;
         }

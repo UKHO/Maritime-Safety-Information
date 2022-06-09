@@ -17,7 +17,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
             try
             {
                 await _context.WarningType.ToListAsync();
-
                 return HealthCheckResult.Healthy("Radio navigational warning database is healthy");
             }
             catch (Exception ex)
