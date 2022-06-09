@@ -131,7 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallShowRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
         {
             int[] data = { 4 };
-            List<RadioNavigationalWarningsData> result = await _rnwRepository.ShowRadioNavigationalWarningsDataList(data);
+            List<RadioNavigationalWarningsData> result = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(data);
             Assert.AreEqual(1, result.Count);
         }
 

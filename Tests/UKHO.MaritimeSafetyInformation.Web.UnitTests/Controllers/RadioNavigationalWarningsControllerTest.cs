@@ -77,7 +77,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
 
-            A.CallTo(() => _fakeRnwService.ShowRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty)).Returns(new List<RadioNavigationalWarningsData>());
+            A.CallTo(() => _fakeRnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty)).Returns(new List<RadioNavigationalWarningsData>());
             
             IActionResult result = await _controller.ShowSelection();
 
