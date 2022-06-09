@@ -51,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
 
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.ShowRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetSelectedRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
 
             return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);
         }

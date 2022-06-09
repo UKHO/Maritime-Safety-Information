@@ -199,13 +199,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return true;
         }
 
-        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsData(int[] selectedIds, string correlationId)
+        public async Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsData(int[] selectedIds, string correlationId)
         {
             try
             {
                 _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseStarted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.ShowRadioNavigationalWarningsDataList(selectedIds);
+                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(selectedIds);
 
                 _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database completed for _X-Correlation-ID:{correlationId}", correlationId);
 

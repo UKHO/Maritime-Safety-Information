@@ -74,7 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                      .ToListAsync();
         }
 
-        public async Task<List<RadioNavigationalWarningsData>> ShowRadioNavigationalWarningsDataList(int[] selectedIds)
+        public async Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsDataList(int[] selectedIds)
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
                           join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
