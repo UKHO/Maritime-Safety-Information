@@ -120,14 +120,16 @@ export default class RadioNavigationalWarningsListEndUser {
     expect(compareDate).toBeTruthy();
   }
 
-  public async verifySelectOption() {
+  public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all") ;
     await this.selectAll.click({force:true});
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all") ;
+    }
+    public async verifySelectOptionCheckBox()
+    {
     await this.selectAll.click({force:true});
-
     expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
     const detailsRefrence = await this.refrence.first().innerText();
     expect(detailsRefrence.length).toBeGreaterThan(0);
@@ -140,6 +142,6 @@ export default class RadioNavigationalWarningsListEndUser {
     expect(beforeDetailsDateTimeGroupRnwFormat).toEqual(afterDetailsDateTimeGroupRnwFormat);
     expect(beforeDetailsRefrence).toEqual(afterDetailsRefrence);
     await this.backToAllWarning.click();
-  }
+    }
 
 }  
