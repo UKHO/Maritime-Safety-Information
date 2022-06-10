@@ -174,11 +174,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             return new RadioNavigationalWarning()
             {
+                Id = 9,
                 WarningType = 1,
                 Reference = "ReferenceTest",
                 DateTimeGroup = new DateTime(2022, 12, 30),
                 Summary = "SummaryTest",
-                Content = "ContentTest"
+                Content = "ContentTest",
+                ExpiryDate = new DateTime(2099, 1, 1),
+                IsDeleted = true
             };
         }
     }
