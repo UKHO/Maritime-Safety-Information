@@ -12,5 +12,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<string> GetRadioNavigationalWarningsLastModifiedDateTime(string correlationId);
         RadioNavigationalWarning GetRadioNavigationalWarningById(int id, string correlationId);
         Task<bool> EditRadioNavigationalWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId);
+        Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsData(int[] selectedIds, string correlationId);
     }
 }

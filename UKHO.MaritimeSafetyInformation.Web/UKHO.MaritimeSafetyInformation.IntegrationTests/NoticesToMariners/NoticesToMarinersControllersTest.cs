@@ -12,7 +12,7 @@ using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
-   internal class NoticesToMarinersControllersTest
+    internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
         private NoticesToMarinersController _nMController;
@@ -153,7 +153,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
 
-        [Test]      
+        [Test]
         public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
         {
             const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
@@ -161,7 +161,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string mimeType = "application/txt";
 
             ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
-            Assert.AreEqual(false,((RedirectToActionResult)result).PreserveMethod);
+            Assert.AreEqual(false, ((RedirectToActionResult)result).PreserveMethod);
             Assert.AreEqual("ShowDailyFiles", ((RedirectToActionResult)result).ActionName);
         }
     }
