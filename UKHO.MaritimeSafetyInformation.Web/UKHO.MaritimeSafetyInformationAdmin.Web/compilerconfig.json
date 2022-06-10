@@ -1,6 +1,6 @@
 ﻿[
-    {
-        "outputFile": "wwwroot/css/maritime-safety-information.css",
-        "inputFile": "wwwroot/css/maritime-safety-information.scss"
-    }
+  {
+    "outputFile": "wwwroot/css/maritime-safety-information-admin.css",
+    "inputFile": "wwwroot/css/maritime-safety-information-admin.scss"
+  }
 ]
