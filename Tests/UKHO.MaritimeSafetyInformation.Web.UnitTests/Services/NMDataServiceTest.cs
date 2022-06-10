@@ -126,12 +126,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
-            const int dailyFilesDataCount = 2;
+            const int expectedDailyFilesDataCount = 2;
 
             List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-            Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+            Assert.AreEqual(expectedDailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-            Result<BatchSearchResponse> searchResult = SetSearchResultForWeeklyDuplicateFile();
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
@@ -663,7 +663,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             return attributeSearchResult;
         }
 
-        private static Result<BatchSearchResponse> SetSearchResultForWeeklyDuplicateFile()
+        private static Result<BatchSearchResponse> SetSearchResultForDuplicateWeeklyFiles()
         {
             Result<BatchSearchResponse> searchResult = new()
             {
