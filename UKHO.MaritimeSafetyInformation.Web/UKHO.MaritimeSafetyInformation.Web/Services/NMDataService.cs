@@ -45,10 +45,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                    List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                    ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
+                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
                     return ListshowFilesResponseModels;
                 }
                 else
@@ -122,7 +121,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
@@ -138,7 +136,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
-                    showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
+                    List<ShowDailyFilesResponseModel> showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
+                    return showDailyFilesResponses;
                 }
                 else
                 {
@@ -146,7 +145,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     throw new ArgumentNullException("Invalid data received for daily NM files", new Exception());
                 }
 
-                return showDailyFilesResponses;
+                
             }
             catch (Exception ex)
             {

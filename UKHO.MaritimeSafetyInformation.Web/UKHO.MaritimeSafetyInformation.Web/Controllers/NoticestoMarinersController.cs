@@ -23,10 +23,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                ShowWeeklyFilesResponseModel showWeeklyFiles = new();
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
+                ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
@@ -45,10 +44,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             try
             {
-                ShowWeeklyFilesResponseModel showWeeklyFiles = new();
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
+                ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
                 ViewData["Year"] = year;
                 ViewData["Week"] = week;
@@ -87,11 +85,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = new();
-
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 

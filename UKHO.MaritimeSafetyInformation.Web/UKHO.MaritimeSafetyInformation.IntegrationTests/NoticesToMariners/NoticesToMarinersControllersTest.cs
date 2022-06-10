@@ -148,7 +148,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
+        public void WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException()
         {
             const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
             const string filename = "Test.txt";
