@@ -43,35 +43,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
         {
-            var distinctList = searchResult.Entries.Select(entry => new { YearWeek = entry.Attributes[5].Value, Date = entry.Attributes[0].Value, BatchPublishedDate = entry.BatchPublishedDate, BatchId = entry.BatchId }).OrderByDescending(x => x.BatchPublishedDate).ToList();
-            var groupDailyList = distinctList.GroupBy(entry => new { entry.YearWeek, entry.Date }).Select(x => x.First()).ToList();
-
-            List<BatchDetails> BatchDetailsList = new();
-            foreach (BatchDetails item in searchResult.Entries)
-            {
-                foreach (var innerItem in groupDailyList)
-                {
-                    if (innerItem.BatchId == item.BatchId)
-                    {
-                        BatchDetailsList.Add(item);
-                        break;
-                    }
-                }
-            }
-            searchResult.Count = BatchDetailsList.Count;
-            searchResult.Total = BatchDetailsList.Count;
-            searchResult.Entries = BatchDetailsList;
-         
-            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new ();
+            List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
             List<AttributesModel> attributes = searchResult.Entries.Where(x => x.AllFilesZipSize.HasValue).Select(item => new AttributesModel
             {
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
                 Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
-                YearWeek = item.Attributes.Where(x => x.Key.Replace(" ","").Equals("Year / Week".Replace(" ", ""))).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
-                 AllFilesZipSize = (long)item.AllFilesZipSize
-            }).ToList();
+                YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year / Week".Replace(" ", ""))).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
+                AllFilesZipSize = (long)item.AllFilesZipSize,
+                BatchPublishedDate = item.BatchPublishedDate,
+            }).OrderByDescending(x => x.BatchPublishedDate)
+            .GroupBy(x => Convert.ToDateTime(x.DataDate))
+            .Select(x => x.First())
+            .ToList();
 
             IEnumerable<IGrouping<string, AttributesModel>> grouped = attributes.GroupBy(x => x.YearWeek);
             foreach (IGrouping<string, AttributesModel> group in grouped)
@@ -103,7 +88,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static string GetFormattedDate(string strDate)
         {
-            string[] formats = { "M/d/yyyy", "d/M/yyyy", "M-d-yyyy", "d-M-yyyy", "d-MMM-yy", "d-MMMM-yyyy","yyyy-MM-dd" };
+            string[] formats = { "M/d/yyyy", "d/M/yyyy", "M-d-yyyy", "d-M-yyyy", "d-MMM-yy", "d-MMMM-yyyy", "yyyy-MM-dd" };
 
             if (DateTime.TryParseExact(strDate, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
                 return date.ToString("dd-MM-yy");
@@ -111,7 +96,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return string.Empty;
         }
 
-        public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters,string correlationId, ILogger logger)
+        public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters, string correlationId, ILogger logger)
         {
             foreach (var parameter in parameters)
             {
@@ -119,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 {
                     logger.LogInformation(
                         EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
-                        "Maritime safety information download single NM files called with invalid argument "+ parameter.Key + ":{" + parameter.Key +"} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
+                        "Maritime safety information download single NM files called with invalid argument " + parameter.Key + ":{" + parameter.Key + "} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
             }
