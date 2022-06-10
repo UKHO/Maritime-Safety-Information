@@ -37,12 +37,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
-            Assert.AreEqual(9, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual(3, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(2022, showWeeklyFiles.YearAndWeekList[3].Year);
-            Assert.AreEqual(05, showWeeklyFiles.YearAndWeekList[3].Week);
-            Assert.AreEqual("image/jpg", showWeeklyFiles.ShowFilesResponseList[3].MimeType);
+            Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
+            Assert.AreEqual(14, showWeeklyFiles.YearAndWeekList[0].Week);
+            Assert.AreEqual("image/jpg", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
         }
 
         [Test]
@@ -92,6 +92,21 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
+        public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
+        {
+            IActionResult result = await _nMController.ShowWeeklyFilesAsync(2022, 18);
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
+            Assert.IsTrue(listFiles != null);
+            Assert.AreEqual(3, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("e6231e8f-2dfa-4c1d-8b68-9913f4d70e55", listFiles[0].BatchId);
+            Assert.AreEqual("NM_MSI", listFiles[0].FileDescription);
+            Assert.AreEqual("image/jpg", listFiles[0].MimeType);
+            Assert.AreEqual(108480, listFiles[0].FileSize);
+        }
+
+        [Test]
         public async Task WhenCallShowDailyFilesAsync_ThenReturnDailyFiles()
         {
             IActionResult result = await _nMController.ShowDailyFilesAsync();
@@ -99,12 +114,31 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(showFiles);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(17, showFiles[0].DailyFilesData.Count);
-            Assert.AreEqual("33", showFiles[0].WeekNumber);
-            Assert.AreEqual("2021", showFiles[0].Year);
-            Assert.AreEqual("Daily 02-10-20.zip", showFiles[0].DailyFilesData[0].Filename);
+            Assert.AreEqual(1, showFiles[3].DailyFilesData.Count);
+            Assert.AreEqual("33", showFiles[3].WeekNumber);
+            Assert.AreEqual("2021", showFiles[3].Year);
+            Assert.AreEqual("2021/33", showFiles[3].YearWeek);
+            Assert.AreEqual("2021-08-14", showFiles[3].DailyFilesData[0].DataDate);
+            Assert.AreEqual("Daily 14-08-21.zip", showFiles[3].DailyFilesData[0].Filename);
+            Assert.AreEqual("416 KB", showFiles[3].DailyFilesData[0].FileSizeInKB);
+            Assert.AreEqual("977e771c-1ed6-4345-8d01-fff728952f1b", showFiles[3].DailyFilesData[0].BatchId);
+        }
+
+        [Test]
+        public async Task WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles()
+        {
+            IActionResult result = await _nMController.ShowDailyFilesAsync();
+            List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(5, showFiles[0].DailyFilesData.Count);
+            Assert.AreEqual("21", showFiles[0].WeekNumber);
+            Assert.AreEqual("2022", showFiles[0].Year);
+            Assert.AreEqual("2022-05-24", showFiles[0].DailyFilesData[0].DataDate);
+            Assert.AreEqual("Daily 24-05-22.zip", showFiles[0].DailyFilesData[0].Filename);
             Assert.AreEqual("416 KB", showFiles[0].DailyFilesData[0].FileSizeInKB);
-            Assert.AreEqual("74806230-3041-4dbf-b32b-1c099aa8285c", showFiles[0].DailyFilesData[0].BatchId);
+            Assert.AreEqual("a8d14b93-42ab-455b-a4ed-39effecb8536", showFiles[0].DailyFilesData[0].BatchId);
         }
 
         [Test]

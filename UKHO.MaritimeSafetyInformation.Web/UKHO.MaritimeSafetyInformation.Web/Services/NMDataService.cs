@@ -44,7 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 BatchSearchResponse SearchResult = result.Data;
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
-                {
+                {          
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                     List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
@@ -125,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken =  await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 

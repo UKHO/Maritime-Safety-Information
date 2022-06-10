@@ -1,4 +1,4 @@
-﻿@model UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.EditRadioNavigationalWarningAdmin
+﻿@model UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO.RadioNavigationalWarning
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,7 +14,8 @@
                 <div class="mb-3">
                     <label asp-for="WarningType" class="form-label"></label>
                     <span class="text-danger">*</span>
-                    <select name="WarningType" class="form-select" asp-items="@ViewBag.WarningType" id="WarningType"></select>
+                    <select asp-for="WarningType" asp-items="@(new SelectList(ViewBag.WarningType,"Id","Name"))" class="form-select">
+                     </select>
                     <span asp-validation-for="WarningType" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
