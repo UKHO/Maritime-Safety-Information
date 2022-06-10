@@ -85,22 +85,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public RadioNavigationalWarning GetRadioNavigationalWarningById(int id)
         {
-            RadioNavigationalWarning rnwWarning = _context.Set<RadioNavigationalWarning>().Find(id);
-            return rnwWarning;
+            return _context.Set<RadioNavigationalWarning>().Find(id);
         }
 
-        public async Task UpdateRadioNavigationalWarning(RadioNavigationalWarning radioNavigationalWarningAdmin)
+        public async Task UpdateRadioNavigationalWarning(RadioNavigationalWarning radioNavigationalWarning)
         {
-            RadioNavigationalWarning rnw = await _context.RadioNavigationalWarnings.FirstOrDefaultAsync(r => r.Id == radioNavigationalWarningAdmin.Id);
-            rnw.WarningType = radioNavigationalWarningAdmin.WarningType;
-            rnw.Reference = radioNavigationalWarningAdmin.Reference;
-            rnw.DateTimeGroup = radioNavigationalWarningAdmin.DateTimeGroup;
-            rnw.Summary = radioNavigationalWarningAdmin.Summary;
-            rnw.Content = radioNavigationalWarningAdmin.Content;
-            rnw.ExpiryDate = radioNavigationalWarningAdmin.ExpiryDate;
-            rnw.IsDeleted = radioNavigationalWarningAdmin.IsDeleted;
-            rnw.LastModified = DateTime.UtcNow;
-            _context.Update(rnw);
+            radioNavigationalWarning.LastModified = DateTime.UtcNow;
+            _context.Update(radioNavigationalWarning);
             await _context.SaveChangesAsync();
         }
 

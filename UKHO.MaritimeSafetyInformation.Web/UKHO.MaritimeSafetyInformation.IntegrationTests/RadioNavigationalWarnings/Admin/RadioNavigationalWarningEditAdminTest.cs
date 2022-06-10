@@ -55,12 +55,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public async Task WhenCallUpdateRadioNavigationWarnings_ThenRecordIsUpdated()
         {
             _controller.TempData = _tempData;
-            _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            _fakeRadioNavigationalWarning = FakeContext.RadioNavigationalWarnings.Find(9);
+            _fakeRadioNavigationalWarning.IsDeleted = false;
             IActionResult result = await _controller.Edit(_fakeRadioNavigationalWarning);
             Assert.IsInstanceOf<IActionResult>(result);
             Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());
             Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-            
         }
 
 
@@ -104,21 +104,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
                                 async delegate { await _controller.Edit(_fakeRadioNavigationalWarning); });
         }
-
-        //private static RadioNavigationalWarning GetFakeRadioNavigationalWarning()
-        //{
-        //    return new RadioNavigationalWarning()
-        //    {
-        //        Id = 9,
-        //        WarningType = 1,
-        //        Reference = "ReferenceTest",
-        //        DateTimeGroup = new DateTime(2022, 12, 30),
-        //        Summary = "SummaryTest",
-        //        Content = "ContentTest",
-        //        ExpiryDate = new DateTime(2099, 1, 1),
-        //        IsDeleted = true
-        //    };
-        //}
 
         [OneTimeTearDown]
         public async Task GlobalTearDown()
