@@ -199,5 +199,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return true;
         }
 
+        public async Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsData(int[] selectedIds, string correlationId)
+        {
+            try
+            {
+                _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseStarted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database started for _X-Correlation-ID:{correlationId}", correlationId);
+
+                List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(selectedIds);
+
+                _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database completed for _X-Correlation-ID:{correlationId}", correlationId);
+
+                return radioNavigationalWarningsData;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ErrorInRNWShowListDetailFromDatabase.ToEventId(), ex, "Maritime safety information error has occurred in the process to show RNW details for selected warnings from database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
+                throw;
+            }
+        }
     }
 }

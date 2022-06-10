@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             IActionResult result = await _controller.About();
 
             Assert.IsInstanceOf<IActionResult>(result);
+        }
+
+        [Test]
+        public async Task WhenCallShowSelection_ThenReturnView()
+        {
+            DefaultHttpContext httpContext = new();
+            const string expectedView = "~/Views/RadioNavigationalWarnings/ShowSelection.cshtml";
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"showSelectionId", "1,2,3" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+            A.CallTo(() => _fakeRnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty)).Returns(new List<RadioNavigationalWarningsData>());
+            
+            IActionResult result = await _controller.ShowSelection();
+
+            Assert.IsInstanceOf<IActionResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
     }
 }

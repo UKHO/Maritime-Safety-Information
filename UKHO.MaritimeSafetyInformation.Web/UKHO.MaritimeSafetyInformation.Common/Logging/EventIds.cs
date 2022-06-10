@@ -380,7 +380,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910089 - Maritime safety information Error in Creating RNW record.
         /// </summary>
-        CreateRNWRecordException = 910089
+        CreateRNWRecordException = 910089,
+        /// <summary> 
+        /// 910090 -  Maritime safety information request to show RNW details from database started.
+        /// </summary>
+        RNWShowListDetailFromDatabaseStarted = 910090,
+        /// <summary> 
+        /// 910091 -  Maritime safety information request to show RNW details from database completed.
+        /// </summary>
+        RNWShowListDetailFromDatabaseCompleted = 910091,
+        /// <summary> 
+        /// 910092 -  Maritime safety information error has occurred in the process to show RNW detail from database.
+        /// </summary>
+        ErrorInRNWShowListDetailFromDatabase = 910092
 
     }
 
