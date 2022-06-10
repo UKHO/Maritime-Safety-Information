@@ -337,12 +337,6 @@
   border: 0;
   background-color: transparent;
 }
-.accordianTable .accordion-button tr:nth-child(even) {
-  background-color: #ffffff;
-}
-.accordianTable .accordion-button tr:nth-child(4n-1) {
-  background-color: #eef3f4;
-}
 .accordianTable .accordion-button.collapsed::before {
   content: "View ";
 }
