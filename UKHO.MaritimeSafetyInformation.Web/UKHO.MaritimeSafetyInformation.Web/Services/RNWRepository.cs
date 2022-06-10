@@ -63,6 +63,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                           where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
                           select new RadioNavigationalWarningsData
                           {
+                              Id = rnwWarnings.Id,
+                              WarningType = warningType.Name,
+                              Reference = rnwWarnings.Reference,
+                              DateTimeGroup = rnwWarnings.DateTimeGroup,
+                              Description = rnwWarnings.Summary,
+                              DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
+                              Content = rnwWarnings.Content
+                          }).OrderByDescending(a => a.DateTimeGroup)
+                     .ToListAsync();
+        }
+
+        public async Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsDataList(int[] selectedIds)
+        {
+            return await (from rnwWarnings in _context.RadioNavigationalWarnings
+                          join warningType in _context.WarningType on rnwWarnings.WarningType equals warningType.Id
+                          where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow) && selectedIds.Contains(rnwWarnings.Id)
+                          select new RadioNavigationalWarningsData
+                          {
+                              Id = rnwWarnings.Id,
                               WarningType = warningType.Name,
                               Reference = rnwWarnings.Reference,
                               DateTimeGroup = rnwWarnings.DateTimeGroup,

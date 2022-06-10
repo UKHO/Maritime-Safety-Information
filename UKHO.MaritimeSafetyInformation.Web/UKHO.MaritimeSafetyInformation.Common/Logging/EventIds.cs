@@ -381,22 +381,34 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910089 - Maritime safety information Error in Creating RNW record.
         /// </summary>
         CreateRNWRecordException = 910089,
-        /// <summary>
-        /// 910071 - Radio Navigational Warning database for Maritime safety information is healthy.
+        /// <summary> 
+        /// 910090 -  Maritime safety information request to show RNW details from database started.
         /// </summary>
-        RNWDatabaseIsHealthy = 910090,
-        /// <summary>
-        /// 910072 - Radio Navigational Warning database for Maritime safety information is unhealthy.
+        RNWShowListDetailFromDatabaseStarted = 910090,
+        /// <summary> 
+        /// 910091 -  Maritime safety information request to show RNW details from database completed.
         /// </summary>
-        RNWDatabaseIsUnHealthy = 910091,
-        /// <summary>
-        /// 910092 - FSS for Maritime safety information is healthy.
+        RNWShowListDetailFromDatabaseCompleted = 910091,
+        /// <summary> 
+        /// 910092 -  Maritime safety information error has occurred in the process to show RNW detail from database.
         /// </summary>
-        FileShareServiceIsHealthy = 910092,
+        ErrorInRNWShowListDetailFromDatabase = 910092,
         /// <summary>
-        /// 910093 - FSS for Maritime safety information is unhealthy.
+        /// 910093 - Radio Navigational Warning database is healthy.
         /// </summary>
-        FileShareServiceIsUnHealthy = 910093
+        RNWDatabaseIsHealthy = 910093,
+        /// <summary>
+        /// 910094 - Radio Navigational Warning database is unhealthy.
+        /// </summary>
+        RNWDatabaseIsUnHealthy = 910094,
+        /// <summary>
+        /// 910095 - File share service is healthy.
+        /// </summary>
+        FileShareServiceIsHealthy = 910095,
+        /// <summary>
+        /// 910096 - File share service is unhealthy.
+        /// </summary>
+        FileShareServiceIsUnHealthy = 910096
 
     }
 

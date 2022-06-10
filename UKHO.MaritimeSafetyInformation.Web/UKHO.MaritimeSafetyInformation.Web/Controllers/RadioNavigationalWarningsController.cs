@@ -38,5 +38,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ShowSelection()
+        {
+            int[] selectedIds = Array.Empty<int>();
+            string data = Request.Form["showSelectionId"];
+            if (!string.IsNullOrWhiteSpace(data))
+            {
+                selectedIds = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+            }
+
+            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetSelectedRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
+
+            return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);
+        }
     }
 }
