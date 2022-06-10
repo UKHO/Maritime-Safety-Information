@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
-            configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
+            configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
