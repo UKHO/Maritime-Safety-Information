@@ -79,7 +79,6 @@
         }
     }
 }
-
 .accordianTable {
     .accordion-button {
         padding: 0;
@@ -88,7 +87,7 @@
         text-decoration: underline;
         color: $prussian-blue;
         background-color: transparent;
-        font-weight: 300;
+        font-weight:300;
 
         &:hover, &:active {
             border: 0;
@@ -119,9 +118,8 @@
 
     tr.accordion-collapse td {
         border-right: 0 !important;
-    }
+    }    
 }
-
 .accordianTable, .selection-details {
     .warning-detail {
         font-size: 18px;
@@ -154,7 +152,6 @@
         }
     }
 }
-
 .selection-details {
     max-height: 60vh !important;
     overflow-y: auto;
@@ -170,7 +167,6 @@
         }
     }
 }
-
 .caption-table {
     margin-top: 45px;
     position: relative;
@@ -186,7 +182,6 @@
         top: -50px;
     }
 }
-
 .daily-table-container {
     max-height: 78vh !important;
     overflow-y: auto;
