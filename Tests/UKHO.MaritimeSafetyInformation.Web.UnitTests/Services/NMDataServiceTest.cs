@@ -151,32 +151,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledWithValidTokenandNodata_ThenShouldReturnCountZero()
+        public void WhenGetAllYearWeekIsCalled_ThenShouldThrowArgumentNullException()
         {
-            const int ExpectedRecordCount = 0;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
-            Assert.IsEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
+                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldReturnNoList()
+        public void WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldThrowArgumentNullException()
         {
-            const int ExpectedRecordCount = 0;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
-
-            Assert.IsEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
+                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
