@@ -14,7 +14,7 @@ test.describe("Sign in For The maritime-safety-information", () => {
   test("With the blank details", async ({ page, context }) => {
     await login.loginwithBlankDetails('', '');
   })
-  test.only('With the Valid details', async ({ page, context }) => {
+  test('With the Valid details', async ({ page, context }) => {
     await login.loginWithValidDetails(app.username, app.password);
   })
 });
