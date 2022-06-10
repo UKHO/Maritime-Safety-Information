@@ -87,13 +87,11 @@
         text-decoration: underline;
         color: $prussian-blue;
         background-color: transparent;
-        font-weight:300;
+        font-weight: 300;
 
         &:hover, &:active {
             border: 0;
             background-color: transparent;
-        }
-            }
         }
 
         tr:nth-child(even) {
@@ -128,7 +126,7 @@
 
     tr.accordion-collapse td {
         border-right: 0 !important;
-    }    
+    }
 }
 .accordianTable, .selection-details {
     .warning-detail {
