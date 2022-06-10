@@ -117,12 +117,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithInValidPageNo_ThenReturnEmptyListAsync()
+        public void WhenCallIndexWithInValidPageNo_ThenThrowArgumentNullException()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-            IActionResult result = await _controller.Index(4, null, null);
-            RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(0, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No data received from RNW database for Admin"),
+                async delegate { await _controller.Index(4, null, null); });
         }
 
         [Test]

@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenCallGetRadioNavigationalWarningsWithNoData_ThenReturnException()
+        public void WhenCallGetRadioNavigationalWarningsWithNoData_ThenReturnArgumentNullException()
         {
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new List<RadioNavigationalWarningsData>();
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Returns(radioNavigationalWarningsData);
