@@ -317,6 +317,10 @@ table td a {
   margin-top: -1px;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 .pagination {
   margin: 0;
 }
