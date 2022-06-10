@@ -22,8 +22,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [Route("/error")]
-        public IActionResult Error()
+        public IActionResult Error(string CurrentCorrelationId)
         {
+            _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+            ViewData["CurrentCorrelationId"] = CurrentCorrelationId;
             return View();
         }
     }

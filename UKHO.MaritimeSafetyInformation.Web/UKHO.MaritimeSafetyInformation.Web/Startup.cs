@@ -85,16 +85,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             }
             app.UseExceptionHandler("/error");
 
-            app.Use(async (context, next) =>
-            {
-                await next();
-                if (context.Response.StatusCode == 404)
-                {
-                    context.Request.Path = "/error";
-                    await next();
-                }
-            });
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
