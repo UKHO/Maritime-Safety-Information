@@ -93,16 +93,6 @@
             border: 0;
             background-color: transparent;
         }
-            }
-        }
-
-        tr:nth-child(even) {
-            background-color: $white;
-        }
-
-        tr:nth-child(4n-1) {
-            background-color: rgb(238, 243, 244);
-        }
 
         &.collapsed::before {
             content: "View ";
