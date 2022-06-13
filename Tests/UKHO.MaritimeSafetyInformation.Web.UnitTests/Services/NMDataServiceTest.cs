@@ -74,7 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
                 async delegate { await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId); });
         }
 
@@ -170,7 +170,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid data received for daily NM files"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
                 async delegate { await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
         }
 
@@ -194,7 +194,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
                 async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
@@ -206,7 +206,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from File Share Service for request to search attribute year and week"),
                 async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
@@ -283,7 +283,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
                 async delegate { await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId); });
         }
 

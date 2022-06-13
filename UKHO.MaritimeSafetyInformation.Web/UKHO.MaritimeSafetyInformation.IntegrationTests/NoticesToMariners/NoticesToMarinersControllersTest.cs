@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -65,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public void WhenCallIndexForWeekWithNoData_ThenThrowArgumentNullException()
         {
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
                 async delegate { await _nMController.Index(2021, 08); });
         }
 
@@ -87,7 +88,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowArgumentNullException()
         {
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
                 async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });
         }
 

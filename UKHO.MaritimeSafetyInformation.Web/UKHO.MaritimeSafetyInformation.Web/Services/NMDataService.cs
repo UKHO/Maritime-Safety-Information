@@ -52,8 +52,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
-                    throw new ArgumentNullException("Invalid data received for weekly NM files", new Exception());
+                    _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                    throw new InvalidDataException("Invalid data received for weekly NM files", new Exception());
                 }
             }
             catch (Exception ex)
@@ -100,8 +100,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                             }
                             else
                             {
-                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data received from File Share Service for request to search attribute year and week for _X-Correlation-ID:{correlationId}", correlationId);
-                                throw new ArgumentNullException("No Data received from File Share Service for request to search attribute year and week", new Exception());
+                                _logger.LogError(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data received from File Share Service for request to search attribute year and week for _X-Correlation-ID:{correlationId}", correlationId);
+                                throw new InvalidDataException("No data received from File Share Service for request to search attribute year and week", new Exception());
                             }
                             break;
                         }
@@ -109,8 +109,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No Data received from File Share Service for request to search attribute year and week for _X-Correlation-ID:{correlationId}", correlationId);
-                    throw new ArgumentNullException("No Data received from File Share Service for request to search attribute year and week", new Exception());
+                    _logger.LogError(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data received from File Share Service for request to search attribute year and week for _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("No Data received from File Share Service for request to search attribute year and week", new Exception());
                 }
             }
             catch (Exception ex)
@@ -145,8 +145,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
-                    throw new ArgumentNullException("Invalid data received for daily NM files", new Exception());
+                    _logger.LogError(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("Invalid data received for daily NM files", new Exception());
                 }
 
                 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -24,7 +25,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/error")]
         public IActionResult Error()
         {
-            ViewData["CurrentCorrelationId"] = HttpContext.Request.Headers["X-Correlation-ID"].FirstOrDefault();
+            string correlationId = GetCurrentCorrelationId();
+            ViewData["CurrentCorrelationId"] = correlationId;
+            IExceptionHandlerPathFeature exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            _logger.LogError(EventIds.MSISystemError.ToEventId(), "System error has occurred while processing request with exception:{ex}, at exception path:{path} for correlationId:{correlationId}", exceptionDetails.Error.Message, exceptionDetails.Path, correlationId);
             return View();
         }
     }

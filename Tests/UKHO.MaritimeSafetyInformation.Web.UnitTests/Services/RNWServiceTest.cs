@@ -182,7 +182,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No data received from RNW database for Admin"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for Admin"),
                            async delegate { await _rnwService.GetRadioNavigationWarningsForAdmin(4, null, null, string.Empty); });
         }
 
@@ -218,7 +218,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new List<RadioNavigationalWarningsData>();
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Returns(radioNavigationalWarningsData);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No data received for RNW database"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received for RNW database"),
                                async delegate { await _rnwService.GetRadioNavigationalWarningsData(string.Empty); });
         }
 
@@ -246,7 +246,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeRnwRepository.GetSelectedRadioNavigationalWarningsDataList(Array.Empty<int>())).Returns(radioNavigationalWarningsData);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("No data received from RNW database for selected warnings"),
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for selected warnings"),
                                async delegate { await _rnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty); });
         }
 
