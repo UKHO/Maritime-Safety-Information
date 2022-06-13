@@ -21,5 +21,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 
         [DataMember(Name = "allfileszipsize", EmitDefaultValue = false)]
         public long AllFilesZipSize { get; set; }
+
+        [DataMember(Name = "batchpublisheddate", EmitDefaultValue = false)]
+        public DateTime? BatchPublishedDate { get; set; }
     }
 }
