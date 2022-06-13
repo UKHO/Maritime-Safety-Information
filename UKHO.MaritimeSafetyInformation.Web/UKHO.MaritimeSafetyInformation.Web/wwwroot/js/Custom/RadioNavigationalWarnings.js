@@ -39,7 +39,3 @@ function enableDisableShowSelection() {
         }
     }
 }
-
-function printDiv() {
-    window.print();
-}
