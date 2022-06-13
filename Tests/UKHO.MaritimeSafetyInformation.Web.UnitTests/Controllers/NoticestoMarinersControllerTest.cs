@@ -45,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenIndexIsCalled_ThenShouldThrowException()
+        public void WhenIndexIsCalledAndExceptionThrownByService_ThenShouldThrowException()
         {
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenIndexPostIsCalled_ThenShouldThrowException()
+        public void WhenIndexPostIsCalledAndExceptionThrownByService_ThenShouldThrowException()
         {
             const int year = -1;
             const int week = -1;
