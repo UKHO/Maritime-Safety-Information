@@ -1,5 +1,5 @@
 ﻿@media print {
-    button#Print, .msi-tabs-container, .back-btn-container, .footer-links {
+    button#Print, .msi-tabs-container, .back-btn-container, .site-footer, .site-header {
         display: none;
     }
 
@@ -13,5 +13,12 @@
     }
     .footer-text{
         margin-top:0!important;
+    }
+    #rnwInfo{
+        padding-top:0!important;
+        padding-bottom:0!important;
+    }
+    h1{
+        font-size:32px;
     }
 }
