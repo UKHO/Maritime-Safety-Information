@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
@@ -27,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
         [Test]
         public async Task WhenRNWDatabaseIsHealthy_ThenReturnsHealthy()
         {
-            A.CallTo(() => _fakeRnwDatabaseHealthClient.CheckHealthAsync()).Returns(new HealthCheckResult(HealthStatus.Healthy));
+            A.CallTo(() => _fakeRnwDatabaseHealthClient.CheckHealthAsync(A<CancellationToken>.Ignored)).Returns(new HealthCheckResult(HealthStatus.Healthy));
 
             HealthCheckResult response = await _rnwDatabaseHealthCheck.CheckHealthAsync(new HealthCheckContext());
 
@@ -37,7 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
         [Test]
         public async Task WhenRNWDatabaseIsUnhealthy_ThenReturnsUnhealthy()
         {
-            A.CallTo(() => _fakeRnwDatabaseHealthClient.CheckHealthAsync()).Returns(new HealthCheckResult(HealthStatus.Unhealthy, "Radio navigational Warning database is unhealthy", new Exception("Radio navigational Warning database is unhealthy")));
+            A.CallTo(() => _fakeRnwDatabaseHealthClient.CheckHealthAsync(A<CancellationToken>.Ignored)).Returns(new HealthCheckResult(HealthStatus.Unhealthy, "Radio Navigational Warnings database is unhealthy", new Exception("Radio Navigational Warnings database is unhealthy")));
 
             HealthCheckResult response = await _rnwDatabaseHealthCheck.CheckHealthAsync(new HealthCheckContext());
 

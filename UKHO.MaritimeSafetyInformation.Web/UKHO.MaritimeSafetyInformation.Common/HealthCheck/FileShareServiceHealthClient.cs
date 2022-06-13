@@ -22,34 +22,34 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
             _authFssTokenProvider = authFssTokenProvider;
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync()
+        public async Task<HealthCheckResult> CheckHealthAsync(CancellationToken cancellationToken)
         {
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(Guid.NewGuid().ToString());
                 FileShareApiClient fileShareApiClient = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                IResult<BatchSearchResponse> result = await FSSSearchAsync(fileShareApiClient);
+                IResult<BatchSearchResponse> result = await FSSSearchAsync(fileShareApiClient, cancellationToken);
 
                 if (result.IsSuccess)
                 {
-                    return HealthCheckResult.Healthy("File share service is healthy");
+                    return HealthCheckResult.Healthy("File Share Service is healthy");
                 }
                 else
                 {
-                    return HealthCheckResult.Unhealthy("File share service is unhealthy", new Exception("Batch search response is not success, Please check configuration."));
+                    return HealthCheckResult.Unhealthy("File Share Service is unhealthy", new Exception("Batch search response is not success, Please check configuration."));
                 }
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy("File share service is unhealthy", new Exception(ex.Message));
+                return HealthCheckResult.Unhealthy("File Share Service is unhealthy", new Exception(ex.Message));
             }
         }
 
-        private async Task<IResult<BatchSearchResponse>> FSSSearchAsync(IFileShareApiClient fileShareApiClient)
+        private async Task<IResult<BatchSearchResponse>> FSSSearchAsync(IFileShareApiClient fileShareApiClient, CancellationToken cancellationToken)
         {
             string searchQuery = $"BusinessUnit eq 'invalid'";
-            IResult<BatchSearchResponse> result = await fileShareApiClient.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, CancellationToken.None);
+            IResult<BatchSearchResponse> result = await fileShareApiClient.Search(searchQuery, _fileShareServiceConfig.Value.PageSize, _fileShareServiceConfig.Value.Start, cancellationToken);
             return result;
         }
     }

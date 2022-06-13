@@ -12,16 +12,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
             _context = context;
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync()
+        public async Task<HealthCheckResult> CheckHealthAsync(CancellationToken cancellationToken)
         {
             try
             {
                 await _context.WarningType.ToListAsync();
-                return HealthCheckResult.Healthy("Radio navigational warning database is healthy");
+                return HealthCheckResult.Healthy("Radio Navigational Warnings database is healthy");
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy("Radio navigational warning database is unhealthy", new Exception(ex.Message));
+                return HealthCheckResult.Unhealthy("Radio Navigational Warnings database is unhealthy", new Exception(ex.Message));
             }      
         }
     }

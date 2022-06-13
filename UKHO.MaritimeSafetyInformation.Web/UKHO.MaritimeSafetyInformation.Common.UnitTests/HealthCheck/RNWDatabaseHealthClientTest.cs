@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FakeItEasy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NUnit.Framework;
+using System.Threading;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
@@ -21,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
 
             _rnwDatabaseHealthClient = new RNWDatabaseHealthClient(_context);
 
-            HealthCheckResult response = await _rnwDatabaseHealthClient.CheckHealthAsync();
+            HealthCheckResult response = await _rnwDatabaseHealthClient.CheckHealthAsync(CancellationToken.None);
 
             Assert.AreEqual(HealthStatus.Healthy, response.Status);
         }
@@ -31,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
         {
             _rnwDatabaseHealthClient = new RNWDatabaseHealthClient(_context);
 
-            HealthCheckResult response = await _rnwDatabaseHealthClient.CheckHealthAsync();
+            HealthCheckResult response = await _rnwDatabaseHealthClient.CheckHealthAsync(CancellationToken.None);
 
             Assert.AreEqual(HealthStatus.Unhealthy, response.Status);
         }

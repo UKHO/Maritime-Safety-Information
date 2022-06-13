@@ -17,14 +17,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            HealthCheckResult healthCheckResult = await _rnwDatabaseHealthClient.CheckHealthAsync();
+            HealthCheckResult healthCheckResult = await _rnwDatabaseHealthClient.CheckHealthAsync(cancellationToken);
             if (healthCheckResult.Status == HealthStatus.Healthy)
             {
-                _logger.LogDebug(EventIds.RNWDatabaseIsHealthy.ToEventId(), "Radio navigational Warning database is healthy");
+                _logger.LogDebug(EventIds.RNWDatabaseIsHealthy.ToEventId(), "Radio Navigational Warnings database is healthy");
             }
             else
             {
-                _logger.LogError(EventIds.RNWDatabaseIsUnHealthy.ToEventId(), healthCheckResult.Exception, "Radio mavigational warning database is unhealthy responded with error {Message}", healthCheckResult.Exception.Message);
+                _logger.LogError(EventIds.RNWDatabaseIsUnHealthy.ToEventId(), healthCheckResult.Exception, "Radio Navigational Warnings database is unhealthy responded with error {Message}", healthCheckResult.Exception.Message);
             }
             return healthCheckResult;
         }

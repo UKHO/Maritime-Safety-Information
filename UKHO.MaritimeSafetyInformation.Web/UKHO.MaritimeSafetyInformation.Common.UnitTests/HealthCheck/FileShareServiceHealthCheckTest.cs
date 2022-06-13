@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
@@ -25,9 +26,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
         }
 
         [Test]
-        public async Task WhenFssConnectionIsHealthy_ThenReturnsHealthy()
+        public async Task WhenFSSConnectionIsHealthy_ThenReturnsHealthy()
         {
-            A.CallTo(() => _fakeFileShareServiceHealthClient.CheckHealthAsync()).Returns(new HealthCheckResult(HealthStatus.Healthy));
+            A.CallTo(() => _fakeFileShareServiceHealthClient.CheckHealthAsync(A<CancellationToken>.Ignored)).Returns(new HealthCheckResult(HealthStatus.Healthy));
 
             HealthCheckResult response = await _fileShareServiceHealthCheck.CheckHealthAsync(new HealthCheckContext());
 
@@ -35,9 +36,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
         }
 
         [Test]
-        public async Task WhenFssConnectionIsUnHealthy_ThenReturnsUnHealthy()
+        public async Task WhenFSSConnectionIsUnHealthy_ThenReturnsUnHealthy()
         {
-            A.CallTo(() => _fakeFileShareServiceHealthClient.CheckHealthAsync()).Returns(new HealthCheckResult(HealthStatus.Unhealthy, "File share service is unhealthy", new Exception("File share service is unhealthy")));
+            A.CallTo(() => _fakeFileShareServiceHealthClient.CheckHealthAsync(A<CancellationToken>.Ignored)).Returns(new HealthCheckResult(HealthStatus.Unhealthy, "File Share Service is unhealthy", new Exception("File Share Service is unhealthy")));
 
             HealthCheckResult response = await _fileShareServiceHealthCheck.CheckHealthAsync(new HealthCheckContext());
 

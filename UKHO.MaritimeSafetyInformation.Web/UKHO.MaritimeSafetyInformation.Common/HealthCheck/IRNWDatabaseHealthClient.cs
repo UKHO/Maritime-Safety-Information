@@ -5,6 +5,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
 {
     public interface IRNWDatabaseHealthClient
     {
-        Task<HealthCheckResult> CheckHealthAsync();
+        Task<HealthCheckResult> CheckHealthAsync(CancellationToken cancellationToken);
     }
 }

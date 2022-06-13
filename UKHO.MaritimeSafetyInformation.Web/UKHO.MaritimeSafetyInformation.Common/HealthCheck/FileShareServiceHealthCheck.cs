@@ -17,14 +17,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            HealthCheckResult healthCheckResult = await _fileShareServiceHealthClient.CheckHealthAsync();
+            HealthCheckResult healthCheckResult = await _fileShareServiceHealthClient.CheckHealthAsync(cancellationToken);
             if (healthCheckResult.Status == HealthStatus.Healthy)
             {
-                _logger.LogDebug(EventIds.FileShareServiceIsHealthy.ToEventId(), "File share service is healthy");
+                _logger.LogDebug(EventIds.FileShareServiceIsHealthy.ToEventId(), "File Share Service is healthy");
             }
             else
             {
-                _logger.LogError(EventIds.FileShareServiceIsUnHealthy.ToEventId(), healthCheckResult.Exception, "File share service is unhealthy responded with error {Message}", healthCheckResult.Exception.Message);
+                _logger.LogError(EventIds.FileShareServiceIsUnHealthy.ToEventId(), healthCheckResult.Exception, "File Share Service is unhealthy responded with error {Message}", healthCheckResult.Exception.Message);
             }
             return healthCheckResult;
         }
