@@ -392,7 +392,23 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910092 -  Maritime safety information error has occurred in the process to show RNW detail from database.
         /// </summary>
-        ErrorInRNWShowListDetailFromDatabase = 910092
+        ErrorInRNWShowListDetailFromDatabase = 910092,
+        /// <summary>
+        /// 910093 - Radio Navigational Warning database is healthy.
+        /// </summary>
+        RNWDatabaseIsHealthy = 910093,
+        /// <summary>
+        /// 910094 - Radio Navigational Warning database is unhealthy.
+        /// </summary>
+        RNWDatabaseIsUnHealthy = 910094,
+        /// <summary>
+        /// 910095 - File share service is healthy.
+        /// </summary>
+        FileShareServiceIsHealthy = 910095,
+        /// <summary>
+        /// 910096 - File share service is unhealthy.
+        /// </summary>
+        FileShareServiceIsUnHealthy = 910096
 
     }
 

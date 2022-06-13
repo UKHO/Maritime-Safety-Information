@@ -53,13 +53,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenSignedOutActionCalled_ThenRedirectResult()
+        public void WhenSignedOutActionCalled_ThenRedirects()
         {
             A.CallTo(() => _fakeUrlHelper.Content(A<string>.Ignored)).Returns("test");
 
             IActionResult result = _controller.SignedOut();
 
-            Assert.IsTrue(result != null);
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<RedirectResult>(result);            
         }
     }
