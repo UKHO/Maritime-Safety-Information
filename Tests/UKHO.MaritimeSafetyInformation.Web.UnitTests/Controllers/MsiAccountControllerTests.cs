@@ -38,16 +38,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
         [Test]
         public void WhenSignOutActionCalled_ThenUsesRequiredAuthenticationScheme()
-        {
-            string callbackUrl = "https://www.abc.com/";
-            A.CallTo(() => _fakeUrlHelper.Action(A<UrlActionContext>.Ignored)).Returns(callbackUrl);
-
+        {           
             IActionResult result = _controller.SignOut();
 
             SignOutResult signOutResult = ((SignOutResult)result);
 
-            Assert.IsInstanceOf<SignOutResult>(result);
-            Assert.AreEqual(callbackUrl, signOutResult.Properties.RedirectUri);
+            Assert.IsInstanceOf<SignOutResult>(result);           
             Assert.IsTrue(signOutResult.AuthenticationSchemes.Contains(OpenIdConnectDefaults.AuthenticationScheme));
             Assert.IsTrue(signOutResult.AuthenticationSchemes.Contains(CookieAuthenticationDefaults.AuthenticationScheme));
         }
