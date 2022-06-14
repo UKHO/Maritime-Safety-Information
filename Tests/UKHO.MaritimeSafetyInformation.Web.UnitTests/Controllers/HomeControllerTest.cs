@@ -1,6 +1,4 @@
-﻿using System;
-using FakeItEasy;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

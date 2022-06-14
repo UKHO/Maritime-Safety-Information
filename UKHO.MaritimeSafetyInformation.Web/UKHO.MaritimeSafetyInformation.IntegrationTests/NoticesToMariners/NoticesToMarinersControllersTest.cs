@@ -64,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallIndexForWeekWithNoData_ThenThrowArgumentNullException()
+        public void WhenCallIndexForWeekWithNoData_ThenThrowInvalidDataException()
         {
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
                 async delegate { await _nMController.Index(2021, 08); });
@@ -86,7 +86,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowArgumentNullException()
+        public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowInvalidDataException()
         {
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
                 async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });

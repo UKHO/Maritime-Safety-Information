@@ -277,7 +277,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d2", "Daily 16-05-22.zip", "", Description = "When Download Daily File Is Called With Empty Mime Type Then Should Then Should Throw Exception")]
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d3", null, "application/gzip", Description = "When Download Daily File Is Called With Null File Name Then Should Then Should Throw Exception")]
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "", "application/gzip", Description = "When Download Daily File Is Called With Empty File Name Then Should Then Should Throw Exception")]
-        public void WhenDownloadDailyFileIsCalledWithEmptyValue_ThenShouldReturnThrowException(string batchId, string fileName, string mimeType)
+        public void WhenDownloadDailyFileIsCalledWithEmptyValue_ThenShouldThrowException(string batchId, string fileName, string mimeType)
         {
             Task<FileResult> result = _controller.DownloadDailyFile(batchId, fileName, mimeType);
 
