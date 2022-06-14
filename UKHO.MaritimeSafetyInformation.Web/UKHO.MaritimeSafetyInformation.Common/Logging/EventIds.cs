@@ -394,13 +394,29 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         ErrorInRNWShowListDetailFromDatabase = 910092,
         /// <summary>
-        /// 910093 -  Notices To Mariners Weekly File Request failed.
+        /// 910093 - Radio Navigational Warning database is healthy.
         /// </summary>
-        NoticesToMarinersWeeklyFilesRequestFailed = 910093,
+        RNWDatabaseIsHealthy = 910093,
         /// <summary>
-        /// 910094 -  MSI System Error.
+        /// 910094 - Radio Navigational Warning database is unhealthy.
         /// </summary>
-        MSISystemError = 910094
+        RNWDatabaseIsUnHealthy = 910094,
+        /// <summary>
+        /// 910095 - File share service is healthy.
+        /// </summary>
+        FileShareServiceIsHealthy = 910095,
+        /// <summary>
+        /// 910096 - File share service is unhealthy.
+        /// </summary>
+        FileShareServiceIsUnHealthy = 910096,
+        /// <summary>
+        /// 910097 -  Notices To Mariners Weekly File Request failed.
+        /// </summary>
+        NoticesToMarinersWeeklyFilesRequestFailed = 910097,
+        /// <summary>
+        /// 910098 -  MSI System Error.
+        /// </summary>
+        MSISystemError = 910098
 
     }
 
