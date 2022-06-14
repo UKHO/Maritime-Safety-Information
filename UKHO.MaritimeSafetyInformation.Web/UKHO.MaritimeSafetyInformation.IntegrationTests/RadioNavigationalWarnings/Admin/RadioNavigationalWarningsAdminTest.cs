@@ -118,7 +118,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public void WhenCallIndexWithInValidPageNo_ThenThrowArgumentNullException()
+        public void WhenCallIndexWithInValidPageNo_ThenThrowInvalidDataException()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for Admin"),

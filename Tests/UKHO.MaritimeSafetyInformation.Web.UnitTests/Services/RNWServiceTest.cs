@@ -66,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenPostInvalidWarningTypeInRequest_ThenReturnException()
+        public void WhenPostInvalidWarningTypeInRequest_ThenReturnInvalidDataException()
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
