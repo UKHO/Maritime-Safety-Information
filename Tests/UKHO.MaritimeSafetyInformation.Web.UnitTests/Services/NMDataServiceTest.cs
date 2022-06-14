@@ -64,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnZeroFiles()
+        public void WhenGetWeeklyBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
         {
             const int year = 2022;
             const int week = 15;
@@ -74,12 +74,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            const int expectedRecordCount = 0;
-
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
-
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+                async delegate { await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId); });
         }
 
         [Test]
@@ -154,23 +150,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldReturnZeroFiles()
-        {
-
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-
-            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-
-            const int expectedRecordCount = 0;
-
-            List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
-
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-
-        }
-
-        [Test]
         public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldExecuteCatch()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
@@ -181,6 +160,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Task<List<ShowDailyFilesResponseModel>> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldThrowInvalidDataException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
+                async delegate { await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
         }
 
         [Test]
@@ -196,32 +187,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledWithValidTokenandNodata_ThenShouldReturnCountZero()
+        public void WhenGetAllYearWeekIsCalled_ThenShouldThrowInvalidDataException()
         {
-            const int ExpectedRecordCount = 0;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
-            Assert.IsEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
+                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldReturnNoList()
+        public void WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldThrowInvalidDataException()
         {
-            const int ExpectedRecordCount = 0;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
-
-            Assert.IsEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from File Share Service for request to search attribute year and week"),
+                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
@@ -284,12 +270,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCountZero()
+        public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldThrowInvalidDataException()
         {
             const int year = 2022;
             const int week = 0;
-            const int expectedShowFilesResponseModelRecordCount = 0;
-            const int expectedYearAndWeekRecordCount = 3;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
@@ -299,10 +283,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
-
-            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
-            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+                async delegate { await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId); });
         }
 
         [Test]

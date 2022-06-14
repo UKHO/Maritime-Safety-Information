@@ -172,7 +172,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenFSSDownloadZipFileAsyncIsCalled_ThenShouldThrowAggregateException()
+        public void WhenFSSDownloadZipFileAsyncIsCalled_ThenShouldThrowArgumentException()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
@@ -192,7 +192,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadZipFileAsync(A<string>.Ignored, CancellationToken.None)).Returns(stream);
 
-            Assert.ThrowsAsync(Is.TypeOf<AggregateException>().And.Message.EqualTo(error.ToString()),
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>().And.Message.EqualTo(error.ToString()),
                 async delegate { await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, FakeAccessToken, CorrelationId, _fileShareApiClient); });
         }
     }

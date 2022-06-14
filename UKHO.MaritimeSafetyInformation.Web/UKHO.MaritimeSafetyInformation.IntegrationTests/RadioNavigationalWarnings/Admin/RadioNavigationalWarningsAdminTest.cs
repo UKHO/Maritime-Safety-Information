@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -117,12 +118,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndexWithInValidPageNo_ThenReturnEmptyListAsync()
+        public void WhenCallIndexWithInValidPageNo_ThenThrowInvalidDataException()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-            IActionResult result = await _controller.Index(4, null, null);
-            RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(0, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for Admin"),
+                async delegate { await _controller.Index(4, null, null); });
         }
 
         [Test]
