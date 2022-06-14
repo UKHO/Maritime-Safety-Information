@@ -160,7 +160,15 @@
 
     .warning-detail {
         padding: 18px 0;
-        border-top: 1px solid $american-silver;
+        border-bottom: 1px solid $american-silver;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:first-child {
+            border-top: 1px solid $american-silver;
+        }
 
         h1 {
             font-size: 21px;
