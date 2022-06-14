@@ -8,6 +8,9 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
+#if ChildProject
+    [ExcludeFromCodeCoverage]
+#endif
     public class RNWRepository : IRNWRepository
     {
         private readonly RadioNavigationalWarningsContext _context;
