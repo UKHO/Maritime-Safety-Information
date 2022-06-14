@@ -1,23 +1,25 @@
-﻿using System.Security.Claims;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
+using System.Security.Claims;
 using UKHO.MaritimeSafetyInformation.Web.Services;
-using FakeItEasy;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 {
     [TestFixture]
     public class UserServiceTests
     {
+        private const string DISTRIBUTOR_ROLE_NAME = "TBC";
+
         [Test]
         public void WhenUserIsUnautheticated_ThenIsDistributorReturnsFalse()
         {
-            DefaultHttpContext httpContext = new DefaultHttpContext();
+            DefaultHttpContext httpContext = new();
 
-            var mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
+            HttpContextAccessor mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
             mockHttpContextAccessor.HttpContext = httpContext;
 
-            UserService userService = new UserService(mockHttpContextAccessor);
+            UserService userService = new(mockHttpContextAccessor);
 
             Assert.AreEqual(false, userService.IsDistributorUser);
         }
@@ -31,15 +33,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     new Claim(ClaimTypes.Role, "Test Role 1")
                 }, "mock"));
 
-            DefaultHttpContext httpContext = new DefaultHttpContext()
+            DefaultHttpContext httpContext = new()
             {
                 User = user
             };
 
-            var mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
+            HttpContextAccessor mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
             mockHttpContextAccessor.HttpContext = httpContext;
 
-            UserService userService = new UserService(mockHttpContextAccessor);
+            UserService userService = new(mockHttpContextAccessor);
 
             Assert.AreEqual(false, userService.IsDistributorUser);
         }
@@ -50,18 +52,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, "Test User"),
-                    new Claim(ClaimTypes.Role, UserService.DISTRIBUTOR_ROLE_NAME)
+                   new Claim(ClaimTypes.Role, DISTRIBUTOR_ROLE_NAME)
                 }, "mock"));
 
-            DefaultHttpContext httpContext = new DefaultHttpContext()
+            DefaultHttpContext httpContext = new()
             {
                 User = user
             };
 
-            var mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
+            HttpContextAccessor mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
             mockHttpContextAccessor.HttpContext = httpContext;
 
-            UserService userService = new UserService(mockHttpContextAccessor);
+            UserService userService = new(mockHttpContextAccessor);
 
             Assert.AreEqual(true, userService.IsDistributorUser);
         }

@@ -3,16 +3,15 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
     [TestFixture]
-    public class MsiAccountControllerTests
+    public class AccountControllerTests
     {
-        private MsiAccountController _controller;
+        private AccountController _controller;
         private IUrlHelper _fakeUrlHelper;
 
         [SetUp]
@@ -21,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             var ctx = new DefaultHttpContext();
             _fakeUrlHelper = A.Fake<IUrlHelper>();
 
-            _controller = new MsiAccountController
+            _controller = new AccountController
             {
                 ControllerContext = new() { HttpContext = ctx },
                 Url = _fakeUrlHelper

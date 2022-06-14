@@ -5,7 +5,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public const string DISTRIBUTOR_ROLE_NAME = "TBC";
+        private const string DISTRIBUTOR_ROLE_NAME = "TBC";
+
         public UserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
