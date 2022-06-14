@@ -346,8 +346,8 @@ stages:
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
-         url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteURL']  ]
-         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
+         url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
+         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AdminMsiWafUrl']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
