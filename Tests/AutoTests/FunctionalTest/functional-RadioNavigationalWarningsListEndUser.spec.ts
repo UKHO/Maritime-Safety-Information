@@ -22,7 +22,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     expect(await rnwListEndUser.checkText(rnwListEndUser.ukCostalEnduser)).toEqual("UK Coastal");
    })
 
-   test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async () => {
+   test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async ({page,context}) => {
     await rnwListEndUser.verifyTableHeader();
     await rnwListEndUser.verifyTableContainsViewDetailsLink();
     await rnwListEndUser.verifyTableDateColumnData();
@@ -30,5 +30,6 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     await rnwListEndUser.verifyImportantBlock();
     await rnwListEndUser.verifySelectOptionText();
     await rnwListEndUser.verifySelectOptionCheckBox();
+    await rnwListEndUser.verifyPrint();
   })
 });
