@@ -101,7 +101,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList == null || radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList.Count == 0)
                 {
-                    throw new InvalidDataException("No data received from RNW database for Admin", new Exception());
+                    throw new InvalidDataException("No data received from RNW database for Admin");
                 }
 
                 return radioNavigationalWarningsAdminListFilter;
@@ -128,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (radioNavigationalWarningsData == null || radioNavigationalWarningsData.Count == 0)
                 {
-                    throw new InvalidDataException("No data received for RNW database", new Exception());
+                    throw new InvalidDataException("No data received for RNW database");
                 }
 
                 _logger.LogInformation(EventIds.RNWListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW details from database completed for _X-Correlation-ID:{correlationId}", correlationId);
@@ -220,7 +220,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (radioNavigationalWarningsData == null || radioNavigationalWarningsData.Count == 0)
                 {
-                    throw new InvalidDataException("No data received from RNW database for selected warnings", new Exception());
+                    throw new InvalidDataException("No data received from RNW database for selected warnings");
                 }
 
                 _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database completed for _X-Correlation-ID:{correlationId}", correlationId);

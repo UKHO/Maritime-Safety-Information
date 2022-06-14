@@ -414,9 +414,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestFailed = 910097,
         /// <summary>
-        /// 910098 -  MSI System Error.
+        /// 910098 -  System Error.
         /// </summary>
-        MSISystemError = 910098
+        SystemError = 910098
 
     }
 
