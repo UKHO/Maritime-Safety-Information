@@ -178,7 +178,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenReturnArgumentNullException()
+        public void WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenShouldThrowInvalidDataException()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenCallGetRadioNavigationalWarningsWithNoData_ThenReturnArgumentNullException()
+        public void WhenCallGetRadioNavigationalWarningsWithNoData_ThenShouldThrowInvalidDataException()
         {
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new List<RadioNavigationalWarningsData>();
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Returns(radioNavigationalWarningsData);
@@ -240,7 +240,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenCallGetSelectedRadioNavigationalWarningsWithNoData_ThenReturnArgumentNullException()
+        public void WhenCallGetSelectedRadioNavigationalWarningsWithNoData_ThenShouldThrowInvalidDataException()
         {
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new List<RadioNavigationalWarningsData>();
 
