@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Shared\Error.cshtml" />
-    <Content Remove="Views\_ViewImports.cshtml" />
+    <Content Remove="Views\Shared\_RNWLeftMenu.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
