@@ -59,3 +59,6 @@ Write-Host "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$($terrafor
 Write-Host "##vso[task.setvariable variable=WebsiteAdminURL;isOutput=true]$($terraformOutput.Website_Admin_Url.value)"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
+
+Write-output "AdminMsiWafUrl=$AdminMsiWafUrl"
+Write-output "MsiWafUrl=$MsiWafUrl"
