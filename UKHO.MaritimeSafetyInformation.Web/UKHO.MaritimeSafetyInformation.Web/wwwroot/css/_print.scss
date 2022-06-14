@@ -18,7 +18,8 @@
         padding-top:0!important;
         padding-bottom:0!important;
     }
-    h1{
-        font-size:32px;
+    .warning-detail {
+        page-break-inside: avoid;
+        page-break-after: auto;
     }
 }

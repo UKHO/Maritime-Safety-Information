@@ -392,6 +392,12 @@
 }
 .selection-details .warning-detail {
   padding: 18px 0;
+  border-bottom: 1px solid #D0D0D0;
+}
+.selection-details .warning-detail:last-child {
+  border-bottom: none;
+}
+.selection-details .warning-detail:first-child {
   border-top: 1px solid #D0D0D0;
 }
 .selection-details .warning-detail h1 {
@@ -620,8 +626,9 @@ table td a {
     padding-bottom: 0 !important;
   }
 
-  h1 {
-    font-size: 32px;
+  .warning-detail {
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
 }
 .table-scroll {
