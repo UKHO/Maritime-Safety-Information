@@ -3,7 +3,6 @@
 @import "footer";
 @import "table";
 @import "common";
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 @import "print";
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
@@ -91,7 +90,7 @@
             padding: 0.5rem;
             color: $prussian-blue;
             display: inline-block;
-            font-weight:400;
+            font-weight: 400;
 
             @media screen and (max-width: $x-large) {
                 font-size: 14px;
@@ -163,22 +162,25 @@
         }
     }
 }
-input[type="button"].select-all-button{
-    height:auto;
-    padding:0;
-    background-color:transparent;
-    color:$prussian-blue;
-    min-width:auto;
-    border:0;
-    text-decoration:underline;
-    font-size:18px;
-    border-radius:0;
+
+input[type="button"].select-all-button {
+    height: auto;
+    padding: 0;
+    background-color: transparent;
+    color: $prussian-blue;
+    min-width: auto;
+    border: 0;
+    text-decoration: underline;
+    font-size: 18px;
+    border-radius: 0;
 }
+
 .intro-text {
     font-size: 28px;
     line-height: 36px;
-    color:$black;
+    color: $black;
 }
+
 .custom-error {
     .paragraph {
         color: $black;

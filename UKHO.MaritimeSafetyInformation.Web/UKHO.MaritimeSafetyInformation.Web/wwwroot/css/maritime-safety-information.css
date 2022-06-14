@@ -398,8 +398,6 @@
   border-bottom: none;
 }
 .selection-details .warning-detail:first-child {
-.selection-details .warning-detail {
-  padding: 18px 0;
   border-top: 1px solid #D0D0D0;
 }
 .selection-details .warning-detail h1 {
@@ -547,13 +545,6 @@ input[type=submit].primary, a.primary {
   font-weight: 400;
 }
 
-.form-check-label {
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size: 16px;
-  font-weight: 400;
-}
-
 .form-check-input {
   width: 30px;
   height: 30px;
@@ -629,32 +620,11 @@ table td a {
   .footer-text {
     margin-top: 0 !important;
   }
-table {
-  border-collapse: collapse;
-  margin-bottom: 30px !important;
-}
-table thead tr th {
-  border-bottom: 0;
-}
-table td {
-  border-bottom: 1px solid #d8d8d8 !important;
-  border-right: 1px solid #d8d8d8 !important;
-}
-table td a {
-  font-weight: 300;
-}
 
   #rnwInfo {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
-.hidden-caption {
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  margin-top: -1px;
-}
 
   .warning-detail {
     page-break-inside: avoid;
@@ -809,13 +779,6 @@ input[type=button].select-all-button {
 .intro-text {
   font-size: 28px;
   line-height: 36px;
-  color: #000000;
-}
-
-.custom-error .paragraph {
-  color: #000000;
-}
-.custom-error .paragraph a {
   color: #000000;
 }
 
