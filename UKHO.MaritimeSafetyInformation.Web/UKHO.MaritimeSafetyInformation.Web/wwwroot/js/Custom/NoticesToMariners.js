@@ -3,9 +3,8 @@ let onload = false;
 var ddlselectedyear;
 var ddlselectedweek;
 
-$(function () {
+(function () {
 
-    ////if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Weekly") {
     if (document.getElementById('hdnRequestType').value != undefined && document.getElementById('hdnRequestType').value === "Weekly") {
 
         if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
@@ -31,7 +30,7 @@ $(function () {
                 return false;
         }
     }
-});
+})();
 
 function LoadData(data) {
     yearweekdata = data;
