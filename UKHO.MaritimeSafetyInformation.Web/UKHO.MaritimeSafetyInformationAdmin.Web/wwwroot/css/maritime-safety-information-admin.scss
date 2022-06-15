@@ -37,3 +37,19 @@ body{
         }
     }
 }
+
+.intro-text {
+    font-size: 28px;
+    line-height: 36px;
+    color: $black;
+}
+
+.custom-error {
+    .paragraph {
+        color: $black;
+
+        a {
+            color: $black;
+        }
+    }
+}

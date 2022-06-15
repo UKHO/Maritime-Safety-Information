@@ -344,3 +344,16 @@ body {
 .pagination li:before {
   content: none;
 }
+
+.intro-text {
+  font-size: 28px;
+  line-height: 36px;
+  color: #000000;
+}
+
+.custom-error .paragraph {
+  color: #000000;
+}
+.custom-error .paragraph a {
+  color: #000000;
+}
