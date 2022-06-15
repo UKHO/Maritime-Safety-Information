@@ -9,10 +9,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class UserServiceTests
     {
-        private const string DISTRIBUTOR_ROLE_NAME = "TBC";
+        private const string DistributorRoleName = "TBC";
 
         [Test]
-        public void WhenUserIsUnautheticated_ThenIsDistributorReturnsFalse()
+        public void WhenUserIsUnauthenticated_ThenIsDistributorReturnsFalse()
         {
             DefaultHttpContext httpContext = new();
 
@@ -52,7 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, "Test User"),
-                   new Claim(ClaimTypes.Role, DISTRIBUTOR_ROLE_NAME)
+                   new Claim(ClaimTypes.Role, DistributorRoleName)
                 }, "mock"));
 
             DefaultHttpContext httpContext = new()
