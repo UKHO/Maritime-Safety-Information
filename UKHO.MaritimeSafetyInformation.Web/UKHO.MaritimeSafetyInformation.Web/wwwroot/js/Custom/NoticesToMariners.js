@@ -5,7 +5,8 @@ var ddlselectedweek;
 
 $(function () {
 
-    if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Weekly") {
+    ////if ($('#hdnRequestType').val() != undefined && $('#hdnRequestType').val() === "Weekly") {
+    if (document.getElementById('hdnRequestType').value != undefined && document.getElementById('hdnRequestType').value === "Weekly") {
 
         if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
             ddlselectedyear = document.getElementById('hdnYear').value;
