@@ -347,7 +347,7 @@ stages:
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
          url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
-         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.AdminMsiWafUrl']  ]
+         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiAdminWafUrl']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
