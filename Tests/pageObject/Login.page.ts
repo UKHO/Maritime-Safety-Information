@@ -26,17 +26,7 @@ export default class Login {
   public async goToSignIn() {
     await this.signIn.click();
   }
-  public async loginwithBlankDetails() {
-    await this.username.fill("");
-    await this.btnContinue.click();
-    expect((await this.emailError.innerText()).toString()).toContain('Enter your email address')
-    await this.username.fill('UKHODevTestUser1@outlook.com');
-    await this.btnContinue.click();
-    await this.password.fill("");
-    await this.btnLogin.click();
-    expect((await this.page.locator('text=Please enter your password').innerText()).toString()).toContain('Please enter your password');
-  }
-  
+ 
   public async loginWithValidDetails(username: string, password: string) {
     await this.username.click();
     await this.username.fill(username);
