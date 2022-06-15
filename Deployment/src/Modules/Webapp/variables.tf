@@ -34,6 +34,3 @@ variable "allowed_ips" {
 
 }
 
-variable "agent_id" {
-  type = string
-}

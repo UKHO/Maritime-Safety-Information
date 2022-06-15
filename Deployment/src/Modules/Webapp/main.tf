@@ -34,8 +34,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
    }
-
-  
+     
   app_settings = var.app_settings
 
   identity {
