@@ -12,9 +12,10 @@ test.describe("Sign in For The maritime-safety-information", () => {
   });
 
   test("With the blank details", async ({ page, context }) => {
-    await login.loginwithBlankDetails('', '');
+    await login.loginwithBlankDetails();
   })
   test('With the Valid details', async ({ page, context }) => {
     await login.loginWithValidDetails(app.username, app.password);
+    await login.signout();
   })
 });
