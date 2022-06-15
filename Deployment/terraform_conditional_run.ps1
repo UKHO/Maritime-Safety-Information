@@ -52,7 +52,7 @@ Write-output "Terraform output as json"
 $terraformOutput = terraform output -json | ConvertFrom-Json
 
 write-output "Set JSON output into pipeline variables"
-Write-Host "##vso[task.setvariable variable=MsiWebUrl;isOutput=true]$env:SERVICE_DNS_URL"
+Write-Host "##vso[task.setvariable variable=MsiWafUrl;isOutput=true]$env:SERVICE_DNS_URL"
 Write-Host "##vso[task.setvariable variable=AdminMsiWafUrl;isOutput=true]$env:SERVICE_DNS_URL/RadioNavigationalWarningsAdmin"
 Write-Host "##vso[task.setvariable variable=WEB_APP_NAME;isOutput=true]$($terraformOutput.web_app_name.value)"
 Write-Host "##vso[task.setvariable variable=WebsiteURL;isOutput=true]$($terraformOutput.Website_Url.value)"
@@ -60,5 +60,3 @@ Write-Host "##vso[task.setvariable variable=WebsiteAdminURL;isOutput=true]$($ter
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 
-Write-output "AdminMsiWafUrl=$(AdminMsiWafUrl)"
-Write-output "MsiWafUrl=$(MsiWebUrl)"

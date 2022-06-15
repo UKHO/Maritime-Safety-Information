@@ -23,10 +23,6 @@ resource "azurerm_windows_web_app" "webapp_service" {
     ftps_state = "Disabled"
 
     ip_restriction {
-      virtual_network_subnet_id = var.agent_id
-    }
-
-    ip_restriction {
       virtual_network_subnet_id = var.subnet_id
     }
 
