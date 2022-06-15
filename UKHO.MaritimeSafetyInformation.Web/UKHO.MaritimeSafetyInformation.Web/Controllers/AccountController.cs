@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
     [AllowAnonymous]
-    [Area("MicrosoftIdentity")]
+    [Area("MsiIdentity")]
     [Route("[area]/[controller]/[action]")]
     public class AccountController : Controller
     {
