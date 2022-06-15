@@ -173,4 +173,30 @@
     </notes>
     <cve>CVE-2018-8292</cve>
   </suppress>
+<suppress>
+    <notes>
+      <![CDATA[
+    file name:  Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
+    See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
+        Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
+      	Vulnerable versions: 4.3.3 and below
+        Secure versions: 4.3.4+
+    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. MSI is pinned to .Net core SDK > 3.1.408 which is not vulnerable and are false positives, and deployed to Azure App Service which will have the security patch applied.
+    ]]>
+    </notes>
+    <cve>CVE-2007-1651</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+    file name:  Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
+    See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
+        Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
+      	Vulnerable versions: 4.3.3 and below
+        Secure versions: 4.3.4+
+    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. MSI is pinned to .Net core SDK > 3.1.408 which is not vulnerable and are false positives,and Cross-site request forgery (CSRF) vulnerability in OpenID allows remote attackers to restore the login session of a user on an OpenID enabled site via unspecified vectors related to an arbitrary remote web site and cached tokens, after the user has signed into an OpenID server, logged into the OpenID enabled site.
+    ]]>
+    </notes>
+    <cve>CVE-2007-1652</cve>
+  </suppress>
 </suppressions>
