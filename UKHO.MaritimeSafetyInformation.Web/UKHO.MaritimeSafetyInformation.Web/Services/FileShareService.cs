@@ -104,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                         error.AppendLine(item.Description);
 
                     _logger.LogInformation(EventIds.FSSDownloadZipFileAsyncHasError.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file has error for batchId:{batchId} and fileName:{fileName} with error:{error} for _X-Correlation-ID:{correlationId}", batchId, fileName, error, correlationId);
-                    throw new AggregateException(error.ToString());
+                    throw new ArgumentException(error.ToString());
                 }
             }
             catch (Exception ex)
