@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestStarted = 910006,
         /// <summary>
-        /// 910007 -  Notices To Mariners Weekly File Request Started.
+        /// 910007 -  Notices To Mariners Weekly File Request Completed.
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestCompleted = 910007,
         /// <summary>
@@ -408,7 +408,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910096 - File share service is unhealthy.
         /// </summary>
-        FileShareServiceIsUnHealthy = 910096
+        FileShareServiceIsUnHealthy = 910096,
+        /// <summary>
+        /// 910097 -  Notices To Mariners Weekly File Request failed.
+        /// </summary>
+        NoticesToMarinersWeeklyFilesRequestFailed = 910097,
+        /// <summary>
+        /// 910098 -  System Error.
+        /// </summary>
+        SystemError = 910098
 
     }
 

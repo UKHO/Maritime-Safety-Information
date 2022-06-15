@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -63,13 +64,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallIndexForWeekWithNoData_ThenReturnNoData()
+        public void WhenCallIndexForWeekWithNoData_ThenThrowInvalidDataException()
         {
-            IActionResult result = await _nMController.Index(2021, 08);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
-            Assert.AreEqual(0, showWeeklyFiles.ShowFilesResponseList.Count);
-            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
-            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+                async delegate { await _nMController.Index(2021, 08); });
         }
 
         [Test]
@@ -88,13 +86,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowWeeklyFilesAsyncWithNoData_ThenReturnEmptyList()
+        public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowInvalidDataException()
         {
-            IActionResult result = await _nMController.ShowWeeklyFilesAsync(2022, 6);
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
-            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
-            Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(0, listFiles.Count);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+                async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });
         }
 
         [Test]
@@ -188,15 +183,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallDownloadDailyFileWithInvalidData_ThenReturnNoData()
+        public void WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException()
         {
             const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
 
-            ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
-            Assert.AreEqual(false, ((RedirectToActionResult)result).PreserveMethod);
-            Assert.AreEqual("ShowDailyFiles", ((RedirectToActionResult)result).ActionName);
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
+                async delegate { await _nMController.DownloadDailyFile(batchId, filename, mimeType); });
         }
     }
 }

@@ -98,6 +98,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     Year = year,
                     SrNo = srNo,
                 };
+
+                if (radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList == null || radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList.Count == 0)
+                {
+                    throw new InvalidDataException("No data received from RNW database for Admin");
+                }
+
                 return radioNavigationalWarningsAdminListFilter;
             }
             catch (Exception ex)
@@ -119,6 +125,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.RNWListDetailFromDatabaseStarted.ToEventId(), "Maritime safety information request to get RNW details from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetRadioNavigationalWarningsDataList();
+
+                if (radioNavigationalWarningsData == null || radioNavigationalWarningsData.Count == 0)
+                {
+                    throw new InvalidDataException("No data received for RNW database");
+                }
 
                 _logger.LogInformation(EventIds.RNWListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to get RNW details from database completed for _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -206,6 +217,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseStarted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(selectedIds);
+
+                if (radioNavigationalWarningsData == null || radioNavigationalWarningsData.Count == 0)
+                {
+                    throw new InvalidDataException("No data received from RNW database for selected warnings");
+                }
 
                 _logger.LogInformation(EventIds.RNWShowListDetailFromDatabaseCompleted.ToEventId(), "Maritime safety information request to show RNW details for selected warnings from database completed for _X-Correlation-ID:{correlationId}", correlationId);
 
