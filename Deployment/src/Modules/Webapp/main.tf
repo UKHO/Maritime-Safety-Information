@@ -39,7 +39,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 
 #Admin Webapp
 resource "azurerm_windows_web_app" "admin_webapp_service" {
-  name                = "admin-${var.name}"
+  name                = var.admin_webapp_name
   location            = var.location
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.app_service_plan.id
