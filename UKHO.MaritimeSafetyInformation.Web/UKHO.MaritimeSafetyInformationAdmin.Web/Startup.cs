@@ -82,6 +82,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionHandler("/error");
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
