@@ -820,10 +820,10 @@ input[type=button].select-all-button {
   color: #000000;
 }
 
-.navarea1 .U {
+.navarea1 .rnw-allwarnings-table tr.U {
   display: none;
 }
 
-.ukcostal .N {
+.ukcostal .rnw-allwarnings-table tr.N {
   display: none;
 }
