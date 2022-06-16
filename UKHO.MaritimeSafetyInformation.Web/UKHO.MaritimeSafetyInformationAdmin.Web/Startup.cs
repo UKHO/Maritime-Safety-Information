@@ -8,7 +8,6 @@ using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
-using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
