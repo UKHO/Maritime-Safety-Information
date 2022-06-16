@@ -39,15 +39,12 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
-            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
-            services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
-            services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddControllersWithViews();
