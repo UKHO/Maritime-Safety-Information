@@ -26,6 +26,22 @@ function tabButtonKeyDownFunction(e) {
 }
 //Accessibility code for tabs ends here//
 
+let allWarningTabButton = document.querySelector('#allwarnings-tab');
+let navarea1TabButton = document.querySelector('#NAVAREA1-tab');
+let ukcostalTabButton = document.querySelector('#ukcoastal-tab');
+let rnwTabContent = document.querySelector('#rnwTabContent');
+allWarningTabButton.addEventListener('click', function () {
+    rnwTabContent.classList.add('all-warnings');
+    rnwTabContent.classList.remove('navarea1', 'ukcostal');
+})
+navarea1TabButton.addEventListener('click', function () {
+    rnwTabContent.classList.add('navarea1');
+    rnwTabContent.classList.remove('all-warnings', 'ukcostal');
+})
+ukcostalTabButton.addEventListener('click', function () {
+    rnwTabContent.classList.add('ukcostal');
+    rnwTabContent.classList.remove('all-warnings', 'navarea1');
+})
 
 
 
