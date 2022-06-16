@@ -110,6 +110,10 @@
                 a {
                     padding: 2rem 1rem;
                     color: $prussian-blue !important;
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    text-align:center;
 
                     @media screen and (max-width: $x-large) {
                         font-size: 14px;
@@ -147,7 +151,7 @@
                         width: 300px;
                         right: 0;
                         left: inherit;
-                        border-top: 0;
+                        margin-top: 0;
 
                         @media screen and (max-width: $large) {
                             width: 100%;
@@ -156,12 +160,40 @@
 
                         .dropdown-item {
                             padding: 0.5rem 1rem;
-                            border-top: 1px solid $platinum !important;
                             box-shadow: none;
+                            font-weight: 300;
+                            font-size: 18px;
 
                             @media screen and (max-width: $large) {
-                                border-top:0!important;
+                                border-top: 0 !important;
+                                font-size: 14px;
                             }
+                        }
+                    }
+
+                    .dropdown-toggle {
+                        width: min-intrinsic;
+                        width: -webkit-min-content;
+                        width: -moz-min-content;
+                        width: min-content;
+                        white-space: break-spaces;
+
+                        &:hover, &.show {
+                            background-color: $anti-flash-white;
+                            box-shadow: inset 0 -5px $prussian-blue !important;
+
+                            @media screen and (max-width: $large) {
+                                box-shadow: none !important;
+                            }
+                        }
+
+                        @media screen and (max-width: $large) {
+                            white-space: normal;
+                            width: 100%;
+                        }
+
+                        &::after {
+                            content: none;
                         }
                     }
                 }
