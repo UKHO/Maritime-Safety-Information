@@ -29,12 +29,12 @@ function tabButtonKeyDownFunction(e) {
 //site header dropdown menu on mouse hover start here//
 let dropdownParent = document.querySelector('.site-header .dropdown');
 let dropdowToggleButton = document.querySelector('.site-header .dropdown-toggle');
-dropdownParent.addEventListener('mouseenter', function () {
-    dropdowToggleButton.click();
-})
-dropdownParent.addEventListener('mouseleave', function () {
-    dropdowToggleButton.click();
-})
-//site header dropdown menu on mouse hover ends here//
-
-
+if (document.getElementById('hdnLoggedIn').value === "Y") {
+    dropdownParent.addEventListener('mouseenter', function () {
+        dropdowToggleButton.click();
+    })
+    dropdownParent.addEventListener('mouseleave', function () {
+        dropdowToggleButton.click();
+    })
+    //site header dropdown menu on mouse hover ends here//
+}
