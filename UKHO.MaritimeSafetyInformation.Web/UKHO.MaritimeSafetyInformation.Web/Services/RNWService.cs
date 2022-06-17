@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
@@ -8,6 +9,10 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
+    #if MSIAdminProject
+    [ExcludeFromCodeCoverage]
+    #endif
+
     public class RNWService : IRNWService
     {
         private readonly IRNWRepository _rnwRepository;
