@@ -10,7 +10,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     #if MSIAdminProject
-    [ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
     #endif
 
     public class RNWService : IRNWService
