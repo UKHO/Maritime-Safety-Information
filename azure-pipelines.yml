@@ -406,7 +406,7 @@ stages:
           - name: WEB_APP_NAME
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
           - name: ADMIN_WEB_APP_NAME
-            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
+            value: $[ dependencies.DevDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWebUrl
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWebUrl']  ]
         strategy:
@@ -466,7 +466,7 @@ stages:
           - name: WEB_APP_NAME
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
           - name: ADMIN_WEB_APP_NAME
-            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
+            value: $[ dependencies.DevDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWebUrl
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.MsiWebUrl']  ]
         strategy:
