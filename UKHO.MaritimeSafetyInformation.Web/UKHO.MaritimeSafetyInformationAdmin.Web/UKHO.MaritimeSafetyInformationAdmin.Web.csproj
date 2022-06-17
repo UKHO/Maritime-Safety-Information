@@ -13,11 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Shared\Error.cshtml" />
-    <Content Remove="Views\Shared\_RNWLeftMenu.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Filters\CorrelationIdMiddleware.cs" Link="Filters\CorrelationIdMiddleware.cs" />
     <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Filters\LoggingMiddleware.cs" Link="Filters\LoggingMiddleware.cs" />
     <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Services\Interfaces\IRNWRepository.cs" Link="Services\Interfaces\IRNWRepository.cs" />

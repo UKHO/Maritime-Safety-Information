@@ -17,12 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\RadioNavigationalWarningsAdminController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Views\Shared\_WeeklyData.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
