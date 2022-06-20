@@ -3,34 +3,37 @@ let onload = false;
 var ddlselectedyear;
 var ddlselectedweek;
 
-(function () {
+document.onreadystatechange = function () {
 
-    if (document.getElementById('hdnRequestType').value != undefined && document.getElementById('hdnRequestType').value === "Weekly") {
+    if (document.readyState == "interactive" || document.readyState === "complete") {
 
-        if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
-            ddlselectedyear = document.getElementById('hdnYear').value;
-        }
+        if (document.getElementById('hdnRequestType').value != undefined && document.getElementById('hdnRequestType').value === "Weekly") {
 
-        if (document.getElementById('hdnWeek').value != undefined && document.getElementById('hdnWeek').value != null && document.getElementById('hdnWeek').value != '') {
-            ddlselectedweek = document.getElementById('hdnWeek').value;
-        }
+            if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
+                ddlselectedyear = document.getElementById('hdnYear').value;
+            }
 
-        if ((ddlselectedyear != undefined && ddlselectedyear != '') && (ddlselectedweek != undefined && ddlselectedweek != '')) {
-            LoadData(yearweekdata)
-        }
+            if (document.getElementById('hdnWeek').value != undefined && document.getElementById('hdnWeek').value != null && document.getElementById('hdnWeek').value != '') {
+                ddlselectedweek = document.getElementById('hdnWeek').value;
+            }
 
-        document.getElementById('ddlYears').onchange = function () {
-            GetCorrespondingWeeks(this.value, yearweekdata);
-        }
+            if ((ddlselectedyear != undefined && ddlselectedyear != '') && (ddlselectedweek != undefined && ddlselectedweek != '')) {
+                LoadData(yearweekdata)
+            }
 
-        document.getElementById('ddlWeeks').onchange = function () {
-            if (document.getElementById('ddlYears').selectedIndex != 0 && document.getElementById('ddlWeeks').selectedIndex != 0)
-                this.form.submit();
-            else
-                return false;
+            document.getElementById('ddlYears').onchange = function () {
+                GetCorrespondingWeeks(this.value, yearweekdata);
+            }
+
+            document.getElementById('ddlWeeks').onchange = function () {
+                if (document.getElementById('ddlYears').selectedIndex != 0 && document.getElementById('ddlWeeks').selectedIndex != 0)
+                    this.form.submit();
+                else
+                    return false;
+            }
         }
     }
-})();
+}
 
 function LoadData(data) {
     yearweekdata = data;

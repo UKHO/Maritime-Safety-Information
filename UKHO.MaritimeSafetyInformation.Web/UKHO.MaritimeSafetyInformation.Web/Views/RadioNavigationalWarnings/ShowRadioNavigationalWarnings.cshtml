@@ -22,13 +22,16 @@
 <!--tabs-->
 <ul class="nav nav-tabs msi-tabs" id="rnwTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" type="button" role="tab" aria-controls="allwarnings" aria-selected="true">All warnings</button>
+        @*<button class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" type="button" role="tab" aria-controls="allwarnings" aria-selected="true">All warnings</button>*@
+        <a href="#allwarnings" class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">All warnings</a>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab" aria-controls="NAVAREA1" aria-selected="false" tabindex="-1">NAVAREA 1</button>
+        @*<button class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#NAVAREA1" type="button" role="tab" aria-controls="NAVAREA1" aria-selected="false" tabindex="-1">NAVAREA 1</button>*@
+        <a href="#NAVAREA1" class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#NAVAREA1" type="button" role="tab" aria-controls="NAVAREA1" aria-selected="false" tabindex="-1">NAVAREA 1</a>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab" aria-controls="ukcoastal" aria-selected="false" tabindex="-1">UK Coastal</button>
+        @*<button class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" type="button" role="tab" aria-controls="ukcoastal" aria-selected="false" tabindex="-1">UK Coastal</button>*@
+        <a href="#ukcoastal" class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" type="button" role="tab" aria-controls="ukcoastal" aria-selected="false" tabindex="-1">UK Coastal</a>
     </li>
 </ul>
 <div class="tab-content" id="rnwTabContent">
@@ -48,7 +51,7 @@
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
                         <th class="th-4 justify-content-center">
-                            <input type="button" id="select_button" class="select-all-button" value="Select all" onClick="do_Selection()"/>
+                            <input type="button" id="select_button" class="select-all-button" value="Select all" onClick="do_Selection()" />
                         </th>
                         <th class="th-5 justify-content-center">
                             Select
@@ -56,8 +59,11 @@
                     </tr>
                 </thead>
                 <tbody class="scroll-content scroll-bar accordianTable" id="accordionAllwarning">
-                    @{int i = 0;}
-                    @foreach (var item in Model) {
+                    @{
+                        int i = 0;
+                    }
+                    @foreach (var item in Model)
+                    {
                         <tr>
                             <td id="Id_@i" class="td-1" style="display:none">
                                 @Html.DisplayFor(modelItem => item.Id)
@@ -95,7 +101,7 @@
                                         </h3>
                                         <pre id="Details_Description_@i" class="warning-description">
                                             @Html.DisplayFor(modelItem => item.Content)
-                                                </pre>
+                                                    </pre>
                                     </section>
                                 </div>
                             </td>
@@ -112,7 +118,7 @@
             @using (Html.BeginForm("ShowSelection", "RadioNavigationalWarnings", FormMethod.Post))
             {
                 <input type="hidden" id="showSelectionId" name="showSelectionId" value="">
-                <button disabled="disabled" id="BtnShowSelection" type="submit" onclick = "showSelection()" >Show selection</button>
+                <button disabled="disabled" id="BtnShowSelection" type="submit" onclick="showSelection()">Show selection</button>
             }
 
         </div>
