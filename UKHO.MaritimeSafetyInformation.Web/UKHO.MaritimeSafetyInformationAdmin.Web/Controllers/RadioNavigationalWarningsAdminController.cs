@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -7,6 +8,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 {
+    [Authorize(Roles = "rnw-admin")]
     public class RadioNavigationalWarningsAdminController : BaseController<RadioNavigationalWarningsAdminController>
     {
         private readonly IRNWService _rnwService;
@@ -50,7 +52,6 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
             return View("~/Views/RadioNavigationalWarningsAdmin/Create.cshtml", radioNavigationalWarning);
         }
 
-
         public async Task<IActionResult> Index(int pageIndex = 1, int? warningType = null, int? year = null)
         {
             _logger.LogInformation(EventIds.RNWAdminListStarted.ToEventId(), "Maritime safety information request to get RNW records for Admin started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
@@ -62,7 +63,6 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
             _logger.LogInformation(EventIds.RNWAdminListCompleted.ToEventId(), "Maritime safety information request to get RNW records for Admin completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             return View(radioNavigationalWarningsAdminFilter);
         }
-
 
         // GET: RadioNavigationalWarningsAdmin/Edit/5
         public async Task<IActionResult> Edit(int id)
@@ -76,7 +76,6 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
             _logger.LogInformation(EventIds.EditRNWRecordNotFound.ToEventId(), "Maritime safety information edit RNW record not found for id:{id} with _X-Correlation-ID:{correlationId}", id, GetCurrentCorrelationId());
             return NotFound();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

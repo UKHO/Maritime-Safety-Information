@@ -4,6 +4,9 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -11,6 +14,8 @@ using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -37,6 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAd);
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
@@ -46,7 +52,18 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            }).AddMicrosoftIdentityUI();
+
+            //Configuring appsettings section AzureAdB2C, into IOptions
+            services.AddOptions();
+            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
@@ -81,6 +98,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.UseExceptionHandler("/error");
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
