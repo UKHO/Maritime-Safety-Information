@@ -50,7 +50,7 @@ steps:
     inputs:
       targetType: filePath
       filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthEndPointUrl $(MsiWebUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
+      arguments: "-healthEndPointUrl $(MsiWafUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
 
   - task: DownloadPipelineArtifact@2
     displayName: "Download Admin App service Artifact"
