@@ -42,7 +42,7 @@ export default class Login {
       await Promise.all([
         this.page.waitForLoadState(),
         this.signOut.click()]);
-      expect((await this.signIn.innerText()).toString()).toContain('Sign in')   
+        expect((await this.signIn.innerText()).toString()).toContain('Sign in')   
      }
 }
 
