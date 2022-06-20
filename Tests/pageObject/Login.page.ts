@@ -19,7 +19,7 @@ export default class Login {
     this.password = this.page.locator('[placeholder="Password"]');
     this.btnLogin = this.page.locator('button:has-text("Sign in")');
     this.loginUsername = this.page.locator('text=Test User');
-    this.signOut = this.page.locator('#navbarSupportedContent > ul > li.nav-item.dropdown > ul > li > a');
+    this.signOut = this.page.locator('text=Sign out');
     this.emailError= this.page.locator('div.error.itemLevel.show');
   }
 
@@ -41,9 +41,10 @@ export default class Login {
      {
       await Promise.all([
         this.page.waitForLoadState(),
+        this.loginUsername.click(),
         this.signOut.click(),
-        expect((await this.signIn.innerText()).toString()).toContain('Sign in')  
-      ]) 
+        this.page.waitForLoadState(),
+        expect((await this.signIn.innerText()).toString()).toContain('Sign in')])
      }
 }
 
