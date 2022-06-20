@@ -48,6 +48,7 @@ module "webapp_service" {
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
   }
   tags                                                         = local.tags
+  allowed_ips                                                  = var.allowed_ips
 }
 
 module "key_vault" {

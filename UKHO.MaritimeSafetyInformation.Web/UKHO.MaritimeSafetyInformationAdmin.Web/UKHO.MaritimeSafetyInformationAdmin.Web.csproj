@@ -5,6 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>MSIAdminProject</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>MSIAdminProject</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Pages\**" />
     <Content Remove="Pages\**" />

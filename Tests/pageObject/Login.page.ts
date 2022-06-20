@@ -41,8 +41,10 @@ export default class Login {
      {
       await Promise.all([
         this.page.waitForLoadState(),
-        this.signOut.click()]);
-      expect((await this.signIn.innerText()).toString()).toContain('Sign in')   
+        this.loginUsername.click(),
+        this.signOut.click(),
+        this.page.waitForLoadState(),
+        expect((await this.signIn.innerText()).toString()).toContain('Sign in')])
      }
 }
 
