@@ -1,0 +1,36 @@
+﻿@import "variables";
+.site-footer {
+    border-top: $prussian-blue 0.375rem solid;
+    height: auto;
+    background: $whitesmoke;
+    padding: 0 !important;
+    position: relative;
+    font-size: 18px;
+
+    .footer-img {
+        width: 12rem;
+        height: 7rem;
+        display:inline-block;
+    }
+
+    .footer-links {
+        padding: 0 2px;
+
+        a {
+            color: $prussian-blue;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .footer-text {
+        font-weight: 300;
+        color: $dark-charcoal;
+        line-height: 1.875em;
+        margin-top: 28px;
+        margin-bottom: 0 !important;
+        clear: both;
+    }
+}
