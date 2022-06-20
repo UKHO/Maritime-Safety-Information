@@ -349,6 +349,8 @@ stages:
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWafUrl
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
+          - name: Admin_DNS_URL
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
         strategy:
           runOnce:
             deploy:
@@ -409,6 +411,8 @@ stages:
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWafUrl
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
+          - name: Admin_DNS_URL
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
         strategy:
           runOnce:
             deploy:
@@ -469,6 +473,8 @@ stages:
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWafUrl
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
+          - name: Admin_DNS_URL
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
         strategy:
           runOnce:
             deploy:
