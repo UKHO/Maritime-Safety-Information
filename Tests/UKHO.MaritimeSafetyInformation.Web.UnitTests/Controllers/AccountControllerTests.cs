@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
@@ -12,18 +14,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     public class AccountControllerTests
     {
         private AccountController _controller;
-        private IUrlHelper _fakeUrlHelper;
+        private IUrlHelper _fakeUrlHelper;       
 
         [SetUp]
         public void Setup()
         {
             var ctx = new DefaultHttpContext();
-            _fakeUrlHelper = A.Fake<IUrlHelper>();
-
-            _controller = new AccountController
+            _fakeUrlHelper = A.Fake<IUrlHelper>();           
+            _controller = new AccountController()
             {
                 ControllerContext = new() { HttpContext = ctx },
-                Url = _fakeUrlHelper
+                Url = _fakeUrlHelper,
             };
         }
 

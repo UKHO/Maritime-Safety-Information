@@ -10,7 +10,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
     [Area("MsiIdentity")]
     [Route("[area]/[controller]/[action]")]
     public class AccountController : Controller
-    {
+    {       
         /// <summary>
         /// Handles the user sign-out.
         /// </summary>
