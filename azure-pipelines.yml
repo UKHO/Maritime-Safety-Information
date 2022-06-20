@@ -152,7 +152,7 @@ stages:
             inputs:
               command: "test"
               projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml'
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml'
               publishTestResults: true
               testRunTitle: "UnitTests"
 
@@ -222,12 +222,28 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
               ArtifactName: MaritimeSafetyInformation
 
+          - task: DotNetCoreCLI@2
+            displayName: "Publish Admin WebApp"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: '**/*UKHO.MaritimeSafetyInformationAdmin.Web.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
+              zipAfterPublish: true
+              modifyOutputPath: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Admin Web Artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
+              ArtifactName: MaritimeSafetyInformationAdmin
+
+
       - job: PublishTerraformArtifacts
         workspace:
           clean: all
         displayName: "Publish Terraform Artifacts"
         steps:
-
           - task: CopyFiles@2
             displayName: Copy MaritimeSafetyInformationService Config
             inputs:
@@ -329,6 +345,8 @@ stages:
         variables:
           - name: WEB_APP_NAME
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: ADMIN_WEB_APP_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWafUrl
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
         strategy:
@@ -347,7 +365,7 @@ stages:
         displayName: "Dev Functional Automated And Accessibility Tests"
         variables: 
          url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
-         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiAdminWafUrl']  ]
+         rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
@@ -361,7 +379,6 @@ stages:
       - group: "Maritime-Safety-Information-QA-Variables"
     condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
-
       - deployment: QADeployTerraform
         displayName: "QA - Deploy Terraform and Dotnet App"
         environment: "Maritime-Safety-Information-QA"
@@ -388,6 +405,8 @@ stages:
         variables:
           - name: WEB_APP_NAME
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: ADMIN_WEB_APP_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWafUrl
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
         strategy:
@@ -406,7 +425,7 @@ stages:
         displayName: "QA Functional Automated And Accessibility Tests"
         variables: 
          url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
-         rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiAdminWafUrl']  ]
+         rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WebsiteAdminURL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
@@ -446,6 +465,8 @@ stages:
         variables:
           - name: WEB_APP_NAME
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: ADMIN_WEB_APP_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
           - name: MsiWafUrl
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
         strategy:

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,11 +20,13 @@
     </PackageReference>
       <PackageReference Include="System.Net.Security" Version="4.3.2" />
       <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
-      <PackageReference Include="UKHO.FileShareAdminClient" Version="1.4.20530.4" />
       <PackageReference Include="UKHO.FileShareClient" Version="1.4.20530.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj" />
+    <ProjectReference Include="..\..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformationAdmin.Web\UKHO.MaritimeSafetyInformationAdmin.Web.csproj">
+      <Aliases>MSIAdminProjectAlias</Aliases>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -1,0 +1,23 @@
+﻿.rnw-list-table {
+    thead {
+        tr {
+            th {
+                &.th-1 {
+                    width: 65px;
+                }
+
+                &.th-2 {
+                    width: 125px;
+                }
+
+                &.th-3 {
+                    width: 112px;
+                }
+
+                &.th-4, &.th-7 {
+                    width: 175px;
+                }
+            }
+        }
+    }
+}

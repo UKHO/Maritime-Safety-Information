@@ -10,7 +10,6 @@ function YearValueChange(Year) {
 }
 
 function RnwFilterList(pageSelectedIndex) {
-    debugger;
     warningTypeSelectedValue = $("#WarningType").val();
     yearSelectedValue = $("#Year").val();
 
