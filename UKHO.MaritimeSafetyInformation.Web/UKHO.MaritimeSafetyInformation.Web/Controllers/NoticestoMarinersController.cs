@@ -41,6 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
+        [Route("/NoticesToMariners/Weekly")]
         public async Task<IActionResult> Index(int year, int week)
         {
             try
