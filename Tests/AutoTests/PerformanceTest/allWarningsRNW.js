@@ -7,12 +7,12 @@ import http from 'k6/http'
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 
-export const options = { vus: 540, duration: '60m' }
+export const options = { vus: 100, duration: '60m' }
 
 
 export default function main() {
   let response
-
+  
   group('page_1 - https://msi-dev-webapp.azurewebsites.net/RadioNavigationalWarnings', function () {
     response = http.get('https://msi-dev-webapp.azurewebsites.net/RadioNavigationalWarnings', {
       headers: {

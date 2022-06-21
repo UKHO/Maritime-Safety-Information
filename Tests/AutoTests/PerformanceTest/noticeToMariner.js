@@ -11,7 +11,50 @@ export default function main() {
   let response
 
   group('page_2 - https://msi-dev-webapp.azurewebsites.net/NoticesToMariners', function () {
-    response = http.get('https://msi-dev-webapp.azurewebsites.net/NoticesToMariners', {
+    response = http.get('https://msi-dev.admiralty.co.uk/NoticesToMariners/DownloadWeeklyFile?fileName=25snii22.pdf&batchId=ff881157-1ed9-4506-916e-5a300c202408&mimeType=application%2Fpdf', {
+      headers: {
+        'upgrade-insecure-requests': '1',
+        'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+      },
+    })
+  })
+  group('page_2 - https://msi-dev-webapp.azurewebsites.net/NoticesToMariners', function () {
+    response = http.get('https://msi-dev.admiralty.co.uk/NoticesToMariners/DownloadWeeklyFile?fileName=25wknm22.pdf&batchId=ff881157-1ed9-4506-916e-5a300c202408&mimeType=application%2Fpdf', {
+      headers: {
+        'upgrade-insecure-requests': '1',
+        'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+      },
+    })
+  })
+  
+  group('page_2 - https://msi-dev-webapp.azurewebsites.net/NoticesToMariners', function () {
+    response = http.get('https://msi-dev.admiralty.co.uk/NoticesToMariners/DownloadWeeklyFile?fileName=Chart2567NM2542.pdf&batchId=ff881157-1ed9-4506-916e-5a300c202408&mimeType=application%2Fpdf', {
+      headers: {
+        'upgrade-insecure-requests': '1',
+        'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+      },
+    })
+  })
+
+  group('page_2 - https://msi-dev-webapp.azurewebsites.net/NoticesToMariners', function () {
+    response = http.get('https://msi-dev.admiralty.co.uk/NoticesToMariners/DownloadWeeklyFile?fileName=25wknm22.pdf&batchId=ff881157-1ed9-4506-916e-5a300c202408&mimeType=application%2Fpdf', {
+      headers: {
+        'upgrade-insecure-requests': '1',
+        'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+      },
+    })
+  })
+
+  group('page_2 - https://msi-dev-webapp.azurewebsites.net/NoticesToMariners', function () {
+    response = http.get('https://msi-dev.admiralty.co.uk/NoticesToMariners/DownloadWeeklyFile?fileName=Chart2727NM2680.pdf&batchId=ff881157-1ed9-4506-916e-5a300c202408&mimeType=application%2Fpdf', {
       headers: {
         'upgrade-insecure-requests': '1',
         'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
@@ -32,19 +75,3 @@ export function handleSummary(data) {
   stdout: textSummary(data, { indent: " ", enableColors: true })
   }
 };
-
-
-// export function handleSummary(data) {
-//   console.log("Preparing the end-of-test summary...");
-//   return {
-//       "NoticeToMariners_Output/SimplifiedSearchBatchAttributesResult29Mar_4.html": htmlReport(data),
-//       stdout: textSummary(data, { indent: " ", enableColors: true }),
-//       "NoticeToMariners_Output/SimplifiedSearchBatchAttributesSummary29Mar_4.json": JSON.stringify(data)
-//   };
-// }
-
-// export function handleSummary(data) {
-//   return {
-//   "summary.html": htmlReport(data),
-//   };
-//   }
