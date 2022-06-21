@@ -26,22 +26,44 @@ function tabButtonKeyDownFunction(e) {
 }
 //Accessibility code for tabs ends here//
 
+const allwarningrows = Array.from(document.querySelectorAll(".rnw-allwarnings-table tbody tr"));
+const tableRef = document.querySelector(".rnw-allwarnings-table");
+const tableRefBody = document.querySelector(".rnw-allwarnings-table tbody");
+
 let allWarningTabButton = document.querySelector('#allwarnings-tab');
 let navarea1TabButton = document.querySelector('#NAVAREA1-tab');
 let ukcostalTabButton = document.querySelector('#ukcoastal-tab');
 let rnwTabContent = document.querySelector('#rnwTabContent');
+
 allWarningTabButton.addEventListener('click', function () {
-    rnwTabContent.classList.add('all-warnings');
-    rnwTabContent.classList.remove('navarea1', 'ukcostal');
+    const rows = getFilteredWarningRows();
+    insertWarningRows(rows)
 })
 navarea1TabButton.addEventListener('click', function () {
-    rnwTabContent.classList.add('navarea1');
-    rnwTabContent.classList.remove('all-warnings', 'ukcostal');
+    const rows = getFilteredWarningRows("N");
+    insertWarningRows(rows)
 })
 ukcostalTabButton.addEventListener('click', function () {
-    rnwTabContent.classList.add('ukcostal');
-    rnwTabContent.classList.remove('all-warnings', 'navarea1');
+    const rows = getFilteredWarningRows("U");
+    insertWarningRows(rows)
 })
 
+function insertWarningRows(rows) {
+    tableRefBody.innerHTML = '';
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].classList.remove('show');
+        rows[i].classList.remove('coll');
+        ////if (rows[i] && rows[i].children[4].children[0].classList.contains("collapsed")) {
+        ////    rows[i].children[4].children[0].click();
+        ////}
+        tableRef.tBodies[0].appendChild(rows[i]);
+    }
+}
 
-
+function getFilteredWarningRows(warningType) {
+    return allwarningrows.filter(
+        function (warning) {
+            return warningType ? warning.classList.contains(warningType) : warning;
+        }
+    );
+}
