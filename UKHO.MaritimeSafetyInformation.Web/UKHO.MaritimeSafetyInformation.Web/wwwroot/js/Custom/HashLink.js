@@ -1,33 +1,33 @@
-﻿////document.addEventListener("DOMContentLoaded", function () {
-////    HashLinkTab();
-////});
-
-document.onreadystatechange = function () {
-    if (document.readyState == "interactive" || document.readyState === "complete") {
-        HashLinkTab();
-    }
-}
+﻿document.addEventListener("DOMContentLoaded", function () {
+    HashLinkTab();
+});
 
 function HashLinkTab() {
     let url = location.href.replace(/\/$/, "");
 
     if (location.hash) {
         const hash = url.split("#");
+        const hashValue = hash[1].toLowerCase();
+        console.log('Inside Hash');
+        console.log(hash);
 
         let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
-
         let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
 
         for (let i = 0; i < tabs.length; i++) {
             tabs[i].classList.remove('active');
+        }
+
+        for (let i = 0; i < tabContents.length; i++) {
             tabContents[i].classList.remove('active');
             tabContents[i].classList.remove('show');
         }
 
-        document.querySelector('.msi-tabs a[href="#' + hash[1] + '"]').classList.add('active');
+        document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
+        document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
+        document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
 
-        document.querySelector('.tab-content #' + hash[1] + '').classList.add('active');
-        document.querySelector('.tab-content #' + hash[1] + '').classList.add('show');
+        SetTitle(hashValue);
 
         //console.log($('.msi-tabs a[href="#' + hash[1] + '"]'));
         //$('.msi-tabs a[href="#' + hash[1] + '"]').tab("show");
@@ -35,8 +35,8 @@ function HashLinkTab() {
         url = location.href.replace(/\/#/, "#");
         history.replaceState(null, null, url);
         setTimeout(() => {
-            $(window).scrollTop(0);
-        }, 400);
+            window.scrollTo(0, 0)
+        }, 100);
     }
 
     Array.prototype.slice.call(document.querySelectorAll('a[data-bs-toggle="tab"]'))
@@ -46,10 +46,35 @@ function HashLinkTab() {
                 const hash = this.getAttribute('href');
                 if (hash == "#") {
                     newUrl = url.split("#")[0];
+                    console.log('if (hash == "#")');
+                    console.log(newUrl);
+
                 } else {
                     newUrl = url.split("#")[0] + hash;
+                    SetTitle(hash);
                 }
                 history.replaceState(null, null, newUrl);
             }
         });
+}
+
+
+function SetTitle(hash) {
+    let newhash = hash.replace('#', '');
+    console.log('newHash ' + newhash);
+    if (newhash) {
+        switch (newhash.toLowerCase()) {
+            case 'cumulative': document.title = 'Notices to Mariners - Cumulative';
+                break;
+            case 'annual': document.title = 'Notices to Mariners - Annual';
+                break;
+            case 'allwarnings': document.title = 'Radio Navigational Warnings';
+                break;
+            case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
+                break;
+            case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
+                break;
+
+        }
+    }
 }
