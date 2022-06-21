@@ -9,3 +9,15 @@ output "web_app_tenant_id" {
 output "default_site_hostname" {
   value = azurerm_windows_web_app.webapp_service.default_hostname
 }
+
+output "admin_webapp_name" {
+  value = azurerm_windows_web_app.admin_webapp_service.name
+}
+
+output "admin_web_app_object_id" {
+  value = azurerm_windows_web_app.admin_webapp_service.identity.0.principal_id
+}
+
+output "admin_default_site_hostname" {
+  value = azurerm_windows_web_app.admin_webapp_service.default_hostname
+}

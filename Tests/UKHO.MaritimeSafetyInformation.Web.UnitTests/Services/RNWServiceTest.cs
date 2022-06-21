@@ -22,7 +22,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IOptions<RadioNavigationalWarningConfiguration> _fakeRadioNavigationalWarningConfiguration;
         private RNWService _rnwService;
         private RadioNavigationalWarning _fakeRadioNavigationalWarning;
-        private EditRadioNavigationalWarningAdmin _fakeRadioNavigationalWarningAdmin;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
@@ -34,25 +33,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Reference = "test",
                 DateTimeGroup = DateTime.UtcNow,
                 Summary = "Test1",
-                Content = "test"
-            };
-
-            _fakeRadioNavigationalWarningAdmin = new()
-            {
-                WarningType = 1,
-                Reference = "test",
-                DateTimeGroup = DateTime.UtcNow,
-                Summary = "Test1",
                 Content = "test",
-                WarningTypeName = "NavArea",
                 IsDeleted = true
             };
-
+                        
             _fakeLogger = A.Fake<ILogger<RNWService>>();
             _fakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             _fakeRnwRepository = A.Fake<IRNWRepository>();
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-
             _rnwService = new RNWService(_fakeRnwRepository, _fakeRadioNavigationalWarningConfiguration, _fakeLogger);
         }
 
@@ -78,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenPostInvalidWarningTypeInRequest_ThenReturnException()
+        public void WhenPostInvalidWarningTypeInRequest_ThenReturnInvalidDataException()
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
@@ -190,12 +178,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenReturnEmptyListAsync()
+        public void WhenCallGetRadioNavigationWarningsWithInValidPageNo_ThenShouldThrowInvalidDataException()
         {
             _fakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationWarningsAdminList()).Returns(GetFakeRadioNavigationalWarningList());
-            RadioNavigationalWarningsAdminFilter result = await _rnwService.GetRadioNavigationWarningsForAdmin(4, null, null, string.Empty);
-            Assert.IsTrue(result.RadioNavigationalWarningsAdminList.Count == 0);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for Admin"),
+                           async delegate { await _rnwService.GetRadioNavigationWarningsForAdmin(4, null, null, string.Empty); });
         }
 
         [Test]
@@ -225,6 +213,44 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public void WhenCallGetRadioNavigationalWarningsWithNoData_ThenShouldThrowInvalidDataException()
+        {
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new List<RadioNavigationalWarningsData>();
+            A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsDataList()).Returns(radioNavigationalWarningsData);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received for RNW database"),
+                               async delegate { await _rnwService.GetRadioNavigationalWarningsData(string.Empty); });
+        }
+
+        [Test]
+        public async Task WhenCallGetSelectedRadioNavigationalWarningsDataList_ThenReturnWarnings()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetSelectedRadioNavigationalWarningsDataList(Array.Empty<int>())).Returns(GetFakeRadioNavigationalWarningsDataList());
+            List<RadioNavigationalWarningsData> result = await _rnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty);
+            Assert.AreEqual(1, result.Count);
+        }
+
+        [Test]
+        public void WhenCallGetSelectedRadioNavigationalWarningsDataListWithException_ThenReturnException()
+        {
+            A.CallTo(() => _fakeRnwRepository.GetSelectedRadioNavigationalWarningsDataList(Array.Empty<int>())).Throws(new Exception());
+
+            Assert.ThrowsAsync(Is.TypeOf<Exception>(),
+                               async delegate { await _rnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty); });
+        }
+
+        [Test]
+        public void WhenCallGetSelectedRadioNavigationalWarningsWithNoData_ThenShouldThrowInvalidDataException()
+        {
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new List<RadioNavigationalWarningsData>();
+
+            A.CallTo(() => _fakeRnwRepository.GetSelectedRadioNavigationalWarningsDataList(Array.Empty<int>())).Returns(radioNavigationalWarningsData);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for selected warnings"),
+                               async delegate { await _rnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty); });
+        }
+
+        [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime()).Returns(new DateTime(2020, 01, 01, 13, 14, 15));
@@ -235,52 +261,52 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenEditRadioNavigationalRecordWithInvalidRecordId_ThenReturnException()
         {
-            _fakeRadioNavigationalWarningAdmin.Id = 0;
+            _fakeRadioNavigationalWarning.Id = 0;
             A.CallTo(() => _fakeRnwRepository.GetRadioNavigationalWarningById(A<int>.Ignored)).Throws(new Exception()); 
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-            delegate { _rnwService.GetRadioNavigationalWarningById(_fakeRadioNavigationalWarningAdmin.Id, CorrelationId); return Task.CompletedTask; });
+            delegate { _rnwService.GetRadioNavigationalWarningById(_fakeRadioNavigationalWarning.Id, CorrelationId); return Task.CompletedTask; });
         }
 
         [Test]
         public void WhenPostInvalidWarningTypeInRequestForEdit_ThenReturnInvalidDataException()
         {
-            _fakeRadioNavigationalWarningAdmin.WarningType = 3;
+            _fakeRadioNavigationalWarning.WarningType = 3;
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningAdmin, CorrelationId); });
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostInvalidReferenceInRequestForEdit_ThenReturnArgumentNullException()
         {
-            _fakeRadioNavigationalWarningAdmin.Reference = "";
+            _fakeRadioNavigationalWarning.Reference = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningAdmin, CorrelationId); });
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostInvalidContentInRequestForEdit_ThenReturnException()
         {
-            _fakeRadioNavigationalWarningAdmin.Content = "";
+            _fakeRadioNavigationalWarning.Content = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningAdmin, CorrelationId); });
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenPostInvalidSummaryInRequestForEdit_ThenReturnException()
         {
-            _fakeRadioNavigationalWarningAdmin.Summary = "";
+            _fakeRadioNavigationalWarning.Summary = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter summary"),
-                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningAdmin, CorrelationId); });
+                             async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
-            Task result = _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningAdmin, CorrelationId);
+            Task result = _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId);
             Assert.IsTrue(result.IsCompleted);
         }
 
@@ -288,10 +314,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenEditValidRequestWithException_ThenReturnException()
         {
             DateTime dateTime = DateTime.UtcNow;
-            _fakeRadioNavigationalWarningAdmin.DateTimeGroup = dateTime;
-            A.CallTo(() => _fakeRnwRepository.UpdateRadioNavigationalWarning(A<EditRadioNavigationalWarningAdmin>.Ignored)).Throws(new Exception());
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            A.CallTo(() => _fakeRnwRepository.UpdateRadioNavigationalWarning(A<RadioNavigationalWarning>.Ignored)).Throws(new Exception());
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-                               async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarningAdmin, CorrelationId); });
+                               async delegate { await _rnwService.EditRadioNavigationalWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
         }
 
         private static List<RadioNavigationalWarningsAdmin> GetFakeRadioNavigationalWarningList()

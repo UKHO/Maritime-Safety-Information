@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestStarted = 910006,
         /// <summary>
-        /// 910007 -  Notices To Mariners Weekly File Request Started.
+        /// 910007 -  Notices To Mariners Weekly File Request Completed.
         /// </summary>
         NoticesToMarinersWeeklyFilesRequestCompleted = 910007,
         /// <summary>
@@ -380,7 +380,43 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary> 
         /// 910089 - Maritime safety information Error in Creating RNW record.
         /// </summary>
-        CreateRNWRecordException = 910089
+        CreateRNWRecordException = 910089,
+        /// <summary> 
+        /// 910090 -  Maritime safety information request to show RNW details from database started.
+        /// </summary>
+        RNWShowListDetailFromDatabaseStarted = 910090,
+        /// <summary> 
+        /// 910091 -  Maritime safety information request to show RNW details from database completed.
+        /// </summary>
+        RNWShowListDetailFromDatabaseCompleted = 910091,
+        /// <summary> 
+        /// 910092 -  Maritime safety information error has occurred in the process to show RNW detail from database.
+        /// </summary>
+        ErrorInRNWShowListDetailFromDatabase = 910092,
+        /// <summary>
+        /// 910093 - Radio Navigational Warning database is healthy.
+        /// </summary>
+        RNWDatabaseIsHealthy = 910093,
+        /// <summary>
+        /// 910094 - Radio Navigational Warning database is unhealthy.
+        /// </summary>
+        RNWDatabaseIsUnHealthy = 910094,
+        /// <summary>
+        /// 910095 - File share service is healthy.
+        /// </summary>
+        FileShareServiceIsHealthy = 910095,
+        /// <summary>
+        /// 910096 - File share service is unhealthy.
+        /// </summary>
+        FileShareServiceIsUnHealthy = 910096,
+        /// <summary>
+        /// 910097 -  Notices To Mariners Weekly File Request failed.
+        /// </summary>
+        NoticesToMarinersWeeklyFilesRequestFailed = 910097,
+        /// <summary>
+        /// 910098 -  System Error.
+        /// </summary>
+        SystemError = 910098
 
     }
 

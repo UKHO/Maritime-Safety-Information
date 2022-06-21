@@ -21,90 +21,97 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ShowWeeklyFilesResponseModel showWeeklyFiles = new();
             try
             {
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
+                ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowWeeklyFilesIndexGetFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
             }
-
-            _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for correlationId:{correlationId}", GetCurrentCorrelationId());
-
-            return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(int year, int week)
         {
-            ShowWeeklyFilesResponseModel showWeeklyFiles = new();
+
             try
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
+                ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
                 ViewData["Year"] = year;
                 ViewData["Week"] = week;
 
+                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+                return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowWeeklyFilesIndexPostFailed.ToEventId(), "Maritime safety information request to get daily NM weekly files index post failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
             }
-            _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for correlationId:{correlationId}", GetCurrentCorrelationId());
-            return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
         }
 
         [HttpPost]
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
-            _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestStarted.ToEventId(), "Maritime safety information request to show weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            try
+            {
+                _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestStarted.ToEventId(), "Maritime safety information request to show weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            List<ShowFilesResponseModel> listFiles = await _nMDataService.GetWeeklyBatchFiles(year, week, GetCurrentCorrelationId());
+                List<ShowFilesResponseModel> listFiles = await _nMDataService.GetWeeklyBatchFiles(year, week, GetCurrentCorrelationId());
 
-            _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestCompleted.ToEventId(), "Maritime safety information request to show weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.NoticesToMarinersWeeklyFilesRequestCompleted.ToEventId(), "Maritime safety information request to show weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            return PartialView("~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml", listFiles);
+                return PartialView("~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml", listFiles);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.NoticesToMarinersWeeklyFilesRequestFailed.ToEventId(), "Maritime safety information request to show weekly NM files failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
+            }
         }
 
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
-            List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = new();
             try
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
+                return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels);
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowDailyFilesFailed.ToEventId(), "Maritime safety information request to show daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
             }
-
-            return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels);
-
         }
 
         public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
         {
-            NMHelper.ValidateParametersForDownloadSingleFile(new()
-            {
-                new KeyValuePair<string, string>("BatchId", batchId),
-                new KeyValuePair<string, string>("FileName", fileName),
-                new KeyValuePair<string, string>("MimeType", mimeType)
-            }, GetCurrentCorrelationId(), _logger);
-
             try
             {
                 _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download single weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                NMHelper.ValidateParametersForDownloadSingleFile(new()
+                {
+                    new KeyValuePair<string, string>("BatchId", batchId),
+                    new KeyValuePair<string, string>("FileName", fileName),
+                    new KeyValuePair<string, string>("MimeType", mimeType)
+                }, GetCurrentCorrelationId(), _logger);
 
                 byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
@@ -139,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult> DownloadDailyFile(string batchId, string fileName, string mimeType)
+        public async Task<FileResult> DownloadDailyFile(string batchId, string fileName, string mimeType)
         {
             try
             {
@@ -163,7 +170,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.DownloadDailyNMFileFailed.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} has failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, fileName, ex.Message, GetCurrentCorrelationId());
-                return RedirectToAction("ShowDailyFiles");
+                throw;
             }
         }
 

@@ -1,16 +1,18 @@
-﻿using FakeItEasy;
+﻿extern alias MSIAdminProjectAlias;
+
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
-using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
@@ -108,8 +110,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenEditRadioNavigationalWarningsRecordReturnTrueInRequest_ThenRecordIsUpdated()
         {
             _controller.TempData = _tempData;
-            A.CallTo(() => _fakeRnwService.EditRadioNavigationalWarningsRecord(A<EditRadioNavigationalWarningAdmin>.Ignored, A<string>.Ignored)).Returns(true);
-            Task<IActionResult> result = _controller.Edit(new EditRadioNavigationalWarningAdmin() { Id = 5 });
+            A.CallTo(() => _fakeRnwService.EditRadioNavigationalWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
+            Task<IActionResult> result = _controller.Edit(new RadioNavigationalWarning() { Id = 5 });
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record updated successfully!", _controller.TempData["message"].ToString());
         }
@@ -135,17 +137,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             };
         }
 
-        private static EditRadioNavigationalWarningAdmin GetEditFakeRadioNavigationWarningForAdmin()
+        private static RadioNavigationalWarning GetEditFakeRadioNavigationWarningForAdmin()
         {
-            return new EditRadioNavigationalWarningAdmin
+            return new RadioNavigationalWarning
             {
                 WarningType = 1,
                 Reference = "test",
                 DateTimeGroup = DateTime.UtcNow,
                 Summary = "Test1",
-                Content = "test",
-                WarningTypeName = "NavArea"
-            };
+                Content = "test"
+             };
         }
 
     }

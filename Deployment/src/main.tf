@@ -31,6 +31,7 @@ module "eventhub" {
 module "webapp_service" {
   source                    = "./Modules/Webapp"
   name                      = local.web_app_name
+  admin_webapp_name         = local.admin_web_app_name
   resource_group_name       = azurerm_resource_group.rg.name
   env_name                  = local.env_name
   location                  = azurerm_resource_group.rg.location
@@ -47,6 +48,7 @@ module "webapp_service" {
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
   }
   tags                                                         = local.tags
+  allowed_ips                                                  = var.allowed_ips
 }
 
 module "key_vault" {
@@ -59,12 +61,14 @@ module "key_vault" {
   allowed_subnet_ids  = [data.azurerm_subnet.main_subnet.id,data.azurerm_subnet.agent_subnet.id]
   location            = azurerm_resource_group.rg.location
   read_access_objects = {
-     "webapp_service" = module.webapp_service.web_app_object_id
+     "webapp_service"       = module.webapp_service.web_app_object_id
+     "admin_webapp_service" = module.webapp_service.admin_web_app_object_id
   }
   secrets = {
       "EventHubLoggingConfiguration--ConnectionString"       = module.eventhub.log_primary_connection_string
       "EventHubLoggingConfiguration--EntityPath"             = module.eventhub.entity_path
       "RadioNavigationalWarningsContext--ConnectionString"   = local.rnw_db_connection_string
+      "RadioNavigationalWarningsAdminContext--ConnectionString"   = local.rnw_db_admin_connection_string
  }
   tags                                                       = local.tags
 }

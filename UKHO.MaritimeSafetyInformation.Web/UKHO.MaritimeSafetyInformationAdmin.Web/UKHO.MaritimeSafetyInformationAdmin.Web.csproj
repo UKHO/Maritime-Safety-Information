@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>    
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>MSIAdminProject</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>MSIAdminProject</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\**" />
+    <Content Remove="Pages\**" />
+    <EmbeddedResource Remove="Pages\**" />
+    <None Remove="Pages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Filters\CorrelationIdMiddleware.cs" Link="Filters\CorrelationIdMiddleware.cs" />
+    <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Filters\LoggingMiddleware.cs" Link="Filters\LoggingMiddleware.cs" />
+    <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Services\Interfaces\IRNWRepository.cs" Link="Services\Interfaces\IRNWRepository.cs" />
+    <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Services\Interfaces\IRNWService.cs" Link="Services\Interfaces\IRNWService.cs" />
+    <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Services\RNWRepository.cs" Link="Services\RNWRepository.cs" />
+    <Compile Include="..\UKHO.MaritimeSafetyInformation.Web\Services\RNWService.cs" Link="Services\RNWService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.6.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.4" />
+    <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    <PackageReference Include="System.Net.Security" Version="4.3.2" />
+    <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
+  </ItemGroup>
+
+</Project>

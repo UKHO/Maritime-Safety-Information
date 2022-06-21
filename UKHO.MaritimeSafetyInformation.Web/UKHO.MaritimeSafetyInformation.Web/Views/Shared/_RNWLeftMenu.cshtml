@@ -1,7 +1,7 @@
 ﻿<ul class="nav flex-column msi-page-nav">
     <li class="nav-item">
         <a href="@Url.Action("Index", "RadioNavigationalWarnings")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "nav-link active" : "nav-link")"
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowSelection" ? "nav-link active" : "nav-link")"
            aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "true" : "")">
             Radio Warnings
         </a>

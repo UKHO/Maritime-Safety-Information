@@ -17,8 +17,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _context;
         private RadioNavigationalWarning _radioNavigationalWarning;
-        private EditRadioNavigationalWarningAdmin _fakeRadioNavigationalWarningAdmin;
-
+        
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -41,20 +40,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Reference = "test",
                 DateTimeGroup = new DateTime(2019, 1, 1),
                 Summary = "Test1",
-                Content = "test"
-            };
-            _fakeRadioNavigationalWarningAdmin = new()
-            {
-                Id = 1,
-                WarningType = 1,
-                WarningTypeName = "NAVAREA 1",
-                Reference = "edittest",
-                DateTimeGroup = new DateTime(2019, 1, 1),
-                Summary = "editsummary",
-                Content = "editcontent",
+                Content = "test",
                 IsDeleted = false,
-
-             };
+            };
             _rnwRepository = new RNWRepository(_context);
         }
 
@@ -128,6 +116,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenCallGetSelectedRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
+        {
+            int[] data = { 4 };
+            List<RadioNavigationalWarningsData> result = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(data);
+            Assert.AreEqual(1, result.Count);
+        }
+
+        [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
             DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
@@ -149,18 +145,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
-            Task result = _rnwRepository.UpdateRadioNavigationalWarning(_fakeRadioNavigationalWarningAdmin);
+            Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);
+            Task isUpdate = _rnwRepository.UpdateRadioNavigationalWarning(_radioNavigationalWarning);
             Assert.IsTrue(result.IsCompleted);
+            Assert.IsTrue(isUpdate.IsCompleted);
         }
 
         [Test]
         public void WhenCallEditRadioNavigationalWarningsRecord_ThenReturnRecordForGivenId()
         {
             const int id = 1;
-            EditRadioNavigationalWarningAdmin result = _rnwRepository.GetRadioNavigationalWarningById(id);
+            RadioNavigationalWarning result = _rnwRepository.GetRadioNavigationalWarningById(id);
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Id);
-            Assert.AreEqual("NAVAREA 1", result.WarningTypeName);
         }
 
         [OneTimeTearDown]

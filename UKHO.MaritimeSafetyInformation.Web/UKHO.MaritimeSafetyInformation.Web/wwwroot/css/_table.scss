@@ -79,6 +79,7 @@
         }
     }
 }
+
 .accordianTable {
     .accordion-button {
         padding: 0;
@@ -87,20 +88,11 @@
         text-decoration: underline;
         color: $prussian-blue;
         background-color: transparent;
+        font-weight: 300;
 
         &:hover, &:active {
             border: 0;
             background-color: transparent;
-        }
-            }
-        }
-
-        tr:nth-child(even) {
-            background-color: $white;
-        }
-
-        tr:nth-child(4n-1) {
-            background-color: rgb(238, 243, 244);
         }
 
         &.collapsed::before {
@@ -127,8 +119,9 @@
 
     tr.accordion-collapse td {
         border-right: 0 !important;
-    }    
+    }
 }
+
 .accordianTable, .selection-details {
     .warning-detail {
         font-size: 18px;
@@ -150,71 +143,6 @@
         .warning-type {
             font-weight: 400;
         }
-        &.scroll-content {
-            max-height: 88vh !important;
-        }
-    }
-}
-.accordianTable {
-    .accordion-button {
-        padding: 0;
-        width: auto;
-        display: inline-block;
-        text-decoration: underline;
-        color: $prussian-blue;
-        background-color: transparent;
-
-        &:hover, &:active {
-            border: 0;
-            background-color: transparent;
-        }
-
-        &.collapsed::before {
-            content: "View ";
-        }
-
-        &:not(.collapsed) {
-            background-color: transparent;
-            box-shadow: none;
-
-            &::before {
-                content: "Hide ";
-            }
-        }
-
-        &::before {
-            white-space: pre;
-        }
-
-        &::after {
-            content: none;
-        }
-    }
-
-    tr.accordion-collapse td {
-        border-right: 0 !important;
-    }
-
-    .warning-detail {
-        font-size: 18px;
-        color: $black;
-
-        h1, h2, h3 {
-            color: $black;
-            font-weight: 300;
-            font-size: 18px;
-            line-height: 24px;
-            margin-bottom: 0;
-            margin-top: 0;
-        }
-
-        p {
-            margin-bottom: 0;
-        }
-
-        .warning-type {
-            font-weight: 400;
-        }
 
         pre {
             width: 100%;
@@ -226,49 +154,31 @@
         }
     }
 }
-.caption-table {
-    margin-top: 45px;
-    position: relative;
 
-        pre {
-            width: 100%;
-            overflow: hidden;
-            font-family: JohnstonITC, Helvetica, sans-serif;
-            font-size: 18px;
-            white-space: pre-line;
-            word-break: break-word;
-        }
-    }
-    .table-caption {
-        display: block;
-        font-weight: 400;
-        font-size: 21px;
-        color: $black;
-        padding: 1rem 0;
-        position: absolute;
-        width: 100%;
-        top: -50px;
-    }
-}
-.daily-table-container {
-    max-height: 78vh !important;
-    overflow-y: auto;
-    padding-right: 2px;
-}
 .selection-details {
     max-height: 60vh !important;
     overflow-y: auto;
-    margin:30px 0;
-    padding-right:2px;
+    margin: 30px 0;
+    padding-right: 2px;
 
     .warning-detail {
         padding: 18px 0;
-        border-top: 1px solid $american-silver;
-        h1{
-            font-size:21px;
+        border-bottom: 1px solid $american-silver;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:first-child {
+            border-top: 1px solid $american-silver;
+        }
+
+        h1 {
+            font-size: 21px;
         }
     }
 }
+
 .caption-table {
     margin-top: 45px;
     position: relative;
@@ -284,31 +194,9 @@
         top: -50px;
     }
 }
+
 .daily-table-container {
     max-height: 78vh !important;
     overflow-y: auto;
     padding-right: 2px;
-}
-.rnw-list-table {
-    thead {
-        tr {
-            th {
-                &.th-1 {
-                    width: 65px;
-                }
-
-                &.th-2 {
-                    width: 125px;
-                }
-
-                &.th-3 {
-                    width: 112px;
-                }
-
-                &.th-4, &.th-7 {
-                    width: 175px;
-                }
-            }
-        }
-    }
 }

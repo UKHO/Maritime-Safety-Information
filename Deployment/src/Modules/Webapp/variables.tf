@@ -2,6 +2,10 @@ variable "name" {
   type = string
 }
 
+variable "admin_webapp_name" {
+  type = string
+}
+
 variable "resource_group_name" {
   type = string
 }
@@ -29,3 +33,8 @@ variable "env_name" {
 variable "subnet_id" {
   type = string
 }
+
+variable "allowed_ips" {
+
+}
+

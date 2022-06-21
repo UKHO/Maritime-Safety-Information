@@ -56,7 +56,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
-            const int expectedRecordCount = 4;
+            const int expectedRecordCount = 2;
 
             List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -64,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnZeroFiles()
+        public void WhenGetWeeklyBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
         {
             const int year = 2022;
             const int week = 15;
@@ -74,12 +74,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            const int expectedRecordCount = 0;
-
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
-
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+                async delegate { await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId); });
         }
 
         [Test]
@@ -114,24 +110,43 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
             Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
-
         }
 
         [Test]
-        public async Task WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldReturnZeroFiles()
+        public async Task WhenGetDailyBatchDetailsFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
-
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
-            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
 
-            const int expectedRecordCount = 0;
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 1;
+            const int expectedDailyFilesDataCount = 2;
 
             List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedDailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+        }
 
+        [Test]
+        public async Task WhenGetWeeklyBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
+        {
+            const int year = 2022;
+            const int week = 07;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 3;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
         }
 
         [Test]
@@ -148,6 +163,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldThrowInvalidDataException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
+                async delegate { await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
+        }
+
+        [Test]
         public void WhenGetAllYearWeekIsCalledWithInvalidToken_ThenShouldReturnException()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
@@ -160,32 +187,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledWithValidTokenandNodata_ThenShouldReturnCountZero()
+        public void WhenGetAllYearWeekIsCalled_ThenShouldThrowInvalidDataException()
         {
-            const int ExpectedRecordCount = 0;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
-            Assert.IsEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
+                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldReturnNoList()
+        public void WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldThrowInvalidDataException()
         {
-            const int ExpectedRecordCount = 0;
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
-
-            Assert.IsEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from File Share Service for request to search attribute year and week"),
+                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
@@ -208,7 +230,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 2022;
             const int week = 15;
-            const int expectedShowFilesResponseModelRecordCount = 4;
+            const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
@@ -230,7 +252,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 0;
             const int week = 0;
-            const int expectedShowFilesResponseModelRecordCount = 4;
+            const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
@@ -248,12 +270,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCountZero()
+        public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldThrowInvalidDataException()
         {
             const int year = 2022;
             const int week = 0;
-            const int expectedShowFilesResponseModelRecordCount = 0;
-            const int expectedYearAndWeekRecordCount = 3;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
@@ -263,10 +283,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
-
-            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
-            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
+                async delegate { await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId); });
         }
 
         [Test]
@@ -479,6 +497,118 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             return searchResult;
         }
 
+        private static Result<BatchSearchResponse> SetSearchResultForDuplicateDailyFiles()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 3,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "aaa.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "bbb.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "1ca861e4-d1e6-3a5d-70gb-5f60fkdec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "aaa.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "bbb.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "23134ffc-4450-47eb-be36-aaa1204eb3b3",
+                            AllFilesZipSize=299170,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-21"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "ccc.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "ddd.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        }
+                    }
+                }
+            };
+            return searchResult;
+        }
+
         private static Result<BatchAttributesSearchResponse> SetAttributeSearchResult()
         {
             Result<BatchAttributesSearchResponse> attributeSearchResult = new()
@@ -513,6 +643,66 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 }
             };
             return attributeSearchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDuplicateWeeklyFiles()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 3,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                            BatchPublishedDate =DateTime.UtcNow.AddMinutes(-10),
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "xxx.pdf",
+                                    FileSize=5555,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "yyy.jpg",
+                                    FileSize=2222,
+                                    MimeType = "jpg",
+                                    Links = null
+                                },
+                                 new BatchDetailsFiles () {
+                                    Filename = "xyz.txt",
+                                    FileSize=2332,
+                                    MimeType = "txt",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "2",
+                            BatchPublishedDate = DateTime.UtcNow.AddMinutes(-20),
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "aaa.pdf",
+                                    FileSize=987,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "ddd.pdf",
+                                    FileSize=654,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
         }
     }
 }

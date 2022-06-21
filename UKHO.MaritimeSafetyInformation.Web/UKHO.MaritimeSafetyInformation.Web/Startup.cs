@@ -1,6 +1,9 @@
 ﻿using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
@@ -29,7 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
-  
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -37,11 +40,14 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
+            
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
+
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
+            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
-
+            
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
@@ -52,17 +58,42 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
-            services.AddControllersWithViews();
+            services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
+            services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddControllersWithViews()
+                .AddMicrosoftIdentityUI();
+
+            //Configuring appsettings section AzureAdB2C, into IOptions
+            services.AddOptions();
+            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAdB2C"));
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
 
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.SaveTokens = true; // this saves the token for the downstream api
+                options.Events.OnRedirectToIdentityProvider = async context =>
+                {
+                    context.ProtocolMessage.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"];
+                    await Task.FromResult(0);
+                };
+                options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
+                {
+                    context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:SignedOutCallbackPath"];
+                    await Task.FromResult(0);
+                };
+            });
             services.AddHttpClient();
-
             services.AddHealthChecks()
-                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
+                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck")
+                .AddCheck<FileShareServiceHealthCheck>("FileShareServiceHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
         }
@@ -83,8 +114,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseExceptionHandler("/error");
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -14,6 +14,15 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly navAreaEndUser: Locator;
   readonly ukCostalEnduser: Locator;
   readonly tableHeader: Locator;
+  readonly selectCheckBox: Locator;
+  readonly btnShowSelection: Locator;
+  readonly selectAll: Locator;
+  readonly backToAllWarning: Locator;
+  readonly refrence: Locator;
+  readonly dateTimeGroupRnwFormat: Locator;
+  readonly detailsReference: Locator;
+  readonly detailsDateTimeGroupRnwFormat: Locator;
+  readonly print: Locator;
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
   constructor(page: Page) {
     this.page = page;
@@ -24,7 +33,15 @@ export default class RadioNavigationalWarningsListEndUser {
     this.allWarningEndUser = this.page.locator('#allwarnings-tab')
     this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
     this.ukCostalEnduser = this.page.locator('#ukcoastal-tab')
-
+    this.selectCheckBox = this.page.locator("[id^='checkbox'] > input")
+    this.btnShowSelection = this.page.locator("#BtnShowSelection")
+    this.selectAll = this.page.locator('#select_button')
+    this.backToAllWarning = this.page.locator('text=Back to all warnings')
+    this.refrence = this.page.locator('[id^="Reference"]')
+    this.dateTimeGroupRnwFormat = this.page.locator('[id^="DateTimeGroupRnwFormat"]')
+    this.detailsReference = this.page.locator('[id^="Details_Reference"]')
+    this.detailsDateTimeGroupRnwFormat = this.page.locator('[id^="Details_DateTimeGroupRnwFormat"]')
+    this.print = this.page.locator('#Print')
   }
 
   public async goToRadioWarning() {
@@ -35,12 +52,11 @@ export default class RadioNavigationalWarningsListEndUser {
     return await locator.innerText();
   }
 
-    public async verifyTableDateColumnData()
-    {
-      const resultYear= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
-  
-      //fail if there are no matching selections
-      expect(resultYear.length).toBeGreaterThan(0);
+  public async verifyTableDateColumnData() {
+    const resultYear = await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]', (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(-2)) });
+
+    //fail if there are no matching selections
+    expect(resultYear.length).toBeGreaterThan(0);
 
     //Verify Dates are descending order   
     const resultdate = await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]', (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
@@ -59,6 +75,8 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifyTableHeader() {
     let tableColsHeader = await this.page.$$eval('.table>thead>tr>th', (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    let selectAllHeader = await this.selectAll.inputValue();
+    tableColsHeader.splice(3, 0, selectAllHeader);
     tableColsHeader = tableColsHeader.filter(Boolean);
     var match = (this.tableHeaderText.length == tableColsHeader.length) && this.tableHeaderText.every(function (element, index) {
       return element === tableColsHeader[index];
@@ -101,5 +119,36 @@ export default class RadioNavigationalWarningsListEndUser {
       else { return false; }
     }
     expect(compareDate).toBeTruthy();
+  }
+
+  public async verifySelectOptionText() {
+    expect(await this.selectAll.inputValue()).toEqual("Select all");
+    await this.selectAll.click({ force: true });
+    expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
+    await this.page.waitForLoadState('domcontentloaded')
+    expect(await this.selectAll.inputValue()).toEqual("Clear all");
+  }
+  public async verifySelectOptionCheckBox() {
+    await this.selectAll.click({ force: true });
+    expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
+    const detailsRefrence = await this.refrence.first().innerText();
+    expect(detailsRefrence.length).toBeGreaterThan(0);
+    const beforeDetailsRefrence = await (await this.refrence.first().innerText()).trim();
+    const beforeDetailsDateTimeGroupRnwFormat = await (await this.dateTimeGroupRnwFormat.first().innerText()).trim();
+    await this.selectCheckBox.first().click();
+    await this.btnShowSelection.click();
+    const afterDetailsRefrence = await (await this.detailsReference.first().innerText()).trim();
+    const afterDetailsDateTimeGroupRnwFormat = await (await this.detailsDateTimeGroupRnwFormat.first().innerText()).trim();
+    expect(beforeDetailsDateTimeGroupRnwFormat).toEqual(afterDetailsDateTimeGroupRnwFormat);
+    expect(beforeDetailsRefrence).toEqual(afterDetailsRefrence);
+    await this.backToAllWarning.click();
+  }
+
+  public async verifyPrint() {
+    await this.selectCheckBox.first().click();
+    await this.btnShowSelection.click();
+    await this.page.waitForLoadState();
+    expect(this.print.isEnabled()).toBeTruthy();
+    expect((await this.print.innerText()).toString()).toContain("Print");
   }
 }  
