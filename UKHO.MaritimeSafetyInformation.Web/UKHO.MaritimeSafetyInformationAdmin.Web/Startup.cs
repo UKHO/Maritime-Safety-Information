@@ -31,7 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
-  
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
@@ -40,9 +40,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAd);
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));     
-
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
@@ -50,23 +49,20 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
-
+            services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
-
-            services.AddOptions();
-            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
-
+            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
             services.AddHttpClient();
 
             services.AddHealthChecks()
-                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck");
+                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
+                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck");
             services.AddApplicationInsightsTelemetry();
 
         }
