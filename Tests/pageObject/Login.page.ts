@@ -15,6 +15,9 @@ export default class Login {
   readonly adNext:Locator;
   readonly adPassword:Locator;
   readonly login:Locator;
+  readonly adYes:Locator;
+  readonly adUserNameDropdown:Locator;
+  readonly adSignOutText:Locator;
   constructor(page: Page) {
     this.page = page;
     this.signIn = this.page.locator('a:has-text("Sign in")');
@@ -29,6 +32,9 @@ export default class Login {
     this.adNext=  this.page.locator('text=Next');
     this.adPassword = this.page.locator('[placeholder="Password"]');
     this.login = this.page.locator('text=Sign in');
+    this.adYes=this.page.locator('#idSIButton9');
+    this.adUserNameDropdown=this.page.locator('#navbarDropdown');
+   this.adSignOutText=this.page.locator("#navbarSupportedContent > ul > li > ul > li > a")
 
   }
 
@@ -65,15 +71,18 @@ export default class Login {
       ])
     }
 
-     public async adLogin()
+     public async adLogin(username: string, password: string)
      {
-      await this.adUsername.fill('');
+      await this.adUsername.fill(username);
       await Promise.all([
       this.page.waitForNavigation(),
       this.adNext.click()
       ]);
-      await this.adPassword.fill('');
+      await this.adPassword.fill(password);
       await this.login.click();
+      await this.adYes.click();
+      await this.adUserNameDropdown.click();
+      expect(await this.adSignOutText.innerText().toString()).toContain('Sign out')
      }
 }
 

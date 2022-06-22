@@ -11,8 +11,7 @@ test.describe("AD Authentication Sign in For The maritime-safety-information", (
   });
 
   test('With the Valid details', async ({ page, context }) => {
-    await login.adLogin();
-    await login.signout();
+    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
   })
   
 });

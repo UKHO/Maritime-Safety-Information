@@ -1,6 +1,8 @@
 {
     "url": "",
-    "rnwAdminUrl": "",
+    "rnwAdminUrl": "https://localhost:60640/",
     "username":"",
-    "password":""
+    "password":"",
+    "RNWAdminAutoTest_User":"",
+    "RNWAdminAutoTest_Pass":""
 }
