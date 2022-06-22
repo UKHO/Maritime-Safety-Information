@@ -18,15 +18,23 @@
 }
 
 function showSelection() {
-    var checkboxes = document.getElementsByName('checkbox');
-    var selectedIds = [];
+    //var checkboxes = Array.from(document.querySelectorAll('input[type=checkbox]:checked'));
 
-    for (var i in checkboxes) {
-        if (checkboxes[i].checked && i < checkboxes.length) {
-            selectedIds.push(((document.getElementById("Id_" + i)).innerHTML).trim());
-        }
-    }
-    document.getElementById('showSelectionId').value = selectedIds
+    //var selectedIds = [];
+
+    ////for (var checkbox in checkboxes) {
+    ////    console.log(checkbox.getAttribute("warning-id"));
+    ////    //if (checkboxes[i].checked && i < checkboxes.length) {
+
+    ////       // selectedIds.push(((document.getElementById("Id_" + i)).innerHTML).trim());
+    ////   // }
+    ////}
+    //console.log(checkboxes);
+
+    //for (var i = 0; i < checkboxes.length; i++) {
+    //    selectedIds.push(checkboxes[i].getAttribute("warning-id"));
+    //}
+    //document.getElementById('showSelectionId').value = selectedIds
 }
 
 function enableDisableShowSelection() {
