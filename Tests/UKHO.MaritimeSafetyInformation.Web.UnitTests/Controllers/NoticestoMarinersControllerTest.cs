@@ -44,7 +44,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
+
 
         [Test]
         public void WhenIndexIsCalledAndExceptionThrownByService_ThenShouldThrowException()
@@ -73,6 +75,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual(expectedView, actualView);
             Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
             Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
+            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
         [Test]
@@ -81,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
             const int year = 0;
             const int week = 0;
-            const int expectedViewCount = 2;
+            const int expectedViewCount = 3;
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
@@ -152,6 +155,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
         [Test]
