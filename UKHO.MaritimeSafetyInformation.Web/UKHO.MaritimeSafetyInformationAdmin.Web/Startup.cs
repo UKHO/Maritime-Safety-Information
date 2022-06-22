@@ -1,12 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Security.Claims;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
