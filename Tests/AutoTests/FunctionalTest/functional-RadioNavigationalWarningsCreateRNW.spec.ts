@@ -9,6 +9,7 @@ test.describe("Create new radio navigational warnings record", ()=> {
 
   test.beforeEach(async ({page}) => {
     await page.goto(app.rnwAdminUrl); 
+    login = new loginPage(page);
     await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
     radioNavigationalWarnings = new RadioNavigationalWarnings(page);  
   });

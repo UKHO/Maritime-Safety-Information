@@ -8,6 +8,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
   let login: loginPage;
   test.beforeEach(async ({page}) => {
    await page.goto(app.rnwAdminUrl);  
+   login = new loginPage(page);
    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
    rnwList=new RadioNavigationalWarningsList(page);
   });

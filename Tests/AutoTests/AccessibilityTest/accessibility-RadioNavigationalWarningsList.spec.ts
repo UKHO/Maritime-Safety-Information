@@ -3,6 +3,7 @@ import * as app from "../../Configuration/appConfig.json";
 import { checkA11y, injectAxe, Options } from 'axe-playwright';
 
 import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWarningsAdminList.page';
+import loginPage from '../../pageObject/Login.page';
 
   test.describe("A11y tests", ()=> {
    const defaultCheckA11yOptions: Options = {
@@ -18,7 +19,9 @@ import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWar
   };
  
   test.beforeEach(async ({page}) => {
-    await page.goto(app.rnwAdminUrl);    
+    await page.goto(app.rnwAdminUrl); 
+    let login = new loginPage(page);
+    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);   
   });
 
 

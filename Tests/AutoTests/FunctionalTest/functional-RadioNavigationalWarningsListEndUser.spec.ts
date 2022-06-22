@@ -9,6 +9,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
 
   test.beforeEach(async ({page}) => {
     await page.goto(app.url);
+    login = new loginPage(page);
     await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
     rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
@@ -24,7 +25,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     expect(await rnwListEndUser.checkText(rnwListEndUser.ukCostalEnduser)).toEqual("UK Coastal");
    })
 
-   test.only('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async ({page,context}) => {
+   test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async ({page,context}) => {
     await rnwListEndUser.verifyTableHeader();
     await rnwListEndUser.verifyTableContainsViewDetailsLink();
     await rnwListEndUser.verifyTableDateColumnData();
