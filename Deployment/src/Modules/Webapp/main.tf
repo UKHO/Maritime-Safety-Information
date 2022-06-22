@@ -70,7 +70,7 @@ resource "azurerm_windows_web_app" "admin_webapp_service" {
     }
 
     dynamic "ip_restriction" {
-      for_each = var.allowed_ips
+      for_each = var.admin_webapp_allowed_ips
       content {
         ip_address  = length(split("/",ip_restriction.value)) > 1 ? ip_restriction.value : "${ip_restriction.value}/32"
       }

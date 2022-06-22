@@ -38,3 +38,7 @@ variable "allowed_ips" {
 
 }
 
+variable "admin_webapp_allowed_ips" {
+
+}
+
