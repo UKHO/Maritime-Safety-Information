@@ -81,7 +81,7 @@ export default class Login {
       await this.adPassword.fill(password);
       await this.login.click();
       await this.adUserNameDropdown.click();
-      expect(await this.adSignOutText.innerText().toString()).toContain('Sign out')
+      expect(await this.adSignOutText.innerText()).toContain('Sign out')
      }
 }
 
