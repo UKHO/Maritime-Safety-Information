@@ -6,7 +6,7 @@ import loginPage from '../../pageObject/Login.page';
 test.describe("Sign in For The maritime-safety-information", () => {
   let login: loginPage;
   test.beforeEach(async ({ page }) => {
-    await page.goto(app.rnwAdminUrl);
+    await page.goto(app.url);
     login = new loginPage(page);
     await login.goToSignIn();
   });
