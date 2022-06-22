@@ -1,13 +1,15 @@
 import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
 import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigationalWarningsAdminListEndUser.page';
-
+import loginPage from '../../pageObject/Login.page';
 
 test.describe("Goto maritime-safety-information Home Page", ()=> {
   let rnwListEndUser:RadioNavigationalWarningsListEndUser;
+  let login: loginPage;
 
   test.beforeEach(async ({page}) => {
     await page.goto(app.url);
+    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
     rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
     
@@ -22,7 +24,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     expect(await rnwListEndUser.checkText(rnwListEndUser.ukCostalEnduser)).toEqual("UK Coastal");
    })
 
-   test('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async ({page,context}) => {
+   test.only('Does the Table data ,Table Header Text and View details link with Date Sorting is Displayed',async ({page,context}) => {
     await rnwListEndUser.verifyTableHeader();
     await rnwListEndUser.verifyTableContainsViewDetailsLink();
     await rnwListEndUser.verifyTableDateColumnData();
@@ -31,5 +33,6 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     await rnwListEndUser.verifySelectOptionText();
     await rnwListEndUser.verifySelectOptionCheckBox();
     await rnwListEndUser.verifyPrint();
+    
   })
 });
