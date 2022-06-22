@@ -6,9 +6,11 @@
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" asp-area="MsiIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a></li>
         </ul>
-    </li>    
+    </li>
+    <input type="hidden" id="hdnLoggedIn" name="hdnLoggedIn" value="Y">
 }
 else
 {
     <li class="nav-item"><a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
+    <input type="hidden" id="hdnLoggedIn" name="hdnLoggedIn" value="N">
 }

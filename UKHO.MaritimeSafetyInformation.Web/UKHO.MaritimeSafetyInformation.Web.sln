@@ -22,7 +22,9 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{EE2F39EA-5394-4E83-BE3A-7D3FE20E9FB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.IntegrationTests", "UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.csproj", "{2531CBB9-F254-493B-BCB7-CCD49A29EB39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.IntegrationTests", "UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.csproj", "{2531CBB9-F254-493B-BCB7-CCD49A29EB39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformationAdmin.Web", "UKHO.MaritimeSafetyInformationAdmin.Web\UKHO.MaritimeSafetyInformationAdmin.Web.csproj", "{D3888119-3006-46E5-BD9F-581D6C938DA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

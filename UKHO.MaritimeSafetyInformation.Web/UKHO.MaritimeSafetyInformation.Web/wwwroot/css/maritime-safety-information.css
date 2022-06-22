@@ -188,6 +188,15 @@
 .site-header .navbar-collapse .navbar-nav li.dropdown .dropdown-toggle::after {
   content: none;
 }
+@media screen and (max-width: 992px) {
+  .site-header .navbar-collapse .navbar-nav li.dropdown .dropdown-toggle {
+    white-space: normal;
+    width: 100%;
+  }
+}
+.site-header .navbar-collapse .navbar-nav li.dropdown .dropdown-toggle::after {
+  content: none;
+}
 .site-header .vertical-divider {
   border-right: 1px solid #d8d8d8;
   margin-left: 24px;

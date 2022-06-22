@@ -1,15 +1,17 @@
-﻿using FakeItEasy;
+﻿extern alias MSIAdminProjectAlias;
+
+using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using NUnit.Framework;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
-using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings.Admin
 {
@@ -17,8 +19,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
     internal class RadioNavigationalWarningsAdminTest : BaseRNWTest
     {
         private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
+        private ILogger<RNWService> _fakeLoggerRnwService;
         private IRNWRepository _rnwRepository;
-        private RNWService _rnwService;
+        private IRNWService _rnwService;
         private const int Year2024 = 2024;
         private const int Year2020 = 2020;
 
@@ -35,8 +38,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public void Setup()
         {
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
+            _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
             _rnwRepository = new RNWRepository(FakeContext);
-            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
+            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
 
             _controller = new RadioNavigationalWarningsAdminController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
         }

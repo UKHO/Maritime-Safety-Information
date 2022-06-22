@@ -26,6 +26,18 @@ function tabButtonKeyDownFunction(e) {
 }
 //Accessibility code for tabs ends here//
 
+//site header dropdown menu on mouse hover start here//
+let dropdownParent = document.querySelector('.site-header .dropdown');
+let dropdowToggleButton = document.querySelector('.site-header .dropdown-toggle');
+if (document.getElementById('hdnLoggedIn').value === "Y") {
+    dropdownParent.addEventListener('mouseenter', function () {
+        dropdowToggleButton.click();
+    })
+    dropdownParent.addEventListener('mouseleave', function () {
+        dropdowToggleButton.click();
+    })
+    //site header dropdown menu on mouse hover ends here//
+}
 const allwarningrows = Array.from(document.querySelectorAll(".rnw-allwarnings-table tbody tr"));
 const tableRef = document.querySelector(".rnw-allwarnings-table");
 const tableRefBody = document.querySelector(".rnw-allwarnings-table tbody");

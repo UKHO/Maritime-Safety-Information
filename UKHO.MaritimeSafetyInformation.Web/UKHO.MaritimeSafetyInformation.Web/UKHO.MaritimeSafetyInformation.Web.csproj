@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Views\Shared\_WeeklyData.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
