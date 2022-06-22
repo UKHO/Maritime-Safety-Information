@@ -8,9 +8,7 @@ function HashLinkTab() {
     if (location.hash) {
         const hash = url.split("#");
         const hashValue = hash[1].toLowerCase();
-        console.log('Inside Hash');
-        console.log(hash);
-
+        
         let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
         let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
 
@@ -43,8 +41,6 @@ function HashLinkTab() {
                 const hash = this.getAttribute('href');
                 if (hash == "#") {
                     newUrl = url.split("#")[0];
-                    console.log('if (hash == "#")');
-                    console.log(newUrl);
 
                 } else {
                     newUrl = url.split("#")[0] + hash;
@@ -57,7 +53,6 @@ function HashLinkTab() {
 
 function SetTitle(hash) {
     let newhash = hash.replace('#', '');
-    console.log('newHash ' + newhash);
     if (newhash) {
         switch (newhash.toLowerCase()) {
             case 'cumulative': document.title = 'Notices to Mariners - Cumulative';
