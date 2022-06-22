@@ -11,6 +11,10 @@ export default class Login {
   readonly loginUsername: Locator;
   readonly signOut: Locator;
   readonly emailError:Locator;
+  readonly adUsername:Locator;
+  readonly adNext:Locator;
+  readonly adPassword:Locator;
+  readonly login:Locator;
   constructor(page: Page) {
     this.page = page;
     this.signIn = this.page.locator('a:has-text("Sign in")');
@@ -21,6 +25,11 @@ export default class Login {
     this.loginUsername = this.page.locator('text=Test User');
     this.signOut = this.page.locator('text=Sign out');
     this.emailError= this.page.locator('div.error.itemLevel.show');
+    this.adUsername = this.page.locator('[placeholder="someone\\@ukho\\.gov\\.uk"]');
+    this.adNext=  this.page.locator('text=Next');
+    this.adPassword = this.page.locator('[placeholder="Password"]');
+    this.login = this.page.locator('text=Sign in');
+
   }
 
   public async goToSignIn() {
@@ -45,6 +54,26 @@ export default class Login {
         this.signOut.click(),
         this.page.waitForLoadState(),
         expect((await this.signIn.innerText()).toString()).toContain('Sign in')])
+     }
+
+     public async adSignout()
+     {
+      await Promise.all([
+        this.page.waitForLoadState(),
+        this.loginUsername.click(),
+        this.signOut.click(),
+      ])
+    }
+
+     public async adLogin()
+     {
+      await this.adUsername.fill('');
+      await Promise.all([
+      this.page.waitForNavigation(),
+      this.adNext.click()
+      ]);
+      await this.adPassword.fill('');
+      await this.login.click();
      }
 }
 
