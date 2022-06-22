@@ -74,3 +74,9 @@ steps:
       appName: "$(ADMIN_WEB_APP_NAME)"
       package: "$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformationAdmin.Web.zip"
 
+  - task: PowerShell@2
+    displayName: "Check the status of Admin Web App"
+    inputs:
+      targetType: filePath
+      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+      arguments: "-healthEndPointUrl $(Admin_DNS_URL)/health -waitTimeInMinute $(waitTimeInMinute)"
