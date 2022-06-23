@@ -84,7 +84,3 @@ variable "agent_subscription_id" {
 variable "allowed_ips" {
   type = list
 }
-
-variable "admin_webapp_allowed_ips" {
-  type = list
-}
