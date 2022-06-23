@@ -8,30 +8,31 @@ function HashLinkTab() {
     if (location.hash) {
         const hash = url.split("#");
         const hashValue = hash[1].toLowerCase();
-        
-        let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
-        let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
+        if (SetTitle(hashValue)) {
 
-        for (let i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
+            let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
+            let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
+
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+                tabContents[i].classList.remove('show');
+            }
+
+            document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
+            document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
+            document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+
+            url = location.href.replace(/\/#/, "#");
+            history.replaceState(null, null, url);
+            setTimeout(() => {
+                window.scrollTo(0, 0)
+            }, 100);
+
         }
-
-        for (let i = 0; i < tabContents.length; i++) {
-            tabContents[i].classList.remove('active');
-            tabContents[i].classList.remove('show');
-        }
-
-        document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
-        document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
-        document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
-
-        SetTitle(hashValue);
-
-        url = location.href.replace(/\/#/, "#");
-        history.replaceState(null, null, url);
-        setTimeout(() => {
-            window.scrollTo(0, 0)
-        }, 100);
     }
 
     Array.prototype.slice.call(document.querySelectorAll('a[data-bs-toggle="tab"]'))
@@ -53,6 +54,7 @@ function HashLinkTab() {
 
 function SetTitle(hash) {
     let newhash = hash.replace('#', '');
+    let bool = true;
     if (newhash) {
         switch (newhash.toLowerCase()) {
             case 'cumulative': document.title = 'Notices to Mariners - Cumulative';
@@ -65,7 +67,10 @@ function SetTitle(hash) {
                 break;
             case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
                 break;
-
+            default: bool = false;
+                break;
         }
     }
+    else { bool = false; }
+    return bool;
 }
