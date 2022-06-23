@@ -6,9 +6,11 @@
         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "0":"-1")" id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners" role="tab">Daily</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a href="#cumulative" class="nav-link" id="cumulative-tab" data-bs-toggle="tab" data-bs-target="#cumulative" role="tab" aria-controls="cumulative" aria-selected="false" tabindex="-1">Cumulative</a>
+        @*<a href="#cumulative" class="nav-link" id="cumulative-tab" data-bs-toggle="tab" data-bs-target="#cumulative" role="tab" aria-controls="cumulative" aria-selected="false" tabindex="-1">Cumulative</a>*@
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" ? "0":"-1")" id="cumulative-tab" asp-action="Cumulative" asp-controller="NoticestoMariners" role="tab">Cumulative</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a href="#annual" class="nav-link" id="annual-tab" data-bs-toggle="tab" data-bs-target="#annual" role="tab" aria-controls="annual" aria-selected="false" tabindex="-1">Annual</a>
+        @*<a href="#annual" class="nav-link" id="annual-tab" data-bs-toggle="tab" data-bs-target="#annual" role="tab" aria-controls="annual" aria-selected="false" tabindex="-1">Annual</a>*@
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "0":"-1")" id="annual-tab" asp-action="Annual" asp-controller="NoticestoMariners" role="tab">Annual</a>
     </li>
 </ul>

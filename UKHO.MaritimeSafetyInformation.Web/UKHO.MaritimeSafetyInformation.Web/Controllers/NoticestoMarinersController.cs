@@ -134,6 +134,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
+        [Route("/NoticesToMariners/Cumulative")]
+        public IActionResult Cumulative()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("/NoticesToMariners/Annual")]
+        public IActionResult Annual()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Route("/NoticesToMariners/Leisure")]
         public IActionResult Leisure()
         {
