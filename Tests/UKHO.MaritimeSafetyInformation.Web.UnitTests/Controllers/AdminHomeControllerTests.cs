@@ -1,11 +1,10 @@
 ﻿extern alias MSIAdminProjectAlias;
-
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
+using NUnit.Framework;
 using System.Security.Claims;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers

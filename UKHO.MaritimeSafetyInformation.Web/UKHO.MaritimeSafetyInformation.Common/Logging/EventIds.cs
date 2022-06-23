@@ -418,7 +418,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         SystemError = 910098,
         /// <summary>
-        /// 910098 -  Unauthorized Access.
+        /// 910099 -  Unauthorized Access.
         /// </summary>
         UnauthorizedAccess = 910099
 
