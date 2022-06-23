@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using System.Security.Principal;
+using System.Security.Claims;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
@@ -25,6 +27,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IRNWService _fakeRnwService;
         private TempDataDictionary _tempData;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+        private readonly ClaimsPrincipal _user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
+
 
         [SetUp]
         public void Setup()
@@ -34,6 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeRnwService = A.Fake<IRNWService>();
             _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
         }
 
 
