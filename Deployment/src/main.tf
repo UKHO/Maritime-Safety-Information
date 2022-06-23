@@ -49,7 +49,6 @@ module "webapp_service" {
   }
   tags                                                         = local.tags
   allowed_ips                                                  = var.allowed_ips
-  admin_webapp_allowed_ips                                     = var.admin_webapp_allowed_ips
 }
 
 module "key_vault" {
