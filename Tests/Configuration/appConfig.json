@@ -1,8 +1,8 @@
 {
-    "url": "",
-    "rnwAdminUrl": "",
-    "username":"",
-    "password":"",
-    "RNWAdminAutoTest_User":"",
-    "RNWAdminAutoTest_Pass":""
+  "url": "",
+  "rnwAdminUrl": "",
+  "B2CAutoTest_User": "",
+  "B2CAutoTest_Pass": "",
+  "RNWAdminAutoTest_User": "",
+  "RNWAdminAutoTest_Pass": ""
 }

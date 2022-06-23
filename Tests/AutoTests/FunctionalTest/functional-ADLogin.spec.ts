@@ -3,7 +3,7 @@ import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwrig
 import * as app from "../../Configuration/appConfig.json";
 import loginPage from '../../pageObject/Login.page';
 
-test.describe("AD Authentication Sign in For The maritime-safety-information", () => {
+test.describe("AD Authentication Sign in For The maritime-safety-information admin app", () => {
   let login: loginPage;
   test.beforeEach(async ({ page }) => {
     await page.goto(app.rnwAdminUrl);

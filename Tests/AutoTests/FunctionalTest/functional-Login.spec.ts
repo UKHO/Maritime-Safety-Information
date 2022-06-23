@@ -12,7 +12,7 @@ test.describe("Sign in For The maritime-safety-information", () => {
   });
 
   test('With the Valid details', async ({ page, context }) => {
-   await login.loginWithValidDetails(app.username, app.password);
+      await login.loginWithValidDetails(app.B2CAutoTest_User, app.B2CAutoTest_Pass);
    await login.signout();
   })
  
