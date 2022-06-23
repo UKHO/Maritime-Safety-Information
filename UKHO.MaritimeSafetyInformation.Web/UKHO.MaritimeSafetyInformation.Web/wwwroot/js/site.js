@@ -51,7 +51,6 @@ let ukcostalTabButton = document.querySelector('#ukcoastal-tab');
 let rnwTabContent = document.querySelector('#rnwTabContent');
 let toggleDetailsButtons = Array.from(document.querySelectorAll('.view_details'));
 
-
 allWarningTabButton.addEventListener('click', function () {
     selected_tab = undefined;
     const rows = getFilteredWarningRows();
@@ -81,15 +80,13 @@ toggleDetailsButtons.map(function (toggleDetailsButton, index) {
 
 function insertWarningRows(rows) {
     tableRefBody.innerHTML = '';
-    
-    for (var i = 0; i < rows.length; i++) {
-        //rows[i].classList.remove('show');
-        //rows[i].classList.remove('coll');
-        tableRef.tBodies[0].appendChild(rows[i]);
+
+    for (let value of rows) {
+        tableRef.tBodies[0].appendChild(value);
     }
+
     setTimeout(function () {
         if (document.querySelector(".view_details:not(.collapsed)")) {
-            console.log(document.querySelector(".view_details:not(.collapsed)"));
             document.querySelector(".view_details:not(.collapsed)").click();
         }
     }, 100);
@@ -117,7 +114,6 @@ function initEvents() {
             else {
                 selectedIds.splice(id, 1);
             }
-            console.log(event.target.getAttribute("warning-id"));
 
             document.getElementById('showSelectionId').value = selectedIds;
         })
@@ -126,7 +122,6 @@ function initEvents() {
 }
 
 select_button.addEventListener("click", function (event) {
-    console.log(event.target.value)
     if (event.target.value === "Clear all") {
         selectedIds = Array.from(document.querySelectorAll(".checkbox_warning")).map(function (element) {
             return element.getAttribute("warning-id");
