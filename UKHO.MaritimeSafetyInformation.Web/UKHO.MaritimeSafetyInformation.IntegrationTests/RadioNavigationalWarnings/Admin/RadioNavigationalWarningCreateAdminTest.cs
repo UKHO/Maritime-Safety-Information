@@ -14,6 +14,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
+using System.Security.Claims;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings.Admin
 {
@@ -28,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private ILogger<RNWService> _fakeLoggerRnwService;
 
         private RadioNavigationalWarningsAdminController _controller;
+        private readonly ClaimsPrincipal _user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
 
         [SetUp]
         public void Setup()
@@ -37,8 +39,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _rnwRepository = new RNWRepository(FakeContext);
             _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
             _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
-
             _controller = new RadioNavigationalWarningsAdminController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
         }
 
         [Test]
