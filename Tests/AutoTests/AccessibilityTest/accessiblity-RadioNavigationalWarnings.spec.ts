@@ -20,7 +20,7 @@ import loginPage from '../../pageObject/Login.page';
   test.beforeEach(async ({page}) => {
     await page.goto(app.url); 
     const login = new loginPage(page);
-    await login.adLogin(app.B2CAutoTest_User,app.B2CAutoTest_Pass);   
+    await login.loginWithValidDetails(app.B2CAutoTest_User,app.B2CAutoTest_Pass);   
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
