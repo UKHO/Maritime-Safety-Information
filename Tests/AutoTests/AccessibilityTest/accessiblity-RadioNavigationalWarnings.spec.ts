@@ -18,8 +18,9 @@ import loginPage from '../../pageObject/Login.page';
   };
  
   test.beforeEach(async ({page}) => {
-    await page.goto(app.url); 
+    await page.goto(app.url);
     const login = new loginPage(page);
+    await login.goToSignIn();
     await login.loginWithValidDetails(app.B2CAutoTest_User,app.B2CAutoTest_Pass);   
   });
 
