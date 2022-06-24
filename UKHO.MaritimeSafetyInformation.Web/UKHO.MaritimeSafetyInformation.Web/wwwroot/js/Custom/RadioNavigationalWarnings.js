@@ -118,7 +118,7 @@ function initEvents() {
                 event.target.getAttribute("warning-id")
             }
             else {
-                selectedIds.splice(id, 1);
+                selectedIds = selectedIds.filter(e => e !== id);
             }
 
             document.getElementById('showSelectionId').value = selectedIds;
