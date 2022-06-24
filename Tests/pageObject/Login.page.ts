@@ -19,6 +19,7 @@ export default class Login {
   readonly adUserNameDropdown:Locator;
   readonly adSignOutText:Locator;
   readonly adPasswordError:Locator;
+  readonly adUnathorisedError:Locator;
   constructor(page: Page) {
     this.page = page;
     this.signIn = this.page.locator('a:has-text("Sign in")');
@@ -37,6 +38,7 @@ export default class Login {
     this.adUserNameDropdown=this.page.locator('#navbarDropdown');
     this.adSignOutText=this.page.locator("#navbarSupportedContent > ul > li > ul > li > a")
     this.adPasswordError=this.page.locator("#passwordError")
+    this.adUnathorisedError=this.page.locator("#headingLevelOne")
   }
 
   public async goToSignIn() {
@@ -91,7 +93,7 @@ export default class Login {
      public async adUnathoriseddetails()
      {
       await this.adUserNameDropdown.click();
-      expect(await (await this.adSignOutText.innerText()).toString()).not.toContain('Sign out')
+      expect(await this.adUnathorisedError.innerText()).toContain("Sorry, you do not have access to this website.");
      }
      public async adpassworError()
      {
