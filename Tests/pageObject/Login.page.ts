@@ -91,7 +91,7 @@ export default class Login {
      public async adUnathoriseddetails()
      {
       await this.adUserNameDropdown.click();
-      expect(await this.adSignOutText.innerText()).not.toEqual('Sign out')
+      expect(await (await this.adSignOutText.innerText()).toString()).not.toContain('Sign out')
      }
      public async adpassworError()
      {
