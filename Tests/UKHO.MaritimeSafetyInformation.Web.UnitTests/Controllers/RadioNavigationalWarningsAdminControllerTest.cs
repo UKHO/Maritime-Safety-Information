@@ -1,5 +1,6 @@
 ﻿extern alias MSIAdminProjectAlias;
 using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -96,6 +97,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<IActionResult>(result);
             Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
             Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
+        }
+
+        [Test]
+        public void WhenICallGetRadioNavigationWarningsForAdmin_ThenCheckIfUserHasCorrectRole()
+        {
+            object[] actualAttribute = _controller.GetType().GetCustomAttributes(typeof(AuthorizeAttribute), true);
+            object role = _controller.GetType().GetCustomAttributes(typeof(AuthorizeAttribute), true).GetValue(0);
+            _ = _controller.Index();
+            Assert.AreEqual(typeof(AuthorizeAttribute), actualAttribute[0].GetType());
+            Assert.AreEqual("rnw-admin", ((AuthorizeAttribute)role).Roles);
         }
 
         [Test]
