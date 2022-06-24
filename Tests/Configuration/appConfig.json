@@ -4,5 +4,8 @@
   "B2CAutoTest_User": "",
   "B2CAutoTest_Pass": "",
   "RNWAdminAutoTest_User": "",
-  "RNWAdminAutoTest_Pass": ""
+  "RNWAdminAutoTest_Pass": "",
+  "RNWAdminAutoTestNoAccess_User":"",
+  "RNWAdminAutoTestNoAccess_Pass":""
+
 }
