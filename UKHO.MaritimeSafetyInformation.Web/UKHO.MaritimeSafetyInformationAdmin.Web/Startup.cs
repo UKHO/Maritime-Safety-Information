@@ -62,6 +62,21 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
             options => options.AccessDeniedPath = "/accessdenied");
 
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.SaveTokens = true; // this saves the token for the downstream api
+                options.Events.OnRedirectToIdentityProvider = async context =>
+                {
+                    context.ProtocolMessage.RedirectUri = configuration["AzureAd:RedirectBaseUrl"] + configuration["AzureAd:CallbackPath"];
+                    await Task.FromResult(0);
+                };
+                options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
+                {
+                    context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAd:RedirectBaseUrl"] + configuration["AzureAd:SignedOutCallbackPath"];
+                    await Task.FromResult(0);
+                };
+            });
+
             services.AddHttpClient();
 
             services.AddHealthChecks()
