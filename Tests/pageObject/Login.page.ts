@@ -18,6 +18,7 @@ export default class Login {
   readonly adYes:Locator;
   readonly adUserNameDropdown:Locator;
   readonly adSignOutText:Locator;
+  readonly adPasswordError:Locator;
   constructor(page: Page) {
     this.page = page;
     this.signIn = this.page.locator('a:has-text("Sign in")');
@@ -34,8 +35,8 @@ export default class Login {
     this.login = this.page.locator('text=Sign in');
     this.adYes=this.page.locator('#idSIButton9');
     this.adUserNameDropdown=this.page.locator('#navbarDropdown');
-   this.adSignOutText=this.page.locator("#navbarSupportedContent > ul > li > ul > li > a")
-
+    this.adSignOutText=this.page.locator("#navbarSupportedContent > ul > li > ul > li > a")
+    this.adPasswordError=this.page.locator("#passwordError")
   }
 
   public async goToSignIn() {
@@ -80,8 +81,21 @@ export default class Login {
       ]);
       await this.adPassword.fill(password);
       await this.login.click();
+     
+     }
+     public async adsignout()
+     {
       await this.adUserNameDropdown.click();
       expect(await this.adSignOutText.innerText()).toContain('Sign out')
+     }
+     public async adUnathoriseddetails()
+     {
+      await this.adUserNameDropdown.click();
+      expect(await this.adSignOutText.innerText()).not.toEqual('Sign out')
+     }
+     public async adpassworError()
+     {
+      expect(await this.adPasswordError.innerText()).toContain('Your account or password is incorrect');
      }
 }
 
