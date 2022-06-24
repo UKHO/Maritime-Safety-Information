@@ -103,7 +103,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenICallGetRadioNavigationWarningsForAdmin_ThenCheckIfUserHasCorrectRole()
         {
             object[] actualAttribute = _controller.GetType().GetCustomAttributes(typeof(AuthorizeAttribute), true);
-            object role = _controller.GetType().GetCustomAttributes(typeof(AuthorizeAttribute), true).GetValue(0);
+            object role = actualAttribute.GetValue(0);
             _ = _controller.Index();
             Assert.AreEqual(typeof(AuthorizeAttribute), actualAttribute[0].GetType());
             Assert.AreEqual("rnw-admin", ((AuthorizeAttribute)role).Roles);
