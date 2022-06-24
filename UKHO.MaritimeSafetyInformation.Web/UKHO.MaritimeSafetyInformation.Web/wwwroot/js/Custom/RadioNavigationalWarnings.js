@@ -40,18 +40,25 @@ let navarea1TabButton = document.querySelector('#NAVAREA1-tab');
 let ukcostalTabButton = document.querySelector('#ukcoastal-tab');
 let rnwTabContent = document.querySelector('#rnwTabContent');
 let toggleDetailsButtons = Array.from(document.querySelectorAll('.rnw-allwarnings-table .accordion-button'));
+let tabPane = document.querySelector('#rnwTabContent .tab-pane');
 
 allWarningTabButton.addEventListener('click', function () {
+    tabPane.id = "allwarnings";
+    tabPane.setAttribute("aria-labelledby","allwarnings-tab");
     selected_tab = undefined;
     const rows = getFilteredWarningRows();
     insertWarningRows(rows)
 })
 navarea1TabButton.addEventListener('click', function () {
+    tabPane.id = "navarea1";
+    tabPane.setAttribute("aria-labelledby", "NAVAREA1-tab");
     selected_tab = "N";
     const rows = getFilteredWarningRows("N");
     insertWarningRows(rows)
 })
 ukcostalTabButton.addEventListener('click', function () {
+    tabPane.id = "ukcoastal";
+    tabPane.setAttribute("aria-labelledby", "ukcoastal-tab");
     selected_tab = "U";
     const rows = getFilteredWarningRows("U");
     insertWarningRows(rows)

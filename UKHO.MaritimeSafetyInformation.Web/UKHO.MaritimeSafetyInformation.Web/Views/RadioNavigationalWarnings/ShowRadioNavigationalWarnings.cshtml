@@ -22,35 +22,35 @@
 <!--tabs-->
 <ul class="nav nav-tabs msi-tabs" id="rnwTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <a href="" class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">All warnings</a>
+        <a href="" class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" type="button" role="tab" aria-controls="allwarnings" aria-selected="false">All warnings</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a href="#navarea1" class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#navarea1" type="button" role="tab" aria-controls="navarea1" aria-selected="false" tabindex="-1">NAVAREA 1</a>
+        <a href="#navarea1" class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#navarea1" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">NAVAREA 1</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a href="#ukcoastal" class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" type="button" role="tab" aria-controls="ukcoastal" aria-selected="false" tabindex="-1">UK Coastal</a>
+        <a href="#ukcoastal" class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">UK Coastal</a>
     </li>
 </ul>
 <div class="tab-content" id="rnwTabContent">
     <div class="tab-pane fade show active" id="allwarnings" role="tabpanel" aria-labelledby="allwarnings-tab">
         <div class="table-responsive-md">
             <table class="table table-scroll small-first-col rnw-allwarnings-table">
-                <caption class="hidden-caption">Radio Navigational Warnings All warnings</caption>
+                <caption class="visually-hidden" id="rnwTableCaption" tabindex="-1">Radio Navigational Warnings All warnings</caption>
                 <thead>
                     <tr>
-                        <th class="th-1">
+                        <th class="th-1" role="cell">
                             @Html.DisplayNameFor(model => model.Reference)
                         </th>
-                        <th class="th-2">
+                        <th class="th-2" role="cell">
                             @Html.DisplayNameFor(model => model.DateTimeGroupRnwFormat)
                         </th>
-                        <th>
+                        <th role="cell">
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
-                        <th class="th-4 justify-content-center">
+                        <th class="th-4 justify-content-center" role="cell">
                             <input type="button" id="select_button" class="select-all-button" value="Select all" onClick="do_Selection()" />
                         </th>
-                        <th class="th-5 justify-content-center">
+                        <th class="th-5 justify-content-center" role="cell">
                             Select
                         </th>
                     </tr>
@@ -81,7 +81,8 @@
                                 </button>
                             </td>
                             <td id="checkbox_@i" class="td-5 justify-content-center">
-                                <input warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" aria-label="Select" onchange="enableDisableShowSelection()" />
+                                <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" onchange="enableDisableShowSelection()" />
+                                <label class="visually-hidden" id="selectCheckboxLabel_@i" for="selectCheckbox_@i">@Html.DisplayFor(modelItem => item.Reference) </label>
                             </td>
                         </tr>
                         <tr id="collapse_@i" class="accordion-collapse @Html.DisplayFor(modelItem => item.WarningType[0]) collapse" data-bs-parent="#accordionAllwarning">
