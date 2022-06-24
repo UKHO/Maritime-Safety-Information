@@ -3,7 +3,7 @@ import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwrig
 import * as app from "../../Configuration/appConfig.json";
 import loginPage from '../../pageObject/Login.page';
 
-test.describe("AD Authentication Sign in For The maritime-safety-information", () => {
+test.describe("AD Authentication Sign in For The maritime-safety-information admin app", () => {
   let login: loginPage;
   test.beforeEach(async ({ page }) => {
     await page.goto(app.rnwAdminUrl);
@@ -12,6 +12,14 @@ test.describe("AD Authentication Sign in For The maritime-safety-information", (
 
   test('With the Valid details', async ({ page, context }) => {
     await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
+    await login.adsignout();
   })
-  
+  test('With the Unauthorised details', async ({ page, context }) => {
+    await login.adLogin(app.RNWAdminAutoTestNoAccess_User,app.RNWAdminAutoTestNoAccess_Pass);
+    await login.adUnathoriseddetails();
+  })
+  test('With the Invalid details', async ({ page, context }) => {
+    await login.adLogin(app.RNWAdminAutoTest_User,'1111111');
+    await login.adpassworError();
+  })
 });

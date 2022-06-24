@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -58,6 +59,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
             services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
+            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
+            options => options.AccessDeniedPath = "/accessdenied");
+
             services.AddHttpClient();
 
             services.AddHealthChecks()
