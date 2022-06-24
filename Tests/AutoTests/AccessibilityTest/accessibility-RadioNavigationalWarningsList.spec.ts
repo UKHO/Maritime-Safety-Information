@@ -19,13 +19,10 @@ import loginPage from '../../pageObject/Login.page';
   };
  
   test.beforeEach(async ({page}) => {
-    await page.goto(app.rnwAdminUrl); 
-    let login = new loginPage(page);
-    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);   
-  });
-
-
-  
+    await page.goto(app.rnwAdminUrl);
+    const login = new loginPage(page);
+    await login.adLogin(app.B2CAutoTest_User,app.B2CAutoTest_Pass); 
+  });  
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
     await injectAxe(page);
