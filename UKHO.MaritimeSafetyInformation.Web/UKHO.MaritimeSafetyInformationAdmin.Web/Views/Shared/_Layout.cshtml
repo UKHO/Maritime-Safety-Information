@@ -18,6 +18,17 @@
                 </a>
                 <div class="vertical-divider"></div>
                 <a class="site-title" id="siteTitle" asp-area="" asp-controller="RadioNavigationalWarningsAdmin" asp-action="Index" aria-label="Maritime Safety Information Admin">Maritime Safety Information</a>
+                <button class="navbar-toggler collapsed ms-auto d-flex d-lg-none flex-column justify-content-around" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="toggler-icon top-bar"></span>
+                    <span class="toggler-icon middle-bar"></span>
+                    <span class="toggler-icon bottom-bar"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                        <partial name="_LoginPartial" />
+                    </ul>                    
+                </div>
             </div>
         </nav>
     </header>
