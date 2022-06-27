@@ -42,6 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
+            services.Configure<AzureADConfiguration>(configuration.GetSection("AzureAd"));
             services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAd);
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
@@ -60,7 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
             services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
-            options => options.AccessDeniedPath = "/accessdenied");
+            options => options.AccessDeniedPath = "/accessdenied");            
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -111,6 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     name: "default",
                     pattern: "{controller=RadioNavigationalWarningsAdmin}/{action=Index}/{id?}");
                 endpoints.MapHealthChecks("/health");
+                
             });
         }
 

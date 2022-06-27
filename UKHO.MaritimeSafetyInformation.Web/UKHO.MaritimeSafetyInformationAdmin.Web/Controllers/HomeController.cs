@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using System.Web;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 
 namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
@@ -8,11 +11,13 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IOptions<AzureADConfiguration> _azureADConfiguration;
 
-        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger) : base(contextAccessor, logger)
+        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger, IOptions<AzureADConfiguration> azureADConfiguration) : base(contextAccessor, logger)
         {
             _logger = logger;
             _contextAccessor = contextAccessor;
+            _azureADConfiguration = azureADConfiguration;
         }
 
         [Route("/error")]
@@ -28,8 +33,12 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
         [Route("/accessdenied")]
         public IActionResult AccessDenied()
         {
-            _logger.LogError(EventIds.UnauthorizedAccess.ToEventId(), "Unauthorized page requested by user: {user}", User.Identity.Name);            
-            return new RedirectResult("https://rnwadmin-dev.ukho.gov.uk/accessdenied");
+            string host = _contextAccessor.HttpContext.Request.Host.Value.ToString();
+            _logger.LogError(EventIds.UnauthorizedAccess.ToEventId(), "Unauthorized page requested by user: {user}", User.Identity.Name);
+            if (!string.IsNullOrEmpty(host) && "https://"+ host != _azureADConfiguration.Value.RedirectBaseUrl)
+                return new RedirectResult(_azureADConfiguration.Value.RedirectBaseUrl + "/accessdenied");                
+            else
+                return View();
         }
     }
 }

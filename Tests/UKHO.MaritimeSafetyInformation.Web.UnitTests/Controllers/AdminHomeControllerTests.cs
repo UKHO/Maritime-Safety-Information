@@ -3,9 +3,11 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using NUnit.Framework;
 using System.Security.Claims;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
@@ -15,6 +17,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private HomeController _controller;
         private IHttpContextAccessor _fakeContextAccessor;
         private ILogger<HomeController> _fakeLogger;
+        private IOptions<AzureADConfiguration> _fakeAzureADConfiguration;
         private readonly ClaimsPrincipal _user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
 
         [SetUp]
@@ -22,8 +25,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<HomeController>>();
+            _fakeAzureADConfiguration = A.Fake<IOptions<AzureADConfiguration>>();
+            _fakeAzureADConfiguration.Value.RedirectBaseUrl = "https://test.com";
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new HomeController(_fakeContextAccessor, _fakeLogger);
+            _controller = new HomeController(_fakeContextAccessor, _fakeLogger, _fakeAzureADConfiguration);
             _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
         }
 
@@ -38,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
         [Test]
         public void WhenAccessDeniedIsCalled_ThenShouldReturnsViewAndViewData()
-        {
+        {            
             IActionResult result = _controller.AccessDenied();
 
             Assert.IsInstanceOf<RedirectResult>(result);
