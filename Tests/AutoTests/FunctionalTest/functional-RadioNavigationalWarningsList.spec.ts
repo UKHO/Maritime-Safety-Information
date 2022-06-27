@@ -1,11 +1,15 @@
 import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
 import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWarningsAdminList.page';
+import loginPage from '../../pageObject/Login.page';
 
 test.describe("Goto maritime-safety-information Home Page", ()=> {
   let rnwList:RadioNavigationalWarningsList;
+  let login: loginPage;
   test.beforeEach(async ({page}) => {
    await page.goto(app.rnwAdminUrl);  
+   login = new loginPage(page);
+   await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
    rnwList=new RadioNavigationalWarningsList(page);
   });
 
