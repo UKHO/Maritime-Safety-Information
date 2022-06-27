@@ -5,6 +5,7 @@ import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigati
 
 test.describe("Goto maritime-safety-information Home Page", ()=> {
   let rnwListEndUser:RadioNavigationalWarningsListEndUser;
+  
 
   test.beforeEach(async ({page}) => {
     await page.goto(app.url);
@@ -31,5 +32,6 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     await rnwListEndUser.verifySelectOptionText();
     await rnwListEndUser.verifySelectOptionCheckBox();
     await rnwListEndUser.verifyPrint();
+    
   })
 });
