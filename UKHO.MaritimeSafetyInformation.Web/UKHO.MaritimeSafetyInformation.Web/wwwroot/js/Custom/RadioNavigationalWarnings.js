@@ -113,9 +113,10 @@ function initEvents() {
     checkbox_warnings.map(function (checkbox_warning) {
         checkbox_warning.addEventListener("change", function (event) {
             const id = event.target.getAttribute("warning-id");
-            if (selectedIds.indexOf(id) === -1) {
-                selectedIds.push(id);
-                event.target.getAttribute("warning-id")
+            if (this.checked) {
+                if (!selectedIds.includes(id)) {
+                    selectedIds.push(id);
+                }
             }
             else {
                 selectedIds = selectedIds.filter(e => e !== id);

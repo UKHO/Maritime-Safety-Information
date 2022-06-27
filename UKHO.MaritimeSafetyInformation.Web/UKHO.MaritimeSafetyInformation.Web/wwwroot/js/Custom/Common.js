@@ -63,11 +63,11 @@ function SetTitle(hash) {
                 break;
             case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
                 document.querySelector('#NAVAREA1-tab').click();
+
                 break;
             case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
                 document.querySelector('#ukcoastal-tab').click();
                 break;
-
         }
     }
 }
