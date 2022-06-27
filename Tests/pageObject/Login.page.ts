@@ -92,7 +92,6 @@ export default class Login {
      }
      public async adUnathoriseddetails()
      {
-      await this.adUserNameDropdown.click();
       expect(await this.adUnathorisedError.innerText()).toContain("Sorry, you do not have access to this website.");
      }
      public async adpassworError()
