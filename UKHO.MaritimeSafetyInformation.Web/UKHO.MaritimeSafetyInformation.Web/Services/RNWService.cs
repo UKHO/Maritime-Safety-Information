@@ -104,11 +104,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     SrNo = srNo,
                 };
 
-                if (radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList == null || radioNavigationalWarningsAdminListFilter.RadioNavigationalWarningsAdminList.Count == 0)
-                {
-                    throw new InvalidDataException("No data received from RNW database for Admin");
-                }
-
                 return radioNavigationalWarningsAdminListFilter;
             }
             catch (Exception ex)

@@ -1,6 +1,10 @@
 ﻿using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Claims;
@@ -38,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
-
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAd);
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
@@ -47,11 +51,25 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+            .AddMicrosoftIdentityUI();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+            });
+            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
+            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
+            options => options.AccessDeniedPath = "/accessdenied");
+
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.SaveTokens = true; // this saves the token for the downstream api
+                options.Events.OnRedirectToIdentityProvider = async context =>
+                {
+                    context.ProtocolMessage.RedirectUri = configuration["AzureAd:RedirectBaseUrl"] + configuration["AzureAd:CallbackPath"];
+                    await Task.FromResult(0);
+                };
             });
 
             services.AddHttpClient();
@@ -83,6 +101,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.UseExceptionHandler("/error");
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,15 +1,16 @@
 ﻿extern alias MSIAdminProjectAlias;
-
 using FakeItEasy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
-using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
@@ -25,6 +26,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IRNWService _fakeRnwService;
         private TempDataDictionary _tempData;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+        private readonly ClaimsPrincipal _user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
+
 
         [SetUp]
         public void Setup()
@@ -34,6 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeRnwService = A.Fake<IRNWService>();
             _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
             _controller = new RadioNavigationalWarningsAdminController(_fakeHttpContextAccessor, _fakeLogger, _fakeRnwService);
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
         }
 
 
@@ -93,6 +97,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<IActionResult>(result);
             Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
             Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
+        }
+
+        [Test]
+        public void WhenICallGetRadioNavigationWarningsForAdmin_ThenCheckIfUserHasCorrectRole()
+        {
+            object[] actualAttribute = _controller.GetType().GetCustomAttributes(typeof(AuthorizeAttribute), true);
+            object role = actualAttribute.GetValue(0);
+            _ = _controller.Index();
+            Assert.AreEqual(typeof(AuthorizeAttribute), actualAttribute[0].GetType());
+            Assert.AreEqual("rnw-admin", ((AuthorizeAttribute)role).Roles);
         }
 
         [Test]
