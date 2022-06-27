@@ -34,4 +34,11 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
     await rnwListEndUser.verifyPrint();
     
   })
+
+  test('Does the Table data has navarea1 data with date sorting is displayed ',async ({page,context}) => {
+   await rnwListEndUser.verifyNavareaAndUkCostalFilter(rnwListEndUser.navAreaEndUser,"NAVAREA 1")
+   await rnwListEndUser.verifyNavareaAndUkCostalFilter(rnwListEndUser.ukCostalEnduser,"UK Coastal")
+  })
+
+
 });
