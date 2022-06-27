@@ -28,8 +28,8 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
         [Route("/accessdenied")]
         public IActionResult AccessDenied()
         {
-            _logger.LogError(EventIds.UnauthorizedAccess.ToEventId(), "Unauthorized page requested by user: {user}", User.Identity.Name);
-            return View();
+            _logger.LogError(EventIds.UnauthorizedAccess.ToEventId(), "Unauthorized page requested by user: {user}", User.Identity.Name);            
+            return new RedirectResult("https://rnwadmin-dev.ukho.gov.uk/accessdenied");
         }
     }
 }
