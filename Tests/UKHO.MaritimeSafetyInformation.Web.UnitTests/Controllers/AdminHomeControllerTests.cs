@@ -27,9 +27,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<HomeController>>();
             _fakeAzureADConfiguration = A.Fake<IOptions<AzureADConfiguration>>();
             _fakeAzureADConfiguration.Value.RedirectBaseUrl = "https://test.com";
-            A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
+            A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());           
             _controller = new HomeController(_fakeContextAccessor, _fakeLogger, _fakeAzureADConfiguration);
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };            
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {            
             IActionResult result = _controller.AccessDenied();
 
-            Assert.IsInstanceOf<RedirectResult>(result);
+            Assert.IsInstanceOf<ViewResult>(result);
         }
 
     }

@@ -32,8 +32,8 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 
         [Route("/accessdenied")]
         public IActionResult AccessDenied()
-        {
-            string host = _contextAccessor.HttpContext.Request.Host.Value.ToString();
+        {            
+            string host = _contextAccessor.HttpContext.Request.Host.HasValue? _contextAccessor.HttpContext.Request.Host.Value.ToString():string.Empty;
             _logger.LogError(EventIds.UnauthorizedAccess.ToEventId(), "Unauthorized page requested by user: {user}", User.Identity.Name);
             if (!string.IsNullOrEmpty(host) && "https://"+ host != _azureADConfiguration.Value.RedirectBaseUrl)
                 return new RedirectResult(_azureADConfiguration.Value.RedirectBaseUrl + "/accessdenied");                
