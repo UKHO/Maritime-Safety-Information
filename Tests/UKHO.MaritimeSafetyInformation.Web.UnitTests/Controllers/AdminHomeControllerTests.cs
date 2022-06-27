@@ -41,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             IActionResult result = _controller.AccessDenied();
 
-            Assert.IsInstanceOf<RedirectResult>(result);
+            Assert.IsInstanceOf<ViewResult>(result);
         }
 
     }
