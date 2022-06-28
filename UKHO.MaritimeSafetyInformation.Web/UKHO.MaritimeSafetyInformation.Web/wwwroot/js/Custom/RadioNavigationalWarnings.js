@@ -1,5 +1,4 @@
 ﻿document.onreadystatechange = function () {
-
     if (document.readyState == "interactive" || document.readyState === "complete") {
         HashLinkTab();
     }
@@ -67,8 +66,6 @@ ukcostalTabButton.addEventListener('click', function () {
 toggleDetailsButtons.map(function (toggleDetailsButton, index) {
 
     toggleDetailsButton.addEventListener('click', function (event) {
-
-        console.log(event.target, event.target.children);
         resetViewdetailButtonText();
         if (toggleDetailsButton.classList.contains("collapsed")) {
             toggleDetailsButton.children[1].innerText = "View details";
