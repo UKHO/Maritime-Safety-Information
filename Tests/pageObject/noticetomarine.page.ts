@@ -38,7 +38,7 @@ export default class noticetoMarine
      this.tabdaily = this.page.locator("#daily-tab");
      this.tabcumulative = this.page.locator("#cumulative-tab");
      this.tabannual = this.page.locator("#annual-tab");
-     this.navareatab = this.page.locator("#navarea1-tab");
+     this.navareatab = this.page.locator("#NAVAREA1-tab");
      this.ukcoastaltab = this.page.locator("#ukcoastal-tab");
     }
     
