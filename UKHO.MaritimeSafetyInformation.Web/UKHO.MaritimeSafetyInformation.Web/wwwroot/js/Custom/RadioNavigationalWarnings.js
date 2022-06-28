@@ -1,4 +1,11 @@
-﻿function do_Selection() {
+﻿document.onreadystatechange = function () {
+
+    if (document.readyState == "interactive" || document.readyState === "complete") {
+        HashLinkTab();
+    }
+}
+
+function do_Selection() {
     var checkboxes = document.getElementsByName('checkbox');
     var button = document.getElementById('select_button');
 
