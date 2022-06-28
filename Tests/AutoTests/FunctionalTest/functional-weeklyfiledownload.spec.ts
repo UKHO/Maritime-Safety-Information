@@ -13,7 +13,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     notice = new noticeToMariner(page);
   });
 
-  test('Should Goto Notice to Mariner Page for Weekly Download', async ({ page, context }) => {
+  test('Should Goto Notices to Mariner Page for Weekly Download', async ({ page, context }) => {
     await noticeFileDownload.goToNoticeToMariner();
 
     const name = await noticeFileDownload.checkFileDownload();
@@ -25,12 +25,12 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     expect(newPageUrl).toContain(`NoticesToMariners/DownloadWeeklyFile?fileName=${fileName}`);
   })
 
-  test('Should Goto Notice to Mariner Page for Daily download File', async ({ page, context }) => {
+  test('Should Goto Notices to Mariner Page for Daily download File', async ({ page, context }) => {
     await noticeFileDownload.goToNoticeToMariner();
     await noticeFileDownload.goToDailyFile();
     await noticeFileDownload.checkDailyFileDownload();
   })
-  test('Does the Notice to mariner Page url are displayed with page title',async ({page}) => {
+  test('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
     await notice.checkpageurl('','Maritime Safety Information')
     await notice.checkurl(notice.noticeMarine,'NoticesToMariners/Weekly','Notices to Mariners - Weekly')
     await notice.checkurl(notice.tabdaily,'NoticesToMariners/Daily','Notices to Mariners - Daily')
