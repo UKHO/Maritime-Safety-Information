@@ -11,6 +11,12 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
     [Route("[area]/[controller]/[action]")]
     public class AccountController : Controller
     {
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public AccountController(IHttpContextAccessor contextAccessor)
+        {
+            _contextAccessor = contextAccessor;
+        }
         /// <summary>
         /// Handles the user sign-out.
         /// </summary>
@@ -28,9 +34,8 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 
         public IActionResult SignedOut()
         {
-            //do any post logout activities here
+            _contextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("Index", "RadioNavigationalWarningsAdmin");
-            //return new RedirectResult(Url.Action("SignIn"));
         }
     }
 }
