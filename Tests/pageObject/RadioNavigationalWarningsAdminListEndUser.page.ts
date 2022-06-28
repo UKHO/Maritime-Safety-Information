@@ -1,6 +1,7 @@
 
 import { expect } from '@playwright/test';
 import type { Locator, Page } from 'playwright';
+import * as app from "../Configuration/appConfig.json"
 import { DateTime } from 'luxon';
 
 
@@ -23,6 +24,8 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly detailsReference: Locator;
   readonly detailsDateTimeGroupRnwFormat: Locator;
   readonly print: Locator;
+  readonly viewDetails: Locator;
+  readonly detailWarningType: Locator; 
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
   constructor(page: Page) {
     this.page = page;
@@ -42,6 +45,9 @@ export default class RadioNavigationalWarningsListEndUser {
     this.detailsReference = this.page.locator('[id^="Details_Reference"]')
     this.detailsDateTimeGroupRnwFormat = this.page.locator('[id^="Details_DateTimeGroupRnwFormat"]')
     this.print = this.page.locator('#Print')
+    this.viewDetails=this.page.locator('[id^="Viewdetails"] >> text=details')
+    this.detailWarningType=this.page.locator('[id^="Details_WarningType"]')
+    
   }
 
   public async goToRadioWarning() {
@@ -150,5 +156,21 @@ export default class RadioNavigationalWarningsListEndUser {
     await this.page.waitForLoadState();
     expect(this.print.isEnabled()).toBeTruthy();
     expect((await this.print.innerText()).toString()).toContain("Print");
+  
   }
+  public async verifyNavareaAndUkCostalFilter(locator:Locator,text:string){
+ 
+    await locator.click();
+    await this.viewDetails.first().click();
+    const detailWarnigType = await (await this.detailWarningType).first().innerText();
+    expect(detailWarnigType).toContain(text) 
+    const resultdate = await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]', (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) })
+    const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date,);
+    expect(resultdate).toEqual(sortedDesc);
+    let anchor= await locator.getAttribute("href");
+    var urlName=`${app.url}RadioNavigationalWarnings${anchor}`;
+    expect(this.page.url()).toEqual(urlName);
+
+  }
+ 
 }  
