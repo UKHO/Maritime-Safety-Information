@@ -1,0 +1,36 @@
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
+{
+    [AllowAnonymous]
+    [Area("MsiIdentity")]
+    [Route("[area]/[controller]/[action]")]
+    public class AccountController : Controller
+    {
+        /// <summary>
+        /// Handles the user sign-out.
+        /// </summary>
+        public new IActionResult SignOut()
+        {
+            string callbackUrl = Url.Action("SignedOut");
+            return SignOut(
+                 new AuthenticationProperties
+                 {
+                     RedirectUri = callbackUrl,
+                 },
+                 CookieAuthenticationDefaults.AuthenticationScheme,
+                 OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
+        public IActionResult SignedOut()
+        {
+            //do any post logout activities here
+            return RedirectToAction("Index", "RadioNavigationalWarningsAdmin");
+            //return new RedirectResult(Url.Action("SignIn"));
+        }
+    }
+}
