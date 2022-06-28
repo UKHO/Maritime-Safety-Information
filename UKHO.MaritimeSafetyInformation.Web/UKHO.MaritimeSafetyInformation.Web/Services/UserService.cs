@@ -5,7 +5,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private const string DistributorRoleName = "TBC";
+        private const string DistributorRoleName = "Distributor";
 
         public UserService(IHttpContextAccessor httpContextAccessor)
         {
@@ -18,6 +18,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated
                     && _httpContextAccessor.HttpContext.User.IsInRole(DistributorRoleName);
             }
-        }
+        }     
     }
 }
