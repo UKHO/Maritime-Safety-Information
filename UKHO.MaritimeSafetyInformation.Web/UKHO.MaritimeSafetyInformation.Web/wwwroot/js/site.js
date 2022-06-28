@@ -81,7 +81,7 @@ function HashLinkTab() {
                     newUrl = url.split("#")[0];
 
                 } else {
-                    if (hash.toLowerCase() === '#allwarnings') newUrl = url;
+                    if (hash.toLowerCase() === '#allwarnings') newUrl = url.split('#')[0];
                     else newUrl = url.split("#")[0] + hash;
                     SetTitle(hash);
                 }
