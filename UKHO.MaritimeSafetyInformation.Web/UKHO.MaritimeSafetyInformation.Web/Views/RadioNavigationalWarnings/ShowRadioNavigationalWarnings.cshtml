@@ -25,10 +25,10 @@
         <a href="" class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" type="button" role="tab" aria-controls="allwarnings" aria-selected="false">All warnings</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a href="#navarea1" class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#navarea1" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">NAVAREA 1</a>
+        <a href="" class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#navarea1" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">NAVAREA 1</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a href="#ukcoastal" class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">UK Coastal</a>
+        <a href="" class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" type="button" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">UK Coastal</a>
     </li>
 </ul>
 <div class="tab-content" id="rnwTabContent">
@@ -81,7 +81,7 @@
                                 </button>
                             </td>
                             <td id="checkbox_@i" class="td-5 justify-content-center">
-                                <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" onchange="enableDisableShowSelection()" />
+                                <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" onchange="enableDisableShowSelection()" aria-labelledby="selectCheckboxLabel_@i" />
                                 <label class="visually-hidden" id="selectCheckboxLabel_@i" for="selectCheckbox_@i">@Html.DisplayFor(modelItem => item.Reference) </label>
                             </td>
                         </tr>
