@@ -85,18 +85,22 @@ function resetViewdetailButtonText() {
 }
 
 function insertWarningRows(rows) {
-    tableRefBody.innerHTML = '';
-
-    for (let value of rows) {
-        tableRef.tBodies[0].appendChild(value);
-    }
-
-    setTimeout(function () {
-        if (document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)")) {
-            document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)").click();
+    if (rows.length > 0) {
+        tableRefBody.innerHTML = '';
+        for (let value of rows) {
+            tableRef.tBodies[0].appendChild(value);
         }
-    }, 100);
-    initEvents();
+
+        setTimeout(function () {
+            if (document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)")) {
+                document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)").click();
+            }
+        }, 100);
+        initEvents();
+    }
+    else {
+        tableRefBody.innerHTML = 'No Record Found.';
+    }
 }
 
 function getFilteredWarningRows(warningType) {

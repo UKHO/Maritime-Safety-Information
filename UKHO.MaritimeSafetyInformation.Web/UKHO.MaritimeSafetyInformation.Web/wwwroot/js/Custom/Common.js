@@ -70,4 +70,7 @@ function SetTitle(hash) {
                 break;
         }
     }
+    else {
+        document.title = 'Radio Navigational Warnings'
+    }
 }
