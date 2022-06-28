@@ -13,6 +13,8 @@ export const options = {
           exec: 'DownloadNMDailyFiles',
           exec: 'DownloadNMWeeklyFiles',
           exec: 'allWarningsRNW',
+          exec: 'noticedToMariners',
+          exec: 'noticedToMarinersDailyFiles',
           executor: 'per-vu-iterations',
           startTime: '5s',
           gracefulStop: '5s',
@@ -55,6 +57,17 @@ export function allWarningsRNW()
 
   http.get(`${config.url}/RadioNavigationalWarnings`);
       
+}
+
+export function noticedToMariners(){
+
+  http.get(`${config.url}/NoticestoMariners`);
+  
+}
+
+export function noticedToMarinersDailyFiles(){
+
+  http.get(`${config.url}/NoticestoMariners/ShowDailyFiles`);
 }
 
 
