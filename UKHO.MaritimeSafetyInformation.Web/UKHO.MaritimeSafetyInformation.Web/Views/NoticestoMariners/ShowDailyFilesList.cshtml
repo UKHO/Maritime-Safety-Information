@@ -23,7 +23,7 @@
                                 <td id="filename_@j">@Model[i].DailyFilesData[j].FileDescription</td>
                                 <td id="filesize_@j">@Model[i].DailyFilesData[j].FileSizeInKB (@Model[i].DailyFilesData[j].FileExtension)</td>
                                 <td class="td-3 justify-content-center" id="download_@j">
-                                    <a href="@Url.Action("DownloadDailyFile", "NoticesToMariners", new { batchId = @Model[i].DailyFilesData[j].BatchId,fileName=@Model[i].DailyFilesData[j].Filename, mimeType = @Model[i].DailyFilesData[j].MimeType })">Download</a>
+                                    <a aria-label="download file for @Model[i].DailyFilesData[j].FileDescription. Link open new tab" href="@Url.Action("DownloadDailyFile", "NoticesToMariners", new { batchId = @Model[i].DailyFilesData[j].BatchId,fileName=@Model[i].DailyFilesData[j].Filename, mimeType = @Model[i].DailyFilesData[j].MimeType })">Download</a>
                                 </td>
                             </tr>
                         }
