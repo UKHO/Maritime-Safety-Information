@@ -2,7 +2,8 @@
 <ul class="nav flex-column msi-page-nav">
     <li class="nav-item">
         <a href="@Url.Action("Index", "NoticesToMariners")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "nav-link active" : "nav-link")"
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles"
+           || ViewContext.RouteData.Values["Action"].ToString() == "Cumulative"|| ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "nav-link active" : "nav-link")"
            aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "true" : "")">
             Notices to Mariners
         </a>
