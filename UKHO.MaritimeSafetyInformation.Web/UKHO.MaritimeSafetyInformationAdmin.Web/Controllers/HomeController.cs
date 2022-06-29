@@ -24,5 +24,12 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
             _logger.LogError(EventIds.SystemError.ToEventId(), "System error has occurred while processing request with exception:{ex}, at exception path:{path} for correlationId:{correlationId}", exceptionDetails?.Error.Message, exceptionDetails?.Path, correlationId);
             return View();
         }
+
+        [Route("/accessdenied")]
+        public IActionResult AccessDenied()
+        {
+            _logger.LogError(EventIds.UnauthorizedAccess.ToEventId(), "Unauthorized page requested by user: {user}", User.Identity.Name);
+            return View();
+        }
     }
 }
