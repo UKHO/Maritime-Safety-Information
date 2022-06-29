@@ -1,7 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 {
+    [ExcludeFromCodeCoverage]
     public class DailyFilesDataModel
     {
         [DataMember(Name = "datadate", EmitDefaultValue = false)]

@@ -2,6 +2,7 @@ import { test, expect, chromium, Page, Browser, BrowserContext } from '@playwrig
 import * as app from "../../Configuration/appConfig.json";
 import noticeToMarine from '../../pageObject/noticetomarine.page';
 
+
 test.describe("Maritime Safety Information Notice to Marine Page Functional Test Scenarios", ()=> {
  
        let notice:any;
@@ -31,5 +32,7 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
        test('Does the Table Data For Yearly and Weekly Drop Down Include Table Data,File Name and File Size',async ({page}) => {
          await notice.checkFileSizeData();
          await notice.checkFileNameSort();
-      })     
+      })  
+     
+     
     })
