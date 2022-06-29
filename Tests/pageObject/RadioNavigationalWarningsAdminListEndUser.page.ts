@@ -45,7 +45,7 @@ export default class RadioNavigationalWarningsListEndUser {
     this.detailsReference = this.page.locator('[id^="Details_Reference"]')
     this.detailsDateTimeGroupRnwFormat = this.page.locator('[id^="Details_DateTimeGroupRnwFormat"]')
     this.print = this.page.locator('#Print')
-    this.viewDetails=this.page.locator('[id^="Viewdetails"] >> text=details')
+    this.viewDetails=this.page.locator('[id^="Viewdetails"] > button > span.view_details')
     this.detailWarningType=this.page.locator('[id^="Details_WarningType"]')
     
   }
@@ -72,10 +72,10 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async verifyTableContainsViewDetailsLink() {
-    const resultLinks = await this.page.$$eval('[id^="Viewdetails"] > button', (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
+    const resultLinks = await this.page.$$eval('[id^="Viewdetails"] > button > span.view_details', (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
 
     for (let i = 0; i < resultLinks.length; i++) {
-      expect(resultLinks[i].trim()).toEqual("details");
+      expect(resultLinks[i].trim()).toEqual("View details");
     }
   }
 
@@ -91,13 +91,13 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async verifyTableViewDetailsUrl() {
-    const viewDetails = await this.page.$('[id^="Viewdetails"] >> text=details');
+    const viewDetails = await this.page.$('[id^="Viewdetails"] > button > span.view_details');
     const beforeRefrence = await (await this.page.$('[id^="Reference"]')).innerText();
     const beforeDatetime = await (await this.page.$('[id^="DateTimeGroupRnwFormat"]')).innerText();
-    const beforeViewDetails = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
+    const beforeViewDetails = await (await this.page.$('[id^="Viewdetails"] > button')).getAttribute("aria-expanded");
     expect(beforeViewDetails).toEqual("false");
     await viewDetails.click({ force: true });
-    const newDetails = await (await this.page.$('[id^="Viewdetails"] >> text=details')).getAttribute("aria-expanded");
+    const newDetails = await (await this.page.$('[id^="Viewdetails"] > button')).getAttribute("aria-expanded");
     expect(newDetails).toBeTruthy();
     const afterRefrence = await (await this.page.$('[id^="Details_Reference"]')).innerText();
     const afterDateTime = await (await this.page.$('[id^="Details_DateTimeGroupRnwFormat"]')).innerText();
