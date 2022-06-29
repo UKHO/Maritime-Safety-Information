@@ -19,8 +19,8 @@ export const options = {
           executor: 'per-vu-iterations',
           startTime: '5s',
           gracefulStop: '5s',
-          vus: 19,
-          iterations: 29,
+          vus: 540,
+          iterations: 6,
           maxDuration: '1h'
           
       }
