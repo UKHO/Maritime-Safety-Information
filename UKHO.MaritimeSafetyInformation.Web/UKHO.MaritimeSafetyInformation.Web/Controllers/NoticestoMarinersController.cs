@@ -12,17 +12,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly ILogger<NoticesToMarinersController> _logger;
         private readonly INMDataService _nMDataService;
         private readonly IHttpContextAccessor _contextAccessor;
-        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger) : base(contextAccessor, logger)
+        private readonly IUserService _userService;
+
+        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
             try
             {
+                ViewBag.IsDistributor = _userService.IsDistributorUser;
+                
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
@@ -46,6 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
+                ViewBag.IsDistributor = _userService.IsDistributorUser;
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
                 ViewData["Year"] = year;
@@ -87,6 +93,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
+                ViewBag.IsDistributor = _userService.IsDistributorUser;
                 List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());

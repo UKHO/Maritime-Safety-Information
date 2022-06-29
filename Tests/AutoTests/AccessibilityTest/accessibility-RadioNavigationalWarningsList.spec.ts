@@ -3,6 +3,7 @@ import * as app from "../../Configuration/appConfig.json";
 import { checkA11y, injectAxe, Options } from 'axe-playwright';
 
 import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWarningsAdminList.page';
+import loginPage from '../../pageObject/Login.page';
 
   test.describe("A11y tests", ()=> {
    const defaultCheckA11yOptions: Options = {
@@ -18,11 +19,10 @@ import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWar
   };
  
   test.beforeEach(async ({page}) => {
-    await page.goto(app.rnwAdminUrl);    
-  });
-
-
-  
+    await page.goto(app.rnwAdminUrl);
+    const login = new loginPage(page);
+    await login.adLogin(app.B2CAutoTest_User,app.B2CAutoTest_Pass); 
+  });  
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
     await injectAxe(page);

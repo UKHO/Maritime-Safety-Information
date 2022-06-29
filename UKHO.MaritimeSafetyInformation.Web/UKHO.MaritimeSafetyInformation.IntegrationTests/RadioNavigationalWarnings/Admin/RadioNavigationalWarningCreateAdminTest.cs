@@ -1,17 +1,17 @@
 ﻿extern alias MSIAdminProjectAlias;
-
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using NUnit.Framework;
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
@@ -28,6 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private ILogger<RNWService> _fakeLoggerRnwService;
 
         private RadioNavigationalWarningsAdminController _controller;
+        private readonly ClaimsPrincipal _user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
 
         [SetUp]
         public void Setup()
@@ -37,8 +38,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _rnwRepository = new RNWRepository(FakeContext);
             _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
             _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
-
             _controller = new RadioNavigationalWarningsAdminController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
         }
 
         [Test]

@@ -122,14 +122,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public void WhenCallIndexWithInValidPageNo_ThenThrowInvalidDataException()
-        {
-            FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 3;
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from RNW database for Admin"),
-                async delegate { await _controller.Index(4, null, null); });
-        }
-
-        [Test]
         public async Task WhenCallIndexWithValidAdminListRecordPerPage_ThenReturnValidRecordPerPageAsync()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 5;
