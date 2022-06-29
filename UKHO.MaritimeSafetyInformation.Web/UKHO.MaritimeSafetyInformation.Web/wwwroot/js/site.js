@@ -48,12 +48,24 @@ function HashLinkTab() {
         if (SetTitle(hashValue)) {
 
             let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
+            let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
 
             for (let i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove('active');
             }
 
+            if (hashValue != "navarea1" && hashValue != "ukcoastal") {
+                for (let i = 0; i < tabContents.length; i++) {
+                    tabContents[i].classList.remove('active');
+                    tabContents[i].classList.remove('show');
+                }
+            }
+
             document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
+            if (hashValue != "navarea1" && hashValue != "ukcoastal") {
+                document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
+                document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+            }
 
             url = location.href.replace(/\/#/, "#");
             history.replaceState(null, null, url);
@@ -73,7 +85,7 @@ function HashLinkTab() {
                     newUrl = url.split("#")[0];
 
                 } else {
-                    if (hash.toLowerCase() === '#allwarnings') newUrl = url;
+                    if (hash.toLowerCase() === '#allwarnings') newUrl = url.split('#')[0];
                     else newUrl = url.split("#")[0] + hash;
                     SetTitle(hash);
                 }
@@ -87,6 +99,8 @@ function SetTitle(hash) {
     let bool = true;
     if (newhash) {
         switch (newhash.toLowerCase()) {
+            case 'allwarnings': document.title = 'Radio Navigational Warnings';
+                break;
             case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
                 document.querySelector('#NAVAREA1-tab').click();
                 break;
@@ -97,9 +111,6 @@ function SetTitle(hash) {
                 break;
         }
     }
-    else {
-        document.title = 'Radio Navigational Warnings';
-        bool = false;
-    }
+    else { bool = false; }
     return bool;
 }
