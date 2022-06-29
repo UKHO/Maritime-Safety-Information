@@ -18,6 +18,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        [Route("/RadioNavigationalWarnings")]
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
@@ -32,6 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
+        [Route("/RadioNavigationalWarnings/About")]
         public async Task<IActionResult>  About()
         {
             ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
