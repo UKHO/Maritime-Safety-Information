@@ -22,6 +22,8 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
         /// </summary>
         public new IActionResult SignOut()
         {
+            
+            //_contextAccessor.HttpContext.Session.Clear();
             string callbackUrl = Url.Action("SignedOut");
             return SignOut(
                  new AuthenticationProperties
@@ -38,7 +40,6 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
             {
                 Response.Cookies.Delete(cookie);
             }
-            _contextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("Index", "RadioNavigationalWarningsAdmin");
         }
     }
