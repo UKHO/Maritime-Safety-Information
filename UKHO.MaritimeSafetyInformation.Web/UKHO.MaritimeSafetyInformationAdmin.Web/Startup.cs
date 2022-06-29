@@ -70,6 +70,13 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     context.ProtocolMessage.RedirectUri = configuration["AzureAd:RedirectBaseUrl"] + configuration["AzureAd:CallbackPath"];
                     await Task.FromResult(0);
                 };
+                options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
+                {
+                    foreach (string cookie in context.HttpContext.Request.Cookies.Keys)
+                    {
+                        context.HttpContext.Response.Cookies.Delete(cookie);
+                    }
+                };
             });
 
             services.AddHttpClient();

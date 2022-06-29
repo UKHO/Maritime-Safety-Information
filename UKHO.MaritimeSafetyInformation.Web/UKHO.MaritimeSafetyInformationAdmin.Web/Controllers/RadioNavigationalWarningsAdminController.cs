@@ -9,7 +9,7 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 {
-    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Roles = "rnw-admin")]
     public class RadioNavigationalWarningsAdminController : BaseController<RadioNavigationalWarningsAdminController>
     {
