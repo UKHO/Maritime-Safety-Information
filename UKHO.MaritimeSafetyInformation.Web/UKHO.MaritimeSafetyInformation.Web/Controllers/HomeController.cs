@@ -15,6 +15,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _contextAccessor = contextAccessor;
         }
 
+        [HttpGet]
+        [Route("/")]
         public IActionResult Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
