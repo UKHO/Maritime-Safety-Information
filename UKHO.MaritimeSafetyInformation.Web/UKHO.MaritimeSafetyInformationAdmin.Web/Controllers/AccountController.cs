@@ -34,6 +34,10 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 
         public IActionResult SignedOut()
         {
+            foreach (string cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
             _contextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("Index", "RadioNavigationalWarningsAdmin");
         }
