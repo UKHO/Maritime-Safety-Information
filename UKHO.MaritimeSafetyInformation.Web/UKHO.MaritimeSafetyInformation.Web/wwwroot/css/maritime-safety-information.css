@@ -324,6 +324,11 @@
 .rnw-allwarnings-table thead tr th.th-1 {
   flex-basis: 64%;
 }
+@media screen and (max-width: 576px) {
+  .rnw-allwarnings-table thead tr th.th-1 {
+    flex-basis: 71%;
+  }
+}
 .rnw-allwarnings-table thead tr th.th-2 {
   flex-basis: 94%;
 }
@@ -333,8 +338,18 @@
 .rnw-allwarnings-table thead tr th.th-5 {
   flex-basis: 38%;
 }
+@media screen and (max-width: 576px) {
+  .rnw-allwarnings-table thead tr th.th-5 {
+    flex-basis: 46%;
+  }
+}
 .rnw-allwarnings-table tbody tr td.td-1 {
   flex-basis: 60%;
+}
+@media screen and (max-width: 576px) {
+  .rnw-allwarnings-table tbody tr td.td-1 {
+    flex-basis: 71%;
+  }
 }
 .rnw-allwarnings-table tbody tr td.td-2 {
   flex-basis: 90%;
@@ -684,6 +699,7 @@ button:disabled, input[type=button]:disabled {
   flex-grow: 2;
   display: flex;
   align-items: center;
+  word-break: break-word;
 }
 
 .scroll-bar {
