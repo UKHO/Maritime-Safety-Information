@@ -199,4 +199,17 @@
     </notes>
     <cve>CVE-2007-1652</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+    file name:  NuGet.Common.dll
+    See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
+        Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
+          Vulnerable versions: 4.3.3 and below
+        Secure versions: 4.3.4+
+    This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. MSI is pinned to .Net core SDK > 3.1.408  for .NET and Visual Studio Information Disclosure Vulnerability.
+    ]]>
+    </notes>
+    <cve>CVE-2022-30184</cve>
+  </suppress>
 </suppressions>
