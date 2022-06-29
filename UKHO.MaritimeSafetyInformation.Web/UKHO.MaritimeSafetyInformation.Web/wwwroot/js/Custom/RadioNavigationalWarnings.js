@@ -1,4 +1,5 @@
 ﻿document.onreadystatechange = function () {
+
     if (document.readyState == "interactive" || document.readyState === "complete") {
         HashLinkTab();
     }
