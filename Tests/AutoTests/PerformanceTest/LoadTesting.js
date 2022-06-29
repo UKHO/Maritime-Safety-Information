@@ -10,17 +10,19 @@ const config = JSON.parse(open('./appConfig.json'));
 export const options = {
   scenarios: {
     DownloadNMFiles: {
+          exec: 'msiHomePage',
+          exec: 'noticedToMariners()',
+          exec: 'noticedToMarinersDailyFiles',
           exec: 'DownloadNMDailyFiles',
           exec: 'DownloadNMWeeklyFiles',
           exec: 'allWarningsRNW',
-          exec: 'noticedToMariners',
-          exec: 'noticedToMarinersDailyFiles',
           executor: 'per-vu-iterations',
           startTime: '5s',
           gracefulStop: '5s',
           vus: 19,
           iterations: 29,
           maxDuration: '1h'
+          
       }
     }
   }
@@ -33,6 +35,23 @@ const batchDaily = new SharedArray('batchIdDailyURl', function () {
      return JSON.parse(open('./url.json')).batchIdweeklyURl; 
               });
 
+ export function msiHomePage()
+  {
+               
+     http.get(config.url);
+             
+  }
+   export function noticedToMariners(){
+
+    http.get(`${config.url}/NoticestoMariners`);
+    
+  }
+            
+  export function noticedToMarinersDailyFiles(){
+
+    http.get(`${config.url}/NoticestoMariners/ShowDailyFiles`);
+  }
+  
   export function DownloadNMDailyFiles()
   {
     const dailyurldata = batchDaily[Math.floor(Math.random() * batchDaily.length)]; 
@@ -58,18 +77,6 @@ export function allWarningsRNW()
   http.get(`${config.url}/RadioNavigationalWarnings`);
       
 }
-
-export function noticedToMariners(){
-
-  http.get(`${config.url}/NoticestoMariners`);
-  
-}
-
-export function noticedToMarinersDailyFiles(){
-
-  http.get(`${config.url}/NoticestoMariners/ShowDailyFiles`);
-}
-
 
 export function handleSummary(data) {
     console.log("Preparing the end-of-test summary...")
