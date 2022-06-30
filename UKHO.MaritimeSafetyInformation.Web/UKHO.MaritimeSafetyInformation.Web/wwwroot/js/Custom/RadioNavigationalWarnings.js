@@ -52,6 +52,7 @@ let tabPane = document.querySelector('#rnwTabContent .tab-pane');
 allWarningTabButton.addEventListener('click', function () {
     tabPane.id = "allwarnings";
     tabPane.setAttribute("aria-labelledby","allwarnings-tab");
+    rnwTableCaption.innerText = "All Warnings";
     selected_tab = undefined;
     const rows = getFilteredWarningRows();
     insertWarningRows(rows)
@@ -59,6 +60,7 @@ allWarningTabButton.addEventListener('click', function () {
 navarea1TabButton.addEventListener('click', function () {
     tabPane.id = "navarea1";
     tabPane.setAttribute("aria-labelledby", "NAVAREA1-tab");
+    rnwTableCaption.innerText = "Navarea 1";
     selected_tab = "N";
     const rows = getFilteredWarningRows("N");
     insertWarningRows(rows)
@@ -66,6 +68,7 @@ navarea1TabButton.addEventListener('click', function () {
 ukcostalTabButton.addEventListener('click', function () {
     tabPane.id = "ukcoastal";
     tabPane.setAttribute("aria-labelledby", "ukcoastal-tab");
+    rnwTableCaption.innerText = "UK Coastal";
     selected_tab = "U";
     const rows = getFilteredWarningRows("U");
     insertWarningRows(rows)
