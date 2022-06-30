@@ -22,6 +22,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        [Route("/NoticesToMariners/Weekly")]
         public async Task<IActionResult> Index()
         {
             try
@@ -44,9 +46,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
+        [Route("/NoticesToMariners/Weekly")]
         public async Task<IActionResult> Index(int year, int week)
         {
-
             try
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
@@ -87,6 +89,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/NoticesToMariners/Daily")]
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
             try
@@ -107,6 +111,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
         {
             try
@@ -136,23 +141,41 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
+        [Route("/NoticesToMariners/Cumulative")]
+        public IActionResult Cumulative()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("/NoticesToMariners/Annual")]
+        public IActionResult Annual()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("/NoticesToMariners/Leisure")]
         public IActionResult Leisure()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("/NoticesToMariners/Resellers")]
         public IActionResult Resellers()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("/NoticesToMariners/About")]
         public IActionResult About()
         {
             return View();
         }
 
+        [HttpGet]
         public async Task<FileResult> DownloadDailyFile(string batchId, string fileName, string mimeType)
         {
             try

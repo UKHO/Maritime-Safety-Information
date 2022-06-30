@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 import { errors, Locator, Page } from 'playwright';
+import * as app from "../Configuration/appConfig.json";
 
 export default class noticetoMarine
 {
@@ -17,11 +18,14 @@ export default class noticetoMarine
     readonly tabdaily:Locator;
     readonly tabcumulative:Locator;
     readonly tabannual:Locator;
-  
+    readonly radioNavigationalWarnings: Locator;
+    readonly navareatab: Locator;
+    readonly ukcoastaltab:Locator;
     constructor(page:Page)
     {
      this.page = page; 
      this.noticeMarine =this.page.locator('a:has-text("Notices to Mariners")');
+     this.radioNavigationalWarnings = this.page.locator('a:has-text("Radio Navigational Warnings")');
      this.dropDownYearly = this.page.locator("#ddlYears");
      this.dropDownWeekly = this.page.locator("#ddlWeeks");
      this.fileName=this.page.locator('#weekly >> text=File Name');
@@ -33,7 +37,9 @@ export default class noticetoMarine
      this.tabweekly = this.page.locator('#weekly-tab');
      this.tabdaily = this.page.locator("#daily-tab");
      this.tabcumulative = this.page.locator("#cumulative-tab");
-     this.tabannual = this.page.locator("#annual-tab"); 
+     this.tabannual = this.page.locator("#annual-tab");
+     this.navareatab = this.page.locator("#NAVAREA1-tab");
+     this.ukcoastaltab = this.page.locator("#ukcoastal-tab");
     }
     
     public async clickToNoticemarine()
@@ -51,6 +57,31 @@ export default class noticetoMarine
      return await this.dropDownWeekly.isEnabled();
     }
 
+    public async checkpageurl(url:string,title:string)
+    {
+        await expect(this.page).toHaveURL(`${app.url}`);
+        await expect(this.page).toHaveTitle(title)
+    }
+
+    public async checkurl(locator:Locator,url:string,title:string)
+    {
+        await locator.click();
+        await expect(this.page).toHaveURL(`${app.url}/${url}`);
+        await expect(this.page).toHaveTitle(title)
+    }
+    public async checkNavareaUrl(locator:Locator,url:string,title:string)
+    {
+        await locator.click();
+        await expect(this.page).toHaveURL(`${app.url}/${url}#navarea1`);
+        await expect(this.page).toHaveTitle(title);
+    }
+    public async checkUkcoastalUrl(locator:Locator,url:string,title:string)
+    {
+        await locator.click();
+        await expect(this.page).toHaveURL(`${app.url}/${url}#ukcoastal`);
+        await expect(this.page).toHaveTitle(title);
+    }
+   
     public async checkText(locator:Locator)
     {
      return (await locator.innerText()).toString();

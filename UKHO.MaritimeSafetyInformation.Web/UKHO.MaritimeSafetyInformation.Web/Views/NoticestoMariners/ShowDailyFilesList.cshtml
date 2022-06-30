@@ -4,6 +4,7 @@
 <div class="daily-table-container scroll-bar">
     @if (Model != null && Model.Count > 0)
     {
+        int count = 0;
         @for (int i = 0; i < Model.Count; i++)
         {
             <div class="table-responsive-sm">
@@ -20,12 +21,13 @@
                         @for (int j = 0; j < Model[i].DailyFilesData.Count; j++)
                         {
                             <tr>
-                                <td id="filename_@j@Model[i].WeekNumber">@Model[i].DailyFilesData[j].FileDescription</td>
-                                <td id="filesize_@j@Model[i].WeekNumber">@Model[i].DailyFilesData[j].FileSizeInKB (@Model[i].DailyFilesData[j].FileExtension)</td>
-                                <td class="td-3 justify-content-center" id="download_@j@Model[i].WeekNumber">
-                                    <a aria-label="download file for @Model[i].DailyFilesData[j].FileDescription. Link open new tab" href="@Url.Action("DownloadDailyFile", "NoticesToMariners", new { batchId = @Model[i].DailyFilesData[j].BatchId,fileName=@Model[i].DailyFilesData[j].Filename, mimeType = @Model[i].DailyFilesData[j].MimeType })">Download</a>
+                                <td id="filename_@count">@Model[i].DailyFilesData[j].FileDescription</td>
+                                <td id="filesize_@count">@Model[i].DailyFilesData[j].FileSizeInKB (@Model[i].DailyFilesData[j].FileExtension)</td>
+                                <td class="td-3 justify-content-center" id="download_@count">
+                                    <a href="@Url.Action("DownloadDailyFile", "NoticesToMariners", new { batchId = @Model[i].DailyFilesData[j].BatchId,fileName=@Model[i].DailyFilesData[j].Filename, mimeType = @Model[i].DailyFilesData[j].MimeType })">Download</a>
                                 </td>
                             </tr>
+                            count++;
                         }
                     </tbody>
                 </table>

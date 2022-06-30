@@ -4,6 +4,7 @@ import type { Locator, Page } from 'playwright';
 
 
 
+
 export default class noticeToMarinerWeekDownload {
   private page: Page;
   readonly noticeToMarine: Locator;

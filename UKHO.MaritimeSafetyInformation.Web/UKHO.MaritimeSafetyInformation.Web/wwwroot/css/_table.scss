@@ -94,27 +94,6 @@
             border: 0;
             background-color: transparent;
         }
-
-        &.collapsed::before {
-            content: "View ";
-        }
-
-        &:not(.collapsed) {
-            background-color: transparent;
-            box-shadow: none;
-
-            &::before {
-                content: "Hide ";
-            }
-        }
-
-        &::before {
-            white-space: pre;
-        }
-
-        &::after {
-            content: none;
-        }
     }
 
     tr.accordion-collapse td {
