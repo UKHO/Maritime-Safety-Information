@@ -368,22 +368,6 @@
   border: 0;
   background-color: transparent;
 }
-.accordianTable .accordion-button.collapsed::before {
-  content: "View ";
-}
-.accordianTable .accordion-button:not(.collapsed) {
-  background-color: transparent;
-  box-shadow: none;
-}
-.accordianTable .accordion-button:not(.collapsed)::before {
-  content: "Hide ";
-}
-.accordianTable .accordion-button::before {
-  white-space: pre;
-}
-.accordianTable .accordion-button::after {
-  content: none;
-}
 .accordianTable tr.accordion-collapse td {
   border-right: 0 !important;
 }
