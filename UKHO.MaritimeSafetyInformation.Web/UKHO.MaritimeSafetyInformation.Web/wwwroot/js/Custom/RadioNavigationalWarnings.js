@@ -51,7 +51,7 @@ let tabPane = document.querySelector('#rnwTabContent .tab-pane');
 
 allWarningTabButton.addEventListener('click', function () {
     tabPane.id = "allwarnings";
-    tabPane.setAttribute("aria-labelledby","allwarnings-tab");
+    tabPane.setAttribute("aria-labelledby", "allwarnings-tab");
     rnwTableCaption.innerText = "All Warnings";
     selected_tab = undefined;
     const rows = getFilteredWarningRows();
@@ -77,8 +77,6 @@ ukcostalTabButton.addEventListener('click', function () {
 toggleDetailsButtons.map(function (toggleDetailsButton, index) {
 
     toggleDetailsButton.addEventListener('click', function (event) {
-
-        console.log(event.target, event.target.children);
         resetViewdetailButtonText();
         if (toggleDetailsButton.classList.contains("collapsed")) {
             toggleDetailsButton.children[1].innerText = "View details";
@@ -102,18 +100,22 @@ function resetViewdetailButtonText() {
 }
 
 function insertWarningRows(rows) {
-    tableRefBody.innerHTML = '';
-
-    for (let value of rows) {
-        tableRef.tBodies[0].appendChild(value);
-    }
-
-    setTimeout(function () {
-        if (document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)")) {
-            document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)").click();
+    if (rows.length > 0) {
+        tableRefBody.innerHTML = '';
+        for (let value of rows) {
+            tableRef.tBodies[0].appendChild(value);
         }
-    }, 100);
-    initEvents();
+
+        setTimeout(function () {
+            if (document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)")) {
+                document.querySelector(".rnw-allwarnings-table .accordion-button:not(.collapsed)").click();
+            }
+        }, 100);
+        initEvents();
+    }
+    else {
+        tableRefBody.innerHTML = 'No Record Found.';
+    }
 }
 
 function getFilteredWarningRows(warningType) {
@@ -130,12 +132,13 @@ function initEvents() {
     checkbox_warnings.map(function (checkbox_warning) {
         checkbox_warning.addEventListener("change", function (event) {
             const id = event.target.getAttribute("warning-id");
-            if (selectedIds.indexOf(id) === -1) {
-                selectedIds.push(id);
-                event.target.getAttribute("warning-id")
+            if (this.checked) {
+                if (!selectedIds.includes(id)) {
+                    selectedIds.push(id);
+                }
             }
             else {
-                selectedIds.splice(id, 1);
+                selectedIds = selectedIds.filter(e => e !== id);
             }
 
             document.getElementById('showSelectionId').value = selectedIds;

@@ -58,8 +58,8 @@ if (document.getElementById('hdnLoggedIn').value === "Y") {
     dropdownParent.addEventListener('mouseleave', function () {
         dropdowToggleButton.click();
     })
-    //site header dropdown menu on mouse hover ends here//
 }
+//site header dropdown menu on mouse hover ends here//
 
 function HashLinkTab() {
     let url = location.href.replace(/\/$/, "");
@@ -76,14 +76,18 @@ function HashLinkTab() {
                 tabs[i].classList.remove('active');
             }
 
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-                tabContents[i].classList.remove('show');
+            if (hashValue != "navarea1" && hashValue != "ukcoastal") {
+                for (let i = 0; i < tabContents.length; i++) {
+                    tabContents[i].classList.remove('active');
+                    tabContents[i].classList.remove('show');
+                }
             }
 
             document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
-            document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
-            document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+            if (hashValue != "navarea1" && hashValue != "ukcoastal") {
+                document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
+                document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+            }
 
             url = location.href.replace(/\/#/, "#");
             history.replaceState(null, null, url);
@@ -120,8 +124,10 @@ function SetTitle(hash) {
             case 'allwarnings': document.title = 'Radio Navigational Warnings';
                 break;
             case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
+                document.querySelector('#NAVAREA1-tab').click();
                 break;
             case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
+                document.querySelector('#ukcoastal-tab').click();
                 break;
             default: bool = false;
                 break;
@@ -130,4 +136,3 @@ function SetTitle(hash) {
     else { bool = false; }
     return bool;
 }
-
