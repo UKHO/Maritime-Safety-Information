@@ -58,5 +58,76 @@ if (document.getElementById('hdnLoggedIn').value === "Y") {
     dropdownParent.addEventListener('mouseleave', function () {
         dropdowToggleButton.click();
     })
+    //site header dropdown menu on mouse hover ends here//
 }
-//site header dropdown menu on mouse hover ends here//
+
+function HashLinkTab() {
+    let url = location.href.replace(/\/$/, "");
+
+    if (location.hash) {
+        const hash = url.split("#");
+        const hashValue = hash[1].toLowerCase();
+        if (SetTitle(hashValue)) {
+
+            let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
+            let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
+
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+                tabContents[i].classList.remove('show');
+            }
+
+            document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
+            document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
+            document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+
+            url = location.href.replace(/\/#/, "#");
+            history.replaceState(null, null, url);
+            setTimeout(() => {
+                window.scrollTo(0, 0)
+            }, 100);
+
+        }
+    }
+
+    Array.prototype.slice.call(document.querySelectorAll('a[data-bs-toggle="tab"]'))
+        .forEach(function (element) {
+            element.onclick = function () {
+                let newUrl;
+                const hash = this.getAttribute('href');
+                if (hash == "#") {
+                    newUrl = url.split("#")[0];
+
+                } else {
+                    if (hash.toLowerCase() === '#allwarnings') newUrl = url.split('#')[0];
+                    else newUrl = url.split("#")[0] + hash;
+                    SetTitle(hash);
+                }
+                history.replaceState(null, null, newUrl);
+            }
+        });
+}
+
+function SetTitle(hash) {
+    let newhash = hash.replace('#', '');
+    let bool = true;
+    if (newhash) {
+        switch (newhash.toLowerCase()) {
+            case 'allwarnings': document.title = 'Radio Navigational Warnings';
+                break;
+            case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
+                break;
+            case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
+                break;
+            default: bool = false;
+                break;
+        }
+    }
+    else { bool = false; }
+    return bool;
+}
+
