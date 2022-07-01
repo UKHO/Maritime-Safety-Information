@@ -324,6 +324,11 @@
 .rnw-allwarnings-table thead tr th.th-1 {
   flex-basis: 64%;
 }
+@media screen and (max-width: 576px) {
+  .rnw-allwarnings-table thead tr th.th-1 {
+    flex-basis: 71%;
+  }
+}
 .rnw-allwarnings-table thead tr th.th-2 {
   flex-basis: 94%;
 }
@@ -333,8 +338,18 @@
 .rnw-allwarnings-table thead tr th.th-5 {
   flex-basis: 38%;
 }
+@media screen and (max-width: 576px) {
+  .rnw-allwarnings-table thead tr th.th-5 {
+    flex-basis: 46%;
+  }
+}
 .rnw-allwarnings-table tbody tr td.td-1 {
   flex-basis: 60%;
+}
+@media screen and (max-width: 576px) {
+  .rnw-allwarnings-table tbody tr td.td-1 {
+    flex-basis: 71%;
+  }
 }
 .rnw-allwarnings-table tbody tr td.td-2 {
   flex-basis: 90%;
@@ -367,22 +382,6 @@
 .accordianTable .accordion-button:hover, .accordianTable .accordion-button:active {
   border: 0;
   background-color: transparent;
-}
-.accordianTable .accordion-button.collapsed::before {
-  content: "View ";
-}
-.accordianTable .accordion-button:not(.collapsed) {
-  background-color: transparent;
-  box-shadow: none;
-}
-.accordianTable .accordion-button:not(.collapsed)::before {
-  content: "Hide ";
-}
-.accordianTable .accordion-button::before {
-  white-space: pre;
-}
-.accordianTable .accordion-button::after {
-  content: none;
 }
 .accordianTable tr.accordion-collapse td {
   border-right: 0 !important;
@@ -634,6 +633,11 @@ table td a {
   margin-top: -1px;
 }
 
+button:disabled, input[type=button]:disabled {
+  background-color: #6c757d;
+  border: 2px solid #6c757d;
+}
+
 @media print {
   button#Print, .msi-tabs-container, .back-btn-container, .site-footer, .site-header {
     display: none;
@@ -695,6 +699,7 @@ table td a {
   flex-grow: 2;
   display: flex;
   align-items: center;
+  word-break: break-word;
 }
 
 .scroll-bar {

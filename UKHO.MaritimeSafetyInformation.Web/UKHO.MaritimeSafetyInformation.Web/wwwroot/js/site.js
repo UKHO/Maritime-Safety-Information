@@ -5,24 +5,46 @@
 
 //Accessibility code for tabs start here//
 let tabButtons = Object.assign([], document.querySelectorAll('.msi-tabs li .nav-link')); //object.assign is used to convert NodeList to an Array
+let rnwTableCaption = document.querySelector('#rnwTableCaption');
 for (let i = 0; i < tabButtons.length; i++) {
     tabButtons[i].onkeydown = function (e) {
-        tabButtonKeyDownFunction(e)
+        tabButtonKeyDownFunction(e);
     }
+    tabButtons[i].addEventListener('click', function (e) {
+        removeTabIndex(e);        
+    });
+}
+
+function removeTabIndex(e) {
+    for (var i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].setAttribute("tabindex", '-1');
+    }
+    event.target.removeAttribute("tabindex");    
 }
 
 function tabButtonKeyDownFunction(e) {
     var keycode = (event.keyCode ? event.keyCode : event.which);
-    if (keycode === 40 || keycode === 38) { // Keycode "40" is for downkey and "38" is for upkey
+    if (keycode === 13) {
+        setTimeout(function () {
+            if (document.body.contains(rnwTableCaption)) {
+                rnwTableCaption.focus();
+            }
+        }, 100);
+    }
+    if (keycode === 39 || keycode === 37) { // Keycode "39" is for rightkey and "37" is for leftkey
         event.preventDefault();
     }
-    if (keycode === 40) { // Keycode "40" is down key
+    if (keycode === 39) { // Keycode "39" is right key
         let nextButton = event.target.parentNode.nextElementSibling.children[0];
         nextButton.focus();
-    } else if (keycode === 38) {// Keycode "38" is up key
+    } else if (keycode === 37) {// Keycode "37" is left key
         let prevButton = event.target.parentNode.previousElementSibling.children[0];
         prevButton.focus();
     }
+    if (keycode === 39) { // Keycode "39" is right key
+        let nextButton = event.target.parentNode.nextElementSibling.children[0];
+        nextButton.focus();
+    }    
 }
 //Accessibility code for tabs ends here//
 
@@ -36,8 +58,8 @@ if (document.getElementById('hdnLoggedIn').value === "Y") {
     dropdownParent.addEventListener('mouseleave', function () {
         dropdowToggleButton.click();
     })
-    //site header dropdown menu on mouse hover ends here//
 }
+//site header dropdown menu on mouse hover ends here//
 
 function HashLinkTab() {
     let url = location.href.replace(/\/$/, "");
@@ -54,14 +76,18 @@ function HashLinkTab() {
                 tabs[i].classList.remove('active');
             }
 
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-                tabContents[i].classList.remove('show');
+            if (hashValue != "navarea1" && hashValue != "ukcoastal") {
+                for (let i = 0; i < tabContents.length; i++) {
+                    tabContents[i].classList.remove('active');
+                    tabContents[i].classList.remove('show');
+                }
             }
 
             document.querySelector('.msi-tabs a[href="#' + hashValue + '"]').classList.add('active');
-            document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
-            document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+            if (hashValue != "navarea1" && hashValue != "ukcoastal") {
+                document.querySelector('.tab-content #' + hashValue + '').classList.add('active');
+                document.querySelector('.tab-content #' + hashValue + '').classList.add('show');
+            }
 
             url = location.href.replace(/\/#/, "#");
             history.replaceState(null, null, url);
@@ -98,8 +124,10 @@ function SetTitle(hash) {
             case 'allwarnings': document.title = 'Radio Navigational Warnings';
                 break;
             case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
+                document.querySelector('#NAVAREA1-tab').click();
                 break;
             case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
+                document.querySelector('#ukcoastal-tab').click();
                 break;
             default: bool = false;
                 break;
@@ -108,4 +136,3 @@ function SetTitle(hash) {
     else { bool = false; }
     return bool;
 }
-
