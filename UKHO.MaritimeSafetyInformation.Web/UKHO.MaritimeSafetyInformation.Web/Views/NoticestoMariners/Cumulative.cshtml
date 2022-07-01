@@ -1,7 +1,51 @@
-﻿@{
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+@model List<ShowFilesResponseModel>
+@{
     Layout = "~/Views/Shared/_MSILayout.cshtml";
     ViewData["Header"] = "Notices to Mariners";
     ViewData["Title"] = "Notices to Mariners - Cumulative";
 }
 <partial name="_NMHorizontalTab" />
-<partial name="ShowCumulativeNMs" />
+<p>
+    The Cumulative List of ADMIRALTY Notices to Mariners (NP234 A/B) can help you to identify outstanding NMs and audit trails for a particular chart or charts. The list is published annually, with Part A in January and Part B in July. The Cumulative List of ADMIRALTY Notices to Mariners is available without subscription from ADMIRALTY Chart Agents. You can view it by clicking on the links below.
+</p>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" id="divCumulativeNMs">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th width="45%">File name</th>
+                            <th width="45%">File size</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td id="filename_@i">@Model[i].FileDescription</td>
+                                <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
+                                <td class="td-3 justify-content-center" id="download_@i">
+                                    <a target="_blank" href="@Url.Action("DownloadCumulativeFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType })">Download</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert" aria-atomic="true">
+        <i class="bi bi-exclamation-lg" aria-hidden="true"></i>
+        <div class="alert-head">There’s a problem</div>
+        <p>It looks like there might be a problem with our system. We’re sorry for the inconvenience. If the problem persists contact <a href="mailto:customerservices@ukho.gov.uk">customerservices@ukho.gov.uk</a></p>
+    </div>
+}
+

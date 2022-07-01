@@ -237,5 +237,45 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
 
         }
+
+        public async Task<List<ShowFilesResponseModel>> GetCumulativeBatchFiles(string correlationId)
+        {
+            try
+            {
+                //_logger.LogInformation(EventIds.GetWeeklyFilesResponseStarte.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+
+
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+
+                string searchText = $" and $batch(Frequency) eq 'cumulative'";
+
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                BatchSearchResponse SearchResult = result.Data;
+
+                if (SearchResult != null && SearchResult.Entries.Count > 0)
+                {
+                   // _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFoun.ToEventId(), "Maritime safety information request to get cumulative NM files returned data with _X-Correlation-ID:{correlationId}", correlationId);
+
+                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
+                    return ListshowFilesResponseModels;
+                }
+                else
+                {
+                   // _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFoun.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("Invalid data received for cumulative NM files");
+                }
+
+                //   _logger.LogInformation(EventIds.GetWeeklyFilesResponseComplete.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+
+            }
+            catch (Exception ex)
+            {
+                // _logger.LogError(EventIds.GetWeeklyFilesResponseFaile.ToEventId(), "Maritime safety information request to cumulative cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
+        }
     }
 }
