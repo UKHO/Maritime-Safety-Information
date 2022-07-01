@@ -27,7 +27,11 @@
         tr {
             th {
                 &.th-1 {
-                    flex-basis: 64%
+                    flex-basis: 64%;
+
+                    @media screen and (max-width: $small) {
+                        flex-basis: 71%;
+                    }
                 }
 
                 &.th-2 {
@@ -39,7 +43,11 @@
                 }
 
                 &.th-5 {
-                    flex-basis: 38%
+                    flex-basis: 38%;
+
+                    @media screen and (max-width: $small) {
+                        flex-basis: 46%;
+                    }
                 }
             }
         }
@@ -49,7 +57,11 @@
         tr {
             td {
                 &.td-1 {
-                    flex-basis: 60%
+                    flex-basis: 60%;
+
+                    @media screen and (max-width: $small) {
+                        flex-basis: 71%;
+                    }
                 }
 
                 &.td-2 {

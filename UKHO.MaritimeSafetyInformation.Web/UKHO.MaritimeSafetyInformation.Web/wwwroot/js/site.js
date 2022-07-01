@@ -5,24 +5,46 @@
 
 //Accessibility code for tabs start here//
 let tabButtons = Object.assign([], document.querySelectorAll('.msi-tabs li .nav-link')); //object.assign is used to convert NodeList to an Array
+let rnwTableCaption = document.querySelector('#rnwTableCaption');
 for (let i = 0; i < tabButtons.length; i++) {
     tabButtons[i].onkeydown = function (e) {
-        tabButtonKeyDownFunction(e)
+        tabButtonKeyDownFunction(e);
     }
+    tabButtons[i].addEventListener('click', function (e) {
+        removeTabIndex(e);        
+    });
+}
+
+function removeTabIndex(e) {
+    for (var i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].setAttribute("tabindex", '-1');
+    }
+    event.target.removeAttribute("tabindex");    
 }
 
 function tabButtonKeyDownFunction(e) {
     var keycode = (event.keyCode ? event.keyCode : event.which);
-    if (keycode === 40 || keycode === 38) { // Keycode "40" is for downkey and "38" is for upkey
+    if (keycode === 13) {
+        setTimeout(function () {
+            if (document.body.contains(rnwTableCaption)) {
+                rnwTableCaption.focus();
+            }
+        }, 100);
+    }
+    if (keycode === 39 || keycode === 37) { // Keycode "39" is for rightkey and "37" is for leftkey
         event.preventDefault();
     }
-    if (keycode === 40) { // Keycode "40" is down key
+    if (keycode === 39) { // Keycode "39" is right key
         let nextButton = event.target.parentNode.nextElementSibling.children[0];
         nextButton.focus();
-    } else if (keycode === 38) {// Keycode "38" is up key
+    } else if (keycode === 37) {// Keycode "37" is left key
         let prevButton = event.target.parentNode.previousElementSibling.children[0];
         prevButton.focus();
     }
+    if (keycode === 39) { // Keycode "39" is right key
+        let nextButton = event.target.parentNode.nextElementSibling.children[0];
+        nextButton.focus();
+    }    
 }
 //Accessibility code for tabs ends here//
 
