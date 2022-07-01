@@ -49,7 +49,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
-                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),             
+                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
                 YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year/Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize,
                 BatchPublishedDate = item.BatchPublishedDate,
@@ -103,7 +103,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 if (string.IsNullOrEmpty(parameter.Value))
                 {
                     logger.LogInformation(
-                        EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
+                        EventIds.DownloadSingleNMFileInvalidParameter.ToEventId(),
                         "Maritime safety information download single NM files called with invalid argument " + parameter.Key + ":{" + parameter.Key + "} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
@@ -124,6 +124,32 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             } while (numBytesToRead > 0);
             stream.Close();
             return fileBytes;
+        }
+
+        public static string GetYearAndTypeFromFilenName(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName)) 
+            {
+                return string.Concat(fileName.AsSpan(fileName.Length - 4), fileName.AsSpan(fileName.Length - 7, 1));
+            }
+            else
+            {
+                return string.Empty;
+            }
+
+        }
+
+        public static int GetYearFromFileName(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                return int.Parse(fileName.Substring(fileName.Length - 4));
+            }
+            else
+            {
+                return 0;
+            }
+
         }
     }
 }

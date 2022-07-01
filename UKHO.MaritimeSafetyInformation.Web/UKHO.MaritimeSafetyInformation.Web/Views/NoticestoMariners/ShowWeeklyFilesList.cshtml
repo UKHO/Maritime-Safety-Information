@@ -22,7 +22,7 @@
                     <td id="filename_@i">@Model[i].FileDescription</td>
                     <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                     <td class="td-3 justify-content-center" id="download_@i">
-                        <a target="_blank" href="@Url.Action("DownloadWeeklyFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType })">Download</a>
+                        <a target="_blank" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType })">Download</a>
                     </td>
                 </tr>
             }

@@ -190,7 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
@@ -200,13 +200,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileCompleted.ToEventId(), "Maritime safety information request to get single NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 return fileBytes;
             }
             catch (Exception)
             {
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to get single weekly NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
                 throw;
             }
 
@@ -257,14 +257,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                   // _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFoun.ToEventId(), "Maritime safety information request to get cumulative NM files returned data with _X-Correlation-ID:{correlationId}", correlationId);
-
-                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
+                    // _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFoun.ToEventId(), "Maritime safety information request to get cumulative NM files returned data with _X-Correlation-ID:{correlationId}", correlationId);
+                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).Where(a => NMHelper.GetYearFromFileName(a.FileDescription) >= DateTime.UtcNow.AddYears(-3).Year).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
                     return ListshowFilesResponseModels;
                 }
                 else
                 {
-                   // _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFoun.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                    // _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFoun.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
                     throw new InvalidDataException("Invalid data received for cumulative NM files");
                 }
 
