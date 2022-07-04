@@ -50,8 +50,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual("RnwAdminListReference", warningsData[2].Reference);
             Assert.AreEqual("RnwAdminListSummary", warningsData[2].Description);
             Assert.AreEqual(new DateTime(2022, 1, 1), warningsData[2].DateTimeGroup);
-            Assert.AreEqual("011200 UTC Jan 22", warningsData[2].DateTimeGroupRnwFormat);  
-            Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
+            Assert.AreEqual("010000 UTC Jan 22", warningsData[2].DateTimeGroupRnwFormat);  
+            Assert.AreEqual("151415 UTC Aug 19", lastModifiedDateTime);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         {
             IActionResult result = await _controller.About();
             string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
-            Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
+            Assert.AreEqual("151415 UTC Aug 19", lastModifiedDateTime);
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual("RnwAdminListReference", warningsData[0].Reference);
             Assert.AreEqual("RnwAdminListSummary", warningsData[0].Description);
             Assert.AreEqual(new DateTime(2021, 1, 1), warningsData[0].DateTimeGroup);
-            Assert.AreEqual("011200 UTC Jan 21", warningsData[0].DateTimeGroupRnwFormat);
-            Assert.AreEqual("150215 UTC Aug 19", lastModifiedDateTime);
+            Assert.AreEqual("010000 UTC Jan 21", warningsData[0].DateTimeGroupRnwFormat);
+            Assert.AreEqual("151415 UTC Aug 19", lastModifiedDateTime);
         }
 
         [OneTimeTearDown]

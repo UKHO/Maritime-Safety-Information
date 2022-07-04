@@ -199,3 +199,7 @@ table {
     clip: rect(1px,1px,1px,1px);
     margin-top: -1px;
 }
+button:disabled, input[type=button]:disabled {
+    background-color: $AuroMetalSaurus;
+    border: 2px solid $AuroMetalSaurus;
+}

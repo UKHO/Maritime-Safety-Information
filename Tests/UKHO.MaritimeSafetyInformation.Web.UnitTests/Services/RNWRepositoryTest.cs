@@ -78,7 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.AreEqual(5, result.Count);
             Assert.AreEqual(5, result[0].Id);
-            Assert.AreEqual("011200 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
+            Assert.AreEqual("010000 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
             Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
         }
 
