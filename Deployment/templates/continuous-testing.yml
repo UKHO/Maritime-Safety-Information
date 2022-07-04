@@ -77,6 +77,21 @@ steps:
       displayName: 'Publish Functional Test Results'
 
     - script: |
+       npm run test:all
+      displayName: 'Run Cross Browser Tests'
+      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: 'JUnit'
+        testResultsFiles: 'results.xml'
+        mergeTestResults: true
+        searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
+        testRunTitle: $(Environment) Cross Browser Test Results
+      displayName: 'Publish Cross Browser Test Results'
+
+    - script: |
        npm run test:a11y
       displayName: 'Run Accessibility Tests'
       workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
