@@ -47,18 +47,37 @@ let navarea1TabButton = document.querySelector('#NAVAREA1-tab');
 let ukcostalTabButton = document.querySelector('#ukcoastal-tab');
 let rnwTabContent = document.querySelector('#rnwTabContent');
 let toggleDetailsButtons = Array.from(document.querySelectorAll('.rnw-allwarnings-table .accordion-button'));
+let tabPane = document.querySelector('#rnwTabContent .tab-pane');
 
 allWarningTabButton.addEventListener('click', function () {
+    tabPane.id = "allwarnings";
+    tabPane.setAttribute("aria-labelledby", "allwarnings-tab");
+    rnwTableCaption.innerText = "All Warnings";
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].setAttribute("aria-controls", "allwarnings");
+    }
     selected_tab = undefined;
     const rows = getFilteredWarningRows();
     insertWarningRows(rows)
 })
 navarea1TabButton.addEventListener('click', function () {
+    tabPane.id = "navarea1";
+    tabPane.setAttribute("aria-labelledby", "NAVAREA1-tab");
+    rnwTableCaption.innerText = "Navarea 1";
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].setAttribute("aria-controls", "navarea1");
+    }
     selected_tab = "N";
     const rows = getFilteredWarningRows("N");
     insertWarningRows(rows)
 })
 ukcostalTabButton.addEventListener('click', function () {
+    tabPane.id = "ukcoastal";
+    tabPane.setAttribute("aria-labelledby", "ukcoastal-tab");
+    rnwTableCaption.innerText = "UK Coastal";
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].setAttribute("aria-controls", "ukcoastal");
+    }
     selected_tab = "U";
     const rows = getFilteredWarningRows("U");
     insertWarningRows(rows)

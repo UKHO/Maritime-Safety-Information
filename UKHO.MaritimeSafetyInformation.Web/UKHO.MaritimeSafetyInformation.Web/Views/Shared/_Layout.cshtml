@@ -1,6 +1,27 @@
-﻿<!DOCTYPE html>
+﻿@inject IConfiguration _config
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+                w[l] = w[l] || []; w[l].push({
+                    'gtm.start':
+                        new Date().getTime(), event: 'gtm.js'
+                }); var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', '@_config["GoogleTagManagerID"]');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@_config["GoogleTagManagerID"]"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', '@_config["GoogleTagManagerID"]');
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
@@ -9,6 +30,12 @@
     <link rel="stylesheet" href="~/css/maritime-safety-information.min.css" asp-append-version="true" />
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@_config["GoogleTagManagerID"]"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <a class="skip-to-content-link" href="#headingLevelOne">Skip to content</a>
     <header class="site-header">
         <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow py-lg-0 py-2">
@@ -33,7 +60,7 @@
                             <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings" ? "active":"")" asp-area="" asp-controller="RadioNavigationalWarnings" asp-action="Index">Radio Navigational Warnings</a>
                         </li>
                         <partial name="_LoginPartial" />
-                    </ul>                    
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -51,7 +78,7 @@
                 </div>
                 <div class="col-12 col-lg-auto col-md-8 text-lg-end text-start mt-lg-3 mb-3 mt-0">
                     <div class="footer-links row row-cols-lg-auto row-cols-sm-2 row-cols-1 justify-content-lg-end  justify-content-start">
-                        <a class="col" href="https://www.admiralty.co.uk/cookie-policy" target="_blank" tabindex="0" id="privacypolicylink" aria-label="Privacy policy opens in new tab">Privacy and cookies</a>
+                        <a class="col" href="https://www.admiralty.co.uk/cookie-policy" target="_blank" tabindex="0" id="privacypolicylink" aria-label="Privacy and cookies opens in new tab">Privacy and cookies</a>
                         <a class="col" href="#" target="_blank" tabindex="0" id="accessibilitylink" aria-label="Accessibility opens in new tab">Accessibility</a>
                     </div>
                     <p class="footer-text">&copy; Crown copyright @DateTime.Now.Year UK Hydrographic Office</p>
