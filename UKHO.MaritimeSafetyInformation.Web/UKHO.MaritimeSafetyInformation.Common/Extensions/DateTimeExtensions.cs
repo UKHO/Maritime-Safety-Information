@@ -6,7 +6,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
     {
         public static string ToRnwDateFormat(this DateTime? dateTime)
         {
-            return dateTime == null ? string.Empty: dateTime?.ToString("ddhhmm UTC MMM yy", DateTimeFormatInfo.InvariantInfo);
+            return dateTime == null ? string.Empty: dateTime?.ToString("ddHHmm UTC MMM yy", DateTimeFormatInfo.InvariantInfo);
         }
     }
 }
