@@ -6,7 +6,8 @@
   "scripts": {
     "test": "playwright test",
     "test:a11y": "playwright test --config=Autotests/AccessibilityTest --reporter=junit",
-    "test:auto": "playwright test --config=Autotests/FunctionalTest --reporter=junit"
+    "test:auto": "playwright test --config=Autotests/FunctionalTest --reporter=junit",
+    "test:all" : "playwright test"
   },
   "keywords": [],
   "author": "",
