@@ -420,7 +420,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910099 -  Unauthorized Access.
         /// </summary>
-        UnauthorizedAccess = 910099
+        UnauthorizedAccess = 910099,
+        /// <summary>
+        /// 910100 -   Event data for Retrieval of MSI Cumulative File Request Started.
+        /// </summary>
+        ShowCumulativeFilesRequestStarted = 910100,
+        /// <summary>
+        /// 910101 -   Event data for Retrieval of MSI Cumulative File Request Completed.
+        /// </summary>
+        ShowCumulativeFilesRequestCompleted = 910101,
+        /// <summary>
+        /// 910102 -    Event data for Retrieval of MSI Show Cumulative File Failed.
+        /// </summary>
+        ShowCumulativeFilesFailed = 910102,
+        /// <summary>
+        /// 910103 -  Event data for Retrieval of MSI Get Cumulative File Response Started.
+        /// </summary>
+        GetCumulativeFilesResponseStarted = 910103,
+        /// <summary>
+        /// 910104 -  Get NM Batch Files Data Found.
+        /// </summary>
+        GetCumulativeNMFilesRequestDataFound = 910104,
+        /// <summary>
+        /// 910105 -  Get NM Batch Files Data Not Found.
+        /// </summary>
+        GetCumulativeNMFilesRequestDataNotFound = 910105,
+        /// <summary>
+        /// 910106 -  Event data for Retrieval of MSI Get Cumulative File Response Completed.
+        /// </summary>
+        GetCumulativeFilesResponseCompleted = 910106,
+        /// <summary>
+        /// 910107 -  Event data for Retrieval of MSI Get Cumulative File Response Failed.
+        /// </summary>
+        GetCumulativeFilesResponseFailed = 910107,
 
     }
 

@@ -146,17 +146,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                //_logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
 
-              //  _logger.LogInformation(EventIds.ShowDailyFilesReques.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 return View(showFilesResponse);
             }
             catch (Exception ex)
             {
-               // _logger.LogError(EventIds.ShowDailyFilesFaile.ToEventId(), "Maritime safety information request to show cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                 _logger.LogError(EventIds.ShowCumulativeFilesFailed.ToEventId(), "Maritime safety information request to show cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
                 throw;
             }
         }
