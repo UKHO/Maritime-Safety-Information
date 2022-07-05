@@ -64,6 +64,8 @@ export default class RadioNavigationalWarningsListEndUser {
     //fail if there are no matching selections
     expect(resultYear.length).toBeGreaterThan(0);
 
+    expect(DateTime.fromFormat(resultYear[0],"ddHHmm UTC MMM yy")).toBeTruthy();
+
     //Verify Dates are descending order   
     const resultdate = await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]', (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
     const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date,);
@@ -106,11 +108,14 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async verifyImportantBlock() {
-    const rnwHeader = this.page.locator("#rnwInfo > p").innerText();
+    const rnwHeader =  (await this.page.locator("#rnwInfo > p").innerText()).toString();
     const rnwHeaderText = (await rnwHeader).split(":");
 
     const rnwMessageText = rnwHeaderText[0];
     expect(rnwMessageText).toContain("NAVAREA 1 and UK Coastal");
+
+    const DateTimeUtcformat = DateTime.fromFormat(rnwHeaderText[1],"ddhhmm UTC MMM yy");
+    expect(DateTimeUtcformat).toBeTruthy();
 
     const currentDateTime = new Date().getTime();
     const rnwDateTime = rnwHeaderText[1].replace('UTC', "").trim();
@@ -159,7 +164,6 @@ export default class RadioNavigationalWarningsListEndUser {
   
   }
   public async verifyNavareaAndUkCostalFilter(locator:Locator,text:string){
- 
     await locator.click();
     await this.viewDetails.first().click();
     const detailWarnigType = await (await this.detailWarningType).first().innerText();
