@@ -95,12 +95,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     IResult<BatchAttributesSearchResponse>  searchAttributes_ = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
 
-                    searchAttributes = new() {
-                        Data = searchAttributes_.Data,
-                        Errors = searchAttributes_.Errors,
-                        IsSuccess = searchAttributes_.IsSuccess,
-                        StatusCode = searchAttributes_.StatusCode
-                    };
+                    searchAttributes = new() {  Data = searchAttributes_.Data,
+                                                Errors = searchAttributes_.Errors,
+                                                IsSuccess = searchAttributes_.IsSuccess,
+                                                StatusCode = searchAttributes_.StatusCode };
 
                     if (_cacheConfiguration.Value.IsFssCacheEnabled)
                     {
