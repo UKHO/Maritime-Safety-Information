@@ -75,7 +75,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
         {
             List<YearWeekModel> yearWeekModelList = new();
-            IResult<BatchAttributesSearchResponse> searchAttributes;
+            BatchAttributesSearchModel searchAttributes;
 
             try
             {
@@ -87,13 +87,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled && cacheInfo != null && !string.IsNullOrEmpty(cacheInfo.Response))
                 {
-                    searchAttributes = JsonConvert.DeserializeObject<IResult<BatchAttributesSearchResponse>>(cacheInfo.Response);
+                    searchAttributes = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(cacheInfo.Response);
                 }
                 else
                 {
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    searchAttributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
+                    IResult<BatchAttributesSearchResponse>  searchAttributes_ = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
+
+                    searchAttributes = new() {
+                        Data = searchAttributes_.Data,
+                        Errors = searchAttributes_.Errors,
+                        IsSuccess = searchAttributes_.IsSuccess,
+                        StatusCode = searchAttributes_.StatusCode
+                    };
 
                     if (_cacheConfiguration.Value.IsFssCacheEnabled)
                     {
