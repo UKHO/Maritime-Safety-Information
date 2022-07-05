@@ -278,7 +278,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             AllFilesZipSize = 300040
                         }
                     }
-                }                
+                }
             };
             expected = expected.OrderByDescending(x => x.Year).ThenByDescending(x => x.WeekNumber).ToList();
 
@@ -366,6 +366,104 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
             byte[] result = await NMHelper.GetFileBytesFromStream(stream);
             Assert.IsInstanceOf(typeof(byte[]), result);
+        }
+
+        [Test]
+        public void WhenNMHelperCallsGetShowFilesResponseModel_ThenConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForWeekly();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "aaa.pdf",
+                    FileDescription = "aaa",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "bbb.pdf",
+                    FileDescription = "bbb",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ccc.pdf",
+                    FileDescription = "ccc",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ddd.pdf",
+                    FileDescription = "ddd",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.GetShowFilesResponseModel(searchResult.Entries);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenCallsGetYearAndTypeFromFilenName_ThenReturnYearAndType()
+        {
+            string result = NMHelper.GetYearAndTypeFromFilenName("NP234(A) 2022");
+            Assert.AreEqual("2022A", result);
+        }
+
+        [Test]
+        public void WhenCallGetYearAndTypeFromFilenNameWithNull_ThenReturnEmpty()
+        {
+            string result = NMHelper.GetYearAndTypeFromFilenName(null);
+            Assert.AreEqual(string.Empty, result);
+        }
+
+        [Test]
+        public void WhenCallGetYearFromFileName_ThenReturnYear()
+        {
+            int result = NMHelper.GetYearFromFileName("NP234(A) 2022");
+            Assert.AreEqual(2022, result);
+        }
+
+        [Test]
+        public void WhenCallGetYearFromFileNameWithNull_ThenReturnZero()
+        {
+            int result = NMHelper.GetYearFromFileName(null);
+            Assert.AreEqual(0, result);
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()
