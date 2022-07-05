@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
+using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
@@ -17,14 +19,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private const string YearAndWeek = "YEAR/WEEK";
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
+        private readonly IAzureTableStorageClient _azureTableStorageClient;
+        private readonly IOptions<CacheConfiguration> _cacheConfiguration;
 
-        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig)
+        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig,
+                             IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration)
         {
             _fileShareService = fileShareService;
             _logger = logger;
             _authFssTokenProvider = authFssTokenProvider;
             _fileShareServiceConfig = fileShareServiceConfig;
             _httpClientFactory = httpClientFactory;
+            _azureTableStorageClient = azureTableStorageClient;
+            _cacheConfiguration = cacheConfiguration;
         }
 
         public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
@@ -68,15 +75,39 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
         {
             List<YearWeekModel> yearWeekModelList = new();
+            IResult<BatchAttributesSearchResponse> searchAttributes;
+
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                FssWeeklyAttributeResponseCache cacheInfo = await _azureTableStorageClient.GetEntityAsync("Public","", _cacheConfiguration.Value.FssWeeklyAttributeTableName, _cacheConfiguration.Value.ConnectionString);
+                
+                if (_cacheConfiguration.Value.IsFssCacheEnabled && cacheInfo != null && !string.IsNullOrEmpty(cacheInfo.Response))
+                {
+                    BatchAttributesSearchResponseMaster searchAttributes_ = JsonConvert.DeserializeObject<BatchAttributesSearchResponseMaster>(cacheInfo.Response);
+                    searchAttributes = (IResult<BatchAttributesSearchResponse>)searchAttributes_;
+                }
+                else
+                {
+                    IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                IResult<BatchAttributesSearchResponse> searchAttributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
+                    searchAttributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
+
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    {
+                        FssWeeklyAttributeResponseCache fssWeeklyAttributeResponseCache = new FssWeeklyAttributeResponseCache
+                        {
+                            PartitionKey = "Public",
+                            RowKey = "",
+                            Response = JsonConvert.SerializeObject(searchAttributes)
+                        };
+
+                        await _azureTableStorageClient.InsertEntityAsync(fssWeeklyAttributeResponseCache, _cacheConfiguration.Value.FssWeeklyAttributeTableName, _cacheConfiguration.Value.ConnectionString);
+                    }
+                }
 
                 if (searchAttributes.Data != null)
                 {
@@ -174,7 +205,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Week).Where(x => x.Year == year).Select(x => x.Week).FirstOrDefault());
                 }
                 showWeeklyFilesResponses.ShowFilesResponseList = await GetWeeklyBatchFiles(year, week, correlationId);
-
+                
                 _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
 
                 return showWeeklyFilesResponses;
