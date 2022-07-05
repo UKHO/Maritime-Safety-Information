@@ -166,7 +166,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/pdf";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
-                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+                async delegate { await _controller.DownloadFile(batchId, fileName, mimeType); });
         }
 
         [Test]
@@ -176,7 +176,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "testfile.pdf";
             const string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
-                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+                async delegate { await _controller.DownloadFile(batchId, fileName, mimeType); });
         }
 
         [Test]
@@ -186,7 +186,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = null;
             const string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
-                async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+                async delegate { await _controller.DownloadFile(batchId, fileName, mimeType); });
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "";
             const string mimeType = "application/pdf";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
-               async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+               async delegate { await _controller.DownloadFile(batchId, fileName, mimeType); });
         }
 
         [Test]
@@ -206,7 +206,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "testfile.pdf";
             const string mimeType = null;
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
-               async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+               async delegate { await _controller.DownloadFile(batchId, fileName, mimeType); });
         }
 
         [Test]
@@ -216,7 +216,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "testfile.pdf";
             const string mimeType = "";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
-               async delegate { await _controller.DownloadWeeklyFile(batchId, fileName, mimeType); });
+               async delegate { await _controller.DownloadFile(batchId, fileName, mimeType); });
         }
 
         [Test]
@@ -227,7 +227,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/pdf";
 
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
-            IActionResult result = await _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            IActionResult result = await _controller.DownloadFile(batchId, fileName, mimeType);
 
             Assert.IsInstanceOf<FileResult>(result);
         }
@@ -242,7 +242,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 
-            Task<FileResult> result = _controller.DownloadWeeklyFile(batchId, fileName, mimeType);
+            Task<FileResult> result = _controller.DownloadFile(batchId, fileName, mimeType);
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -288,6 +288,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Task<FileResult> result = _controller.DownloadDailyFile(batchId, fileName, mimeType);
 
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenCumulativeFilesAsyncIsCalled_ThenShouldReturnsExpectedView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Cumulative.cshtml";
+
+            A.CallTo(() => _fakeNMDataService.GetCumulativeBatchFiles(CorrelationId));
+
+            IActionResult result = await _controller.Cumulative();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()

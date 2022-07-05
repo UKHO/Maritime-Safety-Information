@@ -152,7 +152,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                return View(showFilesResponse);
+                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showFilesResponse);
             }
             catch (Exception ex)
             {

@@ -363,6 +363,126 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.IsFaulted);
         }
 
+        [Test]
+        public async Task WhenGetCumulativeBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFilesOrderByFileName()
+        {
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 4;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual("NP234(B) 2022", listShowFilesResponseModels[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2022", listShowFilesResponseModels[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[3].FileDescription);
+        }
+
+        [Test]
+        public void WhenGetCumulativeBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for cumulative NM files"),
+                async delegate { await _nMDataService.GetCumulativeBatchFiles(CorrelationId); });
+        }
+
+        [Test]
+        public void WhenGetCumulativeBatchFilesIsCalled_ThenShouldExecuteCatch()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenGetCumulativeBatchFilesIsCalled_ThenShouldReturnsRecordFromLastThreeYearsOnly()
+        {
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
+            searchResult.Data.Entries[0].Files[0].Filename = "NP234(A) 2015";
+            searchResult.Data.Entries[0].Files[1].Filename = "NP234(B) 2015";
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 2;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[1].FileDescription);
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForCumulative()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 2,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "2",
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()

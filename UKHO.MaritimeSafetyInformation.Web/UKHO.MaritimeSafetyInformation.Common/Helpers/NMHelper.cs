@@ -20,8 +20,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
             }
+            return GetShowFilesResponseModel(SearchResult.Entries);
+        }
+
+        public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
+        {
             List<ShowFilesResponseModel> listshowFilesResponseModels = new();
-            foreach (BatchDetails item in SearchResult.Entries)
+            foreach (BatchDetails item in batchDetails)
             {
                 foreach (BatchDetailsFiles file in item.Files)
                 {
@@ -128,7 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static string GetYearAndTypeFromFilenName(string fileName)
         {
-            if (!string.IsNullOrEmpty(fileName)) 
+            if (!string.IsNullOrEmpty(fileName))
             {
                 return string.Concat(fileName.AsSpan(fileName.Length - 4), fileName.AsSpan(fileName.Length - 7, 1));
             }

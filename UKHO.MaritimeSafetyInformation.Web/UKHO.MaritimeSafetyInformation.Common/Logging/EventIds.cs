@@ -438,21 +438,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetCumulativeFilesResponseStarted = 910103,
         /// <summary>
-        /// 910104 -  Get NM Batch Files Data Found.
+        /// 910104 -  Get NM Batch Files Data Not Found.
         /// </summary>
-        GetCumulativeNMFilesRequestDataFound = 910104,
+        GetCumulativeNMFilesRequestDataNotFound = 910104,
         /// <summary>
-        /// 910105 -  Get NM Batch Files Data Not Found.
+        /// 910105 -  Event data for Retrieval of MSI Get Cumulative File Response Completed.
         /// </summary>
-        GetCumulativeNMFilesRequestDataNotFound = 910105,
+        GetCumulativeFilesResponseCompleted = 910105,
         /// <summary>
-        /// 910106 -  Event data for Retrieval of MSI Get Cumulative File Response Completed.
+        /// 910106 -  Event data for Retrieval of MSI Get Cumulative File Response Failed.
         /// </summary>
-        GetCumulativeFilesResponseCompleted = 910106,
-        /// <summary>
-        /// 910107 -  Event data for Retrieval of MSI Get Cumulative File Response Failed.
-        /// </summary>
-        GetCumulativeFilesResponseFailed = 910107,
+        GetCumulativeFilesResponseFailed = 910106,
 
     }
 

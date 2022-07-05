@@ -165,7 +165,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
+               , async delegate { await _nMController.DownloadFile(batchId, filename, mimeType); });
         }
 
         [Test]

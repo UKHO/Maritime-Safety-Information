@@ -256,14 +256,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                    List<ShowFilesResponseModel> ListshowFilesResponseModels = new();
-                    _logger.LogInformation(EventIds.GetCumulativeNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned data with _X-Correlation-ID:{correlationId}", correlationId);
-                    foreach (BatchDetails entries in SearchResult.Entries)
-                    {
-                        ListshowFilesResponseModels.AddRange(NMHelper.ListFilesResponse(SearchResult));
-                    }
+
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
-                    return ListshowFilesResponseModels.Where(a => NMHelper.GetYearFromFileName(a.FileDescription) >= DateTime.UtcNow.AddYears(-3).Year).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
+                    return NMHelper.GetShowFilesResponseModel(SearchResult.Entries).Where(a => NMHelper.GetYearFromFileName(a.FileDescription) >= DateTime.UtcNow.AddYears(-3).Year).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
                 }
                 else
                 {
@@ -273,7 +268,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                 _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
         }
