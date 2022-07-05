@@ -15,16 +15,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return tableClient;
         }
 
-        public async Task<FssWeeklyAttributeResponseCache> GetEntityAsync(string partitionKey, string rowKey, string tableName, string storageAccountConnectionString)
+        public async Task<CustomTableEntity> GetEntityAsync(string partitionKey, string rowKey, string tableName, string storageAccountConnectionString)
         {
             TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
             try
             {
-                return await tableClient.GetEntityAsync<FssWeeklyAttributeResponseCache>(partitionKey, rowKey);
+                return await tableClient.GetEntityAsync<CustomTableEntity>(partitionKey, rowKey);
             }
             catch (Exception)
             {
-                return new FssWeeklyAttributeResponseCache();
+                return new CustomTableEntity();
             }
         }
 
@@ -34,10 +34,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             await tableClient.DeleteEntityAsync(category, id);
         }
 
-        public async Task InsertEntityAsync(FssWeeklyAttributeResponseCache fssWeeklyAttributeResponseCache, string tableName, string storageAccountConnectionString)
+        public async Task InsertEntityAsync(CustomTableEntity customTableEntity, string tableName, string storageAccountConnectionString)
         {
             TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
-            await tableClient.AddEntityAsync(fssWeeklyAttributeResponseCache);
+            await tableClient.AddEntityAsync(customTableEntity);
         }
     }
 }

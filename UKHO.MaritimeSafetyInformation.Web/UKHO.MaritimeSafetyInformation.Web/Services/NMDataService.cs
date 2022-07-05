@@ -83,12 +83,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                FssWeeklyAttributeResponseCache cacheInfo = await _azureTableStorageClient.GetEntityAsync("Public","", _cacheConfiguration.Value.FssWeeklyAttributeTableName, _cacheConfiguration.Value.ConnectionString);
+                CustomTableEntity cacheInfo = await _azureTableStorageClient.GetEntityAsync("Public","", _cacheConfiguration.Value.FssWeeklyAttributeTableName, _cacheConfiguration.Value.ConnectionString);
                 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled && cacheInfo != null && !string.IsNullOrEmpty(cacheInfo.Response))
                 {
-                    BatchAttributesSearchResponseMaster searchAttributes_ = JsonConvert.DeserializeObject<BatchAttributesSearchResponseMaster>(cacheInfo.Response);
-                    searchAttributes = (IResult<BatchAttributesSearchResponse>)searchAttributes_;
+                    searchAttributes = JsonConvert.DeserializeObject<IResult<BatchAttributesSearchResponse>>(cacheInfo.Response);
                 }
                 else
                 {
@@ -98,14 +97,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     if (_cacheConfiguration.Value.IsFssCacheEnabled)
                     {
-                        FssWeeklyAttributeResponseCache fssWeeklyAttributeResponseCache = new FssWeeklyAttributeResponseCache
+                        CustomTableEntity customTableEntity = new()
                         {
                             PartitionKey = "Public",
                             RowKey = "",
                             Response = JsonConvert.SerializeObject(searchAttributes)
                         };
 
-                        await _azureTableStorageClient.InsertEntityAsync(fssWeeklyAttributeResponseCache, _cacheConfiguration.Value.FssWeeklyAttributeTableName, _cacheConfiguration.Value.ConnectionString);
+                        await _azureTableStorageClient.InsertEntityAsync(customTableEntity, _cacheConfiguration.Value.FssWeeklyAttributeTableName, _cacheConfiguration.Value.ConnectionString);
                     }
                 }
 

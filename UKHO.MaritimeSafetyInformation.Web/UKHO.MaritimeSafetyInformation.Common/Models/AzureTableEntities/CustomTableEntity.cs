@@ -3,7 +3,7 @@ using Azure.Data.Tables;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities
 {
-    public class FssWeeklyAttributeResponseCache : ITableEntity
+    public class CustomTableEntity : ITableEntity
     {
         public string PartitionKey { get; set; }
         public string RowKey { get; set; }
