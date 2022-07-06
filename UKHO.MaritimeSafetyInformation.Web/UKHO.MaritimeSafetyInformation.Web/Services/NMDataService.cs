@@ -41,10 +41,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
                 BatchSearchResponse SearchResult = new();
-              
+                string userRole = _userService.IsDistributorUser ? "Distributor" : "Public";
+
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    SearchResult = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache("Public", year, week, correlationId);
+                    SearchResult = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(userRole, year, week, correlationId);
                 }
                 
                 if (SearchResult.Entries == null)
@@ -64,7 +65,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         CustomTableEntity customTableEntity = new()
                         {
-                            PartitionKey = _userService.IsDistributorUser ? "Distributor" : "Public",
+                            PartitionKey = userRole,
                             RowKey = year.ToString() + '|' + week.ToString(),
                             Response = JsonConvert.SerializeObject(result.Data)
                         };
@@ -98,12 +99,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             List<YearWeekModel> yearWeekModelList = new();
             BatchAttributesSearchModel searchAttributes =new ();
+            string userRole = _userService.IsDistributorUser ? "Distributor" : "Public";
 
             try
             {
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    searchAttributes = await _fileShareServiceCache.GetAllYearWeekFromCache("Public", "", correlationId);
+                    searchAttributes = await _fileShareServiceCache.GetAllYearWeekFromCache(userRole, "", correlationId);
                 }
 
                 if(searchAttributes.Data == null)
@@ -125,7 +127,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         CustomTableEntity customTableEntity = new()
                         {
-                            PartitionKey = _userService.IsDistributorUser ? "Distributor" : "Public",
+                            PartitionKey = userRole,
                             RowKey = "",
                             Response = JsonConvert.SerializeObject(searchAttributes)
                         };
