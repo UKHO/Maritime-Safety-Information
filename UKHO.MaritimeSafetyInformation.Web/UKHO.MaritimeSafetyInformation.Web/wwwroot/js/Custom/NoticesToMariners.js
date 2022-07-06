@@ -88,7 +88,7 @@ function GetCorrespondingWeeks(id, data) {
     document.getElementById('ddlWeeks').innerHTML = defaultweek;
 
     for (i = 0; i < weekdata.length; i++) {
-        var week = '<option>' + weekdata[i] + '</option>'
+        var week = '<option value='+ weekdata[i]+'>Week ' + weekdata[i] +'</option>'
         document.getElementById('ddlWeeks').innerHTML += week;
     }
 
