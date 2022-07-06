@@ -24,6 +24,14 @@ function do_Selection() {
     }
 }
 
+function showSelection() {
+    const checkbox_warnings = Array.from(document.querySelectorAll(".checkbox_warning"));
+
+    checkbox_warnings.map(function (checkbox_warning) {
+        checkbox_warning.checked = false;
+    })
+}
+
 function enableDisableShowSelection() {
     var checkboxes = document.getElementsByName('checkbox');
     document.getElementById("BtnShowSelection").disabled = true;

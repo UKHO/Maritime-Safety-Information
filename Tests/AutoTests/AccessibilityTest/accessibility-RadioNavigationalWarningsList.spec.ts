@@ -1,7 +1,7 @@
 import { test} from '@playwright/test';
 import * as app from "../../Configuration/appConfig.json";
 import { checkA11y, injectAxe, Options } from 'axe-playwright';
-
+import RadioNavigationalWarnings from '../../pageObject/RadioNavigationalWarnings.page';
 import RadioNavigationalWarningsList from '../../pageObject/RadioNavigationalWarningsAdminList.page';
 import loginPage from '../../pageObject/Login.page';
 
