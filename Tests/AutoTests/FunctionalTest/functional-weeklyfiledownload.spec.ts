@@ -29,6 +29,9 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await noticeFileDownload.goToNoticeToMariner();
     await noticeFileDownload.goToDailyFile();
     await noticeFileDownload.checkDailyFileDownload();
+    await noticeFileDownload.verifySortDailyFileDownload();
+    await noticeFileDownload.checkFileNameText()
+    await noticeFileDownload.checkFileSizeText()
   })
   test('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
     await notice.checkpageurl('','Maritime Safety Information')
@@ -42,6 +45,8 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await notice.checkurl(notice.radioNavigationalWarnings,'RadioNavigationalWarnings','Radio Navigational Warnings')
     await notice.checkNavareaUrl(notice.navareatab,'RadioNavigationalWarnings','Radio Navigational Warnings - NAVAREA I')
     await notice.checkUkcoastalUrl(notice.ukcoastaltab,'RadioNavigationalWarnings','Radio Navigational Warnings - UK Coastal')
- })  
+ })
+ 
+
 
 });

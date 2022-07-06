@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { DateTime } from 'luxon';
 import { Locator, Page } from 'playwright';
 
 export default class RadioNavigationalWarningsList
@@ -107,6 +108,10 @@ export default class RadioNavigationalWarningsList
        {
          expect(resultYear[i]).toEqual(yearString.slice(-2));
        }
+
+   
+    expect(DateTime.fromFormat(resultYear[0],"ddHHmm UTC MMM yy")).toBeTruthy();
+    
 
     //Verify Dates are descending order   
     const resultdate= await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]' , (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) });
