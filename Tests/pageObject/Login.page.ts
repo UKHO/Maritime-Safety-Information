@@ -33,7 +33,7 @@ export default class Login {
     this.adUsername = this.page.locator('#i0116');
     this.adNext=  this.page.locator('text=Next');
     this.adPassword = this.page.locator('#i0118');
-    this.login = this.page.locator('text=Sign in');
+    this.login = this.page.locator('#idSIButton9');
     this.adYes=this.page.locator('#idSIButton9');
     this.adUserNameDropdown=this.page.locator('#navbarDropdown');
     this.adSignOutText=this.page.locator("#navbarSupportedContent > ul > li > ul > li > a")
@@ -82,13 +82,13 @@ export default class Login {
       this.adNext.click()
       ]);
       await Promise.all([
-        this.page.waitForTimeout(5000),
+       this.page.waitForTimeout(5000),
        this.adPassword.focus(),
       ]);
        await Promise.all([
         this.adPassword.fill(password),
       ]);
-      this.login.click()
+      await this.login.click()
      
      }
      public async adsignout()
