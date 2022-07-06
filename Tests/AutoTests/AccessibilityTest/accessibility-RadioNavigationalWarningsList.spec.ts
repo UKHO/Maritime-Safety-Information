@@ -24,7 +24,7 @@ import loginPage from '../../pageObject/Login.page';
     await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass); 
   });  
 
-  test.only('Radio Navigational Warnings page should be accessible', async ({page}) => {
+  test('Radio Navigational Warnings page should be accessible', async ({page}) => {
     await injectAxe(page);
     await checkA11y(page, undefined, defaultCheckA11yOptions);
     
