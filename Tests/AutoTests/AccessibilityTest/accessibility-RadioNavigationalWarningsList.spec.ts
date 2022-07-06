@@ -21,10 +21,12 @@ import loginPage from '../../pageObject/Login.page';
   test.beforeEach(async ({page}) => {
     await page.goto(app.rnwAdminUrl);
     const login = new loginPage(page);
-    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass); 
+    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass);
+    const radioNavigationalWarnings =new RadioNavigationalWarnings(page);
+    await radioNavigationalWarnings.filter.click();
   });  
 
-  test('Radio Navigational Warnings page should be accessible', async ({page}) => {
+  test.only('Radio Navigational Warnings page should be accessible', async ({page}) => {
     await injectAxe(page);
     await checkA11y(page, undefined, defaultCheckA11yOptions);
     
