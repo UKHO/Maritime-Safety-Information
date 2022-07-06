@@ -94,6 +94,4 @@ module "cache_storage" {
   tags                                  = local.tags
   m_spoke_subnet                        = data.azurerm_subnet.main_subnet.id
   agent_subnet                          = data.azurerm_subnet.agent_subnet.id
-  env_name                              = local.env_name
-  service_name                          = local.service_name
 }
