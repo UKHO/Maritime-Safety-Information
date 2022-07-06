@@ -15,6 +15,7 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -40,8 +41,12 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
-            
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
+
+            //services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
+
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
+                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://mgiaidtestb2c.onmicrosoft.com/FileShareServiceAPIQA/Public" })
+                    .AddInMemoryTokenCaches();
 
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
