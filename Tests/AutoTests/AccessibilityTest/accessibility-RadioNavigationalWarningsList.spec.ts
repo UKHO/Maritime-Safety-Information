@@ -25,8 +25,8 @@ import loginPage from '../../pageObject/Login.page';
   });  
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
-    // await injectAxe(page);
-    // await checkA11y(page, undefined, defaultCheckA11yOptions);
+    await injectAxe(page);
+    await checkA11y(page, undefined, defaultCheckA11yOptions);
     
   })
  
