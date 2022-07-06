@@ -420,7 +420,37 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910099 -  Unauthorized Access.
         /// </summary>
-        UnauthorizedAccess = 910099
+        UnauthorizedAccess = 910099,
+
+
+        /// <summary>
+        /// 910100 -  Event data for Retrieval of Leisure file Started.
+        /// </summary>
+        ShowLeisureFilesRequestStarted = 910100,
+        /// <summary>
+        /// 910101 -  Event data for Retrieval of Leisure file Completed.
+        /// </summary>
+        ShowLeisureFilesRequestCompleted = 910101,
+        /// <summary>
+        /// 910102 -  Event data for Retrieval of Leisure file Failed.
+        /// </summary>
+        ShowLeisureFilesRequestFailed = 910102,
+        /// <summary>
+        /// 910103 -  Event data for Retrieval of Leisure file Response Started.
+        /// </summary>
+        ShowLeisureFilesResponseStarted = 910103,
+        /// <summary>
+        /// 910104 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
+        /// </summary>
+        ShowLeisureFilesResponseDataFound = 910104,
+        /// <summary>
+        /// 910105 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
+        /// </summary>
+        ShowLeisureFilesResponseDataNotFound = 910105,
+        /// <summary>
+        /// 910106 -  Event data for Retrieval of Leisure file Response Failed.
+        /// </summary>
+        ShowLeisureFilesResponseFailed = 910106,
 
     }
 

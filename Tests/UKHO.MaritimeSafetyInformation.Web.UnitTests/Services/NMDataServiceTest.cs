@@ -363,6 +363,77 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.IsFaulted);
         }
 
+
+
+
+
+
+
+
+        //[Test]
+        //public async Task WhenGetleisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        //{
+        //    A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+        //    Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
+
+        //    A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+        //    const int expectedRecordCount = 1;
+            
+        //    List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetleisureFilesAsync(CorrelationId);
+
+        //    Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+        //}
+
+        //[Test]
+        //public async Task WhenGetleisureFilesAsyncIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
+        //{
+        //    A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+        //    Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
+
+        //    A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+        //    const int expectedRecordCount = 1;
+        //    const int expectedDailyFilesDataCount = 2;
+
+        //    List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetleisureFilesAsync(CorrelationId);
+
+        //    Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+        //    Assert.AreEqual(expectedDailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+        //}
+
+        //[Test]
+        //public void WhenGetleisureFilesAsyncIsCalled_ThenShouldExecuteCatch()
+        //{
+        //    A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+
+        //    IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+        //    A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+        //    Task<List<ShowFilesResponseModel>> result = _nMDataService.GetleisureFilesAsync(CorrelationId);
+
+        //    Assert.IsTrue(result.IsFaulted);
+        //}
+
+        //[Test]
+        //public void WhenGetleisureFilesAsyncIsCalled_ThenShouldThrowInvalidDataException()
+        //{
+        //    A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+        //    IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+        //    A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+        //    Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
+        //        async delegate { await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
+        //}
+
+
+
+
+
+
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()
@@ -704,5 +775,86 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             return searchResult;
         }
+
+        //private static Result<BatchSearchResponse> SetSearchResultForLeisure()
+        //{
+        //    Result<BatchSearchResponse> searchResult = new()
+        //    {
+        //        Data = new BatchSearchResponse
+        //        {
+        //            Count = 2,
+        //            Links = null,
+        //            Total = 0,
+        //            Entries = new List<BatchDetails>() {
+        //                new BatchDetails() {
+        //                    BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+        //                    AllFilesZipSize=346040,
+        //                    Attributes = new List<BatchDetailsAttributes>()
+        //                    {
+        //                        new BatchDetailsAttributes("Data Date","2022-04-22"),
+        //                        new BatchDetailsAttributes("Frequency","leisure"),
+        //                        new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+        //                        new BatchDetailsAttributes("Week Number","17"),
+        //                        new BatchDetailsAttributes("Year","2022"),
+        //                        new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+        //                    },
+        //                    BusinessUnit = "TEST",
+        //                    BatchPublishedDate = DateTime.Now,
+        //                    ExpiryDate = DateTime.Now,
+        //                    Files = new List<BatchDetailsFiles>() {
+        //                        new BatchDetailsFiles () {
+        //                            Filename = "aaa.pdf",
+        //                            FileSize=1232,
+        //                            MimeType = "PDF",
+        //                            Links = null
+        //                        },
+        //                        new BatchDetailsFiles () {
+        //                            Filename = "bbb.pdf",
+        //                            FileSize=1232,
+        //                            MimeType = "PDF",
+        //                            Links = null
+        //                        }
+        //                    }
+
+        //                },
+        //                new BatchDetails() {
+        //                    BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
+        //                    AllFilesZipSize=299170,
+        //                    Attributes = new List<BatchDetailsAttributes>()
+        //                    {
+        //                        new BatchDetailsAttributes("Data Date","2022-04-21"),
+        //                        new BatchDetailsAttributes("Frequency","Daily"),
+        //                        new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+        //                        new BatchDetailsAttributes("Week Number","17"),
+        //                        new BatchDetailsAttributes("Year","2022"),
+        //                        new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+        //                    },
+        //                    BusinessUnit = "TEST",
+        //                    BatchPublishedDate = DateTime.Now,
+        //                    ExpiryDate = DateTime.Now,
+        //                    Files = new List<BatchDetailsFiles>() {
+        //                        new BatchDetailsFiles () {
+        //                            Filename = "ccc.pdf",
+        //                            FileSize=1232,
+        //                            MimeType = "PDF",
+        //                            Links = null
+        //                        },
+        //                        new BatchDetailsFiles () {
+        //                            Filename = "ddd.pdf",
+        //                            FileSize=1232,
+        //                            MimeType = "PDF",
+        //                            Links = null
+        //                        }
+        //                    }
+
+        //                }
+        //            }
+        //        }
+        //    };
+
+        //    return searchResult;
+        //}
     }
 }

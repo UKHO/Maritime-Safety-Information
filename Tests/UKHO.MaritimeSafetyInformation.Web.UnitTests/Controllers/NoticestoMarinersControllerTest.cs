@@ -277,6 +277,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
         }
 
+        [Test]
+        public async Task WhenLeisureIsCalled_ThenShouldReturnsExpectedView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Leisure.cshtml";
+
+            A.CallTo(() => _fakeNMDataService.GetleisureFilesAsync(A<string>.Ignored));
+
+            IActionResult result = await _controller.Leisure();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
+        public void WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        {
+            A.CallTo(() => _fakeNMDataService.GetleisureFilesAsync(A<string>.Ignored)).Throws(new Exception());
+
+            Task<IActionResult> result = _controller.Leisure();
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
         [TestCase(null, "Daily 16-05-22.zip", "application/gzip", Description = "When Download Daily File Is Called With Null BatchID Then Should Throw Exception")]
         [TestCase("", "Daily 16-05-22.zip", "application/gzip", Description = "When Download Daily File Is Called With Empty BatchID Then Should Then Should Throw Exception")]
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d1", "Daily 16-05-22.zip", null, Description = "When Download Daily File Is Called With Null Mime Type Then Should Then Should Throw Exception")]

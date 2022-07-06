@@ -41,6 +41,42 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return listshowFilesResponseModels;
         }
 
+        public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
+        {
+            List<ShowFilesResponseModel> listshowFilesResponseModels = new();
+
+            foreach (BatchDetails item in batchDetails)
+            {
+                foreach (BatchDetailsFiles file in item.Files)
+                {
+                    item.Attributes.Add(new BatchDetailsAttributes { Key = "BatchPublishedDate", Value = item.BatchPublishedDate.ToString() });
+                    listshowFilesResponseModels.Add(new ShowFilesResponseModel
+                    {
+                        Attributes = item.Attributes,
+                        BatchId = item.BatchId,
+                        Filename = file.Filename,
+                        FileDescription = Path.GetFileNameWithoutExtension(file.Filename),
+                        FileExtension = Path.GetExtension(file.Filename),
+                        FileSize = file.FileSize,
+                        FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
+                        MimeType = file.MimeType,
+                        Links = file.Links
+                    });
+                }
+            }
+
+            return listshowFilesResponseModels;
+        }
+
+        public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
+        {
+
+            List<ShowFilesResponseModel> listshowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
+            
+            return listshowFilesResponseModels.OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate").Value)).GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart").Value)
+            .Select(grp => grp.First()).OrderBy(x=>x.FileDescription).ToList();
+        }
+
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();
