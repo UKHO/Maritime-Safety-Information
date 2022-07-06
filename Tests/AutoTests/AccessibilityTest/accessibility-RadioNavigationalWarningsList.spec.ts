@@ -21,10 +21,10 @@ import loginPage from '../../pageObject/Login.page';
   test.beforeEach(async ({page}) => {
     await page.goto(app.rnwAdminUrl);
     const login = new loginPage(page);
-    await login.adLogin(app.B2CAutoTest_User,app.B2CAutoTest_Pass); 
+    await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass); 
   });  
 
-  test('Radio Navigational Warnings page should be accessible', async ({page}) => {
+  test.only('Radio Navigational Warnings page should be accessible', async ({page}) => {
     await injectAxe(page);
     await checkA11y(page, undefined, defaultCheckA11yOptions);
     
