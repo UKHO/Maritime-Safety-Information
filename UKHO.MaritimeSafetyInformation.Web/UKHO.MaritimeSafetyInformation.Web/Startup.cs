@@ -63,7 +63,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
-
+            services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
+            
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
 
