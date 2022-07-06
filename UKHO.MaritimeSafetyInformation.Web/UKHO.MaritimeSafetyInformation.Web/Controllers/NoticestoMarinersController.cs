@@ -155,10 +155,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Annual")]
         public async Task<IActionResult> Annual()
         {
-            var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPI/Public" });
+
 
             if (_userService.IsDistributorUser)
+            {
+                var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPI/Public" });
                 _logger.LogInformation("Distributor Token : " + token);
+            }
 
             return View();
         }
