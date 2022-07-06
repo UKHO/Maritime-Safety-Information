@@ -21,9 +21,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private readonly IFileShareServiceCache _fileShareServiceCache;
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
+        private readonly IUserService _userService;
 
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig,
-                             IFileShareServiceCache fileShareServiceCache, IOptions<CacheConfiguration> cacheConfiguration)
+                             IFileShareServiceCache fileShareServiceCache, IOptions<CacheConfiguration> cacheConfiguration, IUserService userService)
         {
             _fileShareService = fileShareService;
             _logger = logger;
@@ -32,6 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _httpClientFactory = httpClientFactory;
             _fileShareServiceCache = fileShareServiceCache;
             _cacheConfiguration = cacheConfiguration;
+            _userService = userService;
         }
 
         public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
@@ -62,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         CustomTableEntity customTableEntity = new()
                         {
-                            PartitionKey = "Public",
+                            PartitionKey = _userService.IsDistributorUser ? "Distributor" : "Public",
                             RowKey = year.ToString() + '|' + week.ToString(),
                             Response = JsonConvert.SerializeObject(result.Data)
                         };
@@ -123,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         CustomTableEntity customTableEntity = new()
                         {
-                            PartitionKey = "Public",
+                            PartitionKey = _userService.IsDistributorUser ? "Distributor" : "Public",
                             RowKey = "",
                             Response = JsonConvert.SerializeObject(searchAttributes)
                         };

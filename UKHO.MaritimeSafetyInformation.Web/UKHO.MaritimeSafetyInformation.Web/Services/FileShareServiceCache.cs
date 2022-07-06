@@ -13,11 +13,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     {
         private readonly IAzureTableStorageClient _azureTableStorageClient;
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
+        private readonly IAzureStorageService _azureStorageService;
 
-        public FileShareServiceCache(IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration)
+        public FileShareServiceCache(IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService)
         {
             _azureTableStorageClient = azureTableStorageClient;
             _cacheConfiguration = cacheConfiguration;
+            _azureStorageService = azureStorageService;
         }
 
         public async Task<BatchAttributesSearchModel> GetAllYearWeekFromCache(string partitionKey, string rowKey, string correlationId)
@@ -49,12 +51,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task InsertEntityAsync(CustomTableEntity customTableEntity, string tableName)
         {
-            await _azureTableStorageClient.InsertEntityAsync(customTableEntity, tableName, _cacheConfiguration.Value.ConnectionString);
+            string connectionString =_azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey); 
+            
+            await _azureTableStorageClient.InsertEntityAsync(customTableEntity, tableName, connectionString);
         }
 
         private async Task<CustomTableEntity> GetCacheTableData(string partitionKey, string rowKey, string tableName)
         {
-            return await _azureTableStorageClient.GetEntityAsync(partitionKey, rowKey, tableName, _cacheConfiguration.Value.ConnectionString);
+            string connectionString = _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
+
+            return await _azureTableStorageClient.GetEntityAsync(partitionKey, rowKey, tableName, connectionString);
         }
     }
 }
