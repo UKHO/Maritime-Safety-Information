@@ -30,8 +30,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 foreach (BatchDetailsFiles file in item.Files)
                 {
+                    item.Attributes.Add(new BatchDetailsAttributes { Key = "BatchPublishedDate", Value = item.BatchPublishedDate.ToString() });
                     listshowFilesResponseModels.Add(new ShowFilesResponseModel
                     {
+                        Attributes = item.Attributes,
                         BatchId = item.BatchId,
                         Filename = file.Filename,
                         FileDescription = Path.GetFileNameWithoutExtension(file.Filename),
@@ -39,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         FileSize = file.FileSize,
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
-                        Links = file.Links,
+                        Links = file.Links
                     });
                 }
             }
@@ -148,13 +150,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         {
             if (!string.IsNullOrEmpty(fileName))
             {
-                return int.Parse(fileName.Substring(fileName.Length - 4));
+                return int.Parse(fileName[^4..]);
             }
             else
             {
                 return 0;
             }
 
+        }
+
+        public static List<ShowFilesResponseModel> ListFilesResponseCumulative(List<BatchDetails> batchDetails)
+        {
+            return GetShowFilesResponseModel(batchDetails).OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate").Value)).GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date").Value)
+                                                           .Select(grp => grp.First()).ToList();
         }
     }
 }
