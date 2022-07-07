@@ -432,27 +432,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.IsFaulted);
         }
 
-        [Test]
-        public async Task WhenGetCumulativeBatchFilesIsCalled_ThenShouldReturnsRecordFromLastThreeYearsOnly()
-        {
-
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-
-            Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
-            searchResult.Data.Entries[0].Attributes[0].Value = new DateTime(2015,01,01).ToString();
-            searchResult.Data.Entries[1].Attributes[0].Value = new DateTime(2015, 01, 01).ToString();
-
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-
-            const int expectedRecordCount = 2;
-
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
-
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[1].FileDescription);
-        }
-
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()
