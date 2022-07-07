@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
+        public async Task<FileResult> DownloadFile(string batchId, string fileName, string mimeType)
         {
             try
             {

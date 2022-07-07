@@ -44,7 +44,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
         {
             List<ShowFilesResponseModel> listshowFilesResponseModels = new();
-
             foreach (BatchDetails item in batchDetails)
             {
                 foreach (BatchDetailsFiles file in item.Files)
@@ -64,7 +63,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     });
                 }
             }
-
             return listshowFilesResponseModels;
         }
 

@@ -278,7 +278,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             AllFilesZipSize = 300040
                         }
                     }
-                }                
+                }
             };
             expected = expected.OrderByDescending(x => x.Year).ThenByDescending(x => x.WeekNumber).ToList();
 
@@ -368,6 +368,171 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.IsInstanceOf(typeof(byte[]), result);
         }
 
+        [Test]
+        public void WhenNMHelperCallsGetShowFilesResponseModel_ThenConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForWeekly();
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "aaa.pdf",
+                    FileDescription = "aaa",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "bbb.pdf",
+                    FileDescription = "bbb",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ccc.pdf",
+                    FileDescription = "ccc",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ddd.pdf",
+                    FileDescription = "ddd",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                }
+            };
+            List<ShowFilesResponseModel> result = NMHelper.GetShowFilesResponseModel(searchResult.Entries);
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenListFilesResponseLeisureIsCalled_ThenCheckIfConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForLeisure();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                    FileDescription = "SC5623 Ireland - South West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                    Filename = "SC5623 Ireland - West Coast.pdf",
+                    FileDescription = "SC5623 Ireland - West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenListFilesResponseLeisureIsCalledWithDuplicateData_ThenCheckIfLatestRecordIsReturned()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForDuplicateLeisure();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                    FileDescription = "SC5623 Ireland - South West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                    Filename = "SC5623 Ireland - West Coast.pdf",
+                    FileDescription = "SC5623 Ireland - West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
         private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse searchResult = new()
@@ -391,7 +556,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 MimeType = "PDF",
                                 Links = null
                             }
-                        }
+                        },
+                        Attributes = new()
 
                     },
                     new BatchDetails() {
@@ -409,7 +575,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 MimeType = "PDF",
                                 Links = null
                             }
-                        }
+                        },
+                        Attributes = new()
 
                     }
                 }
@@ -442,7 +609,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 MimeType = "PDF",
                                 Links = null
                             }
-                        }
+                        },
+                        Attributes = new()
 
                     },
                     new BatchDetails() {
@@ -461,7 +629,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 MimeType = "PDF",
                                 Links = null
                             }
-                        }
+                        },
+                        Attributes = new()
 
                     }
                 }
@@ -783,6 +952,154 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 
                         }
                 }
+            };
+
+            return searchResult;
+        }
+
+        private static BatchSearchResponse SetSearchResultForLeisure()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 2,
+                Links = null,
+                Total = 2,
+                Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                        AllFilesZipSize=346040,
+                        Attributes = new List<BatchDetailsAttributes>()
+                        {
+                            new BatchDetailsAttributes("Chart","SC5623"),
+                            new BatchDetailsAttributes("Data Date","2022-04-22"),
+                            new BatchDetailsAttributes("Frequency","leisure"),
+                            new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                            new BatchDetailsAttributes("Year","2022")
+                        },
+                        BusinessUnit = "TEST",
+                        BatchPublishedDate =Convert.ToDateTime("05-07-2022 13:25:35"),
+                        ExpiryDate = DateTime.Now,
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "SC5623 Ireland - South West Coast.pdf",
+                                FileSize=636436,
+                                MimeType = "application/pdf",
+                                Links = null
+                            }
+                        }
+
+                    },
+                    new BatchDetails() {
+                        BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                        AllFilesZipSize=346040,
+                        Attributes = new List<BatchDetailsAttributes>()
+                        {
+                            new BatchDetailsAttributes("Chart","SC5622"),
+                            new BatchDetailsAttributes("Data Date","2022-04-22"),
+                            new BatchDetailsAttributes("Frequency","leisure"),
+                            new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                            new BatchDetailsAttributes("Year","2022")
+                        },
+                        BusinessUnit = "TEST",
+                        BatchPublishedDate =Convert.ToDateTime("05-07-2022 14:25:35"),
+                        ExpiryDate = DateTime.Now,
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "SC5623 Ireland - West Coast.pdf",
+                                FileSize=636436,
+                                MimeType = "application/pdf",
+                                Links = null
+                            }
+                        }
+
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static BatchSearchResponse SetSearchResultForDuplicateLeisure()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 3,
+                Links = null,
+                Total = 3,
+                Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5622"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 14:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("06-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                    }
             };
 
             return searchResult;
