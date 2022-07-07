@@ -253,19 +253,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         GetSingleNMFileFailed = 910060,
 
         /// <summary>
-        /// 910061 - Request For FSS To Get Single Weekly NM File Started.
+        /// 910061 - Request For FSS To Get Single NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileStarted = 910061,
+        FSSGetSingleNMFileStarted = 910061,
 
         /// <summary>
-        /// 910062 - Request For FSS To Get Single Weekly NM File Completed.
+        /// 910062 - Request For FSS To Get Single NM File Completed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileCompleted = 910062,
+        FSSGetSingleNMFileCompleted = 910062,
 
         /// <summary>
-        /// 910063 - Request For FSS To Get Single Weekly NM File Failed.
+        /// 910063 - Request For FSS To Get Single NM File Failed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileResponseFailed = 910063,
+        FSSGetSingleNMFileResponseFailed = 910063,
         /// <summary> 
         /// 910064 -  Maritime safety information request to get RNW detail started.
         /// </summary>

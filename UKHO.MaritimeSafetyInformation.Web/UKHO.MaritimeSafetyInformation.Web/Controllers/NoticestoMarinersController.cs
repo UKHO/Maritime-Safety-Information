@@ -116,7 +116,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                _logger.LogInformation(EventIds.DownloadSingleNMFileStarted.ToEventId(), "Maritime safety information request to download single "+ frequency+" NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadSingleNMFileStarted.ToEventId(), "Maritime safety information request to download single {frequency} NM files started for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
                 NMHelper.ValidateParametersForDownloadSingleFile(new()
                 {
@@ -127,7 +127,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId(), frequency);
 
-                _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single " + frequency + " NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single {frequency} NM files completed for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
 
@@ -135,7 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.DownloadSingleNMFileFailed.ToEventId(), "Maritime safety information request to download single " + frequency + " NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.DownloadSingleNMFileFailed.ToEventId(), "Maritime safety information request to download single {frequency} NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, frequency, GetCurrentCorrelationId());
                 throw;
             }
         }
