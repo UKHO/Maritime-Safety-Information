@@ -420,8 +420,47 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910099 -  Unauthorized Access.
         /// </summary>
-        UnauthorizedAccess = 910099
-
+        UnauthorizedAccess = 910099,
+        /// <summary>
+        /// 910100 - Request for searching all year week from cache azure table storage is started.
+        /// </summary>
+        FSSSearchAllYearWeekFromCacheStart = 910100,
+        /// <summary>
+        /// 910101 - Request for searching all year week from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchAllYearWeekFromCacheCompleted = 910101,
+        /// <summary>
+        /// 910102 - Data not found for searching all year week from cache azure table storage.
+        /// </summary>
+        FSSSearchAllYearWeekDataNotFoundFromCache = 910102,
+        /// <summary>
+        /// 910103 - Request for searching weekly batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesFromCacheStart = 910103,
+        /// <summary>
+        /// 910104 - Request for searching weekly batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesFromCacheCompleted = 910104,
+        /// <summary>
+        /// 910105 - Data not found for searching weekly batch files from cache azure table storage.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesDataNotFoundFromCache = 910105,
+        /// <summary>
+        /// 910106 - Request for storing file share service search all year week response in azure table storage is started.
+        /// </summary>
+        FSSSearchAllYearWeekResponseStoreToCacheStart = 910106,
+        /// <summary>
+        /// 910107 - Request for storing file share service search all year week response in azure table storage is completed.
+        /// </summary>
+        FSSSearchAllYearWeekResponseStoreToCacheCompleted = 910107,
+        /// <summary>
+        /// 910108 - Request for storing file share service search weekly batch files response in azure table storage is started.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheStart = 910108,
+        /// <summary>
+        /// 910109 - Request for storing file share service search weekly batch files response in azure table storage is completed.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted = 910109
     }
 
     public static class EventIdExtensions

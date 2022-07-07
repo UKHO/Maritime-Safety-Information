@@ -26,8 +26,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private ILogger<NMDataService> _fakeLogger;
         private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
         private IHttpClientFactory _httpClientFactory;
-        private IAzureTableStorageClient _fakeAzureTableStorageClient;
+        private IFileShareServiceCache _fakeFileShareServiceCache;
         private IOptions<CacheConfiguration> _fakeCacheConfiguration;
+        private IUserService _fakeUserService;
 
         private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
@@ -42,10 +43,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
             _httpClientFactory = A.Fake<IHttpClientFactory>();
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
-            _fakeAzureTableStorageClient = A.Fake<IAzureTableStorageClient>();
+            _fakeFileShareServiceCache = A.Fake<IFileShareServiceCache>();
             _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
+            _fakeUserService = A.Fake<IUserService>();
 
-            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeAzureTableStorageClient, _fakeCacheConfiguration);
+            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
+                                               _fakeCacheConfiguration, _fakeUserService);
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
