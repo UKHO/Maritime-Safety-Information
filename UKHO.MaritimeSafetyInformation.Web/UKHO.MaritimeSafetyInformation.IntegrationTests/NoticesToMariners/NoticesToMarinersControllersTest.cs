@@ -148,8 +148,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
+            const string frequency = "Weekly";
 
-            FileResult result = await _nMController.DownloadFile(batchId, filename, mimeType);
+            FileResult result = await _nMController.DownloadFile(batchId, filename, mimeType, frequency);
             Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
@@ -162,10 +163,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
+            const string frequency = "Weekly";
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await _nMController.DownloadFile(batchId, filename, mimeType); });
+               , async delegate { await _nMController.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
         [Test]

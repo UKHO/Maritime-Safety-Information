@@ -311,12 +311,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const string batchId = "";
             const string filename = "";
+            const string frequency = "";
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
-            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.IsInstanceOf<Task<byte[]>>(result);
         }
 
@@ -325,10 +326,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const string batchId = "";
             const string filename = "";
+            const string frequency = "";
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).ThrowsAsync(new Exception());
-            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.IsTrue(result.IsFaulted);
         }
 
