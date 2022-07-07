@@ -437,8 +437,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
-            searchResult.Data.Entries[0].Files[0].Filename = "NP234(A) 2015";
-            searchResult.Data.Entries[1].Files[0].Filename = "NP234(B) 2015";
+            searchResult.Data.Entries[0].Attributes[0].Value = new DateTime(2015,01,01).ToString();
+            searchResult.Data.Entries[1].Attributes[0].Value = new DateTime(2015, 01, 01).ToString();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 

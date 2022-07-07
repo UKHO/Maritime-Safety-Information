@@ -146,19 +146,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         }
 
-        public static int GetYearFromFileName(string fileName)
-        {
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                return int.Parse(fileName[^4..]);
-            }
-            else
-            {
-                return 0;
-            }
-
-        }
-
         public static List<ShowFilesResponseModel> ListFilesResponseCumulative(List<BatchDetails> batchDetails)
         {
             return GetShowFilesResponseModel(batchDetails).OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate").Value)).GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date").Value)

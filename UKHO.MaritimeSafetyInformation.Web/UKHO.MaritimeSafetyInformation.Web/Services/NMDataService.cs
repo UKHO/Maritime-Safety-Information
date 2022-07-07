@@ -256,7 +256,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(SearchResult.Entries).Where(a => NMHelper.GetYearFromFileName(a.FileDescription) >= DateTime.UtcNow.AddYears(-3).Year).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(SearchResult.Entries).Where(a => Convert.ToDateTime(a.Attributes.FirstOrDefault(y => y.Key == "Data Date").Value).Year >= DateTime.UtcNow.AddYears(-3).Year).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
                     return showFilesResponseModel;
                 }

@@ -452,19 +452,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.AreEqual(string.Empty, result);
         }
 
-        [Test]
-        public void WhenCallGetYearFromFileName_ThenReturnYear()
-        {
-            int result = NMHelper.GetYearFromFileName("NP234(A) 2022");
-            Assert.AreEqual(2022, result);
-        }
 
-        [Test]
-        public void WhenCallGetYearFromFileNameWithNull_ThenReturnZero()
-        {
-            int result = NMHelper.GetYearFromFileName(null);
-            Assert.AreEqual(0, result);
-        }
 
         [Test]
         public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
