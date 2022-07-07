@@ -15,7 +15,9 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using Microsoft.Identity.Web.TokenCacheProviders.InMemory;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -42,17 +44,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
 
-            //services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
-
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
-                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://mgiaidtestb2c.onmicrosoft.com/FileShareServiceAPIQA/Public" })
-                    .AddInMemoryTokenCaches();
-
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
-            
+
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
@@ -69,6 +65,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
+
+            services.AddRazorPages();
 
             //Configuring appsettings section AzureAdB2C, into IOptions
             services.AddOptions();
@@ -94,6 +92,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     await Task.FromResult(0);
                 };
             });
+
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
+                .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPIQA/Public" })
+                .AddInMemoryTokenCaches();
+
             services.AddHttpClient();
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
@@ -131,6 +134,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHealthChecks("/health");
+                endpoints.MapRazorPages();
             });
         }
 

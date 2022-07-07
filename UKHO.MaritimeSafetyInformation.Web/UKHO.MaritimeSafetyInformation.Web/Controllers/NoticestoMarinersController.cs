@@ -159,8 +159,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             if (_userService.IsDistributorUser)
             {
-                var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPI/Public" });
-                _logger.LogInformation("Distributor Token : " + token);
+                //string token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPI/Public" });
+                string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPIQA/Public" });
+                //_logger.LogInformation("Distributor Token : " + token);
             }
 
             return View();
