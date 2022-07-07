@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
+        public async Task<FileResult> DownloadFile(string batchId, string fileName, string mimeType)
         {
             try
             {
@@ -206,7 +206,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
-                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={batchId}.zip");
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
 
                 _logger.LogInformation(EventIds.DownloadDailyNMFileCompleted.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} is completed for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
 
