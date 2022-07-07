@@ -27,7 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<BatchAttributesSearchModel> GetAllYearWeekFromCache(string partitionKey, string rowKey, string correlationId)
         {
-            _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheStart.ToEventId(), "Maritime safety information request for searching all year week from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
+            _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheStart.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
 
             BatchAttributesSearchModel SearchResult =new();
             CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName);
@@ -36,18 +36,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 SearchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(cacheInfo.Response);
 
-                _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheCompleted.ToEventId(), "Maritime safety information request for searching all year week from cache azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheCompleted.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
             }
             else 
             {
-                _logger.LogInformation(EventIds.FSSSearchAllYearWeekDataNotFoundFromCache.ToEventId(), "Cache data not found for searching all year week from azure table storage for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.FSSSearchAllYearWeekDataNotFoundFromCache.ToEventId(), "Cache data not found for searching attribute year and week data from azure table storage for _X-Correlation-ID:{correlationId}", correlationId);
             }
             return SearchResult;
         }
 
         public async Task<BatchSearchResponse> GetWeeklyBatchFilesFromCache(string partitionKey, int year, int week, string correlationId)
         {
-            _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly batch files from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+            _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
             BatchSearchResponse SearchResult = new();
             string rowKey = year.ToString() + '|' + week.ToString();
@@ -57,11 +57,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 SearchResult = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
 
-                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly batch files from cache azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
             }
             else 
             {
-                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesDataNotFoundFromCache.ToEventId(), "Cache data not found for searching weekly batch files from azure table storage for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesDataNotFoundFromCache.ToEventId(), "Cache data not found for searching weekly NM files from azure table storage for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
             }
 
             return SearchResult;
