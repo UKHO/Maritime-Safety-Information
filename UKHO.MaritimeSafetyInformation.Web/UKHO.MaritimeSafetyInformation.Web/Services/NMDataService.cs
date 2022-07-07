@@ -186,27 +186,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId)
+        public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId, string frequency)
         {
             try
             {
-                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single {frequency} NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient);
+                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient, frequency);
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
-                _logger.LogInformation(EventIds.GetSingleNMFileCompleted.ToEventId(), "Maritime safety information request to get single NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileCompleted.ToEventId(), "Maritime safety information request to get single {frequency} NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
                 return fileBytes;
             }
             catch (Exception)
             {
-                _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single {frequency} NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
                 throw;
             }
 
@@ -256,9 +256,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(SearchResult.Entries).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
-                    return NMHelper.GetShowFilesResponseModel(SearchResult.Entries).Where(a => NMHelper.GetYearFromFileName(a.FileDescription) >= DateTime.UtcNow.AddYears(-3).Year).OrderByDescending(e => NMHelper.GetYearAndTypeFromFilenName(e.FileDescription)).ToList();
+                    return showFilesResponseModel;
                 }
                 else
                 {
