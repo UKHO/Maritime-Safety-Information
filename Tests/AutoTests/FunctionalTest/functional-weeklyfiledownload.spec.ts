@@ -22,7 +22,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     var fileName = name[0];
 
     const newPageUrl = await (await page.$("[id^='download'] > a")).getAttribute('href');
-    expect(newPageUrl).toContain(`NoticesToMariners/DownloadWeeklyFile?fileName=${fileName}`);
+    expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
   })
 
   test('Should Goto Notices to Mariner Page for Daily download File', async ({ page, context }) => {
