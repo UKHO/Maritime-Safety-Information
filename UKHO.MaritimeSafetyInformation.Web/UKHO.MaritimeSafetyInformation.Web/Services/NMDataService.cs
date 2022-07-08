@@ -48,10 +48,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     batchSearchResponseModel = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(userRole, year, week, correlationId);
 
-                    SearchResult = batchSearchResponseModel.batchSearchResponse;
+                    if (batchSearchResponseModel.batchSearchResponse != null) {
+                        SearchResult = batchSearchResponseModel.batchSearchResponse;
+                    }
                 }
                 
-                if (SearchResult == null)
+                if (SearchResult.Entries == null)
                 {
                     string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
