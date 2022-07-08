@@ -27,7 +27,7 @@ import loginPage from '../../pageObject/Login.page';
     await noticeFileDownload.goToLeisureFolios();
   });
 
-  test.only('Radio Navigational Warnings page should be accessible', async ({page}) => {
+  test('Radio Navigational Warnings page should be accessible', async ({page}) => {
    
     await injectAxe(page);
     
