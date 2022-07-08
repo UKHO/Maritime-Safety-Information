@@ -41,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         FileSize = file.FileSize,
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
-                        Links = file.Links
+                        Links = file.Links,
                     });
                 }
             }
@@ -56,7 +56,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
-                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
+                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),            
                 YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year/Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize,
                 BatchPublishedDate = item.BatchPublishedDate,

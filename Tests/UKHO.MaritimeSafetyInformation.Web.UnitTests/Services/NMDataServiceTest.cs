@@ -420,7 +420,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetCumulativeBatchFilesIsCalled_ThenShouldExecuteCatch()
+        public void WhenGetCumulativeBatchFilesIsCalledThrowException_ThenShouldExecuteCatch()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
 
@@ -946,7 +946,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             }
                         },
                             new BatchDetails() {
-                            BatchId = "3",
+                            BatchId = "4",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-04-20"),
@@ -966,7 +966,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             }
                         },
                         new BatchDetails() {
-                            BatchId = "4",
+                            BatchId = "5",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-04-19"),
@@ -986,7 +986,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             }
                         },
                          new BatchDetails() {
-                            BatchId = "4",
+                            BatchId = "6",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-04-19"),

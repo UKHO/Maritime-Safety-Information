@@ -190,7 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single " + frequency + " NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single {frequency} NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
@@ -200,13 +200,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
-                _logger.LogInformation(EventIds.GetSingleNMFileCompleted.ToEventId(), "Maritime safety information request to get single " + frequency + " NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileCompleted.ToEventId(), "Maritime safety information request to get single {frequency} NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
                 return fileBytes;
             }
             catch (Exception)
             {
-                _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single " + frequency + " NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single {frequency} NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
                 throw;
             }
 

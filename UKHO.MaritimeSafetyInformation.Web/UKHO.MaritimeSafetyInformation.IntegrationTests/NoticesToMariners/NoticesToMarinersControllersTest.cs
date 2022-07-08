@@ -213,5 +213,24 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
             Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
         }
+
+        [Test]
+        public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
+        {
+            IActionResult result = await _nMController.Cumulative();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[1].BatchId);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[1].FileExtension);
+            Assert.AreEqual(1386825, listFiles[1].FileSize);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+        }
     }
 }
