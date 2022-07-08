@@ -8,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
     {
         Task<BatchAttributesSearchModel> GetAllYearWeekFromCache(string partitionKey, string rowKey, string correlationId);
 
-        Task<BatchSearchResponse> GetWeeklyBatchFilesFromCache(string partitionKey, int year, int week, string correlationId);
+        Task<BatchSearchResponseModel> GetWeeklyBatchFilesFromCache(string partitionKey, int year, int week, string correlationId);
 
         Task InsertEntityAsync(CustomTableEntity customTableEntity, string tableName);
     }

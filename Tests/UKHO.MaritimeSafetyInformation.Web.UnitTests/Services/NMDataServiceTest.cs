@@ -66,9 +66,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 2;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            Task<ShowNMFilesResponseModel> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -152,9 +152,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 3;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
 
         [Test]
@@ -190,7 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<List<YearWeekModel>> result = _nMDataService.GetAllYearWeek(CorrelationId);
+            Task<YearWeekResponseDataModel> result = _nMDataService.GetAllYearWeek(CorrelationId);
             Assert.IsTrue(result.IsFaulted);
         }
 
@@ -227,10 +227,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
-            Assert.IsNotEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.IsNotEmpty(result.YearWeekModel);
+            Assert.AreEqual(result.YearWeekModel.Count, ExpectedRecordCount);
         }
 
         [Test]

@@ -35,6 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             if (!string.IsNullOrEmpty(cacheInfo.Response))
             {
                 SearchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(cacheInfo.Response);
+                SearchResult.AttributeYearAndWeekIsCache = true;
 
                 _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheCompleted.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
             }
@@ -45,17 +46,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return SearchResult;
         }
 
-        public async Task<BatchSearchResponse> GetWeeklyBatchFilesFromCache(string partitionKey, int year, int week, string correlationId)
+        public async Task<BatchSearchResponseModel> GetWeeklyBatchFilesFromCache(string partitionKey, int year, int week, string correlationId)
         {
             _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-            BatchSearchResponse SearchResult = new();
+            BatchSearchResponseModel SearchResult = new();
             string rowKey = year.ToString() + '|' + week.ToString();
             CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
 
             if (!string.IsNullOrEmpty(cacheInfo.Response))
             {
-                SearchResult = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
+                SearchResult.batchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
+                SearchResult.WeeklyNMFilesIsCache = true;
 
                 _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
             }

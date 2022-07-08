@@ -36,19 +36,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _userService = userService;
         }
 
-        public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
+        public async Task<ShowNMFilesResponseModel> GetWeeklyBatchFiles(int year, int week, string correlationId)
         {
             try
             {
                 BatchSearchResponse SearchResult = new();
+                BatchSearchResponseModel batchSearchResponseModel = new();
                 string userRole = _userService.IsDistributorUser ? "Distributor" : "Public";
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    SearchResult = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(userRole, year, week, correlationId);
+                    batchSearchResponseModel = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(userRole, year, week, correlationId);
+
+                    SearchResult = batchSearchResponseModel.batchSearchResponse;
                 }
                 
-                if (SearchResult.Entries == null)
+                if (SearchResult == null)
                 {
                     string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
@@ -83,7 +86,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                     List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
-                    return ListshowFilesResponseModels;
+                    return new ShowNMFilesResponseModel() { ShowFilesResponseModel = ListshowFilesResponseModels, NMFilesResponseIsCache = batchSearchResponseModel.WeeklyNMFilesIsCache };
                 }
                 else
                 {
@@ -99,7 +102,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public async Task<List<YearWeekModel>> GetAllYearWeek(string correlationId)
+        public async Task<YearWeekResponseDataModel> GetAllYearWeek(string correlationId)
         {
             List<YearWeekModel> yearWeekModelList = new();
             BatchAttributesSearchModel searchAttributes =new ();
@@ -185,7 +188,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.GetSearchAttributeRequestDataFailed.ToEventId(), "Request to search attribute year and week data failed with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
-            return yearWeekModelList;
+
+
+            return new YearWeekResponseDataModel(){ YearWeekModel = yearWeekModelList,  AttributeYearAndWeekIsCache = searchAttributes.AttributeYearAndWeekIsCache };
         }
 
         public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
@@ -233,14 +238,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 ShowWeeklyFilesResponseModel showWeeklyFilesResponses = new();
 
-                showWeeklyFilesResponses.YearAndWeekList = await GetAllYearWeek(correlationId);
+                YearWeekResponseDataModel yearWeekResponseDataModel = await GetAllYearWeek(correlationId);
+                showWeeklyFilesResponses.YearAndWeekList = yearWeekResponseDataModel.YearWeekModel;
+                showWeeklyFilesResponses.AttributeYearAndWeekIsCache = yearWeekResponseDataModel.AttributeYearAndWeekIsCache;
+
                 if (year == 0 && week == 0)
                 {
                     year = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Year).Select(x => x.Year).FirstOrDefault());
                     week = Convert.ToInt32(showWeeklyFilesResponses.YearAndWeekList.OrderByDescending(x => x.Week).Where(x => x.Year == year).Select(x => x.Week).FirstOrDefault());
                 }
-                showWeeklyFilesResponses.ShowFilesResponseList = await GetWeeklyBatchFiles(year, week, correlationId);
-                
+
+                ShowNMFilesResponseModel showNMFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
+                showWeeklyFilesResponses.ShowFilesResponseList = showNMFilesResponseModel.ShowFilesResponseModel;
+                showWeeklyFilesResponses.WeeklyNMFilesIsCache = showNMFilesResponseModel.NMFilesResponseIsCache;
+
                 _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
 
                 return showWeeklyFilesResponses;
