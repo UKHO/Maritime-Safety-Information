@@ -74,17 +74,22 @@ export default class Login {
       ])
     }
 
-     public async adLogin(username: string, password: string)
-     {
-      await this.adUsername.fill(username);
-      await Promise.all([
-      this.page.waitForNavigation(),
-      this.adNext.click()
-      ]);
-      await this.adPassword.fill(password);
-      await this.login.click();
-     
-     }
+    public async adLogin(username: string, password: string)
+    {
+     await this.adUsername.fill(username);
+     await Promise.all([
+     this.page.waitForNavigation(),
+     this.adNext.click()
+     ]);
+     await Promise.all([
+      this.adPassword.fill(password),  
+     ]);
+     await Promise.all([
+     this.page.waitForNavigation(),
+     this.login.click()
+     ]);
+    
+    }
      public async adsignout()
      {
       await this.adUserNameDropdown.click();
