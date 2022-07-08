@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -191,6 +192,33 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
                 async delegate { await _nMController.DownloadDailyFile(batchId, filename, mimeType); });
+        }
+
+        [Test]
+        public async Task WhenLeisureCalled_ThenReturnFiles()
+        {
+            IActionResult result = await _nMController.Leisure();
+            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(3, showFiles.Count);
+            Assert.AreEqual("application/pdf", showFiles[0].MimeType);
+        }
+
+        [Test]
+        public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
+        {
+            IActionResult result = await _nMController.Leisure();
+            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            
+            List<string> lstChart = new();
+            foreach (var file in showFiles)
+            {
+                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);           
+            }
+            Assert.AreEqual(lstChart.Count, lstChart.Distinct().Count());
         }
     }
 }
