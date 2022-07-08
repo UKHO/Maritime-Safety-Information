@@ -19,19 +19,15 @@ test.describe("A11y tests", ()=> {
  };
 
  test.beforeEach(async ({page,}) => {
-   await page.goto(app.url);    
- });
-
-test.only('Notice To Mariner page should be accessible for cumulative file', async ({page}) => {
-  noticeCumulative = new noticeToMarinerWeekDownload(page);
+    await page.goto(app.url);    
+    noticeCumulative = new noticeToMarinerWeekDownload(page);
   await noticeCumulative.goToNoticeToMariner();
   await noticeCumulative.goToCumulative();
+ });
 
+test('Notice To Mariner page should be accessible for cumulative file', async ({page}) => {
   await injectAxe(page);
   await checkA11y(page, undefined, defaultCheckA11yOptions);
   
 })
-
-
-
 });
