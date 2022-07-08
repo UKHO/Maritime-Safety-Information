@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -13,14 +14,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly INMDataService _nMDataService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
-
+        
         public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
             _userService = userService;
-        }
+        } 
 
         [HttpGet]
         [Route("/NoticesToMariners/Weekly")]
@@ -28,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                ViewBag.IsDistributor = _userService.IsDistributorUser;
+                ViewBag.IsDistributor = _userService.IsDistributorUser;// selflogin - true else false
                 
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
@@ -97,7 +98,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                ViewBag.IsDistributor = _userService.IsDistributorUser;
+                ViewBag.IsDistributor = _userService.IsDistributorUser;//true - user login (create new user token), false - existing working.
                 List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
@@ -149,9 +150,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         [HttpGet]
         [Route("/NoticesToMariners/Annual")]
-        public IActionResult Annual()
+        public async Task<IActionResult> Annual()
         {
-            return View();
+           return View();
         }
 
         [HttpGet]

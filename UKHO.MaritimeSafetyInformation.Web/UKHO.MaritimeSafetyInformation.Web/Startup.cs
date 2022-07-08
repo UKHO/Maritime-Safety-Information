@@ -40,9 +40,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
-            
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
 
+            //services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
+            
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
@@ -64,6 +64,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();
+
+            services.AddRazorPages();
 
             //Configuring appsettings section AzureAdB2C, into IOptions
             services.AddOptions();
@@ -89,6 +91,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     await Task.FromResult(0);
                 };
             });
+
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
+                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://mgiaidtestb2c.onmicrosoft.com/FileShareServiceAPIQA/Public" })
+                    .AddInMemoryTokenCaches();
+
             services.AddHttpClient();
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
@@ -126,6 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHealthChecks("/health");
+                endpoints.MapRazorPages();
             });
         }
 

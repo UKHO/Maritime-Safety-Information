@@ -14,8 +14,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 List<BatchDetails> batchDetailsList = new();
 
-                BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                batchDetailsList.Add(batchDetail);
+                //BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                batchDetailsList  = SearchResult.Entries.OrderByDescending(t=>t.BatchPublishedDate).ToList();
+                //batchDetailsList.Add(batchDetail);
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;

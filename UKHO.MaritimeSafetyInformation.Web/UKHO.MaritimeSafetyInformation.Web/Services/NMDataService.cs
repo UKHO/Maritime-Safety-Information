@@ -17,14 +17,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private const string YearAndWeek = "YEAR/WEEK";
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
-
-        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig)
+        private readonly IUserService _userService;
+        public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig, IUserService userService)
         {
             _fileShareService = fileShareService;
             _logger = logger;
             _authFssTokenProvider = authFssTokenProvider;
             _fileShareServiceConfig = fileShareServiceConfig;
             _httpClientFactory = httpClientFactory;
+            _userService = userService;
         }
 
         public async Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId)
@@ -32,11 +33,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
+                string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}' ";
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -70,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             List<YearWeekModel> yearWeekModelList = new();
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -126,7 +127,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -192,7 +193,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser,correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -218,7 +219,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 

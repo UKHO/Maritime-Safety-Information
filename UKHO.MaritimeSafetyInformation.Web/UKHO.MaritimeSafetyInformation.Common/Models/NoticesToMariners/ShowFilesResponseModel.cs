@@ -34,6 +34,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
         [DataMember(Name = "attributes", EmitDefaultValue = false)]
         public List<BatchDetailsAttributes> Attributes { get; set; }
 
+        [DataMember(Name = "isdistributoruser", EmitDefaultValue = false)]
+        public bool IsDistributorUser { get; set; }
+
         [DataMember(Name = "links", EmitDefaultValue = false)]
         public BatchDetailsLinks Links { get; set; }
     }
