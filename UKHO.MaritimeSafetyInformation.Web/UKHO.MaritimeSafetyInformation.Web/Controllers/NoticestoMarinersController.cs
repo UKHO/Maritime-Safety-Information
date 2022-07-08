@@ -14,16 +14,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly INMDataService _nMDataService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
-        private readonly ITokenAcquisition _tokenAcquisition;
 
-
-        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService, ITokenAcquisition tokenAcquisition) : base(contextAccessor, logger)
+        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
             _userService = userService;
-            _tokenAcquisition = tokenAcquisition;
         }
 
         [HttpGet]
@@ -153,17 +150,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         [HttpGet]
         [Route("/NoticesToMariners/Annual")]
-        public async Task<IActionResult> Annual()
+        public IActionResult Annual()
         {
-
-
-            if (_userService.IsDistributorUser)
-            {
-                //string token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPI/Public" });
-                string accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPIQA/Public" });
-                //_logger.LogInformation("Distributor Token : " + token);
-            }
-
             return View();
         }
 

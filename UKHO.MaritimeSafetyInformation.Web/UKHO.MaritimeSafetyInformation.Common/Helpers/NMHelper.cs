@@ -10,12 +10,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     {
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
+            List<BatchDetails> batchDetailsList = new();
             if (SearchResult.Entries.Count > 1)
             {
-                List<BatchDetails> batchDetailsList = new();
-
-                BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                batchDetailsList.Add(batchDetail);
+                //BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
+                //batchDetailsList.Add(batchDetail);
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
@@ -35,6 +35,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
                         Links = file.Links,
+                        IsDistributorUser = item.Attributes.Where(x => x.Key.Equals("Content"))
+                        .Select(x => x.Value).FirstOrDefault() == "tracings" ? true : false
                     });
                 }
             }
@@ -49,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
-                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),             
+                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
                 YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year/Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize,
                 BatchPublishedDate = item.BatchPublishedDate,
