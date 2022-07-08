@@ -13,12 +13,15 @@ export default class noticeToMarinerWeekDownload {
   readonly daily: Locator;
   readonly download: Locator;
   readonly fileName: Locator;
+  readonly tabcumulative:Locator;
   constructor(page: Page) {
     this.page = page;
     this.noticeToMarine = this.page.locator('a:has-text("Notices to Mariners")');
     this.year = this.page.locator('#ddlYears');
     this.week = this.page.locator('#ddlWeeks');
     this.daily = this.page.locator('a[role="tab"]:has-text("Daily")');
+    this.tabcumulative = this.page.locator("#cumulative-tab");
+
     this.download = this.page.locator("[id^='download'] > a");
     this.fileName = this.page.locator("[id^='filename']");
   }
@@ -29,6 +32,10 @@ export default class noticeToMarinerWeekDownload {
 
   public async goToDailyFile() {
     await this.daily.click();
+  }
+  public async goToCumulative()
+  {
+     await this.tabcumulative.click();
   }
   public async checkFileDownload() {
     await this.year.selectOption({index:1});
@@ -51,8 +58,19 @@ export default class noticeToMarinerWeekDownload {
       throw new Error("No download File Found")
     }
   }
+  public async verifyCumulativeFileName() {
+    await this.page.waitForSelector("td[id^='filename']");
+    const cumulativefileName = await this.page.$$eval("td[id^='filename']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    expect((await cumulativefileName).length).toBeGreaterThan(0);
+    const sortedDesc = cumulativefileName.sort((objA, objB) => objB.date - objA.date,);
+    expect(cumulativefileName).toEqual(sortedDesc);
+  }
+  public async verifyCumulativeFileNameDownload()
+  {
+    const resultLinks= await this.page.$$eval('[id^="download"]' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    for(let i=0;i<resultLinks.length;i++)
+    {
+      expect(resultLinks[i].trim()).toEqual("Download");
+    }
+  }
 }
-
-
-
-

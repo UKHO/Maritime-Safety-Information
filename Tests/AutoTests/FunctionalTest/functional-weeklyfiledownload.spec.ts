@@ -30,6 +30,14 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await noticeFileDownload.goToDailyFile();
     await noticeFileDownload.checkDailyFileDownload();
   })
+
+  test('Does the Notices to Mariners Cumulative Page is displayed',async ({page}) => {
+    await noticeFileDownload.goToNoticeToMariner();
+    await noticeFileDownload.goToCumulative();
+    await noticeFileDownload.verifyCumulativeFileName();
+    await noticeFileDownload.verifyCumulativeFileNameDownload();
+  })  
+
   test('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
     await notice.checkpageurl('','Maritime Safety Information')
     await notice.checkurl(notice.noticeMarine,'NoticesToMariners/Weekly','Notices to Mariners - Weekly')
