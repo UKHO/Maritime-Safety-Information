@@ -19,7 +19,7 @@ export default class noticeToMarinerWeekDownload {
     this.noticeToMarine = this.page.locator('a:has-text("Notices to Mariners")');
     this.year = this.page.locator('#ddlYears');
     this.week = this.page.locator('#ddlWeeks');
-    this.daily = this.page.locator('a[role="tab"]:has-text("Daily")');
+    this.daily = this.page.locator('a[role="listitem"]:has-text("Daily")');
     this.tabcumulative = this.page.locator("#cumulative-tab");
 
     this.download = this.page.locator("[id^='download'] > a");
