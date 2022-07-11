@@ -10,12 +10,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     {
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
-            List<BatchDetails> batchDetailsList = new();
+            List<BatchDetails> batchDetailsList = new();            
             if (SearchResult.Entries.Count > 1)
-            {
-                //BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
-                //batchDetailsList.Add(batchDetail);
+            {          
+
+               batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
+
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
@@ -36,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         MimeType = file.MimeType,
                         Links = file.Links,
                         IsDistributorUser = item.Attributes.Where(x => x.Key.Equals("Content"))
-                        .Select(x => x.Value).FirstOrDefault() == "tracings" ? true : false
+                        .Select(x => x.Value).FirstOrDefault() == "tracings"
                     });
                 }
             }

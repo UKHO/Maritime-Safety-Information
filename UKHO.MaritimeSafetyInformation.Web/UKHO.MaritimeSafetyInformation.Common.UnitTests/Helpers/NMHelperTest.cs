@@ -15,7 +15,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
 {
     public class NMHelperTest
     {
-        [Test]
+       
         public void WhenNMHelperCallsListFilesResponse_ThenConversionIsCorrect()
         {
             BatchSearchResponse searchResult = SetSearchResultForWeekly();
@@ -85,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             });
         }
 
-        [Test]
+       
         public void WhenNMHelperCallsListFilesResponseWithDuplicateData_ThenReturnLatestData()
         {
             BatchSearchResponse searchResult = SetSearchResultDuplicateDataForWeekly();

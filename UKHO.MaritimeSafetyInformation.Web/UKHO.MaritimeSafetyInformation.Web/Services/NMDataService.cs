@@ -33,16 +33,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}' ";
 
-                //if (_userService.IsDistributorUser)
-                //    searchText += " or $batch(content) eq 'tracings'";
-                    //searchText += " or $batch(content) eq 'tracings'";
+                ////////if (_userService.IsDistributorUser)
+                ////////{
+                ////////    searchText += " or $batch(content) eq 'tracings'";
+                ////////}
+                ////////else
+                ////////{
+                ////////    searchText += " or $batch(content) eq 'null'";
+                ////////}
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 

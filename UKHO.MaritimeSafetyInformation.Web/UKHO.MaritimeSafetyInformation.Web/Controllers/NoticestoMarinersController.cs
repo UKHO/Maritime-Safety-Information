@@ -3,7 +3,6 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using Microsoft.Identity.Web;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
@@ -30,7 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
-
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
@@ -53,7 +51,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
-
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
