@@ -170,7 +170,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/About")]
         public IActionResult About()
         {
-            return View();
+            return View("~/Views/NoticesToMariners/About.cshtml");
         }
 
         [HttpGet]

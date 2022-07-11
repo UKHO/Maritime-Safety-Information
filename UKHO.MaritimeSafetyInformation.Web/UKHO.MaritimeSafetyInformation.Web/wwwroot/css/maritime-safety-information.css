@@ -760,6 +760,14 @@ button:disabled, input[type=button]:disabled {
     width: 100%;
   }
 }
+.msi-tabs-content-container h2 {
+  color: #000000;
+  font-size: 21px;
+}
+.msi-tabs-content-container p {
+  color: #000000;
+  line-height: 1.7rem;
+}
 
 .msi-tabs-container {
   border-right: 1px solid #D0D0D0;
@@ -823,4 +831,20 @@ input[type=button].select-all-button {
 }
 .custom-error .paragraph a {
   color: #000000;
+}
+
+.msi-list-style li {
+  transform: none;
+  padding-left: 30px;
+  position: relative;
+}
+.msi-list-style li:before {
+  content: none;
+}
+.msi-list-style li .list-icon {
+  font-size: 7px;
+  color: #09315b;
+  position: absolute;
+  left: 0;
+  top: 1px;
 }
