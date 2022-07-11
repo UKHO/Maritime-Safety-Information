@@ -1,14 +1,14 @@
-﻿<ul class="nav nav-tabs msi-tabs" id="nmTab" role="tablist">
+﻿<ul class="nav nav-tabs msi-tabs" id="nmTab" role="list">
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString()=="Index" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString()=="Index" ? "0":"-1")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners" role="tab">Weekly</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString()=="Index" ? "active":"")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners" role="listitem">Weekly</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "0":"-1")" id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners" role="tab">Daily</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "active":"")"  id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners" role="listitem">Daily</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" ? "0":"-1")" id="cumulative-tab" asp-action="Cumulative" asp-controller="NoticestoMariners" role="tab">Cumulative</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" ? "active":"")" id="cumulative-tab" asp-action="Cumulative" asp-controller="NoticestoMariners" role="listitem">Cumulative</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "active":"")" tabindex="@(ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "0":"-1")" id="annual-tab" asp-action="Annual" asp-controller="NoticestoMariners" role="tab">Annual</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "active":"")" id="annual-tab" asp-action="Annual" asp-controller="NoticestoMariners" role="listitem">Annual</a>
     </li>
 </ul>

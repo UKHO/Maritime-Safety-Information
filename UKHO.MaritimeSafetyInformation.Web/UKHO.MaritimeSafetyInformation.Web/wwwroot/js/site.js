@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 
 //Accessibility code for tabs start here//
-let tabButtons = Object.assign([], document.querySelectorAll('.msi-tabs li .nav-link')); //object.assign is used to convert NodeList to an Array
+let tabButtons = Object.assign([], document.querySelectorAll('#rnwTab li .nav-link')); //object.assign is used to convert NodeList to an Array
 let rnwTableCaption = document.querySelector('#rnwTableCaption');
 for (let i = 0; i < tabButtons.length; i++) {
     tabButtons[i].onkeydown = function (e) {
