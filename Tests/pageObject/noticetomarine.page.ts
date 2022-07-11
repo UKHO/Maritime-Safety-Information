@@ -40,11 +40,17 @@ export default class noticetoMarine
      this.tabannual = this.page.locator("#annual-tab");
      this.navareatab = this.page.locator("#NAVAREA1-tab");
      this.ukcoastaltab = this.page.locator("#ukcoastal-tab");
+     
     }
     
     public async clickToNoticemarine()
     {
      await this.noticeMarine.click();
+    }
+
+    public async clickToNoticemarineAbout()
+    {
+        await this.menuAbout.click();
     }
 
     public async checkEnabledYearDropDown()
