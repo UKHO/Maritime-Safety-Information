@@ -242,7 +242,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 YearWeekResponseDataModel yearWeekResponseDataModel = await GetAllYearWeek(correlationId);
                 showWeeklyFilesResponses.YearAndWeekList = yearWeekResponseDataModel.YearWeekModel;
-                showWeeklyFilesResponses.AttributeYearAndWeekIsCache = yearWeekResponseDataModel.AttributeYearAndWeekIsCache;
+                showWeeklyFilesResponses.AttributeYearAndWeekIsCached = yearWeekResponseDataModel.AttributeYearAndWeekIsCache;
 
                 if (year == 0 && week == 0)
                 {
@@ -252,7 +252,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 ShowNMFilesResponseModel showNMFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 showWeeklyFilesResponses.ShowFilesResponseList = showNMFilesResponseModel.ShowFilesResponseModel;
-                showWeeklyFilesResponses.WeeklyNMFilesIsCache = showNMFilesResponseModel.NMFilesResponseIsCache;
+                showWeeklyFilesResponses.WeeklyNMFilesIsCached = showNMFilesResponseModel.NMFilesResponseIsCache;
 
                 _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
 
