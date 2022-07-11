@@ -299,6 +299,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public void WhenAboutIsCalled_ThenReturnView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/About.cshtml";
+
+            IActionResult result = _controller.About();
+            Assert.IsInstanceOf<IActionResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
         public async Task WhenCumulativeFilesAsyncIsCalled_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Cumulative.cshtml";

@@ -167,8 +167,8 @@ export default class RadioNavigationalWarningsListEndUser {
     const resultdate = await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]', (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) })
     const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date,);
     expect(resultdate).toEqual(sortedDesc);
-    let anchor= await locator.getAttribute("href");
-    var urlName=`${app.url}/RadioNavigationalWarnings${anchor}`;
+    const anchor= await locator.getAttribute("href");
+    const urlName=`${app.url}/RadioNavigationalWarnings${anchor}`;
     expect(this.page.url()).toEqual(urlName);
 
   }
