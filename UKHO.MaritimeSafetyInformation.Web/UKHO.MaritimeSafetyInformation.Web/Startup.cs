@@ -94,7 +94,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
 
             services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
-                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://mgiaidtestb2c.onmicrosoft.com/FileShareServiceAPIQA/Public" })
+                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })
                     .AddInMemoryTokenCaches();
 
             services.AddHttpClient();
