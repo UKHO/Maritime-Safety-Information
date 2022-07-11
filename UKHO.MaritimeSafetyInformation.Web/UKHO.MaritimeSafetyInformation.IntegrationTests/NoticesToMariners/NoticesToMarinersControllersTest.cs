@@ -14,6 +14,11 @@ using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
+    /// <summary>
+    /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
+    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
+    /// </summary>
+    
     internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
