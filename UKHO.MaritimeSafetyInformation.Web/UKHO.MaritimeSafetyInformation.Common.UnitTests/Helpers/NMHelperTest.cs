@@ -439,28 +439,24 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         }
 
         [Test]
-        public void WhenCallsGetYearAndTypeFromFilenName_ThenReturnYearAndType()
-        {
-            string result = NMHelper.GetYearAndTypeFromFilenName("NP234(A) 2022");
-            Assert.AreEqual("2022A", result);
-        }
-
-        [Test]
-        public void WhenCallGetYearAndTypeFromFilenNameWithNull_ThenReturnEmpty()
-        {
-            string result = NMHelper.GetYearAndTypeFromFilenName(null);
-            Assert.AreEqual(string.Empty, result);
-        }
-
-
-
-        [Test]
         public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
         {
             BatchSearchResponse searchResult = SetSearchResultForCumulative();
 
             List<ShowFilesResponseModel> expected = new()
             {
+                new ShowFilesResponseModel()
+                {
+
+                    BatchId = "2",
+                    Filename = "NP234(B) 2022.pdf",
+                    FileDescription = "NP234(B) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
                 new ShowFilesResponseModel()
                 {
                     BatchId = "1",
@@ -474,9 +470,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 },
                 new ShowFilesResponseModel()
                 {
-                    BatchId = "2",
-                    Filename = "NP234(B) 2022.pdf",
-                    FileDescription = "NP234(B) 2022",
+                    BatchId = "4",
+                    Filename = "NP234(B) 2021.pdf",
+                    FileDescription = "NP234(B) 2021",
                     FileExtension = ".pdf",
                     FileSize = 1232,
                     FileSizeinKB = "1 KB",
@@ -488,17 +484,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     BatchId = "3",
                     Filename = "NP234(A) 2021.pdf",
                     FileDescription = "NP234(A) 2021",
-                    FileExtension = ".pdf",
-                    FileSize = 1232,
-                    FileSizeinKB = "1 KB",
-                    MimeType = "PDF",
-                    Links = null
-                },
-                new ShowFilesResponseModel()
-                {
-                    BatchId = "4",
-                    Filename = "NP234(B) 2021.pdf",
-                    FileDescription = "NP234(B) 2021",
                     FileExtension = ".pdf",
                     FileSize = 1232,
                     FileSizeinKB = "1 KB",
@@ -534,6 +519,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 new ShowFilesResponseModel()
                 {
+                    BatchId = "2",
+                    Filename = "NP234(B) 2022.pdf",
+                    FileDescription = "NP234(B) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {       
                     BatchId = "1",
                     Filename = "NP234(A) 2022.pdf",
                     FileDescription = "NP234(A) 2022",
@@ -545,9 +541,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 },
                 new ShowFilesResponseModel()
                 {
-                    BatchId = "2",
-                    Filename = "NP234(B) 2022.pdf",
-                    FileDescription = "NP234(B) 2022",
+                    BatchId = "4",
+                    Filename = "NP234(B) 2021.pdf",
+                    FileDescription = "NP234(B) 2021",
                     FileExtension = ".pdf",
                     FileSize = 1232,
                     FileSizeinKB = "1 KB",
@@ -559,17 +555,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     BatchId = "3",
                     Filename = "NP234(A) 2021.pdf",
                     FileDescription = "NP234(A) 2021",
-                    FileExtension = ".pdf",
-                    FileSize = 1232,
-                    FileSizeinKB = "1 KB",
-                    MimeType = "PDF",
-                    Links = null
-                },
-                new ShowFilesResponseModel()
-                {
-                    BatchId = "4",
-                    Filename = "NP234(B) 2021.pdf",
-                    FileDescription = "NP234(B) 2021",
                     FileExtension = ".pdf",
                     FileSize = 1232,
                     FileSizeinKB = "1 KB",
@@ -1021,15 +1006,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         {
             BatchSearchResponse searchResult = new()
             {
-                    Count = 4,
-                    Links = null,
-                    Total = 0,
-                    Entries = new List<BatchDetails>() {
+                Count = 4,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
                               Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
@@ -1049,7 +1034,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             BatchId = "2",
                              Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-21"),
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
@@ -1069,10 +1054,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             BatchId = "3",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-20"),
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
                             BatchPublishedDate = DateTime.Now,
@@ -1089,10 +1074,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             BatchId = "4",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-19"),
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
                             BatchPublishedDate = DateTime.Now,
@@ -1114,15 +1099,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         {
             BatchSearchResponse searchResult = new()
             {
-                    Count = 6,
-                    Links = null,
-                    Total = 0,
-                    Entries = new List<BatchDetails>() {
+                Count = 6,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
                               Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
@@ -1142,7 +1127,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             BatchId = "2",
                              Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-21"),
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
@@ -1157,16 +1142,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 }
                             }
                         },
-                        new BatchDetails() {
+                            new BatchDetails() {
                             BatchId = "3",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-20"),
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
                             },
-                            BatchPublishedDate = DateTime.Now,
+                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "NP234(A) 2021.pdf",
@@ -1176,16 +1161,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                 }
                             }
                         },
-                            new BatchDetails() {
+                        new BatchDetails() {
                             BatchId = "3",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-20"),
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
                             },
-                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
+                            BatchPublishedDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "NP234(A) 2021.pdf",
@@ -1199,10 +1184,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             BatchId = "4",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-19"),
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
                             },
                             BatchPublishedDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
@@ -1218,10 +1203,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             BatchId = "4",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-19"),
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
                                 new BatchDetailsAttributes("Frequency","Comulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
                             },
                             BatchPublishedDate = DateTime.Now.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {

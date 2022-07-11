@@ -405,6 +405,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual("NP234(A) 2022", listShowFilesResponseModels[1].FileDescription);
             Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[2].FileDescription);
             Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[3].FileDescription);
+            Assert.AreEqual("2", listShowFilesResponseModels[0].BatchId);
+            Assert.AreEqual("1", listShowFilesResponseModels[1].BatchId);
+            Assert.AreEqual("5", listShowFilesResponseModels[2].BatchId);
+            Assert.AreEqual("4", listShowFilesResponseModels[3].BatchId);
         }
 
         [Test]
@@ -792,8 +796,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "1",
                               Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-22"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -812,8 +816,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "2",
                              Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-21"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -832,10 +836,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "3",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-20"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
                             BatchPublishedDate = DateTime.Now,
@@ -852,10 +856,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "4",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-19"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
                             BatchPublishedDate = DateTime.Now,
@@ -889,8 +893,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "1",
                               Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-22"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -909,8 +913,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "2",
                              Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-21"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -929,13 +933,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "3",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-20"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
-                            BatchPublishedDate = DateTime.Now,
+                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "NP234(A) 2021.pdf",
@@ -949,13 +953,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "4",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-20"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
-                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
+                             BatchPublishedDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "NP234(A) 2021.pdf",
@@ -969,10 +973,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "5",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-19"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
                             BatchPublishedDate = DateTime.Now,
@@ -989,10 +993,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             BatchId = "6",
                             Attributes = new List<BatchDetailsAttributes>()
                             {
-                                new BatchDetailsAttributes("Data Date","2022-04-19"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year","2021"),
 
                             },
                             BatchPublishedDate = DateTime.Now.AddMinutes(-10),
