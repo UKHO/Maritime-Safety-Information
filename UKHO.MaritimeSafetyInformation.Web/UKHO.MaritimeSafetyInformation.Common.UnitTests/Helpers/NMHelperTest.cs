@@ -1015,7 +1015,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                               Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-01-22"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -1035,7 +1035,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                              Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-06-21"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -1055,7 +1055,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2021-01-20"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
 
@@ -1075,7 +1075,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2021-06-19"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
 
@@ -1108,7 +1108,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                               Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-01-22"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
 
@@ -1128,7 +1128,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                              Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2022-06-21"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
                             },
@@ -1147,7 +1147,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2021-01-20"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
                             },
@@ -1166,7 +1166,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2021-01-20"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
                             },
@@ -1185,7 +1185,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2021-06-19"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
                             },
@@ -1204,7 +1204,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             Attributes = new List<BatchDetailsAttributes>()
                             {
                                 new BatchDetailsAttributes("Data Date","2021-06-19"),
-                                new BatchDetailsAttributes("Frequency","Comulative"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
                             },
