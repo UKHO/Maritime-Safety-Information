@@ -36,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
 
-        [Test]
+       
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
             IActionResult result = await _nMController.Index();
@@ -97,7 +97,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
                 async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });
         }
 
-        [Test]
+        
         public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2022, 18);

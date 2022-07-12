@@ -12,7 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         {
             List<BatchDetails> batchDetailsList = new();            
             if (SearchResult.Entries.Count > 1)
-            {          
+            {      
 
                batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
 

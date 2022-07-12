@@ -1,5 +1,5 @@
 ﻿
-namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+namespace UKHO.MaritimeSafetyInformation.Common.Configuration
 {
     public class AzureAdB2C
     {

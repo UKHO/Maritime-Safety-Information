@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
+
 namespace UKHO.MaritimeSafetyInformation.Web
 {
     [ExcludeFromCodeCoverage]
@@ -48,6 +49,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
+            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
