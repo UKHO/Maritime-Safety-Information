@@ -58,7 +58,7 @@ export default class noticeToMarinerWeekDownload {
   }
   public async checkImportantSafetyNotice()
   {
-    expect(await (await this.importantSafetyNotice.innerText()).toString()).toContain("Important safety notice:")
+    expect(await (await this.importantSafetyNotice.innerText()).toString()).toContain("Important safety notice")
   }
   public async verifyleisureFoliosFileName() {
     await this.page.waitForSelector("td[id^='filename']");
