@@ -246,17 +246,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
-                string searchText = $" and $batch(Frequency) eq 'cumulative'";
+                const string searchText = $" and $batch(Frequency) eq 'cumulative'";
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
                 IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
 
-                BatchSearchResponse SearchResult = result.Data;
+                BatchSearchResponse searchResult = result.Data;
 
-                if (SearchResult != null && SearchResult.Entries.Count > 0)
+                if (searchResult != null && searchResult.Entries.Count > 0)
                 {
-                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(SearchResult.Entries);
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(searchResult.Entries);
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
                     return showFilesResponseModel;
                 }

@@ -136,10 +136,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         public static List<ShowFilesResponseModel> ListFilesResponseCumulative(List<BatchDetails> batchDetails)
         {
             return GetShowFilesResponseModel(batchDetails)
-                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate").Value))
-                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date").Value)
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value)
                 .Select(grp => grp.First())
-                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date").Value))
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
                 .ToList();
         }
     }
