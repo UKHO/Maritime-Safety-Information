@@ -26,7 +26,7 @@ export default class noticeToMarinerWeekDownload {
     this.week = this.page.locator('#ddlWeeks');
     this.daily = this.page.locator('a[role="listitem"]:has-text("Daily")');
     this.menuLeisureFolios = this.page.locator('text=Leisure Folios');
-    this.importantSafetyNotice=this.page.locator('text=Important safety notice:');
+    this.importantSafetyNotice=this.page.locator('text=Important safety notice');
     this.download = this.page.locator("[id^='download'] > a");
     this.fileName = this.page.locator("[id^='filename']");
     this.leisureFolios=this.page.locator('div > p > a');
