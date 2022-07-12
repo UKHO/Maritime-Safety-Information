@@ -81,7 +81,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             });
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {
+           {
                 options.SaveTokens = true; // this saves the token for the downstream api
                 options.Events.OnRedirectToIdentityProvider = async context =>
                 {
@@ -95,9 +95,20 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 };
             });
 
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
-                .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })
-                .AddInMemoryTokenCaches();
+
+            //////services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
+            //////    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })                
+            //////    .AddInMemoryTokenCaches();
+
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration,"AzureAdB2C", subscribeToOpenIdConnectMiddlewareDiagnosticsEvents: true)
+           .EnableTokenAcquisitionToCallDownstreamApi(p =>
+           {
+               p.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"]; // NOT WORKING, WHY?
+               p.EnablePiiLogging = true;
+           },
+              new string[] { configuration["AzureAdB2C:Scope"] }
+           )
+           .AddInMemoryTokenCaches();
 
             services.AddHttpClient();
             services.AddHealthChecks()
