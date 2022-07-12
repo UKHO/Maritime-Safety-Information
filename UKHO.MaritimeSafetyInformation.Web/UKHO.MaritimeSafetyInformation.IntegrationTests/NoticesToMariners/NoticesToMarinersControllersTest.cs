@@ -13,6 +13,11 @@ using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
+    /// <summary>
+    /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
+    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
+    /// </summary>
+    
     internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
@@ -148,8 +153,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
+            const string frequency = "Weekly";
 
-            FileResult result = await _nMController.DownloadWeeklyFile(batchId, filename, mimeType);
+            FileResult result = await _nMController.DownloadFile(batchId, filename, mimeType, frequency);
             Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
@@ -162,10 +168,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
+            const string frequency = "Weekly";
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
+               , async delegate { await _nMController.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
         [Test]
@@ -191,6 +198,44 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
                 async delegate { await _nMController.DownloadDailyFile(batchId, filename, mimeType); });
+        }
+
+        [Test]
+        public async Task WhenCallCumulativeAsync_ThenReturnCumulativeFiles()
+        {
+            IActionResult result = await _nMController.Cumulative();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("0cdb2271-b5a3-43b0-b923-733ada1760af", listFiles[0].BatchId);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
+            Assert.AreEqual(1125181, listFiles[0].FileSize);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+        }
+
+        [Test]
+        public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
+        {
+            IActionResult result = await _nMController.Cumulative();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[1].BatchId);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[1].FileExtension);
+            Assert.AreEqual(1386825, listFiles[1].FileSize);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
         }
     }
 }

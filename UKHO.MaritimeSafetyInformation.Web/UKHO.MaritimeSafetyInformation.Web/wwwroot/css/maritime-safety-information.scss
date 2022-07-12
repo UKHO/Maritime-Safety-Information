@@ -120,6 +120,16 @@
     @media screen and (max-width: $large) {
         width: 100%;
     }
+
+    h2 {
+        color: $black;
+        font-size: 21px;
+    }
+
+    p {
+        color: $black;
+        line-height:1.7rem;
+    }
 }
 
 .msi-tabs-container {
@@ -188,6 +198,25 @@ input[type="button"].select-all-button {
 
         a {
             color: $black;
+        }
+    }
+}
+.msi-list-style {
+    li {
+        transform: none;
+        padding-left:30px;
+        position:relative;
+
+        &:before {
+            content: none;
+        }
+
+        .list-icon{
+            font-size:7px;
+            color:$prussian-blue;
+            position:absolute;
+            left:0;
+            top:1px;
         }
     }
 }

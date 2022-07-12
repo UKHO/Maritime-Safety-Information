@@ -30,8 +30,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                ViewBag.IsDistributor = _userService.IsDistributorUser;// selflogin - true else false
-                
+                ViewBag.IsDistributor = _userService.IsDistributorUser;
+
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
@@ -114,11 +114,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadWeeklyFile(string batchId, string fileName, string mimeType)
+        public async Task<FileResult> DownloadFile(string batchId, string fileName, string mimeType, string frequency)
         {
             try
             {
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download single weekly NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadSingleNMFileStarted.ToEventId(), "Maritime safety information request to download single {frequency} NM files started for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
                 NMHelper.ValidateParametersForDownloadSingleFile(new()
                 {
@@ -127,9 +127,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     new KeyValuePair<string, string>("MimeType", mimeType)
                 }, GetCurrentCorrelationId(), _logger);
 
-                byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId());
+                byte[] fileBytes = await _nMDataService.DownloadFssFileAsync(batchId, fileName, GetCurrentCorrelationId(), frequency);
 
-                _logger.LogInformation(EventIds.DownloadSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download single weekly NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single {frequency} NM files completed for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
 
@@ -137,16 +137,30 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.DownloadSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to download single weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.DownloadSingleNMFileFailed.ToEventId(), "Maritime safety information request to download single {frequency} NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, frequency, GetCurrentCorrelationId());
                 throw;
             }
         }
 
         [HttpGet]
         [Route("/NoticesToMariners/Cumulative")]
-        public IActionResult Cumulative()
+        public async Task<IActionResult> Cumulative()
         {
-            return View();
+            try
+            {
+                _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showFilesResponse);
+            }
+            catch (Exception ex)
+            {
+                 _logger.LogError(EventIds.ShowCumulativeFilesFailed.ToEventId(), "Maritime safety information request to show cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
+            }
         }
 
         [HttpGet]
@@ -174,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/About")]
         public IActionResult About()
         {
-            return View();
+            return View("~/Views/NoticesToMariners/About.cshtml");
         }
 
         [HttpGet]

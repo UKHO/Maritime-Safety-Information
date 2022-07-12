@@ -196,27 +196,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId)
+        public async Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId, string frequency)
         {
             try
             {
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to get single weekly NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single {frequency} NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser,correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient);
+                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient, frequency);
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to get single weekly NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileCompleted.ToEventId(), "Maritime safety information request to get single {frequency} NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
                 return fileBytes;
             }
             catch (Exception)
             {
-                _logger.LogInformation(EventIds.GetSingleWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to get single weekly NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single {frequency} NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
                 throw;
             }
 
@@ -246,6 +246,41 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 throw;
             }
 
+        }
+
+        public async Task<List<ShowFilesResponseModel>> GetCumulativeBatchFiles(string correlationId)
+        {
+            try
+            {
+                _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+
+                const string searchText = $" and $batch(Frequency) eq 'cumulative'";
+
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                BatchSearchResponse searchResult = result.Data;
+
+                if (searchResult != null && searchResult.Entries.Count > 0)
+                {
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(searchResult.Entries);
+                    _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    return showFilesResponseModel;
+                }
+                else
+                {
+                    _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("Invalid data received for cumulative NM files");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
         }
     }
 }

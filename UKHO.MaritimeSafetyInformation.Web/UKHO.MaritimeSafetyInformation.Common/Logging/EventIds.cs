@@ -218,54 +218,54 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         GetWeeklyFilesResponseCompleted = 910053,
 
         /// <summary>
-        /// 910054 -Request For Download Single Weekly NM File Started.
+        /// 910054 -Request For Download Single NM File Started.
         /// </summary>
-        DownloadSingleWeeklyNMFileStarted = 910054,
+        DownloadSingleNMFileStarted = 910054,
 
         /// <summary>
-        /// 910055 -Request For Download Single Weekly NM File Completed.
+        /// 910055 -Request For Download Single NM File Completed.
         /// </summary>
-        DownloadSingleWeeklyNMFileCompleted = 910055,
+        DownloadSingleNMFileCompleted = 910055,
 
         /// <summary>
-        /// 910056 -Download Single Weekly NM File Called With Invalid Arguments.
+        /// 910056 -Download Single NM File Called With Invalid Arguments.
         /// </summary>
-        DownloadSingleWeeklyNMFileInvalidParameter = 910056,
+        DownloadSingleNMFileInvalidParameter = 910056,
 
         /// <summary>
-        /// 910057 -Download Single Weekly NM File Failed.
+        /// 910057 -Download Single NM File Failed.
         /// </summary>
-        DownloadSingleWeeklyNMFileFailed = 910057,
+        DownloadSingleNMFileFailed = 910057,
 
         /// <summary>
-        /// 910058 - Request To Get Single Weekly NM File Started.
+        /// 910058 - Request To Get Single NM File Started.
         /// </summary>
-        GetSingleWeeklyNMFileStarted = 910058,
+        GetSingleNMFileStarted = 910058,
 
         /// <summary>
-        /// 910059 - Request To Get Single Weekly NM File Completed.
+        /// 910059 - Request To Get Single NM File Completed.
         /// </summary>
-        GetSingleWeeklyNMFileCompleted = 910059,
+        GetSingleNMFileCompleted = 910059,
 
         /// <summary>
-        /// 910060 - Request To Get Single Weekly NM File Failed.
+        /// 910060 - Request To Get Single NM File Failed.
         /// </summary>
-        GetSingleWeeklyNMFileFailed = 910060,
+        GetSingleNMFileFailed = 910060,
 
         /// <summary>
-        /// 910061 - Request For FSS To Get Single Weekly NM File Started.
+        /// 910061 - Request For FSS To Get Single NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileStarted = 910061,
+        FSSGetSingleNMFileStarted = 910061,
 
         /// <summary>
-        /// 910062 - Request For FSS To Get Single Weekly NM File Completed.
+        /// 910062 - Request For FSS To Get Single NM File Completed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileCompleted = 910062,
+        FSSGetSingleNMFileCompleted = 910062,
 
         /// <summary>
-        /// 910063 - Request For FSS To Get Single Weekly NM File Failed.
+        /// 910063 - Request For FSS To Get Single NM File Failed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileResponseFailed = 910063,
+        FSSGetSingleNMFileResponseFailed = 910063,
         /// <summary> 
         /// 910064 -  Maritime safety information request to get RNW detail started.
         /// </summary>
@@ -420,7 +420,35 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910099 -  Unauthorized Access.
         /// </summary>
-        UnauthorizedAccess = 910099
+        UnauthorizedAccess = 910099,
+        /// <summary>
+        /// 910100 -   Event data for Retrieval of MSI Cumulative File Request Started.
+        /// </summary>
+        ShowCumulativeFilesRequestStarted = 910100,
+        /// <summary>
+        /// 910101 -   Event data for Retrieval of MSI Cumulative File Request Completed.
+        /// </summary>
+        ShowCumulativeFilesRequestCompleted = 910101,
+        /// <summary>
+        /// 910102 -    Event data for Retrieval of MSI Show Cumulative File Failed.
+        /// </summary>
+        ShowCumulativeFilesFailed = 910102,
+        /// <summary>
+        /// 910103 -  Event data for Retrieval of MSI Get Cumulative File Response Started.
+        /// </summary>
+        GetCumulativeFilesResponseStarted = 910103,
+        /// <summary>
+        /// 910104 -  Get NM Batch Files Data Not Found.
+        /// </summary>
+        GetCumulativeNMFilesRequestDataNotFound = 910104,
+        /// <summary>
+        /// 910105 -  Event data for Retrieval of MSI Get Cumulative File Response Completed.
+        /// </summary>
+        GetCumulativeFilesResponseCompleted = 910105,
+        /// <summary>
+        /// 910106 -  Event data for Retrieval of MSI Get Cumulative File Response Failed.
+        /// </summary>
+        GetCumulativeFilesResponseFailed = 910106,
 
     }
 
