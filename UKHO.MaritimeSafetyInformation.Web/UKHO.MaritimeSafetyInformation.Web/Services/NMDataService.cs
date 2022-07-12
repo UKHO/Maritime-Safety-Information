@@ -131,7 +131,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                const string searchText = $" and $batch(Frequency) eq 'Daily'";
+                string searchText = "";
+
+                if (_userService.IsDistributorUser)
+                {
+                    searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq 'Tracings' ";
+                }
+                else
+                {
+                    searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq null ";
+                }
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
