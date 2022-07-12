@@ -302,6 +302,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsTrue(result.IsFaulted);
         }
 
+        [Test]
+        public void WhenAboutIsCalled_ThenReturnView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/About.cshtml";
+
+            IActionResult result = _controller.About();
+            Assert.IsInstanceOf<IActionResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
+
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
         {
             return new()
