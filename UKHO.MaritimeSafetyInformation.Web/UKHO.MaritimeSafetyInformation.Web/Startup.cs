@@ -100,7 +100,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             //////    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })                
             //////    .AddInMemoryTokenCaches();
 
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration,"AzureAdB2C", subscribeToOpenIdConnectMiddlewareDiagnosticsEvents: true)
+            services.AddMicrosoftIdentityWebAppAuthentication(configuration,"AzureAdB2C", OpenIdConnectDefaults.AuthenticationScheme)
            .EnableTokenAcquisitionToCallDownstreamApi(p =>
            {
                p.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"]; // NOT WORKING, WHY?
