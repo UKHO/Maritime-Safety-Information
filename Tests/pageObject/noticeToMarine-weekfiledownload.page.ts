@@ -59,8 +59,8 @@ export default class noticeToMarinerWeekDownload {
     }
   }
   public async verifyCumulativeFileName() {
-    await this.page.waitForSelector("td[id^='filename']");
-    const cumulativefileName = await this.page.$$eval("td[id^='filename']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    await this.page.waitForSelector("td[id^='FileName']");
+    const cumulativefileName = await this.page.$$eval("td[id^='FileName']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
     expect((await cumulativefileName).length).toBeGreaterThan(0);
     const sortedDesc = cumulativefileName.sort((objA, objB) => objB.date - objA.date,);
     expect(cumulativefileName).toEqual(sortedDesc);
