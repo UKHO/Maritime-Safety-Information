@@ -25,7 +25,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 DefaultAzureCredential azureCredential = new();
                 TokenRequestContext tokenRequestContext = new(new string[] { _fileShareServiceConfiguration.Value.FssClientId + "/.default" });
-                AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);               
+                AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
                 return tokenResult.Token;
             }
             catch (Exception ex)
