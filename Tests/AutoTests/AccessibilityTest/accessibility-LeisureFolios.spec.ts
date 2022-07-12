@@ -27,7 +27,7 @@ import loginPage from '../../pageObject/Login.page';
     await noticeFileDownload.goToLeisureFolios();
   });
 
-  test('Radio Navigational Warnings page should be accessible', async ({page}) => {
+  test('Notices to Mariners Leisure Folios page should be accessible', async ({page}) => {
    
     await injectAxe(page);
     

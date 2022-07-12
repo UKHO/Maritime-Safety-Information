@@ -62,10 +62,10 @@ export default class noticeToMarinerWeekDownload {
   }
   public async verifyleisureFoliosFileName() {
     await this.page.waitForSelector("td[id^='filename']");
-    const cumulativefileName = await this.page.$$eval("td[id^='filename']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
-    expect((await cumulativefileName).length).toBeGreaterThan(0);
-    const sortedDesc = cumulativefileName.sort();
-    expect(cumulativefileName).toEqual(sortedDesc);
+    const leisurefileName  = await this.page.$$eval("td[id^='filename']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    expect((await leisurefileName).length).toBeGreaterThan(0);
+    const sortedDesc = leisurefileName.sort();
+    expect(leisurefileName).toEqual(sortedDesc);
   }
   public async verifyleisureFoliosFileNameDownload()
   {
@@ -76,10 +76,10 @@ export default class noticeToMarinerWeekDownload {
     }
     
     await this.page.waitForSelector("[id^='filename']");
-    const dailyfileName = await this.fileName.first().evaluate((name) => name.textContent);
-    const dailyDownloadPageUrl = await (await this.download.first().getAttribute('href')).trim().split("&");
-    const downloadurl = dailyDownloadPageUrl[0].replace(/%20/g, " ");
-    expect(downloadurl).toContain(`fileName=${dailyfileName}`);
+    const leisurefileName = await this.fileName.first().evaluate((name) => name.textContent);
+    const leisureDownloadPageUrl = await (await this.download.first().getAttribute('href')).trim().split("&");
+    const downloadurl = leisureDownloadPageUrl[0].replace(/%20/g, " ");
+    expect(downloadurl).toContain(`fileName=${leisurefileName}`);
   }
 
  
