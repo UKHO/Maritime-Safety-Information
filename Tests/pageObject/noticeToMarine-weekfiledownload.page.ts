@@ -14,6 +14,7 @@ export default class noticeToMarinerWeekDownload {
   readonly daily: Locator;
   readonly download: Locator;
   readonly fileName: Locator;
+  readonly tabcumulative:Locator;
   readonly menuLeisureFolios:Locator;
   readonly leisureFolios:Locator;
   readonly importantSafetyNotice:Locator;
@@ -25,6 +26,8 @@ export default class noticeToMarinerWeekDownload {
     this.year = this.page.locator('#ddlYears');
     this.week = this.page.locator('#ddlWeeks');
     this.daily = this.page.locator('a[role="listitem"]:has-text("Daily")');
+    this.tabcumulative = this.page.locator("#cumulative-tab");
+
     this.menuLeisureFolios = this.page.locator('text=Leisure Folios');
     this.importantSafetyNotice=this.page.locator('text=Important safety notice');
     this.download = this.page.locator("[id^='download'] > a");
@@ -38,6 +41,10 @@ export default class noticeToMarinerWeekDownload {
 
   public async goToDailyFile() {
     await this.daily.click();
+  }
+  public async goToCumulative()
+  {
+     await this.tabcumulative.click();
   }
   public async goToLeisureFolios()
   {
@@ -100,8 +107,19 @@ export default class noticeToMarinerWeekDownload {
       throw new Error("No download File Found")
     }
   }
+  public async verifyCumulativeFileName() {
+    await this.page.waitForSelector("td[id^='FileName']");
+    const cumulativefileName = await this.page.$$eval("td[id^='FileName']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+    expect((await cumulativefileName).length).toBeGreaterThan(0);
+    const sortedDesc = cumulativefileName.sort((objA, objB) => objB.date - objA.date,);
+    expect(cumulativefileName).toEqual(sortedDesc);
+  }
+  public async verifyCumulativeFileNameDownload()
+  {
+    const resultLinks= await this.page.$$eval('[id^="download"]' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    for(let i=0;i<resultLinks.length;i++)
+    {
+      expect(resultLinks[i].trim()).toEqual("Download");
+    }
+  }
 }
-
-
-
-

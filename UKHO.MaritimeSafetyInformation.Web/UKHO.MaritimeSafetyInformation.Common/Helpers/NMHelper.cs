@@ -20,25 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
             }
-            List<ShowFilesResponseModel> listshowFilesResponseModels = new();
-            foreach (BatchDetails item in SearchResult.Entries)
-            {
-                foreach (BatchDetailsFiles file in item.Files)
-                {
-                    listshowFilesResponseModels.Add(new ShowFilesResponseModel
-                    {
-                        BatchId = item.BatchId,
-                        Filename = file.Filename,
-                        FileDescription = Path.GetFileNameWithoutExtension(file.Filename),
-                        FileExtension = Path.GetExtension(file.Filename),
-                        FileSize = file.FileSize,
-                        FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
-                        MimeType = file.MimeType,
-                        Links = file.Links,
-                    });
-                }
-            }
-            return listshowFilesResponseModels;
+            return GetShowFilesResponseModel(SearchResult.Entries);
         }
 
         public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
@@ -59,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         FileSize = file.FileSize,
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
-                        Links = file.Links
+                        Links = file.Links,
                     });
                 }
             }
@@ -83,7 +65,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
-                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),             
+                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),            
                 YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year/Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize,
                 BatchPublishedDate = item.BatchPublishedDate,
@@ -137,7 +119,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 if (string.IsNullOrEmpty(parameter.Value))
                 {
                     logger.LogInformation(
-                        EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
+                        EventIds.DownloadSingleNMFileInvalidParameter.ToEventId(),
                         "Maritime safety information download single NM files called with invalid argument " + parameter.Key + ":{" + parameter.Key + "} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
@@ -158,6 +140,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             } while (numBytesToRead > 0);
             stream.Close();
             return fileBytes;
+        }
+
+        public static List<ShowFilesResponseModel> ListFilesResponseCumulative(List<BatchDetails> batchDetails)
+        {
+            return GetShowFilesResponseModel(batchDetails)
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value)
+                .Select(grp => grp.First())
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
+                .ToList();
         }
     }
 }
