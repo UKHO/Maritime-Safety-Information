@@ -364,7 +364,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetleisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        public async Task WhenGetLeisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
@@ -374,13 +374,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 2;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetleisureFilesAsync(CorrelationId);
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
         }
 
         [Test]
-        public async Task WhenGetleisureFilesAsyncIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
+        public async Task WhenGetLeisureFilesAsyncIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
@@ -390,34 +390,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 2;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetleisureFilesAsync(CorrelationId);
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
         }
 
         [Test]
-        public void WhenGetleisureFilesAsyncIsCalled_ThenShouldExecuteCatch()
+        public void WhenGetLeisureFilesAsyncIsCalled_ThenShouldExecuteCatch()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
-            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetleisureFilesAsync(CorrelationId);
+            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetLeisureFilesAsync(CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }
 
         [Test]
-        public void WhenGetleisureFilesAsyncIsCalled_ThenShouldThrowInvalidDataException()
+        public void WhenGetLeisureFilesAsyncIsCalled_ThenShouldThrowInvalidDataException()
         {
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
-                async delegate { await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for leisure files"),
+                async delegate { await _nMDataService.GetLeisureFilesAsync(CorrelationId); });
         }
 
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()

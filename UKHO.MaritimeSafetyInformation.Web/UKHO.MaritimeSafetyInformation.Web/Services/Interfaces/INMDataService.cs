@@ -8,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId);
         Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId);
         Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId);
-        Task<List<ShowFilesResponseModel>> GetleisureFilesAsync(string correlationId);
+        Task<List<ShowFilesResponseModel>> GetLeisureFilesAsync(string correlationId);
         Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId);
         Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, string correlationId);
     }

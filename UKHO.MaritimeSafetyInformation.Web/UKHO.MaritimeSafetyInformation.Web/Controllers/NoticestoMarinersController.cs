@@ -162,8 +162,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowLeisureFilesRequestStarted.ToEventId(), "Request to show leisure files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                ViewBag.IsDistributor = _userService.IsDistributorUser;
-                List<ShowFilesResponseModel> listFiles = await _nMDataService.GetleisureFilesAsync(GetCurrentCorrelationId());
+                List<ShowFilesResponseModel> listFiles = await _nMDataService.GetLeisureFilesAsync(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowLeisureFilesRequestCompleted.ToEventId(), "Request to show leisure files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 

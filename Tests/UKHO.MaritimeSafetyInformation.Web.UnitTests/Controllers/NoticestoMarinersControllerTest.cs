@@ -282,7 +282,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Leisure.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetleisureFilesAsync(A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.GetLeisureFilesAsync(A<string>.Ignored));
 
             IActionResult result = await _controller.Leisure();
             Assert.IsInstanceOf<ViewResult>(result);
@@ -293,7 +293,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public void WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldThrowException()
         {
-            A.CallTo(() => _fakeNMDataService.GetleisureFilesAsync(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeNMDataService.GetLeisureFilesAsync(A<string>.Ignored)).Throws(new Exception());
 
             Task<IActionResult> result = _controller.Leisure();
 

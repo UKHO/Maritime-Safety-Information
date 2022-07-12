@@ -209,6 +209,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(3, showFiles.Count);
             Assert.AreEqual("application/pdf", showFiles[0].MimeType);
+            Assert.AreEqual("5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly", showFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", showFiles[0].FileExtension);
+            Assert.AreEqual(539264, showFiles[0].FileSize);
+            Assert.AreEqual("527 KB", showFiles[0].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x=>x.Key=="Frequency").Value);
+            Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x=>x.Key=="Chart").Value);
         }
 
         [Test]
@@ -223,7 +229,19 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             {
                 lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);           
             }
-            Assert.AreEqual(lstChart.Count, lstChart.Distinct().Count());
+            Assert.AreEqual(lstChart.Distinct().Count(),lstChart.Count);
+
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(3, showFiles.Count);
+            Assert.AreEqual("application/pdf", showFiles[1].MimeType);
+            Assert.AreEqual("5608SC5608_Bristol_Channel", showFiles[1].FileDescription);
+            Assert.AreEqual(".pdf", showFiles[1].FileExtension);
+            Assert.AreEqual(781199, showFiles[1].FileSize);
+            Assert.AreEqual("763 KB", showFiles[1].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles[1].Attributes.First(x => x.Key == "Frequency").Value);
+            Assert.AreEqual("SC5608", showFiles[1].Attributes.First(x => x.Key == "Chart").Value);
+            Assert.AreEqual("07-07-2022 11:01:38", showFiles[1].Attributes.First(x => x.Key == "BatchPublishedDate").Value);
         }
     }
 }

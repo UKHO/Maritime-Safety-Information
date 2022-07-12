@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
             List<ShowFilesResponseModel> listshowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
             
-            return listshowFilesResponseModels.OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate").Value)).GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart").Value)
+            return listshowFilesResponseModels.OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value)).GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
             .Select(grp => grp.First()).OrderBy(x=>x.FileDescription).ToList();
         }
 

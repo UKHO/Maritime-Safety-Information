@@ -159,7 +159,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<List<ShowFilesResponseModel>> GetleisureFilesAsync(string correlationId)
+        public async Task<List<ShowFilesResponseModel>> GetLeisureFilesAsync(string correlationId)
         {
             try
             {
