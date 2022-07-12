@@ -40,7 +40,7 @@
                     @for (int i = 0; i < Model.Count; i++)
                     {
                         <tr>
-                            <td id="filename_@i">@Model[i].FileDescription</td>
+                            <td id="filename_@i"><a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType })">@Model[i].FileDescription</a></td>
                             <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                             <td class="td-3 justify-content-center" id="download_@i">
                                 <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType })">Download</a>
