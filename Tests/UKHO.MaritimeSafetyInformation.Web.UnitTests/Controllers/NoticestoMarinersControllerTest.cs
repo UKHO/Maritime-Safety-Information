@@ -162,7 +162,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullBatchID_ThenShouldReturnArgumentNullException()
+        public void WhenDownloadFileIsCalledWithNullBatchID_ThenShouldReturnArgumentNullException()
         {
             const string batchId = null;
             const string fileName = "testfile.pdf";
@@ -174,7 +174,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyBatchID_ThenShouldReturnArgumentNullException()
+        public void WhenDownloadFileIsCalledWithEmptyBatchID_ThenShouldReturnArgumentNullException()
         {
             const string batchId = "";
             const string fileName = "testfile.pdf";
@@ -185,7 +185,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullFileName_ThenShouldReturnArgumentNullException()
+        public void WhenDownloadFileIsCalledWithNullFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = null;
@@ -196,7 +196,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyFileName_ThenShouldReturnArgumentNullException()
+        public void WhenDownloadFileIsCalledWithEmptyFileName_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "";
@@ -207,7 +207,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithNullMimeType_ThenShouldReturnArgumentNullException()
+        public void WhenDownloadFileIsCalledWithNullMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "testfile.pdf";
@@ -218,7 +218,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalledWithEmptyMimeType_ThenShouldReturnArgumentNullException()
+        public void WhenDownloadFileIsCalledWithEmptyMimeType_ThenShouldReturnArgumentNullException()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "testfile.pdf";
@@ -229,7 +229,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenDownloadWeeklyFileIsCalled_ThenShouldReturnFileResult()
+        public async Task WhenDownloadFileIsCalled_ThenShouldReturnFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "testfile.pdf";
@@ -243,7 +243,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenDownloadWeeklyFileIsCalled_ThenShouldExecuteCatch()
+        public void WhenDownloadFileIsCalled_ThenShouldExecuteCatch()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "testfile.pdf";
@@ -286,6 +286,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             Assert.IsTrue(result.IsFaulted);
 
+        }
+
+        [Test]
+        public async Task WhenLeisureIsCalled_ThenShouldReturnsExpectedView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Leisure.cshtml";
+
+            A.CallTo(() => _fakeNMDataService.GetLeisureFilesAsync(A<string>.Ignored));
+
+            IActionResult result = await _controller.Leisure();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
+        public void WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        {
+            A.CallTo(() => _fakeNMDataService.GetLeisureFilesAsync(A<string>.Ignored)).Throws(new Exception());
+
+            Task<IActionResult> result = _controller.Leisure();
+
+            Assert.IsTrue(result.IsFaulted);
         }
 
         [TestCase(null, "Daily 16-05-22.zip", "application/gzip", Description = "When Download Daily File Is Called With Null BatchID Then Should Throw Exception")]

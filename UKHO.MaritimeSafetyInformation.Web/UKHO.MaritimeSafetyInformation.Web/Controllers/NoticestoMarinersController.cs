@@ -172,9 +172,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         [HttpGet]
         [Route("/NoticesToMariners/Leisure")]
-        public IActionResult Leisure()
+        public async Task<IActionResult> Leisure()
         {
-            return View();
+            try
+            {
+                _logger.LogInformation(EventIds.ShowLeisureFilesRequestStarted.ToEventId(), "Request to show leisure files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                List<ShowFilesResponseModel> listFiles = await _nMDataService.GetLeisureFilesAsync(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.ShowLeisureFilesRequestCompleted.ToEventId(), "Request to show leisure files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/NoticesToMariners/Leisure.cshtml", listFiles);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowLeisureFilesRequestFailed.ToEventId(), "Request to show leisure files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
+            }
         }
 
         [HttpGet]
