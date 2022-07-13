@@ -130,7 +130,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                const string searchText = $" and $batch(Frequency) eq 'Daily'";
+                const string searchText = $" and $batch(Frequency) eq 'daily'";
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -155,6 +155,41 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
+        }
+
+        public async Task<List<ShowFilesResponseModel>> GetLeisureFilesAsync(string correlationId)
+        {
+            try
+            {
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+
+                _logger.LogInformation(EventIds.ShowLeisureFilesResponseStarted.ToEventId(), "Request to get leisure files started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                const string searchText = $" and $batch(Frequency) eq 'leisure'";
+
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                BatchSearchResponse searchResult = result.Data;
+
+                if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
+                {
+                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseDataFound.ToEventId(), "Request to get leisure files completed and data found for _X-Correlation-ID:{correlationId}", correlationId);
+                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponseLeisure(searchResult);
+                    return ListshowFilesResponseModels;
+                }
+                else
+                {
+                    _logger.LogError(EventIds.ShowLeisureFilesResponseDataNotFound.ToEventId(), "Request to get leisure files completed and data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("Invalid data received for leisure files");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowLeisureFilesResponseFailed.ToEventId(), "Request to get leisure files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
         }

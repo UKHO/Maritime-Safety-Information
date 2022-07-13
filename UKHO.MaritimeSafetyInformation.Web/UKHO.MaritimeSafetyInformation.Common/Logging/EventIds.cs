@@ -450,6 +450,36 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetCumulativeFilesResponseFailed = 910106,
 
+
+        /// <summary>
+        /// 910107 -  Event data for Retrieval of Leisure file Started.
+        /// </summary>
+        ShowLeisureFilesRequestStarted = 910107,
+        /// <summary>
+        /// 910108 -  Event data for Retrieval of Leisure file Completed.
+        /// </summary>
+        ShowLeisureFilesRequestCompleted = 910108,
+        /// <summary>
+        /// 910109 -  Event data for Retrieval of Leisure file Failed.
+        /// </summary>
+        ShowLeisureFilesRequestFailed = 910109,
+        /// <summary>
+        /// 910110 -  Event data for Retrieval of Leisure file Response Started.
+        /// </summary>
+        ShowLeisureFilesResponseStarted = 910110,
+        /// <summary>
+        /// 910111 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
+        /// </summary>
+        ShowLeisureFilesResponseDataFound = 910111,
+        /// <summary>
+        /// 910112 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
+        /// </summary>
+        ShowLeisureFilesResponseDataNotFound = 910112,
+        /// <summary>
+        /// 910113 -  Event data for Retrieval of Leisure file Response Failed.
+        /// </summary>
+        ShowLeisureFilesResponseFailed = 910113,
+
     }
 
     public static class EventIdExtensions

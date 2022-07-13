@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -148,7 +149,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallDownloadWeeklyFile_ThenReturnFile()
+        public async Task WhenCallDownloadFile_ThenReturnFile()
         {
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "21snii22_week_W2020_14.pdf";
@@ -163,7 +164,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallDownloadWeeklyFileWithInvalidData_ThenReturnException()
+        public void WhenCallDownloadFileWithInvalidData_ThenReturnException()
         {
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "Test.txt";
@@ -236,6 +237,52 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
             Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
             Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+        }
+
+        [Test]
+        public async Task WhenLeisureCalled_ThenReturnFiles()
+        {
+            IActionResult result = await _nMController.Leisure();
+            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(3, showFiles.Count);
+            Assert.AreEqual("application/pdf", showFiles[0].MimeType);
+            Assert.AreEqual("5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly", showFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", showFiles[0].FileExtension);
+            Assert.AreEqual(539264, showFiles[0].FileSize);
+            Assert.AreEqual("527 KB", showFiles[0].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x=>x.Key=="Frequency").Value);
+            Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x=>x.Key=="Chart").Value);
+            Assert.AreEqual("63f4c516-2d8d-4db3-aff1-89c7f97c56a3", showFiles[0].BatchId);
+        }
+
+        [Test]
+        public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
+        {
+            IActionResult result = await _nMController.Leisure();
+            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            
+            List<string> lstChart = new();
+            foreach (var file in showFiles) 
+            {
+                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);            
+            }
+            Assert.AreEqual(lstChart.Distinct().Count(),lstChart.Count);
+
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(3, showFiles.Count);
+            Assert.AreEqual("application/pdf", showFiles[1].MimeType);
+            Assert.AreEqual("5608SC5608_Bristol_Channel", showFiles[1].FileDescription);
+            Assert.AreEqual(".pdf", showFiles[1].FileExtension);
+            Assert.AreEqual(781199, showFiles[1].FileSize);
+            Assert.AreEqual("763 KB", showFiles[1].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles[1].Attributes.First(x => x.Key == "Frequency").Value);
+            Assert.AreEqual("SC5608", showFiles[1].Attributes.First(x => x.Key == "Chart").Value);
+            Assert.AreEqual("8d4cd2d6-e4a7-4b48-9f48-ef3a744682c5", showFiles[1].BatchId);
         }
     }
 }
