@@ -108,13 +108,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             List<YearWeekModel> yearWeekModelList = new();
             BatchAttributesSearchModel searchAttributes =new ();
-            string userRole = _userService.IsDistributorUser ? "Distributor" : "Public";
+            string userRole = _userService.IsDistributorUser ? "Distributor" : "Public" , rowKey = "XYZ";
 
             try
             {
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    searchAttributes = await _fileShareServiceCache.GetAllYearWeekFromCache(userRole, "", correlationId);
+                    searchAttributes = await _fileShareServiceCache.GetAllYearWeekFromCache(userRole, rowKey, correlationId);
                 }
 
                 if(searchAttributes.Data == null)
@@ -137,7 +137,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                         CustomTableEntity customTableEntity = new()
                         {
                             PartitionKey = userRole,
-                            RowKey = "",
+                            RowKey = rowKey,
                             Response = JsonConvert.SerializeObject(searchAttributes)
                         };
 

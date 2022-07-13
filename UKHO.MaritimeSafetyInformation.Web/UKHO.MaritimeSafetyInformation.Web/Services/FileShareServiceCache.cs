@@ -41,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             else 
             {
-                _logger.LogInformation(EventIds.FSSSearchAllYearWeekDataNotFoundFromCache.ToEventId(), "Cache data not found for searching attribute year and week data from azure table storage for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.FSSSearchAllYearWeekDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching attribute year and week data from azure table storage for _X-Correlation-ID:{correlationId}", correlationId);
             }
             return SearchResult;
         }
@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             else 
             {
-                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesDataNotFoundFromCache.ToEventId(), "Cache data not found for searching weekly NM files from azure table storage for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching weekly NM files from azure table storage for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
             }
 
             return SearchResult;
