@@ -447,6 +447,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 new ShowFilesResponseModel()
                 {
+                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                    Filename = "SC5622 Ireland - West Coast.pdf",
+                    FileDescription = "SC5622 Ireland - West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
                     BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
                     Filename = "SC5623 Ireland - South West Coast.pdf",
                     FileDescription = "SC5623 Ireland - South West Coast",
@@ -455,19 +466,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "622 KB",
                     MimeType = "application/pdf",
                     Links = null
-                },
-
-                new ShowFilesResponseModel()
-                {
-                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
-                    Filename = "SC5623 Ireland - West Coast.pdf",
-                    FileDescription = "SC5623 Ireland - West Coast",
-                    FileExtension = ".pdf",
-                    FileSize = 636436,
-                    FileSizeinKB = "622 KB",
-                    MimeType = "application/pdf",
-                    Links = null
-                },
+                }
             };
 
             List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
@@ -496,6 +495,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 new ShowFilesResponseModel()
                 {
+                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                    Filename = "SC5622 Ireland - West Coast.pdf",
+                    FileDescription = "SC5622 Ireland - West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
                     BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
                     Filename = "SC5623 Ireland - South West Coast.pdf",
                     FileDescription = "SC5623 Ireland - South West Coast",
@@ -504,19 +514,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "622 KB",
                     MimeType = "application/pdf",
                     Links = null
-                },
-
-                new ShowFilesResponseModel()
-                {
-                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
-                    Filename = "SC5623 Ireland - West Coast.pdf",
-                    FileDescription = "SC5623 Ireland - West Coast",
-                    FileExtension = ".pdf",
-                    FileSize = 636436,
-                    FileSizeinKB = "622 KB",
-                    MimeType = "application/pdf",
-                    Links = null
-                },
+                }
             };
 
             List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
@@ -1363,7 +1361,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                         ExpiryDate = DateTime.Now,
                         Files = new List<BatchDetailsFiles>() {
                             new BatchDetailsFiles () {
-                                Filename = "SC5623 Ireland - West Coast.pdf",
+                                Filename = "SC5622 Ireland - West Coast.pdf",
                                 FileSize=636436,
                                 MimeType = "application/pdf",
                                 Links = null
@@ -1425,7 +1423,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                             ExpiryDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
-                                    Filename = "SC5623 Ireland - West Coast.pdf",
+                                    Filename = "SC5622 Ireland - West Coast.pdf",
                                     FileSize=636436,
                                     MimeType = "application/pdf",
                                     Links = null
