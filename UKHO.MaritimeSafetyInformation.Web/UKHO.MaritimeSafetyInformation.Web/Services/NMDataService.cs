@@ -254,7 +254,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 const string searchText = $" and $batch(Frequency) eq 'cumulative'";
 

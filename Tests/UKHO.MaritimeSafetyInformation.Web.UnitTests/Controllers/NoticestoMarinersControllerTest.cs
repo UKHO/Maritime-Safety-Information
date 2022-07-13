@@ -33,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeUserService = A.Fake<IUserService>();
             _fakeTokenAcquisition = A.Fake<ITokenAcquisition>();
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService, _fakeTokenAcquisition);
+            _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService);
         }
 
         [Test]
