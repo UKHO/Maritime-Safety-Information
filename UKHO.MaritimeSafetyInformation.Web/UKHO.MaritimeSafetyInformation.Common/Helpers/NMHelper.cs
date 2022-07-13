@@ -69,13 +69,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
             }
-            List<ShowFilesResponseModel> listshowFilesResponseModels = new();
-            foreach (BatchDetails item in SearchResult.Entries)
+            return GetShowFilesResponseModel(SearchResult.Entries);
+        }
+
+        public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
+        {
+            List<ShowFilesResponseModel> listShowFilesResponseModels = new();
+            foreach (BatchDetails item in batchDetails)
             {
                 foreach (BatchDetailsFiles file in item.Files)
                 {
-                    listshowFilesResponseModels.Add(new ShowFilesResponseModel
+                    item.Attributes.Add(new BatchDetailsAttributes { Key = "BatchPublishedDate", Value = item.BatchPublishedDate.ToString() });
+                    listShowFilesResponseModels.Add(new ShowFilesResponseModel
                     {
+                        Attributes = item.Attributes,
                         BatchId = item.BatchId,
                         Filename = file.Filename,
                         FileDescription = Path.GetFileNameWithoutExtension(file.Filename),
@@ -89,7 +96,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     });
                 }
             }
-            return listshowFilesResponseModels;
+            return listShowFilesResponseModels;
+        }
+
+        public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
+        {
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
+            
+            return listShowFilesResponseModels
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
+                .Select(grp => grp.First())
+                .OrderBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
+                .ToList();
         }
 
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
@@ -154,7 +174,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 if (string.IsNullOrEmpty(parameter.Value))
                 {
                     logger.LogInformation(
-                        EventIds.DownloadSingleWeeklyNMFileInvalidParameter.ToEventId(),
+                        EventIds.DownloadSingleNMFileInvalidParameter.ToEventId(),
                         "Maritime safety information download single NM files called with invalid argument " + parameter.Key + ":{" + parameter.Key + "} for _X-Correlation-ID:{correlationId}", parameter.Value, correlationId);
                     throw new ArgumentNullException("Invalid value received for parameter " + parameter.Key, new Exception());
                 }
@@ -175,6 +195,16 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             } while (numBytesToRead > 0);
             stream.Close();
             return fileBytes;
+        }
+
+        public static List<ShowFilesResponseModel> ListFilesResponseCumulative(List<BatchDetails> batchDetails)
+        {
+            return GetShowFilesResponseModel(batchDetails)
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value)
+                .Select(grp => grp.First())
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
+                .ToList();
         }
     }
 }
