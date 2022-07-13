@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
-    
+        [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
             const int year = 2022;
@@ -132,7 +132,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(expectedDailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
         }
 
-     
+        [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
             const int year = 2022;
@@ -227,7 +227,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(result.Count, ExpectedRecordCount);
         }
 
-       
+       [Test]
         public async Task WhenGetWeeklyFilesResponseModelsAsyncIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
         {
             const int year = 2022;
@@ -249,7 +249,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
         }
 
-       
+       [Test]
         public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
         {
             const int year = 0;
@@ -377,6 +377,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "aaa.pdf",
@@ -395,6 +405,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                         new BatchDetails() {
                             BatchId = "2",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "ccc.pdf",
@@ -659,6 +679,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
+                            Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
                             BatchPublishedDate =DateTime.UtcNow.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
@@ -683,6 +709,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                         new BatchDetails() {
                             BatchId = "2",
+                            Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
                             BatchPublishedDate = DateTime.UtcNow.AddMinutes(-20),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
@@ -700,10 +732,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             }
 
                         }
+
                     }
                 }
-            };
+                
+                };
 
+        
             return searchResult;
         }
     }

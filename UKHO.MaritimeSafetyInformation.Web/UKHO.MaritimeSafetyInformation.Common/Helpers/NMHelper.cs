@@ -12,9 +12,58 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         {
             List<BatchDetails> batchDetailsList = new();            
             if (SearchResult.Entries.Count > 1)
-            {      
+            {
+                List<BatchDetails> distributorBatchDetail = new();
+                List<BatchDetails> publicBatchDetail = new();
+                for (int i = 0; i < SearchResult.Entries.Count; i++)
+                {
+                    bool checkContent = false;
+                    for (int j = 0; j < SearchResult.Entries[i].Attributes.Count; j++)
+                    {
+                        if (SearchResult.Entries[i].Attributes[j].Value == "tracings")
+                        {
+                            checkContent = true;
+                        }
+                    }
+                    if (checkContent)
+                    {
+                        distributorBatchDetail.Add(new BatchDetails
+                        {
+                            BatchId = SearchResult.Entries[i].BatchId,
+                            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
+                            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
+                            Files = SearchResult.Entries[i].Files,
+                            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
+                            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
+                            Status = SearchResult.Entries[i].Status,
+                            Attributes = SearchResult.Entries[i].Attributes
+                        });
+                    }
+                    else
+                    {
+                        publicBatchDetail.Add(new BatchDetails
+                        {
+                            BatchId = SearchResult.Entries[i].BatchId,
+                            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
+                            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
+                            Files = SearchResult.Entries[i].Files,
+                            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
+                            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
+                            Status = SearchResult.Entries[i].Status,
+                            Attributes = SearchResult.Entries[i].Attributes
+                        });
+                    }
+                }
 
-               batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
+                BatchDetails distBatch = distributorBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                BatchDetails publicBatch = publicBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                if (distBatch != null)
+                {
+                    batchDetailsList.Add(distBatch);
+                }
+                batchDetailsList.Add(publicBatch);
+
+                //////batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
 
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;

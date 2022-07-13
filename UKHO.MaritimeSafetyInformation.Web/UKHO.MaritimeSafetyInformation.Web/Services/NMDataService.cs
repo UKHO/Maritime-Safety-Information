@@ -37,16 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}' ";
-
-                ////////if (_userService.IsDistributorUser)
-                ////////{
-                ////////    searchText += " or $batch(content) eq 'tracings'";
-                ////////}
-                ////////else
-                ////////{
-                ////////    searchText += " or $batch(content) eq 'null'";
-                ////////}
+                string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -159,8 +150,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     _logger.LogError(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
                     throw new InvalidDataException("Invalid data received for daily NM files");
                 }
-
-
             }
             catch (Exception ex)
             {
