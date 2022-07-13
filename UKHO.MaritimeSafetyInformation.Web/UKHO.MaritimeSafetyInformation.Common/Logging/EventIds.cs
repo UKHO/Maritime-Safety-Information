@@ -450,46 +450,73 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetCumulativeFilesResponseFailed = 910106,
         /// <summary>
-        /// 910107 - Request for searching all year week from cache azure table storage is started.
+        /// 910107 -  Event data for Retrieval of Leisure file Started.
         /// </summary>
-        FSSSearchAllYearWeekFromCacheStart = 910107,
+        ShowLeisureFilesRequestStarted = 910107,
         /// <summary>
-        /// 910108 - Request for searching all year week from cache azure table storage is completed.
+        /// 910108 -  Event data for Retrieval of Leisure file Completed.
         /// </summary>
-        FSSSearchAllYearWeekFromCacheCompleted = 910108,
+        ShowLeisureFilesRequestCompleted = 910108,
         /// <summary>
-        /// 910109 - Data not found for searching all year week from cache azure table storage.
+        /// 910109 -  Event data for Retrieval of Leisure file Failed.
         /// </summary>
-        FSSSearchAllYearWeekDataNotFoundFromCache = 910109,
+        ShowLeisureFilesRequestFailed = 910109,
         /// <summary>
-        /// 910110- Request for searching weekly batch files from cache azure table storage is started.
+        /// 910110 -  Event data for Retrieval of Leisure file Response Started.
         /// </summary>
-        FSSSearchWeeklyBatchFilesFromCacheStart = 910110,
+        ShowLeisureFilesResponseStarted = 910110,
         /// <summary>
-        /// 910111 - Request for searching weekly batch files from cache azure table storage is completed.
+        /// 910111 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
         /// </summary>
-        FSSSearchWeeklyBatchFilesFromCacheCompleted = 910111,
+        ShowLeisureFilesResponseDataFound = 910111,
         /// <summary>
-        /// 910112 - Data not found for searching weekly batch files from cache azure table storage.
+        /// 910112 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
         /// </summary>
-        FSSSearchWeeklyBatchFilesDataNotFoundFromCache = 910112,
+        ShowLeisureFilesResponseDataNotFound = 910112,
         /// <summary>
-        /// 910113 - Request for storing file share service search all year week response in azure table storage is started.
+        /// 910113 -  Event data for Retrieval of Leisure file Response Failed.
         /// </summary>
-        FSSSearchAllYearWeekResponseStoreToCacheStart = 910113,
+        ShowLeisureFilesResponseFailed = 910113,
         /// <summary>
-        /// 910114 - Request for storing file share service search all year week response in azure table storage is completed.
+        /// 910114 - Request for searching all year week from cache azure table storage is started.
         /// </summary>
-        FSSSearchAllYearWeekResponseStoreToCacheCompleted = 910114,
+        FSSSearchAllYearWeekFromCacheStart = 910114,
         /// <summary>
-        /// 910115 - Request for storing file share service search weekly batch files response in azure table storage is started.
+        /// 910115 - Request for searching all year week from cache azure table storage is completed.
         /// </summary>
-        FSSSearchWeeklyBatchFilesResponseStoreToCacheStart = 910115,
+        FSSSearchAllYearWeekFromCacheCompleted = 910115,
         /// <summary>
-        /// 910116 - Request for storing file share service search weekly batch files response in azure table storage is completed.
+        /// 910116 - Data not found for searching all year week from cache azure table storage.
         /// </summary>
-        FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted = 910116
-
+        FSSSearchAllYearWeekDataNotFoundFromCache = 910116,
+        /// <summary>
+        /// 910117- Request for searching weekly batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesFromCacheStart = 910117,
+        /// <summary>
+        /// 910118 - Request for searching weekly batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesFromCacheCompleted = 910118,
+        /// <summary>
+        /// 910119 - Data not found for searching weekly batch files from cache azure table storage.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesDataNotFoundFromCache = 910119,
+        /// <summary>
+        /// 910120 - Request for storing file share service search all year week response in azure table storage is started.
+        /// </summary>
+        FSSSearchAllYearWeekResponseStoreToCacheStart = 910120,
+        /// <summary>
+        /// 910121 - Request for storing file share service search all year week response in azure table storage is completed.
+        /// </summary>
+        FSSSearchAllYearWeekResponseStoreToCacheCompleted = 910121,
+        /// <summary>
+        /// 910122 - Request for storing file share service search weekly batch files response in azure table storage is started.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheStart = 910122,
+        /// <summary>
+        /// 910123 - Request for storing file share service search weekly batch files response in azure table storage is completed.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted = 910123
     }
 
     public static class EventIdExtensions

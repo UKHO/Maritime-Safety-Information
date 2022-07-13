@@ -25,13 +25,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
         {
-            List<ShowFilesResponseModel> listshowFilesResponseModels = new();
+            List<ShowFilesResponseModel> listShowFilesResponseModels = new();
             foreach (BatchDetails item in batchDetails)
             {
                 foreach (BatchDetailsFiles file in item.Files)
                 {
                     item.Attributes.Add(new BatchDetailsAttributes { Key = "BatchPublishedDate", Value = item.BatchPublishedDate.ToString() });
-                    listshowFilesResponseModels.Add(new ShowFilesResponseModel
+                    listShowFilesResponseModels.Add(new ShowFilesResponseModel
                     {
                         Attributes = item.Attributes,
                         BatchId = item.BatchId,
@@ -45,7 +45,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     });
                 }
             }
-            return listshowFilesResponseModels;
+            return listShowFilesResponseModels;
+        }
+
+        public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
+        {
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
+            
+            return listShowFilesResponseModels
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
+                .Select(grp => grp.First())
+                .OrderBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
+                .ToList();
         }
 
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)

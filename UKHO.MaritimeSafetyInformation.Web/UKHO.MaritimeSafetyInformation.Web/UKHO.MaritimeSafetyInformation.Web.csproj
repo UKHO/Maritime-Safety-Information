@@ -64,7 +64,6 @@
   
   <ItemGroup>
     <Folder Include="wwwroot\nms\annual\" />
-    <Folder Include="wwwroot\nms\leisure\" />
   </ItemGroup>
 
 </Project>
