@@ -10,7 +10,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     {
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
-            List<BatchDetails> batchDetailsList = new();            
+            List<BatchDetails> batchDetailsList = new();
             if (SearchResult.Entries.Count > 1)
             {
                 List<BatchDetails> distributorBatchDetail = new();
@@ -61,7 +61,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 {
                     batchDetailsList.Add(distBatch);
                 }
-                batchDetailsList.Add(publicBatch);
+
+                if (publicBatch != null)
+                    batchDetailsList.Add(publicBatch);
 
                 //////batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
 
@@ -102,8 +104,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
         {
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
-            
+            List<ShowFilesResponseModel> listShowFilesResponseModels = GetShowFilesResponseModel(searchResult.Entries);
+
             return listShowFilesResponseModels
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
                 .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
