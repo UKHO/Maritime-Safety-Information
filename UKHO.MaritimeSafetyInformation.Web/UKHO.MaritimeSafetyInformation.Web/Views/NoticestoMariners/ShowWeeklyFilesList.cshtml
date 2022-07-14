@@ -6,7 +6,7 @@
 
 @if (Model != null && Model.Count > 0)
 {
-    if (ViewBag.IsDistributor)
+    @if (ViewBag.IsDistributor)
     {
         <caption class="table-caption">Partner</caption>
         <table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
@@ -37,7 +37,7 @@
     }
 }
 
-    if (ViewBag.IsDistributor)
+    @if (ViewBag.IsDistributor)
     {
         <caption class="table-caption">Public</caption>
     }

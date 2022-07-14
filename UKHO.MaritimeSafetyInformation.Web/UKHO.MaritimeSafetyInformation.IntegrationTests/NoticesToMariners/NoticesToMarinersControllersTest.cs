@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
@@ -7,10 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
@@ -25,21 +28,31 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         private NoticesToMarinersController _nMController;
 
         private Configuration Config { get; set; }
+        private HttpContextAccessor _httpContext;
 
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();
-            _ = new HttpContextAccessor
+            Config = new Configuration();           
+            _httpContext = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
+           
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
+            _services.GetRequiredService<IUserService>();
         }
-
-       
+        
+        [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
+            _httpContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "Distributor"),
+                    new Claim(ClaimTypes.Role, "Distributor"),                   
+                    new Claim("custom-claim", "Custom")
+                }, "mock"));           
+
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
@@ -77,7 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowWeeklyFilesAsync_ThenReturnWeeklyFiles()
+        public async Task WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
@@ -89,6 +102,24 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("21snii22_week_W2020_14", listFiles[0].FileDescription);
             Assert.AreEqual(".pdf", listFiles[0].FileExtension);
             Assert.AreEqual(1072212, listFiles[0].FileSize);
+            Assert.IsFalse(listFiles[0].IsDistributorUser);
+        }
+
+
+        [Test]
+        public async Task WhenCallShowWeeklyFilesAsyncForDistributorUser_ThenReturnWeeklyFiles()
+        {
+            IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(4, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("a738d0d3-bc1e-47ca-892a-9514ccef6464", listFiles[0].BatchId);
+            Assert.AreEqual("21snii22_week_W2020_14", listFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
+            Assert.AreEqual(1072212, listFiles[0].FileSize);
+            Assert.IsFalse(listFiles[0].IsDistributorUser);
         }
 
         [Test]
@@ -98,7 +129,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
                 async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });
         }
 
-        
+        [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2022, 18);

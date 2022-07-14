@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} for User:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName, _userService.UserIdentifier, correlationId);
 
                 string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
@@ -47,14 +47,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (SearchResult != null && SearchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                    _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} for User:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName, _userService.UserIdentifier,correlationId);
 
                     List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
                     return ListshowFilesResponseModels;
                 }
                 else
                 {
-                    _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+                    _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} for User:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName, _userService.UserIdentifier,correlationId);
                     throw new InvalidDataException("Invalid data received for weekly NM files");
                 }
             }
@@ -72,8 +72,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
-
-                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
+                
+                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for User:{_userService.SignInName} and Identity:{_userService.UserIdentifier} and _X-Correlation-ID:{correlationId}", _userService.SignInName, _userService.UserIdentifier, correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -98,11 +98,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                         yearWeekModelList.Add(new YearWeekModel { Year = Convert.ToInt32(yearWeek[0].Trim()), Week = Convert.ToInt32(yearWeek[1].Trim()) });
                                     }
                                 }
-                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request to search attribute year and week data completed successfully from File Share Service for BatchSearchAttribute with _X-Correlation-ID:{correlationId}", correlationId);
+                                _logger.LogInformation(EventIds.GetSearchAttributeRequestDataFound.ToEventId(), "Request to search attribute year and week data completed successfully from File Share Service for BatchSearchAttribute for User:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", _userService.SignInName, _userService.UserIdentifier, correlationId);
                             }
                             else
                             {
-                                _logger.LogError(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data received from File Share Service for request to search attribute year and week for _X-Correlation-ID:{correlationId}", correlationId);
+                                _logger.LogError(EventIds.GetSearchAttributeRequestDataNotFound.ToEventId(), "No data received from File Share Service for request to search attribute year and week for User:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", _userService.SignInName, _userService.UserIdentifier, correlationId);
                                 throw new InvalidDataException("No data received from File Share Service for request to search attribute year and week");
                             }
                             break;
