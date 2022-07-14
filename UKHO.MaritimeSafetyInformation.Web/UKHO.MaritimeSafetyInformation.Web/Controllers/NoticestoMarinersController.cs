@@ -130,7 +130,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
 
+                if (mimeType != "application/pdf")
+                    mimeType = "application/octet-stream";
+
                 return File(fileBytes, mimeType);
+
             }
             catch (Exception ex)
             {
@@ -155,7 +159,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
-                 _logger.LogError(EventIds.ShowCumulativeFilesFailed.ToEventId(), "Maritime safety information request to show cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ShowCumulativeFilesFailed.ToEventId(), "Maritime safety information request to show cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
                 throw;
             }
         }
