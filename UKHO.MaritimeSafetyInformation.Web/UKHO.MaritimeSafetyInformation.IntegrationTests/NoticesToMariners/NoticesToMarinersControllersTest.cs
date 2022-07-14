@@ -46,12 +46,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            _httpContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, "Distributor"),
-                    new Claim(ClaimTypes.Role, "Distributor"),
-                    new Claim("custom-claim", "Custom")
-                }, "mock"));
+            //////_httpContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            //////    {
+            //////        new Claim(ClaimTypes.Name, "Distributor"),
+            //////        new Claim(ClaimTypes.Role, "Distributor"),
+            //////        new Claim("custom-claim", "Custom")
+            //////    }, "mock"));
 
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
