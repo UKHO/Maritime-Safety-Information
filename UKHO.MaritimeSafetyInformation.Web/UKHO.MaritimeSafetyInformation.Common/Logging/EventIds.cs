@@ -516,7 +516,23 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910123 - Request for storing file share service search weekly batch files response in azure table storage is completed.
         /// </summary>
-        FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted = 910123
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted = 910123,
+        /// <summary>
+        /// 910124 - Deletion started for expired all year and week cache data from table.
+        /// </summary>
+        DeleteExpiredYearWeekCacheDataFromTableStarted = 910124,
+        /// <summary>
+        /// 910125 - Deletion completed for expired all year and week cache data from table.
+        /// </summary>
+        DeleteExpiredYearWeekCacheDataFromTableCompleted = 910125,
+        /// <summary>
+        /// 910126 - Deletion started for expired searching weekly NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchWeeklyBatchFilesFromCacheStarted = 910126,
+        /// <summary>
+        /// 910127 - Deletion completed for expired searching weekly NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchWeeklyBatchFilesFromCacheCompleted = 910127
     }
 
     public static class EventIdExtensions
