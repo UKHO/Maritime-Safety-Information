@@ -8,5 +8,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Configuration
         public string FssWeeklyAttributeTableName { get; set; }
         public string FssWeeklyBatchSearchTableName { get; set; }
         public bool IsFssCacheEnabled { get; set; }
+        public int CacheTimeOutInMins { get; set; }
     }
 }

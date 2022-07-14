@@ -72,7 +72,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                         {
                             PartitionKey = userRole,
                             RowKey = year.ToString() + '|' + week.ToString(),
-                            Response = JsonConvert.SerializeObject(result.Data)
+                            Response = JsonConvert.SerializeObject(result.Data),
+                            CacheExpiry = DateTime.UtcNow.AddMinutes(_cacheConfiguration.Value.CacheTimeOutInMins)
                         };
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
@@ -138,7 +139,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                         {
                             PartitionKey = userRole,
                             RowKey = rowKey,
-                            Response = JsonConvert.SerializeObject(searchAttributes)
+                            Response = JsonConvert.SerializeObject(searchAttributes),
+                            CacheExpiry = DateTime.UtcNow.AddMinutes(_cacheConfiguration.Value.CacheTimeOutInMins)
                         };
 
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);

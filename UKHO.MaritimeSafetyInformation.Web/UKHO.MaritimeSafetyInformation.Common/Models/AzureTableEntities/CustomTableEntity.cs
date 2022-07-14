@@ -10,5 +10,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
         public string Response { get; set; }
+        public DateTime CacheExpiry { get; set; }
     }
 }

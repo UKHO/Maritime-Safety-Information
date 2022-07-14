@@ -32,14 +32,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             BatchAttributesSearchModel SearchResult =new();
             CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName);
 
-            if (!string.IsNullOrEmpty(cacheInfo.Response))
+            if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
             {
                 SearchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(cacheInfo.Response);
                 SearchResult.AttributeYearAndWeekIsCache = true;
 
                 _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheCompleted.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
             }
-            else 
+            else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
+            {
+                string connectionString = _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
+
+                await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName, connectionString);
+            }
+            else
             {
                 _logger.LogInformation(EventIds.FSSSearchAllYearWeekDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching attribute year and week data from azure table storage for _X-Correlation-ID:{correlationId}", correlationId);
             }
@@ -54,12 +60,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             string rowKey = year.ToString() + '|' + week.ToString();
             CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
 
-            if (!string.IsNullOrEmpty(cacheInfo.Response))
+            if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
             {
                 SearchResult.batchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
                 SearchResult.WeeklyNMFilesIsCache = true;
 
                 _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+            }
+            else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
+            {
+                string connectionString = _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
+
+                await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, connectionString);
             }
             else 
             {
