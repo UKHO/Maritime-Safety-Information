@@ -270,7 +270,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
         }
 
-        [Test]
+       
         public async Task WhenLeisureCalled_ThenReturnFiles()
         {
             IActionResult result = await _nMController.Leisure();
@@ -289,7 +289,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("63f4c516-2d8d-4db3-aff1-89c7f97c56a3", showFiles[0].BatchId);
         }
 
-        [Test]
+      
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
