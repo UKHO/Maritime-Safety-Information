@@ -30,7 +30,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
 
   test('Should Goto Notices to Mariner Page for Weekly Download with Distributor Role', async ({ page, context }) => {
     await login.goToSignIn();
-    await login.loginWithDistributorDetails(app.RNWAdminAutoTest_User, app.RNWAdminAutoTest_Pass);
+    await login.loginWithDistributorDetails(app.DistributorTest_UserName, app.DistributorTest_Password);
     await noticeFileDownload.goToNoticeToMariner();
     await noticeFileDownload.checkWeeklyFileSectionName();
     await noticeFileDownload.checkWeeklyFileSortingWithDistributorRole();
