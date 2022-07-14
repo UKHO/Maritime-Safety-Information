@@ -46,12 +46,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            _httpContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, "Distributor"),
-                    new Claim(ClaimTypes.Role, "Distributor"),                   
-                    new Claim("custom-claim", "Custom")
-                }, "mock"));           
+            //////////_httpContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            //////////    {
+            //////////        new Claim(ClaimTypes.Name, "Distributor"),
+            //////////        new Claim(ClaimTypes.Role, "Distributor"),                   
+            //////////        new Claim("custom-claim", "Custom")
+            //////////    }, "mock"));           
 
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
@@ -106,21 +106,21 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
 
-        [Test]
-        public async Task WhenCallShowWeeklyFilesAsyncForDistributorUser_ThenReturnWeeklyFiles()
-        {
-            IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
-            Assert.IsNotNull(listFiles);
-            Assert.AreEqual(4, listFiles.Count);
-            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
-            Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("a738d0d3-bc1e-47ca-892a-9514ccef6464", listFiles[0].BatchId);
-            Assert.AreEqual("21snii22_week_W2020_14", listFiles[0].FileDescription);
-            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
-            Assert.AreEqual(1072212, listFiles[0].FileSize);
-            Assert.IsFalse(listFiles[0].IsDistributorUser);
-        }
+        //////[Test]
+        //////public async Task WhenCallShowWeeklyFilesAsyncForDistributorUser_ThenReturnWeeklyFiles()
+        //////{
+        //////    IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
+        //////    List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
+        //////    Assert.IsNotNull(listFiles);
+        //////    Assert.AreEqual(4, listFiles.Count);
+        //////    Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+        //////    Assert.AreEqual("Notices to Mariners", Config.ProductType);
+        //////    Assert.AreEqual("a738d0d3-bc1e-47ca-892a-9514ccef6464", listFiles[0].BatchId);
+        //////    Assert.AreEqual("21snii22_week_W2020_14", listFiles[0].FileDescription);
+        //////    Assert.AreEqual(".pdf", listFiles[0].FileExtension);
+        //////    Assert.AreEqual(1072212, listFiles[0].FileSize);
+        //////    Assert.IsFalse(listFiles[0].IsDistributorUser);
+        //////}
 
         [Test]
         public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowInvalidDataException()
