@@ -15,10 +15,6 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -79,36 +75,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
-
-            //////// services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            ////////{
-            ////////     options.SaveTokens = true; // this saves the token for the downstream api
-            ////////     options.Events.OnRedirectToIdentityProvider = async context =>
-            ////////     {
-            ////////         context.ProtocolMessage.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"];
-            ////////         await Task.FromResult(0);
-            ////////     };
-            ////////     options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
-            ////////     {
-            ////////         context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:SignedOutCallbackPath"];
-            ////////         await Task.FromResult(0);
-            ////////     };
-            //////// });
-
-
-            //////// //////services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C)
-            //////// //////    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })                
-            //////// //////    .AddInMemoryTokenCaches();
-
-            //////// services.AddMicrosoftIdentityWebAppAuthentication(configuration,"AzureAdB2C", OpenIdConnectDefaults.AuthenticationScheme)
-            ////////.EnableTokenAcquisitionToCallDownstreamApi(p =>
-            ////////{
-            ////////    p.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"]; // NOT WORKING, WHY?
-            ////////    p.EnablePiiLogging = true;
-            ////////},
-            ////////   new string[] { configuration["AzureAdB2C:Scope"] }
-            ////////)
-            ////////.AddInMemoryTokenCaches();
 
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApp(options =>

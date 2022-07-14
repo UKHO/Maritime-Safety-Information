@@ -1,6 +1,8 @@
-﻿
+﻿using System.Diagnostics.CodeAnalysis;
+
 namespace UKHO.MaritimeSafetyInformation.Common.Configuration
 {
+    [ExcludeFromCodeCoverage]
     public class AzureAdB2C
     {
         public string Instance { get; set; }

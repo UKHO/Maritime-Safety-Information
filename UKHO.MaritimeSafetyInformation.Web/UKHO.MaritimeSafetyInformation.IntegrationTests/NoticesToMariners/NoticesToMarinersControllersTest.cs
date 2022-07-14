@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -148,13 +149,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallDownloadWeeklyFile_ThenReturnFile()
+        public async Task WhenCallDownloadFile_ThenReturnFile()
         {
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
+            const string frequency = "Weekly";
 
-            FileResult result = await _nMController.DownloadWeeklyFile(batchId, filename, mimeType);
+            FileResult result = await _nMController.DownloadFile(batchId, filename, mimeType, frequency);
             Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
@@ -162,15 +164,16 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallDownloadWeeklyFileWithInvalidData_ThenReturnException()
+        public void WhenCallDownloadFileWithInvalidData_ThenReturnException()
         {
             const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
+            const string frequency = "Weekly";
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await _nMController.DownloadWeeklyFile(batchId, filename, mimeType); });
+               , async delegate { await _nMController.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
         [Test]
@@ -196,6 +199,90 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
                 async delegate { await _nMController.DownloadDailyFile(batchId, filename, mimeType); });
+        }
+
+        [Test]
+        public async Task WhenCallCumulativeAsync_ThenReturnCumulativeFiles()
+        {
+            IActionResult result = await _nMController.Cumulative();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("0cdb2271-b5a3-43b0-b923-733ada1760af", listFiles[0].BatchId);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
+            Assert.AreEqual(1125181, listFiles[0].FileSize);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+        }
+
+        [Test]
+        public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
+        {
+            IActionResult result = await _nMController.Cumulative();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[1].BatchId);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[1].FileExtension);
+            Assert.AreEqual(1386825, listFiles[1].FileSize);
+            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+        }
+
+        [Test]
+        public async Task WhenLeisureCalled_ThenReturnFiles()
+        {
+            IActionResult result = await _nMController.Leisure();
+            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(3, showFiles.Count);
+            Assert.AreEqual("application/pdf", showFiles[0].MimeType);
+            Assert.AreEqual("5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly", showFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", showFiles[0].FileExtension);
+            Assert.AreEqual(539264, showFiles[0].FileSize);
+            Assert.AreEqual("527 KB", showFiles[0].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x=>x.Key=="Frequency").Value);
+            Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x=>x.Key=="Chart").Value);
+            Assert.AreEqual("63f4c516-2d8d-4db3-aff1-89c7f97c56a3", showFiles[0].BatchId);
+        }
+
+        [Test]
+        public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
+        {
+            IActionResult result = await _nMController.Leisure();
+            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsTrue(showFiles != null);
+            
+            List<string> lstChart = new();
+            foreach (var file in showFiles) 
+            {
+                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);            
+            }
+            Assert.AreEqual(lstChart.Distinct().Count(),lstChart.Count);
+
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual(3, showFiles.Count);
+            Assert.AreEqual("application/pdf", showFiles[1].MimeType);
+            Assert.AreEqual("5608SC5608_Bristol_Channel", showFiles[1].FileDescription);
+            Assert.AreEqual(".pdf", showFiles[1].FileExtension);
+            Assert.AreEqual(781199, showFiles[1].FileSize);
+            Assert.AreEqual("763 KB", showFiles[1].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles[1].Attributes.First(x => x.Key == "Frequency").Value);
+            Assert.AreEqual("SC5608", showFiles[1].Attributes.First(x => x.Key == "Chart").Value);
+            Assert.AreEqual("8d4cd2d6-e4a7-4b48-9f48-ef3a744682c5", showFiles[1].BatchId);
         }
     }
 }

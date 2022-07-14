@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
-    
+        [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
             const int year = 2022;
@@ -132,7 +132,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(expectedDailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
         }
 
-     
+        [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
             const int year = 2022;
@@ -227,7 +227,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(result.Count, ExpectedRecordCount);
         }
 
-       
+       [Test]
         public async Task WhenGetWeeklyFilesResponseModelsAsyncIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
         {
             const int year = 2022;
@@ -249,7 +249,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
         }
 
-       
+       [Test]
         public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnsShowWeeklyFilesResponseModelCount()
         {
             const int year = 0;
@@ -313,12 +313,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const string batchId = "";
             const string filename = "";
+            const string frequency = "";
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
-            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.IsInstanceOf<Task<byte[]>>(result);
         }
 
@@ -327,10 +328,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const string batchId = "";
             const string filename = "";
+            const string frequency = "";
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).ThrowsAsync(new Exception());
-            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId);
+            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.IsTrue(result.IsFaulted);
         }
 
@@ -365,6 +367,134 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.IsTrue(result.IsFaulted);
         }
 
+        [Test]
+        public async Task WhenGetCumulativeBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFilesOrderByFileName()
+        {
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 4;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual("NP234(B) 2022", listShowFilesResponseModels[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2022", listShowFilesResponseModels[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[3].FileDescription);
+        }
+
+        [Test]
+        public async Task WhenGetCumulativeBatchFilesIsCalledWithDuplicateData_ThenShouldReturnsLatestFile()
+        {
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 4;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual("NP234(B) 2022", listShowFilesResponseModels[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2022", listShowFilesResponseModels[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[3].FileDescription);
+            Assert.AreEqual("2", listShowFilesResponseModels[0].BatchId);
+            Assert.AreEqual("1", listShowFilesResponseModels[1].BatchId);
+            Assert.AreEqual("5", listShowFilesResponseModels[2].BatchId);
+            Assert.AreEqual("4", listShowFilesResponseModels[3].BatchId);
+        }
+
+        [Test]
+        public void WhenGetCumulativeBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for cumulative NM files"),
+                async delegate { await _nMDataService.GetCumulativeBatchFiles(CorrelationId); });
+        }
+
+        [Test]
+        public void WhenGetCumulativeBatchFilesIsCalledThrowException_ThenShouldExecuteCatch()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+
+            IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+
+            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenGetLeisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 2;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+        }
+
+        [Test]
+        public async Task WhenGetLeisureFilesAsyncIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateLeisure();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 2;
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+        }
+
+        [Test]
+        public void WhenGetLeisureFilesAsyncIsCalled_ThenShouldExecuteCatch()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetLeisureFilesAsync(CorrelationId);
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public void WhenGetLeisureFilesAsyncIsCalled_ThenShouldThrowInvalidDataException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for leisure files"),
+                async delegate { await _nMDataService.GetLeisureFilesAsync(CorrelationId); });
+        }
+
         private static Result<BatchSearchResponse> SetSearchResultForWeekly()
         {
             Result<BatchSearchResponse> searchResult = new()
@@ -377,6 +507,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "aaa.pdf",
@@ -395,6 +535,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                         new BatchDetails() {
                             BatchId = "2",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                            },
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "ccc.pdf",
@@ -659,6 +809,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
+                            Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
                             BatchPublishedDate =DateTime.UtcNow.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
@@ -683,6 +839,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                         new BatchDetails() {
                             BatchId = "2",
+                            Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
                             BatchPublishedDate = DateTime.UtcNow.AddMinutes(-20),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
@@ -704,6 +866,396 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 }
             };
 
+            return searchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForCumulative()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 4,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                           new BatchDetails() {
+                            BatchId = "2",
+                             Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "3",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "4",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDuplicateCumulative()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 6,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                           new BatchDetails() {
+                            BatchId = "2",
+                             Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "3",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                            new BatchDetails() {
+                            BatchId = "4",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                             BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(A) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "5",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                         new BatchDetails() {
+                            BatchId = "6",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Cumulative"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now.AddMinutes(-10),
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "NP234(B) 2021.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForLeisure()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 2,
+                    Links = null,
+                    Total = 2,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5622"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 14:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDuplicateLeisure()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 3,
+                    Links = null,
+                    Total = 3,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5622"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 14:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("06-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                    }
+                }
+                
+                };
+
+        
             return searchResult;
         }
     }

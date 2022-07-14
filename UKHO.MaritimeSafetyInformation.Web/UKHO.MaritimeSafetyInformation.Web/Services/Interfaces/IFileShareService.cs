@@ -7,7 +7,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
     {
         Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient);
         Task<IResult<BatchAttributesSearchResponse>> FSSSearchAttributeAsync(string accessToken, string correlationId, IFileShareApiClient fileShareApiClient);
-        Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient);
+        Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient, string frequency);
         Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient);
     }
 }

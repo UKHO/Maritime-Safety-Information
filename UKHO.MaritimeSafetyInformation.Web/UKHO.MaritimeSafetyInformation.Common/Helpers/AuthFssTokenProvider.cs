@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
@@ -38,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     DefaultAzureCredential azureCredential = new();
                     TokenRequestContext tokenRequestContext = new(new string[] { _fileShareServiceConfiguration.Value.FssClientId + "/.default" });
                     AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
-                    return tokenResult.Token;
+                    return tokenResult.Token;                   
                 }
             }
             catch (Exception ex)

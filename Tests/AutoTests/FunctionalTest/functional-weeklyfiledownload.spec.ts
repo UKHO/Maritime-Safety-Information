@@ -25,7 +25,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     var fileName = name[0];
 
     const newPageUrl = await (await page.$("[id^='download'] > a")).getAttribute('href');
-    expect(newPageUrl).toContain(`NoticesToMariners/DownloadWeeklyFile?fileName=${fileName}`);
+    expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
   })
 
   test('Should Goto Notices to Mariner Page for Weekly Download with Distributor Role', async ({ page, context }) => {
@@ -46,6 +46,14 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await noticeFileDownload.goToDailyFile();
     await noticeFileDownload.checkDailyFileDownload();
   })
+
+  test('Does the Notices to Mariners Cumulative Page is displayed',async ({page}) => {
+    await noticeFileDownload.goToNoticeToMariner();
+    await noticeFileDownload.goToCumulative();
+    await noticeFileDownload.verifyCumulativeFileName();
+    await noticeFileDownload.verifyCumulativeFileNameDownload();
+  })  
+
   test('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
     await notice.checkpageurl('','Maritime Safety Information')
     await notice.checkurl(notice.noticeMarine,'NoticesToMariners/Weekly','Notices to Mariners - Weekly')
@@ -60,4 +68,13 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await notice.checkUkcoastalUrl(notice.ukcoastaltab,'RadioNavigationalWarnings','Radio Navigational Warnings - UK Coastal')
  })  
 
+ test('Should Goto Notices to Mariner Page for Leisure Folios is displayed', async ({ page, context }) => {
+  await noticeFileDownload.goToNoticeToMariner();
+  await noticeFileDownload.goToLeisureFolios();
+  await noticeFileDownload.checkFurtherInformation();
+  await noticeFileDownload.checkImportantSafetyNotice();
+  await noticeFileDownload.verifyleisureFoliosFileName();
+  await noticeFileDownload.verifyleisureFoliosFileNameDownload();
+  
+})
 });
