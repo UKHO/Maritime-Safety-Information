@@ -20,6 +20,8 @@ export default class noticeToMarinerWeekDownload {
   readonly importantSafetyNotice:Locator;
   readonly leisureFoliosFileName:Locator;
   readonly leisureFoliosFileSize:Locator;
+  readonly distributorPartner:Locator;
+  readonly distributorPublic:Locator;
   constructor(page: Page) {
     this.page = page;
     this.noticeToMarine = this.page.locator('a:has-text("Notices to Mariners")');
@@ -33,6 +35,9 @@ export default class noticeToMarinerWeekDownload {
     this.download = this.page.locator("[id^='download'] > a");
     this.fileName = this.page.locator("[id^='filename']");
     this.leisureFolios=this.page.locator('div > p > a');
+    this.distributorPartner=this.page.locator('text=Partner');
+    this.distributorPublic=this.page.locator('text=Partner');
+
   }
 
   public async goToNoticeToMariner() {
@@ -106,6 +111,25 @@ export default class noticeToMarinerWeekDownload {
     else {
       throw new Error("No download File Found")
     }
+  }
+
+  public async checkWeeklyFileSortingWithDistributorRole()
+  {
+   
+    await this.page.waitForSelector("[id^='filename']");
+    const fileNames= await this.page.$$eval("[id^='filename']", (matches: any[]) => { return matches.map(option => option.textContent) }); ;
+    const sortedFilename =fileNames.sort()
+    expect(sortedFilename).toEqual(fileNames);
+  
+  }
+
+  public async checkWeeklyFileSectionName()
+  {
+    const distributorSectionName=await (await this.distributorPartner.first().innerText());
+    expect(distributorSectionName).toContain('Partner');
+    const publicSectionName=await (await this.distributorPublic.first().innerText());
+    expect(publicSectionName).toContain('Public');
+
   }
   public async verifyCumulativeFileName() {
     await this.page.waitForSelector("td[id^='FileName']");
