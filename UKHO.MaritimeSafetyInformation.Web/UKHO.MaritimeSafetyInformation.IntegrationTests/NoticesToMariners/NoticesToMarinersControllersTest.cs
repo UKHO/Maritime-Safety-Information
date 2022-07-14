@@ -255,7 +255,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("527 KB", showFiles[0].FileSizeinKB);
             Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x=>x.Key=="Frequency").Value);
             Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x=>x.Key=="Chart").Value);
-            Assert.AreEqual("63f4c516-2d8d-4db3-aff1-89c7f97c56a3", showFiles[0].BatchId);
+            Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles[0].BatchId);
         }
 
         [Test]
@@ -282,7 +282,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("763 KB", showFiles[1].FileSizeinKB);
             Assert.AreEqual("Leisure", showFiles[1].Attributes.First(x => x.Key == "Frequency").Value);
             Assert.AreEqual("SC5608", showFiles[1].Attributes.First(x => x.Key == "Chart").Value);
-            Assert.AreEqual("8d4cd2d6-e4a7-4b48-9f48-ef3a744682c5", showFiles[1].BatchId);
+            Assert.AreEqual("f017aead-89d3-484d-9acc-e12842724e9e", showFiles[1].BatchId);
         }
     }
 }
