@@ -22,6 +22,15 @@ export default class noticeToMarinerWeekDownload {
   readonly leisureFoliosFileSize:Locator;
   readonly distributorPartner:Locator;
   readonly distributorPublic:Locator;
+  readonly distributorFileNumber:Locator;
+  readonly distributorFirstFileName:Locator;
+  readonly distributorFirstSize:Locator;
+  readonly distributorSecoundFileName:Locator;
+  readonly distributorSecoundSize:Locator;
+  readonly distributorThirdFileName:Locator;
+  readonly distributorThirdSize:Locator;
+  readonly publicFirstFileName:Locator;
+  readonly publicFirstSize:Locator;
   constructor(page: Page) {
     this.page = page;
     this.noticeToMarine = this.page.locator('a:has-text("Notices to Mariners")');
@@ -37,6 +46,15 @@ export default class noticeToMarinerWeekDownload {
     this.leisureFolios=this.page.locator('div > p > a');
     this.distributorPartner=this.page.locator('text=Partner');
     this.distributorPublic=this.page.locator('text=Partner');
+    this.distributorFileNumber=this.page.locator("[id^='distributor']");
+    this.distributorFirstFileName=this.page.locator('#filename_1');
+    this.distributorFirstSize=this.page.locator('#filesize_1');
+    this.distributorSecoundFileName=this.page.locator('#filename_3');
+    this.distributorSecoundSize=this.page.locator('#filesize_3');
+    this.distributorThirdFileName=this.page.locator('#filename_4');
+    this.distributorThirdSize=this.page.locator('#filesize_4');
+    this.publicFirstFileName=this.page.locator('#filename_0');
+    this.publicFirstSize=this.page.locator('#filesize_0');
 
   }
 
@@ -145,5 +163,35 @@ export default class noticeToMarinerWeekDownload {
     {
       expect(resultLinks[i].trim()).toEqual("Download");
     }
+  }
+
+  public async verifyDistributorFileCount()
+  { 
+    await this.page.waitForSelector("[id^='distributor']");
+    const fileNumber=await this.distributorFileNumber.count();
+    expect(fileNumber).toEqual(3);
+
+  }
+
+  public async verifyIntegrationTestValueForDistributor()
+  {
+    const distributorFileName=await this.distributorFirstFileName.textContent();
+    expect(distributorFileName).toContain("26sect4");
+    const distributorFileSize=await this.distributorFirstSize.textContent();
+    expect(distributorFileSize).toContainEqual("91 KB (.rtf)");
+    const distributorFileNameSecound=await this.distributorSecoundFileName.textContent();
+    expect(distributorFileNameSecound).toContain("rs6-nms-2022-26");
+    const distributorFileSizeSecound=await this.distributorFirstSize.textContent();
+    expect(distributorFileSizeSecound).toContainEqual("30 KB (.xml)");
+    const distributorFileNameThird=await this.distributorSecoundFileName.textContent();
+    expect(distributorFileNameThird).toContain("WK26_22");
+    const distributorFileSizeThird=await this.distributorFirstSize.textContent();
+    expect(distributorFileSizeThird).toContainEqual("74 KB (.pdf)");
+
+    const publicFileNameFirst=await this.publicFirstFileName.textContent();
+    expect(publicFileNameFirst).toContain("23wknm22");
+    const publicFileSizeFirst=await this.publicFirstSize.textContent();
+    expect(publicFileSizeFirst).toContainEqual("2 MB (.pdf)");
+
   }
 }
