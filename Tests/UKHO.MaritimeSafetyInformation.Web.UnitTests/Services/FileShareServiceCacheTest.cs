@@ -191,14 +191,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsInsertEntityAsyncSuccessfully()
+        public void WhenExecutionFailedForInsertEntityAsync()
+        {
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Throws(new Exception());
+
+            Task response = _fileShareServiceCache.InsertEntityAsync(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
+
+            Assert.IsTrue(response.IsCompleted);
+        }
+
+        [Test]
+        public void WhenExecutionSuccessfullyCompletedForInsertEntityAsync()
         {
             A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
             A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            await _fileShareServiceCache.InsertEntityAsync(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
+            Task response =  _fileShareServiceCache.InsertEntityAsync(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
+
+            Assert.IsTrue(response.IsCompleted);
         }
     }
 }

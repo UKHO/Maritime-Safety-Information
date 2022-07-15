@@ -43,13 +43,13 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
-            Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
-            Assert.AreEqual(3, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual(8, showWeeklyFiles.YearAndWeekList.Count);
+            Assert.AreEqual(5, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
             Assert.AreEqual(14, showWeeklyFiles.YearAndWeekList[0].Week);
-            Assert.AreEqual("image/jpg", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
+            Assert.AreEqual("application/pdf", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(4, showWeeklyFiles.ShowFilesResponseList.Count);
-            Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
+            Assert.AreEqual(8, showWeeklyFiles.YearAndWeekList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual("msi_img_W2021_30.jpg", showWeeklyFiles.ShowFilesResponseList[1].Filename);
