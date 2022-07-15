@@ -1,7 +1,8 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 @model List<ShowFilesResponseModel>
 @{
-    var publicRole = Model.Where(x => x.IsDistributorUser.Equals(false));
+    bool publicBool = false;
+    bool partnerBool = false;
 }
 
 @if (Model != null && Model.Count > 0)
@@ -23,49 +24,63 @@
                 {
                     if (Model[i].IsDistributorUser)
                     {
+                        { partnerBool = true; }
                         <tr>
                             <td id="filename_@i">@Model[i].FileDescription</td>
                             <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                             <td class="td-3 justify-content-center" id="download_@i">
                                 <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly" })">Download</a>
-                                <label id="distributor_@i" class="hidden-caption">@Model[i].IsDistributorUser</label>
+                                <label id="distributor_@i" class="hidden-caption">Distributor</label>
 
                             </td>
                         </tr>
                     }
+                }
+                @if (!partnerBool)
+                {
+                    <tr>
+                        <td colspan="3">No data available for selected year and week</td>
+                    </tr>
                 }
             </tbody>
         </table>
     }
 }
 
-    @if (ViewBag.IsDistributor)
-    {
-        <caption class="table-caption">Public</caption>
-    }
-    <table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
-        <caption class="hidden-caption">Notices to Mariners Weekly Updates</caption>
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>File Size</th>
-                <th class="th-3"><span class="visually-hidden">Action</span></th>
-            </tr>
-        </thead>
-        <tbody class="scroll-content scroll-bar">
-            @for (int i = 0; i < Model.Count; i++)
+@if (ViewBag.IsDistributor)
+{
+    <caption class="table-caption">Public</caption>
+}
+<table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
+    <caption class="hidden-caption">Notices to Mariners Weekly Updates</caption>
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>File Size</th>
+            <th class="th-3"><span class="visually-hidden">Action</span></th>
+        </tr>
+    </thead>
+    <tbody class="scroll-content scroll-bar">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            @if (!Model[i].IsDistributorUser)
             {
-                if (!Model[i].IsDistributorUser)
-                {
-                    <tr>
-                        <td id="filename_@i">@Model[i].FileDescription</td>
-                        <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
-                        <td class="td-3 justify-content-center" id="download_@i">
-                            <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly"  })">Download</a>
-                            <label id="public_@i" class="hidden-caption">@Model[i].IsDistributorUser</label>
-                        </td>
-                    </tr>
-                }
+                { publicBool = true; }
+                <tr>
+                    <td id="filename_@i">@Model[i].FileDescription</td>
+                    <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
+                    <td class="td-3 justify-content-center" id="download_@i">
+                        <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly"  })">Download</a>
+                        <label id="public_@i" class="hidden-caption">Public</label>
+                    </td>
+                </tr>
             }
-        </tbody>
-    </table>
+        }
+        @if (!publicBool)
+        {
+            <tr>
+                <td colspan="3">No data available for selected year and week</td>
+            </tr>
+        }
+    </tbody>
+</table>
