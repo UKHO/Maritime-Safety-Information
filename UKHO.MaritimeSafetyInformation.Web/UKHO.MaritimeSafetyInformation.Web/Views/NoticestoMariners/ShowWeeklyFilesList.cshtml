@@ -28,6 +28,8 @@
                             <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                             <td class="td-3 justify-content-center" id="download_@i">
                                 <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly" })">Download</a>
+                                <label id="distributor_@i" class="hidden-caption">@Model[i].IsDistributorUser</label>
+
                             </td>
                         </tr>
                     }
@@ -60,7 +62,7 @@
                         <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                         <td class="td-3 justify-content-center" id="download_@i">
                             <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly"  })">Download</a>
-                            
+                            <label id="public_@i" class="hidden-caption">@Model[i].IsDistributorUser</label>
                         </td>
                     </tr>
                 }
