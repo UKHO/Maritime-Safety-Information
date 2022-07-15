@@ -39,7 +39,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
             {
                 SearchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(cacheInfo.Response);
-                SearchResult.AttributeYearAndWeekIsCache = true;
 
                 _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheCompleted.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
             }
@@ -71,7 +70,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
             {
                 SearchResult.batchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
-                SearchResult.WeeklyNMFilesIsCache = true;
 
                 _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly NM file from cache azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
             }

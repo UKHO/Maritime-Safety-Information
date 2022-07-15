@@ -11,7 +11,5 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
         public List<Error> Errors { get; set; }
 
         public BatchAttributesSearchResponse Data { get; set; }
-
-        public bool AttributeYearAndWeekIsCache { get; set; }
     }
 }
