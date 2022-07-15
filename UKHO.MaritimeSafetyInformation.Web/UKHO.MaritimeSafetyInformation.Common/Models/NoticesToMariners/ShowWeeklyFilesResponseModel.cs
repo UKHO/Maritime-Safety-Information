@@ -8,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
     {
         public List<ShowFilesResponseModel> ShowFilesResponseList { get; set; }
         public List<YearWeekModel> YearAndWeekList { get; set; }
-        public bool AttributeYearAndWeekIsCached { get; set; }
-        public bool WeeklyNMFilesIsCached { get; set; }
+        public bool IsYearAndWeekAttributesCached { get; set; }
+        public bool IsWeeklyBatchResponseCached { get; set; }
     }
 }

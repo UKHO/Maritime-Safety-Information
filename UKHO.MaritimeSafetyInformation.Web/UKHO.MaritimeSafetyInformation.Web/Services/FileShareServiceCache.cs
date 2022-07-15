@@ -16,20 +16,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
         private readonly IAzureStorageService _azureStorageService;
         private readonly ILogger<FileShareServiceCache> _logger;
+        private readonly IUserService _userService;
 
-        public FileShareServiceCache(IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, ILogger<FileShareServiceCache> logger)
+        public FileShareServiceCache(IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, ILogger<FileShareServiceCache> logger, IUserService userService)
         {
             _azureTableStorageClient = azureTableStorageClient;
             _cacheConfiguration = cacheConfiguration;
             _azureStorageService = azureStorageService;
             _logger = logger;
+            _userService = userService;
         }
 
-        public async Task<BatchAttributesSearchModel> GetAllYearWeekFromCache(string partitionKey, string rowKey, string correlationId)
+        public async Task<BatchAttributesSearchModel> GetAllYearWeekFromCache(string rowKey, string correlationId)
         {
+            string partitionKey = _userService.IsDistributorUser ? "Distributor" : "Public";
+            BatchAttributesSearchModel SearchResult = new();
+
             _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheStart.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
 
-            BatchAttributesSearchModel SearchResult =new();
             CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName);
 
             if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
@@ -54,12 +58,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return SearchResult;
         }
 
-        public async Task<BatchSearchResponseModel> GetWeeklyBatchFilesFromCache(string partitionKey, int year, int week, string correlationId)
+        public async Task<BatchSearchResponseModel> GetWeeklyBatchFilesFromCache(int year, int week, string correlationId)
         {
-            _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
-
+            string partitionKey = _userService.IsDistributorUser ? "Distributor" : "Public";
             BatchSearchResponseModel SearchResult = new();
             string rowKey = year.ToString() + '|' + week.ToString();
+
+            _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM files from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
+
             CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
 
             if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
@@ -85,8 +91,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return SearchResult;
         }
 
-        public async Task InsertEntityAsync(CustomTableEntity customTableEntity, string tableName)
+        public async Task InsertEntityAsync(object data, string rowKey, string tableName)
         {
+            string userRole = _userService.IsDistributorUser ? "Distributor" : "Public";
+            
+            CustomTableEntity customTableEntity = new()
+            {
+                PartitionKey = userRole,
+                RowKey = rowKey,
+                Response = JsonConvert.SerializeObject(data),
+                CacheExpiry = DateTime.UtcNow.AddMinutes(_cacheConfiguration.Value.CacheTimeOutInMins)
+            };
+
             string connectionString =_azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey); 
             
             await _azureTableStorageClient.InsertEntityAsync(customTableEntity, tableName, connectionString);

@@ -23,6 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IAzureStorageService _azureStorageService;
         private IFileShareServiceCache _fileShareServiceCache;
         private ILogger<FileShareServiceCache> _logger;
+        private IUserService _userService;
 
         [SetUp]
         public void Setup()
@@ -32,8 +33,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _logger = A.Fake<ILogger<FileShareServiceCache>>();
             _fileShareServiceCache = A.Fake<IFileShareServiceCache>();
             _azureStorageService = A.Fake<IAzureStorageService>();
+            _userService = A.Fake<IUserService>();
 
-            _fileShareServiceCache = new FileShareServiceCache(_azureTableStorageClient, _cacheConfiguration, _azureStorageService, _logger);
+            _fileShareServiceCache = new FileShareServiceCache(_azureTableStorageClient, _cacheConfiguration, _azureStorageService, _logger, _userService);
         }
 
         [Test]
@@ -44,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache("Public", "", "");
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
             Assert.IsNull(result.Data);
@@ -68,7 +70,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache("Public", "", "");
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
             Assert.IsNull(result.Data);
@@ -88,7 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache("Public", "", "");
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
             Assert.AreEqual(SearchResult.Data.SearchBatchCount, result.Data.SearchBatchCount);
@@ -102,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache("Public", 2022, 2, "");
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.IsNull(result.batchSearchResponse);
@@ -129,7 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                           .MustNotHaveHappened();
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache("Public", 2022, 2, "");
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.IsNull(result.batchSearchResponse);
@@ -154,7 +156,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache("Public", 2022, 2, "");
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.AreEqual(batchSearchResponseModel.batchSearchResponse.Count, result.batchSearchResponse.Count);
@@ -168,7 +170,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            await _fileShareServiceCache.InsertEntityAsync(new CustomTableEntity(), "");
+            await _fileShareServiceCache.InsertEntityAsync(new object(), string.Empty, string.Empty);
         }
     }
 }
