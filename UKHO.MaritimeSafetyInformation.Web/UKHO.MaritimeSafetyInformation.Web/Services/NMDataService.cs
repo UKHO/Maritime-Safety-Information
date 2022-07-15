@@ -129,7 +129,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started for daily user:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", _userService.SignInName, _userService.UserIdentifier, correlationId);
 
                 string searchText = "";
 
@@ -150,13 +150,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for user:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", _userService.SignInName, _userService.UserIdentifier, correlationId);
+
                     List<ShowDailyFilesResponseModel> showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
                     return showDailyFilesResponses;
                 }
                 else
                 {
-                    _logger.LogError(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogError(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for user:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{correlationId}", _userService.SignInName, _userService.UserIdentifier, correlationId);
+
                     throw new InvalidDataException("Invalid data received for daily NM files");
                 }
 
@@ -164,8 +166,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
-                throw;
+                 _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for user:{_userService.SignInName} and Identity:{_userService.UserIdentifier} with _X-Correlation-ID:{CorrelationId}", ex.Message, _userService.SignInName, _userService.UserIdentifier, correlationId);
+            throw;
             }
         }
 
