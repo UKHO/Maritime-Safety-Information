@@ -65,8 +65,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 if (publicBatch != null)
                     batchDetailsList.Add(publicBatch);
 
-                //////batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
-
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;

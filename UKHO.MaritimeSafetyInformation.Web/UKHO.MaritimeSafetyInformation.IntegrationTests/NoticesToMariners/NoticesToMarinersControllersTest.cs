@@ -28,31 +28,22 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         private NoticesToMarinersController _nMController;
 
         private Configuration Config { get; set; }
-        private HttpContextAccessor _httpContext;
 
         [SetUp]
         public void Setup()
         {
             Config = new Configuration();           
-            _httpContext = new HttpContextAccessor
+            _ = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
            
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
-            _services.GetRequiredService<IUserService>();
         }
         
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            //////_httpContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            //////    {
-            //////        new Claim(ClaimTypes.Name, "Distributor"),
-            //////        new Claim(ClaimTypes.Role, "Distributor"),
-            //////        new Claim("custom-claim", "Custom")
-            //////    }, "mock"));
-
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
