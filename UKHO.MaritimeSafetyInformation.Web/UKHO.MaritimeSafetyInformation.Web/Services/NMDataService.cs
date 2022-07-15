@@ -36,31 +36,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                BatchSearchResponse SearchResult = new();
+                BatchSearchResponse searchResult = new();
                 bool isCached = false;
+                const string Frequency = "Weekly";
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetWeeklyBatchFilesFromCache(year, week, correlationId);
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(year, week, correlationId);
 
                     if (batchSearchResponseModel.batchSearchResponse != null) {
-                        SearchResult = batchSearchResponseModel.batchSearchResponse;
+                        searchResult = batchSearchResponseModel.batchSearchResponse;
                         isCached = true;
                     }
                 }
                 
-                if (SearchResult.Entries == null)
+                if (searchResult.Entries == null)
                 {
                     string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                    string searchText = $" and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
+                    string searchText = $" and $batch(Frequency) eq {Frequency} and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
                     IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
-                    SearchResult = result.Data;
+                    searchResult = result.Data;
 
                     if (_cacheConfiguration.Value.IsFssCacheEnabled)
                     {
@@ -68,17 +69,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
   
-                        await _fileShareServiceCache.InsertEntityAsync(SearchResult, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
+                        await _fileShareServiceCache.InsertEntityAsync(searchResult, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, Frequency, correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
                     }
                 }
 
-                if (SearchResult != null && SearchResult.Entries.Count > 0)
+                if (searchResult != null && searchResult.Entries.Count > 0)
                 {
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned data for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(SearchResult).OrderBy(e => e.FileDescription).ToList();
+                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponse(searchResult).OrderBy(e => e.FileDescription).ToList();
                     return new ShowNMFilesResponseModel() { ShowFilesResponseModel = ListshowFilesResponseModels, IsWeeklyBatchResponseCached = isCached };
                 }
                 else
@@ -132,7 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertEntityAsync(searchAttributes, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName);
+                        await _fileShareServiceCache.InsertEntityAsync(searchAttributes, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName, "BatchAttribute", correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
                     }

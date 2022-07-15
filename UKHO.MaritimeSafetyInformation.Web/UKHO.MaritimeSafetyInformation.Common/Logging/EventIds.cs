@@ -492,15 +492,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910117- Request for searching weekly batch files from cache azure table storage is started.
         /// </summary>
-        FSSSearchWeeklyBatchFilesFromCacheStart = 910117,
+        FSSSearchWeeklyBatchResponseFromCacheStart = 910117,
         /// <summary>
         /// 910118 - Request for searching weekly batch files from cache azure table storage is completed.
         /// </summary>
-        FSSSearchWeeklyBatchFilesFromCacheCompleted = 910118,
+        FSSSearchWeeklyBatchResponseFromCacheCompleted = 910118,
         /// <summary>
         /// 910119 - Data not found for searching weekly batch files from cache azure table storage.
         /// </summary>
-        FSSSearchWeeklyBatchFilesDataNotFoundFromCache = 910119,
+        FSSSearchWeeklyBatchResponseDataNotFoundFromCache = 910119,
         /// <summary>
         /// 910120 - Request for storing file share service search all year week response in azure table storage is started.
         /// </summary>
@@ -528,11 +528,23 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910126 - Deletion started for expired searching weekly NM file cache data from table.
         /// </summary>
-        DeleteExpiredSearchWeeklyBatchFilesFromCacheStarted = 910126,
+        DeleteExpiredSearchWeeklyBatchResponseFromCacheStarted = 910126,
         /// <summary>
         /// 910127 - Deletion completed for expired searching weekly NM file cache data from table.
         /// </summary>
-        DeleteExpiredSearchWeeklyBatchFilesFromCacheCompleted = 910127
+        DeleteExpiredSearchWeeklyBatchResponseFromCacheCompleted = 910127,
+        /// <summary>
+        /// 910128 - Failed to get searching attribute year and week data from cache azure table.
+        /// </summary>
+        FSSSearchAllYearWeekFromCacheFailed = 910128,
+        /// <summary>
+        /// 910129 - Failed to get searching weekly NM files from cache azure table.
+        /// </summary>
+        FSSSearchWeeklyBatchResponseFromCacheFailed = 910129,
+        /// <summary>
+        /// 910130 - Process failed to insert entity value in cache table.
+        /// </summary>
+        FSSCacheDataInsertFailed = 910130
     }
 
     public static class EventIdExtensions

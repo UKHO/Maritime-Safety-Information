@@ -17,9 +17,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public async Task<CustomTableEntity> GetEntityAsync(string partitionKey, string rowKey, string tableName, string storageAccountConnectionString)
         {
-            TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
             try
             {
+                TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
                 return await tableClient.GetEntityAsync<CustomTableEntity>(partitionKey, rowKey);
             }
             catch (Exception)

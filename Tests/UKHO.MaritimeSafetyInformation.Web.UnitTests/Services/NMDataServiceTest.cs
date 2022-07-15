@@ -148,8 +148,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchFilesFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
-            A.CallTo(() => _fakeFileShareServiceCache.InsertEntityAsync(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.InsertEntityAsync(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             const int expectedRecordCount = 3;
 
@@ -159,7 +159,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetWeeklyBatchFilesUsingCache_ThenShouldReturnFiles()
+        public async Task WhenCacheEnabledForGetWeeklyBatchFiles_ThenCacheReturnResponse()
         {
             const int year = 2022;
             const int week = 07;
@@ -170,13 +170,35 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel batchSearchResponseModel = new();
             batchSearchResponseModel.batchSearchResponse = GetBatchSearchResponse();
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchFilesFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 2;
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForBatchFilesButDataNotInTable_ThenFSSReturnResponse()
+        {
+            const int year = 2022;
+            const int week = 07;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+
+            const int expectedRecordCount = 3;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
         }
 
         [Test]
@@ -251,7 +273,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
             A.CallTo(() => _fakeFileShareServiceCache.GetAllYearWeekFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
-            A.CallTo(() => _fakeFileShareServiceCache.InsertEntityAsync(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeFileShareServiceCache.InsertEntityAsync(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
@@ -260,7 +282,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetAllYearWeekIsCalledUsingCache_ThenShouldReturnYearWeekList_()
+        public async Task WhenCacheEnabledForYearWeek_ThenCacheReturnYearWeekList()
         {
             const int ExpectedRecordCount = 3;
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
@@ -275,6 +297,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsNotEmpty(result.YearWeekModel);
             Assert.AreEqual(result.YearWeekModel.Count, ExpectedRecordCount);
+            Assert.IsTrue(result.IsYearAndWeekAttributesCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForYearWeekButDataNotInTable_ThenFSSReturnYearWeekList()
+        {
+            const int ExpectedRecordCount = 3;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearWeekFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+
+            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
+
+            Assert.IsNotEmpty(result.YearWeekModel);
+            Assert.AreEqual(result.YearWeekModel.Count, ExpectedRecordCount);
+            Assert.IsFalse(result.IsYearAndWeekAttributesCached);
         }
 
         [Test]
