@@ -14,12 +14,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfiguration;
         private readonly ILogger<AuthFssTokenProvider> _logger;
         private readonly ITokenAcquisition _tokenAcquisition;
+        private readonly IOptions<AzureAdB2C> _azureAdB2C;
 
-        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, ITokenAcquisition tokenAcquisition)
+        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, ITokenAcquisition tokenAcquisition, IOptions<AzureAdB2C> azureAdB2C)
         {
             _fileShareServiceConfiguration = fileShareServiceConfiguration;
             _logger = logger;
             _tokenAcquisition = tokenAcquisition;
+            _azureAdB2C = azureAdB2C;
         }
 
         public async Task<string> GenerateADAccessToken(bool isDistributorUser, string correlationId)
@@ -28,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 if (isDistributorUser)
                 {
-                    return await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { "https://MGIAIDTESTB2C.onmicrosoft.com/FileShareServiceAPIQA/Public" });
+                    return await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { _azureAdB2C.Value.Scope });
                 }
                 else
                 {

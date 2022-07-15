@@ -13,9 +13,60 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             List<BatchDetails> batchDetailsList = new();
             if (SearchResult.Entries.Count > 1)
             {
-                //BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
-                //batchDetailsList.Add(batchDetail);
+                List<BatchDetails> distributorBatchDetail = new();
+                List<BatchDetails> publicBatchDetail = new();
+                for (int i = 0; i < SearchResult.Entries.Count; i++)
+                {
+                    bool checkContent = false;
+                    for (int j = 0; j < SearchResult.Entries[i].Attributes.Count; j++)
+                    {
+                        if (SearchResult.Entries[i].Attributes[j].Value == "tracings")
+                        {
+                            checkContent = true;
+                        }
+                    }
+                    if (checkContent)
+                    {
+                        distributorBatchDetail.Add(new BatchDetails
+                        {
+                            BatchId = SearchResult.Entries[i].BatchId,
+                            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
+                            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
+                            Files = SearchResult.Entries[i].Files,
+                            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
+                            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
+                            Status = SearchResult.Entries[i].Status,
+                            Attributes = SearchResult.Entries[i].Attributes
+                        });
+                    }
+                    else
+                    {
+                        publicBatchDetail.Add(new BatchDetails
+                        {
+                            BatchId = SearchResult.Entries[i].BatchId,
+                            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
+                            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
+                            Files = SearchResult.Entries[i].Files,
+                            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
+                            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
+                            Status = SearchResult.Entries[i].Status,
+                            Attributes = SearchResult.Entries[i].Attributes
+                        });
+                    }
+                }
+
+                BatchDetails distBatch = distributorBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                BatchDetails publicBatch = publicBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                if (distBatch != null)
+                {
+                    batchDetailsList.Add(distBatch);
+                }
+
+                if (publicBatch != null)
+                    batchDetailsList.Add(publicBatch);
+
+                //////batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
+
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
@@ -43,7 +94,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         MimeType = file.MimeType,
                         Links = file.Links,
                         IsDistributorUser = item.Attributes.Where(x => x.Key.Equals("Content"))
-                        .Select(x => x.Value).FirstOrDefault() == "tracings" ? true : false
+                        .Select(x => x.Value).FirstOrDefault() == "tracings"
                     });
                 }
             }
@@ -53,8 +104,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
         {
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
-            
+            List<ShowFilesResponseModel> listShowFilesResponseModels = GetShowFilesResponseModel(searchResult.Entries);
+
             return listShowFilesResponseModels
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
                 .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
