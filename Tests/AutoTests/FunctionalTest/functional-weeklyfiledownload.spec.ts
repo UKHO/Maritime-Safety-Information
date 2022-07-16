@@ -25,7 +25,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     var fileName = name[0];
 
     const newPageUrl = await (await page.$("[id^='download'] > a")).getAttribute('href');
-    expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
+    expect(newPageUrl).toContain(`NoticesToMariners/DownloadWeeklyFile?fileName=${fileName}`);
   })
 
   test('Should Goto Notices to Mariner Page for Daily download File', async ({ page, context }) => {
@@ -41,7 +41,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await noticeFileDownload.verifyCumulativeFileNameDownload();
   })  
 
-  test('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
+  test.only('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
     await notice.checkpageurl('','Maritime Safety Information')
     await notice.checkurl(notice.noticeMarine,'NoticesToMariners/Weekly','Notices to Mariners - Weekly')
     await notice.checkurl(notice.tabdaily,'NoticesToMariners/Daily','Notices to Mariners - Daily')
