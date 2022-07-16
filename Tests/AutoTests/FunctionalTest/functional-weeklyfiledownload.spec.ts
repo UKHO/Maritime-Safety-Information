@@ -41,7 +41,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await noticeFileDownload.verifyCumulativeFileNameDownload();
   })  
 
-  test.only('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
+  test('Does the Notices to Mariners Page urls are displayed with page title',async ({page}) => {
     await notice.checkpageurl('','Maritime Safety Information')
     await notice.checkurl(notice.noticeMarine,'NoticesToMariners/Weekly','Notices to Mariners - Weekly')
     await notice.checkurl(notice.tabdaily,'NoticesToMariners/Daily','Notices to Mariners - Daily')

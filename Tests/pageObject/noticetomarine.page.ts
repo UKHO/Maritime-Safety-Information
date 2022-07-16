@@ -72,20 +72,20 @@ export default class noticetoMarine
     public async checkurl(locator:Locator,url:string,title:string)
     {
         
-        await locator.click({force:true});
+        await locator.click();
     
         expect(this.page).toHaveURL(`${app.url}/${url}`);
         expect(this.page).toHaveTitle(title)
     }
     public async checkNavareaUrl(locator:Locator,url:string,title:string)
     {
-        await locator.click({force:true});
+        await locator.click();
         expect(this.page).toHaveURL(`${app.url}/${url}#navarea1`);
          expect(this.page).toHaveTitle(title);
     }
     public async checkUkcoastalUrl(locator:Locator,url:string,title:string)
     {
-        await locator.click({force:true});
+        await locator.click();
         expect(this.page).toHaveURL(`${app.url}/${url}#ukcoastal`);
         expect(this.page).toHaveTitle(title);
     }
