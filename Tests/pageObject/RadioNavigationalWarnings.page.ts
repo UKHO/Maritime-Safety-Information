@@ -44,6 +44,7 @@ export default class RadioNavigationalWarnings
         this.filter = this.page.locator("#BtnFilter");
         this.delete = this.page.locator('#IsDeleted');
         this.edit=this.page.locator("[id^='Edit'] > a");
+        
     }
 
     public async SelectRadioNavigationalWarning()
@@ -73,6 +74,7 @@ export default class RadioNavigationalWarnings
 
     public async checkErrorMessage(locator:Locator,text:String)
     {
+        await this.page.waitForLoadState();
         expect((await locator.textContent()).toString()).toEqual(text);   
     }
     
