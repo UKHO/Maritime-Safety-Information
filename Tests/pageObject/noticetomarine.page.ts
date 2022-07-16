@@ -71,7 +71,9 @@ export default class noticetoMarine
 
     public async checkurl(locator:Locator,url:string,title:string)
     {
-        await locator.click();
+        
+        await locator.click({force:true});
+    
         expect(this.page).toHaveURL(`${app.url}/${url}`);
         expect(this.page).toHaveTitle(title)
     }
