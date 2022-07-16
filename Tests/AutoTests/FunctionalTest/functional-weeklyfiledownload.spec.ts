@@ -51,9 +51,12 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await notice.checkurl(notice.menuValueAddedResellers,'NoticesToMariners/Resellers','Notices to Mariners - Value Added Resellers')
     await notice.checkurl(notice.menuAbout,'NoticesToMariners/About','About Notices to Mariners')
     await notice.checkurl(notice.radioNavigationalWarnings,'RadioNavigationalWarnings','Radio Navigational Warnings')
+    await page.waitForTimeout(5000);
     await notice.checkNavareaUrl(notice.navareatab,'RadioNavigationalWarnings','Radio Navigational Warnings - NAVAREA I')
+    await page.waitForTimeout(5000);
     await notice.checkUkcoastalUrl(notice.ukcoastaltab,'RadioNavigationalWarnings','Radio Navigational Warnings - UK Coastal')
- })  
+    await page.waitForTimeout(5000);
+  })  
 
  test('Should Goto Notices to Mariner Page for Leisure Folios is displayed', async ({ page, context }) => {
   await noticeFileDownload.goToNoticeToMariner();
