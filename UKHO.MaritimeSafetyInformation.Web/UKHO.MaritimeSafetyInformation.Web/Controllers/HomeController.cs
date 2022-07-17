@@ -33,9 +33,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             ViewData["CurrentCorrelationId"] = correlationId;
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
-            {
-                string appBaseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-                string appLogInUrl = $"{appBaseUrl}/MicrosoftIdentity/Account/SignIn";
+            {                
+                string appLogInUrl = $"https://msi-dev.admiralty.co.uk/MicrosoftIdentity/Account/SignIn";
                 await Request.HttpContext.SignOutAsync();
                 _logger.LogError(EventIds.SystemError.ToEventId(), "User redirected to signin in case of MsalUiRequiredException exception:{ex} with correlationId:{correlationId}", exceptionDetails?.Error.InnerException.Message, correlationId);
                 return Redirect(appLogInUrl);                
