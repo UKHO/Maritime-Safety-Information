@@ -44,7 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(8, showWeeklyFiles.YearAndWeekList.Count);
-            Assert.AreEqual(5, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual(2, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
