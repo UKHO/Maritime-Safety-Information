@@ -183,7 +183,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static async Task<byte[]> GetFileBytesFromStream(Stream stream)
         {
-            byte[] fileBytes = new byte[stream.Length + 10];
+            byte[] fileBytes = new byte[stream.Length];
 
             int numBytesToRead = (int)stream.Length;
             int numBytesRead = 0;

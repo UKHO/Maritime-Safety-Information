@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -25,11 +27,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [Route("/error")]
-        public IActionResult Error()
+        public async Task<IActionResult> ErrorAsync()
         {
             string correlationId = GetCurrentCorrelationId();
             ViewData["CurrentCorrelationId"] = correlationId;
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
+            {
+                string appBaseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+                string appLogInUrl = $"{appBaseUrl}/MicrosoftIdentity/Account/SignIn";
+                await Request.HttpContext.SignOutAsync();
+                _logger.LogError(EventIds.SystemError.ToEventId(), "User redirected to signin in case of MsalUiRequiredException exception:{ex} with correlationId:{correlationId}", exceptionDetails?.Error.InnerException.Message, correlationId);
+                return Redirect(appLogInUrl);                
+            }
+
             _logger.LogError(EventIds.SystemError.ToEventId(), "System error has occurred while processing request with exception:{ex}, at exception path:{path} for correlationId:{correlationId}", exceptionDetails?.Error.Message, exceptionDetails?.Path, correlationId);
             return View();
         }

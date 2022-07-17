@@ -1,7 +1,5 @@
 ﻿using Azure.Core;
 using Azure.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
@@ -16,32 +14,35 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfiguration;
         private readonly ILogger<AuthFssTokenProvider> _logger;        
         private readonly IOptions<AzureAdB2C> _azureAdB2C;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ITokenAcquisition _tokenAcquisition;
 
-        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, IOptions<AzureAdB2C> azureAdB2C, IHttpContextAccessor contextAccessor)
+        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, IOptions<AzureAdB2C> azureAdB2C, ITokenAcquisition tokenAcquisition)
         {
             _fileShareServiceConfiguration = fileShareServiceConfiguration;
             _logger = logger;         
             _azureAdB2C = azureAdB2C;
-            _contextAccessor = contextAccessor;
+            _tokenAcquisition = tokenAcquisition;
         }
 
         public async Task<string> GenerateADAccessToken(bool isDistributorUser, string correlationId)
         {
             try
-            {                
+            {
                 if (isDistributorUser)
                 {
-                    ITokenAcquisition tokenAcquisition = _contextAccessor.HttpContext.RequestServices.GetRequiredService<ITokenAcquisition>();                   
-                    return await tokenAcquisition.GetAccessTokenForUserAsync(new string[] { _azureAdB2C.Value.Scope });
+                    return await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { _azureAdB2C.Value.Scope });
                 }
                 else
                 {
                     DefaultAzureCredential azureCredential = new();
                     TokenRequestContext tokenRequestContext = new(new string[] { _fileShareServiceConfiguration.Value.FssClientId + "/.default" });
                     AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
-                    return tokenResult.Token;                   
+                    return tokenResult.Token;
                 }
+            }
+            catch (MicrosoftIdentityWebChallengeUserException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

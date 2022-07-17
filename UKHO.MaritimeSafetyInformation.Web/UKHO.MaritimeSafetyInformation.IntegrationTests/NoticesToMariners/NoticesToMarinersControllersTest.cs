@@ -162,7 +162,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
-            Assert.AreEqual(1072222, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual(1072212, ((FileContentResult)result).FileContents.Length);
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
             Assert.IsTrue(((FileContentResult)result) != null);
             Assert.AreEqual("application/pdf", ((FileContentResult)result).ContentType);
-            Assert.AreEqual(425612, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual(425602, ((FileContentResult)result).FileContents.Length);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
 

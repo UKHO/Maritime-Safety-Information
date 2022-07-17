@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
@@ -32,9 +33,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenErrorIsCalled_ThenShouldReturnsViewAndViewData()
+        public async Task WhenErrorIsCalled_ThenShouldReturnsViewAndViewDataAsync()
         {
-            IActionResult result = _controller.Error();
+            IActionResult result = await _controller.ErrorAsync();
 
             Assert.IsInstanceOf<ViewResult>(result);
             Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
