@@ -63,13 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddControllersWithViews(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            })
+            services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
 
             services.AddRazorPages();

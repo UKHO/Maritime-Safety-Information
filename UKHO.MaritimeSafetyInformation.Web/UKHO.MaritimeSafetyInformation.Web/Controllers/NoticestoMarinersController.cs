@@ -30,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
 
-                _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for User:{_userService.SignInName} and IsDistributor:{_userService.IsDistributorUser} and correlationId:{correlationId}", _userService.SignInName, _userService.IsDistributorUser, GetCurrentCorrelationId());
 
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(0, 0, GetCurrentCorrelationId());
 
@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ShowWeeklyFilesIndexGetFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ShowWeeklyFilesIndexGetFailed.ToEventId(), "Maritime safety information request to get weekly NM files failed to return data with exception:{exceptionMessage} for User:{_userService.SignInName} and IsDistributor:{_userService.IsDistributorUser} with _X-Correlation-ID:{CorrelationId}", ex.Message, _userService.SignInName, _userService.IsDistributorUser, GetCurrentCorrelationId());
                 throw;
             }
         }
@@ -51,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             try
             {
-                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for correlationId:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for User:{_userService.SignInName} and IsDistributor:{_userService.IsDistributorUser} with correlationId:{correlationId}", _userService.SignInName, _userService.IsDistributorUser, GetCurrentCorrelationId());
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ShowWeeklyFilesIndexPostFailed.ToEventId(), "Maritime safety information request to get daily NM weekly files index post failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ShowWeeklyFilesIndexPostFailed.ToEventId(), "Maritime safety information request to get daily NM weekly files index post failed to return data with exception:{exceptionMessage} for User:{_userService.SignInName} and IsDistributor:{_userService.IsDistributorUser} with _X-Correlation-ID:{CorrelationId}", ex.Message, _userService.SignInName, _userService.IsDistributorUser, GetCurrentCorrelationId());
                 throw;
             }
         }

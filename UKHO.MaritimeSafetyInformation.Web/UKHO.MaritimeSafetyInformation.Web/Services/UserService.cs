@@ -5,16 +5,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class UserService : IUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private DefaultHttpContext _httpContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;       
         private const string DistributorRoleName = "Distributor";
 
         public UserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-        }
-
-        public UserService(DefaultHttpContext httpContext) => _httpContext = httpContext;
+        }       
        
         public bool IsDistributorUser
         {
