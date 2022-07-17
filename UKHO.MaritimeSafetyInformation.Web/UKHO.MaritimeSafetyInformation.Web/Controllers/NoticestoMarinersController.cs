@@ -130,8 +130,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
 
+                if (mimeType == "application/xml")
+                    _contextAccessor.HttpContext.Response.ContentType = "text/xml";
+
                 if (mimeType != "application/pdf")
                     mimeType = "application/octet-stream";
+
 
                 return File(fileBytes, mimeType);
 

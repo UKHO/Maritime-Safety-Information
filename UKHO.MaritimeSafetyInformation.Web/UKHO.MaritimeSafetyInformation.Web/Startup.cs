@@ -15,6 +15,8 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -61,8 +63,14 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddControllersWithViews()
-                .AddMicrosoftIdentityUI();
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddMicrosoftIdentityUI();
 
             services.AddRazorPages();
 

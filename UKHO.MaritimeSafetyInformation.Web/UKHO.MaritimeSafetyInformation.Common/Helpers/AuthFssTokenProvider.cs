@@ -1,5 +1,7 @@
 ﻿using Azure.Core;
 using Azure.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
@@ -15,13 +17,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         private readonly ILogger<AuthFssTokenProvider> _logger;
         private readonly ITokenAcquisition _tokenAcquisition;
         private readonly IOptions<AzureAdB2C> _azureAdB2C;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, ITokenAcquisition tokenAcquisition, IOptions<AzureAdB2C> azureAdB2C)
+        public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, ITokenAcquisition tokenAcquisition, IOptions<AzureAdB2C> azureAdB2C, IHttpContextAccessor contextAccessor)
         {
             _fileShareServiceConfiguration = fileShareServiceConfiguration;
             _logger = logger;
             _tokenAcquisition = tokenAcquisition;
             _azureAdB2C = azureAdB2C;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<string> GenerateADAccessToken(bool isDistributorUser, string correlationId)
@@ -29,8 +33,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             try
             {
                 if (isDistributorUser)
-                {
+                { 
+                    var tokenAcquisition = _contextAccessor.HttpContext.RequestServices.GetRequiredService<ITokenAcquisition>();
+
                     return await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { _azureAdB2C.Value.Scope });
+
+                   ///// return await _tokenAcquisition.GetAccessTokenForUserAsync(new string[] { _azureAdB2C.Value.Scope });
                 }
                 else
                 {
