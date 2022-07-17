@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -10,11 +12,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IOptions<AzureAdB2C> _azureAdB2C;
 
-        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger) : base(contextAccessor, logger)
+        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger, IOptions<AzureAdB2C> azureAdB2C) : base(contextAccessor, logger)
         {
             _logger = logger;
             _contextAccessor = contextAccessor;
+            _azureAdB2C = azureAdB2C;
         }
 
         [HttpGet]
@@ -34,7 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
             {                
-                string appLogInUrl = $"https://msi-dev.admiralty.co.uk/MicrosoftIdentity/Account/SignIn";
+                string appLogInUrl = $"{_azureAdB2C.Value.RedirectBaseUrl}/MicrosoftIdentity/Account/SignIn";
                 await Request.HttpContext.SignOutAsync();
                 _logger.LogError(EventIds.SystemError.ToEventId(), "User redirected to signin in case of MsalUiRequiredException exception:{ex} with correlationId:{correlationId}", exceptionDetails?.Error.InnerException.Message, correlationId);
                 return Redirect(appLogInUrl);                
