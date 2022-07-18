@@ -207,7 +207,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await _nMController.Cumulative();
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
             Assert.IsNotNull(listFiles);
-            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual(6, listFiles.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual("0cdb2271-b5a3-43b0-b923-733ada1760af", listFiles[0].BatchId);
@@ -226,7 +226,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await _nMController.Cumulative();
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
             Assert.IsNotNull(listFiles);
-            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual(6, listFiles.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[1].BatchId);
