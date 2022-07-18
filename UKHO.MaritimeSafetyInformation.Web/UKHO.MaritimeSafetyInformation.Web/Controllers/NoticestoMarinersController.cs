@@ -128,17 +128,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single {frequency} NM files completed for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
-                if (mimeType == "application/xml")
-                {
-                 _contextAccessor.HttpContext.Response.ContentType = "text/xml";
-                   //// _contextAccessor.HttpContext.Response.Headers.Add("Content-Type", "text/xml; charset=utf-8;");
-               }
-                /////// _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename =\"{0}\" {fileName}");
+              
+                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename ={fileName}");
                 if (mimeType != "application/pdf")
                     mimeType = "application/octet-stream";
 
-                return File(fileBytes, mimeType, fileName);
-
+                return File(fileBytes, mimeType);
             }
             catch (Exception ex)
             {
