@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
             Assert.IsNull(result.Data);
@@ -60,14 +60,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
             Assert.IsNull(result.Data);
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsReceivedExpiredCacheData_ThenReturnsEmptyBatchAttributesResponse()
+        public async Task WhenFSSCacheReceivesExpiredCacheData_ThenReturnsEmptyBatchAttributesResponse()
         {
             CustomTableEntity customTableEntity = new()
             {
@@ -84,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
             Assert.IsNull(result.Data);
@@ -93,21 +93,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenFSSCacheCallsGetAllYearWeekFromCache_ThenReturnsBatchAttributesResponse()
         {
-            CustomTableEntity customTableEntity = new() { PartitionKey = "Public", RowKey = "",
-                Response = "{\"IsSuccess\":true,\"StatusCode\":200,\"Errors\":[],\"Data\":{ \"searchBatchCount\":264,\"batchAttributes\":[{\"Key\":\"DATA DATE\",\"Values\":[\"2020 - 01 - 02\"]},{\"Key\":\"FREQUENCY\",\"Values\":[\"Weekly\"]},{\"Key\":\"PRODUCT TYPE\",\"Values\":[\"Notices to Mariners\"]},{\"Key\":\"WEEK NUMBER\",\"Values\":[\"1\"]},{\"Key\":\"YEAR\",\"Values\":[\"2020\",\"2021\",\"2022\"]},{\"Key\":\"YEAR / WEEK\",\"Values\":[\"2020 / 1\",\"2020 / 10\",\"2020 / 11\"]},{\"Key\":\"CONTENT\",\"Values\":[\"tracings\"]}]},\"AttributeYearAndWeekIsCache\":false}"};
+            CustomTableEntity customTableEntity = new()
+            {
+                PartitionKey = "Public",
+                RowKey = "",
+                Response = "{\"IsSuccess\":true,\"StatusCode\":200,\"Errors\":[],\"Data\":{ \"searchBatchCount\":264,\"batchAttributes\":[{\"Key\":\"DATA DATE\",\"Values\":[\"2020 - 01 - 02\"]},{\"Key\":\"FREQUENCY\",\"Values\":[\"Weekly\"]},{\"Key\":\"PRODUCT TYPE\",\"Values\":[\"Notices to Mariners\"]},{\"Key\":\"WEEK NUMBER\",\"Values\":[\"1\"]},{\"Key\":\"YEAR\",\"Values\":[\"2020\",\"2021\",\"2022\"]},{\"Key\":\"YEAR / WEEK\",\"Values\":[\"2020 / 1\",\"2020 / 10\",\"2020 / 11\"]},{\"Key\":\"CONTENT\",\"Values\":[\"tracings\"]}]},\"AttributeYearAndWeekIsCache\":false}",
+                CacheExpiry = DateTime.UtcNow.AddMinutes(2)
+            };
 
-            customTableEntity.CacheExpiry = DateTime.UtcNow.AddMinutes(2);
-            BatchAttributesSearchModel SearchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(customTableEntity.Response);
+            BatchAttributesSearchModel searchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(customTableEntity.Response);
 
             A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearWeekFromCache(string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
-            Assert.AreEqual(SearchResult.Data.SearchBatchCount, result.Data.SearchBatchCount);
+            Assert.AreEqual(searchResult.Data.SearchBatchCount, result.Data.SearchBatchCount);
         }
 
         [Test]
@@ -121,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.batchSearchResponse);
+            Assert.IsNull(result.BatchSearchResponse);
         }
 
         [Test]
@@ -135,11 +139,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.batchSearchResponse);
+            Assert.IsNull(result.BatchSearchResponse);
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsReceivedExpiredCacheData_ThenReturnsEmptyBatchSearchResponse()
+        public async Task WhenFSSCacheReceivesExpiredCacheData_ThenReturnsEmptyBatchSearchResponse()
         {
             BatchSearchResponseModel batchSearchResponseModel = new();
             CustomTableEntity customTableEntity = new()
@@ -149,7 +153,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Response = "{\"count\":2,\"total\":2,\"entries\":[{\"batchId\":\"e637f124-27bb-4f6a-a413-3b3f879725cf\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Content\",\"value\":\"tracings\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-06T12:07:23.137Z\",\"expiryDate\":\"2023-01-09T00:00:00Z\",\"files\":[{\"filename\":\"rs6-nms-2020-01.xml\",\"fileSize\":8758,\"mimeType\":\"application/xml\",\"hash\":\"mWZtPqCbWAqAqT4KPHV83w==\",\"attributes\":[],\"links\":{\"get\":{\"href\":\"/batch/e637f124-27bb-4f6a-a413-3b3f879725cf/files/rs6-nms-2020-01.xml\"}}}],\"allFilesZipSize\":3605391}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100\"} }}"
             };
 
-            batchSearchResponseModel.batchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
+            batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
             A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
@@ -162,7 +166,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.batchSearchResponse);
+            Assert.IsNull(result.BatchSearchResponse);
         }
 
         [Test]
@@ -173,11 +177,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             {
                 PartitionKey = "Public",
                 RowKey = "",
-                Response = "{\"count\":2,\"total\":2,\"entries\":[{\"batchId\":\"e637f124-27bb-4f6a-a413-3b3f879725cf\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Content\",\"value\":\"tracings\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-06T12:07:23.137Z\",\"expiryDate\":\"2023-01-09T00:00:00Z\",\"files\":[{\"filename\":\"rs6-nms-2020-01.xml\",\"fileSize\":8758,\"mimeType\":\"application/xml\",\"hash\":\"mWZtPqCbWAqAqT4KPHV83w==\",\"attributes\":[],\"links\":{\"get\":{\"href\":\"/batch/e637f124-27bb-4f6a-a413-3b3f879725cf/files/rs6-nms-2020-01.xml\"}}}],\"allFilesZipSize\":3605391}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100\"} }}"
+                Response = "{\"count\":2,\"total\":2,\"entries\":[{\"batchId\":\"e637f124-27bb-4f6a-a413-3b3f879725cf\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Content\",\"value\":\"tracings\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-06T12:07:23.137Z\",\"expiryDate\":\"2023-01-09T00:00:00Z\",\"files\":[{\"filename\":\"rs6-nms-2020-01.xml\",\"fileSize\":8758,\"mimeType\":\"application/xml\",\"hash\":\"mWZtPqCbWAqAqT4KPHV83w==\",\"attributes\":[],\"links\":{\"get\":{\"href\":\"/batch/e637f124-27bb-4f6a-a413-3b3f879725cf/files/rs6-nms-2020-01.xml\"}}}],\"allFilesZipSize\":3605391}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100\"} }}",
+                CacheExpiry = DateTime.UtcNow.AddMinutes(2)
             };
 
-            customTableEntity.CacheExpiry = DateTime.UtcNow.AddMinutes(2);
-            batchSearchResponseModel.batchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
+            batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
             A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
@@ -187,7 +191,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.AreEqual(batchSearchResponseModel.batchSearchResponse.Count, result.batchSearchResponse.Count);
+            Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
         }
 
         [Test]
@@ -198,7 +202,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            Task response = _fileShareServiceCache.InsertEntityAsync(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
+            Task response = _fileShareServiceCache.InsertCacheObject(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
 
             Assert.IsTrue(response.IsCompleted);
         }
@@ -211,7 +215,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            Task response =  _fileShareServiceCache.InsertEntityAsync(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
+            Task response =  _fileShareServiceCache.InsertCacheObject(new object(), string.Empty, string.Empty, string.Empty, string.Empty);
 
             Assert.IsTrue(response.IsCompleted);
         }
