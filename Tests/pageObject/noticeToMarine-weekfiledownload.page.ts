@@ -178,20 +178,20 @@ export default class noticeToMarinerWeekDownload {
     const distributorFileName=await this.distributorFirstFileName.textContent();
     expect(distributorFileName).toContain("26sect4");
     const distributorFileSize=await this.distributorFirstSize.textContent();
-    expect(distributorFileSize).toContainEqual("91 KB (.rtf)");
+    expect(distributorFileSize).toEqual("91 KB (.rtf)");
     const distributorFileNameSecound=await this.distributorSecoundFileName.textContent();
-    expect(distributorFileNameSecound).toContain("rs6-nms-2022-26");
-    const distributorFileSizeSecound=await this.distributorFirstSize.textContent();
-    expect(distributorFileSizeSecound).toContainEqual("30 KB (.xml)");
-    const distributorFileNameThird=await this.distributorSecoundFileName.textContent();
-    expect(distributorFileNameThird).toContain("WK26_22");
-    const distributorFileSizeThird=await this.distributorFirstSize.textContent();
-    expect(distributorFileSizeThird).toContainEqual("74 KB (.pdf)");
+    expect(distributorFileNameSecound).toEqual("rs6-nms-2022-26");
+    const distributorFileSizeSecound=await this.distributorSecoundSize.textContent();
+    expect(distributorFileSizeSecound).toEqual("30 KB (.xml)");
+    const distributorFileNameThird=await this.distributorThirdFileName.textContent();
+    expect(distributorFileNameThird).toEqual("WK26_22");
+    const distributorFileSizeThird=await this.distributorThirdSize.textContent();
+    expect(distributorFileSizeThird).toEqual("74 KB (.pdf)");
 
     const publicFileNameFirst=await this.publicFirstFileName.textContent();
-    expect(publicFileNameFirst).toContain("23wknm22");
+    expect(publicFileNameFirst).toEqual("23wknm22");
     const publicFileSizeFirst=await this.publicFirstSize.textContent();
-    expect(publicFileSizeFirst).toContainEqual("2 MB (.pdf)");
+    expect(publicFileSizeFirst).toEqual("2 MB (.pdf)");
 
   }
 }
