@@ -1,56 +1,13 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 @model List<ShowFilesResponseModel>
-@{
-    bool publicBool = false;
-    bool partnerBool = false;
-}
-
-    @if (ViewBag.IsDistributor)
-    {
-        <caption class="table-caption">Partner</caption>
-        <table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
-            <caption class="hidden-caption">Notices to Mariners Weekly Updates</caption>
-            <thead>
-                <tr>
-                    <th>File Name</th>
-                    <th>File Size</th>
-                    <th class="th-3"><span class="visually-hidden">Action</span></th>
-                </tr>
-            </thead>
-            <tbody class="scroll-content scroll-bar">
-                @for (int i = 0; i < Model.Count; i++)
-                {
-                    if (Model[i].IsDistributorUser)
-                    {
-                        { partnerBool = true; }
-                        <tr>
-                            <td id="filename_@i">@Model[i].FileDescription</td>
-                            <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
-                            <td class="td-3 justify-content-center" id="download_@i">
-                                <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly" })">Download</a>
-                                <label id="distributor_@i" class="hidden-caption">Distributor</label>
-
-                            </td>
-                        </tr>
-                    }
-                }
-                @if (!partnerBool)
-                {
-                    <tr>
-                        <td colspan="3">No Tracings available for Distributor for selected year and week</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-
 
 @if (ViewBag.IsDistributor)
 {
-    <caption class="table-caption">Public</caption>
+    <caption class="table-caption">@ViewBag.TableTitle</caption>
 }
 <table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
     <caption class="hidden-caption">Notices to Mariners Weekly Updates</caption>
+
     <thead>
         <tr>
             <th>File Name</th>
@@ -58,27 +15,47 @@
             <th class="th-3"><span class="visually-hidden">Action</span></th>
         </tr>
     </thead>
+
     <tbody class="scroll-content scroll-bar">
-        @for (int i = 0; i < Model.Count; i++)
+        @if (Model != null && Model.Count > 0)
         {
-            @if (!Model[i].IsDistributorUser)
+            @for (int i = 0; i < Model.Count; i++)
             {
-                { publicBool = true; }
                 <tr>
                     <td id="filename_@i">@Model[i].FileDescription</td>
                     <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                     <td class="td-3 justify-content-center" id="download_@i">
-                        <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly"  })">Download</a>
-                        <label id="public_@i" class="hidden-caption">Public</label>
+                        <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly" })">Download</a>
+                        @if (@Model[i].IsDistributorUser)
+                        {
+                            <label id="distributor_@i" class="hidden-caption">Distributor</label>
+                        }
+                        else
+                        {
+                            <label id="public_@i" class="hidden-caption">Public</label>
+                        }
                     </td>
                 </tr>
             }
         }
-        @if (!publicBool)
+        else
         {
-            <tr>
-                <td colspan="3">No files available for Public for selected year and week </td>
-            </tr>
+            @if (ViewBag.IsDistributor)
+            {
+                @if (ViewBag.TableTitle == "Partner")
+                {
+                    <tr>
+                        <td colspan="3">No Tracings available for Distributor for selected year and week</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">No files available for Public for selected year and week </td>
+                    </tr>
+                }
+            }
         }
     </tbody>
 </table>
+
