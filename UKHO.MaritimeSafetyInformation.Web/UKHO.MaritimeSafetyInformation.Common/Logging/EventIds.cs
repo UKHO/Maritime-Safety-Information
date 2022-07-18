@@ -544,7 +544,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910130 - Process failed to insert entity value in cache table.
         /// </summary>
-        FSSCacheDataInsertFailed = 910130
+        FSSCacheDataInsertFailed = 910130,
+        /// <summary>
+        /// 910131 - Request for storing file share service search cumulative batch files response in azure table storage is started.
+        /// </summary>
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910131,
+        /// <summary>
+        /// 910132 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
+        /// </summary>
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910132,
+        /// <summary>
+        /// 910133- Request for searching cumulative batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseFromCacheStart = 910133,
+        /// <summary>
+        /// 910134 - Request for searching cumulative batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseFromCacheCompleted = 910134,
+        /// <summary>
+        /// 910135 - Deletion started for expired searching cumulative NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted = 910135,
+        /// <summary>
+        /// 910136 - Deletion completed for expired searching cumulative NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted = 910136,
+        /// <summary>
+        /// 910137 - Data not found for searching cumulative batch files from cache azure table storage.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseDataNotFoundFromCache = 910137,
+        /// <summary>
+        /// 910138 - Failed to get searching cumulative NM files from cache azure table.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseFromCacheFailed = 910138,
     }
 
     public static class EventIdExtensions

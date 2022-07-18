@@ -108,6 +108,46 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
+        public async Task<BatchSearchResponseModel> GetCumulativeBatchFilesFromCache(string correlationId)
+        {
+            BatchSearchResponseModel searchResult = new();
+            try
+            {
+                string partitionKey = _userService.IsDistributorUser ? "Distributor" : "Public";
+                const string RowKey = "CumulativeKey"; ;
+
+                _logger.LogInformation(EventIds.FSSSearchCumulativeBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching cumulative NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, RowKey, _cacheConfiguration.Value.FssCumulativeBatchSearchTableName);
+
+                if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
+                {
+                    searchResult.batchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
+
+                    _logger.LogInformation(EventIds.FSSSearchCumulativeBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching cumulative NM response from cache azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
+                }
+                else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
+                {
+                    string connectionString = _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
+
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching cumulative NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, correlationId);
+                    await _azureTableStorageClient.DeleteEntityAsync(partitionKey, RowKey, _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, connectionString);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching cumulativ NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, correlationId);
+                }
+                else
+                {
+                    _logger.LogInformation(EventIds.FSSSearchCumulativeBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching cumulative NM response from azure table storage with _X-Correlation-ID:{correlationId}", correlationId);
+                }
+
+                return searchResult;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.FSSSearchCumulativeBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching cumulative NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+
+                return searchResult;
+            }
+        }
         public async Task InsertEntityAsync(object data, string rowKey, string tableName, string requestType, string correlationId)
         {
             try

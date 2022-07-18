@@ -9,5 +9,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<BatchSearchResponseModel> GetWeeklyBatchResponseFromCache(int year, int week, string correlationId);
 
         Task InsertEntityAsync(object data, string rowKey, string tableName, string requestType, string correlationId);
+
+        Task<BatchSearchResponseModel> GetCumulativeBatchFilesFromCache(string correlationId);
     }
 }
