@@ -39,7 +39,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsGetAllYearWeekFromCache_ThenReturnsNullObject()
+        public async Task WhenFSSCacheCallsGetAllYearsAndWeeksFromCache_ThenReturnsNullObject()
         {
             A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenExceptionInFSSCacheCallsGetAllYearWeekFromCache_ThenReturnsNullObject()
+        public async Task WhenExceptionInFSSCacheCallsGetAllYearsAndWeeksFromCache_ThenReturnsNullObject()
         {
             A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
@@ -91,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsGetAllYearWeekFromCache_ThenReturnsBatchAttributesResponse()
+        public async Task WhenFSSCacheCallsGetAllYearsAndWeeksFromCache_ThenReturnsBatchAttributesResponse()
         {
             CustomTableEntity customTableEntity = new()
             {
