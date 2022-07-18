@@ -10,24 +10,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     {
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
-            List<BatchDetails> batchDetailsList = new();
             if (SearchResult.Entries.Count > 1)
             {
-                List<BatchDetails> distributorBatchDetail = new();
-                List<BatchDetails> publicBatchDetail = new();
-                
-                BatchDetails distBatch = distributorBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                BatchDetails publicBatch = publicBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                if (distBatch != null)
-                {
-                    batchDetailsList.Add(distBatch);
-                }
+                List<BatchDetails> batchDetailsList = new();
 
-                if (publicBatch != null)
-                    batchDetailsList.Add(publicBatch);
-
-                //////batchDetailsList = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).ToList();
-
+                BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                batchDetailsList.Add(batchDetail);
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;

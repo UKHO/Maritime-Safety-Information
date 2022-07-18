@@ -52,7 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, "Distributor"),
-                   new Claim(ClaimTypes.Role, DistributorRoleName),
+                   new Claim(ClaimTypes.Role, DistributorRoleName)
                 }, "mock"));
 
             DefaultHttpContext httpContext = new()
@@ -69,7 +69,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenUserIsauthenticated_ThenGetSignInNameAndUserIdentityReturnsTrue()
+        public void WhenUserIsAuthenticated_ThenReturnsSignInNameAndUserIdentifier()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                {
@@ -90,29 +90,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual("TestUser", userService.SignInName);
             Assert.AreEqual("f457520b-0f1c-44cc-9b5c-2113e2ba1234", userService.UserIdentifier);
 
-        }
-
-        [Test]
-        public void WhenUserIsUnauthenticated_ThenGetSignInNameAndUserIdentityReturnsFalse()
-        {
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-               {
-                     new Claim("SignInName", "TestUse"),
-                     new Claim("http://schemas.microsoft.com/identity/claims/objectidentifier", "f457520b-0f1c-44cc-9b5c-2113e2ba234")
-               }, "mock"));
-
-            DefaultHttpContext httpContext = new()
-            {
-                User = user
-            };
-
-            HttpContextAccessor mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
-            mockHttpContextAccessor.HttpContext = httpContext;
-
-            UserService userService = new(mockHttpContextAccessor);
-
-            Assert.AreNotEqual("TestUser", userService.SignInName);
-            Assert.AreNotEqual("f457520b-0f1c-44cc-9b5c-2113e2ba1234", userService.UserIdentifier);
         }
     }
 }

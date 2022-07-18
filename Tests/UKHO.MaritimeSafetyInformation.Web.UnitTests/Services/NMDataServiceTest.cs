@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
-            const int expectedRecordCount = 0;
+            const int expectedRecordCount = 2;
 
             List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -143,7 +143,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
-            const int expectedRecordCount = 0;
+            const int expectedRecordCount = 3;
 
             List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -231,7 +231,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 2022;
             const int week = 15;
-            const int expectedShowFilesResponseModelRecordCount = 0;
+            const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
@@ -253,7 +253,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 0;
             const int week = 0;
-            const int expectedShowFilesResponseModelRecordCount = 0;
+            const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
