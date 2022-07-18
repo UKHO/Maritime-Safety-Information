@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -42,6 +43,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
                     return tokenResult.Token;                   
                 }
+            }
+            catch(MsalUiRequiredException msalex)
+            {
+                return $"Error Acquiring Token:{System.Environment.NewLine}{msalex}";                
             }
             catch (Exception ex)
             {
