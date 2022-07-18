@@ -27,31 +27,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     }
                     if (checkContent)
                     {
-                        distributorBatchDetail.Add(new BatchDetails
-                        {
-                            BatchId = SearchResult.Entries[i].BatchId,
-                            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
-                            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
-                            Files = SearchResult.Entries[i].Files,
-                            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
-                            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
-                            Status = SearchResult.Entries[i].Status,
-                            Attributes = SearchResult.Entries[i].Attributes
-                        });
+                        distributorBatchDetail.Add(AddBatchDetails(SearchResult, i));
                     }
                     else
                     {
-                        publicBatchDetail.Add(new BatchDetails
-                        {
-                            BatchId = SearchResult.Entries[i].BatchId,
-                            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
-                            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
-                            Files = SearchResult.Entries[i].Files,
-                            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
-                            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
-                            Status = SearchResult.Entries[i].Status,
-                            Attributes = SearchResult.Entries[i].Attributes
-                        });
+                        publicBatchDetail.Add(AddBatchDetails(SearchResult, i));
                     }
                 }
 
@@ -71,6 +51,18 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             }
             return GetShowFilesResponseModel(SearchResult.Entries);
         }
+
+        private static BatchDetails AddBatchDetails(BatchSearchResponse SearchResult, int i) => new()
+        {
+            BatchId = SearchResult.Entries[i].BatchId,
+            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
+            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
+            Files = SearchResult.Entries[i].Files,
+            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
+            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
+            Status = SearchResult.Entries[i].Status,
+            Attributes = SearchResult.Entries[i].Attributes
+        };
 
         public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
         {
