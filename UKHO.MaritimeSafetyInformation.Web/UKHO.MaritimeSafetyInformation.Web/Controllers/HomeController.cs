@@ -36,11 +36,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             string correlationId = GetCurrentCorrelationId();
             ViewData["CurrentCorrelationId"] = correlationId;
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            // In case of MsalUiRequiredException redirect user to sign in to get the account/login hint
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
             {                
                 string appLogInUrl = $"{_azureAdB2C.Value.RedirectBaseUrl}/MicrosoftIdentity/Account/SignIn";
-                await Request.HttpContext.SignOutAsync();
-                _logger.LogError(EventIds.SystemError.ToEventId(), "User redirected to signin in case of MsalUiRequiredException exception:{ex} with correlationId:{correlationId}", exceptionDetails?.Error.InnerException.Message, correlationId);
+                await Request.HttpContext.SignOutAsync();                
                 return Redirect(appLogInUrl);                
             }
 
