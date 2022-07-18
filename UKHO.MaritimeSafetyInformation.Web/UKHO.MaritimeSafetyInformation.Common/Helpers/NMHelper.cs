@@ -15,17 +15,10 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 List<BatchDetails> distributorBatchDetail = new();
                 List<BatchDetails> publicBatchDetail = new();
+                
                 for (int i = 0; i < SearchResult.Entries.Count; i++)
                 {
-                    bool checkContent = false;
-                    for (int j = 0; j < SearchResult.Entries[i].Attributes.Count; j++)
-                    {
-                        if (SearchResult.Entries[i].Attributes[j].Value == "tracings")
-                        {
-                            checkContent = true;
-                        }
-                    }
-                    if (checkContent)
+                    if (SearchResult.Entries[i].Attributes.SingleOrDefault(x => x.Key.Contains("Content") && x.Value.Contains("tracings")) != null)
                     {
                         distributorBatchDetail.Add(AddBatchDetails(SearchResult, i));
                     }
@@ -34,7 +27,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         publicBatchDetail.Add(AddBatchDetails(SearchResult, i));
                     }
                 }
-
                 BatchDetails distBatch = distributorBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
                 BatchDetails publicBatch = publicBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
                 if (distBatch != null)
@@ -43,7 +35,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
 
                 if (publicBatch != null)
+                {
                     batchDetailsList.Add(publicBatch);
+                }
 
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
@@ -51,18 +45,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             }
             return GetShowFilesResponseModel(SearchResult.Entries);
         }
-
-        private static BatchDetails AddBatchDetails(BatchSearchResponse SearchResult, int i) => new()
-        {
-            BatchId = SearchResult.Entries[i].BatchId,
-            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
-            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
-            Files = SearchResult.Entries[i].Files,
-            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
-            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
-            Status = SearchResult.Entries[i].Status,
-            Attributes = SearchResult.Entries[i].Attributes
-        };
 
         public static List<ShowFilesResponseModel> GetShowFilesResponseModel(List<BatchDetails> batchDetails)
         {
@@ -198,5 +180,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
                 .ToList();
         }
+
+        private static BatchDetails AddBatchDetails(BatchSearchResponse SearchResult, int i) => new()
+        {
+            BatchId = SearchResult.Entries[i].BatchId,
+            BatchPublishedDate = SearchResult.Entries[i].BatchPublishedDate,
+            ExpiryDate = SearchResult.Entries[i].ExpiryDate,
+            Files = SearchResult.Entries[i].Files,
+            AllFilesZipSize = SearchResult.Entries[i].AllFilesZipSize,
+            BusinessUnit = SearchResult.Entries[i].BusinessUnit,
+            Status = SearchResult.Entries[i].Status,
+            Attributes = SearchResult.Entries[i].Attributes
+        };
     }
 }
