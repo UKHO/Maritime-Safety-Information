@@ -158,7 +158,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
         [Test]
