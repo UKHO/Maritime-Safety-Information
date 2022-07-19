@@ -137,7 +137,7 @@ export default class noticetoMarine
      public async checkFileSizeData()
      {
      await this.page.waitForLoadState();
-     await this.page.waitForSelector("#ddlYears option");   
+     await this.page.waitForSelector("#ddlYears");   
      const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
      for(var year=1;year<=yearlyCount-1;year++)
@@ -145,8 +145,9 @@ export default class noticetoMarine
      await this.dropDownYearly.selectOption({index:year});
      const weekCount = (await this.page.$$("#ddlWeeks option")).length;
 
-     for(var week=1;week<=weekCount-1;week++)
+     for(var week=1;week<=1;week++)
      {
+     
      await this.dropDownWeekly.selectOption({index:week});
      const fileSizeData = await this.page.$$eval('td[id^=filesize]' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
      expect(fileSizeData.length).toBeGreaterThan(0); 

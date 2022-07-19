@@ -51,10 +51,10 @@ export default class noticeToMarinerWeekDownload {
     this.distributorFirstSize=this.page.locator('#filesize_1');
     this.distributorSecoundFileName=this.page.locator('#filename_2');
     this.distributorSecoundSize=this.page.locator('#filesize_2');
-    this.distributorThirdFileName=this.page.locator('#filename_22');
-    this.distributorThirdSize=this.page.locator('#filesize_22');
-    this.publicFirstFileName=this.page.locator('#filename_3');
-    this.publicFirstSize=this.page.locator('#filesize_3');
+    this.distributorThirdFileName=this.page.locator('#filename_3');
+    this.distributorThirdSize=this.page.locator('#filesize_3');
+    this.publicFirstFileName=this.page.locator('#filename_0');
+    this.publicFirstSize=this.page.locator('#filesize_0');
 
   }
 
@@ -178,22 +178,22 @@ export default class noticeToMarinerWeekDownload {
 
   public async verifyIntegrationTestValueForDistributor()
   {
-    const distributorFileName=await this.distributorFirstFileName.textContent();
-    expect(distributorFileName).toContain("2022-29");
-    const distributorFileSize=await this.distributorFirstSize.textContent();
+    const distributorFileName=await this.distributorFirstFileName.first().textContent();
+    expect(distributorFileName).toEqual("2022-29");
+    const distributorFileSize=await this.distributorFirstSize.first().textContent();
     expect(distributorFileSize).toEqual("1 MB (.pdf)");
-    const distributorFileNameSecound=await this.distributorSecoundFileName.textContent();
+    const distributorFileNameSecound=await this.distributorSecoundFileName.first().textContent();
     expect(distributorFileNameSecound).toEqual("29sect4");
-    const distributorFileSizeSecound=await this.distributorSecoundSize.textContent();
+    const distributorFileSizeSecound=await this.distributorSecoundSize.first().textContent();
     expect(distributorFileSizeSecound).toEqual("13 KB (.rtf)");
-    const distributorFileNameThird=await this.distributorThirdFileName.textContent();
+    const distributorFileNameThird=await this.distributorThirdFileName.first().textContent();
     expect(distributorFileNameThird).toEqual("lights-2022-29");
-    const distributorFileSizeThird=await this.distributorThirdSize.textContent();
+    const distributorFileSizeThird=await this.distributorThirdSize.first().textContent();
     expect(distributorFileSizeThird).toEqual("796 KB (.xml)");
 
-    const publicFileNameFirst=await this.publicFirstFileName.textContent();
+    const publicFileNameFirst=await this.publicFirstFileName.last().textContent();
     expect(publicFileNameFirst).toEqual("29snii22");
-    const publicFileSizeFirst=await this.publicFirstSize.textContent();
+    const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
     expect(publicFileSizeFirst).toEqual("650 KB (.pdf)");
 
   }
