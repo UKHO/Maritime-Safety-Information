@@ -14,8 +14,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public UserService(DefaultHttpContext httpContext) => _httpContext = httpContext;
-
         public bool IsDistributorUser
         {
             get
