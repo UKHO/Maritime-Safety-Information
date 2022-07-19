@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         protected IActionResult GetCacheResponse()
         {
-            return new OkObjectResult(StatusCodes.Status200OK);
+            return new OkObjectResult(StatusCodes.Status200OK); 
         }
     }
 }

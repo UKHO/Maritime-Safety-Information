@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             string payload = request.ToString(Formatting.None);
             Logger.LogInformation(EventIds.ClearFSSSearchCacheEventStart.ToEventId(), "Clear FSS Search Cache Event started for _X-Correlation-ID:{correlationId} Payload: {payload}", GetCurrentCorrelationId(), payload);
 
-            return GetCacheResponse();
+            return GetCacheResponse(); 
         }
     }
 }
