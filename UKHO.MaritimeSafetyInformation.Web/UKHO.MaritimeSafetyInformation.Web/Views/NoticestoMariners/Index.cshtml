@@ -49,8 +49,7 @@
             <div class="col">
                 @if (@Model != null && @Model.ShowFilesResponseList != null)
                 {
-                    { ViewBag.TableTitle = "Partner"; }
-                    @*<partial name="ShowWeeklyFilesList" model="@Model.ShowFilesResponseList" />*@
+                    { ViewBag.TableTitle = "Partner"; }                    
                     @if (ViewBag.IsDistributor)
                     {
                         <partial name="ShowWeeklyFilesList" model="@distributorList" />
