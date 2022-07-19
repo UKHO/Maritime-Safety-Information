@@ -169,7 +169,9 @@ export default class noticeToMarinerWeekDownload {
 
   public async verifyDistributorFileCount()
   { 
-    await this.page.waitForLoadState();
+    await this.year.selectOption({label:'2022'});
+    await this.week.selectOption({label:'29'});
+   await this.page.waitForLoadState();
     await this.page.waitForSelector("[id^='distributor']");
     const fileNumber=await this.distributorFileNumber.count();
     expect(fileNumber).toEqual(8);
