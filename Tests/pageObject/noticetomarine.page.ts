@@ -136,6 +136,8 @@ export default class noticetoMarine
 
      public async checkFileSizeData()
      {
+     await this.page.waitForLoadState();
+     await this.page.waitForSelector("#ddlYears option");   
      const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
      for(var year=1;year<=yearlyCount-1;year++)

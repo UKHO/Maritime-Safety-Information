@@ -45,7 +45,7 @@ export default class noticeToMarinerWeekDownload {
     this.fileName = this.page.locator("[id^='filename']");
     this.leisureFolios=this.page.locator('div > p > a');
     this.distributorPartner=this.page.locator('text=Partner');
-    this.distributorPublic=this.page.locator('text=Partner');
+    this.distributorPublic=this.page.locator('text=Public');
     this.distributorFileNumber=this.page.locator("[id^='distributor']");
     this.distributorFirstFileName=this.page.locator('#filename_1');
     this.distributorFirstSize=this.page.locator('#filesize_1');
@@ -143,6 +143,8 @@ export default class noticeToMarinerWeekDownload {
 
   public async checkWeeklyFileSectionName()
   {
+    await this.page.waitForLoadState();
+    await this.page.waitForSelector('text=Partner');
     const distributorSectionName=await (await this.distributorPartner.first().innerText());
     expect(distributorSectionName).toContain('Partner');
     const publicSectionName=await (await this.distributorPublic.first().innerText());
@@ -167,6 +169,7 @@ export default class noticeToMarinerWeekDownload {
 
   public async verifyDistributorFileCount()
   { 
+    await this.page.waitForLoadState();
     await this.page.waitForSelector("[id^='distributor']");
     const fileNumber=await this.distributorFileNumber.count();
     expect(fileNumber).toEqual(8);
