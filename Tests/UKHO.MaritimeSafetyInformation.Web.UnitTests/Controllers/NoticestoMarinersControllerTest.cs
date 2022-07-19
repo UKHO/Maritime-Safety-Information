@@ -390,6 +390,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsTrue(result.IsFaulted);
         }
 
+        [Test]
+        public async Task WhenAnnualFilesAsyncIsCalled_ThenShouldReturnsExpectedView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
+
+            A.CallTo(() => _fakeNMDataService.GetAnnualBatchFiles(CorrelationId));
+
+            IActionResult result = await _controller.Annual();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
+        public void WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        {
+            A.CallTo(() => _fakeNMDataService.GetAnnualBatchFiles(A<string>.Ignored)).Throws(new Exception());
+
+            Task<IActionResult> result = _controller.Annual();
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
         {
             return new()

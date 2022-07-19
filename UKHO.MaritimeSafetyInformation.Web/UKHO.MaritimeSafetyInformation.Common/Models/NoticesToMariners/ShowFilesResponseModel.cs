@@ -36,5 +36,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 
         [DataMember(Name = "links", EmitDefaultValue = false)]
         public BatchDetailsLinks Links { get; set; }
+
+        [DataMember(Name = "section", EmitDefaultValue = false)]
+        public string Secton { get; set; }
+
+        [DataMember(Name = "displayOrder", EmitDefaultValue = false)]
+        public int DisplayOrder { get; set; }
     }
 }

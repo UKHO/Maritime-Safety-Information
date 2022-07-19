@@ -51,8 +51,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
         {
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
-            
+            List<ShowFilesResponseModel> listShowFilesResponseModels = GetShowFilesResponseModel(searchResult.Entries);
+
             return listShowFilesResponseModels
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
                 .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
@@ -69,7 +69,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
-                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),            
+                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
                 YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year/Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize,
                 BatchPublishedDate = item.BatchPublishedDate,
@@ -155,5 +155,85 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
                 .ToList();
         }
+
+        public static List<ShowFilesResponseModel> GetShowAnnualFilesResponseModel(List<BatchDetails> batchDetails)
+        {
+            List<ShowFilesResponseModel> listShowFilesResponseModels = new();
+            foreach (BatchDetails item in batchDetails)
+            {
+                foreach (BatchDetailsFiles file in item.Files)
+                {
+                    switch (Path.GetFileNameWithoutExtension(file.Filename))
+                    {
+                        case "An overview of each of the 26 sections":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 1, "--"));
+                            break;
+
+                        case "ADMIRALTY Tide Tables 2022 — General Information":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 2, "1"));
+                            break;
+                        case "Suppliers of ADMIRALTY Charts and Publications":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 3, "2"));
+                            break;
+                        case "Safety of British merchant ships in periods of peace, tension or conflict":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 4, "3"));
+                            break;
+                        case "Firing Practice and Exercise Areas":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 5, "5"));
+                            break;
+                        case "Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 6, "10"));
+                            break;
+                        case "National Claims to Maritime Jurisdiction":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 7, "12"));
+                            break;
+                        case "Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 8, "19"));
+                            break;
+                        case "Mandatory Expanded Inspections - EU Directive 2009.16.EC":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 9, "20"));
+                            break;
+                        case "Canadian Charts and Nautical Publications Regulations":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 10, "21"));
+                            break;
+                        case "US Navigation Safety Regulations Relating to Navigation, Charts and Publications":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 11, "22"));
+                            break;
+                        case "High Speed Craft":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 12, "23"));
+                            break;
+                        case "Marine Environmental High Risk Areas":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 13, "26"));
+                            break;
+                        case "T&P 2022":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 14, "--"));
+                            break;
+                        case "Amends to SDs":
+                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 15, "--"));
+                            break;
+                    }
+                }
+            }
+            return listShowFilesResponseModels.OrderBy(x=>x.DisplayOrder).ToList();
+        }
+
+        public static ShowFilesResponseModel SetShowFilesForAnnualResponseModel(BatchDetails batchDetails, BatchDetailsFiles file, int displayOrder, string secton)
+        {
+            ShowFilesResponseModel showFilesResponse = new ShowFilesResponseModel();
+            showFilesResponse.DisplayOrder = displayOrder;
+            showFilesResponse.Secton = secton;
+            showFilesResponse.Attributes = batchDetails.Attributes;
+            showFilesResponse.BatchId = batchDetails.BatchId;
+            showFilesResponse.Filename = file.Filename;
+            showFilesResponse.FileDescription = Path.GetFileNameWithoutExtension(file.Filename);
+            showFilesResponse.FileExtension = Path.GetExtension(file.Filename);
+            showFilesResponse.FileSize = file.FileSize;
+            showFilesResponse.FileSizeinKB = FileHelper.FormatSize((long)file.FileSize);
+            showFilesResponse.MimeType = file.MimeType;
+            showFilesResponse.Links = file.Links;
+            return showFilesResponse;
+        }
+
+
     }
 }
