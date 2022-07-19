@@ -192,6 +192,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<bool>.Ignored)).MustNotHaveHappened();
 
             const int expectedRecordCount = 3;
 
