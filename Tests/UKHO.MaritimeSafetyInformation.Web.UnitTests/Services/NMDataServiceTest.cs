@@ -26,12 +26,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private ILogger<NMDataService> _fakeLogger;
         private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
         private IHttpClientFactory _httpClientFactory;
-
+        private IFileShareServiceCache _fakeFileShareServiceCache;
+        private IOptions<CacheConfiguration> _fakeCacheConfiguration;
         private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
-        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
-
         private NMDataService _nMDataService;
         private IUserService _fakeUserService;
+        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";       
 
         [SetUp]
         public void Setup()
@@ -41,8 +41,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
             _httpClientFactory = A.Fake<IHttpClientFactory>();
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
+            _fakeFileShareServiceCache = A.Fake<IFileShareServiceCache>();
+            _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
             _fakeUserService= A.Fake<IUserService>();
-            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeUserService);
+            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
+                                               _fakeCacheConfiguration, _fakeUserService);
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
@@ -60,9 +63,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 2;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
 
         [Test]
@@ -91,7 +94,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            Task<ShowNMFilesResponseModel> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -137,18 +140,64 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 2022;
             const int week = 07;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             const int expectedRecordCount = 3;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForGetWeeklyBatchFiles_ThenCacheReturnResponse()
+        {
+            const int year = 2022;
+            const int week = 07;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponse();
+
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+
+            const int expectedRecordCount = 2;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForBatchFilesButDataNotInTable_ThenFSSReturnResponse()
+        {
+            const int year = 2022;
+            const int week = 07;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+
+            const int expectedRecordCount = 3;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
         }
 
         [Test]
@@ -184,7 +233,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<List<YearWeekModel>> result = _nMDataService.GetAllYearWeek(CorrelationId);
+            Task<YearWeekResponseDataModel> result = _nMDataService.GetAllYearWeek(CorrelationId);
             Assert.IsTrue(result.IsFaulted);
         }
 
@@ -215,16 +264,58 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetAllYearWeekIsCalledWithValidToken_ThenShouldReturnYearWeekList()
         {
-            const int ExpectedRecordCount = 3;
+            const int expectedRecordCount = 3;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
-            List<YearWeekModel> result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
-            Assert.IsNotEmpty(result);
-            Assert.AreEqual(result.Count, ExpectedRecordCount);
+            Assert.IsNotEmpty(result.YearWeekModel);
+            Assert.AreEqual(result.YearWeekModel.Count, expectedRecordCount);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForYearWeek_ThenCacheReturnYearWeekList()
+        {
+            const int expectedRecordCount = 3;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(GetBatchAttributesSearchModel());
+
+            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
+
+            Assert.IsNotEmpty(result.YearWeekModel);
+            Assert.AreEqual(result.YearWeekModel.Count, expectedRecordCount);
+            Assert.IsTrue(result.IsYearAndWeekAttributesCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForYearWeekButDataNotInTable_ThenFSSReturnYearWeekList()
+        {
+            const int expectedRecordCount = 3;
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
+            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+
+            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
+
+            Assert.IsNotEmpty(result.YearWeekModel);
+            Assert.AreEqual(result.YearWeekModel.Count, expectedRecordCount);
+            Assert.IsFalse(result.IsYearAndWeekAttributesCached);
         }
 
        [Test]
@@ -495,16 +586,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 async delegate { await _nMDataService.GetLeisureFilesAsync(CorrelationId); });
         }
 
-        private static Result<BatchSearchResponse> SetSearchResultForWeekly()
+        private static BatchSearchResponse GetBatchSearchResponse()
         {
-            Result<BatchSearchResponse> searchResult = new()
+            return new BatchSearchResponse
             {
-                Data = new BatchSearchResponse
-                {
-                    Count = 2,
-                    Links = null,
-                    Total = 0,
-                    Entries = new List<BatchDetails>() {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
                             Attributes = new List<BatchDetailsAttributes>()
@@ -560,10 +649,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
                         }
                     }
-                }
+            };
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForWeekly()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = GetBatchSearchResponse()
             };
 
             return searchResult;
+        }
+
+        private static BatchAttributesSearchModel GetBatchAttributesSearchModel()
+        {
+            return new BatchAttributesSearchModel()
+            {
+                Data = new BatchAttributesSearchResponse
+                {
+                    SearchBatchCount = 5,
+                    BatchAttributes = new List<BatchAttributesSearchAttribute> { new BatchAttributesSearchAttribute() {  Key = "Frequency" , Values =  new List<string> { "Weekly","Daily"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Product Type" , Values = new List<string> {"NMTest"} },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Week Number", Values = new List<string> { "14", "16", "17", } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "Year", Values = new List<string> { "2021", "2022" } },
+                                                                                new BatchAttributesSearchAttribute() { Key = "YEAR/WEEK", Values = new List<string> { "2022 / 14", "2022 / 16", "2021 / 15" ,"..." } }
+                  }
+                }
+            };
         }
 
         private static Result<BatchSearchResponse> SetSearchResultForDaily()
