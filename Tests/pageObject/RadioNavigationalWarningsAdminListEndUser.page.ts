@@ -26,10 +26,12 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly print: Locator;
   readonly viewDetails: Locator;
   readonly detailWarningType: Locator; 
+  readonly radioNavigationalWarnings;
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
   constructor(page: Page) {
     this.page = page;
     this.radioNavigationalWarningsPage = this.page.locator('a:has-text("Radio Navigational Warnings")')
+    this.radioNavigationalWarnings = this.page.locator('#navbarSupportedContent > ul > li:nth-child(2) > a')
     this.radioNavigationalWarningsEndUser = this.page.locator('#headingLevelOne')
     this.radioWarningEndUser = this.page.locator('text=Radio Warnings')
     this.aboutEndUser = this.page.locator('text=About')
@@ -51,7 +53,7 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async goToRadioWarning() {
-    await this.radioNavigationalWarningsPage.click();
+    await this.radioNavigationalWarnings.click();
   }
 
   public async checkText(locator: Locator) {
