@@ -129,6 +129,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public void WhenShowWeeklyFilesAsyncIsCalled_ThenShouldThrowException()
+        {
+            const int year = 2022;
+            const int week = 15;
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
+
+            Task<IActionResult> result = _controller.ShowWeeklyFilesAsync(year, week);
+            Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
         public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
         {
             const int year = 2022;
