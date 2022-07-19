@@ -379,7 +379,7 @@ stages:
     variables:
       - group: "Maritime-Safety-Information-QA-TF-Variables"
       - group: "Maritime-Safety-Information-QA-Variables"
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+   # condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
     jobs:
       - deployment: QADeployTerraform
         displayName: "QA - Deploy Terraform and Dotnet App"
