@@ -45,6 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
+            services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
             services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
@@ -60,6 +61,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
             services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
+            services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
+            services.AddScoped<IAzureStorageService, AzureStorageService>();
 
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();

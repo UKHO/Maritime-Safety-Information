@@ -20,7 +20,10 @@
 <partial name="_NMHorizontalTab" />
 
 <div class="tab-content" id="nmTabContent">
-    <div class="tab-pane fade show active" id="weekly" role="tabpanel">
+    <input type="hidden" id="IsYearAndWeekAttributesCached" value= @Model.IsYearAndWeekAttributesCached />
+    <input type="hidden" id="IsWeeklyBatchResponseCached" value= @Model.IsWeeklyBatchResponseCached />
+
+    <div class="tab-pane fade show active" id="weekly" role="tabpanel" >       
         @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
         {
             <input type="hidden" id="hdnRequestType" value="Weekly" />
