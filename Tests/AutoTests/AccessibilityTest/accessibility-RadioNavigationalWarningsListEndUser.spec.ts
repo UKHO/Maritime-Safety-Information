@@ -20,6 +20,7 @@ import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigati
   };
  
   test.beforeEach(async ({page}) => {
+    test.slow();
     await page.goto(app.url);    
     const rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
@@ -27,7 +28,7 @@ import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigati
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
    
-    test.setTimeout(12000);
+    
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);

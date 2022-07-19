@@ -19,6 +19,7 @@ let rnwListEndUser:RadioNavigationalWarningsListEndUser;
   };
  
   test.beforeEach(async ({page}) => {
+    test.slow();
     await page.goto(app.url);    
     rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
