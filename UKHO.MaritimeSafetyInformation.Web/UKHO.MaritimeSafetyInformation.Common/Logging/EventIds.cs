@@ -544,7 +544,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910130 - Process failed to insert entity value in cache table.
         /// </summary>
-        FSSCacheDataInsertFailed = 910130
+        FSSCacheDataInsertFailed = 910130,
+        /// <summary>
+        /// 910131 - Started processing the Options request for the New Files Published event webhook
+        /// </summary>
+        NewFilesPublishedWebhookOptionsCallStarted = 910131,
+        /// <summary>
+        /// 910132 - Completed processing the Options request for the New Files Published event webhook
+        /// </summary>
+        NewFilesPublishedWebhookOptionsCallCompleted = 910132,
+        /// <summary>
+        /// 910133 -  Request for clearing FSS search cache data from Azure table started.
+        /// </summary>
+        ClearFSSSearchCacheEventStart = 910133
     }
 
     public static class EventIdExtensions
