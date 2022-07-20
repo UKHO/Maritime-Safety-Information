@@ -6,7 +6,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private DefaultHttpContext _httpContext;
         private const string DistributorRoleName = "Distributor";
 
         public UserService(IHttpContextAccessor httpContextAccessor)
@@ -27,7 +26,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             get
             {
-                return Convert.ToString(_httpContextAccessor.HttpContext.User.FindFirstValue("http://schemas.microsoft.com/identity/claims/objectidentifier"));
+                return _httpContextAccessor.HttpContext.User.FindFirstValue("http://schemas.microsoft.com/identity/claims/objectidentifier");
             }
         }
 
@@ -35,7 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             get
             {
-                return Convert.ToString(_httpContextAccessor.HttpContext.User.FindFirstValue("signInName"));
+                return _httpContextAccessor.HttpContext.User.FindFirstValue("signInName");
             }
         }
     }
