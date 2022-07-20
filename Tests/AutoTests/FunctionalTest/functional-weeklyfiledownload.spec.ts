@@ -24,7 +24,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     expect((await name).length).toBeGreaterThan(0);
     var fileName = name[0];
 
-    const newPageUrl = await (await page.$("[id^='download'] > a")).getAttribute('href');
+    const newPageUrl = await (await page.$(noticeFileDownload.download)).getAttribute('href');
     expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
   })
 
@@ -37,7 +37,7 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     const name = await noticeFileDownload.checkFileDownload();
     expect((await name).length).toBeGreaterThan(0);
     var fileName = name[0];
-    const newPageUrl = await (await page.$("[id^='download'] > a")).getAttribute('href');
+    const newPageUrl = await (await page.$(noticeFileDownload.download)).getAttribute('href');
     expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
   })
 
