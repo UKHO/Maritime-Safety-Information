@@ -24,6 +24,7 @@ import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigati
     await page.goto(app.url);    
     const rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
+    await page.waitForTimeout(5000)
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {

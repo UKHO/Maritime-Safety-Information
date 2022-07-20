@@ -26,10 +26,12 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly print: Locator;
   readonly viewDetails: Locator;
   readonly detailWarningType: Locator; 
+  readonly radioNavigationalWarnings;
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
   constructor(page: Page) {
     this.page = page;
     this.radioNavigationalWarningsPage = this.page.locator('a:has-text("Radio Navigational Warnings")')
+    this.radioNavigationalWarnings = this.page.locator('#navbarSupportedContent > ul > li:nth-child(2) > a')
     this.radioNavigationalWarningsEndUser = this.page.locator('#headingLevelOne')
     this.radioWarningEndUser = this.page.locator('text=Radio Warnings')
     this.aboutEndUser = this.page.locator('text=About')
@@ -51,7 +53,7 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async goToRadioWarning() {
-    await this.radioNavigationalWarningsPage.click();
+    await this.radioNavigationalWarnings.click();
   }
 
   public async checkText(locator: Locator) {
@@ -167,9 +169,13 @@ export default class RadioNavigationalWarningsListEndUser {
     const resultdate = await this.page.$$eval('[id^="DateTimeGroupRnwFormat"]', (matches: any[]) => { return matches.map(option => option.textContent.trim().slice(6)) })
     const sortedDesc = resultdate.sort((objA, objB) => objB.date - objA.date,);
     expect(resultdate).toEqual(sortedDesc);
+    this.page.waitForTimeout(5000)
     const anchor= await locator.getAttribute("href");
+    this.page.waitForTimeout(5000)
     const urlName=`${app.url}/RadioNavigationalWarnings${anchor}`;
+    this.page.waitForTimeout(5000)
     expect(this.page.url()).toEqual(urlName);
+    this.page.waitForTimeout(5000)
 
   }
  

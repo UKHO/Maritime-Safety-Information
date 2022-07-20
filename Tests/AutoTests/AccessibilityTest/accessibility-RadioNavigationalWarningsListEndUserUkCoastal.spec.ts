@@ -24,6 +24,7 @@ let rnwListEndUser:RadioNavigationalWarningsListEndUser;
     rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
     await rnwListEndUser.ukCostalEnduser.click();
+  
   });
   test('Radio Navigational Warnings For Uk Coastal page should be accessible', async ({page}) => {
     
