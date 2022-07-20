@@ -396,7 +396,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries.Count > 0)
                 {
-                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.GetShowAnnualFilesResponseModel(searchResult.Entries).ToList();
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.GetShowAnnualFilesResponse(searchResult.Entries).ToList();
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
                     return showFilesResponseModel;
                 }

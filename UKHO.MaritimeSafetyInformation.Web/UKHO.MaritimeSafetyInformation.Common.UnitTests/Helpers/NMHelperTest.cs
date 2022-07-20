@@ -438,7 +438,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             });
         }
 
-[Test]
+        [Test]
         public void WhenListFilesResponseLeisureIsCalled_ThenCheckIfConversionIsCorrect()
         {
             BatchSearchResponse searchResult = SetSearchResultForLeisure();
@@ -533,7 +533,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 }
             });
         }
-[Test]public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
+
+        [Test]
+        public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
         {
             BatchSearchResponse searchResult = SetSearchResultForCumulative();
 
@@ -603,7 +605,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             });
         }
 
-
         [Test]
         public void WhenCallsListFilesResponseCumulativeWithDuplicateData_ThenConversionIsCorrect()
         {
@@ -623,7 +624,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     Links = null
                 },
                 new ShowFilesResponseModel()
-                {       
+                {
                     BatchId = "1",
                     Filename = "NP234(A) 2022.pdf",
                     FileDescription = "NP234(A) 2022",
@@ -672,7 +673,109 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
                 }
             });
-        }        private static BatchSearchResponse SetSearchResultForWeekly()
+        }
+
+        [Test]
+        public void WhenGetShowAnnualFilesResponseIsCalled_ThenDataShouldBeOrderByFileName()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForAnnual();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+
+                    BatchId = "6",
+                    Filename = "00 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash ="--"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "4",
+                    Filename = "01 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash="01"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "5",
+                    Filename = "02 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "02"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "3",
+                    Filename = "26 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "26"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "27 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "--"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "28 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "--"
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.GetShowAnnualFilesResponse(searchResult.Entries);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.AreEqual(expected[i].Hash, result[i].Hash);
+                }
+            });
+        }
+
+        private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse searchResult = new()
             {
@@ -1313,6 +1416,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             };
             return searchResult;
         }
+
         private static BatchSearchResponse SetSearchResultForLeisure()
         {
             BatchSearchResponse searchResult = new()
@@ -1458,6 +1562,139 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     }
             };
 
+            return searchResult;
+        }
+
+        private static BatchSearchResponse SetSearchResultForAnnual()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 15,
+                Links = null,
+                Total = 15,
+                Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "28 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                           new BatchDetails() {
+                            BatchId = "2",
+                             Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "27 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "3",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "26 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "4",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "01 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "5",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-18"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "02 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "6",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-17"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "00 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+            };
             return searchResult;
         }
 

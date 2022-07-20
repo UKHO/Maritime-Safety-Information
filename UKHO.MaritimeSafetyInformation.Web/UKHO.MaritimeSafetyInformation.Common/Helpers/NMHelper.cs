@@ -156,84 +156,35 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 .ToList();
         }
 
-        public static List<ShowFilesResponseModel> GetShowAnnualFilesResponseModel(List<BatchDetails> batchDetails)
+        public static List<ShowFilesResponseModel> GetShowAnnualFilesResponse(List<BatchDetails> batchDetails)
         {
+
             List<ShowFilesResponseModel> listShowFilesResponseModels = new();
             foreach (BatchDetails item in batchDetails)
             {
                 foreach (BatchDetailsFiles file in item.Files)
                 {
-                    switch (Path.GetFileNameWithoutExtension(file.Filename))
+                    listShowFilesResponseModels.Add(new ShowFilesResponseModel
                     {
-                        case "An overview of each of the 26 sections":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 1, "--"));
-                            break;
-
-                        case "ADMIRALTY Tide Tables 2022 — General Information":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 2, "1"));
-                            break;
-                        case "Suppliers of ADMIRALTY Charts and Publications":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 3, "2"));
-                            break;
-                        case "Safety of British merchant ships in periods of peace, tension or conflict":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 4, "3"));
-                            break;
-                        case "Firing Practice and Exercise Areas":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 5, "5"));
-                            break;
-                        case "Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 6, "10"));
-                            break;
-                        case "National Claims to Maritime Jurisdiction":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 7, "12"));
-                            break;
-                        case "Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 8, "19"));
-                            break;
-                        case "Mandatory Expanded Inspections - EU Directive 2009.16.EC":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 9, "20"));
-                            break;
-                        case "Canadian Charts and Nautical Publications Regulations":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 10, "21"));
-                            break;
-                        case "US Navigation Safety Regulations Relating to Navigation, Charts and Publications":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 11, "22"));
-                            break;
-                        case "High Speed Craft":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 12, "23"));
-                            break;
-                        case "Marine Environmental High Risk Areas":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 13, "26"));
-                            break;
-                        case "T&P 2022":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 14, "--"));
-                            break;
-                        case "Amends to SDs":
-                            listShowFilesResponseModels.Add(SetShowFilesForAnnualResponseModel(item, file, 15, "--"));
-                            break;
-                    }
+                        Attributes = item.Attributes,
+                        BatchId = item.BatchId,
+                        Filename = file.Filename,
+                        FileDescription = Path.GetFileNameWithoutExtension(String.Join(' ', file.Filename.Remove(0, file.Filename.IndexOf(' ') + 1).Split(' '))),
+                        FileExtension = Path.GetExtension(file.Filename),
+                        FileSize = file.FileSize,
+                        FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
+                        MimeType = file.MimeType,
+                        Links = file.Links,
+                        Hash = file.Filename.Split(' ')[0] == "00" || file.Filename.Split(' ')[0] == "27" || file.Filename.Split(' ')[0] == "28" ? "--" : file.Filename.Split(' ')[0]
+                    });
                 }
             }
-            return listShowFilesResponseModels.OrderBy(x=>x.DisplayOrder).ToList();
-        }
 
-        public static ShowFilesResponseModel SetShowFilesForAnnualResponseModel(BatchDetails batchDetails, BatchDetailsFiles file, int displayOrder, string secton)
-        {
-            ShowFilesResponseModel showFilesResponse = new ShowFilesResponseModel();
-            showFilesResponse.DisplayOrder = displayOrder;
-            showFilesResponse.Secton = secton;
-            showFilesResponse.Attributes = batchDetails.Attributes;
-            showFilesResponse.BatchId = batchDetails.BatchId;
-            showFilesResponse.Filename = file.Filename;
-            showFilesResponse.FileDescription = Path.GetFileNameWithoutExtension(file.Filename);
-            showFilesResponse.FileExtension = Path.GetExtension(file.Filename);
-            showFilesResponse.FileSize = file.FileSize;
-            showFilesResponse.FileSizeinKB = FileHelper.FormatSize((long)file.FileSize);
-            showFilesResponse.MimeType = file.MimeType;
-            showFilesResponse.Links = file.Links;
-            return showFilesResponse;
+            return listShowFilesResponseModels.OrderBy(x => x.Filename).ToList().GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value)
+                .Select(grp => grp.First())
+                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
+                .ToList(); ;
         }
-
 
     }
 }
