@@ -544,7 +544,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910130 - Process failed to insert entity value in cache table.
         /// </summary>
-        FSSCacheDataInsertFailed = 910130
+        FSSCacheDataInsertFailed = 910130,
+        /// <summary>
+        /// 910131 - Request for storing Leisure batch file response in azure table storage started.
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheStart = 910131,
+        /// <summary>
+        /// 910132 - Request for storing Leisure batch file response in azure table storage completed
+        /// </summary>
+        FSSSLeisureBatchFilesResponseStoreToCacheCompleted = 910132,
+        /// <summary>
+        /// 910133 - Request for searching Leisure batch file response from Azure table storage started.
+        /// </summary>
+        FSSLeisureBatchResponseFromCacheStart = 910133,
+        /// <summary>
+        /// 910134 - Request for searching Leisure batch file response from Azure table storage completed.
+        /// </summary>
+        FSSLeisureBatchResponseFromCacheCompleted = 910134,
+        /// <summary>
+        /// 910135 - Request for deleting Leisure batch file response from Azure table storage started..
+        /// </summary>
+        DeleteExpiredLeisureBatchResponseFromCacheStarted = 910135,
+        /// <summary>
+        /// 910136 - Request for deleting Leisure batch file response from Azure table storage completed.
+        /// </summary>
+        DeleteExpiredLeisureBatchResponseFromCacheCompleted = 910136,
+        /// <summary>
+        /// 910137 - Request for Leisure batch file response not found in Azure table storage.
+        /// </summary>
+        FSSLeisureBatchResponseDataNotFoundFromCache = 910137,
+        /// <summary>
+        /// 910138 - Failed to get Leisure batch file response from Azure table storage.
+        /// </summary>
+        FSSLeisureBatchResponseFromCacheFailed = 910138
     }
 
     public static class EventIdExtensions
