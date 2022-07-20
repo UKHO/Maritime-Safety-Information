@@ -544,7 +544,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910130 - Process failed to insert entity value in cache table.
         /// </summary>
-        FSSCacheDataInsertFailed = 910130
+        FSSCacheDataInsertFailed = 910130,
+        /// <summary>
+        /// 910131 - Request for storing file share service daily files response in azure table storage is started.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910131,
+        /// <summary>
+        /// 910132 - Request for storing file share service daily files response in azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910132,
+        /// <summary>
+        /// 910133 - Maritime safety information request for daily NM files response from cache azure table storage is started.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheStart = 910133,
+        /// <summary>
+        /// 910134 - Maritime safety information request for daily NM files response from cache azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheCompleted = 910134,
+        /// <summary>
+        /// 910135 - Deletion started for expired daily NM files response cache data from table.
+        /// </summary>
+        DeleteExpiredDailyBatchResponseFromCacheStarted = 910135,
+        /// <summary>
+        /// 910136 - Deletion completed for expired daily NM files response cache data from table.
+        /// </summary>
+        DeleteExpiredDailyBatchResponseFromCacheCompleted = 910136,
+        /// <summary>
+        /// 910137 - Maritime safety information cache data not found for daily NM files response from azure table storage.
+        /// </summary>
+        FSSDailyBatchResponseDataNotFoundFromCache = 910137,
+        /// <summary>
+        /// 910138 - Failed to get daily NM files response from cache azure table.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheFailed = 910138
     }
 
     public static class EventIdExtensions

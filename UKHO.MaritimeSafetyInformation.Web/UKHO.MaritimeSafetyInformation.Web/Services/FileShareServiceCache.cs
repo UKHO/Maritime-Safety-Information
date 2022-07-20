@@ -129,7 +129,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             try
             {
                 const string rowKey = "DailyBatchKey";
-                _logger.LogInformation(EventIds.FSSSearchWeeklyBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.FSSDailyBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for daily NM files response from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
 
                 CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssDailyBatchSearchTableName);
 
@@ -137,24 +137,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     searchResult.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
 
-                    _logger.LogInformation(EventIds.FSSSearchWeeklyBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSDailyBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for daily NM files response from cache azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
                     await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssDailyBatchSearchTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.FSSSearchWeeklyBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching weekly NM response from azure table storage for with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSDailyBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for daily NM files response from azure table storage for with _X-Correlation-ID:{correlationId}", correlationId);
                 }
 
                 return searchResult;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSSearchWeeklyBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching weekly NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSDailyBatchResponseFromCacheFailed.ToEventId(), "Failed to get daily NM files response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
 
                 return searchResult;
             }
