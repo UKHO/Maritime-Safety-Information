@@ -73,7 +73,6 @@ export default class noticetoMarine
     {
         
         await locator.click();
-    
         expect(this.page).toHaveURL(`${app.url}/${url}`);
         expect(this.page).toHaveTitle(title)
     }
