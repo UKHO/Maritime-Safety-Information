@@ -79,19 +79,15 @@ export default class noticetoMarine
     }
     public async checkNavareaUrl(locator:Locator,url:string,title:string)
     {
-        await locator.click({force:true});
-        await this.page.waitForLoadState();
-        await this.page.waitForURL(`${app.url}/${url}#navarea1`);
-        expect(this.page).toHaveURL(`${app.url}/${url}#navarea1`);
-         expect(this.page).toHaveTitle(title);
+        await locator.click();
+        await expect(this.page.url()).toContain(`${app.url}/${url}#navarea1`);
+        await expect(this.page).toHaveTitle(title);
     }
     public async checkUkcoastalUrl(locator:Locator,url:string,title:string)
     {
-        await locator.click({force:true});
-        await this.page.waitForLoadState();
-        await this.page.waitForURL(`${app.url}/${url}#ukcoastal`);
-        expect(this.page).toHaveURL(`${app.url}/${url}#ukcoastal`);
-        expect(this.page).toHaveTitle(title);
+        await locator.click();
+        await expect(this.page.url()).toContain(`${app.url}/${url}#ukcoastal`);
+        await expect(this.page).toHaveTitle(title);
     }
    
     public async checkText(locator:Locator)
@@ -149,7 +145,7 @@ export default class noticetoMarine
      await this.dropDownYearly.selectOption({index:year});
      const weekCount = (await this.page.$$("#ddlWeeks option")).length;
 
-     for(var week=1;week<=weekCount-1;week++)
+     for(var week=1;week<=1;week++)
      {
      await this.dropDownWeekly.selectOption({index:week});
      const fileSizeData = await this.page.$$eval('td[id^=filesize]' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
