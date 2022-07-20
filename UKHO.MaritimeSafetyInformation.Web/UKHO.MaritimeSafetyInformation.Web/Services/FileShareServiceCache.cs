@@ -133,7 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.FSSSearchCumulativeBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching cumulative NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCumulativeBatchSearchTableName);
+                CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCumulativeBatchTableName);
 
                 if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
                 {
@@ -143,9 +143,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching cumulative NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, correlationId);
-                    await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching cumulativ NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching cumulative NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCumulativeBatchTableName, correlationId);
+                    await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssCumulativeBatchTableName, ConnectionString);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching cumulativ NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCumulativeBatchTableName, correlationId);
                 }
                 else
                 {

@@ -386,7 +386,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                         _logger.LogInformation(EventIds.FSSSearchCumulativeBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search cumulative NM files response in azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCumulativeBatchSearchTableName, frequency, correlationId, partitionKey);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCumulativeBatchTableName, frequency, correlationId, partitionKey);
 
                         _logger.LogInformation(EventIds.FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search cumulative NM files response in azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
                     }
