@@ -12,7 +12,7 @@
     }
 
 @{
-    var distributorList = Model.ShowFilesResponseList.Where(x => x.IsDistributorUser.Equals(true)).ToList();
+    var partnerList = Model.ShowFilesResponseList.Where(x => x.IsDistributorUser.Equals(true)).ToList();
     var publicList = Model.ShowFilesResponseList.Where(x => x.IsDistributorUser.Equals(false)).ToList();
 }
 
@@ -26,36 +26,36 @@
     <div class="tab-pane fade show active" id="weekly" role="tabpanel" >       
         @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
         {
-            <input type="hidden" id="hdnRequestType" value="Weekly" />
-            <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
-            <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
-            <div class="row mb-3">
-                <div class="col-md-3 mb-3">
-                    <label for="ddlYears" class="form-label">Select year</label>
-                    <select class="form-select" id="ddlYears" name="year">
-                        <option selected>Select year</option>
-                    </select>
-                </div>
+                <input type="hidden" id="hdnRequestType" value="Weekly" />
+                <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
+                <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
+                <div class="row mb-3">
+                    <div class="col-md-3 mb-3">
+                        <label for="ddlYears" class="form-label">Select year</label>
+                        <select class="form-select" id="ddlYears" name="year">
+                            <option selected>Select year</option>
+                        </select>
+                    </div>
 
-                <div class="col-md-3 mb-3">
-                    <label for="ddlWeeks" class="form-label">Select week</label>
-                    <select class="form-select" id="ddlWeeks" name="week">
-                        <option selected>Select week</option>
-                    </select>
+                    <div class="col-md-3 mb-3">
+                        <label for="ddlWeeks" class="form-label">Select week</label>
+                        <select class="form-select" id="ddlWeeks" name="week">
+                            <option selected>Select week</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
         }
         <div class="row">
             <div class="col">
                 @if (@Model != null && @Model.ShowFilesResponseList != null)
                 {
-                    { ViewBag.TableTitle = "Partner"; }                    
                     @if (ViewBag.IsDistributor)
                     {
-                        <partial name="ShowWeeklyFilesList" model="@distributorList" />
+                        { ViewBag.TableTitle = "Partner"; }                    
+                                <partial name="ShowWeeklyFilesList" model="@partnerList" />
+                        { ViewBag.TableTitle = "Public"; }
                     }
-                    { ViewBag.TableTitle = "Public"; }
-                    <partial name="ShowWeeklyFilesList" model="@publicList" />
+                        <partial name="ShowWeeklyFilesList" model="@publicList" />
                 }
             </div>
         </div>
