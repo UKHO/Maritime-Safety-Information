@@ -31,6 +31,7 @@ export default class noticeToMarinerWeekDownload {
   readonly distributorThirdSize:Locator;
   readonly publicFirstFileName:Locator;
   readonly publicFirstSize:Locator;
+  readonly weelkydowanload:string;
   constructor(page: Page) {
     this.page = page;
     this.noticeToMarine = this.page.locator('a:has-text("Notices to Mariners")');
@@ -55,7 +56,7 @@ export default class noticeToMarinerWeekDownload {
     this.distributorThirdSize=this.page.locator('#filesize_3');
     this.publicFirstFileName=this.page.locator('#filename_0');
     this.publicFirstSize=this.page.locator('#filesize_0');
-
+    this.weelkydowanload="[id^='download'] > a";
   }
 
   public async goToNoticeToMariner() {
@@ -172,7 +173,7 @@ export default class noticeToMarinerWeekDownload {
     await this.year.selectOption({label:'2022'});
     await this.week.selectOption({label:'29'});
    await this.page.waitForLoadState();
-    await this.page.waitForSelector("[id^='distributor']");
+    await this.page.waitForSelector("[id^='partner']");
     const fileNumber=await this.distributorFileNumber.count();
     expect(fileNumber).toEqual(8);
 
