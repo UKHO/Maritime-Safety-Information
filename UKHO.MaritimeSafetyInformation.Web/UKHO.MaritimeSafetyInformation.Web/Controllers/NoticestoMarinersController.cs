@@ -100,7 +100,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
                 ShowDailyFilesResponseListModel showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
-                ViewData["IsDailyFilesResponseCached"] = showDailyFilesResponseModels.IsDailyFilesResponseCached;
+                ViewBag.IsDailyFilesResponseCached = showDailyFilesResponseModels.IsDailyFilesResponseCached;
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
                 return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels.ShowDailyFilesResponseModel);

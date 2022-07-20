@@ -14,7 +14,7 @@
 <partial name="_NMHorizontalTab" />
 
 <div class="tab-content" id="nmTabContent">
-    <input type="hidden" id="IsYearAndWeekAttributesCached" value="@ViewData["IsDailyFilesResponseCached"]" />
+    <input type="hidden" id="IsDailyFilesResponseCached" value= @ViewBag.IsDailyFilesResponseCached>
 
     <div class="tab-pane fade show active" id="daily" role="tabpanel">
         @if (@ViewBag.IsDistributor)

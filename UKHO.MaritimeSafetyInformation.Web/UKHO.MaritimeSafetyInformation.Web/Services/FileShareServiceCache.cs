@@ -74,7 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.FSSSearchWeeklyBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
+                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
                 if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
                 {
@@ -84,9 +84,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
-                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 const string rowKey = "DailyBatchKey";
                 _logger.LogInformation(EventIds.FSSDailyBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for daily NM files response from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssDailyBatchSearchTableName);
+                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
                 if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
                 {
@@ -141,9 +141,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
-                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssDailyBatchSearchTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
+                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                 }
                 else
                 {
