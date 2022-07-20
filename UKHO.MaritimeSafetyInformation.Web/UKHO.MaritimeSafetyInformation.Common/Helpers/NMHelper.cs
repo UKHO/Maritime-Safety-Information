@@ -180,10 +180,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
             }
 
-            return listShowFilesResponseModels.OrderBy(x => x.Filename).ToList().GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value)
-                .Select(grp => grp.First())
-                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
-                .ToList(); ;
+            return listShowFilesResponseModels.OrderBy(x => x.Filename).ToList();
         }
 
     }
