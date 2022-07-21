@@ -1,7 +1,5 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
