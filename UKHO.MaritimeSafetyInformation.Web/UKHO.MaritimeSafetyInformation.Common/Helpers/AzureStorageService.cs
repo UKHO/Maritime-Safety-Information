@@ -10,9 +10,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 throw new KeyNotFoundException($"Storage account accesskey not found");
             }
 
-            string storageAccountConnectionString = $"DefaultEndpointsProtocol=https;AccountName={storageAccountName};AccountKey={storageAccountKey};EndpointSuffix=core.windows.net";
-
-            return storageAccountConnectionString;
+            return $"DefaultEndpointsProtocol=https;AccountName={storageAccountName};AccountKey={storageAccountKey};EndpointSuffix=core.windows.net";
         }
     }
 }
