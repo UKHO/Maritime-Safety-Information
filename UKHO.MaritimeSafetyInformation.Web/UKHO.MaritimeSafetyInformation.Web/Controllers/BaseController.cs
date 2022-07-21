@@ -20,5 +20,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             return _httpContextAccessor.HttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault();
         }
+
+        protected IActionResult GetCacheResponse()
+        {
+            return new OkObjectResult(StatusCodes.Status200OK); 
+        }
     }
 }

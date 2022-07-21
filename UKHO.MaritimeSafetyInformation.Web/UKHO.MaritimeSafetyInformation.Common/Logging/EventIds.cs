@@ -546,37 +546,49 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSCacheDataInsertFailed = 910130,
         /// <summary>
-        /// 910131 - Request for storing file share service search cumulative batch files response in azure table storage is started.
+        /// 910131 - Started processing the Options request for the New Files Published event webhook
         /// </summary>
-        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910131,
+        NewFilesPublishedWebhookOptionsCallStarted = 910131,
         /// <summary>
-        /// 910132 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
+        /// 910132 - Completed processing the Options request for the New Files Published event webhook
         /// </summary>
-        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910132,
+        NewFilesPublishedWebhookOptionsCallCompleted = 910132,
         /// <summary>
-        /// 910133- Request for searching cumulative batch files from cache azure table storage is started.
+        /// 910133 -  Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheStart = 910133,
+        ClearFSSSearchCacheEventStart = 910133,
         /// <summary>
-        /// 910134 - Request for searching cumulative batch files from cache azure table storage is completed.
+        /// 910134 - Request for storing file share service search cumulative batch files response in azure table storage is started.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheCompleted = 910134,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910134,
         /// <summary>
-        /// 910135 - Deletion started for expired searching cumulative NM file cache data from table.
+        /// 910135 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
         /// </summary>
-        DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted = 910135,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
-        /// 910136 - Deletion completed for expired searching cumulative NM file cache data from table.
+        /// 910136- Request for searching cumulative batch files from cache azure table storage is started.
         /// </summary>
-        DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted = 910136,
+        FSSSearchCumulativeBatchResponseFromCacheStart = 910136,
         /// <summary>
-        /// 910137 - Data not found for searching cumulative batch files from cache azure table storage.
+        /// 910137 - Request for searching cumulative batch files from cache azure table storage is completed.
         /// </summary>
-        FSSSearchCumulativeBatchResponseDataNotFoundFromCache = 910137,
+        FSSSearchCumulativeBatchResponseFromCacheCompleted = 910137,
         /// <summary>
-        /// 910138 - Failed to get searching cumulative NM files from cache azure table.
+        /// 910138 - Deletion started for expired searching cumulative NM file cache data from table.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheFailed = 910138,
+        DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted = 910138,
+        /// <summary>
+        /// 910139 - Deletion completed for expired searching cumulative NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted = 910139,
+        /// <summary>
+        /// 910140 - Data not found for searching cumulative batch files from cache azure table storage.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseDataNotFoundFromCache = 910140,
+        /// <summary>
+        /// 910141 - Failed to get searching cumulative NM files from cache azure table.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseFromCacheFailed = 910141,
     }
 
     public static class EventIdExtensions
