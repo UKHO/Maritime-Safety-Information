@@ -137,6 +137,52 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenCacheEnabledForGetDailyBatchDetailsFiles_ThenCacheReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            BatchSearchResponseModel batchSearchResponseModel = new()
+            {
+                BatchSearchResponse = GetDailyBatchSearchResponse()
+            };
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            A.CallTo(() => _fakeFileShareServiceCache.GetDailyBatchDetailsFromCache(A<string>.Ignored)).Returns(batchSearchResponseModel);
+
+            const int expectedRecordCount = 1;
+            const int expectedDailyFilesDataCount = 2;
+
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
+            Assert.AreEqual(expectedDailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
+            Assert.IsTrue(showDailyFilesResponseListModel.IsDailyFilesResponseCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForGetDailyBatchDetailsButDataNotInTable_ThenFSSReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+
+            A.CallTo(() => _fakeFileShareServiceCache.GetDailyBatchDetailsFromCache(A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 1;
+            const int expectedDailyFilesDataCount = 2;
+
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
+            Assert.AreEqual(expectedDailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
+            Assert.IsFalse(showDailyFilesResponseListModel.IsDailyFilesResponseCached);
+        }
+
+        [Test]
         public async Task WhenGetWeeklyBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
             const int year = 2022;
@@ -664,16 +710,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             };
         }
 
-        private static Result<BatchSearchResponse> SetSearchResultForDaily()
+        private static BatchSearchResponse GetDailyBatchSearchResponse()
         {
-            Result<BatchSearchResponse> searchResult = new()
+            return new BatchSearchResponse
             {
-                Data = new BatchSearchResponse
-                {
-                    Count = 2,
-                    Links = null,
-                    Total = 0,
-                    Entries = new List<BatchDetails>() {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
                             AllFilesZipSize=346040,
@@ -739,7 +783,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
                         }
                     }
-                }
+            };
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDaily()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = GetDailyBatchSearchResponse()
             };
 
             return searchResult;
