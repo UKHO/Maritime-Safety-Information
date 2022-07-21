@@ -70,7 +70,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
   
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, frequency, correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
                     }
@@ -135,7 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchAttributes, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName, "BatchAttribute", correlationId);
+                        await _fileShareServiceCache.InsertCacheObject(searchAttributes, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, "BatchAttribute", correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
                     }
@@ -193,7 +193,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 BatchSearchResponse searchResult = new();
                 bool isCached = false;
                 const string Frequency = "daily";
-                const string rowKey = "DailyBatchKey";
+                const string rowKey = "DailyKey";
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {

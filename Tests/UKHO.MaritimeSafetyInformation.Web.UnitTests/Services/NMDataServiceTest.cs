@@ -112,10 +112,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedRecordCount = 1;
             const int dailyFilesDataCount = 2;
 
-            List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-            Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
+            Assert.AreEqual(dailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
         }
 
         [Test]
@@ -130,10 +130,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
 
-            List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-            Assert.AreEqual(expectedDailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
+            Assert.AreEqual(expectedDailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<List<ShowDailyFilesResponseModel>> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            Task<ShowDailyFilesResponseListModel> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }
