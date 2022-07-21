@@ -73,7 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, PartitionKey, correlationId);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, frequency, PartitionKey, correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is completed for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
                     }
@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    searchAttributes = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(rowKey,PartitionKey, correlationId);
+                    searchAttributes = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(rowKey, PartitionKey, correlationId);
                     if (searchAttributes.Data != null)
                     {
                         isCached = true;
@@ -138,7 +138,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchAttributes, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName, "BatchAttribute", PartitionKey, correlationId);
+                        await _fileShareServiceCache.InsertCacheObject(searchAttributes, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, "BatchAttribute", PartitionKey, correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
                     }
@@ -262,7 +262,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     if (_cacheConfiguration.Value.IsFssCacheEnabled && !isCached)
                     {
-                        string rowKey = "leisure";
+                        string rowKey = "LeisureKey";
 
                         _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
 
