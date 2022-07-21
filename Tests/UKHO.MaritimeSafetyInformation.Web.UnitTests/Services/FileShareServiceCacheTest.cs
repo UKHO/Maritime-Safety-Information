@@ -217,5 +217,86 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsTrue(response.IsCompleted);
         }
+
+        [Test]
+        public async Task WhenFSSCacheCallsGetLeisureResponseFromCache_ThenReturnsBatchSearchResponse()
+        {
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            CustomTableEntity customTableEntity = new()
+            {
+                PartitionKey = "Public",
+                RowKey = "",
+                Response = "{\"count\":2,\"total\":2,\"entries\":[{\"batchId\":\"f81a161f-9ad5-47bc-bffc-0e948c9969fa\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Chart\",\"value\":\"SC5623\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-06T12:07:23.137Z\",\"expiryDate\":\"2023-01-09T00:00:00Z\",\"files\":[{\"filename\":\"SC5623 Ireland - South West Coast.pdf\",\"fileSize\":749479,\"mimeType\":\"application/pdf\",\"hash\":\"mWZtPqCbWAqAqT4KPHV83w==\",\"attributes\":[],\"links\":{\"get\":{\"href\":\"/batch/f81a161f-9ad5-47bc-bffc-0e948c9969fa/files/SC5623%20Ireland%20-%20South%20West%20Coast.pdf\"}}}],\"allFilesZipSize\":665578},{\"batchId\":\"4e6baca9-f3a2-443a-9191-e159b5fb007b\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Chart\",\"value\":\"SC5622\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-06T12:07:23.137Z\",\"expiryDate\":\"2023-01-09T00:00:00Z\",\"files\":[{\"filename\":\"SC5621 Carlingford Lough to Waterford.pdf\",\"fileSize\":2001392,\"mimeType\":\"application/pdf\",\"hash\":\"mWZtPqCbWAqAqT4KPHV83w==\",\"attributes\":[],\"links\":{\"get\":{\"href\":\"/batch/7c075d69-3e45-4a99-a7a8-1a4ad100ce40/files/SC5621%20Carlingford%20Lough%20to%20Waterford.pdf\"}}}],\"allFilesZipSize\":1046690}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100\"} }}",
+                CacheExpiry = DateTime.UtcNow.AddMinutes(3)
+            };
+
+            batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
+
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(customTableEntity);
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetLeisureResponseFromCache("Public", string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
+        }
+
+        [Test]
+        public async Task WhenFSSCacheCallsGetLeisureResponseFromCache_ThenReturnsNullObject()
+        {
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(new CustomTableEntity());
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetLeisureResponseFromCache(string.Empty, string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.IsNull(result.BatchSearchResponse);
+        }
+
+        [Test]
+        public async Task WhenFSSCacheReceivesExpiredLeisureCacheData_ThenReturnsEmptyBatchSearchResponse()
+        {
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            CustomTableEntity customTableEntity = new()
+            {
+                PartitionKey = "Public",
+                RowKey = "",
+                Response = "{\"count\":2,\"total\":2,\"entries\":[{\"batchId\":\"f81a161f-9ad5-47bc-bffc-0e948c9969fa\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Chart\",\"value\":\"SC5623\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-21T10:07:23.137Z\",\"expiryDate\":\"2022-07-21T11:23:00Z\",\"files\":[{\"filename\":\"SC5623 Ireland - South West Coast.pdf\",\"fileSize\":749479,\"mimeType\":\"application/pdf\",\"hash\":\"mWZtPqCbWAqAqT4KPHV83w==\",\"attributes\":[],\"links\":{\"get\":{\"href\":\"/batch/f81a161f-9ad5-47bc-bffc-0e948c9969fa/files/SC5623%20Ireland%20-%20South%20West%20Coast.pdf\"}}}],\"allFilesZipSize\":665578}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100\"} }}",
+                };
+
+            batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
+
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(customTableEntity);
+
+            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                          .MustNotHaveHappened();
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetLeisureResponseFromCache("Public", string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.IsNull(result.BatchSearchResponse);
+        }
+
+        [Test]
+        public async Task WhenExceptionInFSSCacheCallsGetLeisureResponseFromCache_ThenReturnsNullObject()
+        {
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Throws(new Exception());
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetLeisureResponseFromCache(string.Empty, string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.IsNull(result.BatchSearchResponse);
+        }
+
     }
 }

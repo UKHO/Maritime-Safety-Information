@@ -180,7 +180,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsTrue(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
+            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -201,7 +201,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsFalse(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
+            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -541,7 +541,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             const int expectedRecordCount = 2;
 
             ShowNMFilesResponseModel showNMFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
@@ -558,7 +558,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateLeisure();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             const int expectedRecordCount = 2;
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
@@ -590,6 +590,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for leisure files"),
                 async delegate { await _nMDataService.GetLeisureFilesAsync(CorrelationId); });
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledGetLeisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponseForLeisure();
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);           
+            A.CallTo(() => _fakeFileShareServiceCache.GetLeisureResponseFromCache(A<string>.Ignored,A<string>.Ignored)).Returns(batchSearchResponseModel);
+
+            const int expectedRecordCount = 2;
+
+            ShowNMFilesResponseModel showNMFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModels.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModels.IsBatchResponseCached);
         }
 
         private static BatchSearchResponse GetBatchSearchResponse()
@@ -1250,12 +1271,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                     Links = null
                                 }
                             }
-
                         }
                     }
                 }
             };
-
             return searchResult;
         }
 
@@ -1346,6 +1365,65 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             };
 
             return searchResult;
+        }
+
+        private static BatchSearchResponse GetBatchSearchResponseForLeisure()
+        {
+            return new BatchSearchResponse
+            {
+                Count = 2,
+                Links = null,
+                Total = 2,
+                Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5622"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 14:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+            };
         }
     }
 }
