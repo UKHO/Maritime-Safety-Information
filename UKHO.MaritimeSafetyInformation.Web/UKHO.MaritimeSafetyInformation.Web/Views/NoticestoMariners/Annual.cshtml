@@ -26,109 +26,6 @@
 <div class="row">
     <div class="col">
         <div class="table-responsive" id="divAnnualNMs">
-            @*<table width="100%">
-                <thead>
-                <tr>
-                <th width="15%">Section</th>
-                <th width="55%">File name</th>
-                <th width="20%">File size</th>
-                <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                <td>---</td>
-                <td><a href="~/nms/annual/Title_and_Index_2022.pdf" target="_blank">An overview of each of the 26 sections</a></td>
-                <td>201 KB (pdf)</td>
-                <td><a href="~/nms/annual/Title_and_Index_2022.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>1</td>
-                <td><a href="~/nms/annual/01.pdf" target="_blank">ADMIRALTY Tide Tables 2022 — General Information</a></td>
-                <td>131 KB (pdf)</td>
-                <td><a href="~/nms/annual/01.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>2</td>
-                <td><a href="~/nms/annual/02.pdf" target="_blank">Suppliers of ADMIRALTY Charts and Publications</a></td>
-                <td>219 KB (pdf)</td>
-                <td><a href="~/nms/annual/02.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>3</td>
-                <td><a href="~/nms/annual/03.pdf" target="_blank">Safety of British merchant ships in periods of peace, tension or conflict</a></td>
-                <td>431 KB (pdf)</td>
-                <td><a href="~/nms/annual/03.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>5</td>
-                <td><a href="~/nms/annual/05.pdf" target="_blank">Firing Practice and Exercise Areas</a></td>
-                <td>241 KB (pdf)</td>
-                <td><a href="~/nms/annual/05.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>10</td>
-                <td><a href="~/nms/annual/10.pdf" target="_blank">Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles</a></td>
-                <td>455 KB (pdf)</td>
-                <td><a href="~/nms/annual/10.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>12</td>
-                <td><a href="~/nms/annual/12.pdf" target="_blank">National Claims to Maritime Jurisdiction</a></td>
-                <td>457 KB (pdf)</td>
-                <td><a href="~/nms/annual/12.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>19</td>
-                <td><a href="~/nms/annual/19.pdf" target="_blank">Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts</a></td>
-                <td>328 KB (pdf)</td>
-                <td><a href="~/nms/annual/19.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>20</td>
-                <td><a href="~/nms/annual/20.pdf" target="_blank">Mandatory Expanded Inspections - EU Directive 2009/16/EC</a></td>
-                <td>143 KB (pdf)</td>
-                <td><a href="~/nms/annual/20.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>21</td>
-                <td><a href="~/nms/annual/21.pdf" target="_blank">Canadian Charts and Nautical Publications Regulations</a></td>
-                <td>217 KB (pdf)</td>
-                <td><a href="~/nms/annual/21.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>22</td>
-                <td><a href="~/nms/annual/22.pdf" target="_blank">US Navigation Safety Regulations Relating to Navigation, Charts and Publications</a></td>
-                <td>217 KB (pdf)</td>
-                <td><a href="~/nms/annual/22.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>23</td>
-                <td><a href="~/nms/annual/23.pdf" target="_blank">High Speed Craft</a></td>
-                <td>133 KB (pdf)</td>
-                <td><a href="~/nms/annual/23.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>26</td>
-                <td><a href="~/nms/annual/26.pdf" target="_blank">Marine Environmental High Risk Areas</a></td>
-                <td>141 KB (pdf)</td>
-                <td><a href="~/nms/annual/26.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>---</td>
-                <td><a href="~/nms/annual/TP_2022.pdf" target="_blank">T&amp;P 2022</a></td>
-                <td>6,776 KB (pdf)</td>
-                <td><a href="~/nms/annual/TP_2022.pdf" target="_blank">Download</a></td>
-                </tr>
-                <tr>
-                <td>---</td>
-                <td><a href="~/nms/annual/Amends_to_SDs_2022.pdf" target="_blank">Amends to SDs</a></td>
-                <td>3,590 KB (pdf)</td>
-                <td><a href="~/nms/annual/Amends_to_SDs_2022.pdf" target="_blank">Download</a></td>
-                </tr>
-                </tbody>
-                </table>*@
-
             <table width="100%">
                 <thead>
                     <tr>
@@ -142,7 +39,7 @@
                     @for (int i = 0; i < Model.Count; i++)
                     {
                         <tr>
-                            <td>@Model[i].Hash</td>
+                            <td id="section_@i">@Model[i].Hash</td>
                             <td class="td-3 justify-content-center" id="FileName_@i">
                                 <a target="_blank" aria-label="Download File for @Model[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency ="Annual" })">@Model[i].FileDescription</a>
                             </td>

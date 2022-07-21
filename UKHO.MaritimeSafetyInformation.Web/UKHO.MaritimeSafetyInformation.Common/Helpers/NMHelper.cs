@@ -169,19 +169,34 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         Attributes = item.Attributes,
                         BatchId = item.BatchId,
                         Filename = file.Filename,
-                        FileDescription = Path.GetFileNameWithoutExtension(String.Join(' ', file.Filename.Remove(0, file.Filename.IndexOf(' ') + 1).Split(' '))),
+                        FileDescription = GetAnnualFileNameAndSection(file.Filename, "filename"),
                         FileExtension = Path.GetExtension(file.Filename),
                         FileSize = file.FileSize,
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
                         Links = file.Links,
-                        Hash = file.Filename.Split(' ')[0] == "00" || file.Filename.Split(' ')[0] == "27" || file.Filename.Split(' ')[0] == "28" ? "--" : file.Filename.Split(' ')[0]
+                        Hash = GetAnnualFileNameAndSection(file.Filename, "section")
                     });
                 }
             }
 
             return listShowFilesResponseModels.OrderBy(x => x.Filename).ToList();
         }
+
+        public static string GetAnnualFileNameAndSection(string fileName, string type)
+        {
+            string retVal = "";
+            if (type == "filename")
+            {
+                retVal = Path.GetFileNameWithoutExtension(String.Join(' ', fileName.Remove(0, fileName.IndexOf(' ') + 1).Split(' ')));
+            }
+            else if (type == "section")
+            {
+                retVal = fileName.Split(' ')[0] == "00" || fileName.Split(' ')[0] == "27" || fileName.Split(' ')[0] == "28" ? "---" : fileName.Split(' ')[0].TrimStart('0');
+            }
+            return retVal;
+        }
+
 
     }
 }

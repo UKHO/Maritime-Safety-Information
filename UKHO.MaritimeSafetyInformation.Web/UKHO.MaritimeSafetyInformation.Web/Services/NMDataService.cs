@@ -382,7 +382,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get annual NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
 
@@ -397,18 +397,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 if (searchResult != null && searchResult.Entries.Count > 0)
                 {
                     List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.GetShowAnnualFilesResponse(searchResult.Entries).ToList();
-                    _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get annual NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
                     return showFilesResponseModel;
                 }
                 else
                 {
-                    _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
-                    throw new InvalidDataException("Invalid data received for cumulative NM files");
+                    _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get annual NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("Invalid data received for annual NM files");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to annual NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
         }
