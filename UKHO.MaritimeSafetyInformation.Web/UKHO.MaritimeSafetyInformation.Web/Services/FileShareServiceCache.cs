@@ -107,7 +107,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             BatchSearchResponseModel searchResult = new();
             try
             {                
-                const string rowKey = "leisure";
+                const string rowKey = "LeisureKey";
 
                 _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
 
