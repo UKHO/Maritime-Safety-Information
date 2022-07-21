@@ -47,7 +47,7 @@ export default class noticeToMarinerWeekDownload {
     this.leisureFolios=this.page.locator('div > p > a');
     this.distributorPartner=this.page.locator('text=Partner');
     this.distributorPublic=this.page.locator('text=Public');
-    this.distributorFileNumber=this.page.locator("[id^='distributor']");
+    this.distributorFileNumber=this.page.locator("[id^='partner']");
     this.distributorFirstFileName=this.page.locator('#filename_1');
     this.distributorFirstSize=this.page.locator('#filesize_1');
     this.distributorSecoundFileName=this.page.locator('#filename_2');
