@@ -1,5 +1,4 @@
 ﻿using FakeItEasy;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -106,7 +105,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
                 .Returns(stream);
-            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId, fileName, "", CorrelationId, _fileShareApiClient);
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId, fileName, "", CorrelationId, _fileShareApiClient, "");
             Assert.IsInstanceOf<Task<Stream>>(result);
 
         }
@@ -116,7 +115,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _fileShareServiceConfig.Value.BaseUrl = null;
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Throws(new Exception());
-            Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId, _fileShareApiClient);
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId, _fileShareApiClient, "");
             Assert.IsTrue(result.IsFaulted);
         }
 

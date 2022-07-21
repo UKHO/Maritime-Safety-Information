@@ -66,7 +66,7 @@ const batchDaily = new SharedArray('batchIdDailyURl', function () {
     const weeklydata = batchWeely[Math.floor(Math.random() * batchWeely.length)]; 
     for(let i=0 ; i<=weeklydata.length-1;i++)
     {
-     http.get(config.url,`NoticesToMariners/DownloadWeeklyFile?=${batchWeely[i].fileName}&batchId=${batchWeely[i].batchid}&mimeType=application%2Fpdf`);
+     http.get(config.url,`NoticesToMariners/DownloadFile?=${batchWeely[i].fileName}&batchId=${batchWeely[i].batchid}&mimeType=application%2Fpdf`);
     }  
   }
   

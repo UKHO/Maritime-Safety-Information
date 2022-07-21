@@ -8,6 +8,7 @@ const config: PlaywrightTestConfig = {
   expect: {
     timeout: 10000
   },
+  globalTimeout: 60 * 60 * 1000,
   
   forbidOnly: !!process.env.CI,
 
@@ -15,9 +16,10 @@ const config: PlaywrightTestConfig = {
   workers: process.env.CI ? 1 : undefined,
   reporter: [ ['junit', { outputFile: 'results.xml' }] ],
   use: {
-    actionTimeout: 0,
+    actionTimeout: 10 * 1000,
+    navigationTimeout: 30 * 1000,
     trace: 'on-first-retry',
-   
+    
   },
   projects: [
     

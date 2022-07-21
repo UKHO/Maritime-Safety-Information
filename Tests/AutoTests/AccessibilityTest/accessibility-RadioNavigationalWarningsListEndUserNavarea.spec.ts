@@ -19,10 +19,12 @@ let rnwListEndUser:RadioNavigationalWarningsListEndUser;
   };
  
   test.beforeEach(async ({page}) => {
+    test.slow()
     await page.goto(app.url);    
     rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
     await rnwListEndUser.navAreaEndUser.click();
+    await page.waitForTimeout(5000)
   });
 
   test('Radio Navigational Warnings For Navarea page should be accessible', async ({page}) => {

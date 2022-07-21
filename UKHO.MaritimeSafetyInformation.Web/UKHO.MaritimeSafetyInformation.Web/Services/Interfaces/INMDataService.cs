@@ -5,10 +5,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 {
     public interface INMDataService
     {
-        Task<List<ShowFilesResponseModel>> GetWeeklyBatchFiles(int year, int week, string correlationId);
+        Task<ShowNMFilesResponseModel> GetWeeklyBatchFiles(int year, int week, string correlationId);
         Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId);
         Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId);
-        Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId);
+        Task<byte[]> DownloadFssFileAsync(string batchId, string fileName, string correlationId, string frequency);
+        Task<List<ShowFilesResponseModel>> GetLeisureFilesAsync(string correlationId);
         Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, string correlationId);
+        Task<List<ShowFilesResponseModel>> GetCumulativeBatchFiles(string correlationId);
     }
 }
