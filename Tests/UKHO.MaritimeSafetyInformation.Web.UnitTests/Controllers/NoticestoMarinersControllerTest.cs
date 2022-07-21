@@ -67,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week);
+            IActionResult result = await _controller.Index(year, week); 
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;
