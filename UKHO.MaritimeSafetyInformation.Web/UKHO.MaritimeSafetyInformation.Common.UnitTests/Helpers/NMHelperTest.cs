@@ -693,7 +693,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null,
-                    Hash ="--"
+                    Hash = "---"
                 },
                 new ShowFilesResponseModel()
                 {
@@ -705,7 +705,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null,
-                    Hash="01"
+                    Hash = "1"
                 },
                 new ShowFilesResponseModel()
                 {
@@ -717,7 +717,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null,
-                    Hash = "02"
+                    Hash = "2"
                 },
                 new ShowFilesResponseModel()
                 {
@@ -741,7 +741,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null,
-                    Hash = "--"
+                    Hash = "---"
                 },
                 new ShowFilesResponseModel()
                 {
@@ -753,7 +753,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null,
-                    Hash = "--"
+                    Hash = "---"
                 }
             };
 
@@ -773,6 +773,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     Assert.AreEqual(expected[i].Hash, result[i].Hash);
                 }
             });
+        }
+
+        [TestCase("01 NP234(A) 2022.pdf", "filename", ExpectedResult = "NP234(A) 2022", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Proper Filename")]
+        [TestCase("", "filename", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Empty Filename Then Should Return  Empty")]
+        [TestCase("01 NP234(A) 2022.pdf", "section", ExpectedResult = "1", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("00 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("26 NP234(A) 2022.pdf", "section", ExpectedResult = "26", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("27 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("28 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("", "section", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Without Filename Then Should Return Empty Section")]
+        [TestCase("01 NP234(A) 2022.pdf", "", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called With Filename But Empty type Then Should Return Empty")]
+        [TestCase("", "", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called With Empty Filename And type Then Should Return Empty")]
+        public string WhenGetAnnualFileNameAndSection_ThenShouldReturnExpectedResult(string fileName, string type)
+        {
+            return NMHelper.GetAnnualFileNameAndSection(fileName, type);
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()
