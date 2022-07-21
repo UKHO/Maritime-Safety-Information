@@ -533,6 +533,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 }
             });
         }
+
         [Test]
         public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
         {
@@ -674,6 +675,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 }
             });
         }
+
         private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse searchResult = new()
