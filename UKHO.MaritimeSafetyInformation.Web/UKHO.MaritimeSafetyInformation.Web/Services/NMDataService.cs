@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchAttributes, rowKey, _cacheConfiguration.Value.FssWeeklyAttributeTableName, "BatchAttribute", correlationId);
+                        await _fileShareServiceCache.InsertCacheObject(searchAttributes, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, "BatchAttribute", correlationId);
 
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is completed for _X-Correlation-ID:{correlationId}", correlationId);
                     }
@@ -187,31 +187,63 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return new YearWeekResponseDataModel { YearWeekModel = yearWeekModelList, IsYearAndWeekAttributesCached = isCached };
         }
 
-        public async Task<List<ShowDailyFilesResponseModel>> GetDailyBatchDetailsFiles(string correlationId)
+        public async Task<ShowDailyFilesResponseListModel> GetDailyBatchDetailsFiles(string correlationId)
         {
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                BatchSearchResponse searchResult = new();
+                bool isCached = false;
+                const string Frequency = "daily";
+                const string rowKey = "DailyKey";
 
-                _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started for daily user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
-
-                string searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq null ";
-                if (_userService.IsDistributorUser)
+                if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq 'Tracings' ";
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetDailyBatchDetailsFromCache(correlationId);
+
+                    if (batchSearchResponseModel.BatchSearchResponse != null)
+                    {
+                        searchResult = batchSearchResponseModel.BatchSearchResponse;
+                        isCached = true;
+                    }
                 }
 
-                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                if (searchResult.Entries == null)
+                {
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started for daily user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
-                BatchSearchResponse searchResult = result.Data;
+                    string searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq null ";
+                    if (_userService.IsDistributorUser)
+                    {
+                        searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq 'Tracings' ";
+                    }
+
+                    IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                    searchResult = result.Data;
+
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    {
+                        _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
+
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, Frequency, correlationId);
+
+                        _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
+                    }
+                }
 
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
-                    List<ShowDailyFilesResponseModel> showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
-                    return showDailyFilesResponses;
+
+                    ShowDailyFilesResponseListModel showDailyFilesResponseListModel = new();
+                    showDailyFilesResponseListModel.ShowDailyFilesResponseModel = NMHelper.GetDailyShowFilesResponse(searchResult);
+                    showDailyFilesResponseListModel.IsDailyFilesResponseCached = isCached;
+
+                    return showDailyFilesResponseListModel;
                 }
                 else
                 {

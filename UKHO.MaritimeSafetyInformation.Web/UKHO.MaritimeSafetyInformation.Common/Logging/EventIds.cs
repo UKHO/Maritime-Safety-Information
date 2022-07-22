@@ -556,7 +556,39 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910133 -  Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ClearFSSSearchCacheEventStart = 910133
+        ClearFSSSearchCacheEventStart = 910133,
+        /// <summary>
+        /// 910134 - Request for storing file share service daily files response in azure table storage is started.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910134,
+        /// <summary>
+        /// 910135 - Request for storing file share service daily files response in azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910135,
+        /// <summary>
+        /// 910136 - Maritime safety information request for daily NM files response from cache azure table storage is started.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheStart = 910136,
+        /// <summary>
+        /// 910137 - Maritime safety information request for daily NM files response from cache azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheCompleted = 910137,
+        /// <summary>
+        /// 910138 - Deletion started for expired daily NM files response cache data from table.
+        /// </summary>
+        DeleteExpiredDailyBatchResponseFromCacheStarted = 910138,
+        /// <summary>
+        /// 910139 - Deletion completed for expired daily NM files response cache data from table.
+        /// </summary>
+        DeleteExpiredDailyBatchResponseFromCacheCompleted = 910139,
+        /// <summary>
+        /// 910140 - Maritime safety information cache data not found for daily NM files response from azure table storage.
+        /// </summary>
+        FSSDailyBatchResponseDataNotFoundFromCache = 910140,
+        /// <summary>
+        /// 910141 - Failed to get daily NM files response from cache azure table.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheFailed = 910141
     }
 
     public static class EventIdExtensions

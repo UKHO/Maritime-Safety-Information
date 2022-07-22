@@ -97,11 +97,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
-
+                ViewBag.IsDistributor = _userService.IsDistributorUser;
+                ShowDailyFilesResponseListModel showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                ViewBag.IsDailyFilesResponseCached = showDailyFilesResponseModels.IsDailyFilesResponseCached;
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels);
+                return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels.ShowDailyFilesResponseModel);
             }
             catch (Exception ex)
             {
