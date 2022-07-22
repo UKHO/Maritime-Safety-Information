@@ -55,6 +55,16 @@ export default class Login {
     expect((await this.loginUsername.innerText()).toString()).toContain("Test User");
      }
 
+     public async loginWithDistributorDetails(username: string, password: string) {
+      await this.username.click();
+      await this.username.fill(username);
+      await this.btnContinue.click();
+      await this.password.fill(password);
+      await this.btnLogin.click();
+      
+      
+       } 
+
      public async signout()
      {
       await Promise.all([

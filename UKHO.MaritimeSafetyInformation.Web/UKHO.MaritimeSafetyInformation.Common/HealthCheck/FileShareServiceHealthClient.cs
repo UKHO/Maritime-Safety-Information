@@ -26,7 +26,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.HealthCheck
         {
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(Guid.NewGuid().ToString());
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(false, Guid.NewGuid().ToString());
                 FileShareApiClient fileShareApiClient = new(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
                 IResult<BatchSearchResponse> result = await FSSSearchAsync(fileShareApiClient, cancellationToken);

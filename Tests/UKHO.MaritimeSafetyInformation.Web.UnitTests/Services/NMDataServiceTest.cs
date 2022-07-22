@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using UKHO.FileShareClient;
@@ -28,11 +30,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IHttpClientFactory _httpClientFactory;
         private IFileShareServiceCache _fakeFileShareServiceCache;
         private IOptions<CacheConfiguration> _fakeCacheConfiguration;
-
         private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
-        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
-
         private NMDataService _nMDataService;
+        private IUserService _fakeUserService;
+        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
@@ -44,9 +45,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _fakeFileShareServiceCache = A.Fake<IFileShareServiceCache>();
             _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
-
+            _fakeUserService = A.Fake<IUserService>();
             _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
-                                               _fakeCacheConfiguration);
+                                               _fakeCacheConfiguration, _fakeUserService);
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
@@ -56,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForWeekly();
 
@@ -75,7 +76,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -90,7 +91,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -103,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
 
@@ -121,7 +122,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
 
@@ -146,7 +147,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 BatchSearchResponse = GetDailyBatchSearchResponse()
             };
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             A.CallTo(() => _fakeFileShareServiceCache.GetDailyBatchDetailsFromCache(A<string>.Ignored)).Returns(batchSearchResponseModel);
 
@@ -166,7 +167,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             A.CallTo(() => _fakeFileShareServiceCache.GetDailyBatchDetailsFromCache(A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
@@ -189,7 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int week = 07;
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
@@ -211,7 +212,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int week = 07;
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             BatchSearchResponseModel batchSearchResponseModel = new();
             batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponse();
@@ -235,7 +236,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
@@ -250,7 +251,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldExecuteCatch()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -263,7 +264,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -275,7 +276,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetAllYearWeekIsCalledWithInvalidToken_ThenShouldReturnException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -287,7 +288,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetAllYearWeekIsCalled_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -299,7 +300,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -314,7 +315,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedRecordCount = 3;
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -333,7 +334,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedRecordCount = 3;
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -352,7 +353,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedRecordCount = 3;
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -373,7 +374,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
@@ -395,7 +396,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
@@ -415,7 +416,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 0;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = new();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
@@ -433,7 +434,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 0;
             const int week = 0;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             Result<BatchSearchResponse> searchResult = new();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
@@ -455,7 +456,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
             Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.IsInstanceOf<Task<byte[]>>(result);
@@ -468,7 +469,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const string filename = "";
             const string frequency = "";
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.IsTrue(result.IsFaulted);
@@ -482,7 +483,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
 
             Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
@@ -497,7 +498,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const string fileName = "Daily 16-05-22.zip";
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
             A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
             Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
@@ -509,7 +510,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenGetCumulativeBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFilesOrderByFileName()
         {
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
 
@@ -530,7 +531,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenGetCumulativeBatchFilesIsCalledWithDuplicateData_ThenShouldReturnsLatestFile()
         {
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
 
@@ -554,7 +555,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetCumulativeBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -566,7 +567,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetCumulativeBatchFilesIsCalledThrowException_ThenShouldExecuteCatch()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
@@ -579,7 +580,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetLeisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
 
@@ -595,7 +596,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public async Task WhenGetLeisureFilesAsyncIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateLeisure();
 
@@ -611,7 +612,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetLeisureFilesAsyncIsCalled_ThenShouldExecuteCatch()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
@@ -624,13 +625,51 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenGetLeisureFilesAsyncIsCalled_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<string>.Ignored));
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for leisure files"),
                 async delegate { await _nMDataService.GetLeisureFilesAsync(CorrelationId); });
+        }
+
+        [Test]
+        public async Task WhenGetDailyBatchDetailsFilesIsCalledForDistributor_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+               {
+                    new Claim(ClaimTypes.Name, "Distributor"),
+                   new Claim(ClaimTypes.Role, "Distributor")
+               }, "mock"));
+
+            DefaultHttpContext httpContext = new()
+            {
+                User = user
+            };
+
+            HttpContextAccessor mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
+            mockHttpContextAccessor.HttpContext = httpContext;
+
+            UserService userService = new(mockHttpContextAccessor);
+
+            NMDataService _nMDataServiceDistributor = new(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
+                                               _fakeCacheConfiguration, userService);
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDailyDistributorTracings();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 1;
+            const int dailyFilesDataCount = 1;
+
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataServiceDistributor.GetDailyBatchDetailsFiles(CorrelationId);
+
+            Assert.AreEqual(true, userService.IsDistributorUser);
+            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
+            Assert.AreEqual(dailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
         }
 
         private static BatchSearchResponse GetBatchSearchResponse()
@@ -643,7 +682,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
-                            Attributes = new(),
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+                            },
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "aaa.pdf",
@@ -662,7 +709,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                         new BatchDetails() {
                             BatchId = "2",
-                            Attributes = new(),
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+                            },
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
                                     Filename = "ccc.pdf",
@@ -711,13 +766,101 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         private static BatchSearchResponse GetDailyBatchSearchResponse()
+    {
+        return new BatchSearchResponse
         {
-            return new BatchSearchResponse
+            Count = 2,
+            Links = null,
+            Total = 0,
+            Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                        AllFilesZipSize=346040,
+                        Attributes = new List<BatchDetailsAttributes>()
+                        {
+                            new BatchDetailsAttributes("Data Date","2022-04-22"),
+                            new BatchDetailsAttributes("Frequency","Daily"),
+                            new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                            new BatchDetailsAttributes("Week Number","17"),
+                            new BatchDetailsAttributes("Year","2022"),
+                            new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                        },
+                        BusinessUnit = "TEST",
+                        BatchPublishedDate = DateTime.Now,
+                        ExpiryDate = DateTime.Now,
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "aaa.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "bbb.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+
+                    },
+                    new BatchDetails() {
+                        BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
+                        AllFilesZipSize=299170,
+                        Attributes = new List<BatchDetailsAttributes>()
+                        {
+                            new BatchDetailsAttributes("Data Date","2022-04-21"),
+                            new BatchDetailsAttributes("Frequency","Daily"),
+                            new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                            new BatchDetailsAttributes("Week Number","17"),
+                            new BatchDetailsAttributes("Year","2022"),
+                            new BatchDetailsAttributes("Year / Week","2022 / 17"),
+
+                        },
+                        BusinessUnit = "TEST",
+                        BatchPublishedDate = DateTime.Now,
+                        ExpiryDate = DateTime.Now,
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "ccc.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "ddd.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+
+                    }
+                }
+        };
+    }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDaily()
+        {
+            Result<BatchSearchResponse> searchResult = new()
             {
-                Count = 2,
-                Links = null,
-                Total = 0,
-                Entries = new List<BatchDetails>() {
+                Data = GetDailyBatchSearchResponse()
+            };
+
+            return searchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDailyDistributorTracings()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 1,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
                             AllFilesZipSize=346040,
@@ -729,7 +872,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                 new BatchDetailsAttributes("Week Number","17"),
                                 new BatchDetailsAttributes("Year","2022"),
                                 new BatchDetailsAttributes("Year / Week","2022 / 17"),
-
+                                new BatchDetailsAttributes("Content","tracings")
                             },
                             BusinessUnit = "TEST",
                             BatchPublishedDate = DateTime.Now,
@@ -746,35 +889,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                     FileSize=1232,
                                     MimeType = "PDF",
                                     Links = null
-                                }
-                            }
-
-                        },
-                        new BatchDetails() {
-                            BatchId = "68970ffc-4820-47eb-be76-aaa3209eb3b6",
-                            AllFilesZipSize=299170,
-                            Attributes = new List<BatchDetailsAttributes>()
-                            {
-                                new BatchDetailsAttributes("Data Date","2022-04-21"),
-                                new BatchDetailsAttributes("Frequency","Daily"),
-                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
-                                new BatchDetailsAttributes("Week Number","17"),
-                                new BatchDetailsAttributes("Year","2022"),
-                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
-
-                            },
-                            BusinessUnit = "TEST",
-                            BatchPublishedDate = DateTime.Now,
-                            ExpiryDate = DateTime.Now,
-                            Files = new List<BatchDetailsFiles>() {
-                                new BatchDetailsFiles () {
-                                    Filename = "ccc.pdf",
-                                    FileSize=1232,
-                                    MimeType = "PDF",
-                                    Links = null
                                 },
                                 new BatchDetailsFiles () {
-                                    Filename = "ddd.pdf",
+                                    Filename = "tracings.pdf",
                                     FileSize=1232,
                                     MimeType = "PDF",
                                     Links = null
@@ -783,14 +900,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
                         }
                     }
-            };
-        }
-
-        private static Result<BatchSearchResponse> SetSearchResultForDaily()
-        {
-            Result<BatchSearchResponse> searchResult = new()
-            {
-                Data = GetDailyBatchSearchResponse()
+                }
             };
 
             return searchResult;
@@ -956,7 +1066,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     Entries = new List<BatchDetails>() {
                         new BatchDetails() {
                             BatchId = "1",
-                            Attributes = new(),
+                            Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
                             BatchPublishedDate =DateTime.UtcNow.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
@@ -981,7 +1096,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                         new BatchDetails() {
                             BatchId = "2",
-                            Attributes = new(),
+                            Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
                             BatchPublishedDate = DateTime.UtcNow.AddMinutes(-20),
                             Files = new List<BatchDetailsFiles>() {
                                 new BatchDetailsFiles () {
@@ -1141,7 +1261,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                 new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2022"),
-
                             },
                             BatchPublishedDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
@@ -1161,7 +1280,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                 new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
-
                             },
                             BatchPublishedDate = DateTime.Now.AddMinutes(-10),
                             Files = new List<BatchDetailsFiles>() {
@@ -1181,7 +1299,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                 new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
-
                             },
                              BatchPublishedDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
@@ -1201,7 +1318,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                 new BatchDetailsAttributes("Frequency","Cumulative"),
                                 new BatchDetailsAttributes("Product Type","Notices to Mariners"),
                                 new BatchDetailsAttributes("Year","2021"),
-
                             },
                             BatchPublishedDate = DateTime.Now,
                             Files = new List<BatchDetailsFiles>() {
@@ -1389,7 +1505,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                         },
                     }
                 }
+
             };
+
 
             return searchResult;
         }
