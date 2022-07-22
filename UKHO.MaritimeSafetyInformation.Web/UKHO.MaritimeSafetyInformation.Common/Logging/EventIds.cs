@@ -546,37 +546,49 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSCacheDataInsertFailed = 910130,
         /// <summary>
-        /// 910131 - Request for storing file share service daily files response in azure table storage is started.
+        /// 910131 - Started processing the Options request for the New Files Published event webhook
         /// </summary>
-        FSSDailyBatchFilesResponseStoreToCacheStart = 910131,
+        NewFilesPublishedWebhookOptionsCallStarted = 910131,
         /// <summary>
-        /// 910132 - Request for storing file share service daily files response in azure table storage is completed.
+        /// 910132 - Completed processing the Options request for the New Files Published event webhook
         /// </summary>
-        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910132,
+        NewFilesPublishedWebhookOptionsCallCompleted = 910132,
         /// <summary>
-        /// 910133 - Maritime safety information request for daily NM files response from cache azure table storage is started.
+        /// 910133 -  Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        FSSDailyBatchResponseFromCacheStart = 910133,
+        ClearFSSSearchCacheEventStart = 910133,
         /// <summary>
-        /// 910134 - Maritime safety information request for daily NM files response from cache azure table storage is completed.
+        /// 910134 - Request for storing file share service daily files response in azure table storage is started.
         /// </summary>
-        FSSDailyBatchResponseFromCacheCompleted = 910134,
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910134,
         /// <summary>
-        /// 910135 - Deletion started for expired daily NM files response cache data from table.
+        /// 910135 - Request for storing file share service daily files response in azure table storage is completed.
         /// </summary>
-        DeleteExpiredDailyBatchResponseFromCacheStarted = 910135,
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
-        /// 910136 - Deletion completed for expired daily NM files response cache data from table.
+        /// 910136 - Maritime safety information request for daily NM files response from cache azure table storage is started.
         /// </summary>
-        DeleteExpiredDailyBatchResponseFromCacheCompleted = 910136,
+        FSSDailyBatchResponseFromCacheStart = 910136,
         /// <summary>
-        /// 910137 - Maritime safety information cache data not found for daily NM files response from azure table storage.
+        /// 910137 - Maritime safety information request for daily NM files response from cache azure table storage is completed.
         /// </summary>
-        FSSDailyBatchResponseDataNotFoundFromCache = 910137,
+        FSSDailyBatchResponseFromCacheCompleted = 910137,
         /// <summary>
-        /// 910138 - Failed to get daily NM files response from cache azure table.
+        /// 910138 - Deletion started for expired daily NM files response cache data from table.
         /// </summary>
-        FSSDailyBatchResponseFromCacheFailed = 910138
+        DeleteExpiredDailyBatchResponseFromCacheStarted = 910138,
+        /// <summary>
+        /// 910139 - Deletion completed for expired daily NM files response cache data from table.
+        /// </summary>
+        DeleteExpiredDailyBatchResponseFromCacheCompleted = 910139,
+        /// <summary>
+        /// 910140 - Maritime safety information cache data not found for daily NM files response from azure table storage.
+        /// </summary>
+        FSSDailyBatchResponseDataNotFoundFromCache = 910140,
+        /// <summary>
+        /// 910141 - Failed to get daily NM files response from cache azure table.
+        /// </summary>
+        FSSDailyBatchResponseFromCacheFailed = 910141
     }
 
     public static class EventIdExtensions
