@@ -522,9 +522,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.IsInstanceOf(typeof(byte[]), result);
         }
 
-        private static BatchSearchResponse SetSearchResultForWeeklyForPublicUser()
+        [Test]
+        public void WhenNMHelperCallsGetShowFilesResponseModel_ThenConversionIsCorrect()
         {
-            BatchSearchResponse searchResult = new()
+            BatchSearchResponse searchResult = SetSearchResultForWeekly();
+
+            List<ShowFilesResponseModel> expected = new()
             {
                 new ShowFilesResponseModel()
                 {
@@ -617,65 +620,32 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "622 KB",
                     MimeType = "application/pdf",
                     Links = null
-                Count = 2,
-                Links = null,
-                Total = 0,
-                Entries = new List<BatchDetails>() {
-                    new BatchDetails() {
-                        BatchId = "1",
-                        Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
-                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
-                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
-                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
-                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
-                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
-                        Files = new List<BatchDetailsFiles>() {
-                            new BatchDetailsFiles () {
-                                Filename = "aaa.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            },
-                            new BatchDetailsFiles () {
-                                Filename = "bbb.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            }
-                        }
-                    },
-                    new BatchDetails() {
-                        BatchId = "2",
-                        Attributes = new List<BatchDetailsAttributes> {new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
-                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
-                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
-                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
-                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
-                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
-                        Files = new List<BatchDetailsFiles>() {
-                            new BatchDetailsFiles () {
-                                Filename = "ccc.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            },
-                            new BatchDetailsFiles () {
-                                Filename = "ddd.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            }
-                        }
-                    }
                 }
             };
 
-            return searchResult;
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
         }
 
-        private static BatchSearchResponse SetSearchResultForWeeklyForDistributorUser()
+        [Test]
+        public void WhenListFilesResponseLeisureIsCalledWithDuplicateData_ThenCheckIfLatestRecordIsReturned()
         {
-            BatchSearchResponse searchResult = new()
+            BatchSearchResponse searchResult = SetSearchResultForDuplicateLeisure();
+
+            List<ShowFilesResponseModel> expected = new()
             {
                 new ShowFilesResponseModel()
                 {
@@ -839,57 +809,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     FileSizeinKB = "1 KB",
                     MimeType = "PDF",
                     Links = null
-                Count = 2,
-                Links = null,
-                Total = 0,
-                Entries = new List<BatchDetails>() {
-                    new BatchDetails() {
-                        BatchId = "1",
-                        Attributes = new List<BatchDetailsAttributes> {new BatchDetailsAttributes() {  Key = "Content" , Value =  "tracings" },
-                                                                            new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
-                                                                            new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
-                                                                            new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
-                                                                            new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
-                                                                            new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
-                                                                            new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
-                        Files = new List<BatchDetailsFiles>() {
-                            new BatchDetailsFiles () {
-                                Filename = "aaa.xml",
-                                FileSize=4545,
-                                MimeType = "XML",
-                                Links = null
-                            },
-                            new BatchDetailsFiles () {
-                                Filename = "bbb.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            }
-                        }
-                    },
-                    new BatchDetails() {
-                        BatchId = "2",
-                        Attributes = new List<BatchDetailsAttributes> {new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
-                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
-                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
-                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
-                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
-                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
-                        Files = new List<BatchDetailsFiles>() {
-                            new BatchDetailsFiles () {
-                                Filename = "ccc.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            },
-                            new BatchDetailsFiles () {
-                                Filename = "ddd.pdf",
-                                FileSize=1232,
-                                MimeType = "PDF",
-                                Links = null
-                            }
-                        }
-                    }
                 }
             };
 
@@ -1035,6 +954,177 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 Entries = new List<BatchDetails>() {
                     new BatchDetails() {
                         BatchId = "1",
+                        Attributes = new(),
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "aaa.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "bbb.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    },
+                    new BatchDetails() {
+                        BatchId = "2",
+                        Attributes = new(),
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "ccc.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "ddd.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static BatchSearchResponse SetSearchResultForWeeklyForPublicUser()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "1",
+                        Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "aaa.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "bbb.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    },
+                    new BatchDetails() {
+                        BatchId = "2",
+                        Attributes = new List<BatchDetailsAttributes> {new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "ccc.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "ddd.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static BatchSearchResponse SetSearchResultForWeeklyForDistributorUser()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "1",
+                        Attributes = new List<BatchDetailsAttributes> {new BatchDetailsAttributes() {  Key = "Content" , Value =  "tracings" },
+                                                                            new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
+                                                                            new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                            new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                            new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
+                                                                            new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                            new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "aaa.xml",
+                                FileSize=4545,
+                                MimeType = "XML",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "bbb.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    },
+                    new BatchDetails() {
+                        BatchId = "2",
+                        Attributes = new List<BatchDetailsAttributes> {new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-06-20" },
+                                                                                new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
+                                                                                new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
+                                                                                new BatchDetailsAttributes() { Key = "Week Number", Value = "25" },
+                                                                                new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
+                                                                                new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 25"  } },
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "ccc.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "ddd.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static BatchSearchResponse SetSearchResultDuplicateDataForWeeklyForPublicUser()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "1",
                         Attributes = new List<BatchDetailsAttributes> { new BatchDetailsAttributes() {  Key = "Data Date" , Value =  "2022-04-08" },
                                                                                 new BatchDetailsAttributes() { Key = "Frequency" , Value =  "Weekly" },
                                                                                 new BatchDetailsAttributes() { Key = "Product Type" , Value = "NMTest" },
@@ -1106,7 +1196,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                                                                 new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
                                                                                 new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
                                                                                 new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
-                        BatchPublishedDate= DateTime.Now.AddMinutes(-10),                        
+                        BatchPublishedDate= DateTime.Now.AddMinutes(-10),
                         Files = new List<BatchDetailsFiles>() {
                             new BatchDetailsFiles () {
                                 Filename = "aaa.pdf",
@@ -2022,6 +2112,5 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             };
             return searchResult;
         }
-
     }
 }
