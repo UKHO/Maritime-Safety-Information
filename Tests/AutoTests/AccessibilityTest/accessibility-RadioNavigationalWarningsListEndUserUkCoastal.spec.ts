@@ -19,7 +19,7 @@ let rnwListEndUser:RadioNavigationalWarningsListEndUser;
   };
  
   test.beforeEach(async ({page}) => {
-    test.slow()
+    test.slow();
     await page.goto(app.url);    
     rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
     await rnwListEndUser.goToRadioWarning();
@@ -27,7 +27,8 @@ let rnwListEndUser:RadioNavigationalWarningsListEndUser;
   
   });
   test('Radio Navigational Warnings For Uk Coastal page should be accessible', async ({page}) => {
-     await injectAxe(page);  
+    
+    await injectAxe(page);  
      await checkA11y(page, undefined, defaultCheckA11yOptions);
  })
  

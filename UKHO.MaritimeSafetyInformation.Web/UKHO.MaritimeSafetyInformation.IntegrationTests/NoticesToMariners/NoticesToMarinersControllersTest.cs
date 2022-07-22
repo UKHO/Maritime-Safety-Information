@@ -29,14 +29,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();
+            Config = new Configuration();           
             _ = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
+           
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
-
+        
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
@@ -44,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(8, showWeeklyFiles.YearAndWeekList.Count);
-            Assert.AreEqual(2, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual(5, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
@@ -77,7 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowWeeklyFilesAsync_ThenReturnWeeklyFiles()
+        public async Task WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
@@ -89,6 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("21snii22_week_W2020_14", listFiles[0].FileDescription);
             Assert.AreEqual(".pdf", listFiles[0].FileExtension);
             Assert.AreEqual(1072212, listFiles[0].FileSize);
+            Assert.IsFalse(listFiles[0].IsDistributorUser);
         }
 
         [Test]
@@ -160,7 +162,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
-            Assert.AreEqual(1072222, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual(1072212, ((FileContentResult)result).FileContents.Length);
         }
 
         [Test]
@@ -186,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
             Assert.IsTrue(((FileContentResult)result) != null);
             Assert.AreEqual("application/pdf", ((FileContentResult)result).ContentType);
-            Assert.AreEqual(425612, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual(425602, ((FileContentResult)result).FileContents.Length);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
 
@@ -257,7 +259,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles[0].BatchId);
         }
 
-        [Test]
+      [Test]
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
