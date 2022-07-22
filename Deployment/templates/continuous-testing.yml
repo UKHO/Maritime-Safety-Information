@@ -7,12 +7,6 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
-    - task: PowerShell@2
-      inputs:
-       targetType: 'inline'
-       script: |
-         echo "##vso[task.setvariable variable=FileShareService.BusinessUnit]$(FileShareService.BusinessUnitIntegrationTest)"
-
     - task: FileTransform@1
       displayName: "File Transform: integrationtests"
       inputs:
@@ -36,12 +30,6 @@ steps:
           !**/obj/**
        testRunTitle: "$(Environment)-IntegrationTests"
        workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
-
-    - task: PowerShell@2
-      inputs:
-       targetType: 'inline'
-       script: |
-         echo "##vso[task.setvariable variable=FileShareService.BusinessUnit]$(FileShareService.BusinessUnitFunctionTest)"
 
     - checkout: self
 
@@ -75,6 +63,12 @@ steps:
         searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
         testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
+
+    - task: PowerShell@2
+      inputs:
+       targetType: 'inline'
+       script: |
+         echo "##vso[task.setvariable variable=FileShareService.BusinessUnit]$(FileShareService.BusinessUnitFunctionTest)"
 
     - script: |
        npm run test:a11y
