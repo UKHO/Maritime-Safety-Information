@@ -1,4 +1,5 @@
-﻿using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+﻿using System.Security.Claims;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
@@ -14,10 +15,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public bool IsDistributorUser
         {
-            get {
+            get
+            {
                 return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated
                     && _httpContextAccessor.HttpContext.User.IsInRole(DistributorRoleName);
             }
-        }     
+        }
+
+        public string UserIdentifier
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.User.FindFirstValue("http://schemas.microsoft.com/identity/claims/objectidentifier");
+            }
+        }
+
+        public string SignInName
+        {
+            get
+            {
+                return _httpContextAccessor.HttpContext.User.FindFirstValue("signInName");
+            }
+        }
     }
 }

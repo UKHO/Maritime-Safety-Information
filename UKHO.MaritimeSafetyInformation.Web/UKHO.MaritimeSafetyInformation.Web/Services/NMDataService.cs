@@ -19,9 +19,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
         private readonly IFileShareServiceCache _fileShareServiceCache;
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
+        private readonly IUserService _userService;
 
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig,
-                             IFileShareServiceCache fileShareServiceCache, IOptions<CacheConfiguration> cacheConfiguration)
+                             IFileShareServiceCache fileShareServiceCache, IOptions<CacheConfiguration> cacheConfiguration, IUserService userService)
         {
             _fileShareService = fileShareService;
             _logger = logger;
@@ -30,6 +31,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _httpClientFactory = httpClientFactory;
             _fileShareServiceCache = fileShareServiceCache;
             _cacheConfiguration = cacheConfiguration;
+            _userService = userService;
         }
 
         public async Task<ShowNMFilesResponseModel> GetWeeklyBatchFiles(int year, int week, string correlationId)
@@ -53,7 +55,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 
                 if (searchResult.Entries == null)
                 {
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
@@ -115,7 +117,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if(searchAttributes.Data == null)
                 {
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
                     
                     _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -190,11 +192,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started for daily user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
-                const string searchText = $" and $batch(Frequency) eq 'daily'";
+                string searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq null ";
+                if (_userService.IsDistributorUser)
+                {
+                    searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq 'Tracings' ";
+                }
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -204,21 +210,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
-                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
                     List<ShowDailyFilesResponseModel> showDailyFilesResponses = NMHelper.GetDailyShowFilesResponse(searchResult);
                     return showDailyFilesResponses;
                 }
                 else
                 {
-                    _logger.LogError(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogError(EventIds.ShowDailyFilesResponseDataNotFound.ToEventId(), "Maritime safety information request to get daily NM files response data not found for user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
                     throw new InvalidDataException("Invalid data received for daily NM files");
                 }
-
-
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.ShowDailyFilesResponseFailed.ToEventId(), "Maritime safety information request to get daily NM files failed to return data with exception:{exceptionMessage} for user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", ex.Message, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
                 throw;
             }
         }
@@ -227,7 +231,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 _logger.LogInformation(EventIds.ShowLeisureFilesResponseStarted.ToEventId(), "Request to get leisure files started with _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -297,7 +301,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "Maritime safety information request to get single {frequency} NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser,correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -323,7 +327,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
@@ -349,7 +353,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 const string searchText = $" and $batch(Frequency) eq 'cumulative'";
 

@@ -438,7 +438,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             });
         }
 
-[Test]
+        [Test]
         public void WhenListFilesResponseLeisureIsCalled_ThenCheckIfConversionIsCorrect()
         {
             BatchSearchResponse searchResult = SetSearchResultForLeisure();
@@ -533,7 +533,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                 }
             });
         }
-[Test]public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
+
+        [Test]
+        public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
         {
             BatchSearchResponse searchResult = SetSearchResultForCumulative();
 
@@ -623,7 +625,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     Links = null
                 },
                 new ShowFilesResponseModel()
-                {       
+                {
                     BatchId = "1",
                     Filename = "NP234(A) 2022.pdf",
                     FileDescription = "NP234(A) 2022",
@@ -672,7 +674,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                     Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
                 }
             });
-        }        private static BatchSearchResponse SetSearchResultForWeekly()
+        }
+
+        private static BatchSearchResponse SetSearchResultForWeekly()
         {
             BatchSearchResponse searchResult = new()
             {

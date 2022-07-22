@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexIsCalled_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-           
+
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
             IActionResult result = await _controller.Index();
@@ -167,7 +167,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
         [Test]
