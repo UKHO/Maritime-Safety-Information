@@ -136,8 +136,8 @@ export default class noticeToMarinerWeekDownload {
       expect(resultLinks[i].trim()).toEqual("Download");
     }
   }
-}
-  }
+
+  
 
   public async checkFileSizeText()
     {

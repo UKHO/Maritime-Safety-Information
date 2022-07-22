@@ -86,6 +86,7 @@ export default class RadioNavigationalWarnings
         await this.page.keyboard.press("ArrowDown");
         await this.description.fill("testdata");
         await this.content.fill(content);
+        await this.page.locator("#ExpiryDate").type("05072022 06000");
     }
     public async clearInput(locator:Locator)
     {
