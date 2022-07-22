@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
@@ -54,9 +57,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public async Task WhenNewFilesPublishedIsCalled_ThenReturnsOkResponse()
         {
-            var fakeCacheJson = JObject.Parse(@"{""Type"":""FilesPublished""}");
+            string jsonString = JsonConvert.SerializeObject(new JObject());
+            var requestData = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
 
-            var result = (OkObjectResult)await _controller.NewFilesPublished(fakeCacheJson);
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            _controller.HttpContext.Request.Body = requestData;
+
+            var result = (OkObjectResult)await _controller.NewFilesPublished();
 
             Assert.AreEqual(200, result.StatusCode);
         }
