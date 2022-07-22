@@ -46,6 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
             services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
+            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
             services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
@@ -67,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAzureStorageService, AzureStorageService>();
 
             services.AddControllersWithViews()
-                .AddMicrosoftIdentityUI();
+            .AddMicrosoftIdentityUI();
 
             //Configuring appsettings section AzureAdB2C, into IOptions
             services.AddOptions();

@@ -2,7 +2,7 @@
 {
     public interface IUserService
     {
-        bool IsDistributorUser { get; }
+        bool IsDistributorUser { get;}
         string UserIdentifier { get; }
         string SignInName { get; }
     }

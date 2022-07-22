@@ -5,14 +5,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class UserService : IUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;       
         private const string DistributorRoleName = "Distributor";
 
         public UserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-        }
-
+        }       
+       
         public bool IsDistributorUser
         {
             get
@@ -34,7 +34,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             get
             {
-                return _httpContextAccessor.HttpContext.User.FindFirstValue("signInName");
+               return _httpContextAccessor.HttpContext.User.FindFirstValue("signInName");
             }
         }
     }

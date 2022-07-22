@@ -62,8 +62,9 @@ export default class Login {
       await this.password.fill(password);
       await this.btnLogin.click();
       
-     }
-   
+      
+       } 
+
      public async signout()
      {
       await Promise.all([
