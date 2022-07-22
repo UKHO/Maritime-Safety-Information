@@ -23,17 +23,25 @@ const config: PlaywrightTestConfig = {
   },
   projects: [
     
-     {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
+    //  {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
         
-      },
-    },
-     {
-      name: 'edge',
+    //   },
+    // },
+    //  {
+    //   name: 'edge',
+    //   use: {
+    //     ...devices['Desktop Edge'],
+        
+    //   },
+    // },
+
+    {
+      name: 'safari',
       use: {
-        ...devices['Desktop Edge'],
+        ...devices['Desktop Safari'],
         
       },
     },
