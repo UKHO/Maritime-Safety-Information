@@ -20,6 +20,7 @@ test.describe("Create new radio navigational warnings record", ()=> {
     await radioNavigationalWarnings.clearInput(radioNavigationalWarnings.reference);
     await radioNavigationalWarnings.clearInput(radioNavigationalWarnings.content);
     await radioNavigationalWarnings.editRNW();
+    await page.waitForTimeout(5000);
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.summaryError,'The Description field is required.'); 
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.referenceEror,"The Reference field is required.");
     await radioNavigationalWarnings.checkErrorMessage(radioNavigationalWarnings.contentError,'The Text field is required.');

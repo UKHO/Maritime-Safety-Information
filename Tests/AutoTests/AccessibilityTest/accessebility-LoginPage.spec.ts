@@ -25,7 +25,8 @@ import loginPage from '../../pageObject/Login.page';
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
-   
+    
+    test.setTimeout(12000);
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);

@@ -10,12 +10,36 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     {
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
+            List<BatchDetails> batchDetailsList = new();
             if (SearchResult.Entries.Count > 1)
             {
-                List<BatchDetails> batchDetailsList = new();
+                List<BatchDetails> distributorBatchDetail = new();
+                List<BatchDetails> publicBatchDetail = new();
 
-                BatchDetails batchDetail = SearchResult.Entries.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
-                batchDetailsList.Add(batchDetail);
+                foreach (BatchDetails entry in SearchResult.Entries)
+                {
+                    if (entry.Attributes.SingleOrDefault(x => x.Key.Contains("Content") && x.Value.Contains("tracings")) != null)
+                    {
+                        distributorBatchDetail.Add(entry);
+                    }
+                    else
+                    {
+                        publicBatchDetail.Add(entry);
+                    }
+                }
+
+                BatchDetails distBatch = distributorBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                BatchDetails publicBatch = publicBatchDetail.OrderByDescending(t => t.BatchPublishedDate).FirstOrDefault();
+                if (distBatch != null)
+                {
+                    batchDetailsList.Add(distBatch);
+                }
+
+                if (publicBatch != null)
+                {
+                    batchDetailsList.Add(publicBatch);
+                }
+
                 SearchResult.Entries = batchDetailsList;
                 SearchResult.Count = batchDetailsList.Count;
                 SearchResult.Total = batchDetailsList.Count;
@@ -42,6 +66,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
                         Links = file.Links,
+                        IsDistributorUser = item.Attributes.Where(x => x.Key.Equals("Content"))
+                        .Select(x => x.Value).FirstOrDefault() == "tracings"
                     });
                 }
             }
@@ -51,8 +77,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
         {
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels  = GetShowFilesResponseModel(searchResult.Entries);
-            
+            List<ShowFilesResponseModel> listShowFilesResponseModels = GetShowFilesResponseModel(searchResult.Entries);
+
             return listShowFilesResponseModels
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
                 .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
@@ -69,7 +95,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 BatchId = item.BatchId,
                 DataDate = item.Attributes.Where(x => x.Key.Equals("Data Date")).Select(x => x.Value).FirstOrDefault(),
                 WeekNumber = item.Attributes.Where(x => x.Key.Equals("Week Number")).Select(x => x.Value).FirstOrDefault(),
-                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),            
+                Year = item.Attributes.Where(x => x.Key.Equals("Year")).Select(x => x.Value).FirstOrDefault(),
                 YearWeek = item.Attributes.Where(x => x.Key.Replace(" ", "").Equals("Year/Week")).Select(x => x.Value.Replace(" ", "")).FirstOrDefault(),
                 AllFilesZipSize = (long)item.AllFilesZipSize,
                 BatchPublishedDate = item.BatchPublishedDate,
@@ -132,7 +158,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static async Task<byte[]> GetFileBytesFromStream(Stream stream)
         {
-            byte[] fileBytes = new byte[stream.Length + 10];
+            byte[] fileBytes = new byte[stream.Length];
 
             int numBytesToRead = (int)stream.Length;
             int numBytesRead = 0;
