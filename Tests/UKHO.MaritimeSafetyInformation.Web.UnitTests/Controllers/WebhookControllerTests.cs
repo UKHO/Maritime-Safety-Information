@@ -19,6 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private WebhookController _controller;
         private ILogger<WebhookController> _fakeLogger;
         private IHttpContextAccessor _fakeContextAccessor;
+        private IWebhookService _fakeWebhookService;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
@@ -26,8 +27,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             _fakeLogger = A.Fake<ILogger<WebhookController>>();
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
+            _fakeWebhookService = A.Fake<IWebhookService>();
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new WebhookController(_fakeContextAccessor, _fakeLogger);
+            _controller = new WebhookController(_fakeContextAccessor, _fakeLogger, _fakeWebhookService);
         }
 
         [Test]

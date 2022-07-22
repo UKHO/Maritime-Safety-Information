@@ -1,4 +1,6 @@
 ﻿using Azure.Data.Tables;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
 
@@ -38,6 +40,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         {
             TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
             await tableClient.AddEntityAsync(customTableEntity);
+        }
+
+        public async Task DeleteTablesAsync( string tableName, string storageAccountConnectionString)
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageAccountConnectionString);
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable _cloudTable = tableClient.GetTableReference(tableName);
+            await _cloudTable.DeleteIfExistsAsync();
         }
     }
 }

@@ -556,7 +556,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910133 -  Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ClearFSSSearchCacheEventStart = 910133
+        ClearFSSSearchCacheEventStarted = 910133,
+        /// <summary>
+        /// 910134 - Request for clearing FSS search cache data from Azure table completed.
+        /// </summary>
+        ClearFSSSearchCacheEventCompleted = 910134,
+        /// <summary>
+        /// 910135 - Request for validation event for clearing DSS search cache from Azure table
+        /// </summary>
+        ClearFSSSearchCacheValidationEvent = 910135,
     }
 
     public static class EventIdExtensions
