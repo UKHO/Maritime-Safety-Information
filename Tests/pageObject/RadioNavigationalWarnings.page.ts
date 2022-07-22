@@ -23,6 +23,8 @@ export default class RadioNavigationalWarnings
     readonly filter:Locator;
     readonly delete:Locator;
     readonly edit:Locator;
+    readonly expiryDate:Locator;
+
     constructor(page:Page)
     {
         this.page = page; 
@@ -44,6 +46,7 @@ export default class RadioNavigationalWarnings
         this.filter = this.page.locator("#BtnFilter");
         this.delete = this.page.locator('#IsDeleted');
         this.edit=this.page.locator("[id^='Edit'] > a");
+        this.expiryDate=this.page.locator("#ExpiryDate");
     }
 
     public async SelectRadioNavigationalWarning()
@@ -73,6 +76,7 @@ export default class RadioNavigationalWarnings
 
     public async checkErrorMessage(locator:Locator,text:String)
     {
+        await this.page.waitForLoadState();
         expect((await locator.textContent()).toString()).toEqual(text);   
     }
     
@@ -86,6 +90,7 @@ export default class RadioNavigationalWarnings
         await this.page.keyboard.press("ArrowDown");
         await this.description.fill("testdata");
         await this.content.fill(content);
+        await this.expiryDate.type("05072022 06000");
     }
     public async clearInput(locator:Locator)
     {
@@ -126,6 +131,7 @@ export default class RadioNavigationalWarnings
         await this.page.keyboard.press("ArrowDown");
         await this.description.fill("testdata");
         await this.content.type(content);
+
     }
   
 }
