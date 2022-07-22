@@ -76,6 +76,7 @@ export default class RadioNavigationalWarnings
 
     public async checkErrorMessage(locator:Locator,text:String)
     {
+        await this.page.waitForLoadState();
         expect((await locator.textContent()).toString()).toEqual(text);   
     }
     

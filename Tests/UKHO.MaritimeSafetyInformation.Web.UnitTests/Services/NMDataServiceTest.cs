@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using UKHO.FileShareClient;
@@ -115,7 +117,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
             Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
-        }
+        }       
 
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
@@ -586,6 +588,44 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 async delegate { await _nMDataService.GetLeisureFilesAsync(CorrelationId); });
         }
 
+        [Test]
+        public async Task WhenGetDailyBatchDetailsFilesIsCalledForDistributor_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+               {
+                    new Claim(ClaimTypes.Name, "Distributor"),
+                   new Claim(ClaimTypes.Role, "Distributor")
+               }, "mock"));
+
+            DefaultHttpContext httpContext = new()
+            {
+                User = user
+            };
+
+            HttpContextAccessor mockHttpContextAccessor = A.Fake<HttpContextAccessor>();
+            mockHttpContextAccessor.HttpContext = httpContext;
+
+            UserService userService = new(mockHttpContextAccessor);
+
+            NMDataService _nMDataServiceDistributor = new(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
+                                               _fakeCacheConfiguration, userService);
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDailyDistributorTracings();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 1;
+            const int dailyFilesDataCount = 1;
+
+            List<ShowDailyFilesResponseModel> listShowFilesResponseModels = await _nMDataServiceDistributor.GetDailyBatchDetailsFiles(CorrelationId);
+
+            Assert.AreEqual(true, userService.IsDistributorUser);
+            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+        }
+
         private static BatchSearchResponse GetBatchSearchResponse()
         {
             return new BatchSearchResponse
@@ -753,6 +793,61 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                             }
 
                         }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
+        private static Result<BatchSearchResponse> SetSearchResultForDailyDistributorTracings()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 1,
+                    Links = null,
+                    Total = 0,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","Daily"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Week Number","17"),
+                                new BatchDetailsAttributes("Year","2022"),
+                                new BatchDetailsAttributes("Year / Week","2022 / 17"),
+                                new BatchDetailsAttributes("Content","tracings")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate = DateTime.Now,
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "aaa.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "bbb.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "tracings.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+
+                        }                        
                     }
                 }
             };

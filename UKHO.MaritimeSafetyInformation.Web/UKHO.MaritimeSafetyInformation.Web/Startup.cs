@@ -48,6 +48,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
             services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
+            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
+
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));

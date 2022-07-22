@@ -15,7 +15,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
        
         public bool IsDistributorUser
         {
-            get {
+            get
+            {
                 return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated
                     && _httpContextAccessor.HttpContext.User.IsInRole(DistributorRoleName);
             }

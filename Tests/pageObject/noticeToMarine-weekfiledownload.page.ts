@@ -1,6 +1,6 @@
 
 import { expect } from '@playwright/test';
-import { LocaleOptions } from 'luxon';
+import { DateTime, LocaleOptions } from 'luxon';
 import type { Locator, Page } from 'playwright';
 
 
@@ -113,11 +113,6 @@ export default class noticeToMarinerWeekDownload {
     expect(downloadurl).toContain(`fileName=${leisurefileName}`);
   }
 
- 
-   
-  
-
-
   public async checkDailyFileDownload() {
     await this.page.waitForSelector("[id^='filename']");
     const dailyfileName = await this.fileName.first().evaluate((name) => name.textContent);
@@ -167,6 +162,50 @@ export default class noticeToMarinerWeekDownload {
       expect(resultLinks[i].trim()).toEqual("Download");
     }
   }
+
+  public async checkDailyFileName()
+ {
+  await this.page.waitForLoadState();
+  await this.page.waitForSelector("[id^='filename']");
+ const dailyFileName = await this.page.$$eval("[id^='filename']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+ for(let i=0;i<=dailyFileName.length-1;i++)
+ {
+ expect(dailyFileName[i].trim()).toContain("Daily")
+ expect(dailyFileName[i].trim()).toContain("zip")
+const dailyfileNameData = dailyFileName[i].slice(6,14)
+ expect(DateTime.fromFormat(dailyfileNameData,"dd-mm-yy")).toBeTruthy();
+ }
+ const sortedDesc = dailyFileName.sort();
+ expect(sortedDesc).toEqual(dailyFileName);
+ }
+
+ public async checkDailyWeekFileName()
+ {
+   await this.page.waitForLoadState();
+   await this.page.waitForSelector("[id^='caption']");
+   const dailyWeekFileName = await this.page.$$eval("[id^='caption']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+   const regex=/^\d{4}\,\s[a-zA-Z]{4}\s\d{2}$/;
+   for(let i=0;i<=dailyWeekFileName.length-1;i++)
+   {
+     expect(dailyWeekFileName[i].toString().match(regex)).toBeTruthy();
+   }
+
+   const sortedDesc = dailyWeekFileName.sort((objA,objB) => objB - objA);
+   expect(sortedDesc).toEqual(dailyWeekFileName);
+
+ } 
+ public async checkDailyFileSize()
+ {
+   await this.page.waitForLoadState();
+   await this.page.waitForSelector("[id^='filesize']");
+   const dailyFileSize = await this.page.$$eval("[id^='filesize']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+   const regex=/^\S+\sB|MB|KB|GB|$/; 
+   for(let i=0;i<=dailyFileSize.length-1;i++)
+   {
+    const fileSize=dailyFileSize[i].split(" ");
+    expect(fileSize[1].toString().match(regex)).toBeTruthy();
+   }
+}
 
   public async verifyDistributorFileCount()
   { 
