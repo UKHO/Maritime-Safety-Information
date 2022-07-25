@@ -207,6 +207,8 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
    }
 }
 
+
+
   public async verifyDistributorFileCount()
   { 
     await this.year.selectOption({label:'2022'});
@@ -239,4 +241,49 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
     expect(publicFileSizeFirst).toEqual("650 KB (.pdf)");
 
   }
+
+  public async verifySectionDoteCount()
+  {
+    const countOfDots= await this.page.$$eval('[id^="section"]' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    let count=0;
+    for(let i=0;i<countOfDots.length;i++)
+   
+      if(countOfDots[i]=="---")
+      {
+        count++;
+      }
+      
+      expect(count).toEqual(3);
+
+    
+  }
+
+  public async verifyAnnualFileNameLink()
+  {
+    const fileNameLink= await this.page.$$eval("[id^='FileName'] > a" , (matches: any[]) => { return matches.map(option => option.getAttribute('href')) });
+    expect(fileNameLink.length).toBeGreaterThan(0);
+    expect(fileNameLink).toBeTruthy();
+  }
+
+  public async verifyAnnualDownloadLink()
+  {
+    const annualdownloadLink= await this.page.$$eval("[id^='download'] > a" , (matches: any[]) => { return matches.map(option => option.getAttribute('href')) });
+    expect(annualdownloadLink.length).toBeGreaterThan(0);
+    expect(annualdownloadLink).toBeTruthy();
+  }
+
+  public async checkAnnualFileSize()
+ {
+   await this.page.waitForLoadState();
+   await this.page.waitForSelector("[id^='filesize']");
+   const dailyFileSize = await this.page.$$eval("[id^='filesize']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+   const regex=/^\S+\sB|MB|KB|GB|$/; 
+   for(let i=0;i<=dailyFileSize.length-1;i++)
+   {
+    const fileSize=dailyFileSize[i].split(" ");
+    expect(fileSize[1].toString().match(regex)).toBeTruthy();
+   }
+}
+
+
 }
