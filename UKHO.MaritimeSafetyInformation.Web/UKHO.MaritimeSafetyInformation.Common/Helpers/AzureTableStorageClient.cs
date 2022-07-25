@@ -42,12 +42,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             await tableClient.AddEntityAsync(customTableEntity);
         }
 
-        public async Task DeleteTablesAsync( string tableName, string storageAccountConnectionString)
+        public async Task DeleteTablesAsync( List<string> tableNames, string storageAccountConnectionString)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageAccountConnectionString);
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable _cloudTable = tableClient.GetTableReference(tableName);
-            await _cloudTable.DeleteIfExistsAsync();
+            foreach (var tableName in tableNames)
+            {
+                CloudTable _cloudTable = tableClient.GetTableReference(tableName);
+                await _cloudTable.DeleteIfExistsAsync();
+            }
         }
     }
 }

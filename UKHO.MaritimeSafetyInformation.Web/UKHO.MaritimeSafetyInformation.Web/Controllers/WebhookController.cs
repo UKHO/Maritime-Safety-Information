@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.EventGrid.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,12 +13,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
     {
         private readonly IWebhookService _webhookService;
         private readonly ILogger<WebhookController> _logger;
-        private readonly IHttpContextAccessor _contextAccessor;
 
         public WebhookController(IHttpContextAccessor contextAccessor, ILogger<WebhookController> logger, IWebhookService webhookService) : base(contextAccessor, logger)
         {
             _logger = logger;
-            _contextAccessor = contextAccessor;
             _webhookService = webhookService;
         }
 
@@ -27,43 +26,49 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             string webhookRequestOrigin = HttpContext.Request.Headers["WebHook-Request-Origin"].FirstOrDefault();
 
-            Logger.LogInformation(EventIds.NewFilesPublishedWebhookOptionsCallStarted.ToEventId(), "Started processing the Options request for the New Files Published event webhook for WebHook-Request-Origin:{webhookRequestOrigin}", webhookRequestOrigin);
+            _logger.LogInformation(EventIds.NewFilesPublishedWebhookOptionsCallStarted.ToEventId(), "Started processing the Options request for the New Files Published event webhook for WebHook-Request-Origin:{webhookRequestOrigin}", webhookRequestOrigin);
 
             HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
             HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
 
-            Logger.LogInformation(EventIds.NewFilesPublishedWebhookOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New Files Published event webhook for WebHook-Request-Origin:{webhookRequestOrigin}", webhookRequestOrigin);
+            _logger.LogInformation(EventIds.NewFilesPublishedWebhookOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New Files Published event webhook for WebHook-Request-Origin:{webhookRequestOrigin}", webhookRequestOrigin);
 
             return GetCacheResponse();
         }
 
         [HttpPost]
         [Route("/webhook/newfilespublished")]
-        public virtual async Task<IActionResult> NewFilesPublished([FromBody] JObject request)
+        public virtual async Task<IActionResult> NewFilesPublished()
         {
-            Logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Clear FSS search cache event started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            using StreamReader reader = new(Request.Body, Encoding.UTF8);
+            string payload = await reader.ReadToEndAsync();
 
-            var eventGridEvent = new EventGridEvent();
-            JsonConvert.PopulateObject(request.ToString(), eventGridEvent);
+            _logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Clear FSS search cache event started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+            EventGridEvent eventGridEvent = new();
+            JsonConvert.PopulateObject(payload, eventGridEvent);
             EnterpriseEventCacheDataRequest data = (eventGridEvent.Data as JObject).ToObject<EnterpriseEventCacheDataRequest>();
 
-            Logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Enterprise event data deserialized in ESS and Data:{data} and _X-Correlation-ID:{correlationId}", JsonConvert.SerializeObject(data), GetCurrentCorrelationId());
+            _logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Enterprise event data deserialized. Data:{data} and _X-Correlation-ID:{correlationId}", JsonConvert.SerializeObject(data), GetCurrentCorrelationId());
 
-            var validationResult = await _webhookService.ValidateEventGridCacheDataRequest(data);
+            FluentValidation.Results.ValidationResult validationResult = await _webhookService.ValidateEventGridCacheDataRequest(data);
 
-            var productName = data.Attributes.Where(a => a.Key == "CellName").Select(a => a.Value).FirstOrDefault();
+            string productName = data.Attributes.Where(a => a.Key == "CellName").Select(a => a.Value).FirstOrDefault();
 
             if (!validationResult.IsValid)
             {
-                Logger.LogInformation(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Required attributes missing in event data from Enterprise event for clear FSS search cache from Azure table for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-                Logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear FSS search cache event completed for ProductName:{productName} as required data was missing in payload with OK response and _X-Correlation-ID:{correlationId}", productName, GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Required attributes missing in event data from Enterprise event for clear FSS search cache from Azure table for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
 
-            await _webhookService.DeleteSearchAndDownloadCacheData(data, GetCurrentCorrelationId());
-
-            Logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear FSS search cache event completed for ProductName:{productName} with OK response and _X-Correlation-ID:{correlationId}", productName, GetCurrentCorrelationId());
-
+            bool isCacheDeleted = await _webhookService.DeleteSearchAndDownloadCacheData(data, GetCurrentCorrelationId());
+            if (!isCacheDeleted)
+            {
+                _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Event triggered for different ProductName/Business Unit. ProductName:{productName} Business Unit: {businessUnit} and _X-Correlation-ID:{correlationId}", productName, data.BusinessUnit, GetCurrentCorrelationId());
+            }
+            else { 
+                _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear FSS search cache event completed for ProductName:{productName} with OK response and _X-Correlation-ID:{correlationId}", productName, GetCurrentCorrelationId());
+            }
             return GetCacheResponse();
         }
     }

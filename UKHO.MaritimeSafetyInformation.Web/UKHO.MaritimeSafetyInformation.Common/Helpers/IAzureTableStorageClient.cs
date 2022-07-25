@@ -7,6 +7,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         Task<CustomTableEntity> GetEntityAsync(string partitionKey, string rowKey, string tableName, string storageAccountConnectionString);
         Task DeleteEntityAsync(string category, string id, string tableName, string storageAccountConnectionString);
         Task InsertEntityAsync(CustomTableEntity customTableEntity, string tableName, string storageAccountConnectionString);
-        Task DeleteTablesAsync(string tableName, string storageAccountConnectionString);
+        Task DeleteTablesAsync(List<string> tableNames, string storageAccountConnectionString);
     }
 }

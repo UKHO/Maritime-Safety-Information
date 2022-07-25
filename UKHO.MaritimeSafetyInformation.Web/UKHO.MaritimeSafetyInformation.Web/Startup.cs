@@ -15,6 +15,7 @@ using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
+using UKHO.MaritimeSafetyInformation.Web.Validation;
 
 namespace UKHO.MaritimeSafetyInformation.Web
 {
@@ -66,6 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
             services.AddScoped<IAzureStorageService, AzureStorageService>();
             services.AddScoped<IWebhookService, WebhookService>();
+            services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
 
             services.AddControllersWithViews()
                 .AddMicrosoftIdentityUI();

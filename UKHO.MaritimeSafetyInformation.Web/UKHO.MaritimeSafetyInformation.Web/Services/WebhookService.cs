@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
-using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
 using UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using UKHO.MaritimeSafetyInformation.Web.Validation;
@@ -13,7 +12,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
     {
 
         private readonly IAzureTableStorageClient _azureTableStorageClient;
-        private readonly ILogger<WebhookService> _logger;
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
         private readonly IEnterpriseEventCacheDataRequestValidator _enterpriseEventCacheDataRequestValidator;
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
@@ -21,14 +19,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public WebhookService(IAzureTableStorageClient azureTableStorageClient,
             IOptions<CacheConfiguration> cacheConfiguration,
-            ILogger<WebhookService> logger,
             IEnterpriseEventCacheDataRequestValidator enterpriseEventCacheDataRequestValidator,
             IOptions<FileShareServiceConfiguration> fileShareServiceConfig,
             IAzureStorageService azureStorageService)
         {
             _azureTableStorageClient = azureTableStorageClient;
             _cacheConfiguration = cacheConfiguration;
-            _logger = logger;
             _enterpriseEventCacheDataRequestValidator = enterpriseEventCacheDataRequestValidator;
             _fileShareServiceConfig = fileShareServiceConfig;
             _azureStorageService = azureStorageService;
@@ -39,22 +35,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return _enterpriseEventCacheDataRequestValidator.Validate(enterpriseEventCacheDataRequest);
         }
 
-        public async Task DeleteSearchAndDownloadCacheData(EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest, string correlationId)
+        public async Task<bool> DeleteSearchAndDownloadCacheData(EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest, string correlationId)
         {
-            var productCode = enterpriseEventCacheDataRequest.Attributes.Where(a => a.Key == "ProductCode").Select(a => a.Value).FirstOrDefault();
-           
-            if (ValidateCacheAttributeData(enterpriseEventCacheDataRequest.BusinessUnit, productCode))
+            var productCode = enterpriseEventCacheDataRequest.Attributes.First(a => a.Key == "ProductCode").Value;
+
+            if (enterpriseEventCacheDataRequest.BusinessUnit == _fileShareServiceConfig.Value.BusinessUnit && productCode == _fileShareServiceConfig.Value.ProductType)
             {
                 string connectionString = _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
-
-                await _azureTableStorageClient.DeleteTablesAsync(_cacheConfiguration.Value.FssWeeklyAttributeTableName, connectionString);
+                List<string> tableNames = new() { _cacheConfiguration.Value.FssWeeklyBatchSearchTableName , _cacheConfiguration.Value.FssCacheResponseTableName };
+                await _azureTableStorageClient.DeleteTablesAsync(tableNames, connectionString);
+                return true;
             }
+            return false;
         }
-
-        private bool ValidateCacheAttributeData(string businessUnit, string productCode)
-        {
-            return (businessUnit == _fileShareServiceConfig.Value.BusinessUnit && productCode == _fileShareServiceConfig.Value.ProductType);
-        }
-
     }
 }
