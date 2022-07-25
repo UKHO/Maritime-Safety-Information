@@ -113,7 +113,7 @@ export default class noticetoMarine
    
     public async verifyTableContainsDownloadLink()
     {
-     const downloadLinks= await this.page.$$eval('td[id^=download]' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
+     const downloadLinks= await this.page.$$eval('td[id^=download] > a' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
      for(let i=0;i<downloadLinks.length;i++)
      {
      expect(downloadLinks[i]).toEqual("Download");
