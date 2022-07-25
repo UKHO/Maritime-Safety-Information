@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private ILogger<NoticesToMarinersController> _fakeLogger;
         private IHttpContextAccessor _fakeContextAccessor;
         private INMDataService _fakeNMDataService;
-        private IUserService _fakeUserService;
+        private IUserService _fakeUserService;        
 
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeNMDataService = A.Fake<INMDataService>();
-            _fakeUserService = A.Fake<IUserService>();
+            _fakeUserService = A.Fake<IUserService>();            
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
             _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService);
         }
@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexIsCalled_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-           
+
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
             IActionResult result = await _controller.Index();
@@ -67,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week);
+            IActionResult result = await _controller.Index(year, week); 
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;
@@ -129,6 +129,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public void WhenShowWeeklyFilesAsyncIsCalled_ThenShouldThrowException()
+        {
+            const int year = 2022;
+            const int week = 15;
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
+
+            Task<IActionResult> result = _controller.ShowWeeklyFilesAsync(year, week);
+            Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
         public async Task WhenShowWeeklyFilesAsyncIsCalled_ThenShouldReturnsExpectedPartialView()
         {
             const int year = 2022;
@@ -155,7 +167,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
         [Test]
