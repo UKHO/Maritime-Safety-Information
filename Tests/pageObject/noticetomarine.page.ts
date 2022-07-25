@@ -71,9 +71,10 @@ export default class noticetoMarine
 
     public async checkurl(locator:Locator,url:string,title:string)
     {
+        
         await locator.click();
-        await expect(this.page).toHaveURL(`${app.url}/${url}`);
-        await expect(this.page).toHaveTitle(title)
+        expect(this.page).toHaveURL(`${app.url}/${url}`);
+        expect(this.page).toHaveTitle(title)
     }
     public async checkNavareaUrl(locator:Locator,url:string,title:string)
     {
@@ -113,7 +114,7 @@ export default class noticetoMarine
    
     public async verifyTableContainsDownloadLink()
     {
-     const downloadLinks= await this.page.$$eval('td[id^=download]' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
+     const downloadLinks= await this.page.$$eval('td[id^=download] > a' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
      for(let i=0;i<downloadLinks.length;i++)
      {
      expect(downloadLinks[i]).toEqual("Download");
@@ -136,6 +137,8 @@ export default class noticetoMarine
 
      public async checkFileSizeData()
      {
+     await this.page.waitForLoadState();
+     await this.page.waitForSelector("#ddlYears");   
      const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
      for(var year=1;year<=yearlyCount-1;year++)
@@ -145,6 +148,7 @@ export default class noticetoMarine
 
      for(var week=1;week<=1;week++)
      {
+     
      await this.dropDownWeekly.selectOption({index:week});
      const fileSizeData = await this.page.$$eval('td[id^=filesize]' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
      expect(fileSizeData.length).toBeGreaterThan(0); 

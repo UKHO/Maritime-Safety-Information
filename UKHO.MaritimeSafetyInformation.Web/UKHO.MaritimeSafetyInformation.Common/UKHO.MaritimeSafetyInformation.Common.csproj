@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.25.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="UKHO.FileShareAdminClient" Version="1.4.20530.4" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.4.20530.4" />

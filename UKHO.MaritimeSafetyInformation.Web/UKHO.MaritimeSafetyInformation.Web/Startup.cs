@@ -41,14 +41,15 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
-            
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAdB2C);
 
             services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
             services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
             services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
+            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
+
+            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
@@ -70,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
 
             services.AddControllersWithViews()
-                .AddMicrosoftIdentityUI();
+            .AddMicrosoftIdentityUI();
 
             //Configuring appsettings section AzureAdB2C, into IOptions
             services.AddOptions();
@@ -82,8 +83,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
             });
 
-            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(options =>
             {
+                configuration.Bind("AzureAdB2C", options);
+                options.Events ??= new OpenIdConnectEvents();
                 options.SaveTokens = true; // this saves the token for the downstream api
                 options.Events.OnRedirectToIdentityProvider = async context =>
                 {
@@ -95,7 +99,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                     context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:SignedOutCallbackPath"];
                     await Task.FromResult(0);
                 };
-            });
+            })
+            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })
+            .AddInMemoryTokenCaches();
+
             services.AddHttpClient();
             services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
