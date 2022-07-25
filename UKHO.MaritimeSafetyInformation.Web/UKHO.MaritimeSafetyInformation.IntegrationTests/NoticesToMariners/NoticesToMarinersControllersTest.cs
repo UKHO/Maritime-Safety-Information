@@ -29,27 +29,28 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();
+            Config = new Configuration();           
             _ = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
+           
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
-
+        
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
             IActionResult result = await _nMController.Index();
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
-            Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
-            Assert.AreEqual(3, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual(8, showWeeklyFiles.YearAndWeekList.Count);
+            Assert.AreEqual(5, showWeeklyFiles.ShowFilesResponseList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
             Assert.AreEqual(14, showWeeklyFiles.YearAndWeekList[0].Week);
-            Assert.AreEqual("image/jpg", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
+            Assert.AreEqual("application/pdf", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
         }
 
         [Test]
@@ -59,7 +60,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.IsNotNull(showWeeklyFiles);
             Assert.AreEqual(4, showWeeklyFiles.ShowFilesResponseList.Count);
-            Assert.AreEqual(6, showWeeklyFiles.YearAndWeekList.Count);
+            Assert.AreEqual(8, showWeeklyFiles.YearAndWeekList.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
             Assert.AreEqual("msi_img_W2021_30.jpg", showWeeklyFiles.ShowFilesResponseList[1].Filename);
@@ -77,7 +78,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallShowWeeklyFilesAsync_ThenReturnWeeklyFiles()
+        public async Task WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles()
         {
             IActionResult result = await _nMController.ShowWeeklyFilesAsync(2020, 14);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
@@ -89,6 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("21snii22_week_W2020_14", listFiles[0].FileDescription);
             Assert.AreEqual(".pdf", listFiles[0].FileExtension);
             Assert.AreEqual(1072212, listFiles[0].FileSize);
+            Assert.IsFalse(listFiles[0].IsDistributorUser);
         }
 
         [Test]
@@ -160,7 +162,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(result);
             Assert.AreEqual("application/pdf", result.ContentType);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
-            Assert.AreEqual(1072222, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual(1072212, ((FileContentResult)result).FileContents.Length);
         }
 
         [Test]
@@ -186,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ActionResult result = await _nMController.DownloadDailyFile(batchId, filename, mimeType);
             Assert.IsTrue(((FileContentResult)result) != null);
             Assert.AreEqual("application/pdf", ((FileContentResult)result).ContentType);
-            Assert.AreEqual(425612, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual(425602, ((FileContentResult)result).FileContents.Length);
             Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
         }
 
@@ -207,36 +209,35 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await _nMController.Cumulative();
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
             Assert.IsNotNull(listFiles);
-            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual(6, listFiles.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("0cdb2271-b5a3-43b0-b923-733ada1760af", listFiles[0].BatchId);
-            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
+            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[0].BatchId);
+            Assert.AreEqual("NP234(B) 2021", listFiles[0].FileDescription);
             Assert.AreEqual(".pdf", listFiles[0].FileExtension);
-            Assert.AreEqual(1125181, listFiles[0].FileSize);
-            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
-            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
-            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+            Assert.AreEqual(1386825, listFiles[0].FileSize);
+            Assert.AreEqual("NP234(B) 2021", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2020", listFiles[3].FileDescription);
         }
-
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
             IActionResult result = await _nMController.Cumulative();
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
             Assert.IsNotNull(listFiles);
-            Assert.AreEqual(7, listFiles.Count);
+            Assert.AreEqual(6, listFiles.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[1].BatchId);
-            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("f5569dc0-a0e4-40f5-b252-fef2e77861e1", listFiles[1].BatchId);
+            Assert.AreEqual("NP234(A) 2021", listFiles[1].FileDescription);
             Assert.AreEqual(".pdf", listFiles[1].FileExtension);
-            Assert.AreEqual(1386825, listFiles[1].FileSize);
-            Assert.AreEqual("NP234(A) 2022", listFiles[0].FileDescription);
-            Assert.AreEqual("NP234(B) 2021", listFiles[1].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listFiles[2].FileDescription);
-            Assert.AreEqual("NP234(B) 2020", listFiles[3].FileDescription);
+            Assert.AreEqual(1265024, listFiles[1].FileSize);
+            Assert.AreEqual("NP234(B) 2021", listFiles[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", listFiles[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", listFiles[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2020", listFiles[3].FileDescription);
         }
 
         [Test]
@@ -258,7 +259,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles[0].BatchId);
         }
 
-        [Test]
+      [Test]
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
