@@ -31,9 +31,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IFileShareServiceCache _fakeFileShareServiceCache;
         private IOptions<CacheConfiguration> _fakeCacheConfiguration;
         private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
-        private NMDataService _nMDataService;
         private IUserService _fakeUserService;
-        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";       
+        private NMDataService _nMDataService;
+        
+        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";      
 
         [SetUp]
         public void Setup()
@@ -45,7 +46,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _fakeFileShareServiceCache = A.Fake<IFileShareServiceCache>();
             _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
-            _fakeUserService= A.Fake<IUserService>();
+            _fakeUserService = A.Fake<IUserService>();
+
             _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
                                                _fakeCacheConfiguration, _fakeUserService);
             _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
@@ -149,8 +151,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
-            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             const int expectedRecordCount = 3;
 
@@ -171,14 +173,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel batchSearchResponseModel = new();
             batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponse();
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 2;
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsTrue(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
+            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -192,14 +194,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 3;
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
             Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsFalse(showNMFilesResponseModel.IsWeeklyBatchResponseCached);
+            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -273,8 +275,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
-            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
@@ -292,7 +294,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(GetBatchAttributesSearchModel());
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(GetBatchAttributesSearchModel());
 
             YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
@@ -311,7 +313,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
 
             YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
 
@@ -539,12 +541,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             const int expectedRecordCount = 2;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModels.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModels.IsBatchResponseCached);
         }
 
         [Test]
@@ -555,12 +558,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateLeisure();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-
+            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
             const int expectedRecordCount = 2;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -571,7 +575,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
-            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetLeisureFilesAsync(CorrelationId);
+            Task<ShowNMFilesResponseModel> result = _nMDataService.GetLeisureFilesAsync(CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -624,6 +628,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(true, userService.IsDistributorUser);
             Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
             Assert.AreEqual(dailyFilesDataCount, listShowFilesResponseModels.FirstOrDefault().DailyFilesData.Count);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledGetLeisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponseForLeisure();
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored,A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);           
+            A.CallTo(() => _fakeFileShareServiceCache.GetLeisureResponseFromCache(A<string>.Ignored,A<string>.Ignored)).Returns(batchSearchResponseModel);
+
+            const int expectedRecordCount = 2;
+
+            ShowNMFilesResponseModel showNMFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModels.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModels.IsBatchResponseCached);
         }
 
         private static BatchSearchResponse GetBatchSearchResponse()
@@ -1361,12 +1386,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                                     Links = null
                                 }
                             }
-
                         }
                     }
                 }
             };
-
             return searchResult;
         }
 
@@ -1459,6 +1482,65 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
         
             return searchResult;
+        }
+
+        private static BatchSearchResponse GetBatchSearchResponseForLeisure()
+        {
+            return new BatchSearchResponse
+            {
+                Count = 2,
+                Links = null,
+                Total = 2,
+                Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5623"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 13:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+
+                        },
+                        new BatchDetails() {
+                            BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                            AllFilesZipSize=346040,
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Chart","SC5622"),
+                                new BatchDetailsAttributes("Data Date","2022-04-22"),
+                                new BatchDetailsAttributes("Frequency","leisure"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022")
+                            },
+                            BusinessUnit = "TEST",
+                            BatchPublishedDate =Convert.ToDateTime("05-07-2022 14:25:35"),
+                            ExpiryDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "SC5623 Ireland - West Coast.pdf",
+                                    FileSize=636436,
+                                    MimeType = "application/pdf",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+            };
         }
     }
 }
