@@ -365,7 +365,8 @@ stages:
         - DevDeployApp
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
-        variables: 
+        variables:
+         WEB_APP_NAME: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
          url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
          rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
@@ -427,7 +428,8 @@ stages:
         - QADeployApp
         pool: $(WindowsPool)
         displayName: "QA Functional Automated And Accessibility Tests"
-        variables: 
+        variables:
+         WEB_APP_NAME: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
          url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
          rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
