@@ -1,6 +1,9 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+
 namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
 {
+    [ExcludeFromCodeCoverage]
     public class BatchDetails
     {
         public string Href { get; set; }

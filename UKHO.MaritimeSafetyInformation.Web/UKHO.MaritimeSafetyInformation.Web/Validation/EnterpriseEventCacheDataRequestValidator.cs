@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest;
 
@@ -12,6 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Validation
 
     public class EnterpriseEventCacheDataRequestValidator : AbstractValidator<EnterpriseEventCacheDataRequest>, IEnterpriseEventCacheDataRequestValidator
     {
+        [ExcludeFromCodeCoverage]
         public EnterpriseEventCacheDataRequestValidator()
         {
             RuleFor(v => v.BusinessUnit).NotEmpty().NotNull().Must(ru => !string.IsNullOrWhiteSpace(ru))
