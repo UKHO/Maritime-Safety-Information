@@ -249,7 +249,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseStarted.ToEventId(), "Request to get leisure files started with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseStarted.ToEventId(), "Request to get leisure files started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
 
                     const string searchText = $" and $batch(Frequency) eq 'leisure'";
 
@@ -265,21 +265,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         string rowKey = "LeisureKey";
 
-                        _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
+                        _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
 
                         await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, partitionKey, correlationId);
 
-                        _logger.LogInformation(EventIds.FSSSLeisureBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
+                        _logger.LogInformation(EventIds.FSSSLeisureBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is completed with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
                     }
                    
                     List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponseLeisure(searchResult);
                     ShowNMFilesResponseModel showNMFilesResponseModel = new() { ShowFilesResponseModel = ListshowFilesResponseModels, IsBatchResponseCached = isCached };
-                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseDataFound.ToEventId(), "Request to get leisure files completed and data found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseDataFound.ToEventId(), "Request to get leisure files completed and data found with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
                     return showNMFilesResponseModel;
                 }
                 else
                 {
-                    _logger.LogError(EventIds.ShowLeisureFilesResponseDataNotFound.ToEventId(), "Request to get leisure files completed and data not found for _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogError(EventIds.ShowLeisureFilesResponseDataNotFound.ToEventId(), "Request to get leisure files completed and data not found with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
                     throw new InvalidDataException("Invalid data received for leisure files");
                 }
             }

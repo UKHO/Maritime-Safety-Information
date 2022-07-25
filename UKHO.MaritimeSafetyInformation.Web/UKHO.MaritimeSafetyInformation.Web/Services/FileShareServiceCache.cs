@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {                
                 const string rowKey = "LeisureKey";
 
-                _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching leisure NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
 
                 CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
@@ -117,17 +117,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     searchResult.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
 
-                    _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching leisure NM response from cache azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredLeisureBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching weekly NM response cache data from table:{TableName} with _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredLeisureBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching leisure NM response cache data from table:{TableName} with _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                     await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredLeisureBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching weekly NM response cache data from table:{TableName} with _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredLeisureBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching leisure NM response cache data from table:{TableName} with _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.FSSLeisureBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching weekly NM response from azure table storage with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSLeisureBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching leisure NM response from azure table storage with _X-Correlation-ID:{correlationId}", correlationId);
                 }
 
                 return searchResult;
