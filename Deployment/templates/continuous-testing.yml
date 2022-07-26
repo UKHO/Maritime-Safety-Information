@@ -11,6 +11,14 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
+    - task: DownloadBuildArtifacts@0
+      displayName: "Download terraformartifact Artifact"
+      inputs:
+       buildType: 'current'
+       downloadType: 'single'
+       artifactName: 'terraformartifact'
+       downloadPath: '$(Build.SourcesDirectory)'
+
     - task: FileTransform@1
       displayName: "File Transform: integrationtests"
       inputs:
@@ -68,13 +76,12 @@ steps:
         testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
 
-    - task: DownloadBuildArtifacts@0
-      displayName: "Download terraformartifact Artifact"
+    - task: PowerShell@2
+      condition: always()
       inputs:
-       buildType: 'current'
-       downloadType: 'single'
-       artifactName: 'terraformartifact'
-       downloadPath: '$(Build.SourcesDirectory)'
+       targetType: 'inline'
+       script: |
+         ls 
 
     - task: AzureCLI@2
       displayName: "Swap MSI BusinessUnit"
