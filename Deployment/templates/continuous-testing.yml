@@ -81,7 +81,8 @@ steps:
       inputs:
        targetType: 'inline'
        script: |
-         ls 
+         ls |
+         ls terraformartifact
 
     - task: AzureCLI@2
       displayName: "Swap MSI BusinessUnit"
@@ -90,7 +91,7 @@ steps:
         azureSubscription: "${{ parameters.AzureSubscription }}"
         scriptType: 'pscore'
         scriptLocation: 'scriptPath'
-        scriptPath: "$(Pipeline.Workspace)/terraformartifact/set_business_unit.ps1"
+        scriptPath: "$(System.DefaultWorkingDirectory)/terraformartifact/set_business_unit.ps1"
         arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(DeploymentResourceGroupName) -webappName $(WEB_APP_NAME)'
 
     - script: |
