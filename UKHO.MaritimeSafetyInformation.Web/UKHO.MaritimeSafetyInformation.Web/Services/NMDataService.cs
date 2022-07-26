@@ -371,7 +371,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                     const string searchText = $" and $batch(Frequency) eq 'cumulative'";
 
@@ -381,7 +381,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     searchResult = result.Data;
 
-                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && searchResult != null && searchResult.Entries.Count > 0)
                     {
                         const string rowKey = "CumulativeKey";
 
@@ -400,8 +400,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
                     return showNMFilesResponseModel;
                 }
-                    _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
-                    throw new InvalidDataException("Invalid data received for cumulative NM files");
+                _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                throw new InvalidDataException("Invalid data received for cumulative NM files");
             }
             catch (Exception ex)
             {
