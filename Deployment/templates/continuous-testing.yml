@@ -4,14 +4,6 @@ parameters:
 
 steps:
     - task: DownloadBuildArtifacts@0
-      displayName: "Download terraformartifact Artifact"
-      inputs:
-       buildType: 'current'
-       downloadType: 'single'
-       artifactName: 'terraformartifact'
-       downloadPath: '$(Build.SourcesDirectory)'
-
-    - task: DownloadBuildArtifacts@0
       displayName: "Download Integration test Artifact"
       inputs:
        buildType: 'current'
@@ -75,6 +67,14 @@ steps:
         searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
         testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
+
+    - task: DownloadBuildArtifacts@0
+      displayName: "Download terraformartifact Artifact"
+      inputs:
+       buildType: 'current'
+       downloadType: 'single'
+       artifactName: 'terraformartifact'
+       downloadPath: '$(Build.SourcesDirectory)'
 
     - task: AzureCLI@2
       displayName: "Swap MSI BusinessUnit"
