@@ -151,11 +151,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
+                ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showFilesResponse);
+                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showNMFilesResponseModel);
             }
             catch (Exception ex)
             {

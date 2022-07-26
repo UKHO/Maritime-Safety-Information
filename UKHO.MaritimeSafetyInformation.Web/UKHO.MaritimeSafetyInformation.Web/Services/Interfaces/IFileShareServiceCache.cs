@@ -8,6 +8,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
 
         Task<BatchSearchResponseModel> GetWeeklyBatchResponseFromCache(int year, int week, string correlationId);
 
-        Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string correlationId);
+        Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string correlationId, string partitionKey);
+
+        Task<BatchSearchResponseModel> GetBatchResponseFromCache(string partitionKey, string rowKey, string frequency, string correlationId);
     }
 }

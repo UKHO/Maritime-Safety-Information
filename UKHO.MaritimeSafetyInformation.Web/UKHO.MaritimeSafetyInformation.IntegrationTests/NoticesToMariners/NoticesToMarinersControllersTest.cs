@@ -207,37 +207,37 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         public async Task WhenCallCumulativeAsync_ThenReturnCumulativeFiles()
         {
             IActionResult result = await _nMController.Cumulative();
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
-            Assert.IsNotNull(listFiles);
-            Assert.AreEqual(6, listFiles.Count);
+            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(showNMFiles);
+            Assert.AreEqual(6, showNMFiles.ShowFilesResponseModel.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", listFiles[0].BatchId);
-            Assert.AreEqual("NP234(B) 2021", listFiles[0].FileDescription);
-            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
-            Assert.AreEqual(1386825, listFiles[0].FileSize);
-            Assert.AreEqual("NP234(B) 2021", listFiles[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listFiles[1].FileDescription);
-            Assert.AreEqual("NP234(B) 2020", listFiles[2].FileDescription);
-            Assert.AreEqual("NP234(A) 2020", listFiles[3].FileDescription);
+            Assert.AreEqual("50044762-231d-41ec-a908-ba9eb59c61ab", showNMFiles.ShowFilesResponseModel[0].BatchId);
+            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual(".pdf", showNMFiles.ShowFilesResponseModel[0].FileExtension);
+            Assert.AreEqual(1386825, showNMFiles.ShowFilesResponseModel[0].FileSize);
+            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", showNMFiles.ShowFilesResponseModel[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2020", showNMFiles.ShowFilesResponseModel[3].FileDescription);
         }
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
             IActionResult result = await _nMController.Cumulative();
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
-            Assert.IsNotNull(listFiles);
-            Assert.AreEqual(6, listFiles.Count);
+            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(showNMFiles);
+            Assert.AreEqual(6, showNMFiles.ShowFilesResponseModel.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("f5569dc0-a0e4-40f5-b252-fef2e77861e1", listFiles[1].BatchId);
-            Assert.AreEqual("NP234(A) 2021", listFiles[1].FileDescription);
-            Assert.AreEqual(".pdf", listFiles[1].FileExtension);
-            Assert.AreEqual(1265024, listFiles[1].FileSize);
-            Assert.AreEqual("NP234(B) 2021", listFiles[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listFiles[1].FileDescription);
-            Assert.AreEqual("NP234(B) 2020", listFiles[2].FileDescription);
-            Assert.AreEqual("NP234(A) 2020", listFiles[3].FileDescription);
+            Assert.AreEqual("f5569dc0-a0e4-40f5-b252-fef2e77861e1", showNMFiles.ShowFilesResponseModel[1].BatchId);
+            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual(".pdf", showNMFiles.ShowFilesResponseModel[1].FileExtension);
+            Assert.AreEqual(1265024, showNMFiles.ShowFilesResponseModel[1].FileSize);
+            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2020", showNMFiles.ShowFilesResponseModel[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2020", showNMFiles.ShowFilesResponseModel[3].FileDescription);
         }
 
         [Test]
