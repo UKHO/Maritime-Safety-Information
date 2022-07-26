@@ -76,14 +76,6 @@ steps:
         testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
 
-    - task: PowerShell@2
-      condition: always()
-      inputs:
-       targetType: 'inline'
-       script: |
-         ls |
-         ls terraformartifact
-
     - task: AzureCLI@2
       displayName: "Swap MSI BusinessUnit"
       condition: always()
