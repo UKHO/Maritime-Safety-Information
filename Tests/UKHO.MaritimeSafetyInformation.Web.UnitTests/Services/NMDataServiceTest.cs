@@ -149,7 +149,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
             A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             const int expectedRecordCount = 3;
@@ -171,7 +171,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             BatchSearchResponseModel batchSearchResponseModel = new();
             batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponse();
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored,A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 2;
 
@@ -192,7 +192,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
  
             const int expectedRecordCount = 3;
 
