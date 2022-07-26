@@ -374,6 +374,8 @@ stages:
          clean: all
         steps:
           - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
   - stage: QADeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
@@ -437,6 +439,8 @@ stages:
          clean: all
         steps:
           - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "Maritime Safety Information QA - A.008.02"
 
   - stage: Livedeploy
     displayName: "Livedeploy (inc terraform, webapp deploy)"
