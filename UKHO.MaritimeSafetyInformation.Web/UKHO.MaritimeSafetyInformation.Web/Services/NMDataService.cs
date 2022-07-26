@@ -20,6 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
         private readonly IUserService _userService;
         private const string YearAndWeek = "YEAR/WEEK";
+        private string PartitionKey => _userService.IsDistributorUser ? "Distributor" : "Public";
 
         public NMDataService(IFileShareService fileShareService, ILogger<NMDataService> logger, IAuthFssTokenProvider authFssTokenProvider, IHttpClientFactory httpClientFactory, IOptions<FileShareServiceConfiguration> fileShareServiceConfig,
                              IFileShareServiceCache fileShareServiceCache, IOptions<CacheConfiguration> cacheConfiguration, IUserService userService)
@@ -193,12 +194,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 BatchSearchResponse searchResult = new();
                 bool isCached = false;
-                const string Frequency = "daily";
+                const string frequency = "daily";
                 const string rowKey = "DailyKey";
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetDailyBatchDetailsFromCache(correlationId);
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(PartitionKey, rowKey, frequency, correlationId);
 
                     if (batchSearchResponseModel.BatchSearchResponse != null)
                     {
@@ -225,11 +226,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     searchResult = result.Data;
 
-                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && searchResult != null && searchResult.Entries.Count > 0)
                     {
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, Frequency, correlationId);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId);
 
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
                     }

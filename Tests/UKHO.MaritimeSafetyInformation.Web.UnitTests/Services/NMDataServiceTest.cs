@@ -149,7 +149,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetDailyBatchDetailsFromCache(A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
@@ -169,7 +169,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetDailyBatchDetailsFromCache(A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 

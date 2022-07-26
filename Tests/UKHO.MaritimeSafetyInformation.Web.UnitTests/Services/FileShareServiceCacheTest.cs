@@ -202,7 +202,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetDailyBatchDetailsFromCache(string.Empty);
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.IsNull(result.BatchSearchResponse);
@@ -216,7 +216,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetDailyBatchDetailsFromCache(string.Empty);
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.IsNull(result.BatchSearchResponse);
@@ -244,7 +244,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                           .MustNotHaveHappened();
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetDailyBatchDetailsFromCache(string.Empty);
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.IsNull(result.BatchSearchResponse);
@@ -269,7 +269,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetDailyBatchDetailsFromCache(string.Empty);
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
             Assert.IsInstanceOf<BatchSearchResponseModel>(result);
             Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);

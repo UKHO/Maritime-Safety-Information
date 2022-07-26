@@ -123,38 +123,37 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<BatchSearchResponseModel> GetDailyBatchDetailsFromCache(string correlationId)
+        public async Task<BatchSearchResponseModel> GetBatchResponseFromCache(string partitionKey, string rowKey, string frequency, string correlationId)
         {
             BatchSearchResponseModel searchResult = new();
             try
             {
-                const string rowKey = "DailyKey";
-                _logger.LogInformation(EventIds.FSSDailyBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for daily NM files response from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
+                _logger.LogInformation(EventIds.FSSSearchBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching {frequency} NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", frequency, correlationId);
 
-                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
+                CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
                 if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
                 {
                     searchResult.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
 
-                    _logger.LogInformation(EventIds.FSSDailyBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for daily NM files response from cache azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSSearchBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching {frequency} NM response from cache azure table storage is completed with _X-Correlation-ID:{correlationId}", frequency, correlationId);
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
-                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredDailyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired daily NM files response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching {frequency} NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", frequency, _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching {frequency} NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", frequency, _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.FSSDailyBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for daily NM files response from azure table storage for with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSSearchBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching {frequency} NM response from azure table storage with _X-Correlation-ID:{correlationId}", frequency, correlationId);
                 }
 
                 return searchResult;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSDailyBatchResponseFromCacheFailed.ToEventId(), "Failed to get daily NM files response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSSearchBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching {frequency} NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", frequency, ex.Message, correlationId);
 
                 return searchResult;
             }
