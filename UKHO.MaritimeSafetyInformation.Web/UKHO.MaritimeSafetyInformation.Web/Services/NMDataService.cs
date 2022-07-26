@@ -42,12 +42,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 BatchSearchResponse searchResult = new();
                 bool isCached = false;
                 const string frequency = "Weekly";
+                string rowKey = $"{year}|{week}";
 
                 _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestStarted.ToEventId(), "Maritime safety information request to get weekly NM files started for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(year, week, correlationId);
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(PartitionKey, rowKey, frequency, correlationId);
 
                     if (batchSearchResponseModel.BatchSearchResponse != null)
                     {
@@ -69,7 +70,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     if (_cacheConfiguration.Value.IsFssCacheEnabled)
                     {
-                        string rowKey = $"{year}|{week}";
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is started for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
@@ -355,10 +355,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 bool isCached = false;
                 const string frequency = "Cumulative";
                 const string partitionKey = "Public";
+                const string rowKey = "CumulativeKey";
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetCumulativeBatchFilesFromCache(correlationId);
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(partitionKey, rowKey, frequency, correlationId);
 
                     if (batchSearchResponseModel.BatchSearchResponse != null)
                     {
@@ -383,8 +384,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     if (_cacheConfiguration.Value.IsFssCacheEnabled && searchResult != null && searchResult.Entries.Count > 0)
                     {
-                        const string rowKey = "CumulativeKey";
-
                         _logger.LogInformation(EventIds.FSSSearchCumulativeBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search cumulative NM files response in azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
 
                         await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId, partitionKey);

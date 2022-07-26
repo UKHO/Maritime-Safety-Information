@@ -566,25 +566,25 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
-        /// 910136- Request for searching cumulative batch files from cache azure table storage is started.
+        /// 910136- Request for searching batch files from cache azure table storage is started.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheStart = 910136,
+        FSSSearchBatchResponseFromCacheStart = 910136,
         /// <summary>
-        /// 910137 - Request for searching cumulative batch files from cache azure table storage is completed.
+        /// 910137 - Request for searching batch files from cache azure table storage is completed.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheCompleted = 910137,
+        FSSSearchBatchResponseFromCacheCompleted = 910137,
         /// <summary>
-        /// 910138 - Deletion started for expired searching cumulative NM file cache data from table.
+        /// 910138 - Deletion started for expired searching NM file cache data from table.
         /// </summary>
-        DeleteExpiredSearchCumulativeBatchResponseFromCacheStarted = 910138,
+        DeleteExpiredSearchBatchResponseFromCacheStarted = 910138,
         /// <summary>
-        /// 910139 - Deletion completed for expired searching cumulative NM file cache data from table.
+        /// 910139 - Deletion completed for expired searching NM file cache data from table.
         /// </summary>
-        DeleteExpiredSearchCumulativeBatchResponseFromCacheCompleted = 910139,
+        DeleteExpiredSearchBatchResponseFromCacheCompleted = 910139,
         /// <summary>
-        /// 910140 - Data not found for searching cumulative batch files from cache azure table storage.
+        /// 910140 - Data not found for searching batch files from cache azure table storage.
         /// </summary>
-        FSSSearchCumulativeBatchResponseDataNotFoundFromCache = 910140,
+        FSSSearchBatchResponseDataNotFoundFromCache = 910140,
         /// <summary>
         /// 910141 - Failed to get searching cumulative NM files from cache azure table.
         /// </summary>
