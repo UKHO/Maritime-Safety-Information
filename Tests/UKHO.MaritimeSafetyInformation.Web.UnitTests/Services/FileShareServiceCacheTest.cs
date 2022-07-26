@@ -249,7 +249,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsGetBatchResponseFromCacheWithReceivesExpiredCacheData_ThenReturnsEmptyBatchSearchResponse()
+        public async Task WhenCallsGetBatchResponseFromCacheWithExpiredCacheData_ThenReturnsEmptyBatchSearchResponse()
         {
             BatchSearchResponseModel batchSearchResponseModel = new();
             CustomTableEntity customTableEntity = new()
@@ -276,7 +276,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenFSSCacheCallsGetBatchFilesFromCache_ThenReturnsBatchSearchResponse()
+        public async Task WhenFSSCacheCallsGetBatchResponseFromCache_ThenReturnsBatchSearchResponse()
         {
             BatchSearchResponseModel batchSearchResponseModel = new();
             CustomTableEntity customTableEntity = new()
