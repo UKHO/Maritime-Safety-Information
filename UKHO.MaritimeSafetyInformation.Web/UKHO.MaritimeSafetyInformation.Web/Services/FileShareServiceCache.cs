@@ -152,7 +152,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSSearchCumulativeBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching cumulative NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSSearchBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching {frequency} NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", frequency, ex.Message, correlationId);
 
                 return searchResult;
             }

@@ -586,9 +586,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSSearchBatchResponseDataNotFoundFromCache = 910140,
         /// <summary>
-        /// 910141 - Failed to get searching cumulative NM files from cache azure table.
+        /// 910141 - Failed to get searching NM files from cache azure table.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheFailed = 910141,
+        FSSSearchBatchResponseFromCacheFailed = 910141,
     }
 
     public static class EventIdExtensions
