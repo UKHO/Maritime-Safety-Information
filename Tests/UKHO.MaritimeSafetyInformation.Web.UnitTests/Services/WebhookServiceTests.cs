@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void Setup()
         {
             _fakeaAzureTableStorageClient = A.Fake<IAzureTableStorageClient>();
-            _fakeCacheConfiguration =  A.Fake<IOptions<CacheConfiguration>>();
+            _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
             _fakeEnterpriseEventCacheDataRequestValidator = A.Fake<IEnterpriseEventCacheDataRequestValidator>();
             _fakeFileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
             _fakeFileShareServiceConfig.Value.BusinessUnit = "MaritimeSafetyInformation";
@@ -70,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenDeleteSearchAndDownloadCacheDataIsCalledWithWrongProductCode_ThenShouldNotDeleteCache()
         {
             EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest = GetEnterpriseEventCacheData();
-            enterpriseEventCacheDataRequest.Attributes.FirstOrDefault(x=>x.Key == "ProductCode").Value = "TestProductCode";
+            enterpriseEventCacheDataRequest.Attributes.FirstOrDefault(x => x.Key == "ProductCode").Value = "TestProductCode";
 
             A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
@@ -90,13 +91,43 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         private static EnterpriseEventCacheDataRequest GetEnterpriseEventCacheData()
-        { 
+        {
             return new()
             {
+                Links = new()
+                {
+                    BatchDetails = new()
+                    {
+                        Href = "https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0"
+                    },
+                    BatchStatus = new()
+                    {
+                        Href = "https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/status"
+                    }
+                },
+                BatchId = "83d08093-7a67-4b3a-b431-92ba42feqw12",
                 BusinessUnit = "MaritimeSafetyInformation",
-                Attributes = new List<Attribute>()
-                { new Attribute() {Key = "CellName", Value= "Notices to Mariners"},
-                  new Attribute() { Key = "ProductCode", Value = "Notices to Mariners" }
+                Attributes = new List<Common.Models.WebhookRequest.Attribute>()
+                {   new Common.Models.WebhookRequest.Attribute() {Key = "CellName", Value= "Notices to Mariners"},
+                    new Common.Models.WebhookRequest.Attribute() { Key = "ProductCode", Value = "Notices to Mariners" }
+                },
+                BatchPublishedDate = Convert.ToDateTime("2022-04-04T11:22:18.2943076Z"),
+                Files = new List<CacheFile>()
+                {
+                    new CacheFile() {
+                        Filename = "S631-1_Update_Wk45_21_Only.zip",
+                        FileSize= 99073923,
+                        MimeType= "application/zip",
+                        Hash= "yNpJTWFKhD3iasV8B/ePKw==",
+                        Attributes = new List<Common.Models.WebhookRequest.Attribute>()
+                        {   new Common.Models.WebhookRequest.Attribute() {Key = "TestKey", Value= "Test Value"}
+                        },
+                        Links = new() {
+                        Get= new() {
+                                Href = "https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/files/S631-1_Update_Wk45_21_Only.zip"
+                            }
+                        }
+                    }
                 }
             };
         }

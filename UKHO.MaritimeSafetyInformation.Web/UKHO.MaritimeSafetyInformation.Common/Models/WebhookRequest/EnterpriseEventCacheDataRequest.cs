@@ -49,6 +49,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
         public List<Attribute> Attributes { get; set; }
         public List<CacheFile> Files { get; set; }
         public string BatchId { get; set; }
-        public DateTime BatchPublishedDate { get; set; }
+        public DateTime? BatchPublishedDate { get; set; }
     }
 }
