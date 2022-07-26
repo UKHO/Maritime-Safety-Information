@@ -522,6 +522,478 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             Assert.IsInstanceOf(typeof(byte[]), result);
         }
 
+        [Test]
+        public void WhenNMHelperCallsGetShowFilesResponseModel_ThenConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForWeekly();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "aaa.pdf",
+                    FileDescription = "aaa",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "bbb.pdf",
+                    FileDescription = "bbb",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ccc.pdf",
+                    FileDescription = "ccc",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "ddd.pdf",
+                    FileDescription = "ddd",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.GetShowFilesResponseModel(searchResult.Entries);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenListFilesResponseLeisureIsCalled_ThenCheckIfConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForLeisure();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                    Filename = "SC5622 Ireland - West Coast.pdf",
+                    FileDescription = "SC5622 Ireland - West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                    FileDescription = "SC5623 Ireland - South West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenListFilesResponseLeisureIsCalledWithDuplicateData_ThenCheckIfLatestRecordIsReturned()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForDuplicateLeisure();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "e22bf7c7-4c1c-424a-8aa2-8594ce98e233",
+                    Filename = "SC5622 Ireland - West Coast.pdf",
+                    FileDescription = "SC5622 Ireland - West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2cd869e1-a1e2-4a7d-94bb-1f60fddec9fe",
+                    Filename = "SC5623 Ireland - South West Coast.pdf",
+                    FileDescription = "SC5623 Ireland - South West Coast",
+                    FileExtension = ".pdf",
+                    FileSize = 636436,
+                    FileSizeinKB = "622 KB",
+                    MimeType = "application/pdf",
+                    Links = null
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseLeisure(searchResult);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenCallsListFilesResponseCumulative_ThenConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForCumulative();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+
+                    BatchId = "2",
+                    Filename = "NP234(B) 2022.pdf",
+                    FileDescription = "NP234(B) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "4",
+                    Filename = "NP234(B) 2021.pdf",
+                    FileDescription = "NP234(B) 2021",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "3",
+                    Filename = "NP234(A) 2021.pdf",
+                    FileDescription = "NP234(A) 2021",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseCumulative(searchResult.Entries);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenCallsListFilesResponseCumulativeWithDuplicateData_ThenConversionIsCorrect()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForDuplicateCumulative();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "NP234(B) 2022.pdf",
+                    FileDescription = "NP234(B) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "4",
+                    Filename = "NP234(B) 2021.pdf",
+                    FileDescription = "NP234(B) 2021",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "3",
+                    Filename = "NP234(A) 2021.pdf",
+                    FileDescription = "NP234(A) 2021",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.ListFilesResponseCumulative(searchResult.Entries);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                }
+            });
+        }
+
+        [Test]
+        public void WhenGetShowAnnualFilesResponseIsCalled_ThenDataShouldBeOrderByFileName()
+        {
+            BatchSearchResponse searchResult = SetSearchResultForAnnual();
+
+            List<ShowFilesResponseModel> expected = new()
+            {
+                new ShowFilesResponseModel()
+                {
+
+                    BatchId = "6",
+                    Filename = "00 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "---"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "4",
+                    Filename = "01 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "1"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "5",
+                    Filename = "02 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "2"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "3",
+                    Filename = "26 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "26"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "2",
+                    Filename = "27 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "---"
+                },
+                new ShowFilesResponseModel()
+                {
+                    BatchId = "1",
+                    Filename = "28 NP234(A) 2022.pdf",
+                    FileDescription = "NP234(A) 2022",
+                    FileExtension = ".pdf",
+                    FileSize = 1232,
+                    FileSizeinKB = "1 KB",
+                    MimeType = "PDF",
+                    Links = null,
+                    Hash = "---"
+                }
+            };
+
+            List<ShowFilesResponseModel> result = NMHelper.GetShowAnnualFilesResponse(searchResult.Entries);
+
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < result.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
+                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
+                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
+                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
+                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
+                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
+                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.AreEqual(expected[i].Hash, result[i].Hash);
+                }
+            });
+        }
+
+        [TestCase("01 NP234(A) 2022.pdf", "filename", ExpectedResult = "NP234(A) 2022", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Proper Filename")]
+        [TestCase("", "filename", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Empty Filename Then Should Return  Empty")]
+        [TestCase("01 NP234(A) 2022.pdf", "section", ExpectedResult = "1", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("00 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("26 NP234(A) 2022.pdf", "section", ExpectedResult = "26", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("27 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("28 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("", "section", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Without Filename Then Should Return Empty Section")]
+        [TestCase("01 NP234(A) 2022.pdf", "", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called With Filename But Empty type Then Should Return Empty")]
+        [TestCase("", "", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called With Empty Filename And type Then Should Return Empty")]
+        public string WhenGetAnnualFileNameAndSection_ThenShouldReturnExpectedResult(string fileName, string type)
+        {
+            return NMHelper.GetAnnualFileNameAndSection(fileName, type);
+        }
+
+        private static BatchSearchResponse SetSearchResultForWeekly()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 2,
+                Links = null,
+                Total = 0,
+                Entries = new List<BatchDetails>() {
+                    new BatchDetails() {
+                        BatchId = "1",
+                        Attributes = new(),
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "aaa.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "bbb.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    },
+                    new BatchDetails() {
+                        BatchId = "2",
+                        Attributes = new(),
+                        Files = new List<BatchDetailsFiles>() {
+                            new BatchDetailsFiles () {
+                                Filename = "ccc.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            },
+                            new BatchDetailsFiles () {
+                                Filename = "ddd.pdf",
+                                FileSize=1232,
+                                MimeType = "PDF",
+                                Links = null
+                            }
+                        }
+                    }
+                }
+            };
+
+            return searchResult;
+        }
+
         private static BatchSearchResponse SetSearchResultForWeeklyForPublicUser()
         {
             BatchSearchResponse searchResult = new()
@@ -724,7 +1196,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                                                                                 new BatchDetailsAttributes() { Key = "Week Number", Value = "14" },
                                                                                 new BatchDetailsAttributes() { Key = "Year", Value =  "2022"  },
                                                                                 new BatchDetailsAttributes() { Key = "YEAR/WEEK", Value =  "2022 / 14"  } },
-                        BatchPublishedDate= DateTime.Now.AddMinutes(-10),                        
+                        BatchPublishedDate= DateTime.Now.AddMinutes(-10),
                         Files = new List<BatchDetailsFiles>() {
                             new BatchDetailsFiles () {
                                 Filename = "aaa.pdf",
@@ -1359,6 +1831,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             };
             return searchResult;
         }
+
         private static BatchSearchResponse SetSearchResultForLeisure()
         {
             BatchSearchResponse searchResult = new()
@@ -1507,5 +1980,137 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             return searchResult;
         }
 
+        private static BatchSearchResponse SetSearchResultForAnnual()
+        {
+            BatchSearchResponse searchResult = new()
+            {
+                Count = 15,
+                Links = null,
+                Total = 15,
+                Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "28 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                           new BatchDetails() {
+                            BatchId = "2",
+                             Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-06-21"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "27 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "3",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-01-20"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "26 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "4",
+                            Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2021-06-19"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2021"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "01 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "5",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-18"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "02 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "6",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-17"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "00 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+            };
+            return searchResult;
+        }
     }
 }

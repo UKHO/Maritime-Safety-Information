@@ -191,3 +191,32 @@
     overflow-y: auto;
     padding-right: 2px;
 }
+.notice-to-mariners-annual-table {
+    thead {
+        tr {
+            th {
+                &.th-1, &.th-4 {
+                    flex-basis: 35%;
+                }
+
+                &.th-3 {
+                    flex-basis: 45%;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                &.td-1, &.td-4 {
+                    flex-basis: 35%;
+                }
+
+                &.td-3 {
+                    flex-basis: 45%;
+                }
+            }
+        }
+    }
+}

@@ -181,5 +181,48 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
                 .ToList();
         }
+
+        public static List<ShowFilesResponseModel> GetShowAnnualFilesResponse(List<BatchDetails> batchDetails)
+        {
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = new();
+            foreach (BatchDetails item in batchDetails)
+            {
+                foreach (BatchDetailsFiles file in item.Files)
+                {
+                    listShowFilesResponseModels.Add(new ShowFilesResponseModel
+                    {
+                        Attributes = item.Attributes,
+                        BatchId = item.BatchId,
+                        Filename = file.Filename,
+                        FileDescription = GetAnnualFileNameAndSection(file.Filename, "filename"),
+                        FileExtension = Path.GetExtension(file.Filename),
+                        FileSize = file.FileSize,
+                        FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
+                        MimeType = file.MimeType,
+                        Links = file.Links,
+                        Hash = GetAnnualFileNameAndSection(file.Filename, "section")
+                    });
+                }
+            }
+
+            return listShowFilesResponseModels.OrderBy(x => x.Filename).ToList();
+        }
+
+        public static string GetAnnualFileNameAndSection(string fileName, string type)
+        {
+            string retVal = "";
+            if (type == "filename")
+            {
+                retVal = Path.GetFileNameWithoutExtension(String.Join(' ', fileName.Remove(0, fileName.IndexOf(' ') + 1).Split(' ')));
+            }
+            else if (type == "section")
+            {
+                retVal = fileName.Split(' ')[0] == "00" || fileName.Split(' ')[0] == "27" || fileName.Split(' ')[0] == "28" ? "---" : fileName.Split(' ')[0].TrimStart('0');
+            }
+            return retVal;
+        }
+
+
     }
 }

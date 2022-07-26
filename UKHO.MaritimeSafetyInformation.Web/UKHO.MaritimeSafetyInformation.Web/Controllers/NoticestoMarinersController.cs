@@ -13,14 +13,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly INMDataService _nMDataService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
-        
+
         public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
             _userService = userService;
-        } 
+        }
 
         [HttpGet]
         [Route("/NoticesToMariners/Weekly")]
@@ -97,7 +97,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                List<ShowDailyFilesResponseModel> showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
@@ -128,8 +128,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single {frequency} NM files completed for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
-                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
-               
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName.Replace(',', '_')}");
+
                 if (mimeType != "application/pdf")
                     mimeType = "application/octet-stream";
 
@@ -168,7 +168,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Annual")]
         public async Task<IActionResult> Annual()
         {
-           return View();
+            try
+            {
+                _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.ShowAnnualFilesRequestCompleted.ToEventId(), "Maritime safety information request for annual NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/NoticesToMariners/Annual.cshtml", showFilesResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowAnnualFilesFailed.ToEventId(), "Maritime safety information request to show annual NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
+            }
+
         }
 
         [HttpGet]
