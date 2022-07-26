@@ -65,8 +65,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
                     IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
-                    searchResult = result.Data;
+                    searchResult = result.Data;                   
+                }
 
+                if (searchResult != null && searchResult.Entries.Count > 0)
+                {
                     if (_cacheConfiguration.Value.IsFssCacheEnabled)
                     {
                         string rowKey = $"{year}|{week}";
@@ -77,10 +80,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                         _logger.LogInformation(EventIds.FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search weekly NM files response in azure table storage is completed for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
                     }
-                }
-
-                if (searchResult != null && searchResult.Entries.Count > 0)
-                {
                     _logger.LogInformation(EventIds.GetWeeklyNMFilesRequestDataFound.ToEventId(), "Maritime safety information request to get weekly NM files returned from FSS for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
                     List<ShowFilesResponseModel> listshowFilesResponseModels = NMHelper.ListFilesResponse(searchResult).OrderBy(e => e.FileDescription).ToList();
@@ -235,9 +234,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 bool isCached = false;
                 const string frequency = "leisure";
                 const string partitionKey = "Public";
+                const string rowKey = "LeisureKey";
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
                 {
-                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetLeisureResponseFromCache(partitionKey, correlationId);
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(partitionKey, rowKey, frequency, correlationId);
 
                     if (batchSearchResponseModel.BatchSearchResponse != null)
                     {
@@ -262,9 +262,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
                     if (_cacheConfiguration.Value.IsFssCacheEnabled && !isCached)
-                    {
-                        string rowKey = "LeisureKey";
-
+                    {                       
                         _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
 
                         await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, partitionKey, correlationId);

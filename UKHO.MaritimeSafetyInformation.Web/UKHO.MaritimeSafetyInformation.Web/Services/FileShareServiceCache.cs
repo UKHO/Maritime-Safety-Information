@@ -102,14 +102,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<BatchSearchResponseModel> GetLeisureResponseFromCache(string partitionKey, string correlationId)
+        public async Task<BatchSearchResponseModel> GetBatchResponseFromCache(string partitionKey, string rowKey, string frequency, string correlationId)
         {
             BatchSearchResponseModel searchResult = new();
             try
-            {                
-                const string rowKey = "LeisureKey";
-
-                _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching leisure NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
+            {
+                _logger.LogInformation(EventIds.FSSSearchBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching {frequency} and  NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", frequency, correlationId);
 
                 CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
@@ -117,24 +115,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     searchResult.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(cacheInfo.Response);
 
-                    _logger.LogInformation(EventIds.FSSLeisureBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching leisure NM response from cache azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSSearchBatchResponseFromCacheCompleted.ToEventId(), "Maritime safety information request for searching {frequency} NM response from cache azure table storage is completed with _X-Correlation-ID:{correlationId}", frequency, correlationId);
                 }
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
-                    _logger.LogInformation(EventIds.DeleteExpiredLeisureBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching leisure NM response cache data from table:{TableName} with _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching {frequency} NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", frequency, _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                     await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
-                    _logger.LogInformation(EventIds.DeleteExpiredLeisureBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching leisure NM response cache data from table:{TableName} with _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
+                    _logger.LogInformation(EventIds.DeleteExpiredSearchBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching {frequency} NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", frequency, _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.FSSLeisureBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching leisure NM response from azure table storage with _X-Correlation-ID:{correlationId}", correlationId);
+                    _logger.LogInformation(EventIds.FSSSearchBatchResponseDataNotFoundFromCache.ToEventId(), "Maritime safety information cache data not found for searching {frequency} NM response from azure table storage with _X-Correlation-ID:{correlationId}", frequency, correlationId);
                 }
 
                 return searchResult;
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSLeisureBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching weekly NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSSearchCumulativeBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching cumulative NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
 
                 return searchResult;
             }
