@@ -75,7 +75,7 @@ steps:
         azureSubscription: "${{ parameters.AzureSubscription }}"
         scriptType: 'pscore'
         scriptLocation: 'scriptPath'
-        scriptPath: '$(Pipeline.Workspace)/terraformartifact/set_business_unit.ps1'
+        scriptPath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
         arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(DeploymentResourceGroupName) -webappName $(WEB_APP_NAME)'
 
     - script: |
