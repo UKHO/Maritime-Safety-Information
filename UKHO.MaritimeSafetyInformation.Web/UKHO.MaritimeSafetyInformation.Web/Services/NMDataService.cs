@@ -67,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
                     searchResult = result.Data;
 
-                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && searchResult != null && searchResult.Entries.Count > 0)
                     {
                         string rowKey = $"{year}|{week}";
 
@@ -133,7 +133,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                         StatusCode = attributes.StatusCode
                     };
 
-                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && searchAttributes.Data != null)
                     {
                         _logger.LogInformation(EventIds.FSSSearchAllYearWeekResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search attribute year and week data response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
