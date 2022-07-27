@@ -564,7 +564,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910135 - Request for storing batch file response in azure table storage completed
         /// </summary>
-        FSSSLeisureBatchFilesResponseStoreToCacheCompleted = 910135,
+        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
         /// 910136 - Request for searching batch file response from Azure table storage started.
         /// </summary>

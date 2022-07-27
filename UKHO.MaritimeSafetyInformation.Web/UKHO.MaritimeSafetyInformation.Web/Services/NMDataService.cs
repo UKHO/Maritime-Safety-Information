@@ -70,7 +70,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult != null && searchResult.Entries.Count > 0)
                 {
-                    if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && !isCached)
                     {
                         string rowKey = $"{year}|{week}";
 
@@ -267,7 +267,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                         await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, partitionKey, correlationId);
 
-                        _logger.LogInformation(EventIds.FSSSLeisureBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is completed with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
+                        _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is completed with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
                     }
                    
                     List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponseLeisure(searchResult);
@@ -308,7 +308,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 ShowNMFilesResponseModel showNMFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 showWeeklyFilesResponses.ShowFilesResponseList = showNMFilesResponseModel.ShowFilesResponseModel;
-                showWeeklyFilesResponses.IsBatchResponseCached = showNMFilesResponseModel.IsBatchResponseCached;
+                showWeeklyFilesResponses.IsWeeklyBatchResponseCached = showNMFilesResponseModel.IsWeeklyBatchResponseCached;
 
                 _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
 
