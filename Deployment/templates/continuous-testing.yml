@@ -76,6 +76,14 @@ steps:
         testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
 
+    - task: PowerShell@2
+      condition: always()
+      inputs:
+       targetType: 'inline'
+       script: |
+         ls |
+         ls .\terraformartifact\
+
     - task: AzureCLI@2
       displayName: "Swap MSI BusinessUnit"
       condition: always()
@@ -83,7 +91,7 @@ steps:
         azureSubscription: "${{ parameters.AzureSubscription }}"
         scriptType: 'pscore'
         scriptLocation: 'scriptPath'
-        scriptPath: "$(System.DefaultWorkingDirectory)/terraformartifact/set_business_unit.ps1"
+        scriptPath: '$(Build.SourcesDirectory)/Deployment/set_business_unit.ps1'
         arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(DeploymentResourceGroupName) -webappName $(WEB_APP_NAME)'
 
     - script: |
