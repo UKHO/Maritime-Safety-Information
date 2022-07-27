@@ -92,7 +92,7 @@ steps:
         scriptType: 'pscore'
         scriptLocation: 'scriptPath'
         scriptPath: "$(System.DefaultWorkingDirectory)/terraformartifact/set_business_unit.ps1"
-        arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(DeploymentResourceGroupName) -webappName $(WEB_APP_NAME)'
+        arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
     - script: |
        npm run test:a11y
