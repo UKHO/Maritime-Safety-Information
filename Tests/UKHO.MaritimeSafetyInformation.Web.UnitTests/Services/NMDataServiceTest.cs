@@ -637,10 +637,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             BatchSearchResponseModel batchSearchResponseModel = new();
             batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponseForLeisure();
-
-            Result<BatchSearchResponse> searchResult = SetSearchResultForLeisure();
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored,A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);           
+           
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored,A<string>.Ignored));            
             A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored,A<string>.Ignored,A<string>.Ignored,A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 2;
