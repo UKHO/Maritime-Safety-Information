@@ -231,8 +231,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Validation
                 BatchId = "83d08093-7a67-4b3a-b431-92ba42feqw12",
                 BusinessUnit = "MaritimeSafetyInformation",
                 Attributes = new List<Common.Models.WebhookRequest.Attribute>()
-                {   new Common.Models.WebhookRequest.Attribute() {Key = "CellName", Value= "Notices to Mariners"},
-                    new Common.Models.WebhookRequest.Attribute() { Key = "ProductCode", Value = "Notices to Mariners" }
+                {  
+                    new Common.Models.WebhookRequest.Attribute() { Key = "Product Type", Value = "Notices to Mariners" }
                 },
                 BatchPublishedDate = Convert.ToDateTime("2022-04-04T11:22:18.2943076Z"),
                 Files = new List<CacheFile>()

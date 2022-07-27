@@ -134,7 +134,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
                                         + "\"value\": \"Notices to Mariners\""
                                         + "},"
                                         + "{"
-                                        + "\"key\": \"ProductCode\","
+                                        + "\"key\": \"Product Type\","
                                         + "\"value\": \"Notices to Mariners\""
                                         + "}"
                                     + "],"
