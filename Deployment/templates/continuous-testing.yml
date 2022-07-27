@@ -83,7 +83,7 @@ steps:
         azureSubscription: "${{ parameters.AzureSubscription }}"
         scriptType: 'pscore'
         scriptLocation: 'scriptPath'
-        scriptPath: "$(System.DefaultWorkingDirectory)/terraformartifact/set_business_unit.ps1"
+        scriptPath: '$(Build.SourcesDirectory)/terraformartifact/set_business_unit.ps1'
         arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
     - script: |
