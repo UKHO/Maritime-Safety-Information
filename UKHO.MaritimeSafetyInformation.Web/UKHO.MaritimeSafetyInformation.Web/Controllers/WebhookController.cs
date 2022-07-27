@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             FluentValidation.Results.ValidationResult validationResult = await _webhookService.ValidateEventGridCacheDataRequest(data);
 
-            string productName = data.Attributes.Where(a => a.Key == "CellName").Select(a => a.Value).FirstOrDefault();
+            string productName = data.Attributes.Where(a => a.Key == "Product Type").Select(a => a.Value).FirstOrDefault();
 
             if (!validationResult.IsValid)
             {

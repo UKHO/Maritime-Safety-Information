@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<bool> DeleteSearchAndDownloadCacheData(EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest, string correlationId)
         {
-            var productCode = enterpriseEventCacheDataRequest.Attributes.First(a => a.Key == "ProductCode").Value;
+            var productCode = enterpriseEventCacheDataRequest.Attributes.First(a => a.Key == "Product Type").Value;
 
             if (enterpriseEventCacheDataRequest.BusinessUnit == _fileShareServiceConfig.Value.BusinessUnit && productCode == _fileShareServiceConfig.Value.ProductType)
             {
