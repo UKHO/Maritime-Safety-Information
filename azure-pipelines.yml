@@ -435,6 +435,7 @@ stages:
          WEB_APP_NAME: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
          url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
          rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+         webapp_rg: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.webapp_rg']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
