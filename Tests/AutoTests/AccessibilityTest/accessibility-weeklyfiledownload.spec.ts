@@ -19,6 +19,7 @@ test.describe("A11y tests", ()=> {
  };
 
  test.beforeEach(async ({page}) => {
+    test.slow();
    await page.goto(app.url);    
  });
 
