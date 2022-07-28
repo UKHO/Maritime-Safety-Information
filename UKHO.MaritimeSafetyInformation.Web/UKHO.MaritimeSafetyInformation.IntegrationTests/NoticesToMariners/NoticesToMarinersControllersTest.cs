@@ -306,5 +306,25 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("---", listFiles[0].Hash);
             Assert.AreEqual("1", listFiles[1].Hash);
         }
+
+        [Test]
+        public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
+        {
+            IActionResult result = await _nMController.Annual();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(15, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", listFiles[0].BatchId);
+            Assert.AreEqual("Firing Practice and Exercise Areas", listFiles[4].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[3].FileExtension);
+            Assert.AreEqual(133291, listFiles[1].FileSize);
+            Assert.AreEqual("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", listFiles[5].FileDescription);
+            Assert.AreEqual("National Claims to Maritime Jurisdiction", listFiles[6].FileDescription);
+            Assert.AreEqual("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", listFiles[7].Filename);
+            Assert.AreEqual("---", listFiles[14].Hash);
+            Assert.AreEqual("1", listFiles[1].Hash);
+        }
     }
 }
