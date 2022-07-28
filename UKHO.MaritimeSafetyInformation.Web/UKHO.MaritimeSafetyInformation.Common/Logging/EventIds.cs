@@ -590,18 +590,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSSearchBatchResponseFromCacheFailed = 910141,
         /// <summary>
-        /// 910142 - Failed to get batch file response from Azure table storage.
+        /// 910142 - Request for storing Leisure batch file response in azure table storage started.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheFailed = 910142,
+        FSSLeisureBatchFilesResponseStoreToCacheStart = 910142,
         /// <summary>
-        /// 910143 - Request for storing batch file response in azure table storage started.
+        /// 910143 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
-        FSSLeisureBatchFilesResponseStoreToCacheStart = 910143,
-        /// <summary>
-        /// 910144 - Request for storing batch file response in azure table storage completed
-        /// </summary>
-        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910144,
-        
+        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910143        
     }
 
     public static class EventIdExtensions
