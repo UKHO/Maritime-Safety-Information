@@ -66,8 +66,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("msi_img_W2021_30.jpg", showWeeklyFiles.ShowFilesResponseList[1].Filename);
             Assert.AreEqual(".jpg", showWeeklyFiles.ShowFilesResponseList[1].FileExtension);
             Assert.AreEqual("msi_img_W2021_30", showWeeklyFiles.ShowFilesResponseList[1].FileDescription);
-            Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[1].Year);
-            Assert.AreEqual(15, showWeeklyFiles.YearAndWeekList[1].Week);
+            Assert.AreEqual(2021, showWeeklyFiles.YearAndWeekList[2].Year);
+            Assert.AreEqual(30, showWeeklyFiles.YearAndWeekList[2].Week);
         }
 
         [Test]
