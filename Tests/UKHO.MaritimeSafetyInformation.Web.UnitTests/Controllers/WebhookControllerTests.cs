@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _controller = new WebhookController(_fakeContextAccessor, _fakeLogger, _fakeWebhookService);
             _controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
-            string jsonString = GetRequestStringWithNullData();
+            string jsonString = GetRequestString();
             _requestData = new(Encoding.UTF8.GetBytes(jsonString));
             _controller.HttpContext.Request.Body = _requestData;
 
