@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsNotNull(showFiles);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(4, showFiles[3].DailyFilesData.Count);
+            Assert.AreEqual(1, showFiles[4].DailyFilesData.Count);
             Assert.AreEqual("33", showFiles[4].WeekNumber);
             Assert.AreEqual("2021", showFiles[4].Year);
             Assert.AreEqual("2021/33", showFiles[4].YearWeek);
