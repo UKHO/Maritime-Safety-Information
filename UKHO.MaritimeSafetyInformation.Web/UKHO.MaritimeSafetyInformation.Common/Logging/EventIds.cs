@@ -558,33 +558,65 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         ClearFSSSearchCacheEventStart = 910133,
         /// <summary>
-        /// 910134 -   Event data for Retrieval of MSI Annual File Request Started.
+        /// 910134 - Request for storing file share service search cumulative batch files response in azure table storage is started.
         /// </summary>
-        ShowAnnualFilesRequestStarted = 910134,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910134,
         /// <summary>
-        /// 910135 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// 910135 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
         /// </summary>
-        ShowAnnualFilesRequestCompleted = 910135,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
-        /// 910136 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// 910136- Request for searching batch files from cache azure table storage is started.
         /// </summary>
-        ShowAnnualFilesFailed = 910136,
+        FSSSearchBatchResponseFromCacheStart = 910136,
         /// <summary>
-        /// 910137 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// 910137 - Request for searching batch files from cache azure table storage is completed.
         /// </summary>
-        GetAnnualFilesResponseStarted = 910137,
+        FSSSearchBatchResponseFromCacheCompleted = 910137,
         /// <summary>
-        /// 910138 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// 910138 - Deletion started for expired searching NM file cache data from table.
         /// </summary>
-        GetAnnualFilesResponseCompleted = 910138,
+        DeleteExpiredSearchBatchResponseFromCacheStarted = 910138,
         /// <summary>
-        /// 910139 -  Get NM Batch Files For Annual Data Not Found.
+        /// 910139 - Deletion completed for expired searching NM file cache data from table.
         /// </summary>
-        GetAnnualNMFilesRequestDataNotFound = 910139,
+        DeleteExpiredSearchBatchResponseFromCacheCompleted = 910139,
         /// <summary>
-        /// 910140 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// 910140 - Data not found for searching batch files from cache azure table storage.
         /// </summary>
-        GetAnnualFilesResponseFailed = 910140,
+        FSSSearchBatchResponseDataNotFoundFromCache = 910140,
+        /// <summary>
+        /// 910141 - Failed to get searching NM files from cache azure table.
+        /// </summary>
+        FSSSearchBatchResponseFromCacheFailed = 910141,
+        /// <summary>
+        /// 910142 -   Event data for Retrieval of MSI Annual File Request Started.
+        /// </summary>
+        ShowAnnualFilesRequestStarted = 910142,
+        /// <summary>
+        /// 910143 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// </summary>
+        ShowAnnualFilesRequestCompleted = 910143,
+        /// <summary>
+        /// 910144 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// </summary>
+        ShowAnnualFilesFailed = 910144,
+        /// <summary>
+        /// 910145 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// </summary>
+        GetAnnualFilesResponseStarted = 910145,
+        /// <summary>
+        /// 910146 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// </summary>
+        GetAnnualFilesResponseCompleted = 910146,
+        /// <summary>
+        /// 910147 -  Get NM Batch Files For Annual Data Not Found.
+        /// </summary>
+        GetAnnualNMFilesRequestDataNotFound = 910147,
+        /// <summary>
+        /// 910148 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// </summary>
+        GetAnnualFilesResponseFailed = 910148,
     }
 
     public static class EventIdExtensions
