@@ -11,14 +11,6 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
-    - task: DownloadBuildArtifacts@0
-      displayName: "Download terraformartifact Artifact"
-      inputs:
-       buildType: 'current'
-       downloadType: 'single'
-       artifactName: 'terraformartifact'
-       downloadPath: '$(Build.SourcesDirectory)'
-
     - task: FileTransform@1
       displayName: "File Transform: integrationtests"
       inputs:
@@ -44,6 +36,8 @@ steps:
        workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
 
     - checkout: self
+      condition: always()
+      
 
     - task: NodeTool@0
       inputs:
@@ -83,7 +77,7 @@ steps:
         azureSubscription: "${{ parameters.AzureSubscription }}"
         scriptType: 'pscore'
         scriptLocation: 'scriptPath'
-        scriptPath: '$(Build.SourcesDirectory)/terraformartifact/set_business_unit.ps1'
+        scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/set_business_unit.ps1"
         arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
     - script: |
