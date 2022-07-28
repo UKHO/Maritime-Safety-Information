@@ -214,10 +214,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started for daily user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
-                    string searchText = $" and $batch(Frequency) eq {frequency} and $batch(Content) eq null ";
+                    string searchText = $" and $batch(Frequency) eq '{frequency}' and $batch(Content) eq null ";
                     if (_userService.IsDistributorUser)
                     {
-                        searchText = $" and $batch(Frequency) eq {frequency} and $batch(Content) eq 'Tracings' ";
+                        searchText = $" and $batch(Frequency) eq '{frequency}' and $batch(Content) eq 'Tracings' ";
                     }
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
