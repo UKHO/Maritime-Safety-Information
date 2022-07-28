@@ -11,14 +11,6 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
-    - task: DownloadPipelineArtifact@0
-      displayName: "Download terraform artifact"
-      inputs:
-        source: "current"
-        downloadType: 'single'
-        artifact: "terraformartifact"
-        path: "$(Build.SourcesDirectory)/Deployment"
-
     - task: FileTransform@1
       displayName: "File Transform: integrationtests"
       inputs:
@@ -44,6 +36,8 @@ steps:
        workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
 
     - checkout: self
+      condition: always()
+      
 
     - task: NodeTool@0
       inputs:
