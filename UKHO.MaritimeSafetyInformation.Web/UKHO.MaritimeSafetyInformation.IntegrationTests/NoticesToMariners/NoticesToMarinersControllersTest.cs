@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
     /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
     /// </summary>
-    
+
     internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
@@ -29,15 +29,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();           
+            Config = new Configuration();
             _ = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
-           
+
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
-        
+
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
@@ -221,6 +221,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("NP234(B) 2020", showNMFiles.ShowFilesResponseModel[2].FileDescription);
             Assert.AreEqual("NP234(A) 2020", showNMFiles.ShowFilesResponseModel[3].FileDescription);
         }
+
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
@@ -254,24 +255,24 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual(".pdf", showFiles[0].FileExtension);
             Assert.AreEqual(539264, showFiles[0].FileSize);
             Assert.AreEqual("527 KB", showFiles[0].FileSizeinKB);
-            Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x=>x.Key=="Frequency").Value);
-            Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x=>x.Key=="Chart").Value);
+            Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x => x.Key == "Frequency").Value);
+            Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x => x.Key == "Chart").Value);
             Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles[0].BatchId);
         }
 
-      [Test]
+        [Test]
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
             List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
             Assert.IsTrue(showFiles != null);
-            
+
             List<string> lstChart = new();
-            foreach (var file in showFiles) 
+            foreach (var file in showFiles)
             {
-                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);            
+                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);
             }
-            Assert.AreEqual(lstChart.Distinct().Count(),lstChart.Count);
+            Assert.AreEqual(lstChart.Distinct().Count(), lstChart.Count);
 
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
