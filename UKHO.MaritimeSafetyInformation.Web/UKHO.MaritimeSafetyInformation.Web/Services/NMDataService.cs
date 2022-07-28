@@ -308,7 +308,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 ShowNMFilesResponseModel showNMFilesResponseModel = await GetWeeklyBatchFiles(year, week, correlationId);
                 showWeeklyFilesResponses.ShowFilesResponseList = showNMFilesResponseModel.ShowFilesResponseModel;
-                showWeeklyFilesResponses.IsWeeklyBatchResponseCached = showNMFilesResponseModel.IsWeeklyBatchResponseCached;
+                showWeeklyFilesResponses.IsWeeklyBatchResponseCached = showNMFilesResponseModel.IsBatchResponseCached;
 
                 _logger.LogInformation(EventIds.GetWeeklyFilesResponseCompleted.ToEventId(), "Maritime safety information request to get weekly NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
 
@@ -373,33 +373,60 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public async Task<List<ShowFilesResponseModel>> GetCumulativeBatchFiles(string correlationId)
+        public async Task<ShowNMFilesResponseModel> GetCumulativeBatchFiles(string correlationId)
         {
             try
             {
-                _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+                BatchSearchResponse searchResult = new();
+                bool isCached = false;
+                const string frequency = "Cumulative";
+                const string partitionKey = "Public";
+                const string rowKey = "CumulativeKey";
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                {
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(partitionKey, rowKey, frequency, correlationId);
 
-                const string searchText = $" and $batch(Frequency) eq 'cumulative'";
+                    if (batchSearchResponseModel.BatchSearchResponse != null)
+                    {
+                        searchResult = batchSearchResponseModel.BatchSearchResponse;
+                        isCached = true;
+                    }
+                }
 
-                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+                if (searchResult.Entries == null)
+                {
+                    _logger.LogInformation(EventIds.GetCumulativeFilesResponseStarted.ToEventId(), "Maritime safety information request to get cumulative NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                BatchSearchResponse searchResult = result.Data;
+                    const string searchText = $" and $batch(Frequency) eq '{frequency}'";
+
+                    IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                    searchResult = result.Data;
+
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && searchResult != null && searchResult.Entries.Count > 0)
+                    {
+                        _logger.LogInformation(EventIds.FSSSearchCumulativeBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search cumulative NM files response in azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId, partitionKey);
+
+                        _logger.LogInformation(EventIds.FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search cumulative NM files response in azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    }
+                }
 
                 if (searchResult != null && searchResult.Entries.Count > 0)
                 {
                     List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.ListFilesResponseCumulative(searchResult.Entries);
+                    ShowNMFilesResponseModel showNMFilesResponseModel = new() { ShowFilesResponseModel = showFilesResponseModel, IsBatchResponseCached = isCached };
                     _logger.LogInformation(EventIds.GetCumulativeFilesResponseCompleted.ToEventId(), "Maritime safety information request to get cumulative NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
-                    return showFilesResponseModel;
+                    return showNMFilesResponseModel;
                 }
-                else
-                {
-                    _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
-                    throw new InvalidDataException("Invalid data received for cumulative NM files");
-                }
+                _logger.LogError(EventIds.GetCumulativeNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get cumulative NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                throw new InvalidDataException("Invalid data received for cumulative NM files");
             }
             catch (Exception ex)
             {

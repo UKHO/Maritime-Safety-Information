@@ -107,7 +107,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             BatchSearchResponseModel searchResult = new();
             try
             {
-                _logger.LogInformation(EventIds.FSSSearchBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching {frequency} and  NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", frequency, correlationId);
+                _logger.LogInformation(EventIds.FSSSearchBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching {frequency} NM response from cache azure table storage is started with _X-Correlation-ID:{correlationId}", frequency, correlationId);
 
                 CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
@@ -132,13 +132,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSSearchCumulativeBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching cumulative NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                _logger.LogError(EventIds.FSSSearchBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching {frequency} NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", frequency, ex.Message, correlationId);
 
                 return searchResult;
             }
         }
 
-        public async Task InsertCacheObject(object data, string rowKey, string tableName, string requestType,string partitionKey, string correlationId)
+        public async Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string partitionKey, string correlationId)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 _logger.LogError(EventIds.FSSCacheDataInsertFailed.ToEventId(), "Process failed to insert entity value in cache table for request type:{requestType}, tableName:{tableName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", requestType, tableName, ex.Message, correlationId);
             }
-        }
+        }       
 
         private async Task<CustomTableEntity> GetCacheTableData(string partitionKey, string rowKey, string tableName)
         {

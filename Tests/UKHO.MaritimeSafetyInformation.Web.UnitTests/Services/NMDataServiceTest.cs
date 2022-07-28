@@ -474,13 +474,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 4;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFiles = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-            Assert.AreEqual("NP234(B) 2022", listShowFilesResponseModels[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2022", listShowFilesResponseModels[1].FileDescription);
-            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[2].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[3].FileDescription);
+            Assert.AreEqual(expectedRecordCount, showNMFiles.ShowFilesResponseModel.Count);
+            Assert.AreEqual("NP234(B) 2022", showNMFiles.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2022", showNMFiles.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[3].FileDescription);
         }
 
         [Test]
@@ -495,17 +495,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 4;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFiles = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
-            Assert.AreEqual("NP234(B) 2022", listShowFilesResponseModels[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2022", listShowFilesResponseModels[1].FileDescription);
-            Assert.AreEqual("NP234(B) 2021", listShowFilesResponseModels[2].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", listShowFilesResponseModels[3].FileDescription);
-            Assert.AreEqual("2", listShowFilesResponseModels[0].BatchId);
-            Assert.AreEqual("1", listShowFilesResponseModels[1].BatchId);
-            Assert.AreEqual("5", listShowFilesResponseModels[2].BatchId);
-            Assert.AreEqual("4", listShowFilesResponseModels[3].BatchId);
+            Assert.AreEqual(expectedRecordCount, showNMFiles.ShowFilesResponseModel.Count);
+            Assert.AreEqual("NP234(B) 2022", showNMFiles.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual("NP234(A) 2022", showNMFiles.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[2].FileDescription);
+            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[3].FileDescription);
+            Assert.AreEqual("2", showNMFiles.ShowFilesResponseModel[0].BatchId);
+            Assert.AreEqual("1", showNMFiles.ShowFilesResponseModel[1].BatchId);
+            Assert.AreEqual("5", showNMFiles.ShowFilesResponseModel[2].BatchId);
+            Assert.AreEqual("4", showNMFiles.ShowFilesResponseModel[3].BatchId);
         }
 
         [Test]
@@ -528,9 +528,46 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            Task<ShowNMFilesResponseModel> result = _nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForGetCumulativeBatchFiles_ThenCacheReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored,A<string>.Ignored));
+
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(new BatchSearchResponseModel { BatchSearchResponse = SetSearchResultForCumulative().Data });
+
+            const int expectedRecordCount = 4;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForCumulativeBatchFilesButDataNotInTable_ThenFSSReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored,A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored,A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+
+            const int expectedRecordCount = 4;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]

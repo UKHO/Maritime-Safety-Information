@@ -556,39 +556,52 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910133 -  Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ClearFSSSearchCacheEventStart = 910133,       
+        ClearFSSSearchCacheEventStart = 910133,
         /// <summary>
-        /// 910134 - Request for storing batch file response in azure table storage started.
+        /// 910134 - Request for storing file share service search cumulative batch files response in azure table storage is started.
         /// </summary>
-        FSSLeisureBatchFilesResponseStoreToCacheStart = 910134,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910134,
         /// <summary>
-        /// 910135 - Request for storing batch file response in azure table storage completed
+        /// 910135 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
         /// </summary>
-        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910135,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
-        /// 910136 - Request for searching batch file response from Azure table storage started.
+        /// 910136- Request for searching batch files from cache azure table storage is started.
         /// </summary>
         FSSSearchBatchResponseFromCacheStart = 910136,
         /// <summary>
-        /// 910137 - Request for searching batch file response from Azure table storage completed.
+        /// 910137 - Request for searching batch files from cache azure table storage is completed.
         /// </summary>
         FSSSearchBatchResponseFromCacheCompleted = 910137,
         /// <summary>
-        /// 910138 - Request for deleting batch file response from Azure table storage started..
+        /// 910138 - Deletion started for expired searching NM file cache data from table.
         /// </summary>
         DeleteExpiredSearchBatchResponseFromCacheStarted = 910138,
         /// <summary>
-        /// 910139 - Request for deleting batch file response from Azure table storage completed.
+        /// 910139 - Deletion completed for expired searching NM file cache data from table.
         /// </summary>
         DeleteExpiredSearchBatchResponseFromCacheCompleted = 910139,
         /// <summary>
-        /// 910140 - Request for batch file response not found in Azure table storage.
+        /// 910140 - Data not found for searching batch files from cache azure table storage.
         /// </summary>
         FSSSearchBatchResponseDataNotFoundFromCache = 910140,
         /// <summary>
-        /// 910141 - Failed to get batch file response from Azure table storage.
+        /// 910141 - Failed to get searching NM files from cache azure table.
         /// </summary>
-        FSSSearchCumulativeBatchResponseFromCacheFailed = 910141
+        FSSSearchBatchResponseFromCacheFailed = 910141,
+        /// <summary>
+        /// 910142 - Failed to get batch file response from Azure table storage.
+        /// </summary>
+        FSSSearchCumulativeBatchResponseFromCacheFailed = 910142,
+        /// <summary>
+        /// 910143 - Request for storing batch file response in azure table storage started.
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheStart = 910143,
+        /// <summary>
+        /// 910144 - Request for storing batch file response in azure table storage completed
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910144,
+        
     }
 
     public static class EventIdExtensions
