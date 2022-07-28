@@ -192,6 +192,88 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
         }
 
+         [Test]
+        public async Task WhenFSSCacheCallsGetDailyBatchDetailsFromCache_ThenReturnsNullObject()
+        {
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(new CustomTableEntity());
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.IsNull(result.BatchSearchResponse);
+        }
+
+        [Test]
+        public async Task WhenExceptionInFSSCacheCallsGetDailyBatchDetailsFromCache_ThenReturnsNullObject()
+        {
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Throws(new Exception());
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.IsNull(result.BatchSearchResponse);
+        }
+
+        [Test]
+        public async Task WhenFSSCacheReceivesExpiredCacheData_ThenReturnsEmptyDailyBatchSearchResponse()
+        {
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            CustomTableEntity customTableEntity = new()
+            {
+                PartitionKey = "Public",
+                RowKey = "DailyKey",
+                Response = "{\"count\":1,\"total\":1,\"entries\":[{\"batchId\":\"db23d550-3099-4e27-872a-debb34d08706\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Content\",\"value\":\"tracings\"},{\"key\":\"Data Date\",\"value\":\"2022-07-07\"},{ \"key\":\"Frequency\",\"value\":\"Daily\"},{ \"key\":\"Product Type\",\"value\":\"Notices to Mariners\"},{ \"key\":\"Week Number\",\"value\":\"28\"},{ \"key\":\"Year\",\"value\":\"2022\"},{ \"key\":\"Year / Week\",\"value\":\"2022 / 28\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-20T10:21:13.203Z\",\"expiryDate\":\"2022-07-21T12:00:00Z\",\"files\":[{\"filename\":\"DNM-Blocks and Notes.pdf\",\"fileSize\":152253,\"mimeType\":\"application/pdf\",\"hash\":\"8r6J28hfL2tAAuGRG5pj3A==\",\"attributes\":[],\"links\":{ \"get\":{ \"href\":\"/batch/db23d550-3099-4e27-872a-debb34d08706/files/DNM-Blocks%20and%20Notes.pdf\"} }},{ \"filename\":\"DNM-Text.pdf\",\"fileSize\":181385,\"mimeType\":\"application/pdf\",\"hash\":\"3zKKMEgcFY3xkW9kiMClsw==\",\"attributes\":[],\"links\":{ \"get\":{ \"href\":\"/batch/db23d550-3099-4e27-872a-debb34d08706/files/DNM-Text.pdf\"} } },{ \"filename\":\"DNM-Tracings.pdf\",\"fileSize\":200398,\"mimeType\":\"application/pdf\",\"hash\":\"TQdRMDkLyHl+a0kLLxXgqA==\",\"attributes\":[],\"links\":{ \"get\":{ \"href\":\"/batch/db23d550-3099-4e27-872a-debb34d08706/files/DNM-Tracings.pdf\"} } }],\"allFilesZipSize\":534390}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100&start=0&$filter=BusinessUnit%20eq%20%27MaritimeSafetyInformation%27%20and%20%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20%20and%20%24batch%28Frequency%29%20eq%20%27daily%27\"},\"first\":{ \"href\":\"/batch?limit=100&start=0&$filter=BusinessUnit%20eq%20%27MaritimeSafetyInformation%27%20and%20%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20%20and%20%24batch%28Frequency%29%20eq%20%27daily%27\"},\"last\":{ \"href\":\"/batch?limit=100&start=0&$filter=BusinessUnit%20eq%20%27MaritimeSafetyInformation%27%20and%20%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20%20and%20%24batch%28Frequency%29%20eq%20%27daily%27\"} }}",
+                CacheExpiry = DateTime.UtcNow.AddMinutes(-2)
+            };
+
+            batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
+
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(customTableEntity);
+
+            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                          .MustNotHaveHappened();
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.IsNull(result.BatchSearchResponse);
+        }
+
+        [Test]
+        public async Task WhenFSSCacheCallsGetDailyBatchDetailsFromCache_ThenReturnsBatchSearchResponse()
+        {
+            BatchSearchResponseModel batchSearchResponseModel = new();
+            CustomTableEntity customTableEntity = new()
+            {
+                PartitionKey = "Public",
+                RowKey = "DailyKey",
+                Response = "{\"count\":1,\"total\":1,\"entries\":[{\"batchId\":\"db23d550-3099-4e27-872a-debb34d08706\",\"status\":\"Committed\",\"attributes\":[{\"key\":\"Content\",\"value\":\"tracings\"},{\"key\":\"Data Date\",\"value\":\"2022-07-07\"},{ \"key\":\"Frequency\",\"value\":\"Daily\"},{ \"key\":\"Product Type\",\"value\":\"Notices to Mariners\"},{ \"key\":\"Week Number\",\"value\":\"28\"},{ \"key\":\"Year\",\"value\":\"2022\"},{ \"key\":\"Year / Week\",\"value\":\"2022 / 28\"}],\"businessUnit\":\"MaritimeSafetyInformation\",\"batchPublishedDate\":\"2022-07-20T10:21:13.203Z\",\"expiryDate\":\"2022-07-21T12:00:00Z\",\"files\":[{\"filename\":\"DNM-Blocks and Notes.pdf\",\"fileSize\":152253,\"mimeType\":\"application/pdf\",\"hash\":\"8r6J28hfL2tAAuGRG5pj3A==\",\"attributes\":[],\"links\":{ \"get\":{ \"href\":\"/batch/db23d550-3099-4e27-872a-debb34d08706/files/DNM-Blocks%20and%20Notes.pdf\"} }},{ \"filename\":\"DNM-Text.pdf\",\"fileSize\":181385,\"mimeType\":\"application/pdf\",\"hash\":\"3zKKMEgcFY3xkW9kiMClsw==\",\"attributes\":[],\"links\":{ \"get\":{ \"href\":\"/batch/db23d550-3099-4e27-872a-debb34d08706/files/DNM-Text.pdf\"} } },{ \"filename\":\"DNM-Tracings.pdf\",\"fileSize\":200398,\"mimeType\":\"application/pdf\",\"hash\":\"TQdRMDkLyHl+a0kLLxXgqA==\",\"attributes\":[],\"links\":{ \"get\":{ \"href\":\"/batch/db23d550-3099-4e27-872a-debb34d08706/files/DNM-Tracings.pdf\"} } }],\"allFilesZipSize\":534390}],\"_links\":{ \"self\":{ \"href\":\"/batch?limit=100&start=0&$filter=BusinessUnit%20eq%20%27MaritimeSafetyInformation%27%20and%20%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20%20and%20%24batch%28Frequency%29%20eq%20%27daily%27\"},\"first\":{ \"href\":\"/batch?limit=100&start=0&$filter=BusinessUnit%20eq%20%27MaritimeSafetyInformation%27%20and%20%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20%20and%20%24batch%28Frequency%29%20eq%20%27daily%27\"},\"last\":{ \"href\":\"/batch?limit=100&start=0&$filter=BusinessUnit%20eq%20%27MaritimeSafetyInformation%27%20and%20%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20%20and%20%24batch%28Frequency%29%20eq%20%27daily%27\"} }}",
+                CacheExpiry = DateTime.UtcNow.AddMinutes(2)
+            };
+
+            batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
+
+            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+
+            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(customTableEntity);
+
+            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+
+            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
+            Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
+        }
+        
+
         [Test]
         public void WhenExecutionFailedForInsertEntityAsync()
         {
