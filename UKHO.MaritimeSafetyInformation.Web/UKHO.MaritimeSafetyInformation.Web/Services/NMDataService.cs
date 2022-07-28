@@ -194,7 +194,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 BatchSearchResponse searchResult = new();
                 bool isCached = false;
-                const string frequency = "daily";
+                const string frequency = "Daily";
                 const string rowKey = "DailyKey";
 
                 if (_cacheConfiguration.Value.IsFssCacheEnabled)
@@ -214,10 +214,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseStarted.ToEventId(), "Maritime safety information request to get daily NM files response started for daily user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
-                    string searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq null ";
+                    string searchText = $" and $batch(Frequency) eq {frequency} and $batch(Content) eq null ";
                     if (_userService.IsDistributorUser)
                     {
-                        searchText = $" and $batch(Frequency) eq 'Daily' and $batch(Content) eq 'Tracings' ";
+                        searchText = $" and $batch(Frequency) eq {frequency} and $batch(Content) eq 'Tracings' ";
                     }
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
@@ -240,10 +240,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     _logger.LogInformation(EventIds.ShowDailyFilesResponseDataFound.ToEventId(), "Maritime safety information request to get daily NM files response data found for user:{SignInName} and Identity:{userId} with _X-Correlation-ID:{correlationId}", _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
 
-                    ShowDailyFilesResponseListModel showDailyFilesResponseListModel = new();
-                    showDailyFilesResponseListModel.ShowDailyFilesResponseModel = NMHelper.GetDailyShowFilesResponse(searchResult);
-                    showDailyFilesResponseListModel.IsDailyFilesResponseCached = isCached;
-
+                    ShowDailyFilesResponseListModel showDailyFilesResponseListModel = new()
+                    {
+                        ShowDailyFilesResponseModel = NMHelper.GetDailyShowFilesResponse(searchResult),
+                        IsDailyFilesResponseCached = isCached
+                    };
                     return showDailyFilesResponseListModel;
                 }
                 else
