@@ -251,7 +251,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     _logger.LogInformation(EventIds.ShowLeisureFilesResponseStarted.ToEventId(), "Request to get leisure files started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
 
-                    const string searchText = $" and $batch(Frequency) eq 'leisure'";
+                    const string searchText = $" and $batch(Frequency) eq '{frequency}'";
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
