@@ -102,14 +102,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 return searchResult;
             }
         }
-
-        public async Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string correlationId)
+        public async Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string correlationId, string partitionKey)
         {
             try
             {
                 CustomTableEntity customTableEntity = new()
                 {
-                    PartitionKey = PartitionKey,
+                    PartitionKey = partitionKey,
                     RowKey = rowKey,
                     Response = JsonConvert.SerializeObject(data),
                     CacheExpiry = DateTime.UtcNow.AddMinutes(_cacheConfiguration.Value.CacheTimeOutInMins)
