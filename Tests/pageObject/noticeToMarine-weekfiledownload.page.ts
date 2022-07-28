@@ -216,7 +216,7 @@ public async verifyDistributorFileCount()
   await this.page.waitForSelector("[id^='partner']");
   const fileNumber=await this.distributorFileNumber.count();
   if(fileNumber > 0){
-  expect(fileNumber).toEqual(3);
+  expect(fileNumber).toEqual(9);
   }
   else{
   expect(fileNumber).toEqual(0);
@@ -227,13 +227,13 @@ public async verifyDistributorFileCount()
 public async verifyIntegrationTestValueForDistributor()
 {
   const distributorFileName=await this.distributorFirstFileName.first().textContent();
-  expect(distributorFileName).toEqual("26sect4");
+  expect(distributorFileName).toEqual("2022-26");
   const distributorFileSize=await this.distributorFirstSize.first().textContent();
-  expect(distributorFileSize).toEqual("91 KB (.rtf)");
+  expect(distributorFileSize).toEqual("396 KB (.xml)");
   const publicFileNameFirst=await this.publicFirstFileName.last().textContent();
-  expect(publicFileNameFirst).toEqual("23wknm22");
+  expect(publicFileNameFirst).toEqual("26snii22");
   const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
-  expect(publicFileSizeFirst).toEqual("2 MB (.pdf)");
+  expect(publicFileSizeFirst).toEqual("780 KB (.pdf)");
 
 }
 }
