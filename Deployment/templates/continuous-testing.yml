@@ -70,16 +70,6 @@ steps:
         testRunTitle: $(Environment) Functional Test Results
       displayName: 'Publish Functional Test Results'
 
-    - task: AzureCLI@2
-      displayName: "Swap MSI BusinessUnit"
-      condition: always()
-      inputs:
-        azureSubscription: "${{ parameters.AzureSubscription }}"
-        scriptType: 'pscore'
-        scriptLocation: 'scriptPath'
-        scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/set_business_unit.ps1"
-        arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
-
     - script: |
        npm run test:a11y
       displayName: 'Run Accessibility Tests'
@@ -94,5 +84,15 @@ steps:
         searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
         testRunTitle: $(Environment) Accessibility Test Results
       displayName: 'Publish Accessibility Test Results'
+
+    - task: AzureCLI@2
+      displayName: "Swap MSI BusinessUnit"
+      condition: always()
+      inputs:
+        azureSubscription: "${{ parameters.AzureSubscription }}"
+        scriptType: 'pscore'
+        scriptLocation: 'scriptPath'
+        scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/set_business_unit.ps1"
+        arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
     
