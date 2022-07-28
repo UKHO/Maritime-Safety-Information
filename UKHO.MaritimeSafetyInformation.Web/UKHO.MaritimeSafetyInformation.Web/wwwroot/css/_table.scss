@@ -191,3 +191,20 @@
     overflow-y: auto;
     padding-right: 2px;
 }
+.notice-to-mariners-vars-table {
+    thead {
+        tr {
+            th:last-child {
+                flex-basis: 68%;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td:last-child {
+                flex-basis: 68%;
+            }
+        }
+    }
+}

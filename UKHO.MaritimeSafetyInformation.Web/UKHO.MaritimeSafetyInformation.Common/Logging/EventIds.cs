@@ -558,13 +558,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         ClearFSSSearchCacheEventStart = 910133,
         /// <summary>
-        /// 910134 - Request for storing file share service daily files response in azure table storage is started.
+        /// 910134 - Request for storing file share service search cumulative batch files response in azure table storage is started.
         /// </summary>
-        FSSDailyBatchFilesResponseStoreToCacheStart = 910134,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910134,
         /// <summary>
-        /// 910135 - Request for storing file share service daily files response in azure table storage is completed.
+        /// 910135 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
         /// </summary>
-        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910135,
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910135,
         /// <summary>
         /// 910136- Request for searching batch files from cache azure table storage is started.
         /// </summary>
@@ -589,6 +589,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910141 - Failed to get searching NM files from cache azure table.
         /// </summary>
         FSSSearchBatchResponseFromCacheFailed = 910141,
+        /// <summary>
+        /// 910142 - Request for storing file share service daily files response in azure table storage is started.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910142,
+        /// <summary>
+        /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143
+
     }
 
     public static class EventIdExtensions

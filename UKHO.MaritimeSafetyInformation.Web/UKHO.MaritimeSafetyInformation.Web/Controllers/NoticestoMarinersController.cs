@@ -128,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single {frequency} NM files completed for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
-                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
                
                 if (mimeType != "application/pdf")
                     mimeType = "application/octet-stream";
@@ -151,11 +151,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
+                ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showFilesResponse);
+                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showNMFilesResponseModel);
             }
             catch (Exception ex)
             {
@@ -222,7 +222,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
-                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
+                _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
 
                 _logger.LogInformation(EventIds.DownloadDailyNMFileCompleted.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} is completed for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
 
