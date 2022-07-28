@@ -589,6 +589,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910141 - Failed to get searching NM files from cache azure table.
         /// </summary>
         FSSSearchBatchResponseFromCacheFailed = 910141,
+        /// <summary>
+        /// 910142 - Request for storing file share service daily files response in azure table storage is started.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910142,
+        /// <summary>
+        /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143
+
     }
 
     public static class EventIdExtensions
