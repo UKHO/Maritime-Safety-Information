@@ -374,7 +374,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                    const string searchText = $" and $batch(Frequency) eq 'cumulative'";
+                    const string searchText = $" and $batch(Frequency) eq '{frequency}'";
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
