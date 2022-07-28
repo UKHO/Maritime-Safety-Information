@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeContextAccessor;
         private IWebhookService _fakeWebhookService;
 
-        private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
+        private MemoryStream _requestData;
 
         [SetUp]
         public void Setup()
@@ -33,6 +33,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeWebhookService = A.Fake<IWebhookService>();
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
             _controller = new WebhookController(_fakeContextAccessor, _fakeLogger, _fakeWebhookService);
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
+
+            string jsonString = GetRequestStringWithNullData();
+            _requestData = new(Encoding.UTF8.GetBytes(jsonString));
+            _controller.HttpContext.Request.Body = _requestData;
+
         }
 
         [Test]
@@ -56,17 +62,48 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual(requestHeaderValue, _controller.HttpContext.Response.Headers.Where(a => a.Key == "WebHook-Allowed-Origin").Select(b => b.Value).FirstOrDefault());
         }
 
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithEmptyPayload_ThenShouldNotDeleteCache()
+        {
+            _controller.HttpContext.Request.Body = new MemoryStream();
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithEmptyPayloadData_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithNoData();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithNullPayloadData_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithNullData();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithValidData_ThenShouldReturnOkResponse()
         {
-            string jsonString = GetRequestString();
-            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
-
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
-            _controller.HttpContext.Request.Body = requestData;
-
-            A.CallTo(() => _fakeWebhookService.ValidateEventGridCacheDataRequest(A<EnterpriseEventCacheDataRequest>.Ignored)).Returns(new ValidationResult());
-            A.CallTo(() => _fakeWebhookService.DeleteSearchAndDownloadCacheData(A<EnterpriseEventCacheDataRequest>.Ignored, A<string>.Ignored)).Returns(true);
+            A.CallTo(() => _fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
+            A.CallTo(() => _fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored)).Returns(true);
 
             OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
 
@@ -76,14 +113,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithValidDataAndDifferentBusinessUnit_ThenShouldReturnOkResponse()
         {
-            string jsonString = GetRequestString();
-            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
-
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
-            _controller.HttpContext.Request.Body = requestData;
-
-            A.CallTo(() => _fakeWebhookService.ValidateEventGridCacheDataRequest(A<EnterpriseEventCacheDataRequest>.Ignored)).Returns(new ValidationResult());
-            A.CallTo(() => _fakeWebhookService.DeleteSearchAndDownloadCacheData(A<EnterpriseEventCacheDataRequest>.Ignored, A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
+            A.CallTo(() => _fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored)).Returns(false);
 
             OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
 
@@ -93,14 +124,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithInvalidData_ThenDeleteCallShouldNotHappen()
         {
-            string jsonString = GetRequestString();
-            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
-
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
-            _controller.HttpContext.Request.Body = requestData;
-            
-            A.CallTo(() => _fakeWebhookService.ValidateEventGridCacheDataRequest(A<EnterpriseEventCacheDataRequest>.Ignored)).Returns(new ValidationResult(new List<ValidationFailure> { new ValidationFailure() }));
-            A.CallTo(() => _fakeWebhookService.DeleteSearchAndDownloadCacheData(A<EnterpriseEventCacheDataRequest>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult(new List<ValidationFailure> { new ValidationFailure() }));
+            A.CallTo(() => _fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored));
 
             OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
 
@@ -157,6 +182,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
                              + "}"
                     
+                    + "}";
+        }
+
+        private static string GetRequestStringWithNoData()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                             + "}"
+                    + "}";
+        }
+
+        private static string GetRequestStringWithNullData()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
                     + "}";
         }
     }

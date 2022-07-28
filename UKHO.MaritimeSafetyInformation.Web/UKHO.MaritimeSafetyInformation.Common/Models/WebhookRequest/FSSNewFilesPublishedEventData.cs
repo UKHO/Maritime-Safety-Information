@@ -1,7 +1,4 @@
-﻿
-using System.Diagnostics.CodeAnalysis;
-
-namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
+﻿namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
 {
     public class BatchDetails
     {
@@ -13,7 +10,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
         public string Href { get; set; }
     }
 
-    public class CacheLinks
+    public class Links
     {
         public BatchDetails BatchDetails { get; set; }
         public BatchStatus BatchStatus { get; set; }
@@ -31,9 +28,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
         public string Href { get; set; }
     }
 
-    public class CacheFile
+    public class File
     {
-        public CacheLinks Links { get; set; }
+        public Links Links { get; set; }
         public string Hash { get; set; }
         public int FileSize { get; set; }
         public string MimeType { get; set; }
@@ -41,12 +38,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest
         public List<Attribute> Attributes { get; set; }
     }
 
-    public class EnterpriseEventCacheDataRequest
+    public class FSSNewFilesPublishedEventData
     {
-        public CacheLinks Links { get; set; }
+        public Links Links { get; set; }
         public string BusinessUnit { get; set; }
         public List<Attribute> Attributes { get; set; }
-        public List<CacheFile> Files { get; set; }
+        public List<File> Files { get; set; }
         public string BatchId { get; set; }
         public DateTime? BatchPublishedDate { get; set; }
     }

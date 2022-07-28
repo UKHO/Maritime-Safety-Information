@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using System;
@@ -22,6 +23,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IEnterpriseEventCacheDataRequestValidator _fakeEnterpriseEventCacheDataRequestValidator;
         private IOptions<FileShareServiceConfiguration> _fakeFileShareServiceConfig;
         private IAzureStorageService _fakeAzureStorageService;
+        private ILogger<WebhookService> _fakeLogger;
+
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         private WebhookService _webhookService;
@@ -36,61 +39,62 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeFileShareServiceConfig.Value.BusinessUnit = "MaritimeSafetyInformation";
             _fakeFileShareServiceConfig.Value.ProductType = "Notices to Mariners";
             _fakeAzureStorageService = A.Fake<IAzureStorageService>();
+            _fakeLogger = A.Fake<ILogger<WebhookService>>();
 
             _webhookService = new WebhookService(_fakeaAzureTableStorageClient,
                                                 _fakeCacheConfiguration,
                                                 _fakeEnterpriseEventCacheDataRequestValidator,
                                                 _fakeFileShareServiceConfig,
-                                                _fakeAzureStorageService);
+                                                _fakeAzureStorageService,_fakeLogger);
 
         }
 
         [Test]
-        public async Task WhenValidateEventGridCacheDataRequestIsCalled_ThenShouldReturnValidationResult()
+        public async Task WhenValidateNewFilesPublishedEventDataIsCalled_ThenShouldReturnValidationResult()
         {
-            EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest = GetEnterpriseEventCacheData();
-            A.CallTo(() => _fakeEnterpriseEventCacheDataRequestValidator.Validate(A<EnterpriseEventCacheDataRequest>.Ignored)).Returns(new ValidationResult());
-            ValidationResult result = await _webhookService.ValidateEventGridCacheDataRequest(enterpriseEventCacheDataRequest);
+            FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
+            A.CallTo(() => _fakeEnterpriseEventCacheDataRequestValidator.Validate(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
+            ValidationResult result = await _webhookService.ValidateNewFilesPublishedEventData(enterpriseEventCacheDataRequest);
             Assert.AreEqual(0, result.Errors.Count);
             Assert.AreEqual(true, result.IsValid);
         }
 
         [Test]
-        public async Task WhenDeleteSearchAndDownloadCacheDataIsCalledWithWrongBusinessUnit_ThenShouldNotDeleteCache()
+        public async Task WhenDeleteBatchSearchResponseCacheDataIsCalledWithWrongBusinessUnit_ThenShouldNotDeleteCache()
         {
-            EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest = GetEnterpriseEventCacheData();
+            FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
             enterpriseEventCacheDataRequest.BusinessUnit = "TestBusinessUnit";
 
             A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
-            bool result = await _webhookService.DeleteSearchAndDownloadCacheData(enterpriseEventCacheDataRequest, CorrelationId);
+            bool result = await _webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
             Assert.AreEqual(false, result);
         }
 
         [Test]
-        public async Task WhenDeleteSearchAndDownloadCacheDataIsCalledWithWrongProductCode_ThenShouldNotDeleteCache()
+        public async Task WhenDeleteBatchSearchResponseCacheDataIsCalledWithWrongProductCode_ThenShouldNotDeleteCache()
         {
-            EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest = GetEnterpriseEventCacheData();
+            FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
             enterpriseEventCacheDataRequest.Attributes.FirstOrDefault(x => x.Key == "Product Type").Value = "TestProductCode";
 
             A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
-            bool result = await _webhookService.DeleteSearchAndDownloadCacheData(enterpriseEventCacheDataRequest, CorrelationId);
+            bool result = await _webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
             Assert.AreEqual(false, result);
         }
 
         [Test]
-        public async Task WhenDeleteSearchAndDownloadCacheDataIsCalled_ThenShouldDeleteCache()
+        public async Task WhenDeleteBatchSearchResponseCacheDataIsCalled_ThenShouldDeleteCache()
         {
-            EnterpriseEventCacheDataRequest enterpriseEventCacheDataRequest = GetEnterpriseEventCacheData();
+            FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
 
             A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
-            bool result = await _webhookService.DeleteSearchAndDownloadCacheData(enterpriseEventCacheDataRequest, CorrelationId);
+            bool result = await _webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
             Assert.AreEqual(true, result);
         }
 
-        private static EnterpriseEventCacheDataRequest GetEnterpriseEventCacheData()
+        private static FSSNewFilesPublishedEventData GetNewFilesPublishedEventData()
         {
             return new()
             {
@@ -112,9 +116,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     new Common.Models.WebhookRequest.Attribute() { Key = "Product Type", Value = "Notices to Mariners" }
                 },
                 BatchPublishedDate = Convert.ToDateTime("2022-04-04T11:22:18.2943076Z"),
-                Files = new List<CacheFile>()
+                Files = new List<File>()
                 {
-                    new CacheFile() {
+                    new File() {
                         Filename = "S631-1_Update_Wk45_21_Only.zip",
                         FileSize= 99073923,
                         MimeType= "application/zip",
