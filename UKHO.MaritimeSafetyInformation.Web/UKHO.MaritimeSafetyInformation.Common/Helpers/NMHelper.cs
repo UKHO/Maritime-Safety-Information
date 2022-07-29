@@ -8,6 +8,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
     public static class NMHelper
     {
+        private static readonly string[] section = { "00", "27", "28" };
+
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
             List<BatchDetails> batchDetailsList = new();
@@ -188,6 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             List<ShowFilesResponseModel> listShowFilesResponseModels = new();
             foreach (BatchDetails item in batchDetails)
             {
+                item.Attributes.Add(new BatchDetailsAttributes { Key = "BatchPublishedDate", Value = item.BatchPublishedDate.ToString() });
                 foreach (BatchDetailsFiles file in item.Files)
                 {
                     listShowFilesResponseModels.Add(new ShowFilesResponseModel
@@ -206,19 +209,24 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
             }
 
-            return listShowFilesResponseModels.OrderBy(x => x.Filename).ToList();
+            return listShowFilesResponseModels
+                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                 .GroupBy(x => x.Filename)
+                 .Select(grp => grp.First())
+                 .OrderBy(x => x.Filename).ToList().ToList();
         }
 
         public static string GetAnnualFileNameAndSection(string fileName, string type)
         {
             string retVal = "";
+
             if (type == "filename")
             {
-                retVal = Path.GetFileNameWithoutExtension(String.Join(' ', fileName.Remove(0, fileName.IndexOf(' ') + 1).Split(' ')));
+                retVal = Path.GetFileNameWithoutExtension(string.Join(' ', fileName.Remove(0, fileName.IndexOf(' ') + 1).Split(' ')));
             }
             else if (type == "section")
             {
-                retVal = fileName.Split(' ')[0] == "00" || fileName.Split(' ')[0] == "27" || fileName.Split(' ')[0] == "28" ? "---" : fileName.Split(' ')[0].TrimStart('0');
+                retVal = fileName.Split(' ')[0] == section[0] || fileName.Split(' ')[0] == section[1] || fileName.Split(' ')[0] == section[2] ? "---" : fileName.Split(' ')[0].TrimStart('0');
             }
             return retVal;
         }

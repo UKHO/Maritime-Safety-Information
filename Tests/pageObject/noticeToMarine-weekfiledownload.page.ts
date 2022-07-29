@@ -51,8 +51,8 @@ export default class noticeToMarinerWeekDownload {
     this.distributorPartner=this.page.locator('text=Partner');
     this.distributorPublic=this.page.locator('text=Public');
     this.distributorFileNumber=this.page.locator("[id^='partner']");
-    this.distributorFirstFileName=this.page.locator('#filename_1');
-    this.distributorFirstSize=this.page.locator('#filesize_1');
+    this.distributorFirstFileName=this.page.locator('#filename_0');
+    this.distributorFirstSize=this.page.locator('#filesize_0');
     this.distributorSecoundFileName=this.page.locator('#filename_2');
     this.distributorSecoundSize=this.page.locator('#filesize_2');
     this.distributorThirdFileName=this.page.locator('#filename_3');
@@ -213,38 +213,33 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
    }
 }
 
+public async verifyDistributorFileCount()
+{ 
 
-
-  public async verifyDistributorFileCount()
-  { 
-    await this.year.selectOption({label:'2022'});
-    await this.week.selectOption({label:'29'});
-   await this.page.waitForLoadState();
-    await this.page.waitForSelector("[id^='partner']");
-    const fileNumber=await this.distributorFileNumber.count();
-    expect(fileNumber).toEqual(8);
-
+  await this.year.selectOption({label:'2022'});
+  await this.week.selectOption({label:'26'});
+  await this.page.waitForLoadState();
+  await this.page.waitForSelector("[id^='partner']");
+  const fileNumber=await this.distributorFileNumber.count();
+  if(fileNumber > 0){
+  expect(fileNumber).toEqual(9);
+  }
+  else{
+  expect(fileNumber).toEqual(0);
   }
 
-  public async verifyIntegrationTestValueForDistributor()
-  {
-    const distributorFileName=await this.distributorFirstFileName.first().textContent();
-    expect(distributorFileName).toEqual("2022-29");
-    const distributorFileSize=await this.distributorFirstSize.first().textContent();
-    expect(distributorFileSize).toEqual("1 MB (.pdf)");
-    const distributorFileNameSecound=await this.distributorSecoundFileName.first().textContent();
-    expect(distributorFileNameSecound).toEqual("29sect4");
-    const distributorFileSizeSecound=await this.distributorSecoundSize.first().textContent();
-    expect(distributorFileSizeSecound).toEqual("13 KB (.rtf)");
-    const distributorFileNameThird=await this.distributorThirdFileName.first().textContent();
-    expect(distributorFileNameThird).toEqual("lights-2022-29");
-    const distributorFileSizeThird=await this.distributorThirdSize.first().textContent();
-    expect(distributorFileSizeThird).toEqual("796 KB (.xml)");
+}
 
-    const publicFileNameFirst=await this.publicFirstFileName.last().textContent();
-    expect(publicFileNameFirst).toEqual("29snii22");
-    const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
-    expect(publicFileSizeFirst).toEqual("650 KB (.pdf)");
+public async verifyIntegrationTestValueForDistributor()
+{
+  const distributorFileName=await this.distributorFirstFileName.first().textContent();
+  expect(distributorFileName).toEqual("2022-26");
+  const distributorFileSize=await this.distributorFirstSize.first().textContent();
+  expect(distributorFileSize).toEqual("396 KB (.xml)");
+  const publicFileNameFirst=await this.publicFirstFileName.last().textContent();
+  expect(publicFileNameFirst).toEqual("26snii22");
+  const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
+  expect(publicFileSizeFirst).toEqual("780 KB (.pdf)");
 
   }
 
