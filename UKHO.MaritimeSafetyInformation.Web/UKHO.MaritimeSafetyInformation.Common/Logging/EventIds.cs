@@ -596,7 +596,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
         /// </summary>
-        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143,
 		/// <summary>
         /// 910144 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
