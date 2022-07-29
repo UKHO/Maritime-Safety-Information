@@ -590,21 +590,29 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSSearchBatchResponseFromCacheFailed = 910141,
         /// <summary>
-        /// 910142 - Request for clearing FSS search cache data from Azure table completed.
+        /// 910142 - Request for storing file share service daily files response in azure table storage is started.
         /// </summary>
-        ClearFSSSearchCacheEventCompleted = 910142,
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910142,
         /// <summary>
-        /// 910143 - Request for validation event for clearing FSS search cache from Azure table
+        /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
         /// </summary>
-        ClearFSSSearchCacheValidationEvent = 910143,
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143
+		/// <summary>
+        /// 910144 - Request for clearing FSS search cache data from Azure table completed.
+        /// </summary>
+        ClearFSSSearchCacheEventCompleted = 910144,
         /// <summary>
-        /// 910144 - Request for clearing FSS search cache data from Azure table started.
+        /// 910145 - Request for validation event for clearing FSS search cache from Azure table
         /// </summary>
-        ClearFSSSearchCacheStarted = 910144,
+        ClearFSSSearchCacheValidationEvent = 910145,
         /// <summary>
-        /// 910145 - Request for clearing FSS search cache data from Azure table completed.
+        /// 910146 - Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ClearFSSSearchCacheCompleted = 910145
+        ClearFSSSearchCacheStarted = 910146,
+        /// <summary>
+        /// 910147 - Request for clearing FSS search cache data from Azure table completed.
+        /// </summary>
+        ClearFSSSearchCacheCompleted = 910147
     }
 
     public static class EventIdExtensions
