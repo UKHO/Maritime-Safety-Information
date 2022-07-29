@@ -74,6 +74,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithEmptyPayloadData_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithNoData();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithEmptyPayloadDataString_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithEmptyDataString();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
         public async Task WhenNewFilesPublishedIsCalledWithNullPayloadData_ThenShouldNotDeleteCache()
         {
             string jsonString = GetRequestStringWithNullData();
@@ -169,6 +195,35 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
                              + "}"
                     
+                    + "}";
+        }
+
+        private static string GetRequestStringWithNoData()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                             + "}"
+                    + "}";
+        }
+
+        private static string GetRequestStringWithEmptyDataString()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\":\"\""
                     + "}";
         }
 

@@ -55,7 +55,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             EventGridEvent eventGridEvent = new();
 
             JsonConvert.PopulateObject(payload, eventGridEvent);
-            if (eventGridEvent.Data == null)
+            if (eventGridEvent.Data == null || eventGridEvent.Data.ToString() == "" || eventGridEvent.Data.ToString() == "{}")
             {
                 _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload data is null for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return GetCacheResponse();
