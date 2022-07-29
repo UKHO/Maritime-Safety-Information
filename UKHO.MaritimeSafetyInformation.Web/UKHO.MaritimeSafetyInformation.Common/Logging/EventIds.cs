@@ -597,22 +597,32 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
         /// </summary>
         FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143,
+        /// <summary>
+        /// 910144 - Request for storing Leisure batch file response in azure table storage started.
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheStart = 910144,
+        /// <summary>
+        /// 910145 - Request for storing Leisure batch file response in azure table storage completed
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
 		/// <summary>
-        /// 910144 - Request for clearing FSS search cache data from Azure table completed.
+        /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
-        ClearFSSSearchCacheEventCompleted = 910144,
+        ClearFSSSearchCacheEventCompleted = 910146,
         /// <summary>
-        /// 910145 - Request for validation event for clearing FSS search cache from Azure table
+        /// 910147 - Request for validation event for clearing FSS search cache from Azure table
         /// </summary>
-        ClearFSSSearchCacheValidationEvent = 910145,
+        ClearFSSSearchCacheValidationEvent = 910147,
         /// <summary>
-        /// 910146 - Request for clearing FSS search cache data from Azure table started.
+        /// 910148 - Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ClearFSSSearchCacheStarted = 910146,
+        ClearFSSSearchCacheStarted = 910148,
         /// <summary>
-        /// 910147 - Request for clearing FSS search cache data from Azure table completed.
+        /// 910149 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
-        ClearFSSSearchCacheCompleted = 910147
+        ClearFSSSearchCacheCompleted = 910149
+
+		
     }
 
     public static class EventIdExtensions

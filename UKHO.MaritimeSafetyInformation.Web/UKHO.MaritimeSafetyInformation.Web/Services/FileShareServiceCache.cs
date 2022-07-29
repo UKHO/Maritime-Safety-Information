@@ -16,27 +16,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
         private readonly IAzureStorageService _azureStorageService;
         private readonly ILogger<FileShareServiceCache> _logger;
-        private readonly IUserService _userService;
-        private string PartitionKey => _userService.IsDistributorUser ? "Distributor" : "Public";
+        
+        
         private string ConnectionString => _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
 
-        public FileShareServiceCache(IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, ILogger<FileShareServiceCache> logger, IUserService userService)
+        public FileShareServiceCache(IAzureTableStorageClient azureTableStorageClient, IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, ILogger<FileShareServiceCache> logger)
         {
             _azureTableStorageClient = azureTableStorageClient;
             _cacheConfiguration = cacheConfiguration;
             _azureStorageService = azureStorageService;
-            _logger = logger;
-            _userService = userService;
+            _logger = logger;           
         }
 
-        public async Task<BatchAttributesSearchModel> GetAllYearsAndWeeksFromCache(string rowKey, string correlationId)
+        public async Task<BatchAttributesSearchModel> GetAllYearsAndWeeksFromCache(string rowKey, string partitionKey, string correlationId)
         {
             BatchAttributesSearchModel searchResult = new();
             try
             {
                 _logger.LogInformation(EventIds.FSSSearchAllYearWeekFromCacheStart.ToEventId(), "Maritime safety information request for searching attribute year and week data from cache azure table storage is started for _X-Correlation-ID:{correlationId}", correlationId);
 
-                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
+                CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName);
 
                 if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
                 {
@@ -47,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
                     _logger.LogInformation(EventIds.DeleteExpiredYearWeekCacheDataFromTableStarted.ToEventId(), "Deletion started for expired all year and week cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
-                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
+                    await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, ConnectionString);
                     _logger.LogInformation(EventIds.DeleteExpiredYearWeekCacheDataFromTableCompleted.ToEventId(), "Deletion completed for expired all year and week cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssCacheResponseTableName, correlationId);
                 }
                 else
@@ -65,7 +64,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<BatchSearchResponseModel> GetWeeklyBatchResponseFromCache(int year, int week, string correlationId)
+        public async Task<BatchSearchResponseModel> GetWeeklyBatchResponseFromCache(int year, int week, string partitionKey, string correlationId)
         {
             BatchSearchResponseModel searchResult = new();
             try
@@ -74,7 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.FSSSearchWeeklyBatchResponseFromCacheStart.ToEventId(), "Maritime safety information request for searching weekly NM response from cache azure table storage is started for year:{year} and week:{week} with _X-Correlation-ID:{correlationId}", year, week, correlationId);
 
-                CustomTableEntity cacheInfo = await GetCacheTableData(PartitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
+                CustomTableEntity cacheInfo = await GetCacheTableData(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName);
 
                 if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry > DateTime.UtcNow)
                 {
@@ -85,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 else if (!string.IsNullOrEmpty(cacheInfo.Response) && cacheInfo.CacheExpiry <= DateTime.UtcNow)
                 {
                     _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheStarted.ToEventId(), "Deletion started for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
-                    await _azureTableStorageClient.DeleteEntityAsync(PartitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, ConnectionString);
+                    await _azureTableStorageClient.DeleteEntityAsync(partitionKey, rowKey, _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, ConnectionString);
                     _logger.LogInformation(EventIds.DeleteExpiredSearchWeeklyBatchResponseFromCacheCompleted.ToEventId(), "Deletion completed for expired searching weekly NM response cache data from table:{TableName} for _X-Correlation-ID:{CorrelationId}", _cacheConfiguration.Value.FssWeeklyBatchSearchTableName, correlationId);
                 }
                 else
@@ -100,25 +99,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 _logger.LogError(EventIds.FSSSearchWeeklyBatchResponseFromCacheFailed.ToEventId(), "Failed to get searching weekly NM response from cache azure table with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
 
                 return searchResult;
-            }
-        }
-        public async Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string correlationId, string partitionKey)
-        {
-            try
-            {
-                CustomTableEntity customTableEntity = new()
-                {
-                    PartitionKey = partitionKey,
-                    RowKey = rowKey,
-                    Response = JsonConvert.SerializeObject(data),
-                    CacheExpiry = DateTime.UtcNow.AddMinutes(_cacheConfiguration.Value.CacheTimeOutInMins)
-                };
-
-                await _azureTableStorageClient.InsertEntityAsync(customTableEntity, tableName, ConnectionString);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(EventIds.FSSCacheDataInsertFailed.ToEventId(), "Process failed to insert entity value in cache table for request type:{requestType}, tableName:{tableName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", requestType, tableName, ex.Message, correlationId);
             }
         }
 
@@ -157,6 +137,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 return searchResult;
             }
         }
+
+        public async Task InsertCacheObject(object data, string rowKey, string tableName, string requestType, string partitionKey, string correlationId)
+        {
+            try
+            {
+                CustomTableEntity customTableEntity = new()
+                {
+                    PartitionKey = partitionKey,
+                    RowKey = rowKey,
+                    Response = JsonConvert.SerializeObject(data),
+                    CacheExpiry = DateTime.UtcNow.AddMinutes(_cacheConfiguration.Value.CacheTimeOutInMins)
+                };
+
+                await _azureTableStorageClient.InsertEntityAsync(customTableEntity, tableName, ConnectionString);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.FSSCacheDataInsertFailed.ToEventId(), "Process failed to insert entity value in cache table for request type:{requestType}, tableName:{tableName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", requestType, tableName, ex.Message, correlationId);
+            }
+        }       
 
         private async Task<CustomTableEntity> GetCacheTableData(string partitionKey, string rowKey, string tableName)
         {
