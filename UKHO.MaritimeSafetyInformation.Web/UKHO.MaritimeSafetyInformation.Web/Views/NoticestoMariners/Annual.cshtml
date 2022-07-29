@@ -29,7 +29,7 @@
                     {
                         <tr>
                             <td class="td-1" id="section_@i">@Model[i].Hash</td>
-                            <td id="FileName_@i">
+                            <td id="filename_@i">
                                 <a target="_blank" aria-label="Download File for @Model[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency ="Annual" })">@Model[i].FileDescription</a>
                             </td>
                             <td class="td-3" id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
