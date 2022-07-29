@@ -49,7 +49,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Clear FSS search cache event started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             if (string.IsNullOrEmpty(payload))
             {
-                _logger.LogInformation(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload is null or empty for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload is null or empty for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
             EventGridEvent eventGridEvent = new();
@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             JsonConvert.PopulateObject(payload, eventGridEvent);
             if (eventGridEvent.Data == null || eventGridEvent.Data.ToString() == "{}")
             {
-                _logger.LogInformation(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload data is null or empty for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload data is null or empty for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
             FSSNewFilesPublishedEventData data = (eventGridEvent.Data as JObject).ToObject<FSSNewFilesPublishedEventData>();
@@ -72,18 +72,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             if (!validationResult.IsValid)
             {
-                _logger.LogInformation(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Required attributes missing in event data from Enterprise event for clear FSS search cache from Azure table for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Required attributes missing in event data from Enterprise event for clear FSS search cache from Azure table for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear Cache Event completed for Product Type:{productType} as required data was missing in payload with OK response and _X-Correlation-ID:{correlationId}", productType, GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
 
             bool isCacheDeleted = await _webhookService.DeleteBatchSearchResponseCacheData(data, GetCurrentCorrelationId());
-            if (!isCacheDeleted)
+            if (isCacheDeleted)
             {
-                _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Event triggered for different Product Type/Business Unit. Product Type:{productType} Business Unit: {businessUnit} and _X-Correlation-ID:{correlationId}", productType, data.BusinessUnit, GetCurrentCorrelationId());
-            }
-            else { 
                 _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear FSS search cache event completed for Product Type:{productType} with OK response and _X-Correlation-ID:{correlationId}", productType, GetCurrentCorrelationId());
+            }
+            else {
+                _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Event triggered for different Product Type/Business Unit. Product Type:{productType} Business Unit: {businessUnit} and _X-Correlation-ID:{correlationId}", productType, data.BusinessUnit, GetCurrentCorrelationId());
             }
             return GetCacheResponse();
         }
