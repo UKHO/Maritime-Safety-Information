@@ -31,6 +31,9 @@ export default class noticeToMarinerWeekDownload {
   readonly distributorThirdSize:Locator;
   readonly publicFirstFileName:Locator;
   readonly publicFirstSize:Locator;
+  readonly fileNameDownload:Locator;
+  readonly fileSize:Locator;
+  readonly annualSection:Locator;
   readonly weelkydowanload:string;
   constructor(page: Page) {
     this.page = page;
@@ -57,6 +60,9 @@ export default class noticeToMarinerWeekDownload {
     this.publicFirstFileName=this.page.locator('#filename_0');
     this.publicFirstSize=this.page.locator('#filesize_0');
     this.weelkydowanload="[id^='download'] > a";
+    this.fileNameDownload= this.page.locator("[id^='filename'] > a");
+    this.fileSize = this.page.locator("[id^='filesize']");
+    this.annualSection = this.page.locator('[id^="section"]');
   }
 
   public async goToNoticeToMariner() {
@@ -242,9 +248,10 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
 
   }
 
-  public async verifySectionDoteCount()
+  public async verifySectionWithDotsCount()
   {
-    const countOfDots= await this.page.$$eval('[id^="section"]' , (matches: any[]) => { return matches.map(option => option.textContent) });
+    const section = this.annualSection
+    const countOfDots= await section.evaluateAll((matches: any[]) => { return matches.map(option => option.textContent) });
     let count=0;
     for(let i=0;i<countOfDots.length;i++)
    
@@ -260,14 +267,16 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
 
   public async verifyAnnualFileNameLink()
   {
-    const fileNameLink= await this.page.$$eval("[id^='FileName'] > a" , (matches: any[]) => { return matches.map(option => option.getAttribute('href')) });
-    expect(fileNameLink.length).toBeGreaterThan(0);
-    expect(fileNameLink).toBeTruthy();
+    const fileNameLink= await this.fileNameDownload;
+    const fileNameData = await fileNameLink.evaluateAll((option:any[]) =>{return option.map(element => element.getAttribute('href'))}); 
+    expect(fileNameData.length).toBeGreaterThan(0);
+    expect(fileNameData).toBeTruthy();
   }
 
   public async verifyAnnualDownloadLink()
   {
-    const annualdownloadLink= await this.page.$$eval("[id^='download'] > a" , (matches: any[]) => { return matches.map(option => option.getAttribute('href')) });
+    const annualdownload= await this.download;
+    const annualdownloadLink= await annualdownload.evaluateAll((option:any[]) =>{return option.map(element => element.getAttribute('href'))}); 
     expect(annualdownloadLink.length).toBeGreaterThan(0);
     expect(annualdownloadLink).toBeTruthy();
   }
@@ -276,7 +285,9 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
  {
    await this.page.waitForLoadState();
    await this.page.waitForSelector("[id^='filesize']");
-   const dailyFileSize = await this.page.$$eval("[id^='filesize']", (options: any[]) => { return options.map(option => option.textContent.trim()) });
+   
+   const annualFileSizeData= await this.fileSize;
+   const dailyFileSize= await annualFileSizeData.evaluateAll((option:any[]) =>{return option.map(element => element.textContent.trim())}); 
    const regex=/^\S+\sB|MB|KB|GB|$/; 
    for(let i=0;i<=dailyFileSize.length-1;i++)
    {

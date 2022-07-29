@@ -4,7 +4,7 @@ import noticeToMarinerWeekDownload from '../../pageObject/noticeToMarine-weekfil
 import noticeToMarine from '../../pageObject/noticetomarine.page';
 
 
-test.describe("Maritime Safety Information Notice to Marine Page Functional Test Scenarios", ()=> {
+test.describe("Maritime Safety Information Notices to Mariners Annual Page Functional Test Scenarios", ()=> {
  
        let annual:noticeToMarine;
        let annualTab:noticeToMarinerWeekDownload;
@@ -19,11 +19,10 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
        
        test('Does the Table Data For Annual Include Section,File Name,File Size and download',async ({page}) => {
          await annual.clickToNoticemarineAnnual();
-         await annualTab.verifySectionDoteCount();
+         await annualTab.verifySectionWithDotsCount();
          await annualTab.verifyAnnualFileNameLink();
          await annualTab.verifyAnnualDownloadLink();
          await annualTab.checkAnnualFileSize();
-
       })  
      
      
