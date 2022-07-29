@@ -1,6 +1,7 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
-@model List<ShowFilesResponseModel>
+@model ShowNMFilesResponseModel
 @{
+    List<ShowFilesResponseModel> showFilesResponseModel = Model.ShowFilesResponseModel;
     Layout = "~/Views/Shared/_MSILayout.cshtml";
     ViewData["Header"] = "Notices to Mariners";
     ViewData["Title"] = "Notices to Mariners - Leisure";
@@ -28,7 +29,8 @@
 
 <div class="row">
     <div class="col">
-        <div class="table-responsive" id="divCumulativeNMs">
+        <div class="table-responsive" id="divLeisureNMs">
+             <input type="hidden" id="IsLeisureBatchResponseCached" value= @Model.IsBatchResponseCached />
             <table width="100%">
                 <thead>
                     <tr>
@@ -38,13 +40,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 0; i < Model.Count; i++)
+                    @for (int i = 0; i < showFilesResponseModel.Count; i++)
                     {
                         <tr>
-                            <td id="filename_@i"><a target="_blank" aria-label="@Model[i].FileDescription. On enter Pdf Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency ="leisure" })">@Model[i].FileDescription</a></td>
-                            <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
+                            <td id="filename_@i"><a target="_blank" aria-label="@showFilesResponseModel[i].FileDescription. On enter Pdf Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">@showFilesResponseModel[i].FileDescription</a></td>
+                            <td id="filesize_@i">@showFilesResponseModel[i].FileSizeinKB (@showFilesResponseModel[i].FileExtension)</td>
                             <td class="td-3 justify-content-center" id="download_@i">
-                                <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency ="leisure" })">Download</a>
+                                <a target="_blank" aria-label="Download File for @showFilesResponseModel[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">Download</a>
                             </td>
                         </tr>
                     }
