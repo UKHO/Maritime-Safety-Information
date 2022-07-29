@@ -245,30 +245,30 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         public async Task WhenLeisureCalled_ThenReturnFiles()
         {
             IActionResult result = await _nMController.Leisure();
-            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            ShowNMFilesResponseModel showFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showFiles != null);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(3, showFiles.Count);
-            Assert.AreEqual("application/pdf", showFiles[0].MimeType);
-            Assert.AreEqual("5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly", showFiles[0].FileDescription);
-            Assert.AreEqual(".pdf", showFiles[0].FileExtension);
-            Assert.AreEqual(539264, showFiles[0].FileSize);
-            Assert.AreEqual("527 KB", showFiles[0].FileSizeinKB);
-            Assert.AreEqual("Leisure", showFiles[0].Attributes.First(x => x.Key == "Frequency").Value);
-            Assert.AreEqual("SC5603", showFiles[0].Attributes.First(x => x.Key == "Chart").Value);
-            Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles[0].BatchId);
+            Assert.AreEqual(3, showFiles.ShowFilesResponseModel.Count);
+            Assert.AreEqual("application/pdf", showFiles.ShowFilesResponseModel[0].MimeType);
+            Assert.AreEqual("5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly", showFiles.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual(".pdf", showFiles.ShowFilesResponseModel[0].FileExtension);
+            Assert.AreEqual(539264, showFiles.ShowFilesResponseModel[0].FileSize);
+            Assert.AreEqual("527 KB", showFiles.ShowFilesResponseModel[0].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles.ShowFilesResponseModel[0].Attributes.First(x=>x.Key=="Frequency").Value);
+            Assert.AreEqual("SC5603", showFiles.ShowFilesResponseModel[0].Attributes.First(x=>x.Key=="Chart").Value);
+            Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles.ShowFilesResponseModel[0].BatchId);
         }
 
         [Test]
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
-            List<ShowFilesResponseModel> showFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            ShowNMFilesResponseModel showFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showFiles != null);
 
             List<string> lstChart = new();
-            foreach (var file in showFiles)
+            foreach (ShowFilesResponseModel file in showFiles.ShowFilesResponseModel) 
             {
                 lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);
             }
@@ -276,15 +276,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual(3, showFiles.Count);
-            Assert.AreEqual("application/pdf", showFiles[1].MimeType);
-            Assert.AreEqual("5608SC5608_Bristol_Channel", showFiles[1].FileDescription);
-            Assert.AreEqual(".pdf", showFiles[1].FileExtension);
-            Assert.AreEqual(781199, showFiles[1].FileSize);
-            Assert.AreEqual("763 KB", showFiles[1].FileSizeinKB);
-            Assert.AreEqual("Leisure", showFiles[1].Attributes.First(x => x.Key == "Frequency").Value);
-            Assert.AreEqual("SC5608", showFiles[1].Attributes.First(x => x.Key == "Chart").Value);
-            Assert.AreEqual("f017aead-89d3-484d-9acc-e12842724e9e", showFiles[1].BatchId);
+            Assert.AreEqual(3, showFiles.ShowFilesResponseModel.Count);
+            Assert.AreEqual("application/pdf", showFiles.ShowFilesResponseModel[1].MimeType);
+            Assert.AreEqual("5608SC5608_Bristol_Channel", showFiles.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual(".pdf", showFiles.ShowFilesResponseModel[1].FileExtension);
+            Assert.AreEqual(781199, showFiles.ShowFilesResponseModel[1].FileSize);
+            Assert.AreEqual("763 KB", showFiles.ShowFilesResponseModel[1].FileSizeinKB);
+            Assert.AreEqual("Leisure", showFiles.ShowFilesResponseModel[1].Attributes.First(x => x.Key == "Frequency").Value);
+            Assert.AreEqual("SC5608", showFiles.ShowFilesResponseModel[1].Attributes.First(x => x.Key == "Chart").Value);
+            Assert.AreEqual("f017aead-89d3-484d-9acc-e12842724e9e", showFiles.ShowFilesResponseModel[1].BatchId);
         }
 
         [Test]

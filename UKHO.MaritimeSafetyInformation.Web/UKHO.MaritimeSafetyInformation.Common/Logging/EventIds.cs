@@ -598,34 +598,41 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143,
         /// <summary>
-        /// 910144 -   Event data for Retrieval of MSI Annual File Request Started.
+        /// 910144 - Request for storing Leisure batch file response in azure table storage started.
         /// </summary>
-        ShowAnnualFilesRequestStarted = 910144,
+        FSSLeisureBatchFilesResponseStoreToCacheStart = 910144,
         /// <summary>
-        /// 910145 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// 910145 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
-        ShowAnnualFilesRequestCompleted = 910145,
+        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
         /// <summary>
-        /// 910146 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// 910146 -   Event data for Retrieval of MSI Annual File Request Started.
         /// </summary>
-        ShowAnnualFilesFailed = 910146,
+        ShowAnnualFilesRequestStarted = 910146,
         /// <summary>
-        /// 910147 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// 910147 -   Event data for Retrieval of MSI Annual File Request Completed.
         /// </summary>
-        GetAnnualFilesResponseStarted = 910147,
+        ShowAnnualFilesRequestCompleted = 910147,
         /// <summary>
-        /// 910148 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// 910148 -    Event data for Retrieval of MSI Show Annual File Failed.
         /// </summary>
-        GetAnnualFilesResponseCompleted = 910148,
+        ShowAnnualFilesFailed = 910148,
         /// <summary>
-        /// 910149 -  Get NM Batch Files For Annual Data Not Found.
+        /// 910149 -  Event data for Retrieval of MSI Get Annual File Response Started.
         /// </summary>
-        GetAnnualNMFilesRequestDataNotFound = 910149,
+        GetAnnualFilesResponseStarted = 910149,
         /// <summary>
-        /// 910150 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// 910150 -  Event data for Retrieval of MSI Get Annual File Response Completed.
         /// </summary>
-        GetAnnualFilesResponseFailed = 910150,
-
+        GetAnnualFilesResponseCompleted = 910150,
+        /// <summary>
+        /// 910151 -  Get NM Batch Files For Annual Data Not Found.
+        /// </summary>
+        GetAnnualNMFilesRequestDataNotFound = 910151,
+        /// <summary>
+        /// 910152 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// </summary>
+        GetAnnualFilesResponseFailed = 910152
     }
 
     public static class EventIdExtensions
