@@ -97,11 +97,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowDailyFilesResponseModel>  showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
-
+                ShowDailyFilesResponseListModel showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                ViewBag.IsDailyFilesResponseCached = showDailyFilesResponseModels.IsDailyFilesResponseCached;
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels);
+                return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels.ShowDailyFilesResponseModel);
             }
             catch (Exception ex)
             {
@@ -151,11 +151,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
+                ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showFilesResponse);
+                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showNMFilesResponseModel);
             }
             catch (Exception ex)
             {

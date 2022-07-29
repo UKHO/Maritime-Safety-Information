@@ -223,7 +223,7 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
     expect(fileNumber).toEqual(0);
     }
 
-  }
+}
 
   public async verifyIntegrationTestValueForDistributor()
   {
@@ -236,5 +236,5 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
     const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
     expect(publicFileSizeFirst).toEqual("2 MB (.pdf)");
 
-  }
+}
 }
