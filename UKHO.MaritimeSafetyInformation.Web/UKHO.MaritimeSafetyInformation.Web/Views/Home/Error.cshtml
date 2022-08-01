@@ -1,8 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Maritime Safety Information";
+    Layout = "~/Views/Shared/_MSILayout.cshtml";
 }
 <div class="container-fluid">
     <div class="row">
+        @if (ViewData["ControllerName"]?.ToString() == "NoticesToMariners")
+        {
+            ViewData["Header"] = "Notices to Mariners";
+            <partial name="_NMHorizontalTab" />
+        }
+        else if (ViewData["ControllerName"]?.ToString() == "RadioNavigationalWarnings")
+        {
+            ViewData["Header"] = "Radio Navigational Warnings";
+        }
         <div class="offset-md-2 col-lg-6 col-md-8 custom-error">
             <h1 id="headingLevelOne" class="mt-0">Sorry, there is a problem with the service</h1>
             <p class="intro-text">Please try again later</p>

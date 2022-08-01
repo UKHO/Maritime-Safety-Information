@@ -3,8 +3,11 @@
     <li class="nav-item">
         <a href="@Url.Action("Index", "NoticesToMariners")"
            class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles"
-           || ViewContext.RouteData.Values["Action"].ToString() == "Cumulative"|| ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "true" : "")">
+           || ViewContext.RouteData.Values["Action"].ToString() == "Cumulative"|| ViewContext.RouteData.Values["Action"].ToString() == "Annual"
+           || ViewData["ActionName"]?.ToString() == "Index" || ViewData["ActionName"]?.ToString() == "ShowDailyFiles"
+           || ViewData["ActionName"]?.ToString() == "Cumulative"|| ViewData["ActionName"]?.ToString() == "Annual"
+           ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewData["ActionName"]?.ToString() == "Index" ? "true" : "")">
             Notices to Mariners
         </a>
     </li>

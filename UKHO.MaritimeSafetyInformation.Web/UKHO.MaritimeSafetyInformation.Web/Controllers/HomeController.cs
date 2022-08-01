@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -36,6 +37,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             string correlationId = GetCurrentCorrelationId();
             ViewData["CurrentCorrelationId"] = correlationId;
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            var endpoint = exceptionDetails.Endpoint!.Metadata.OfType<ControllerActionDescriptor>().First()!;
+            ViewData["ControllerName"] = endpoint.ControllerName;
+            ViewData["ActionName"] = endpoint.ActionName;
 
             // In case of MsalUiRequiredException redirect user to sign in to get the account/login hint
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
