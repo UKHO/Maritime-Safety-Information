@@ -556,7 +556,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910133 -  Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ClearFSSSearchCacheEventStart = 910133,
+        ClearFSSSearchCacheEventStarted = 910133,
         /// <summary>
         /// 910134 - Request for storing file share service search cumulative batch files response in azure table storage is started.
         /// </summary>
@@ -605,34 +605,50 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910145 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
         FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
-        /// <summary>
-        /// 910146 -   Event data for Retrieval of MSI Annual File Request Started.
+		/// <summary>
+        /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
-        ShowAnnualFilesRequestStarted = 910146,
+        ClearFSSSearchCacheEventCompleted = 910146,
         /// <summary>
-        /// 910147 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// 910147 - Request for validation event for clearing FSS search cache from Azure table
         /// </summary>
-        ShowAnnualFilesRequestCompleted = 910147,
+        ClearFSSSearchCacheValidationEvent = 910147,
         /// <summary>
-        /// 910148 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// 910148 - Request for clearing FSS search cache data from Azure table started.
         /// </summary>
-        ShowAnnualFilesFailed = 910148,
+        ClearFSSSearchCacheStarted = 910148,
         /// <summary>
-        /// 910149 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// 910149 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
-        GetAnnualFilesResponseStarted = 910149,
+        ClearFSSSearchCacheCompleted = 910149,
         /// <summary>
-        /// 910150 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// 910150 -   Event data for Retrieval of MSI Annual File Request Started.
         /// </summary>
-        GetAnnualFilesResponseCompleted = 910150,
+        ShowAnnualFilesRequestStarted = 910150,
         /// <summary>
-        /// 910151 -  Get NM Batch Files For Annual Data Not Found.
+        /// 910151 -   Event data for Retrieval of MSI Annual File Request Completed.
         /// </summary>
-        GetAnnualNMFilesRequestDataNotFound = 910151,
+        ShowAnnualFilesRequestCompleted = 910151,
         /// <summary>
-        /// 910152 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// 910152 -    Event data for Retrieval of MSI Show Annual File Failed.
         /// </summary>
-        GetAnnualFilesResponseFailed = 910152
+        ShowAnnualFilesFailed = 910152,
+        /// <summary>
+        /// 910153 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// </summary>
+        GetAnnualFilesResponseStarted = 910153,
+        /// <summary>
+        /// 910154 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// </summary>
+        GetAnnualFilesResponseCompleted = 910154,
+        /// <summary>
+        /// 910155 -  Get NM Batch Files For Annual Data Not Found.
+        /// </summary>
+        GetAnnualNMFilesRequestDataNotFound = 910155,
+        /// <summary>
+        /// 910156 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// </summary>
+        GetAnnualFilesResponseFailed = 910156
     }
 
     public static class EventIdExtensions
