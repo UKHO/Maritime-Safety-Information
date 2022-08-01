@@ -198,13 +198,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                         Attributes = item.Attributes,
                         BatchId = item.BatchId,
                         Filename = file.Filename,
-                        FileDescription = GetAnnualFileNameAndSection(file.Filename, "filename"),
+                        FileDescription = GetDescriptionFromAnnualFileName(file.Filename),
                         FileExtension = Path.GetExtension(file.Filename),
                         FileSize = file.FileSize,
                         FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
                         MimeType = file.MimeType,
                         Links = file.Links,
-                        Hash = GetAnnualFileNameAndSection(file.Filename, "section")
+                        Hash = GetSectionFromAnnualFileName(file.Filename)
                     });
                 }
             }
@@ -216,19 +216,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                  .OrderBy(x => x.Filename).ToList().ToList();
         }
 
-        public static string GetAnnualFileNameAndSection(string fileName, string type)
+        public static string GetDescriptionFromAnnualFileName(string fileName)
         {
-            string retVal = "";
+            return Path.GetFileNameWithoutExtension(fileName.Remove(0, fileName.IndexOf(' ') + 1));
+        }
 
-            if (type == "filename")
-            {
-                retVal = Path.GetFileNameWithoutExtension(string.Join(' ', fileName.Remove(0, fileName.IndexOf(' ') + 1).Split(' ')));
-            }
-            else if (type == "section")
-            {
-                retVal = fileName.Split(' ')[0] == section[0] || fileName.Split(' ')[0] == section[1] || fileName.Split(' ')[0] == section[2] ? "---" : fileName.Split(' ')[0].TrimStart('0');
-            }
-            return retVal;
+        public static string GetSectionFromAnnualFileName(string fileName)
+        {
+            bool isBookendSection = fileName.Split(' ')[0] == section[0] || fileName.Split(' ')[0] == section[1] || fileName.Split(' ')[0] == section[2];
+            return isBookendSection ? "---" : fileName.Split(' ')[0].TrimStart('0');
         }
 
 

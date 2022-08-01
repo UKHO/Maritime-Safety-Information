@@ -1029,19 +1029,22 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             });
         }
 
-        [TestCase("01 NP234(A) 2022.pdf", "filename", ExpectedResult = "NP234(A) 2022", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Proper Filename")]
-        [TestCase("", "filename", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Empty Filename Then Should Return  Empty")]
-        [TestCase("01 NP234(A) 2022.pdf", "section", ExpectedResult = "1", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
-        [TestCase("00 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
-        [TestCase("26 NP234(A) 2022.pdf", "section", ExpectedResult = "26", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
-        [TestCase("27 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
-        [TestCase("28 NP234(A) 2022.pdf", "section", ExpectedResult = "---", Description = "When GetShowAnnualFilesResponse Is Called With Filename Then Should Return Expected Section")]
-        [TestCase("", "section", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Without Filename Then Should Return Empty Section")]
-        [TestCase("01 NP234(A) 2022.pdf", "", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called With Filename But Empty type Then Should Return Empty")]
-        [TestCase("", "", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called With Empty Filename And type Then Should Return Empty")]
-        public string WhenGetAnnualFileNameAndSection_ThenShouldReturnExpectedResult(string fileName, string type)
+        [TestCase("01 NP234(A) 2022.pdf", ExpectedResult = "NP234(A) 2022", Description = "When GetDescriptionFromAnnualFileName Is Called With Filename Then Should Return Proper Filename")]
+        [TestCase("", ExpectedResult = "", Description = "When GetDescriptionFromAnnualFileName Is Called Empty Filename Then Should Return  Empty")]
+        public string WhenGetDescriptionFromAnnualFileName_ThenShouldReturnExpectedResult(string fileName)
         {
-            return NMHelper.GetAnnualFileNameAndSection(fileName, type);
+            return NMHelper.GetDescriptionFromAnnualFileName(fileName);
+        }
+
+        [TestCase("01 NP234(A) 2022.pdf", ExpectedResult = "1", Description = "When GetSectionFromAnnualFileName Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("00 NP234(A) 2022.pdf", ExpectedResult = "---", Description = "When GetSectionFromAnnualFileName Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("26 NP234(A) 2022.pdf", ExpectedResult = "26", Description = "When GetSectionFromAnnualFileName Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("27 NP234(A) 2022.pdf", ExpectedResult = "---", Description = "When GetSectionFromAnnualFileName Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("28 NP234(A) 2022.pdf", ExpectedResult = "---", Description = "When GetSectionFromAnnualFileName Is Called With Filename Then Should Return Expected Section")]
+        [TestCase("", ExpectedResult = "", Description = "When GetShowAnnualFilesResponse Is Called Without Filename Then Should Return Empty Section")]
+        public string WhenGetSectionFromAnnualFileName_ThenShouldReturnExpectedResult(string fileName)
+        {
+            return NMHelper.GetSectionFromAnnualFileName(fileName);
         }
 
         private static BatchSearchResponse SetSearchResultForWeekly()
