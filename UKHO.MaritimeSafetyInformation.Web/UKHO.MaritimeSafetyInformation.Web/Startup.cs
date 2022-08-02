@@ -69,7 +69,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAzureStorageService, AzureStorageService>();
             services.AddScoped<IWebhookService, WebhookService>();
             services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
-
+            services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
+            
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
 

@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
+using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
+using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
@@ -13,19 +15,28 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IOptions<AzureAdB2C> _azureAdB2C;
+        private readonly IMSIBannerNotificationService _mSIBannerNotificationService;
 
-        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger, IOptions<AzureAdB2C> azureAdB2C) : base(contextAccessor, logger)
+        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger, IOptions<AzureAdB2C> azureAdB2C, IMSIBannerNotificationService mSIBannerNotificationService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _contextAccessor = contextAccessor;
             _azureAdB2C = azureAdB2C;
+            _mSIBannerNotificationService = mSIBannerNotificationService;
         }
 
         [HttpGet]
         [Route("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+            MsiBannerNotificationEntity msiBannerNotificationEntity = await _mSIBannerNotificationService.GetBannerNotification();
+
+            if (msiBannerNotificationEntity != null)
+            {
+                Global.Name = msiBannerNotificationEntity.Message;
+            }
 
             return View();
         }

@@ -1,4 +1,6 @@
-﻿@inject IConfiguration _config
+﻿@using UKHO.MaritimeSafetyInformation.Common.Configuration
+
+@inject IConfiguration _config
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,6 +67,7 @@
             </div>
         </div>
     </header>
+    <span>@Global.Name</span>
     <main class="main-content">
         @RenderBody()
     </main>
