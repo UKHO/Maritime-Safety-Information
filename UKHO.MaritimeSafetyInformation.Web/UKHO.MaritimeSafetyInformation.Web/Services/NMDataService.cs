@@ -229,7 +229,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId, PartitionKey);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, PartitionKey, correlationId);
 
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
                     }
