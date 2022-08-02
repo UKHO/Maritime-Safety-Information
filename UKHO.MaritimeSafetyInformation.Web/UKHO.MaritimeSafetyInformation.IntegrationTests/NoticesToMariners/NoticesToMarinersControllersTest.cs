@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
            
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
-        
+
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
