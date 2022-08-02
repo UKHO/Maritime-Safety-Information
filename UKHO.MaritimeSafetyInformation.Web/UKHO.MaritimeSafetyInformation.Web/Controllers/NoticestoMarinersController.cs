@@ -172,7 +172,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
+                ShowNMFilesResponseModel showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestCompleted.ToEventId(), "Maritime safety information request for annual NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
