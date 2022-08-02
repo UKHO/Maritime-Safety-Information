@@ -780,7 +780,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new BatchSearchResponseModel { BatchSearchResponse = SetSearchResultForAnnual().Data });
 
-            const int expectedRecordCount = 4;
+            const int expectedRecordCount = 6;
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
@@ -799,7 +799,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
-            const int expectedRecordCount = 4;
+            const int expectedRecordCount = 6;
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
