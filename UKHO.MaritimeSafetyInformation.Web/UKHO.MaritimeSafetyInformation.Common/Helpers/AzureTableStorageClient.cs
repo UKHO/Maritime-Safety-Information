@@ -62,15 +62,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
                 AsyncPageable<MsiBannerNotificationEntity> linqEntities = tableClient.QueryAsync<MsiBannerNotificationEntity>();
 
-                await foreach (var item in linqEntities)
+                await foreach (MsiBannerNotificationEntity item in linqEntities)
                 {
                     msiBannerNotificationEntityLit.Add(item);
                 }
 
-                var res = from r in msiBannerNotificationEntityLit 
-                          where r.StartDate < DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.BannerStatus == "enabled"
-                          orderby r.StartDate ascending
-                          select r;
+                IOrderedEnumerable<MsiBannerNotificationEntity> res = from r in msiBannerNotificationEntityLit 
+                                                                      where r.StartDate < DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.Status == "enabled"
+                                                                      orderby r.StartDate ascending
+                                                                      select r;
 
                 return res.FirstOrDefault();
             }
