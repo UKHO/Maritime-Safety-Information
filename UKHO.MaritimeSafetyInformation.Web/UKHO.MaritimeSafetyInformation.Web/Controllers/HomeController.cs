@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
@@ -31,12 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-            MsiBannerNotificationEntity msiBannerNotificationEntity = await _mSIBannerNotificationService.GetBannerNotification();
-
-            if (msiBannerNotificationEntity != null)
-            {
-                Global.Name = msiBannerNotificationEntity.Message;
-            }
+            await _mSIBannerNotificationService.GetBannerNotification();
 
             return View();
         }

@@ -20,9 +20,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _azureTableStorageClient = azureTableStorageClient;
         }
 
-        public Task<MsiBannerNotificationEntity> GetBannerNotification()
+        public async Task GetBannerNotification()
         {
-            return _azureTableStorageClient.GetAllEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
+            MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetAllEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
+
+            Global.Name = msiBannerNotificationEntity.Message;
         }
     }
 }

@@ -9,19 +9,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
     {
         private readonly IRNWService _rnwService;
         private readonly ILogger<RadioNavigationalWarningsController> _logger;
+        private readonly IMSIBannerNotificationService _mSIBannerNotificationService;
 
         public RadioNavigationalWarningsController(IHttpContextAccessor contextAccessor,
                                                    ILogger<RadioNavigationalWarningsController> logger,
-                                                   IRNWService rnwService) : base(contextAccessor, logger)
+                                                   IRNWService rnwService,
+                                                   IMSIBannerNotificationService mSIBannerNotificationService) : base(contextAccessor, logger)
         {
             _rnwService = rnwService;
             _logger = logger;
+            _mSIBannerNotificationService = mSIBannerNotificationService;
         }
 
         [HttpGet]
         [Route("/RadioNavigationalWarnings")]
         public async Task<IActionResult> Index()
         {
+            await _mSIBannerNotificationService.GetBannerNotification();
+
             _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());

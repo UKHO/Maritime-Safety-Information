@@ -62,12 +62,24 @@
                             <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings" ? "active":"")" asp-area="" asp-controller="RadioNavigationalWarnings" asp-action="Index">Radio Navigational Warnings</a>
                         </li>
                         <partial name="_LoginPartial" />
-                    </ul>                    
+                    </ul>
                 </nav>
             </div>
         </div>
+        <!--Phase Banner-->
+        <div class="phase-banner">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p>
+                            <span class="alpha-caption">Beta</span>
+                            @Global.Name
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
-    <span>@Global.Name</span>
     <main class="main-content">
         @RenderBody()
     </main>
