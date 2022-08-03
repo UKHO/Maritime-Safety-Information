@@ -462,6 +462,19 @@
   flex-basis: 68%;
 }
 
+.notice-to-mariners-annual-table thead tr th.th-1, .notice-to-mariners-annual-table thead tr th.th-4 {
+  flex-basis: 35%;
+}
+.notice-to-mariners-annual-table thead tr th.th-3 {
+  flex-basis: 45%;
+}
+.notice-to-mariners-annual-table tbody tr td.td-1, .notice-to-mariners-annual-table tbody tr td.td-4 {
+  flex-basis: 35%;
+}
+.notice-to-mariners-annual-table tbody tr td.td-3 {
+  flex-basis: 45%;
+}
+
 a:focus, button:focus, .form-select:focus, .form-control:focus, .form-check-input:focus, input[type=submit]:focus, input[type=button]:focus {
   outline: 0;
   box-shadow: 0 0 0 0.14rem #fd0 !important;
