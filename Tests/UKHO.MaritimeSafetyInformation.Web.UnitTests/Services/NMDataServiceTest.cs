@@ -725,9 +725,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel listShowFilesResponseModels = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.ShowFilesResponseModel.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
         [Test]
         public async Task WhenGetAnnualBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
@@ -740,9 +740,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel listShowFilesResponseModels = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.ShowFilesResponseModel.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
 
         [Test]
