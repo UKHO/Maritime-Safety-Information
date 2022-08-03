@@ -163,11 +163,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Cumulative")]
         public async Task<IActionResult> Cumulative()
         {
+            ShowNMFilesResponseModel showNMFilesResponseModel = new();
             try
             {
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
+                showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
@@ -175,8 +176,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
                 _logger.LogError(EventIds.ShowCumulativeFilesFailed.ToEventId(), "Maritime safety information request to show cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
-                throw;
+                return View("~/Views/NoticesToMariners/Cumulative.cshtml", showNMFilesResponseModel);
             }
         }
 
@@ -184,11 +187,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Annual")]
         public async Task<IActionResult> Annual()
         {
+            List<ShowFilesResponseModel> showFilesResponse = new();
             try
             {
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
+                showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestCompleted.ToEventId(), "Maritime safety information request for annual NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
@@ -196,8 +200,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
+
                 _logger.LogError(EventIds.ShowAnnualFilesFailed.ToEventId(), "Maritime safety information request to show annual NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
-                throw;
+
+                return View("~/Views/NoticesToMariners/Annual.cshtml", showFilesResponse);
             }
 
         }
@@ -206,11 +214,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Leisure")]
         public async Task<IActionResult> Leisure()
         {
+            ShowNMFilesResponseModel showNMFilesResponseModel = new();
             try
             {
                 _logger.LogInformation(EventIds.ShowLeisureFilesRequestStarted.ToEventId(), "Request to show leisure files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetLeisureFilesAsync(GetCurrentCorrelationId());
+                showNMFilesResponseModel = await _nMDataService.GetLeisureFilesAsync(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowLeisureFilesRequestCompleted.ToEventId(), "Request to show leisure files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
@@ -218,8 +227,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
+
                 _logger.LogError(EventIds.ShowLeisureFilesRequestFailed.ToEventId(), "Request to show leisure files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
-                throw;
+                return View("~/Views/NoticesToMariners/Leisure.cshtml", showNMFilesResponseModel);
             }
         }
 
