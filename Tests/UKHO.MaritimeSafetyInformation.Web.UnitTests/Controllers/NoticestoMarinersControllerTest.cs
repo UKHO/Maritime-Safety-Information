@@ -18,7 +18,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private ILogger<NoticesToMarinersController> _fakeLogger;
         private IHttpContextAccessor _fakeContextAccessor;
         private INMDataService _fakeNMDataService;
-        private IUserService _fakeUserService;        
+        private IUserService _fakeUserService;
+        private IMSIBannerNotificationService _fakeMSIBannerNotificationService;
 
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
@@ -28,9 +29,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeNMDataService = A.Fake<INMDataService>();
-            _fakeUserService = A.Fake<IUserService>();            
+            _fakeUserService = A.Fake<IUserService>();
+            _fakeMSIBannerNotificationService = A.Fake<IMSIBannerNotificationService>();
+
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService);
+            _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService, _fakeMSIBannerNotificationService);
         }
 
         [Test]
