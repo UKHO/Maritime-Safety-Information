@@ -213,6 +213,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public async Task WhenShowDailyFilesAsyncIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
+
+            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored)).Throws(new Exception());
+
+            IActionResult result = await _controller.ShowDailyFilesAsync();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
+        }
+
+        [Test]
         public void WhenDownloadFileIsCalledWithNullBatchID_ThenShouldReturnArgumentNullException()
         {
             const string batchId = null;
@@ -353,13 +367,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        public async Task WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
         {
+            const string expectedView = "~/Views/NoticesToMariners/Leisure.cshtml";
+
             A.CallTo(() => _fakeNMDataService.GetLeisureFilesAsync(A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Leisure();
-
-            Assert.IsTrue(result.IsFaulted);
+            IActionResult result = await _controller.Leisure();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [TestCase(null, "Daily 16-05-22.zip", "application/gzip", Description = "When Download Daily File Is Called With Null BatchID Then Should Throw Exception")]
@@ -427,16 +445,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenShowDailyFilesAsyncIsCalledAndExceptionThrownByService_ThenShouldThrowException()
-        {
-            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored)).Throws(new Exception());
-
-            Task<IActionResult> result = _controller.ShowDailyFilesAsync();
-
-            Assert.IsTrue(result.IsFaulted);
-        }
-
-        [Test]
         public async Task WhenAnnualFilesAsyncIsCalled_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
@@ -450,7 +458,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldExpectedViewWithViewData()
+        public async Task WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
 
