@@ -229,7 +229,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId, PartitionKey);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, PartitionKey, correlationId);
 
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
                     }
@@ -464,6 +464,41 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
+        }
+
+        public async Task<List<ShowFilesResponseModel>> GetAnnualBatchFiles(string correlationId)
+        {
+            try
+            {
+                _logger.LogInformation(EventIds.GetAnnualFilesResponseStarted.ToEventId(), "Maritime safety information request to get annual NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+
+                const string searchText = $" and $batch(Frequency) eq 'annual'";
+
+                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                BatchSearchResponse searchResult = result.Data;
+
+                if (searchResult != null && searchResult.Entries.Count > 0)
+                {
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.GetShowAnnualFilesResponse(searchResult.Entries).ToList();
+                    _logger.LogInformation(EventIds.GetAnnualFilesResponseCompleted.ToEventId(), "Maritime safety information request to get annual NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    return showFilesResponseModel;
+                }
+                else
+                {
+                    _logger.LogError(EventIds.GetAnnualNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get annual NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                    throw new InvalidDataException("Invalid data received for annual NM files");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.GetAnnualFilesResponseFailed.ToEventId(), "Maritime safety information request to annual NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
         }

@@ -8,6 +8,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
     public static class NMHelper
     {
+        private static readonly string[] section = { "00", "27", "28" };
+
         public static List<ShowFilesResponseModel> ListFilesResponse(BatchSearchResponse SearchResult)
         {
             List<BatchDetails> batchDetailsList = new();
@@ -181,5 +183,50 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "Data Date")?.Value))
                 .ToList();
         }
+
+        public static List<ShowFilesResponseModel> GetShowAnnualFilesResponse(List<BatchDetails> batchDetails)
+        {
+
+            List<ShowFilesResponseModel> listShowFilesResponseModels = new();
+            foreach (BatchDetails item in batchDetails)
+            {
+                item.Attributes.Add(new BatchDetailsAttributes { Key = "BatchPublishedDate", Value = item.BatchPublishedDate.ToString() });
+                foreach (BatchDetailsFiles file in item.Files)
+                {
+                    listShowFilesResponseModels.Add(new ShowFilesResponseModel
+                    {
+                        Attributes = item.Attributes,
+                        BatchId = item.BatchId,
+                        Filename = file.Filename,
+                        FileDescription = GetDescriptionFromAnnualFileName(file.Filename),
+                        FileExtension = Path.GetExtension(file.Filename),
+                        FileSize = file.FileSize,
+                        FileSizeinKB = FileHelper.FormatSize((long)file.FileSize),
+                        MimeType = file.MimeType,
+                        Links = file.Links,
+                        Hash = GetSectionFromAnnualFileName(file.Filename)
+                    });
+                }
+            }
+
+            return listShowFilesResponseModels
+                 .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
+                 .GroupBy(x => x.Filename)
+                 .Select(grp => grp.First())
+                 .OrderBy(x => x.Filename).ToList().ToList();
+        }
+
+        public static string GetDescriptionFromAnnualFileName(string fileName)
+        {
+            return Path.GetFileNameWithoutExtension(fileName.Remove(0, fileName.IndexOf(' ') + 1));
+        }
+
+        public static string GetSectionFromAnnualFileName(string fileName)
+        {
+            bool isBookendSection = fileName.Split(' ')[0] == section[0] || fileName.Split(' ')[0] == section[1] || fileName.Split(' ')[0] == section[2];
+            return isBookendSection ? "---" : fileName.Split(' ')[0].TrimStart('0');
+        }
+
+
     }
 }

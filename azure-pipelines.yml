@@ -365,14 +365,18 @@ stages:
         - DevDeployApp
         pool: $(WindowsPool)
         displayName: "Dev Functional Automated And Accessibility Tests"
-        variables: 
+        variables:
+         WEB_APP_NAME: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
          url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
          rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+         webapp_rg: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.webapp_rg']  ]        
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
         steps:
           - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
   - stage: QADeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"
@@ -427,14 +431,18 @@ stages:
         - QADeployApp
         pool: $(WindowsPool)
         displayName: "QA Functional Automated And Accessibility Tests"
-        variables: 
+        variables:
+         WEB_APP_NAME: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
          url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
          rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+         webapp_rg: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.webapp_rg']  ]
          PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
         workspace:
          clean: all
         steps:
           - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "Maritime Safety Information QA - A.008.02"
 
   - stage: Livedeploy
     displayName: "Livedeploy (inc terraform, webapp deploy)"
