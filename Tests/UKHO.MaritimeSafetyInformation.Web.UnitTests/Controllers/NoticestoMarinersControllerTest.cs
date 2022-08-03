@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private ILogger<NoticesToMarinersController> _fakeLogger;
         private IHttpContextAccessor _fakeContextAccessor;
         private INMDataService _fakeNMDataService;
-        private IUserService _fakeUserService;        
+        private IUserService _fakeUserService;
 
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeNMDataService = A.Fake<INMDataService>();
-            _fakeUserService = A.Fake<IUserService>();            
+            _fakeUserService = A.Fake<IUserService>();
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
             _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService);
         }
@@ -67,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week); 
+            IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;
@@ -357,13 +357,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenCumulativeIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        public async Task WhenCumulativeIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
         {
+            const string expectedView = "~/Views/NoticesToMariners/Cumulative.cshtml";
+
             A.CallTo(() => _fakeNMDataService.GetCumulativeBatchFiles(A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Cumulative();
-
-            Assert.IsTrue(result.IsFaulted);
+            IActionResult result = await _controller.Cumulative();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [Test]
@@ -403,13 +407,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        public async Task WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldExpectedViewWithViewData()
         {
+            const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
+
             A.CallTo(() => _fakeNMDataService.GetAnnualBatchFiles(A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Annual();
-
-            Assert.IsTrue(result.IsFaulted);
+            IActionResult result = await _controller.Annual();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
