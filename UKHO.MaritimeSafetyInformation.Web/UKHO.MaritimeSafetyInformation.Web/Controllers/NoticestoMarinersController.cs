@@ -29,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
+                ViewBag.HasError = false;
 
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for User:{SignInName} and IsDistributor:{IsDistributorUser} and correlationId:{correlationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
 
@@ -36,6 +37,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexGetCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index get completed for User:{SignInName} and IsDistributor:{IsDistributorUser} and correlationId:{correlationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
 
+                if (showWeeklyFiles.ShowFilesResponseList.Count == 0)
+                {
+                    ViewBag.HasError = true;
+                    string correlationId = GetCurrentCorrelationId();
+                    ViewData["CurrentCorrelationId"] = correlationId;
+                }
                 return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
             }
             catch (Exception ex)
@@ -53,12 +60,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseStartIndexPost.ToEventId(), "Maritime safety information request for weekly NM file response for index post started for User:{SignInName} and IsDistributor:{IsDistributorUser} with correlationId:{correlationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
+                ViewBag.HasError = false;
                 ShowWeeklyFilesResponseModel showWeeklyFiles = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, GetCurrentCorrelationId());
 
                 ViewData["Year"] = year;
                 ViewData["Week"] = week;
 
                 _logger.LogInformation(EventIds.ShowWeeklyFilesResponseIndexPostCompleted.ToEventId(), "Maritime safety information request for weekly NM file response for index post completed for User:{SignInName} and IsDistributor:{IsDistributorUser} with correlationId:{correlationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
+
+                if (showWeeklyFiles.ShowFilesResponseList.Count == 0)
+                {
+                    ViewBag.HasError = true;
+                    string correlationId = GetCurrentCorrelationId();
+                    ViewData["CurrentCorrelationId"] = correlationId;
+                }
+
                 return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
             }
             catch (Exception ex)

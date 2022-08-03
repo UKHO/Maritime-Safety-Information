@@ -38,13 +38,31 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
             IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
             Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
+        }
+
+        [Test]
+        public async Task WhenIndexIsCalledForNoBatchData_ThenShouldReturnsExpectedView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = SetResultForShowWeeklyFilesResponseModel();
+
+            showWeeklyFilesResponseModel.ShowFilesResponseList = new System.Collections.Generic.List<ShowFilesResponseModel>();
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
+
+            IActionResult result = await _controller.Index();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(true, _controller.ViewBag.HasError);
         }
 
 
@@ -79,14 +97,39 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public async Task WhenIndexPostIsCalledForNoBatchData_ThenShouldReturnsExpectedViewAndViewData()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+            const int year = 2022;
+            const int week = 20;
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = SetResultForShowWeeklyFilesResponseModel();
+
+            showWeeklyFilesResponseModel.ShowFilesResponseList = new System.Collections.Generic.List<ShowFilesResponseModel>();
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
+
+            IActionResult result = await _controller.Index(year, week);
+            Assert.IsInstanceOf<ViewResult>(result);
+
+            string actualView = ((ViewResult)result).ViewName;
+
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
+            Assert.AreEqual(true, _controller.ViewBag.HasError);
+
+        }
+
+        [Test]
         public async Task WhenIndexPostIsCalledWithYearAndWeekZero_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
             const int year = 0;
             const int week = 0;
-            const int expectedViewCount = 3;
+            const int expectedViewCount = 4;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
             IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
