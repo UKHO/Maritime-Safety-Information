@@ -38,7 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             ViewData["CurrentCorrelationId"] = correlationId;
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-            var endpoint = exceptionDetails.Endpoint!.Metadata.OfType<ControllerActionDescriptor>().First()!;
+            ControllerActionDescriptor endpoint = exceptionDetails.Endpoint!.Metadata.OfType<ControllerActionDescriptor>().First()!;
             ViewData["ControllerName"] = endpoint.ControllerName;
             ViewData["ActionName"] = endpoint.ActionName;
 
@@ -46,7 +46,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
             {                
                 string appLogInUrl = $"{_azureAdB2C.Value.RedirectBaseUrl}/MicrosoftIdentity/Account/SignIn";
-                await Request.HttpContext.SignOutAsync();                
+                await _contextAccessor.HttpContext.Request.HttpContext.SignOutAsync();                
                 return Redirect(appLogInUrl);                
             }
 
