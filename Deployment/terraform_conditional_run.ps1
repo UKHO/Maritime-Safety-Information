@@ -56,6 +56,7 @@ Write-Host "##vso[task.setvariable variable=MsiWafUrl;isOutput=true]$env:SERVICE
 Write-Host "##vso[task.setvariable variable=Admin_DNS_URL;isOutput=true]$env:SERVICE_ADMIN_DNS_URL"
 Write-Host "##vso[task.setvariable variable=WEB_APP_NAME;isOutput=true]$($terraformOutput.web_app_name.value)"
 Write-Host "##vso[task.setvariable variable=ADMIN_WEB_APP_NAME;isOutput=true]$($terraformOutput.admin_webapp_name.value)"
+Write-Host "##vso[task.setvariable variable=webapp_rg;isOutput=true]$($terraformOutput.webapp_rg.value)"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 

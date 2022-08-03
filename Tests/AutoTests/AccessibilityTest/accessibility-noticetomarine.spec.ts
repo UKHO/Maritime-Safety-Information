@@ -19,6 +19,7 @@ test.describe("MSI Notice to Marine Page Accessibility Test", () => {
     };
 
     test.beforeEach(async ({ page }) => {
+        test.slow();
         await page.goto(app.url);
         notice = new noticetomarine(page);
         await notice.clickToNoticemarine();
