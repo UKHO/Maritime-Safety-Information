@@ -11,7 +11,7 @@ for (let i = 0; i < tabButtons.length; i++) {
         tabButtonKeyDownFunction(e);
     }
     tabButtons[i].addEventListener('click', function (e) {
-        removeTabIndex(e);        
+        removeTabIndex(e);
     });
 }
 
@@ -19,7 +19,7 @@ function removeTabIndex(e) {
     for (var i = 0; i < tabButtons.length; i++) {
         tabButtons[i].setAttribute("tabindex", '-1');
     }
-    event.target.removeAttribute("tabindex");    
+    event.target.removeAttribute("tabindex");
 }
 
 function tabButtonKeyDownFunction(e) {
@@ -44,7 +44,7 @@ function tabButtonKeyDownFunction(e) {
     if (keycode === 39) { // Keycode "39" is right key
         let nextButton = event.target.parentNode.nextElementSibling.children[0];
         nextButton.focus();
-    }    
+    }
 }
 //Accessibility code for tabs ends here//
 
@@ -67,7 +67,7 @@ function HashLinkTab() {
     if (location.hash) {
         const hash = url.split("#");
         const hashValue = hash[1].toLowerCase();
-        if (SetTitle(hashValue)) {
+        if (SetHashTitle(hashValue)) {
 
             let tabs = Array.from(document.querySelectorAll('.msi-tabs .nav-link'));
             let tabContents = Array.from(document.querySelectorAll('.tab-content .tab-pane'));
@@ -97,6 +97,9 @@ function HashLinkTab() {
 
         }
     }
+    else {
+        SetTitle();
+    }
 
     Array.prototype.slice.call(document.querySelectorAll('a[data-bs-toggle="tab"]'))
         .forEach(function (element) {
@@ -109,14 +112,14 @@ function HashLinkTab() {
                 } else {
                     if (hash.toLowerCase() === '#allwarnings') newUrl = url.split('#')[0];
                     else newUrl = url.split("#")[0] + hash;
-                    SetTitle(hash);
+                    SetHashTitle(hash);
                 }
                 history.replaceState(null, null, newUrl);
             }
         });
 }
 
-function SetTitle(hash) {
+function SetHashTitle(hash) {
     let newhash = hash.replace('#', '');
     let bool = true;
     if (newhash) {
@@ -135,4 +138,35 @@ function SetTitle(hash) {
     }
     else { bool = false; }
     return bool;
+}
+
+function SetTitle() {
+    let pathName = location.pathname;
+
+    if (pathName) {
+        switch (pathName.toLowerCase()) {
+            case '/noticestomariners/weekly': document.title = 'Notices to Mariners - Weekly';
+                break;
+            case '/noticestomariners/daily': document.title = 'Notices to Mariners - Daily';
+                break;
+            case '/noticestomariners/cumulative': document.title = 'Notices to Mariners - Cumulative';
+                break;
+            case '/noticestomariners/annual': document.title = 'Notices to Mariners - Annual';
+                break;
+            case '/noticestomariners/leisure': document.title = 'Notices to Mariners - Leisure';
+                break;
+            case '/noticestomariners/resellers': document.title = 'Notices to Mariners - Value Added Resellers';
+                break;
+            case '/noticestomariners/about': document.title = 'About Notices to Mariners';
+                break;
+            case '/radionavigationalwarnings/about': document.title = 'About Radio Navigational Warnings';
+                break;
+            case '/radionavigationalwarnings/showselection': document.title = 'Radio Navigational Warnings';
+                break;
+            case '/radionavigationalwarnings': document.title = 'Radio Navigational Warnings';
+                break;
+
+        }
+    }
+
 }

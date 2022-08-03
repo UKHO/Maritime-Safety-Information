@@ -17,18 +17,8 @@
     <p>The following NAVAREA 1 and UK Coastal Warnings (WZs) were in force at: @ViewBag.LastModifiedDateTime</p>
 </div>
 
-<!--tabs-->
-<ul class="nav nav-tabs msi-tabs" id="rnwTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <a href="#allwarnings" class="nav-link active" id="allwarnings-tab" data-bs-toggle="tab" data-bs-target="#allwarnings" role="tab" aria-controls="allwarnings" aria-selected="false">All warnings</a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a href="#navarea1" class="nav-link" id="NAVAREA1-tab" data-bs-toggle="tab" data-bs-target="#navarea1" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">NAVAREA 1</a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a href="#ukcoastal" class="nav-link" id="ukcoastal-tab" data-bs-toggle="tab" data-bs-target="#ukcoastal" role="tab" aria-controls="allwarnings" aria-selected="false" tabindex="-1">UK Coastal</a>
-    </li>
-</ul>
+<partial name="_RNWHorizontalTab" />
+
 <div class="tab-content" id="rnwTabContent">
     <div class="tab-pane fade show active" id="allwarnings" role="tabpanel" aria-labelledby="allwarnings-tab">
         <div class="table-responsive-md">

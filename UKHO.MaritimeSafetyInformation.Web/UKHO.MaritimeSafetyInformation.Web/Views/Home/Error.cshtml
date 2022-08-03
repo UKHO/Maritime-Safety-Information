@@ -2,16 +2,33 @@
     ViewData["Title"] = "Maritime Safety Information";
     Layout = "~/Views/Shared/_MSILayout.cshtml";
 }
+@section Scripts
+{
+<script type="text/javascript" src="@Url.Content("~/js/Custom/RadioNavigationalWarnings.js")"></script>
+}
 <div class="container-fluid">
     <div class="row">
         @if (ViewData["ControllerName"]?.ToString() == "NoticesToMariners")
         {
             ViewData["Header"] = "Notices to Mariners";
-            <partial name="_NMHorizontalTab" />
+
+            if (ViewData["ActionName"]?.ToString() == "Index" || ViewData["ActionName"]?.ToString() == "ShowDailyFiles"
+            || ViewData["ActionName"]?.ToString() == "Cumulative" || ViewData["ActionName"]?.ToString() == "Annual")
+            {
+                <partial name="_NMHorizontalTab" />
+            }
         }
         else if (ViewData["ControllerName"]?.ToString() == "RadioNavigationalWarnings")
         {
             ViewData["Header"] = "Radio Navigational Warnings";
+            if (ViewData["ActionName"]?.ToString() == "Index")
+            {
+                <partial name="_RNWHorizontalTab" />
+            }
+            else if (ViewData["ActionName"]?.ToString() == "About")
+            {
+                ViewData["Header"] = "About";
+            }
         }
         <div class="offset-md-2 col-lg-6 col-md-8 custom-error">
             <h1 id="headingLevelOne" class="mt-0">Sorry, there is a problem with the service</h1>
