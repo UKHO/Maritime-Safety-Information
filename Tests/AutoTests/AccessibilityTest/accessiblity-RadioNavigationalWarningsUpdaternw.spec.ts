@@ -19,6 +19,7 @@ import loginPage from '../../pageObject/Login.page';
   };
  
   test.beforeEach(async ({page}) => {
+    test.slow();
     await page.goto(app.rnwAdminUrl);
     let login = new loginPage(page);
     await login.adLogin(app.RNWAdminAutoTest_User,app.RNWAdminAutoTest_Pass); 

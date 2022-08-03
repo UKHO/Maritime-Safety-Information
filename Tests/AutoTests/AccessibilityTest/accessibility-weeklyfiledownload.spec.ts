@@ -19,20 +19,16 @@ test.describe("A11y tests", ()=> {
  };
 
  test.beforeEach(async ({page}) => {
-   await page.goto(app.url);    
+    test.slow();
+   await page.goto(app.url);noticeFileDownload = new noticeToMarinerWeekDownload(page);
+   await noticeFileDownload.goToNoticeToMariner();
+   await noticeFileDownload.goToDailyFile();    
  });
 
- test('Notice To Mariner page should be accessible', async ({page}) => {
-   await injectAxe(page);
-   await checkA11y(page, undefined, defaultCheckA11yOptions);
-   
- })
+ 
 
  test('Notice To Mariner page should be accessible for daily file', async ({page}) => {
-  noticeFileDownload = new noticeToMarinerWeekDownload(page);
-  await noticeFileDownload.goToNoticeToMariner();
-  await noticeFileDownload.goToDailyFile();
-
+  
   await injectAxe(page);
   await checkA11y(page, undefined, defaultCheckA11yOptions);
   

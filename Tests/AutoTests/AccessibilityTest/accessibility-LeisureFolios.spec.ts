@@ -21,6 +21,7 @@ import loginPage from '../../pageObject/Login.page';
   };
  
   test.beforeEach(async ({page}) => {
+    test.slow();
     await page.goto(app.url);    
     const noticeFileDownload =new noticeToMarinerWeekDownload(page);
     await noticeFileDownload.goToNoticeToMariner();
