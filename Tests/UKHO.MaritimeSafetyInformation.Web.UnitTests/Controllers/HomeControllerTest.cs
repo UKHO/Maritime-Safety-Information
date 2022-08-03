@@ -68,6 +68,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             Assert.IsInstanceOf<ViewResult>(result);
             Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("ControllerName"));
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("ActionName"));
         }
 
         [Test]
