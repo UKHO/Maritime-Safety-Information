@@ -11,5 +11,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Configuration
         public string FssClientId { get; set; }
         public int PageSize { get; set; }
         public int Start { get; set; }
+        public int MaxAttributeValuesCount { get; set; }
     }
 }
