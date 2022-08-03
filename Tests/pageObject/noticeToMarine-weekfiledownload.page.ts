@@ -31,6 +31,9 @@ export default class noticeToMarinerWeekDownload {
   readonly distributorThirdSize:Locator;
   readonly publicFirstFileName:Locator;
   readonly publicFirstSize:Locator;
+  readonly fileNameDownload:Locator;
+  readonly fileSize:Locator;
+  readonly annualSection:Locator;
   readonly weelkydowanload:string;
   constructor(page: Page) {
     this.page = page;
@@ -50,13 +53,16 @@ export default class noticeToMarinerWeekDownload {
     this.distributorFileNumber=this.page.locator("[id^='partner']");
     this.distributorFirstFileName=this.page.locator('#filename_0');
     this.distributorFirstSize=this.page.locator('#filesize_0');
-    this.distributorSecoundFileName=this.page.locator('#filename_2');
-    this.distributorSecoundSize=this.page.locator('#filesize_2');
-    this.distributorThirdFileName=this.page.locator('#filename_3');
-    this.distributorThirdSize=this.page.locator('#filesize_3');
+    this.distributorSecoundFileName=this.page.locator('#filename_1');
+    this.distributorSecoundSize=this.page.locator('#filesize_1');
+    this.distributorThirdFileName=this.page.locator('#filename_2');
+    this.distributorThirdSize=this.page.locator('#filesize_2');
     this.publicFirstFileName=this.page.locator('#filename_0');
     this.publicFirstSize=this.page.locator('#filesize_0');
     this.weelkydowanload="[id^='download'] > a";
+    this.fileNameDownload= this.page.locator("[id^='filename'] > a");
+    this.fileSize = this.page.locator("[id^='filesize']");
+    this.annualSection = this.page.locator('[id^="section"]');
   }
 
   public async goToNoticeToMariner() {
@@ -207,33 +213,83 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
    }
 }
 
-public async verifyDistributorFileCount()
-{ 
+  public async verifyDistributorFileCount()
+  { 
 
-  await this.year.selectOption({label:'2022'});
-  await this.week.selectOption({label:'26'});
-  await this.page.waitForLoadState();
-  await this.page.waitForSelector("[id^='partner']");
-  const fileNumber=await this.distributorFileNumber.count();
-  if(fileNumber > 0){
-  expect(fileNumber).toEqual(9);
-  }
-  else{
-  expect(fileNumber).toEqual(0);
-  }
-
-}
-
-public async verifyIntegrationTestValueForDistributor()
-{
-  const distributorFileName=await this.distributorFirstFileName.first().textContent();
-  expect(distributorFileName).toEqual("2022-26");
-  const distributorFileSize=await this.distributorFirstSize.first().textContent();
-  expect(distributorFileSize).toEqual("396 KB (.xml)");
-  const publicFileNameFirst=await this.publicFirstFileName.last().textContent();
-  expect(publicFileNameFirst).toEqual("26snii22");
-  const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
-  expect(publicFileSizeFirst).toEqual("780 KB (.pdf)");
+    await this.year.selectOption({label:'2022'});
+    await this.week.selectOption({label:'26'});
+    await this.page.waitForLoadState();
+    await this.page.waitForSelector("[id^='partner']");
+    const fileNumber=await this.distributorFileNumber.count();
+    if(fileNumber > 0){
+    expect(fileNumber).toEqual(3);
+    }
+    else{
+    expect(fileNumber).toEqual(0);
+    }
 
 }
+
+  public async verifyIntegrationTestValueForDistributor()
+  {
+    const distributorFileName=await this.distributorFirstFileName.first().textContent();
+    expect(distributorFileName).toEqual("26sect4");
+    const distributorFileSize=await this.distributorFirstSize.first().textContent();
+    expect(distributorFileSize).toEqual("91 KB (.rtf)");
+    const publicFileNameFirst=await this.publicFirstFileName.last().textContent();
+    expect(publicFileNameFirst).toEqual("23wknm22");
+    const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
+    expect(publicFileSizeFirst).toEqual("2 MB (.pdf)");
+
+  }
+
+  public async verifySectionWithDotsCount()
+  {
+    const section = this.annualSection
+    const countOfDots= await section.evaluateAll((matches: any[]) => { return matches.map(option => option.textContent) });
+    let count=0;
+    for(let i=0;i<countOfDots.length;i++)
+   
+      if(countOfDots[i]=="---")
+      {
+        count++;
+      }
+      
+      expect(count).toEqual(3);
+
+    
+  }
+
+  public async verifyAnnualFileNameLink()
+  {
+    const fileNameLink= await this.fileNameDownload;
+    const fileNameData = await fileNameLink.evaluateAll((option:any[]) =>{return option.map(element => element.getAttribute('href'))}); 
+    expect(fileNameData.length).toBeGreaterThan(0);
+    expect(fileNameData).toBeTruthy();
+  }
+
+  public async verifyAnnualDownloadLink()
+  {
+    const annualdownload= await this.download;
+    const annualdownloadLink= await annualdownload.evaluateAll((option:any[]) =>{return option.map(element => element.getAttribute('href'))}); 
+    expect(annualdownloadLink.length).toBeGreaterThan(0);
+    expect(annualdownloadLink).toBeTruthy();
+  }
+
+  public async checkAnnualFileSize()
+ {
+   await this.page.waitForLoadState();
+   await this.page.waitForSelector("[id^='filesize']");
+   
+   const annualFileSizeData= await this.fileSize;
+   const dailyFileSize= await annualFileSizeData.evaluateAll((option:any[]) =>{return option.map(element => element.textContent.trim())}); 
+   const regex=/^\S+\sB|MB|KB|GB|$/; 
+   for(let i=0;i<=dailyFileSize.length-1;i++)
+   {
+    const fileSize=dailyFileSize[i].split(" ");
+    expect(fileSize[1].toString().match(regex)).toBeTruthy();
+   }
+}
+
+
 }

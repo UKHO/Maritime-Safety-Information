@@ -52,6 +52,10 @@ export default class noticetoMarine
     {
         await this.menuAbout.click();
     }
+    public async clickToNoticemarineAnnual()
+    {
+     await this.tabannual.click();   
+    }
 
     public async checkEnabledYearDropDown()
     {      
@@ -149,7 +153,7 @@ export default class noticetoMarine
      for(var week=1;week<=1;week++)
      {
      
-     await this.dropDownWeekly.selectOption({index:week});
+     await this.dropDownWeekly.selectOption({index:weekCount-1});
      const fileSizeData = await this.page.$$eval('td[id^=filesize]' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
      expect(fileSizeData.length).toBeGreaterThan(0); 
      expect(await this.checkFileNameText()).toEqual('File Name');

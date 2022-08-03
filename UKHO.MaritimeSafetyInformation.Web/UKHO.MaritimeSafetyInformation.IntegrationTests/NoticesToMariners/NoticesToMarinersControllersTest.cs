@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
     /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
     /// </summary>
-    
+
     internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
@@ -29,15 +29,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();           
+            Config = new Configuration();
             _ = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
-           
+
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
-        
+
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
@@ -221,6 +221,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("NP234(B) 2020", showNMFiles.ShowFilesResponseModel[2].FileDescription);
             Assert.AreEqual("NP234(A) 2020", showNMFiles.ShowFilesResponseModel[3].FileDescription);
         }
+
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
@@ -259,19 +260,19 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles.ShowFilesResponseModel[0].BatchId);
         }
 
-      [Test]
+        [Test]
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
             ShowNMFilesResponseModel showFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showFiles != null);
-            
+
             List<string> lstChart = new();
             foreach (ShowFilesResponseModel file in showFiles.ShowFilesResponseModel) 
             {
-                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);            
+                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);
             }
-            Assert.AreEqual(lstChart.Distinct().Count(),lstChart.Count);
+            Assert.AreEqual(lstChart.Distinct().Count(), lstChart.Count);
 
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
@@ -284,6 +285,46 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("Leisure", showFiles.ShowFilesResponseModel[1].Attributes.First(x => x.Key == "Frequency").Value);
             Assert.AreEqual("SC5608", showFiles.ShowFilesResponseModel[1].Attributes.First(x => x.Key == "Chart").Value);
             Assert.AreEqual("f017aead-89d3-484d-9acc-e12842724e9e", showFiles.ShowFilesResponseModel[1].BatchId);
+        }
+
+        [Test]
+        public async Task WhenCallAnnual_ThenReturnAnnualFiles()
+        {
+            IActionResult result = await _nMController.Annual();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(15, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", listFiles[0].BatchId);
+            Assert.AreEqual("An overview of the 26 sections", listFiles[0].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
+            Assert.AreEqual(205745, listFiles[0].FileSize);
+            Assert.AreEqual("ADMIRALTY Tide Tables 2022 — General Information", listFiles[1].FileDescription);
+            Assert.AreEqual("Suppliers of ADMIRALTY Charts and Publications", listFiles[2].FileDescription);
+            Assert.AreEqual("Safety of British merchant ships in periods of peace, tension or conflict", listFiles[3].FileDescription);
+            Assert.AreEqual("---", listFiles[0].Hash);
+            Assert.AreEqual("1", listFiles[1].Hash);
+        }
+
+        [Test]
+        public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
+        {
+            IActionResult result = await _nMController.Annual();
+            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
+            Assert.IsNotNull(listFiles);
+            Assert.AreEqual(15, listFiles.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", listFiles[0].BatchId);
+            Assert.AreEqual("Firing Practice and Exercise Areas", listFiles[4].FileDescription);
+            Assert.AreEqual(".pdf", listFiles[3].FileExtension);
+            Assert.AreEqual(133291, listFiles[1].FileSize);
+            Assert.AreEqual("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", listFiles[5].FileDescription);
+            Assert.AreEqual("National Claims to Maritime Jurisdiction", listFiles[6].FileDescription);
+            Assert.AreEqual("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", listFiles[7].Filename);
+            Assert.AreEqual("---", listFiles[14].Hash);
+            Assert.AreEqual("1", listFiles[1].Hash);
         }
     }
 }

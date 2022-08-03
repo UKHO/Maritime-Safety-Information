@@ -620,9 +620,35 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910149 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
-        ClearFSSSearchCacheCompleted = 910149
-
-		
+        ClearFSSSearchCacheCompleted = 910149,
+        /// <summary>
+        /// 910150 -   Event data for Retrieval of MSI Annual File Request Started.
+        /// </summary>
+        ShowAnnualFilesRequestStarted = 910150,
+        /// <summary>
+        /// 910151 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// </summary>
+        ShowAnnualFilesRequestCompleted = 910151,
+        /// <summary>
+        /// 910152 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// </summary>
+        ShowAnnualFilesFailed = 910152,
+        /// <summary>
+        /// 910153 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// </summary>
+        GetAnnualFilesResponseStarted = 910153,
+        /// <summary>
+        /// 910154 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// </summary>
+        GetAnnualFilesResponseCompleted = 910154,
+        /// <summary>
+        /// 910155 -  Get NM Batch Files For Annual Data Not Found.
+        /// </summary>
+        GetAnnualNMFilesRequestDataNotFound = 910155,
+        /// <summary>
+        /// 910156 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// </summary>
+        GetAnnualFilesResponseFailed = 910156
     }
 
     public static class EventIdExtensions

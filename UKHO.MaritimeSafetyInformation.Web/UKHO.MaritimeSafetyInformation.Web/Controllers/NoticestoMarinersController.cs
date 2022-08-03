@@ -171,7 +171,22 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Annual")]
         public async Task<IActionResult> Annual()
         {
-           return View();
+            try
+            {
+                _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.ShowAnnualFilesRequestCompleted.ToEventId(), "Maritime safety information request for annual NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/NoticesToMariners/Annual.cshtml", showFilesResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.ShowAnnualFilesFailed.ToEventId(), "Maritime safety information request to show annual NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                throw;
+            }
+
         }
 
         [HttpGet]
