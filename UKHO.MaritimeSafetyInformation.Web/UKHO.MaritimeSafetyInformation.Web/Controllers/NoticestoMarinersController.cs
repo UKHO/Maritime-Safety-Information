@@ -93,11 +93,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Daily")]
         public async Task<IActionResult> ShowDailyFilesAsync()
         {
+            ShowDailyFilesResponseListModel showDailyFilesResponseModels = new();
+
             try
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-                ShowDailyFilesResponseListModel showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
+                showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
                 ViewBag.IsDailyFilesResponseCached = showDailyFilesResponseModels.IsDailyFilesResponseCached;
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
@@ -105,8 +107,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
+
                 _logger.LogError(EventIds.ShowDailyFilesFailed.ToEventId(), "Maritime safety information request to show daily NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
-                throw;
+
+                return View("~/Views/NoticesToMariners/ShowDailyFiles.cshtml", showDailyFilesResponseModels.ShowDailyFilesResponseModel);
             }
         }
 
@@ -129,7 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 _logger.LogInformation(EventIds.DownloadSingleNMFileCompleted.ToEventId(), "Maritime safety information request to download single {frequency} NM files completed for _X-Correlation-ID:{correlationId}", frequency, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
-               
+
                 if (mimeType != "application/pdf")
                     mimeType = "application/octet-stream";
 
