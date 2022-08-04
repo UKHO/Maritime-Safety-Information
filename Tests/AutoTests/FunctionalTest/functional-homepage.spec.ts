@@ -9,7 +9,8 @@ test.describe("Home Page For The maritime-safety-information", () => {
     home=new homePage(page);
   });
 
-  test.only('Should go to Home Page', async ({ page, context }) => {
+  test('Should go to Home Page', async ({ page, context }) => {
+    
     await home.verifyAdmiraltyHomePage();
     await home.verifyadmiraly();
     await home.verifyHomePageTitle();
