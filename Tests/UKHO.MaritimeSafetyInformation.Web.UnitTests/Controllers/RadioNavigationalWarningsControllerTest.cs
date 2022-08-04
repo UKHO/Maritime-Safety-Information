@@ -54,6 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml";
 
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningsLastModifiedDateTime(A<string>.Ignored)).Returns(DateTime.UtcNow.ToString());
             A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningsData(A<string>.Ignored)).Throws(new Exception());
 
             IActionResult result = await _controller.Index();
@@ -62,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
             Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
-            Assert.AreEqual(DateTime.MinValue, _controller.ViewBag.LastModifiedDateTime);
+            Assert.IsNotEmpty(_controller.ViewBag.LastModifiedDateTime);
             Assert.AreEqual(true, _controller.ViewBag.HasError);
         }
 
@@ -74,17 +75,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             IActionResult result = await _controller.About();
             Assert.IsNotEmpty(_controller.ViewBag.LastModifiedDateTime);
             Assert.IsInstanceOf<IActionResult>(result);
-        }
-
-        [Test]
-        public async Task WhenCallAboutAndExceptionThrown_ThenReturnView()
-        {
-            A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningsLastModifiedDateTime(A<string>.Ignored)).Throws(new Exception());
-
-            IActionResult result = await _controller.About();
-
-            Assert.IsInstanceOf<IActionResult>(result);
-            Assert.AreEqual(DateTime.MinValue, _controller.ViewBag.LastModifiedDateTime);
         }
 
         [Test]
@@ -106,6 +96,25 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<IActionResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(false, _controller.ViewBag.HasError);
+        }
+
+        [Test]
+        public async Task WhenCallShowSelectionAndExceptionThrown_ThenReturnView()
+        {
+            DefaultHttpContext httpContext = new();
+            const string expectedView = "~/Views/RadioNavigationalWarnings/ShowSelection.cshtml";
+
+            A.CallTo(() => _fakeRnwService.GetRadioNavigationalWarningsLastModifiedDateTime(A<string>.Ignored)).Returns(DateTime.UtcNow.ToString());
+            A.CallTo(() => _fakeRnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty)).Throws(new Exception());
+
+            IActionResult result = await _controller.ShowSelection();
+
+            Assert.IsInstanceOf<IActionResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(true, _controller.ViewBag.HasError);
+            Assert.IsNotEmpty(_controller.ViewBag.LastModifiedDateTime);
         }
     }
 }
