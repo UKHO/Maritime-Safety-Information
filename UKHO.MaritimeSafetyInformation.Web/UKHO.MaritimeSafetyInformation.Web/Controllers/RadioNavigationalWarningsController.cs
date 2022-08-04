@@ -22,22 +22,52 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/RadioNavigationalWarnings")]
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
 
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
+            try
+            {
+                _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+                ViewBag.HasError = false;
 
-            _logger.LogInformation(EventIds.RNWListDetailCompleted.ToEventId(), "Maritime safety information request to get RNW details completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
 
-            return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
+                ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.RNWListDetailCompleted.ToEventId(), "Maritime safety information request to get RNW details completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.LastModifiedDateTime = DateTime.MinValue;
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
+
+                _logger.LogError(EventIds.RNWListDetailFailed.ToEventId(), "Maritime safety information request to showget RNW details failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+
+                return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
+            }
         }
 
         [HttpGet]
         [Route("/RadioNavigationalWarnings/About")]
-        public async Task<IActionResult>  About()
+        public async Task<IActionResult> About()
         {
-            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+            try
+            {
+                _logger.LogInformation(EventIds.RNWAboutStarted.ToEventId(), "Maritime safety information request for About RNW started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.RNWAboutCompleted.ToEventId(), "Maritime safety information request for About RNW completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.LastModifiedDateTime = DateTime.MinValue;
+
+                _logger.LogError(EventIds.RNWAboutFailed.ToEventId(), "Maritime safety information request to showget RNW details failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+            }
 
             return View();
         }

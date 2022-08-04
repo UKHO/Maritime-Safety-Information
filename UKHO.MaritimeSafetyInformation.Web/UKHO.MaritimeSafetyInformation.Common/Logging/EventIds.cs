@@ -648,7 +648,23 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910156 -  Event data for Retrieval of MSI Get Annual File Response Failed.
         /// </summary>
-        GetAnnualFilesResponseFailed = 910156
+        GetAnnualFilesResponseFailed = 910156,
+        /// <summary>
+        /// 910157 -  Maritime safety information request to get RNW detail Failed.
+        /// </summary>
+        RNWListDetailFailed = 910157,
+        /// <summary> 
+        /// 910158 -  Maritime safety information request for About started.
+        /// </summary>
+        RNWAboutStarted = 910158,
+        /// <summary> 
+        /// 910159 -  Maritime safety information request for About completed.
+        /// </summary>
+        RNWAboutCompleted = 910159,
+        /// <summary>
+        /// 910160 -  Maritime safety information request About Failed.
+        /// </summary>
+        RNWAboutFailed = 910160
     }
 
     public static class EventIdExtensions
