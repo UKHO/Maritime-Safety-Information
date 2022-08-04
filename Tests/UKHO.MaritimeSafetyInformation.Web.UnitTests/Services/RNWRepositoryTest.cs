@@ -144,6 +144,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenGetRadioNavigationalWarningsLastModifiedDateTimeIsCalled_ThenShouldExecuteCatch()
+        {
+            RadioNavigationalWarningsContext emptyContext = null;
+            RNWRepository rnwRepository = new(emptyContext);
+
+            DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+            Assert.AreEqual(new DateTime(1, 1, 1), result);
+        }
+
+
+        [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
             Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);
