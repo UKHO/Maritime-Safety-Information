@@ -115,6 +115,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowDailyFilesRequest.ToEventId(), "Maritime safety information request to show daily NM files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
+                ViewBag.HasError = false;
+
                 showDailyFilesResponseModels = await _nMDataService.GetDailyBatchDetailsFiles(GetCurrentCorrelationId());
                 ViewBag.IsDailyFilesResponseCached = showDailyFilesResponseModels.IsDailyFilesResponseCached;
                 _logger.LogInformation(EventIds.ShowDailyFilesCompleted.ToEventId(), "Maritime safety information request to show daily NM files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
@@ -174,6 +176,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestStarted.ToEventId(), "Maritime safety information request to show cumulative NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
+                ViewBag.HasError = false;
+
                 showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowCumulativeFilesRequestCompleted.ToEventId(), "Maritime safety information request for cumulative NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
@@ -197,6 +201,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
+
+                ViewBag.HasError = false;
 
                 showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
 
@@ -224,6 +230,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 _logger.LogInformation(EventIds.ShowLeisureFilesRequestStarted.ToEventId(), "Request to show leisure files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                ViewBag.HasError = false;
 
                 showNMFilesResponseModel = await _nMDataService.GetLeisureFilesAsync(GetCurrentCorrelationId());
 
