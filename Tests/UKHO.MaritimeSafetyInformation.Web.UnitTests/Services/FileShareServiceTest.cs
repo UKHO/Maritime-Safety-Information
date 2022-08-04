@@ -72,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 StatusCode = 200
             };
 
-            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, CancellationToken.None)).Returns(expectedResponse);
+            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<int>.Ignored, CancellationToken.None)).Returns(expectedResponse);
 
             Task<IResult<BatchAttributesSearchResponse>> actualResult = _fileShareService.FSSSearchAttributeAsync(FakeAccessToken, CorrelationId, _fileShareApiClient);
 
@@ -85,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssSearchAttributeAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.BaseUrl = "www.test.com/";
-            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
+            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
 
             Assert.ThrowsAsync(Is.TypeOf<UriFormatException>()
                 .And.Message.EqualTo("Invalid URI: The format of the URI could not be determined.")
