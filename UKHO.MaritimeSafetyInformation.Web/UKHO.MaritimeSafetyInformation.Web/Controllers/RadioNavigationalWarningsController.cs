@@ -9,16 +9,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
     {
         private readonly IRNWService _rnwService;
         private readonly ILogger<RadioNavigationalWarningsController> _logger;
-        private readonly IMSIBannerNotificationService _mSIBannerNotificationService;
 
         public RadioNavigationalWarningsController(IHttpContextAccessor contextAccessor,
                                                    ILogger<RadioNavigationalWarningsController> logger,
-                                                   IRNWService rnwService,
-                                                   IMSIBannerNotificationService mSIBannerNotificationService) : base(contextAccessor, logger)
+                                                   IRNWService rnwService) : base(contextAccessor, logger)
         {
             _rnwService = rnwService;
             _logger = logger;
-            _mSIBannerNotificationService = mSIBannerNotificationService;
         }
 
         [HttpGet]

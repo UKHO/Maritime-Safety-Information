@@ -13,15 +13,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly INMDataService _nMDataService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
-        private readonly IMSIBannerNotificationService _mSIBannerNotificationService;
 
-        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService, IMSIBannerNotificationService mSIBannerNotificationService) : base(contextAccessor, logger)
+        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
             _userService = userService;
-            _mSIBannerNotificationService = mSIBannerNotificationService;
         } 
 
         [HttpGet]

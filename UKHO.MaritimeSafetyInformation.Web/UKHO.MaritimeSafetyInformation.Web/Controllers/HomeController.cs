@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 {
@@ -14,14 +13,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IOptions<AzureAdB2C> _azureAdB2C;
-        private readonly IMSIBannerNotificationService _mSIBannerNotificationService;
 
-        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger, IOptions<AzureAdB2C> azureAdB2C, IMSIBannerNotificationService mSIBannerNotificationService) : base(contextAccessor, logger)
+        public HomeController(IHttpContextAccessor contextAccessor, ILogger<HomeController> logger, IOptions<AzureAdB2C> azureAdB2C) : base(contextAccessor, logger)
         {
             _logger = logger;
             _contextAccessor = contextAccessor;
             _azureAdB2C = azureAdB2C;
-            _mSIBannerNotificationService = mSIBannerNotificationService;
         }
 
         [HttpGet]
