@@ -654,29 +654,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         RNWListDetailFailed = 910157,
         /// <summary> 
-        /// 910158 -  Maritime safety information request for About started.
+        /// 910158 -  Maritime safety information request for Show Selection started.
         /// </summary>
-        RNWAboutStarted = 910158,
+        RNWShowSelectionStarted = 910158,
         /// <summary> 
-        /// 910159 -  Maritime safety information request for About completed.
+        /// 910159 -  Maritime safety information request for Show Selection completed.
         /// </summary>
-        RNWAboutCompleted = 910159,
+        RNWShowSelectionCompleted = 910159,
         /// <summary>
-        /// 910160 -  Maritime safety information request About Failed.
+        /// 910160 -  Maritime safety information request Show Selection Failed.
         /// </summary>
-        RNWAboutFailed = 910160,
-        /// <summary> 
-        /// 910161 -  Maritime safety information request for Show Selection started.
-        /// </summary>
-        RNWShowSelectionStarted = 910161,
-        /// <summary> 
-        /// 910162 -  Maritime safety information request for Show Selection completed.
-        /// </summary>
-        RNWShowSelectionCompleted = 910162,
-        /// <summary>
-        /// 910163 -  Maritime safety information request Show Selection Failed.
-        /// </summary>
-        RNWShowSelectionFailed = 910163
+        RNWShowSelectionFailed = 910160
     }
 
     public static class EventIdExtensions
