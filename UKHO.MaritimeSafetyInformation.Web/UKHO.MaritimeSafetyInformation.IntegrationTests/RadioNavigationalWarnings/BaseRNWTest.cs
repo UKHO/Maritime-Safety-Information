@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
@@ -17,6 +18,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
     {
         protected readonly RadioNavigationalWarningsContext FakeContext;
         protected readonly IOptions<RadioNavigationalWarningConfiguration> FakeRadioNavigationalWarningConfiguration;
+        protected readonly IOptions<CacheConfiguration> FakeCacheConfiguration;
+        protected readonly IAzureStorageService FakeAzureStorageService;
+        protected readonly IAzureTableStorageClient FakeAzureTableStorageClient;
+        protected readonly IOptions<BannerNotificationConfiguration> FakeBannerNotificationConfiguration;
         protected readonly IHttpContextAccessor FakeHttpContextAccessor;
         protected readonly ILogger<RNWService> FakeLoggerRnwService;
 
@@ -28,6 +33,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             FakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             FakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
+            FakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
+            FakeAzureStorageService = A.Fake<IAzureStorageService>();
+            FakeAzureTableStorageClient = A.Fake<IAzureTableStorageClient>();
+            FakeBannerNotificationConfiguration = A.Fake<IOptions<BannerNotificationConfiguration>>();
+
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
 

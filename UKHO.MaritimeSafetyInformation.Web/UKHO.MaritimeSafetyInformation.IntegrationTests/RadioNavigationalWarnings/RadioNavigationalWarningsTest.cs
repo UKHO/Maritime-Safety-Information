@@ -36,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsController>>();
             _rnwRepository = new RNWRepository(FakeContext);
             _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
-
+            _mSIBannerNotificationService = new MSIBannerNotificationService(FakeCacheConfiguration, FakeAzureStorageService, FakeAzureTableStorageClient, FakeBannerNotificationConfiguration);
             _controller = new RadioNavigationalWarningsController(FakeHttpContextAccessor, _fakeLogger, _rnwService, _mSIBannerNotificationService);
         }
 
