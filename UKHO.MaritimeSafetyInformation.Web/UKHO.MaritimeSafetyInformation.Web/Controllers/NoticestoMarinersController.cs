@@ -31,7 +31,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
-                await _mSIBannerNotificationService.GetBannerNotification();
 
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for User:{SignInName} and IsDistributor:{IsDistributorUser} and correlationId:{correlationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
 

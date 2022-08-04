@@ -30,8 +30,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-            await _mSIBannerNotificationService.GetBannerNotification();
-
             return View();
         }
 

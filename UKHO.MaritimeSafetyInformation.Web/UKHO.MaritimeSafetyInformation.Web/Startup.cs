@@ -72,7 +72,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IWebhookService, WebhookService>();
             services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
-            
+
+            var provider = services.BuildServiceProvider();
+            var dependency = provider.GetRequiredService<IMSIBannerNotificationService>();
+            dependency.GetBannerNotification();
+
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
 

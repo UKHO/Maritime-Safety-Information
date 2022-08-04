@@ -25,8 +25,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/RadioNavigationalWarnings")]
         public async Task<IActionResult> Index()
         {
-            await _mSIBannerNotificationService.GetBannerNotification();
-
             _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
