@@ -71,10 +71,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallIndexForWeekWithNoData_ThenThrowInvalidDataException()
+        public async Task WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMController.Index(2021, 08); });
+            IActionResult result = await _nMController.Index(2021, 08);
+            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(showWeeklyFiles);
+            Assert.AreEqual(0, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
         }
 
         [Test]
@@ -94,10 +98,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowInvalidDataException()
+        public async Task WhenCallShowWeeklyFilesAsyncWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });
+            IActionResult result = await _nMController.Index(2022, 06);
+            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(showWeeklyFiles);
+            Assert.AreEqual(0, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
         }
 
         [Test]

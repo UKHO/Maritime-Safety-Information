@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetWeeklyBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
+        public async Task WhenGetWeeklyBatchFilesIsCalledWithNoData_ThenShouldReturnEmptyShowFilesResponseModel()
         {
             const int year = 2022;
             const int week = 15;
@@ -81,8 +81,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId); });
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(0, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.AreEqual(false, showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -91,10 +93,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
             Task<ShowNMFilesResponseModel> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -411,7 +413,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldThrowInvalidDataException()
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldRetunEmptyShowFilesResponseList()
         {
             const int year = 2022;
             const int week = 0;
@@ -424,8 +426,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId); });
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(0, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+            Assert.AreEqual(false, showWeeklyFilesResponseModel.IsWeeklyBatchResponseCached);
+            Assert.AreEqual(false, showWeeklyFilesResponseModel.IsYearAndWeekAttributesCached);
+            Assert.AreEqual(3, showWeeklyFilesResponseModel.YearAndWeekList.Count);
+
         }
 
         [Test]

@@ -85,9 +85,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     List<ShowFilesResponseModel> listshowFilesResponseModels = NMHelper.ListFilesResponse(searchResult).OrderBy(e => e.FileDescription).ToList();
                     return new ShowNMFilesResponseModel() { ShowFilesResponseModel = listshowFilesResponseModels, IsBatchResponseCached = isCached };
                 }
-
-                _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
-                throw new InvalidDataException("Invalid data received for weekly NM files");
+                else
+                {
+                    _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
+                    return new ShowNMFilesResponseModel() { ShowFilesResponseModel = new List<ShowFilesResponseModel>(), IsBatchResponseCached = isCached };
+                }
             }
             catch (Exception ex)
             {
