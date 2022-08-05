@@ -1,8 +1,10 @@
 ﻿using Azure;
 using Azure.Data.Tables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities
 {
+    [ExcludeFromCodeCoverage]
     public class MsiBannerNotificationEntity : ITableEntity
     {
         public string PartitionKey { get; set; }
