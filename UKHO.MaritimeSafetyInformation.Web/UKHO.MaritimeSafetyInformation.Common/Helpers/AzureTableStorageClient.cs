@@ -54,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             }
         }
 
-        public async Task<MsiBannerNotificationEntity> GetAllEntityAsync(string tableName, string storageAccountConnectionString)
+        public async Task<MsiBannerNotificationEntity> GetSingleEntityAsync(string tableName, string storageAccountConnectionString)
         {
             try
             {

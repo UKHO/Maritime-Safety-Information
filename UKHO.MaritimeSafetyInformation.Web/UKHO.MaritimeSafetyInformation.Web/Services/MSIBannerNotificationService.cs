@@ -29,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             if (_bannerNotificationConfiguration.Value.IsBannerNotificationEnabled)
             {
-                MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetAllEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
+                MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetSingleEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
                 if (msiBannerNotificationEntity != null)
                 {
                     Global.BannerNotificationMessage = msiBannerNotificationEntity.Message;
