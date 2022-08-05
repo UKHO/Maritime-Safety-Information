@@ -61,7 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
             try
             {
-                _logger.LogInformation(EventIds.RNWAboutStarted.ToEventId(), "Maritime safety information request for RNW Show Selection started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.RNWShowSelectionStarted.ToEventId(), "Maritime safety information request for RNW Show Selection started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
                 ViewBag.HasError = false;
 
@@ -76,14 +76,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
                 radioNavigationalWarningsData = await _rnwService.GetSelectedRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
 
-                _logger.LogInformation(EventIds.RNWAboutCompleted.ToEventId(), "Maritime safety information request for RNW Show Selection completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.RNWShowSelectionCompleted.ToEventId(), "Maritime safety information request for RNW Show Selection completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             }
             catch (Exception ex)
             {
                 ViewBag.HasError = true;
                 ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
 
-                _logger.LogError(EventIds.RNWAboutFailed.ToEventId(), "Maritime safety information request to RNW Show Selection failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.RNWShowSelectionFailed.ToEventId(), "Maritime safety information request to RNW Show Selection failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
             }
 
             return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);
