@@ -68,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
 
                 IOrderedEnumerable<MsiBannerNotificationEntity> res = from r in msiBannerNotificationEntityLit 
-                                                                      where r.StartDate < DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.Status == "enabled"
+                                                                      where r.StartDate <= DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.Status == "enabled"
                                                                       orderby r.StartDate ascending
                                                                       select r;
 
