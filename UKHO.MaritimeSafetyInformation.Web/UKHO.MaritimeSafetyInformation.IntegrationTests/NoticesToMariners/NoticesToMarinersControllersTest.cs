@@ -299,40 +299,40 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         public async Task WhenCallAnnual_ThenReturnAnnualFiles()
         {
             IActionResult result = await _nMController.Annual();
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
-            Assert.IsNotNull(listFiles);
-            Assert.AreEqual(15, listFiles.Count);
+            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(responseModel.ShowFilesResponseModel);
+            Assert.AreEqual(15, responseModel.ShowFilesResponseModel.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", listFiles[0].BatchId);
-            Assert.AreEqual("An overview of the 26 sections", listFiles[0].FileDescription);
-            Assert.AreEqual(".pdf", listFiles[0].FileExtension);
-            Assert.AreEqual(205745, listFiles[0].FileSize);
-            Assert.AreEqual("ADMIRALTY Tide Tables 2022 — General Information", listFiles[1].FileDescription);
-            Assert.AreEqual("Suppliers of ADMIRALTY Charts and Publications", listFiles[2].FileDescription);
-            Assert.AreEqual("Safety of British merchant ships in periods of peace, tension or conflict", listFiles[3].FileDescription);
-            Assert.AreEqual("---", listFiles[0].Hash);
-            Assert.AreEqual("1", listFiles[1].Hash);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", responseModel.ShowFilesResponseModel[0].BatchId);
+            Assert.AreEqual("An overview of the 26 sections", responseModel.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual(".pdf", responseModel.ShowFilesResponseModel[0].FileExtension);
+            Assert.AreEqual(205745, responseModel.ShowFilesResponseModel[0].FileSize);
+            Assert.AreEqual("ADMIRALTY Tide Tables 2022 — General Information", responseModel.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual("Suppliers of ADMIRALTY Charts and Publications", responseModel.ShowFilesResponseModel[2].FileDescription);
+            Assert.AreEqual("Safety of British merchant ships in periods of peace, tension or conflict", responseModel.ShowFilesResponseModel[3].FileDescription);
+            Assert.AreEqual("---", responseModel.ShowFilesResponseModel[0].Hash);
+            Assert.AreEqual("1", responseModel.ShowFilesResponseModel[1].Hash);
         }
 
         [Test]
         public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
         {
             IActionResult result = await _nMController.Annual();
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((ViewResult)result).Model;
-            Assert.IsNotNull(listFiles);
-            Assert.AreEqual(15, listFiles.Count);
+            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(responseModel.ShowFilesResponseModel);
+            Assert.AreEqual(15, responseModel.ShowFilesResponseModel.Count);
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
-            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", listFiles[0].BatchId);
-            Assert.AreEqual("Firing Practice and Exercise Areas", listFiles[4].FileDescription);
-            Assert.AreEqual(".pdf", listFiles[3].FileExtension);
-            Assert.AreEqual(133291, listFiles[1].FileSize);
-            Assert.AreEqual("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", listFiles[5].FileDescription);
-            Assert.AreEqual("National Claims to Maritime Jurisdiction", listFiles[6].FileDescription);
-            Assert.AreEqual("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", listFiles[7].Filename);
-            Assert.AreEqual("---", listFiles[14].Hash);
-            Assert.AreEqual("1", listFiles[1].Hash);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", responseModel.ShowFilesResponseModel[0].BatchId);
+            Assert.AreEqual("Firing Practice and Exercise Areas", responseModel.ShowFilesResponseModel[4].FileDescription);
+            Assert.AreEqual(".pdf", responseModel.ShowFilesResponseModel[3].FileExtension);
+            Assert.AreEqual(133291, responseModel.ShowFilesResponseModel[1].FileSize);
+            Assert.AreEqual("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", responseModel.ShowFilesResponseModel[5].FileDescription);
+            Assert.AreEqual("National Claims to Maritime Jurisdiction", responseModel.ShowFilesResponseModel[6].FileDescription);
+            Assert.AreEqual("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", responseModel.ShowFilesResponseModel[7].Filename);
+            Assert.AreEqual("---", responseModel.ShowFilesResponseModel[14].Hash);
+            Assert.AreEqual("1", responseModel.ShowFilesResponseModel[1].Hash);
         }
     }
 }

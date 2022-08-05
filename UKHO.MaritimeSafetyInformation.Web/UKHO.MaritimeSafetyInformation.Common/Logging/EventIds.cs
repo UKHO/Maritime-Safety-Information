@@ -650,21 +650,29 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetAnnualFilesResponseFailed = 910156,
         /// <summary>
-        /// 910157 -  Maritime safety information request to get RNW detail Failed.
+        /// 910157 - Request for searching annual batch files from cache azure table storage is started.
         /// </summary>
-        RNWListDetailFailed = 910157,
-        /// <summary> 
-        /// 910158 -  Maritime safety information request for Show Selection started.
-        /// </summary>
-        RNWShowSelectionStarted = 910158,
-        /// <summary> 
-        /// 910159 -  Maritime safety information request for Show Selection completed.
-        /// </summary>
-        RNWShowSelectionCompleted = 910159,
+        FSSSearchAnnualBatchFilesResponseStoreToCacheStart = 910157,
         /// <summary>
-        /// 910160 -  Maritime safety information request Show Selection Failed.
+        /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
         /// </summary>
-        RNWShowSelectionFailed = 910160
+        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
+		/// <summary>
+        /// 910159 -  Maritime safety information request to get RNW detail Failed.
+        /// </summary>
+        RNWListDetailFailed = 910159,
+        /// <summary> 
+        /// 910160 -  Maritime safety information request for Show Selection started.
+        /// </summary>
+        RNWShowSelectionStarted = 910160,
+        /// <summary> 
+        /// 910161 -  Maritime safety information request for Show Selection completed.
+        /// </summary>
+        RNWShowSelectionCompleted = 910161,
+        /// <summary>
+        /// 910162 -  Maritime safety information request Show Selection Failed.
+        /// </summary>
+        RNWShowSelectionFailed = 910162
     }
 
     public static class EventIdExtensions

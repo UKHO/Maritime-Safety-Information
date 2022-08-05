@@ -197,7 +197,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/NoticesToMariners/Annual")]
         public async Task<IActionResult> Annual()
         {
-            List<ShowFilesResponseModel> showFilesResponse = new();
+            ShowNMFilesResponseModel showFilesResponse = new();
             try
             {
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
