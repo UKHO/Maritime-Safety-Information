@@ -51,6 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
             Assert.AreEqual(14, showWeeklyFiles.YearAndWeekList[0].Week);
             Assert.AreEqual("application/pdf", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
+            Assert.GreaterOrEqual(Config.MaxAttributeValuesCount, showWeeklyFiles.YearAndWeekList.Count);
         }
 
         [Test]
