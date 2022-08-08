@@ -26,6 +26,7 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly print: Locator;
   readonly viewDetails: Locator;
   readonly detailWarningType: Locator; 
+  readonly about:Locator;
   readonly radioNavigationalWarnings;
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
   constructor(page: Page) {
@@ -49,6 +50,8 @@ export default class RadioNavigationalWarningsListEndUser {
     this.print = this.page.locator('#Print')
     this.viewDetails=this.page.locator('[id^="Viewdetails"] > button > span.view_details')
     this.detailWarningType=this.page.locator('[id^="Details_WarningType"]')
+    this.about = this.page.locator('a:has-text("IHO WWNWS-SC")');
+   
     
   }
 
@@ -179,4 +182,9 @@ export default class RadioNavigationalWarningsListEndUser {
 
   }
  
+  public async verifyAboutrnw()
+  {
+    await this.aboutEndUser.click();
+    expect(await this.about.evaluate(option => option.getAttribute('href'))).toContain('https://iho.int/navigation-warnings-on-the-web')
+  }
 }  
