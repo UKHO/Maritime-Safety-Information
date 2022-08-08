@@ -27,8 +27,11 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly viewDetails: Locator;
   readonly detailWarningType: Locator; 
   readonly about:Locator;
+  readonly aboutRNW:Locator;
   readonly radioNavigationalWarnings;
+  
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
+
   constructor(page: Page) {
     this.page = page;
     this.radioNavigationalWarningsPage = this.page.locator('a:has-text("Radio Navigational Warnings")')
@@ -51,6 +54,7 @@ export default class RadioNavigationalWarningsListEndUser {
     this.viewDetails=this.page.locator('[id^="Viewdetails"] > button > span.view_details')
     this.detailWarningType=this.page.locator('[id^="Details_WarningType"]')
     this.about = this.page.locator('a:has-text("IHO WWNWS-SC")');
+    this.aboutRNW = this.page.locator(" div >  p:nth-child(3)")
    
     
   }
@@ -186,6 +190,28 @@ export default class RadioNavigationalWarningsListEndUser {
   {
     await this.aboutEndUser.click();
     expect(await this.about.evaluate(option => option.getAttribute('href'))).toContain('https://iho.int/navigation-warnings-on-the-web')
+  }
+
+  public async verifyAboutRNWImportantBlock() {
+    const rnwHeader = this.aboutRNW.last().innerText();
+    const rnwHeaderText = (await rnwHeader).split(":");
+
+    const rnwMessageText = rnwHeaderText[0];
+    expect(rnwMessageText).toContain("NAVAREA 1 and UK Coastal");
+
+    const currentDateTime = new Date().getTime();
+    const rnwDateTime = rnwHeaderText[1].replace('UTC', "").trim();
+
+    const rnwModifiedDateTime = DateTime.fromFormat(rnwDateTime, "ddhhmm  MMM yy").toString();
+    const lastModifiedDateTime = new Date(rnwModifiedDateTime);
+
+    const compareDate = (currentDateTime, lastModifiedDateTime) => {
+      if (lastModifiedDateTime < currentDateTime) {
+        return true;
+      }
+      else { return false; }
+    }
+    expect(compareDate).toBeTruthy();
   }
 
 }  
