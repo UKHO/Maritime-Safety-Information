@@ -12,7 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities
         public string Message { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime ExpiryDate { get; set; }
-        public string Status { get; set; }
+        public bool IsNotificationEnabled { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
     }
