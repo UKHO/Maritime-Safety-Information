@@ -17,7 +17,6 @@ test.describe("Maritime Safety Information Notices to Mariners Annual Page Funct
        
        test('Does the Table Data For About is displayed',async ({page}) => {
         await rnwListEndUser.verifyAboutrnw();
-        await rnwListEndUser
       })  
      
      
