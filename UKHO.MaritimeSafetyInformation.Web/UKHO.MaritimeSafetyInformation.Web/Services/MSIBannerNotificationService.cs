@@ -23,18 +23,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _bannerNotificationConfiguration = bannerNotificationConfiguration; 
         }
 
-        public async Task GetBannerNotification()
+        public async Task<string> GetBannerNotification()
         {
-            Global.BannerNotificationMessage = null;
+            string bannerNotificationMessage = null;
 
             if (_bannerNotificationConfiguration.Value.IsBannerNotificationEnabled)
             {
                 MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetSingleEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
                 if (msiBannerNotificationEntity != null)
                 {
-                    Global.BannerNotificationMessage = msiBannerNotificationEntity.Message;
+                    bannerNotificationMessage = msiBannerNotificationEntity.Message;
                 }
             }
+
+            return bannerNotificationMessage;
         }
     }
 }

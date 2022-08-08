@@ -1,7 +1,7 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Configuration
 
 <!--Phase Banner-->
- @if (!string.IsNullOrEmpty(Global.BannerNotificationMessage))
+ @if (!string.IsNullOrEmpty(ViewBag.BannerNotificationMessage))
  {
     <div class="phase-banner">
         <div class="container-fluid">
@@ -9,7 +9,7 @@
                 <div class="col-sm-12">
                     <P>
                         @*<span class="alpha-caption">Beta</span>*@
-                        @Html.Raw(Global.BannerNotificationMessage)
+                        @Html.Raw(ViewBag.BannerNotificationMessage)
                     </P>
                 </div>
             </div>

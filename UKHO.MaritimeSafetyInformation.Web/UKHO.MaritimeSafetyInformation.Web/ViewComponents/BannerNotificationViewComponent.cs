@@ -15,7 +15,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            await _mSIBannerNotificationService.GetBannerNotification();
+            ViewBag.BannerNotificationMessage = await _mSIBannerNotificationService.GetBannerNotification();
 
             return View("~/Views/BannerNotification/index.cshtml"); 
         }
