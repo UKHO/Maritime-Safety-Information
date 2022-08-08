@@ -725,9 +725,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 6;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
         [Test]
         public async Task WhenGetAnnualBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
@@ -740,9 +740,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             const int expectedRecordCount = 6;
 
-            List<ShowFilesResponseModel> listShowFilesResponseModels = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, listShowFilesResponseModels.Count);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
         }
 
         [Test]
@@ -765,9 +765,46 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
-            Task<List<ShowFilesResponseModel>> result = _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            Task<ShowNMFilesResponseModel> result = _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForGetAnnualBatchFiles_ThenCacheReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(new BatchSearchResponseModel { BatchSearchResponse = SetSearchResultForAnnual().Data });
+
+            const int expectedRecordCount = 6;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForAnnualBatchFilesButDataNotInTable_ThenFSSReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
+
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+
+            const int expectedRecordCount = 6;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         private static BatchSearchResponse GetBatchSearchResponse()

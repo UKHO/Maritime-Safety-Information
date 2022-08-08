@@ -648,7 +648,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910156 -  Event data for Retrieval of MSI Get Annual File Response Failed.
         /// </summary>
-        GetAnnualFilesResponseFailed = 910156
+        GetAnnualFilesResponseFailed = 910156,
+        /// <summary>
+        /// 910157 - Request for searching annual batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchAnnualBatchFilesResponseStoreToCacheStart = 910157,
+        /// <summary>
+        /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158
     }
 
     public static class EventIdExtensions
