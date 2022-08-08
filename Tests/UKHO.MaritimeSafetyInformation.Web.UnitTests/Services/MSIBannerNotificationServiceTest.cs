@@ -32,41 +32,33 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenIsBannerNotificationDisabled_ThenNullValueForBannerNotificationMessageIsAssigned()
+        public async Task WhenIsBannerNotificationDisabled_ThenNullValueForBannerNotificationMessageIsAssigned()
         {
-            Global.BannerNotificationMessage = null;
             _fakeBannerNotificationConfiguration.Value.IsBannerNotificationEnabled = false;
 
-            Task result = _mSIBannerNotificationService.GetBannerNotification();
+            string result = await _mSIBannerNotificationService.GetBannerNotification();
 
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsNull(Global.BannerNotificationMessage);
+            Assert.IsNull(result);
         }
 
         [Test]
-        public void WhenBannerNotificationNotFound_ThenNullValueForBannerNotificationMessageIsAssigned()
+        public async Task WhenBannerNotificationNotFound_ThenNullValueForBannerNotificationMessageIsAssigned()
         {
-            Global.BannerNotificationMessage = null;
-
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
-            Task result = _mSIBannerNotificationService.GetBannerNotification();
+            string result = await _mSIBannerNotificationService.GetBannerNotification();
 
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsNull(Global.BannerNotificationMessage);
+            Assert.IsNull(result);
         }
 
         [Test]
-        public void WhenBannerNotificationFound_ThenValueForBannerNotificationMessageIsAssigned()
+        public async Task WhenBannerNotificationFound_ThenValueForBannerNotificationMessageIsAssigned()
         {
-            Global.BannerNotificationMessage = null;
-
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns( new MsiBannerNotificationEntity() { Message ="test"});
 
-            Task result =  _mSIBannerNotificationService.GetBannerNotification();
+            string result =  await _mSIBannerNotificationService.GetBannerNotification();
 
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsNotNull(Global.BannerNotificationMessage);
+            Assert.AreEqual("test", result);
         }
     }
 }

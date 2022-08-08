@@ -25,6 +25,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.ViewComponents
         [Test]
         public async Task WhenICallIndexView_ThenReturnView()
         {
+            A.CallTo(() => _fakeMSIBannerNotificationService.GetBannerNotification()).Returns("test");
+
             IViewComponentResult result = await _viewComponent.InvokeAsync();
 
             Assert.IsInstanceOf<ViewViewComponentResult>(result);

@@ -303,19 +303,13 @@
         padding: 20px 0px;
         margin-bottom: 0px;
 
-        .alpha-caption {
-            border: 2px solid $prussian-blue;
-            color: $prussian-blue;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-right: 10px;
-            padding: 6px 8px 3px;
-            text-transform: uppercase;
-        }
-
         @media screen and (max-width: $small) {
             font-size: 16px;
             line-height: 32px;
+        }
+
+        a {
+            font-weight:300;
         }
     }
 }
