@@ -605,7 +605,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910145 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
         FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
-		/// <summary>
+        /// <summary>
         /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
         ClearFSSSearchCacheEventCompleted = 910146,
@@ -657,7 +657,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
         /// </summary>
         FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
-		/// <summary>
+        /// <summary>
         /// 910159 -  Maritime safety information request to get RNW detail Failed.
         /// </summary>
         RNWListDetailFailed = 910159,

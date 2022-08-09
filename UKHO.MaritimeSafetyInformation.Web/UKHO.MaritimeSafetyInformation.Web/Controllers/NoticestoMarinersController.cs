@@ -40,8 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 if (showWeeklyFiles.ShowFilesResponseList.Count == 0)
                 {
                     ViewBag.HasError = true;
-                    string correlationId = GetCurrentCorrelationId();
-                    ViewData["CurrentCorrelationId"] = correlationId;
+                    ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
                 }
 
                 return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);
@@ -72,8 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 if (showWeeklyFiles.ShowFilesResponseList.Count == 0)
                 {
                     ViewBag.HasError = true;
-                    string correlationId = GetCurrentCorrelationId();
-                    ViewData["CurrentCorrelationId"] = correlationId;
+                    ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
                 }
 
                 return View("~/Views/NoticesToMariners/Index.cshtml", showWeeklyFiles);

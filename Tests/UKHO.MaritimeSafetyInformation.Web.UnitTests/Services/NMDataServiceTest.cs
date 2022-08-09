@@ -413,7 +413,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldRetunEmptyShowFilesResponseList()
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnEmptyShowFilesResponseList()
         {
             const int year = 2022;
             const int week = 0;
