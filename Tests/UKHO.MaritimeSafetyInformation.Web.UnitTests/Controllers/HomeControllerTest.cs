@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using NUnit.Framework;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
