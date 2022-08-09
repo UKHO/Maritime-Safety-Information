@@ -7,8 +7,6 @@ using NUnit.Framework;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
-using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
-
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
     [TestFixture]
@@ -18,7 +16,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private IHttpContextAccessor _fakeContextAccessor;
         private ILogger<HomeController> _fakeLogger;
         private IOptions<AzureAdB2C> _fakeOptions;
-        private IMSIBannerNotificationService _fakeMSIBannerNotificationService;
 
         [SetUp]
         public void Setup()
@@ -26,10 +23,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeLogger = A.Fake<ILogger<HomeController>>();
             _fakeOptions = A.Fake<IOptions<AzureAdB2C>>();
-            _fakeMSIBannerNotificationService = A.Fake<IMSIBannerNotificationService>();
 
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new HomeController(_fakeContextAccessor, _fakeLogger, _fakeOptions, _fakeMSIBannerNotificationService);
+            _controller = new HomeController(_fakeContextAccessor, _fakeLogger, _fakeOptions);
         }
 
         [Test]

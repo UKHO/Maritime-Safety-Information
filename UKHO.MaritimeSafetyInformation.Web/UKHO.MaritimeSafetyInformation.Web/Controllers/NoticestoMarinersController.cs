@@ -13,15 +13,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly INMDataService _nMDataService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserService _userService;
-        private readonly IMSIBannerNotificationService _mSIBannerNotificationService;
 
-        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService, IMSIBannerNotificationService mSIBannerNotificationService) : base(contextAccessor, logger)
+        public NoticesToMarinersController(INMDataService nMDataService, IHttpContextAccessor contextAccessor, ILogger<NoticesToMarinersController> logger, IUserService userService) : base(contextAccessor, logger)
         {
             _logger = logger;
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
             _userService = userService;
-            _mSIBannerNotificationService = mSIBannerNotificationService;
         } 
 
         [HttpGet]
@@ -31,7 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             try
             {
                 ViewBag.IsDistributor = _userService.IsDistributorUser;
-                await _mSIBannerNotificationService.GetBannerNotification();
 
                 _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request to get weekly NM files started for User:{SignInName} and IsDistributor:{IsDistributorUser} and correlationId:{correlationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
 
@@ -175,11 +172,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             {
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestStarted.ToEventId(), "Maritime safety information request to show annual NM files started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                List<ShowFilesResponseModel> showFilesResponse = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
+                ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(GetCurrentCorrelationId());
 
                 _logger.LogInformation(EventIds.ShowAnnualFilesRequestCompleted.ToEventId(), "Maritime safety information request for annual NM files completed for correlationId:{correlationId}", GetCurrentCorrelationId());
 
-                return View("~/Views/NoticesToMariners/Annual.cshtml", showFilesResponse);
+                return View("~/Views/NoticesToMariners/Annual.cshtml", showNMFilesResponseModel);
             }
             catch (Exception ex)
             {

@@ -54,13 +54,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             }
         }
 
-        public async Task<MsiBannerNotificationEntity> GetAllEntityAsync(string tableName, string storageAccountConnectionString)
+        public async Task<MsiBannerNotificationEntity> GetSingleEntityAsync(string tableName, string storageAccountConnectionString)
         {
             try
             {
                 List<MsiBannerNotificationEntity> msiBannerNotificationEntityLit = new();
                 TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
-                AsyncPageable<MsiBannerNotificationEntity> linqEntities = tableClient.QueryAsync<MsiBannerNotificationEntity>();
+                AsyncPageable<MsiBannerNotificationEntity> linqEntities = tableClient.QueryAsync<MsiBannerNotificationEntity>(r => r.StartDate <= DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.IsNotificationEnabled);
 
                 await foreach (MsiBannerNotificationEntity item in linqEntities)
                 {
@@ -68,7 +68,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
 
                 IOrderedEnumerable<MsiBannerNotificationEntity> res = from r in msiBannerNotificationEntityLit 
-                                                                      where r.StartDate < DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.Status == "enabled"
                                                                       orderby r.StartDate ascending
                                                                       select r;
 

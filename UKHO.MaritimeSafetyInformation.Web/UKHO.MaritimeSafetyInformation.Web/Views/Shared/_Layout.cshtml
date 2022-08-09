@@ -1,5 +1,4 @@
-﻿@using UKHO.MaritimeSafetyInformation.Common.Configuration
-
+﻿
 @inject IConfiguration _config
 <!DOCTYPE html>
 <html lang="en">
@@ -67,18 +66,7 @@
             </div>
         </div>
         <!--Phase Banner-->
-        <div class="phase-banner">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <p>
-                            <span class="alpha-caption">Beta</span>
-                            @Global.Name
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @await Component.InvokeAsync("BannerNotification")
     </header>
     <main class="main-content">
         @RenderBody()

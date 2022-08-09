@@ -11,27 +11,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<CacheConfiguration> _cacheConfiguration;
         private readonly IAzureStorageService _azureStorageService;
         private readonly IAzureTableStorageClient _azureTableStorageClient;
+        private readonly IOptions<BannerNotificationConfiguration> _bannerNotificationConfiguration;
+        
         private string ConnectionString => _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
 
-        public MSIBannerNotificationService(IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, IAzureTableStorageClient azureTableStorageClient)
+        public MSIBannerNotificationService(IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, IAzureTableStorageClient azureTableStorageClient, IOptions<BannerNotificationConfiguration> bannerNotificationConfiguration)
         {
             _cacheConfiguration = cacheConfiguration;
             _azureStorageService = azureStorageService;
             _azureTableStorageClient = azureTableStorageClient;
+            _bannerNotificationConfiguration = bannerNotificationConfiguration; 
         }
 
-        public async Task GetBannerNotification()
+        public async Task<string> GetBannerNotification()
         {
-            MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetAllEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
+            string bannerNotificationMessage = null;
 
-            if (msiBannerNotificationEntity != null)
+            if (_bannerNotificationConfiguration.Value.IsBannerNotificationEnabled)
             {
-                Global.Name = msiBannerNotificationEntity.Message;
+                MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetSingleEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
+                if (msiBannerNotificationEntity != null)
+                {
+                    bannerNotificationMessage = msiBannerNotificationEntity.Message;
+                }
             }
-            else
-            {
-                Global.Name = null;
-            }
+
+            return bannerNotificationMessage;
         }
     }
 }

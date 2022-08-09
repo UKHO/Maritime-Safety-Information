@@ -28,6 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             FakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
             FakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
+
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
         }
 
