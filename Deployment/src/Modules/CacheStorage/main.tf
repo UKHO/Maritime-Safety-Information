@@ -20,18 +20,3 @@ resource "azurerm_storage_table" "banner_notification_table" {
   name                 = var.table_name
   storage_account_name = azurerm_storage_account.cache_storage.name
 }
-
-resource "azurerm_storage_table_entity" "banner_notification" {
-  storage_account_name = azurerm_storage_account.cache_storage.name
-  table_name           = azurerm_storage_table.banner_notification_table.name
-
-  partition_key = "1"
-  row_key       = "BannerNotificationKey"
-
-  entity = {
-    Status = "enabled OR disabled"
-    ExpiryDate = "2021-08-02T12:54:25.5224203Z"
-    Message = "Coloumn properties which require for Banner Notification Table"
-    StartDate = "2021-05-02T12:54:25.5224203Z"
-  }
-}

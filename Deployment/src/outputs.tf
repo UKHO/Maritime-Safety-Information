@@ -13,3 +13,11 @@ output "webapp_rg" {
 output "admin_webapp_name" {
    value = module.webapp_service.admin_webapp_name
 }
+
+output "storage_name" {
+   value = module.cache_storage.cache_storage_name
+}
+
+output "table_storage_name" {
+   value = module.cache_storage.table_storage_name
+}
