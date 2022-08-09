@@ -6,18 +6,18 @@ import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigati
 
 
 
-test.describe("Maritime Safety Information Notices to Mariners Annual Page Functional Test Scenarios", ()=> {
+test.describe("Maritime Safety Information Radio Navigational Warnings About Page Functional Test Scenarios", ()=> {
   let rnwListEndUser:RadioNavigationalWarningsListEndUser;
        test.beforeEach(async ({page}) => {
          await page.goto(app.url);  
          rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
          await rnwListEndUser.goToRadioWarning();
-      });  
+ });  
      
        
-       test('Does the Table Data For About is displayed',async ({page}) => {
+test('Does the table data for Radio Navigational Warnings About page is displayed',async ({page}) => {
         await rnwListEndUser.verifyAboutrnw();
-      })  
+        await rnwListEndUser.verifyAboutRNWImportantBlock();
+  })  
      
-     
-    })
+})
