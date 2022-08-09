@@ -40,7 +40,7 @@ export default class Homepage {
   {
   expect(await this.headingLevelOne.innerText()).toContain('Maritime Safety Information')
   } 
-  public async verifyadmiraly()
+  public async verifyadmiralty()
   {
   expect(await this.admiralty.getAttribute('src')).toContain('/images/Admiralty-stacked-logo.svg');
   }
