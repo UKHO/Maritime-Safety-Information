@@ -91,7 +91,7 @@ export default class noticeToMarinerWeekDownload {
 
   public async checkFurtherInformation()
   {  
-    expect(await this.leisureFolios.getAttribute("aria-label")).toContain('Click here for Further Information');
+    expect(await this.leisureFolios.getAttribute("aria-label")).toContain('Click here for Further InformationClick here for further guidance about Leisure Folios');
   }
   public async checkImportantSafetyNotice()
   {
@@ -215,6 +215,7 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
 
   public async verifyDistributorFileCount()
   { 
+
 
     await this.year.selectOption({label:'2022'});
     await this.week.selectOption({label:'26'});
