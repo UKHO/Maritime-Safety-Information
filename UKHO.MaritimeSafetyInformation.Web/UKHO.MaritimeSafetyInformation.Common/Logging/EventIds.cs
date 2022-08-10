@@ -656,7 +656,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
         /// </summary>
-        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158
+        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
+        /// <summary>
+        /// 910159 - Maritime safety information request to get banner notification message started.
+        /// </summary>
+        BannerNotificationRequestStarted = 910159,
+        /// <summary>
+        /// 910160 - Maritime safety information request to get banner notification message completed.
+        /// </summary>
+        BannerNotificationRequestCompleted = 910160,
+        /// <summary>
+        /// 910161 - Maritime safety information request to get banner notification message failed.
+        /// </summary>
+        BannerNotificationRequestFailed = 910161
+
     }
 
     public static class EventIdExtensions
