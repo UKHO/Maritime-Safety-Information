@@ -42,13 +42,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenBannerNotificationNotFound_ThenNullValueForBannerNotificationMessageIsAssigned()
+        public async Task WhenBannerNotificationNotFound_ThenEmptyValueForBannerNotificationMessageIsAssigned()
         {
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             string result = await _mSIBannerNotificationService.GetBannerNotification();
 
-            Assert.IsNull(result);
+            Assert.IsEmpty(result);
         }
 
         [Test]
