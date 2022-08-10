@@ -342,7 +342,7 @@ stages:
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
                     scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
-                    arguments: "-Strorageaccountname $(storage_name) -Tablename $(table_storage_name)"
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
 
       - deployment: DevDeployApp
         dependsOn: DevDeployTerraform
@@ -417,7 +417,7 @@ stages:
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
                     scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
-                    arguments: "-Strorageaccountname $(storage_name) -Tablename $(table_storage_name)"
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
 
       - deployment: QADeployApp
         dependsOn: QADeployTerraform
@@ -492,7 +492,7 @@ stages:
                     scriptType: 'pscore'
                     scriptLocation: 'scriptPath'
                     scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
-                    arguments: "-Strorageaccountname $(storage_name) -Tablename $(table_storage_name)"
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
 
       - deployment: LiveDeployApp
         dependsOn: LiveDeployTerraform
