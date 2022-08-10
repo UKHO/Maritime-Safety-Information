@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Ganss.XSS;
+using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
@@ -32,7 +33,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetSingleEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
                 if (msiBannerNotificationEntity != null)
                 {
-                    bannerNotificationMessage = msiBannerNotificationEntity.Message;
+                    HtmlSanitizer sanitizer = new ();
+                    bannerNotificationMessage = sanitizer.Sanitize(msiBannerNotificationEntity.Message);
                 }
             }
 
