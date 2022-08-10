@@ -26,8 +26,12 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly print: Locator;
   readonly viewDetails: Locator;
   readonly detailWarningType: Locator; 
+  readonly about:Locator;
+  readonly aboutRNW:Locator;
   readonly radioNavigationalWarnings;
+  
   readonly tableHeaderText = ['Reference', 'Date Time Group', 'Description', 'Select all', 'Select'];
+
   constructor(page: Page) {
     this.page = page;
     this.radioNavigationalWarningsPage = this.page.locator('a:has-text("Radio Navigational Warnings")')
@@ -49,6 +53,9 @@ export default class RadioNavigationalWarningsListEndUser {
     this.print = this.page.locator('#Print')
     this.viewDetails=this.page.locator('[id^="Viewdetails"] > button > span.view_details')
     this.detailWarningType=this.page.locator('[id^="Details_WarningType"]')
+    this.about = this.page.locator('a:has-text("IHO WWNWS-SC")');
+    this.aboutRNW = this.page.locator(" div >  p:nth-child(3)")
+   
     
   }
 
@@ -108,7 +115,12 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async verifyImportantBlock() {
-    const rnwHeader = this.page.locator("#rnwInfo > p").innerText();
+    
+    const rnwHeader = (await this.page.locator("#rnwInfo > p").innerText()).toString();
+    await this.ImportantBlock(rnwHeader)
+  }
+
+  public async ImportantBlock(rnwHeader:string){
     const rnwHeaderText = (await rnwHeader).split(":");
 
     const rnwMessageText = rnwHeaderText[0];
@@ -179,4 +191,14 @@ export default class RadioNavigationalWarningsListEndUser {
 
   }
  
+  public async verifyAboutrnw()
+  {
+    await this.aboutEndUser.click();
+    expect(await this.about.evaluate(option => option.getAttribute('href'))).toContain('https://iho.int/navigation-warnings-on-the-web')
+  }
+
+  public async verifyAboutRNWImportantBlock() {
+    const rnwHeader = (await this.aboutRNW.last().innerText()).toString();
+    await this.ImportantBlock(rnwHeader)
+  }
 }  
