@@ -16,7 +16,7 @@ test.describe("Maritime Safety Information Radio Navigational Warnings About Pag
      
        
 test('Does the table data for Radio Navigational Warnings About page is displayed',async ({page}) => {
-        await rnwListEndUser.verifyAboutrnw();
+        await rnwListEndUser.verifyAboutRnw();
         await rnwListEndUser.verifyAboutRNWImportantBlock();
   })  
      

@@ -191,7 +191,7 @@ export default class RadioNavigationalWarningsListEndUser {
 
   }
  
-  public async verifyAboutrnw()
+  public async verifyAboutRnw()
   {
     await this.aboutEndUser.click();
     expect(await this.about.evaluate(option => option.getAttribute('href'))).toContain('https://iho.int/navigation-warnings-on-the-web')
