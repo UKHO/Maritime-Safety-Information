@@ -115,7 +115,12 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async verifyImportantBlock() {
-    const rnwHeader = this.page.locator("#rnwInfo > p").innerText();
+    
+    const rnwHeader = (await this.page.locator("#rnwInfo > p").innerText()).toString();
+    await this.ImportantBlock(rnwHeader)
+  }
+
+  public async ImportantBlock(rnwHeader:string){
     const rnwHeaderText = (await rnwHeader).split(":");
 
     const rnwMessageText = rnwHeaderText[0];
@@ -193,25 +198,7 @@ export default class RadioNavigationalWarningsListEndUser {
   }
 
   public async verifyAboutRNWImportantBlock() {
-    const rnwHeader = this.aboutRNW.last().innerText();
-    const rnwHeaderText = (await rnwHeader).split(":");
-
-    const rnwMessageText = rnwHeaderText[0];
-    expect(rnwMessageText).toContain("NAVAREA 1 and UK Coastal");
-
-    const currentDateTime = new Date().getTime();
-    const rnwDateTime = rnwHeaderText[1].replace('UTC', "").trim();
-
-    const rnwModifiedDateTime = DateTime.fromFormat(rnwDateTime, "ddhhmm  MMM yy").toString();
-    const lastModifiedDateTime = new Date(rnwModifiedDateTime);
-
-    const compareDate = (currentDateTime, lastModifiedDateTime) => {
-      if (lastModifiedDateTime < currentDateTime) {
-        return true;
-      }
-      else { return false; }
-    }
-    expect(compareDate).toBeTruthy();
+    const rnwHeader = (await this.aboutRNW.last().innerText()).toString();
+    await this.ImportantBlock(rnwHeader)
   }
-
 }  
