@@ -22,11 +22,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.ViewComponents
         {
             try
             {
-                _logger.LogError(EventIds.BannerNotificationRequestStarted.ToEventId(), "Maritime safety information request to get banner notification message started for User:{SignInName} and IsDistributor:{IsDistributorUser} with _X-Correlation-ID:{CorrelationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.BannerNotificationRequestStarted.ToEventId(), "Maritime safety information request to get banner notification message started for User:{SignInName} and IsDistributor:{IsDistributorUser} with _X-Correlation-ID:{CorrelationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
 
                 ViewBag.BannerNotificationMessage = await _mSIBannerNotificationService.GetBannerNotification();
 
-                _logger.LogError(EventIds.BannerNotificationRequestCompleted.ToEventId(), "Maritime safety information request to get banner notification message completed for User:{SignInName} and IsDistributor:{IsDistributorUser} with _X-Correlation-ID:{CorrelationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.BannerNotificationRequestCompleted.ToEventId(), "Maritime safety information request to get banner notification message completed for User:{SignInName} and IsDistributor:{IsDistributorUser} with _X-Correlation-ID:{CorrelationId}", _userService.SignInName ?? "Public", _userService.IsDistributorUser, GetCurrentCorrelationId());
 
                 return View("~/Views/BannerNotification/index.cshtml");
             }

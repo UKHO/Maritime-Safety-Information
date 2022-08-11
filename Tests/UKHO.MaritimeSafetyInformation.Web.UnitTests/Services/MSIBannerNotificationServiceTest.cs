@@ -52,6 +52,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenBannerNotificationFoundWithXSS_ThenValueExcludingXSSForBannerNotificationMessageIsAssigned()
+        {
+            string message = @"This system will be under maintenance. For more details <a href=""https://www.test.com"" target=""_blank"">click here<script>alert('XSS attack!')</script>";
+            string expectedMessage = @"This system will be under maintenance. For more details <a href=""https://www.test.com"" target=""_blank"">click here</a>";
+
+            A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(new MsiBannerNotificationEntity() { Message = message });
+
+            string result = await _mSIBannerNotificationService.GetBannerNotification();
+
+            Assert.AreEqual(expectedMessage, result);
+        }
+
+        [Test]
         public async Task WhenBannerNotificationFound_ThenValueForBannerNotificationMessageIsAssigned()
         {
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns( new MsiBannerNotificationEntity() { Message ="test"});
