@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FakeItEasy;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private RNWRepository _rnwRepository;
         private RadioNavigationalWarningsContext _context;
         private RadioNavigationalWarning _radioNavigationalWarning;
-        
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -141,6 +142,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.AreEqual(new DateTime(1, 1, 1), result);
         }
+
+        [Test]
+        public async Task WhenGetRadioNavigationalWarningsLastModifiedDateTimeIsCalled_ThenShouldExecuteCatch()
+        {
+            RadioNavigationalWarningsContext emptyContext = null;
+            RNWRepository rnwRepository = new(emptyContext);
+
+            DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+            Assert.AreEqual(new DateTime(1, 1, 1), result);
+        }
+
 
         [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()

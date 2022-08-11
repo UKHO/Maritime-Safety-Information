@@ -3,29 +3,32 @@
     <li class="nav-item">
         <a href="@Url.Action("Index", "NoticesToMariners")"
            class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles"
-           || ViewContext.RouteData.Values["Action"].ToString() == "Cumulative"|| ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "true" : "")">
+           || ViewContext.RouteData.Values["Action"].ToString() == "Cumulative"|| ViewContext.RouteData.Values["Action"].ToString() == "Annual"
+           || ViewData["ActionName"]?.ToString() == "Index" || ViewData["ActionName"]?.ToString() == "ShowDailyFiles"
+           || ViewData["ActionName"]?.ToString() == "Cumulative"|| ViewData["ActionName"]?.ToString() == "Annual"
+           ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewData["ActionName"]?.ToString() == "Index" ? "true" : "")">
             Notices to Mariners
         </a>
     </li>
     <li class="nav-item">
         <a href="@Url.Action("Leisure", "NoticesToMariners")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" ? "true" : "")">
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" || ViewData["ActionName"]?.ToString() == "Leisure" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" || ViewData["ActionName"]?.ToString() == "Leisure" ? "true" : "")">
             Leisure Folios
         </a>
     </li>
     <li class="nav-item">
         <a href="@Url.Action("Resellers", "NoticesToMariners")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" ? "true" : "")">
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" || ViewData["ActionName"]?.ToString() == "Resellers" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" || ViewData["ActionName"]?.ToString() == "Resellers" ? "true" : "")">
             Value Added Resellers
         </a>
     </li>
     <li class="nav-item">
         <a href="@Url.Action("About", "NoticesToMariners")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "true" : "")">
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" || ViewData["ActionName"]?.ToString() == "About" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "About" || ViewData["ActionName"]?.ToString() == "About" ? "true" : "")">
             About
         </a>
     </li>
