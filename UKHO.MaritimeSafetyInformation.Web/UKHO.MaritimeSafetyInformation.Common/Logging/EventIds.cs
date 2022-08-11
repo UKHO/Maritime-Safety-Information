@@ -605,7 +605,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910145 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
         FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
-		/// <summary>
+        /// <summary>
         /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
         ClearFSSSearchCacheEventCompleted = 910146,
@@ -656,7 +656,23 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
         /// </summary>
-        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158
+        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
+        /// <summary>
+        /// 910159 -  Maritime safety information request to get RNW detail Failed.
+        /// </summary>
+        RNWListDetailFailed = 910159,
+        /// <summary> 
+        /// 910160 -  Maritime safety information request for Show Selection started.
+        /// </summary>
+        RNWShowSelectionStarted = 910160,
+        /// <summary> 
+        /// 910161 -  Maritime safety information request for Show Selection completed.
+        /// </summary>
+        RNWShowSelectionCompleted = 910161,
+        /// <summary>
+        /// 910162 -  Maritime safety information request Show Selection Failed.
+        /// </summary>
+        RNWShowSelectionFailed = 910162
     }
 
     public static class EventIdExtensions
