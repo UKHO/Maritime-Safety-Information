@@ -6,6 +6,5 @@ param (
 )
 
 Write-Output "Set MSI Business Unit in appsetting..."
-az webapp config appsettings set -g $resourceGroup -n $webappName --settings FileShareService:BusinessUnit=$businessUnit
-az webapp config appsettings set -g $resourceGroup -n $webappName --settings CacheConfiguration:IsFssCacheEnabled=$isCacheEnabled
+az webapp config appsettings set -g $resourceGroup -n $webappName --settings FileShareService:BusinessUnit=$businessUnit CacheConfiguration:IsFssCacheEnabled=$isCacheEnabled
 az webapp restart --name $webappName --resource-group $resourceGroup

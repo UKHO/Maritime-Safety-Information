@@ -352,7 +352,7 @@ stages:
           - name: Admin_DNS_URL
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
           - name: "CacheConfiguration.IsFssCacheEnabled"
-            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.IsFssCacheEnabled']  ]
+            value: $(IsFssCacheEnabledForFT)
         strategy:
           runOnce:
             deploy:
