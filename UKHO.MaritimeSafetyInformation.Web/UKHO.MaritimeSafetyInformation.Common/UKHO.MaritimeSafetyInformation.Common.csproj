@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,7 +20,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="UKHO.FileShareAdminClient" Version="1.4.20530.4" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.4.20530.4" />
-    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
+    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22221.2" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.43.1" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
