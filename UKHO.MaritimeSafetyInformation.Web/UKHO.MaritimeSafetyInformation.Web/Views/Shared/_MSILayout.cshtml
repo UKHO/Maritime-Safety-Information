@@ -7,11 +7,11 @@
     <div class="row">
         <nav class="col-md-2 msi-tabs-container" role="complementary" aria-label="Sidebar">
             <!--left nav-->
-            @if (ViewContext.RouteData.Values["controller"]?.ToString() == "NoticesToMariners")
+            @if (ViewContext.RouteData.Values["controller"]?.ToString() == "NoticesToMariners" || ViewData["ControllerName"]?.ToString() == "NoticesToMariners")
             {
                 <partial name="_NMLeftMenu"></partial>
             }
-            else if (ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings")
+            else if (ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings" || ViewData["ControllerName"]?.ToString() == "RadioNavigationalWarnings")
             {
                 <partial name="_RNWLeftMenu"></partial>
             }

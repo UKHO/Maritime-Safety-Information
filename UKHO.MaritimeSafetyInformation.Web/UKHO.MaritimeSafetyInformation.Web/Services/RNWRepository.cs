@@ -9,9 +9,9 @@ using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
-    #if MSIAdminProject
+#if MSIAdminProject
         [ExcludeFromCodeCoverage]
-    #endif
+#endif
 
     public class RNWRepository : IRNWRepository
     {
@@ -99,12 +99,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<DateTime> GetRadioNavigationalWarningsLastModifiedDateTime()
         {
-            if (_context.RadioNavigationalWarnings.Any())
+            try
             {
-                return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+                if (_context.RadioNavigationalWarnings.Any())
+                {
+                    return await _context.RadioNavigationalWarnings.MaxAsync(i => i.LastModified);
+                }
+                return DateTime.MinValue;
             }
-
-            return DateTime.MinValue;
+            catch
+            {
+                return DateTime.MinValue;
+            }
         }
 
         public RadioNavigationalWarning GetRadioNavigationalWarningById(int id)

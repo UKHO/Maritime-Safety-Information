@@ -91,7 +91,7 @@ export default class noticeToMarinerWeekDownload {
 
   public async checkFurtherInformation()
   {  
-    expect(await this.leisureFolios.getAttribute("aria-label")).toContain('Click here for Further Information');
+    expect(await this.leisureFolios.getAttribute("aria-label")).toContain('Click here for further guidance about Leisure Folios');
   }
   public async checkImportantSafetyNotice()
   {

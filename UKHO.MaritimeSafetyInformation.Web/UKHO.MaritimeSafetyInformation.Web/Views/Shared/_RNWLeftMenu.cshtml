@@ -1,15 +1,17 @@
 ﻿<ul class="nav flex-column msi-page-nav">
     <li class="nav-item">
         <a href="@Url.Action("Index", "RadioNavigationalWarnings")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowSelection" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "true" : "")">
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "ShowSelection"
+           || ViewData["ActionName"]?.ToString() == "Index" || ViewData["ActionName"]?.ToString() == "ShowSelection"
+           ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewData["ActionName"]?.ToString() == "Index" ? "true" : "")">
             Radio Warnings
         </a>
     </li>
     <li class="nav-item">
         <a href="@Url.Action("About", "RadioNavigationalWarnings")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "About" ? "true" : "")">
+           class="@(ViewContext.RouteData.Values["Action"].ToString() == "About" || ViewData["ActionName"]?.ToString() == "About" ? "nav-link active" : "nav-link")"
+           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "About" || ViewData["ActionName"]?.ToString() == "About" ? "true" : "")">
             About
         </a>
     </li>

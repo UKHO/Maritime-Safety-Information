@@ -605,7 +605,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910145 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
         FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
-		/// <summary>
+        /// <summary>
         /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
         ClearFSSSearchCacheEventCompleted = 910146,
@@ -658,30 +658,45 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
         /// <summary>
-        /// 910159 - Maritime safety information request to get banner notification message started.
+        /// 910159 -  Maritime safety information request to get RNW detail Failed.
         /// </summary>
-        BannerNotificationRequestStarted = 910159,
+        RNWListDetailFailed = 910159,
+        /// <summary> 
+        /// 910160 -  Maritime safety information request for Show Selection started.
+        /// </summary>
+        RNWShowSelectionStarted = 910160,
+        /// <summary> 
+        /// 910161 -  Maritime safety information request for Show Selection completed.
+        /// </summary>
+        RNWShowSelectionCompleted = 910161,
         /// <summary>
-        /// 910160 - Maritime safety information request to get banner notification message completed.
+        /// 910162 -  Maritime safety information request Show Selection Failed.
         /// </summary>
-        BannerNotificationRequestCompleted = 910160,
+        RNWShowSelectionFailed = 910162,
         /// <summary>
-        /// 910161 - Maritime safety information request to get banner notification message failed.
+        /// 910163 - Maritime safety information request to get banner notification message started.
         /// </summary>
-        BannerNotificationRequestFailed = 910161,
+        BannerNotificationRequestStarted = 910163,
         /// <summary>
-        /// 910162 - Maritime safety information request to get banner notification message from azure table started.
+        /// 910164 - Maritime safety information request to get banner notification message completed.
         /// </summary>
-        GetBannerNotificationMessageFromTableStarted = 910162,
+        BannerNotificationRequestCompleted = 910164,
         /// <summary>
-        /// 910163 - Maritime safety information request to get banner notification message from azure table completed.
+        /// 910165 - Maritime safety information request to get banner notification message failed.
         /// </summary>
-        GetBannerNotificationMessageFromTableCompleted = 910163,
+        BannerNotificationRequestFailed = 910165,
         /// <summary>
-        /// 910164 - Maritime safety information request to get banner notification message from azure table failed.
+        /// 910166 - Maritime safety information request to get banner notification message from azure table started.
         /// </summary>
-        GetBannerNotificationMessageFromTableFailed = 910164
-
+        GetBannerNotificationMessageFromTableStarted = 910166,
+        /// <summary>
+        /// 910167 - Maritime safety information request to get banner notification message from azure table completed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableCompleted = 910167,
+        /// <summary>
+        /// 910168 - Maritime safety information request to get banner notification message from azure table failed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableFailed = 910168
     }
 
     public static class EventIdExtensions
