@@ -54,13 +54,13 @@
                 <nav class="navbar-collapse collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "NoticesToMariners" ? "active":"")" asp-area="" asp-controller="NoticesToMariners" asp-action="Index">Notices to Mariners</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "NoticesToMariners" || ViewData["ControllerName"]?.ToString()== "NoticesToMariners" ? "active":"")" asp-area="" asp-controller="NoticesToMariners" asp-action="Index">Notices to Mariners</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings" ? "active":"")" asp-area="" asp-controller="RadioNavigationalWarnings" asp-action="Index">Radio Navigational Warnings</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "RadioNavigationalWarnings" || ViewData["ControllerName"]?.ToString()== "RadioNavigationalWarnings" ? "active":"")" asp-area="" asp-controller="RadioNavigationalWarnings" asp-action="Index">Radio Navigational Warnings</a>
                         </li>
                         <partial name="_LoginPartial" />
-                    </ul>                    
+                    </ul>
                 </nav>
             </div>
         </div>

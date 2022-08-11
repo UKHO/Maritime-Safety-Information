@@ -10,8 +10,10 @@
     ADMIRALTY  Notices to Mariners for ADMIRALTY Leisure Folios
 </h2>
 <p>
-    Here you will find all relevant ADMIRALTY Notices to Mariners (NMs) released since the publication date of the chart within the leisure range's New Edition. This service is updated weekly and aims to provide you with the best information available to help you navigate safely and effectively. You can be assured that with ADMIRALTY charts you are using the best; they are recognised official standard and trusted worldwide. We pride ourselves on the quality and integrity of our data - no one else promulgates information as well or as quickly as we do. </p>
-    <p>For further information, guidance notes including the printing of blocks, please <a href="~/nms/leisure/Keeping ADMIRALTY Leisure Charts up-to-date.pdf" aria-label="Click here for Further Information. opens in new tab" target="_blank">click here</a>.
+    Here you will find all relevant ADMIRALTY Notices to Mariners (NMs) released since the publication date of the chart within the leisure range's New Edition. This service is updated weekly and aims to provide you with the best information available to help you navigate safely and effectively. You can be assured that with ADMIRALTY charts you are using the best; they are recognised official standard and trusted worldwide. We pride ourselves on the quality and integrity of our data - no one else promulgates information as well or as quickly as we do.
+</p>
+<p>
+     <a href="~/nms/leisure/Keeping ADMIRALTY Leisure Charts up-to-date.pdf" aria-label="Click here for further guidance about Leisure Folios, keeping them up to date and the printing of blocks. Opens in new tab" target="_blank">Click here for further guidance about Leisure Folios, keeping them up to date and the printing of blocks.</a>.
 </p>
 
 <div class="alert alert-primary p-4">
@@ -27,31 +29,38 @@
     </p>
 </div>
 
-<div class="row">
-    <div class="col">
-        <div class="table-responsive" id="divLeisureNMs">
-             <input type="hidden" id="IsLeisureBatchResponseCached" value= @Model.IsBatchResponseCached />
-            <table width="100%">
-                <thead>
-                    <tr>
-                        <th width="60%">File name</th>
-                        <th width="30%">File size</th>
-                        <th class="th-3"><span class="visually-hidden">Action</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < showFilesResponseModel.Count; i++)
-                    {
+@if (ViewBag.HasError)
+{
+    <partial name="_Error" />
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" id="divLeisureNMs">
+                <input type="hidden" id="IsLeisureBatchResponseCached" value=@Model.IsBatchResponseCached />
+                <table width="100%">
+                    <thead>
                         <tr>
-                            <td id="filename_@i"><a target="_blank" aria-label="Download file for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">@showFilesResponseModel[i].FileDescription</a></td>
-                            <td id="filesize_@i">@showFilesResponseModel[i].FileSizeinKB (@showFilesResponseModel[i].FileExtension)</td>
-                            <td class="td-3 justify-content-center" id="download_@i">
-                                <a target="_blank" aria-label="Download file for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">Download</a>
-                            </td>
+                            <th width="60%">File name</th>
+                            <th width="30%">File size</th>
+                            <th class="th-3"><span class="visually-hidden">Action</span></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < showFilesResponseModel.Count; i++)
+                        {
+                            <tr>
+                                <td id="filename_@i"><a target="_blank" aria-label="Download file for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">@showFilesResponseModel[i].FileDescription</a></td>
+                                <td id="filesize_@i">@showFilesResponseModel[i].FileSizeinKB (@showFilesResponseModel[i].FileExtension)</td>
+                                <td class="td-3 justify-content-center" id="download_@i">
+                                    <a target="_blank" aria-label="Download file for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">Download</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+}
