@@ -668,7 +668,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910161 - Maritime safety information request to get banner notification message failed.
         /// </summary>
-        BannerNotificationRequestFailed = 910161
+        BannerNotificationRequestFailed = 910161,
+        /// <summary>
+        /// 910162 - Maritime safety information request to get banner notification message from azure table started.
+        /// </summary>
+        GetBannerNotificationMessageFromTableStarted = 910162,
+        /// <summary>
+        /// 910163 - Maritime safety information request to get banner notification message from azure table completed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableCompleted = 910163,
+        /// <summary>
+        /// 910164 - Maritime safety information request to get banner notification message from azure table failed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableFailed = 910164
 
     }
 

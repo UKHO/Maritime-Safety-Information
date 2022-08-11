@@ -1,6 +1,8 @@
 ﻿using FakeItEasy;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
@@ -16,6 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         private IAzureStorageService _fakeAzureStorageService;
         private IAzureTableStorageClient _fakeAzureTableStorageClient;
         private IOptions<BannerNotificationConfiguration> _fakeBannerNotificationConfiguration;
+        private ILogger<MSIBannerNotificationService> _fakeLogger;
 
         private MSIBannerNotificationService _mSIBannerNotificationService;
 
@@ -26,9 +29,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeAzureStorageService = A.Fake<IAzureStorageService>();
             _fakeAzureTableStorageClient = A.Fake<IAzureTableStorageClient>();
             _fakeBannerNotificationConfiguration = A.Fake<IOptions<BannerNotificationConfiguration>>();
+            _fakeLogger = A.Fake<ILogger<MSIBannerNotificationService>>();
+
             _fakeBannerNotificationConfiguration.Value.IsBannerNotificationEnabled = true;
 
-            _mSIBannerNotificationService = new MSIBannerNotificationService(_fakeCacheConfiguration, _fakeAzureStorageService, _fakeAzureTableStorageClient, _fakeBannerNotificationConfiguration);
+            _mSIBannerNotificationService = new MSIBannerNotificationService(_fakeCacheConfiguration, _fakeAzureStorageService, _fakeAzureTableStorageClient, _fakeBannerNotificationConfiguration, _fakeLogger);
         }
 
         [Test]
@@ -36,7 +41,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _fakeBannerNotificationConfiguration.Value.IsBannerNotificationEnabled = false;
 
-            string result = await _mSIBannerNotificationService.GetBannerNotification();
+            string result = await _mSIBannerNotificationService.GetBannerNotification(string.Empty);
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public async Task WhenExceptionThrownByService_ThenNullValueForBannerNotificationMessageIsAssigned()
+        {
+            A.CallTo(() => _fakeAzureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Throws(new Exception());
+
+            string result = await _mSIBannerNotificationService.GetBannerNotification(string.Empty);
 
             Assert.IsNull(result);
         }
@@ -46,7 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
-            string result = await _mSIBannerNotificationService.GetBannerNotification();
+            string result = await _mSIBannerNotificationService.GetBannerNotification(string.Empty);
 
             Assert.IsEmpty(result);
         }
@@ -59,7 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns(new MsiBannerNotificationEntity() { Message = message });
 
-            string result = await _mSIBannerNotificationService.GetBannerNotification();
+            string result = await _mSIBannerNotificationService.GetBannerNotification(string.Empty);
 
             Assert.AreEqual(expectedMessage, result);
         }
@@ -69,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             A.CallTo(() => _fakeAzureTableStorageClient.GetSingleEntityAsync(A<string>.Ignored, A<string>.Ignored)).Returns( new MsiBannerNotificationEntity() { Message ="test"});
 
-            string result =  await _mSIBannerNotificationService.GetBannerNotification();
+            string result =  await _mSIBannerNotificationService.GetBannerNotification(string.Empty);
 
             Assert.AreEqual("test", result);
         }
