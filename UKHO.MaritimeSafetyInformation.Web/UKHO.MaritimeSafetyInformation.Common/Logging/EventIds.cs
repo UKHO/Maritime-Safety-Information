@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetSearchAttributeRequestDataNotFound = 910052,
         /// <summary>
-        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Completed.
         /// </summary>
         GetWeeklyFilesResponseCompleted = 910053,
 
