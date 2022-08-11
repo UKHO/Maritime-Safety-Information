@@ -57,6 +57,7 @@ Write-Host "##vso[task.setvariable variable=Admin_DNS_URL;isOutput=true]$env:SER
 Write-Host "##vso[task.setvariable variable=WEB_APP_NAME;isOutput=true]$($terraformOutput.web_app_name.value)"
 Write-Host "##vso[task.setvariable variable=ADMIN_WEB_APP_NAME;isOutput=true]$($terraformOutput.admin_webapp_name.value)"
 Write-Host "##vso[task.setvariable variable=webapp_rg;isOutput=true]$($terraformOutput.webapp_rg.value)"
+Write-Host "##vso[task.setvariable variable=IsFssCacheEnabled;isOutput=true]$env:IsFssCacheEnabledForFT"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 
