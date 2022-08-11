@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         private ILogger<NoticesToMarinersController> _fakeLogger;
         private IHttpContextAccessor _fakeContextAccessor;
         private INMDataService _fakeNMDataService;
-        private IUserService _fakeUserService;        
+        private IUserService _fakeUserService;
 
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             _fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
             _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
             _fakeNMDataService = A.Fake<INMDataService>();
-            _fakeUserService = A.Fake<IUserService>();            
+            _fakeUserService = A.Fake<IUserService>();
             A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
             _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService);
         }
@@ -38,13 +38,31 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
             IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
             Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
+        }
+
+        [Test]
+        public async Task WhenIndexIsCalledForNoBatchData_ThenShouldReturnsExpectedView()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = SetResultForShowWeeklyFilesResponseModel();
+
+            showWeeklyFilesResponseModel.ShowFilesResponseList = new System.Collections.Generic.List<ShowFilesResponseModel>();
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
+
+            IActionResult result = await _controller.Index();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(true, _controller.ViewBag.HasError);
         }
 
 
@@ -67,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week); 
+            IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
 
             string actualView = ((ViewResult)result).ViewName;
@@ -79,14 +97,39 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
+        public async Task WhenIndexPostIsCalledForNoBatchData_ThenShouldReturnsExpectedViewAndViewData()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+            const int year = 2022;
+            const int week = 20;
+
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = SetResultForShowWeeklyFilesResponseModel();
+
+            showWeeklyFilesResponseModel.ShowFilesResponseList = new System.Collections.Generic.List<ShowFilesResponseModel>();
+
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
+
+            IActionResult result = await _controller.Index(year, week);
+            Assert.IsInstanceOf<ViewResult>(result);
+
+            string actualView = ((ViewResult)result).ViewName;
+
+            Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
+            Assert.AreEqual(true, _controller.ViewBag.HasError);
+
+        }
+
+        [Test]
         public async Task WhenIndexPostIsCalledWithYearAndWeekZero_ThenShouldReturnsExpectedViewAndViewData()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
             const int year = 0;
             const int week = 0;
-            const int expectedViewCount = 3;
+            const int expectedViewCount = 4;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
             IActionResult result = await _controller.Index(year, week);
             Assert.IsInstanceOf<ViewResult>(result);
@@ -167,6 +210,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+        }
+
+        [Test]
+        public async Task WhenShowDailyFilesAsyncIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
+        {
+            const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
+
+            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored)).Throws(new Exception());
+
+            IActionResult result = await _controller.ShowDailyFilesAsync();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [Test]
@@ -310,13 +367,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        public async Task WhenLeisureIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
         {
+            const string expectedView = "~/Views/NoticesToMariners/Leisure.cshtml";
+
             A.CallTo(() => _fakeNMDataService.GetLeisureFilesAsync(A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Leisure();
-
-            Assert.IsTrue(result.IsFaulted);
+            IActionResult result = await _controller.Leisure();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [TestCase(null, "Daily 16-05-22.zip", "application/gzip", Description = "When Download Daily File Is Called With Null BatchID Then Should Throw Exception")]
@@ -357,13 +418,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenCumulativeIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        public async Task WhenCumulativeIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
         {
+            const string expectedView = "~/Views/NoticesToMariners/Cumulative.cshtml";
+
             A.CallTo(() => _fakeNMDataService.GetCumulativeBatchFiles(A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Cumulative();
-
-            Assert.IsTrue(result.IsFaulted);
+            IActionResult result = await _controller.Cumulative();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [Test]
@@ -375,16 +440,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             A.CallTo(() => _fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             Task<IActionResult> result = _controller.ShowWeeklyFilesAsync(year, week);
-
-            Assert.IsTrue(result.IsFaulted);
-        }
-
-        [Test]
-        public void WhenShowDailyFilesAsyncIsCalledAndExceptionThrownByService_ThenShouldThrowException()
-        {
-            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored)).Throws(new Exception());
-
-            Task<IActionResult> result = _controller.ShowDailyFilesAsync();
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -403,13 +458,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        public async Task WhenAnnualIsCalledAndExceptionThrownByService_ThenShouldReturnExpectedViewWithViewData()
         {
+            const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
+
             A.CallTo(() => _fakeNMDataService.GetAnnualBatchFiles(A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Annual();
-
-            Assert.IsTrue(result.IsFaulted);
+            IActionResult result = await _controller.Annual();
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()
