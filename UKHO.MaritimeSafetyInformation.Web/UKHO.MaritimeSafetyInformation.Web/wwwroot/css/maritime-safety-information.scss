@@ -4,6 +4,7 @@
 @import "table";
 @import "common";
 @import "print";
+@import "home";
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
@@ -187,8 +188,8 @@ input[type="button"].select-all-button {
 }
 
 .intro-text {
-    font-size: 28px;
-    line-height: 36px;
+    font-size: 1.75rem;
+    line-height: 1.5;
     color: $black;
 }
 
