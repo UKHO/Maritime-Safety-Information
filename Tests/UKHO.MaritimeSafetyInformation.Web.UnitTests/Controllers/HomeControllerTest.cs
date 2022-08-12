@@ -14,7 +14,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
-
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 {
     [TestFixture]
@@ -48,9 +47,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenIndexIsCalled_ThenShouldReturnsView()
+        public async Task WhenIndexIsCalled_ThenShouldReturnsView()
         {
-            IActionResult result = _controller.Index();
+            IActionResult result = await _controller.Index();
 
             Assert.IsInstanceOf<ViewResult>(result);
         }

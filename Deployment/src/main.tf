@@ -88,6 +88,7 @@ module "azure-dashboard" {
 module "cache_storage" {
   source                                = "./Modules/CacheStorage"
   name                                  = "${local.service_name}${local.env_name}cachestorage"
+  table_name                            = "MsiBannerNotificationTable"
   resource_group_name                   = azurerm_resource_group.rg.name
   allowed_ips                           = var.allowed_ips
   location                              = azurerm_resource_group.rg.location

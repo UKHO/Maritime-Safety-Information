@@ -18,9 +18,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
-    <PackageReference Include="UKHO.FileShareAdminClient" Version="1.4.20530.4" />
-    <PackageReference Include="UKHO.FileShareClient" Version="1.4.20530.4" />
+	<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+	<PackageReference Include="UKHO.FileShareAdminClient" Version="1.5.20802.4" />
+    <PackageReference Include="UKHO.FileShareClient" Version="1.5.20802.4" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.43.1" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />

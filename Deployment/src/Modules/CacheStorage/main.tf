@@ -15,3 +15,8 @@ resource "azurerm_storage_account" "cache_storage" {
 
   tags                               = var.tags
 }
+
+resource "azurerm_storage_table" "banner_notification_table" {
+  name                 = var.table_name
+  storage_account_name = azurerm_storage_account.cache_storage.name
+}

@@ -1,4 +1,5 @@
-﻿@inject IConfiguration _config
+﻿
+@inject IConfiguration _config
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,6 +65,8 @@
                 </nav>
             </div>
         </div>
+        <!--Phase Banner-->
+        @await Component.InvokeAsync("BannerNotification")
     </header>
     <main class="main-content">
         @RenderBody()

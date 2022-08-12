@@ -335,6 +335,15 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
+                - task: AzureCLI@2
+                  displayName: "Set entity in table storage"
+                  inputs:
+                    azureSubscription: "Maritime Safety Information Dev - A.008.02"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
+
       - deployment: DevDeployApp
         dependsOn: DevDeployTerraform
         displayName: "Dev - DACPAC and App Deployment"
@@ -401,6 +410,15 @@ stages:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information QA - A.008.02"
 
+                - task: AzureCLI@2
+                  displayName: "Set entity in table storage"
+                  inputs:
+                    azureSubscription: "Maritime Safety Information QA - A.008.02"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
+
       - deployment: QADeployApp
         dependsOn: QADeployTerraform
         displayName: "QA - DACPAC and App Deployment"
@@ -466,6 +484,15 @@ stages:
                   parameters:
                     ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
                     AzureSubscription: "Maritime Safety Information Live - A.008.02"
+
+                - task: AzureCLI@2
+                  displayName: "Set entity in table storage"
+                  inputs:
+                    azureSubscription: "Maritime Safety Information Live - A.008.02"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
 
       - deployment: LiveDeployApp
         dependsOn: LiveDeployTerraform
