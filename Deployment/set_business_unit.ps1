@@ -1,7 +1,7 @@
 param (
     [Parameter(Mandatory = $true)] [string] $businessUnit,
     [Parameter(Mandatory = $true)] [string] $resourceGroup,
-    [Parameter(Mandatory = $true)] [string] $webappName
+    [Parameter(Mandatory = $true)] [string] $webappName,
     [Parameter(Mandatory = $true)] [string] $isCacheEnabled
 )
 
