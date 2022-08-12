@@ -85,9 +85,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     List<ShowFilesResponseModel> listshowFilesResponseModels = NMHelper.ListFilesResponse(searchResult).OrderBy(e => e.FileDescription).ToList();
                     return new ShowNMFilesResponseModel() { ShowFilesResponseModel = listshowFilesResponseModels, IsBatchResponseCached = isCached };
                 }
-
-                _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
-                throw new InvalidDataException("Invalid data received for weekly NM files");
+                else
+                {
+                    _logger.LogError(EventIds.GetWeeklyNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get weekly NM files returned no data for year:{year} and week:{week} for User:{SignInName} and Identity:{UserIdentifier} with _X-Correlation-ID:{correlationId}", year, week, _userService.SignInName ?? "Public", _userService.UserIdentifier, correlationId);
+                    return new ShowNMFilesResponseModel() { ShowFilesResponseModel = new List<ShowFilesResponseModel>(), IsBatchResponseCached = isCached };
+                }
             }
             catch (Exception ex)
             {
@@ -229,7 +231,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     {
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is started for with _X-Correlation-ID:{correlationId}", correlationId);
 
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, correlationId, PartitionKey);
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, PartitionKey, correlationId);
 
                         _logger.LogInformation(EventIds.FSSDailyBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service daily NM files response in azure table storage is completed for with _X-Correlation-ID:{correlationId}", correlationId);
                     }
@@ -464,6 +466,69 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.GetCumulativeFilesResponseFailed.ToEventId(), "Maritime safety information request to cumulative NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
+                throw;
+            }
+        }
+
+        public async Task<ShowNMFilesResponseModel> GetAnnualBatchFiles(string correlationId)
+        {
+            try
+            {
+                BatchSearchResponse searchResult = new();
+                bool isCached = false;
+                const string frequency = "Annual";
+                const string partitionKey = "Public";
+                const string rowKey = "AnnualKey";
+
+
+                if (_cacheConfiguration.Value.IsFssCacheEnabled)
+                {
+                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(partitionKey, rowKey, frequency, correlationId);
+
+                    if (batchSearchResponseModel.BatchSearchResponse != null)
+                    {
+                        searchResult = batchSearchResponseModel.BatchSearchResponse;
+                        isCached = true;
+                    }
+                }
+
+                if (searchResult.Entries == null)
+                {
+                    _logger.LogInformation(EventIds.GetAnnualFilesResponseStarted.ToEventId(), "Maritime safety information request to get annual NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+
+                    const string searchText = $" and $batch(Frequency) eq '{frequency}'";
+
+                    IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
+
+                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+
+                    searchResult = result.Data;
+
+                    if (_cacheConfiguration.Value.IsFssCacheEnabled && searchResult != null && searchResult.Entries.Count > 0)
+                    {
+                        _logger.LogInformation(EventIds.FSSSearchAnnualBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search annual NM files response in azure table storage is started with _X-Correlation-ID:{correlationId}", correlationId);
+
+                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, partitionKey, correlationId);
+
+                        _logger.LogInformation(EventIds.FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search annual NM files response in azure table storage is completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    }
+                }
+
+                if (searchResult != null && searchResult.Entries.Count > 0)
+                {
+                    List<ShowFilesResponseModel> showFilesResponseModel = NMHelper.GetShowAnnualFilesResponse(searchResult.Entries).ToList();
+                    ShowNMFilesResponseModel showNMFilesResponseModel = new() { ShowFilesResponseModel = showFilesResponseModel, IsBatchResponseCached = isCached };
+                    _logger.LogInformation(EventIds.GetAnnualFilesResponseCompleted.ToEventId(), "Maritime safety information request to get annual NM files response completed with _X-Correlation-ID:{correlationId}", correlationId);
+                    return showNMFilesResponseModel;
+                }
+                _logger.LogError(EventIds.GetAnnualNMFilesRequestDataNotFound.ToEventId(), "Maritime safety information request to get annual NM files returned no data with _X-Correlation-ID:{correlationId}", correlationId);
+                throw new InvalidDataException("Invalid data received for annual NM files");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.GetAnnualFilesResponseFailed.ToEventId(), "Maritime safety information request to annual NM files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 throw;
             }
         }

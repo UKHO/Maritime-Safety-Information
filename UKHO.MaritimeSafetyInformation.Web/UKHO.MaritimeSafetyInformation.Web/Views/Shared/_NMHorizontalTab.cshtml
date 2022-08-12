@@ -1,14 +1,14 @@
 ﻿<ul class="nav nav-tabs msi-tabs" id="nmTab" role="list">
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString()=="Index" ? "active":"")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners" role="listitem">Weekly</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString()=="Index" || ViewData["ActionName"]?.ToString() == "Index" ? "active":"")" id="weekly-tab" asp-action="Index" asp-controller="NoticestoMariners" role="listitem">Weekly</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" ? "active":"")"  id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners" role="listitem">Daily</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ShowDailyFiles" || ViewData["ActionName"]?.ToString() == "ShowDailyFiles" ? "active":"")"  id="daily-tab" asp-action="ShowDailyFiles" asp-controller="NoticestoMariners" role="listitem">Daily</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" ? "active":"")" id="cumulative-tab" asp-action="Cumulative" asp-controller="NoticestoMariners" role="listitem">Cumulative</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Cumulative" || ViewData["ActionName"]?.ToString() == "Cumulative" ? "active":"")" id="cumulative-tab" asp-action="Cumulative" asp-controller="NoticestoMariners" role="listitem">Cumulative</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Annual" ? "active":"")" id="annual-tab" asp-action="Annual" asp-controller="NoticestoMariners" role="listitem">Annual</a>
+        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Annual" || ViewData["ActionName"]?.ToString() == "Annual" ? "active":"")" id="annual-tab" asp-action="Annual" asp-controller="NoticestoMariners" role="listitem">Annual</a>
     </li>
 </ul>

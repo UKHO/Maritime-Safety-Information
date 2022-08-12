@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -23,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         [HttpGet]
         [Route("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
@@ -37,11 +38,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             ViewData["CurrentCorrelationId"] = correlationId;
             IExceptionHandlerPathFeature exceptionDetails = _contextAccessor.HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
+            ControllerActionDescriptor endpoint = exceptionDetails.Endpoint!.Metadata.OfType<ControllerActionDescriptor>().First()!;
+            ViewData["ControllerName"] = endpoint.ControllerName;
+            ViewData["ActionName"] = endpoint.ActionName;
+
             // In case of MsalUiRequiredException redirect user to sign in to get the account/login hint
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
             {                
                 string appLogInUrl = $"{_azureAdB2C.Value.RedirectBaseUrl}/MicrosoftIdentity/Account/SignIn";
-                await Request.HttpContext.SignOutAsync();                
+                await _contextAccessor.HttpContext.Request.HttpContext.SignOutAsync();                
                 return Redirect(appLogInUrl);                
             }
 

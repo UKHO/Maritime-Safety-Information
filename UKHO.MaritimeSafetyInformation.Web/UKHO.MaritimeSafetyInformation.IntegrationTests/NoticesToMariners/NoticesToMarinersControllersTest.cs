@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
     /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
     /// </summary>
-    
+
     internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider _services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
@@ -29,12 +29,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();           
+            Config = new Configuration();
             _ = new HttpContextAccessor
             {
                 HttpContext = new DefaultHttpContext()
             };
-           
+
             _nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(_services);
         }
 
@@ -51,6 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual(2020, showWeeklyFiles.YearAndWeekList[0].Year);
             Assert.AreEqual(14, showWeeklyFiles.YearAndWeekList[0].Week);
             Assert.AreEqual("application/pdf", showWeeklyFiles.ShowFilesResponseList[0].MimeType);
+            Assert.GreaterOrEqual(Config.MaxAttributeValuesCount, showWeeklyFiles.YearAndWeekList.Count);
         }
 
         [Test]
@@ -71,10 +72,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallIndexForWeekWithNoData_ThenThrowInvalidDataException()
+        public async Task WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMController.Index(2021, 08); });
+            IActionResult result = await _nMController.Index(2021, 08);
+            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(showWeeklyFiles);
+            Assert.AreEqual(0, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
         }
 
         [Test]
@@ -94,10 +99,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallShowWeeklyFilesAsyncWithNoData_ThenThrowInvalidDataException()
+        public async Task WhenCallShowWeeklyFilesAsyncWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMController.ShowWeeklyFilesAsync(2022, 6); });
+            IActionResult result = await _nMController.Index(2022, 06);
+            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(showWeeklyFiles);
+            Assert.AreEqual(0, showWeeklyFiles.ShowFilesResponseList.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
         }
 
         [Test]
@@ -221,6 +230,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("NP234(B) 2020", showNMFiles.ShowFilesResponseModel[2].FileDescription);
             Assert.AreEqual("NP234(A) 2020", showNMFiles.ShowFilesResponseModel[3].FileDescription);
         }
+
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
@@ -259,19 +269,19 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles.ShowFilesResponseModel[0].BatchId);
         }
 
-      [Test]
+        [Test]
         public async Task WhenLeisureCalledWithDuplicateData_ThenShouldReturnUniqueFiles()
         {
             IActionResult result = await _nMController.Leisure();
             ShowNMFilesResponseModel showFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.IsTrue(showFiles != null);
-            
+
             List<string> lstChart = new();
             foreach (ShowFilesResponseModel file in showFiles.ShowFilesResponseModel) 
             {
-                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);            
+                lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);
             }
-            Assert.AreEqual(lstChart.Distinct().Count(),lstChart.Count);
+            Assert.AreEqual(lstChart.Distinct().Count(), lstChart.Count);
 
             Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
             Assert.AreEqual("Notices to Mariners", Config.ProductType);
@@ -284,6 +294,46 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("Leisure", showFiles.ShowFilesResponseModel[1].Attributes.First(x => x.Key == "Frequency").Value);
             Assert.AreEqual("SC5608", showFiles.ShowFilesResponseModel[1].Attributes.First(x => x.Key == "Chart").Value);
             Assert.AreEqual("f017aead-89d3-484d-9acc-e12842724e9e", showFiles.ShowFilesResponseModel[1].BatchId);
+        }
+
+        [Test]
+        public async Task WhenCallAnnual_ThenReturnAnnualFiles()
+        {
+            IActionResult result = await _nMController.Annual();
+            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(responseModel.ShowFilesResponseModel);
+            Assert.AreEqual(15, responseModel.ShowFilesResponseModel.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", responseModel.ShowFilesResponseModel[0].BatchId);
+            Assert.AreEqual("An overview of the 26 sections", responseModel.ShowFilesResponseModel[0].FileDescription);
+            Assert.AreEqual(".pdf", responseModel.ShowFilesResponseModel[0].FileExtension);
+            Assert.AreEqual(205745, responseModel.ShowFilesResponseModel[0].FileSize);
+            Assert.AreEqual("ADMIRALTY Tide Tables 2022 — General Information", responseModel.ShowFilesResponseModel[1].FileDescription);
+            Assert.AreEqual("Suppliers of ADMIRALTY Charts and Publications", responseModel.ShowFilesResponseModel[2].FileDescription);
+            Assert.AreEqual("Safety of British merchant ships in periods of peace, tension or conflict", responseModel.ShowFilesResponseModel[3].FileDescription);
+            Assert.AreEqual("---", responseModel.ShowFilesResponseModel[0].Hash);
+            Assert.AreEqual("1", responseModel.ShowFilesResponseModel[1].Hash);
+        }
+
+        [Test]
+        public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
+        {
+            IActionResult result = await _nMController.Annual();
+            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            Assert.IsNotNull(responseModel.ShowFilesResponseModel);
+            Assert.AreEqual(15, responseModel.ShowFilesResponseModel.Count);
+            Assert.AreEqual("MaritimeSafetyInformationIntegrationTest", Config.BusinessUnit);
+            Assert.AreEqual("Notices to Mariners", Config.ProductType);
+            Assert.AreEqual("10219d3c-15bb-43db-ab51-2f2f4f6038de", responseModel.ShowFilesResponseModel[0].BatchId);
+            Assert.AreEqual("Firing Practice and Exercise Areas", responseModel.ShowFilesResponseModel[4].FileDescription);
+            Assert.AreEqual(".pdf", responseModel.ShowFilesResponseModel[3].FileExtension);
+            Assert.AreEqual(133291, responseModel.ShowFilesResponseModel[1].FileSize);
+            Assert.AreEqual("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", responseModel.ShowFilesResponseModel[5].FileDescription);
+            Assert.AreEqual("National Claims to Maritime Jurisdiction", responseModel.ShowFilesResponseModel[6].FileDescription);
+            Assert.AreEqual("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", responseModel.ShowFilesResponseModel[7].Filename);
+            Assert.AreEqual("---", responseModel.ShowFilesResponseModel[14].Hash);
+            Assert.AreEqual("1", responseModel.ShowFilesResponseModel[1].Hash);
         }
     }
 }

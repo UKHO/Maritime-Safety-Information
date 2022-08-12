@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetWeeklyBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
+        public async Task WhenGetWeeklyBatchFilesIsCalledWithNoData_ThenShouldReturnEmptyShowFilesResponseModel()
         {
             const int year = 2022;
             const int week = 15;
@@ -81,8 +81,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
             A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId); });
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+
+            Assert.AreEqual(0, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.AreEqual(false, showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -91,10 +93,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
             Task<ShowNMFilesResponseModel> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -411,7 +413,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public void WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldThrowInvalidDataException()
+        public async Task WhenGetWeeklyFilesResponseModelsAsyncWithZeroIsCalled_ThenShouldReturnEmptyShowFilesResponseList()
         {
             const int year = 2022;
             const int week = 0;
@@ -424,8 +426,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
             A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for weekly NM files"),
-                async delegate { await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId); });
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+
+            Assert.AreEqual(0, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+            Assert.AreEqual(false, showWeeklyFilesResponseModel.IsWeeklyBatchResponseCached);
+            Assert.AreEqual(false, showWeeklyFilesResponseModel.IsYearAndWeekAttributesCached);
+            Assert.AreEqual(3, showWeeklyFilesResponseModel.YearAndWeekList.Count);
+
         }
 
         [Test]
@@ -715,22 +722,96 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenCacheEnabledGetLeisureFilesAsyncIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        public async Task WhenGetAnnualBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForAnnual();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 6;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+        }
+        [Test]
+        public async Task WhenGetAnnualBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
+
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            const int expectedRecordCount = 6;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+        }
+
+        [Test]
+        public void WhenGetAnnualBatchFilesIsCalled_ThenShouldThrowInvalidDataException()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+
+            Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for annual NM files"),
+                async delegate { await _nMDataService.GetAnnualBatchFiles(CorrelationId); });
+        }
+
+        [Test]
+        public void WhenGetAnnualBatchFilesIsCalled_ThenShouldExecuteCatch()
+        {
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+
+            Task<ShowNMFilesResponseModel> result = _nMDataService.GetAnnualBatchFiles(CorrelationId);
+
+            Assert.IsTrue(result.IsFaulted);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForGetAnnualBatchFiles_ThenCacheReturnResponse()
         {
             _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            BatchSearchResponseModel batchSearchResponseModel = new();
-            batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponseForLeisure();
+            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+                           .Returns(new BatchSearchResponseModel { BatchSearchResponse = SetSearchResultForAnnual().Data });
+
+            const int expectedRecordCount = 6;
+
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
+        }
+
+        [Test]
+        public async Task WhenCacheEnabledForAnnualBatchFilesButDataNotInTable_ThenFSSReturnResponse()
+        {
+            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+
+            Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
 
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
-            const int expectedRecordCount = 2;
+            const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel showNMFilesResponseModels = await _nMDataService.GetLeisureFilesAsync(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModels.ShowFilesResponseModel.Count);
-            Assert.IsTrue(showNMFilesResponseModels.IsBatchResponseCached);
+            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         private static BatchSearchResponse GetBatchSearchResponse()
@@ -1567,7 +1648,72 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             };
 
+            return searchResult;
+        }
 
+        private static Result<BatchSearchResponse> SetSearchResultForAnnual()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 15,
+                    Links = null,
+                    Total = 15,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "28 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "27 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "26 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "01 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "02 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "00 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+                }
+            };
             return searchResult;
         }
 
@@ -1629,5 +1775,123 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                     }
             };
         }
+
+        private static Result<BatchSearchResponse> SetSearchResultForAnnualDuplicateData()
+        {
+            Result<BatchSearchResponse> searchResult = new()
+            {
+                Data = new BatchSearchResponse
+                {
+                    Count = 15,
+                    Links = null,
+                    Total = 15,
+                    Entries = new List<BatchDetails>() {
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now,
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "28 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "27 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "26 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "01 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "02 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "00 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        },
+                        new BatchDetails() {
+                            BatchId = "1",
+                              Attributes = new List<BatchDetailsAttributes>()
+                            {
+                                new BatchDetailsAttributes("Data Date","2022-01-22"),
+                                new BatchDetailsAttributes("Frequency","Annual"),
+                                new BatchDetailsAttributes("Product Type","Notices to Mariners"),
+                                new BatchDetailsAttributes("Year","2022"),
+
+                            },
+                            BatchPublishedDate = DateTime.Now.AddDays(-2),
+                            Files = new List<BatchDetailsFiles>() {
+                                new BatchDetailsFiles () {
+                                    Filename = "28 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "27 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "26 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "01 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "02 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                },
+                                new BatchDetailsFiles () {
+                                    Filename = "00 NP234(A) 2022.pdf",
+                                    FileSize=1232,
+                                    MimeType = "PDF",
+                                    Links = null
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            return searchResult;
+        }
+
+
     }
 }

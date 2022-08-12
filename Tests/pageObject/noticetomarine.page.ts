@@ -45,12 +45,16 @@ export default class noticetoMarine
     
     public async clickToNoticemarine()
     {
-     await this.noticeMarine.click();
+     await this.noticeMarine.first().click();
     }
 
     public async clickToNoticemarineAbout()
     {
         await this.menuAbout.click();
+    }
+    public async clickToNoticemarineAnnual()
+    {
+     await this.tabannual.click();   
     }
 
     public async checkEnabledYearDropDown()

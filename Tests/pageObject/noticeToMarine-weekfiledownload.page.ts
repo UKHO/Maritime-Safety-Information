@@ -31,6 +31,9 @@ export default class noticeToMarinerWeekDownload {
   readonly distributorThirdSize:Locator;
   readonly publicFirstFileName:Locator;
   readonly publicFirstSize:Locator;
+  readonly fileNameDownload:Locator;
+  readonly fileSize:Locator;
+  readonly annualSection:Locator;
   readonly weelkydowanload:string;
   constructor(page: Page) {
     this.page = page;
@@ -44,7 +47,7 @@ export default class noticeToMarinerWeekDownload {
     this.importantSafetyNotice=this.page.locator('text=Important safety notice');
     this.download = this.page.locator("[id^='download'] > a");
     this.fileName = this.page.locator("[id^='filename']");
-    this.leisureFolios=this.page.locator('div > p > a');
+    this.leisureFolios=this.page.locator('div > p:nth-child(4) > a');
     this.distributorPartner=this.page.locator('text=Partner');
     this.distributorPublic=this.page.locator('text=Public');
     this.distributorFileNumber=this.page.locator("[id^='partner']");
@@ -57,11 +60,13 @@ export default class noticeToMarinerWeekDownload {
     this.publicFirstFileName=this.page.locator('#filename_0');
     this.publicFirstSize=this.page.locator('#filesize_0');
     this.weelkydowanload="[id^='download'] > a";
-    
+    this.fileNameDownload= this.page.locator("[id^='filename'] > a");
+    this.fileSize = this.page.locator("[id^='filesize']");
+    this.annualSection = this.page.locator('[id^="section"]');
   }
 
   public async goToNoticeToMariner() {
-    await this.noticeToMarine.click();
+    await this.noticeToMarine.first().click();
   }
 
   public async goToDailyFile() {
@@ -86,7 +91,7 @@ export default class noticeToMarinerWeekDownload {
 
   public async checkFurtherInformation()
   {  
-    expect(await this.leisureFolios.getAttribute("aria-label")).toContain('Click here for Further Information');
+    expect(await this.leisureFolios.getAttribute("aria-label")).toContain('Click here for further guidance about Leisure Folios');
   }
   public async checkImportantSafetyNotice()
   {
@@ -211,6 +216,7 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
   public async verifyDistributorFileCount()
   { 
 
+
     await this.year.selectOption({label:'2022'});
     await this.week.selectOption({label:'26'});
     await this.page.waitForLoadState();
@@ -236,5 +242,55 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
     const publicFileSizeFirst=await this.publicFirstSize.last().textContent();
     expect(publicFileSizeFirst).toEqual("2 MB (.pdf)");
 
+  }
+
+  public async verifySectionWithDotsCount()
+  {
+    const section = this.annualSection
+    const countOfDots= await section.evaluateAll((matches: any[]) => { return matches.map(option => option.textContent) });
+    let count=0;
+    for(let i=0;i<countOfDots.length;i++)
+   
+      if(countOfDots[i]=="---")
+      {
+        count++;
+      }
+      
+      expect(count).toEqual(3);
+
+    
+  }
+
+  public async verifyAnnualFileNameLink()
+  {
+    const fileNameLink= await this.fileNameDownload;
+    const fileNameData = await fileNameLink.evaluateAll((option:any[]) =>{return option.map(element => element.getAttribute('href'))}); 
+    expect(fileNameData.length).toBeGreaterThan(0);
+    expect(fileNameData).toBeTruthy();
+  }
+
+  public async verifyAnnualDownloadLink()
+  {
+    const annualdownload= await this.download;
+    const annualdownloadLink= await annualdownload.evaluateAll((option:any[]) =>{return option.map(element => element.getAttribute('href'))}); 
+    expect(annualdownloadLink.length).toBeGreaterThan(0);
+    expect(annualdownloadLink).toBeTruthy();
+  }
+
+  public async checkAnnualFileSize()
+ {
+   await this.page.waitForLoadState();
+   await this.page.waitForSelector("[id^='filesize']");
+   
+   const annualFileSizeData= await this.fileSize;
+   const dailyFileSize= await annualFileSizeData.evaluateAll((option:any[]) =>{return option.map(element => element.textContent.trim())}); 
+   const regex=/^\S+\sB|MB|KB|GB|$/; 
+   for(let i=0;i<=dailyFileSize.length-1;i++)
+   {
+    const fileSize=dailyFileSize[i].split(" ");
+    expect(fileSize[1].toString().match(regex)).toBeTruthy();
+   }
 }
+
+
 }

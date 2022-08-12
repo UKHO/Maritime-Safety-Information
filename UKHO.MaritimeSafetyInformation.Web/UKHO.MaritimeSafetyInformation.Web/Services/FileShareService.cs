@@ -50,7 +50,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 _logger.LogInformation(EventIds.FSSSearchAttributeResponseStarted.ToEventId(), "Maritime safety information request for FSS to get NM batch search attribute response started for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
 
-                IResult<BatchAttributesSearchResponse> result = await fileShareApiClient.BatchAttributeSearch(searchQuery, CancellationToken.None);
+                IResult<BatchAttributesSearchResponse> result = await fileShareApiClient.BatchAttributeSearch(searchQuery, _fileShareServiceConfig.Value.MaxAttributeValuesCount, CancellationToken.None);
 
                 _logger.LogInformation(EventIds.FSSSearchAttributeResponseCompleted.ToEventId(), "Maritime safety information request for FSS to get NM batch search attribute response completed for correlationId:{correlationId} and searchQuery:{searchQuery}", correlationId, searchQuery);
 

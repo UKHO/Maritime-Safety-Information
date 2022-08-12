@@ -12,5 +12,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         Task<ShowNMFilesResponseModel> GetLeisureFilesAsync(string correlationId);
         Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, string correlationId);
         Task<ShowNMFilesResponseModel> GetCumulativeBatchFiles(string correlationId);
+        Task<ShowNMFilesResponseModel> GetAnnualBatchFiles(string correlationId);
     }
 }

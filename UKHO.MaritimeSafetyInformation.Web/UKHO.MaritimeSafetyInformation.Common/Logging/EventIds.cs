@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetSearchAttributeRequestDataNotFound = 910052,
         /// <summary>
-        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Completed.
         /// </summary>
         GetWeeklyFilesResponseCompleted = 910053,
 
@@ -605,7 +605,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910145 - Request for storing Leisure batch file response in azure table storage completed
         /// </summary>
         FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
-		/// <summary>
+        /// <summary>
         /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
         ClearFSSSearchCacheEventCompleted = 910146,
@@ -620,9 +620,83 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910149 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
-        ClearFSSSearchCacheCompleted = 910149
-
-		
+        ClearFSSSearchCacheCompleted = 910149,
+        /// <summary>
+        /// 910150 -   Event data for Retrieval of MSI Annual File Request Started.
+        /// </summary>
+        ShowAnnualFilesRequestStarted = 910150,
+        /// <summary>
+        /// 910151 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// </summary>
+        ShowAnnualFilesRequestCompleted = 910151,
+        /// <summary>
+        /// 910152 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// </summary>
+        ShowAnnualFilesFailed = 910152,
+        /// <summary>
+        /// 910153 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// </summary>
+        GetAnnualFilesResponseStarted = 910153,
+        /// <summary>
+        /// 910154 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// </summary>
+        GetAnnualFilesResponseCompleted = 910154,
+        /// <summary>
+        /// 910155 -  Get NM Batch Files For Annual Data Not Found.
+        /// </summary>
+        GetAnnualNMFilesRequestDataNotFound = 910155,
+        /// <summary>
+        /// 910156 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// </summary>
+        GetAnnualFilesResponseFailed = 910156,
+        /// <summary>
+        /// 910157 - Request for searching annual batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchAnnualBatchFilesResponseStoreToCacheStart = 910157,
+        /// <summary>
+        /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
+        /// <summary>
+        /// 910159 -  Maritime safety information request to get RNW detail Failed.
+        /// </summary>
+        RNWListDetailFailed = 910159,
+        /// <summary> 
+        /// 910160 -  Maritime safety information request for Show Selection started.
+        /// </summary>
+        RNWShowSelectionStarted = 910160,
+        /// <summary> 
+        /// 910161 -  Maritime safety information request for Show Selection completed.
+        /// </summary>
+        RNWShowSelectionCompleted = 910161,
+        /// <summary>
+        /// 910162 -  Maritime safety information request Show Selection Failed.
+        /// </summary>
+        RNWShowSelectionFailed = 910162,
+        /// <summary>
+        /// 910163 - Maritime safety information request to get banner notification message started.
+        /// </summary>
+        BannerNotificationRequestStarted = 910163,
+        /// <summary>
+        /// 910164 - Maritime safety information request to get banner notification message completed.
+        /// </summary>
+        BannerNotificationRequestCompleted = 910164,
+        /// <summary>
+        /// 910165 - Maritime safety information request to get banner notification message failed.
+        /// </summary>
+        BannerNotificationRequestFailed = 910165,
+        /// <summary>
+        /// 910166 - Maritime safety information request to get banner notification message from azure table started.
+        /// </summary>
+        GetBannerNotificationMessageFromTableStarted = 910166,
+        /// <summary>
+        /// 910167 - Maritime safety information request to get banner notification message from azure table completed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableCompleted = 910167,
+        /// <summary>
+        /// 910168 - Maritime safety information request to get banner notification message from azure table failed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableFailed = 910168
     }
 
     public static class EventIdExtensions
