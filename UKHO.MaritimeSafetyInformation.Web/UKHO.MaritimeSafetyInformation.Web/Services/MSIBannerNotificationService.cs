@@ -36,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (_bannerNotificationConfiguration.Value.IsBannerNotificationEnabled)
                 {
-                    MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetSingleEntityAsync(_cacheConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
+                    MsiBannerNotificationEntity msiBannerNotificationEntity = await _azureTableStorageClient.GetSingleEntityAsync(_bannerNotificationConfiguration.Value.MsiBannerNotificationTableName, ConnectionString);
                     if (msiBannerNotificationEntity != null)
                     {
                         HtmlSanitizer sanitizer = new();
