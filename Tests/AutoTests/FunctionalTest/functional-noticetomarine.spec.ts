@@ -8,6 +8,7 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
        let notice:any;
 
        test.beforeEach(async ({page}) => {
+        test.slow();
          await page.goto(app.url);  
          notice = new noticeToMarine(page);
          await notice.clickToNoticemarine();
@@ -25,6 +26,7 @@ test.describe("Maritime Safety Information Notice to Marine Page Functional Test
          expect(await notice.checkText(notice.tabcumulative)).toEqual("Cumulative");  
          expect(await notice.checkText(notice.tabannual)).toEqual("Annual");    
        })
+       
        test('Does the Table Data is Displayed With The Record Count',async ({page}) => {
          expect(await notice.checkTableRecordCount()).toBeGreaterThan(0);
          await notice.verifyTableContainsDownloadLink();
