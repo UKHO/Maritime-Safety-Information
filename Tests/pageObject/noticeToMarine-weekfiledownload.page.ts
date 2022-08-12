@@ -66,7 +66,7 @@ export default class noticeToMarinerWeekDownload {
   }
 
   public async goToNoticeToMariner() {
-    await this.noticeToMarine.click();
+    await this.noticeToMarine.first().click();
   }
 
   public async goToDailyFile() {
