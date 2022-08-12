@@ -20,7 +20,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             _nMDataService = nMDataService;
             _contextAccessor = contextAccessor;
             _userService = userService;
-        }
+        } 
 
         [HttpGet]
         [Route("/NoticesToMariners/Weekly")]

@@ -1,0 +1,17 @@
+﻿
+<!--Phase Banner-->
+ @if (!string.IsNullOrEmpty(ViewBag.BannerNotificationMessage))
+ {
+    <div class="phase-banner">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <P>
+                        @Html.Raw(ViewBag.BannerNotificationMessage)
+                    </P>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

@@ -283,6 +283,21 @@
   transform: translateY(-5%);
 }
 
+/*Phase Banner*/
+.phase-banner p {
+  padding: 20px 0px;
+  margin-bottom: 0px;
+}
+@media screen and (max-width: 576px) {
+  .phase-banner p {
+    font-size: 16px;
+    line-height: 32px;
+  }
+}
+.phase-banner p a {
+  font-weight: 300;
+}
+
 .site-footer {
   border-top: #09315b 0.375rem solid;
   height: auto;

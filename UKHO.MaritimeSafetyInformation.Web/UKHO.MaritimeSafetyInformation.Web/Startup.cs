@@ -47,8 +47,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
             services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
             services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
-            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
-
+            services.Configure<BannerNotificationConfiguration>(configuration.GetSection("BannerNotificationConfiguration"));
             services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
@@ -69,7 +68,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IAzureStorageService, AzureStorageService>();
             services.AddScoped<IWebhookService, WebhookService>();
             services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
-
+            services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
+            
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
 

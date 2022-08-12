@@ -47,7 +47,7 @@ export default class noticeToMarinerWeekDownload {
     this.importantSafetyNotice=this.page.locator('text=Important safety notice');
     this.download = this.page.locator("[id^='download'] > a");
     this.fileName = this.page.locator("[id^='filename']");
-    this.leisureFolios=this.page.locator('div > p > a');
+    this.leisureFolios=this.page.locator('div > p:nth-child(4) > a');
     this.distributorPartner=this.page.locator('text=Partner');
     this.distributorPublic=this.page.locator('text=Public');
     this.distributorFileNumber=this.page.locator("[id^='partner']");

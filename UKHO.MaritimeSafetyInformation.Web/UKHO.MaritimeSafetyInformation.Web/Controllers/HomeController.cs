@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         [HttpGet]
         [Route("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
