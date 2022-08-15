@@ -24,3 +24,7 @@ variable "m_spoke_subnet" {
 variable "agent_subnet" {
   type = string
 }
+
+variable "table_name" {
+  type = string
+}

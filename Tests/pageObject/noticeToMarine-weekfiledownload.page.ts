@@ -47,7 +47,7 @@ export default class noticeToMarinerWeekDownload {
     this.importantSafetyNotice=this.page.locator('text=Important safety notice');
     this.download = this.page.locator("[id^='download'] > a");
     this.fileName = this.page.locator("[id^='filename']");
-    this.leisureFolios=this.page.locator('div > p > a');
+    this.leisureFolios=this.page.locator('div > p:nth-child(4) > a');
     this.distributorPartner=this.page.locator('text=Partner');
     this.distributorPublic=this.page.locator('text=Public');
     this.distributorFileNumber=this.page.locator("[id^='partner']");
@@ -66,7 +66,7 @@ export default class noticeToMarinerWeekDownload {
   }
 
   public async goToNoticeToMariner() {
-    await this.noticeToMarine.click();
+    await this.noticeToMarine.first().click();
   }
 
   public async goToDailyFile() {
@@ -215,6 +215,7 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
 
   public async verifyDistributorFileCount()
   { 
+
 
     await this.year.selectOption({label:'2022'});
     await this.week.selectOption({label:'26'});

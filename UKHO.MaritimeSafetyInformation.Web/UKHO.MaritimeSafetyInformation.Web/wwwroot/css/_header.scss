@@ -295,3 +295,21 @@
 .skip-to-content-link:focus {
     transform: translateY(-5%);
 }
+
+/*Phase Banner*/
+.phase-banner {
+
+    p {
+        padding: 20px 0px;
+        margin-bottom: 0px;
+
+        @media screen and (max-width: $small) {
+            font-size: 16px;
+            line-height: 32px;
+        }
+
+        a {
+            font-weight:300;
+        }
+    }
+}

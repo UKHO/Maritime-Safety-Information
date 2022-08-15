@@ -1,4 +1,5 @@
-﻿using Azure.Data.Tables;
+﻿using Azure;
+using Azure.Data.Tables;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Diagnostics.CodeAnalysis;
@@ -50,6 +51,29 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             {
                 CloudTable _cloudTable = tableClient.GetTableReference(tableName);
                 await _cloudTable.DeleteIfExistsAsync();
+            }
+        }
+
+        public async Task<MsiBannerNotificationEntity> GetSingleEntityAsync(string tableName, string storageAccountConnectionString)
+        {
+            try
+            {
+                List<MsiBannerNotificationEntity> msiBannerNotificationEntityList = new();
+                TableClient tableClient = await GetTableClient(tableName, storageAccountConnectionString);
+                AsyncPageable<MsiBannerNotificationEntity> linqEntities = tableClient.QueryAsync<MsiBannerNotificationEntity>(r => r.StartDate <= DateTime.UtcNow && r.ExpiryDate > DateTime.UtcNow && r.IsNotificationEnabled);
+
+                await foreach (MsiBannerNotificationEntity item in linqEntities)
+                {
+                    msiBannerNotificationEntityList.Add(item);
+                }
+
+                return (from r in msiBannerNotificationEntityList
+                        orderby r.StartDate descending
+                        select r).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

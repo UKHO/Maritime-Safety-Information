@@ -32,6 +32,7 @@
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
     <PackageReference Include="FluentValidation" Version="11.1.0" />
+    <PackageReference Include="HtmlSanitizer" Version="7.1.542" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="6.0.4" />
@@ -47,6 +48,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
     <PackageReference Include="UKHO.FileShareAdminClient" Version="1.5.20802.4" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.5.20802.4" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22221.2" />

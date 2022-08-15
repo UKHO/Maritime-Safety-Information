@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetSearchAttributeRequestDataNotFound = 910052,
         /// <summary>
-        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Completed.
         /// </summary>
         GetWeeklyFilesResponseCompleted = 910053,
 
@@ -672,7 +672,31 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910162 -  Maritime safety information request Show Selection Failed.
         /// </summary>
-        RNWShowSelectionFailed = 910162
+        RNWShowSelectionFailed = 910162,
+        /// <summary>
+        /// 910163 - Maritime safety information request to get banner notification message started.
+        /// </summary>
+        BannerNotificationRequestStarted = 910163,
+        /// <summary>
+        /// 910164 - Maritime safety information request to get banner notification message completed.
+        /// </summary>
+        BannerNotificationRequestCompleted = 910164,
+        /// <summary>
+        /// 910165 - Maritime safety information request to get banner notification message failed.
+        /// </summary>
+        BannerNotificationRequestFailed = 910165,
+        /// <summary>
+        /// 910166 - Maritime safety information request to get banner notification message from azure table started.
+        /// </summary>
+        GetBannerNotificationMessageFromTableStarted = 910166,
+        /// <summary>
+        /// 910167 - Maritime safety information request to get banner notification message from azure table completed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableCompleted = 910167,
+        /// <summary>
+        /// 910168 - Maritime safety information request to get banner notification message from azure table failed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableFailed = 910168
     }
 
     public static class EventIdExtensions

@@ -11,3 +11,7 @@ output cache_storage_primary_access_key {
   value = azurerm_storage_account.cache_storage.primary_access_key
   sensitive = true
 }
+
+output table_storage_name {
+  value = azurerm_storage_table.banner_notification_table.name
+}
