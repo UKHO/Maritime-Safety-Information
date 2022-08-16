@@ -493,7 +493,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
             A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
 
-            Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
+            Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, false, CorrelationId);
 
             Assert.IsInstanceOf<Task<byte[]>>(result);
         }
@@ -508,7 +508,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
             A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
-            Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
+            Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, false, CorrelationId);
 
             Assert.IsTrue(result.IsFaulted);
         }

@@ -274,7 +274,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     new KeyValuePair<string, string>("MimeType", mimeType)
                 }, GetCurrentCorrelationId(), _logger);
 
-                byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, GetCurrentCorrelationId());
+                byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, _userService.IsDistributorUser, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
 
@@ -301,28 +301,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     new KeyValuePair<string, string>("Type", type)
                 }, GetCurrentCorrelationId(), _logger);
 
+                _logger.LogInformation(EventIds.DownloadAllWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to all weekly NM files started for {type} with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", type, batchId, fileName, GetCurrentCorrelationId());
+
                 byte[] fileBytes;
                 if (type == "partner")
                 {
-                    _logger.LogInformation(EventIds.DownloadDailyNMFileStarted.ToEventId(), "Maritime safety information request to all weekly NM files started for partner with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
-                    fileBytes = await _nMDataService.DownloadFSSAllZipFileAsync(batchId, fileName, true, GetCurrentCorrelationId());
+                    fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, true, GetCurrentCorrelationId());
                 }
                 else
                 {
-                    _logger.LogInformation(EventIds.DownloadDailyNMFileStarted.ToEventId(), "Maritime safety information request to all weekly NM files started for public with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
-                    fileBytes = await _nMDataService.DownloadFSSAllZipFileAsync(batchId, fileName, false, GetCurrentCorrelationId());
+                    fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, false, GetCurrentCorrelationId());
                 }
 
-                //fileName = "file.zip";
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
 
-                _logger.LogInformation(EventIds.DownloadDailyNMFileCompleted.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} is completed for _X-Correlation-ID:{correlationId}", batchId, fileName, GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadAllWeeklyNMFileCompleted.ToEventId(), "Maritime safety information request to download all weekly NM files for {type} with batchId:{batchId} and fileName:{fileName} is completed for _X-Correlation-ID:{correlationId}", type, batchId, fileName, GetCurrentCorrelationId());
 
                 return File(fileBytes, mimeType);
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.DownloadDailyNMFileFailed.ToEventId(), "Maritime safety information request to download daily NM files with batchId:{batchId} and fileName:{fileName} has failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, fileName, ex.Message, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.DownloadAllWeeklyNMFileFailed.ToEventId(), "Maritime safety information request to download all weekly NM files for {type} with batchId:{batchId} and fileName:{fileName} has failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", type, batchId, fileName, ex.Message, GetCurrentCorrelationId());
                 throw;
             }
         }

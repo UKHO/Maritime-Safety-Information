@@ -382,37 +382,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public async Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, string correlationId)
+        public async Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, bool isDistributorUser, string correlationId)
         {
             try
             {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
-
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
-
-                IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
-
-                Stream stream = await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient);
-
-                byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
-
-                _logger.LogInformation(EventIds.GetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
-
-                return fileBytes;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileFailed.ToEventId(), "Maritime safety information request to get daily zip NM file failed for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{correlationId}", batchId, fileName, ex.Message, correlationId);
-                throw;
-            }
-
-        }
-
-        public async Task<byte[]> DownloadFSSAllZipFileAsync(string batchId, string fileName, bool isDistributorUser, string correlationId)
-        {
-            try
-            {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetNMZipFileStarted.ToEventId(), "Maritime safety information request to get NM zip file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(isDistributorUser, correlationId);
 
@@ -422,13 +396,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
-                _logger.LogInformation(EventIds.GetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetNMZipFileCompleted.ToEventId(), "Maritime safety information request to get NM zip file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 return fileBytes;
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileFailed.ToEventId(), "Maritime safety information request to get daily zip NM file failed for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{correlationId}", batchId, fileName, ex.Message, correlationId);
+                _logger.LogInformation(EventIds.GetNMZipFileFailed.ToEventId(), "Maritime safety information request to get NM zip file failed for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{correlationId}", batchId, fileName, ex.Message, correlationId);
                 throw;
             }
 
