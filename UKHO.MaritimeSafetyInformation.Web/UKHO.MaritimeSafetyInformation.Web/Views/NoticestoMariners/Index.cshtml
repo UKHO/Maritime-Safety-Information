@@ -69,6 +69,7 @@
 
 <script type="text/javascript">
     var serverData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.YearAndWeekList));
+    console.log(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.YearAndWeekList)));
     window.onload = function () {
         LoadData(serverData);
     }
