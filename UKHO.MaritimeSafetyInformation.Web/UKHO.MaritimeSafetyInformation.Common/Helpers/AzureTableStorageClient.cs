@@ -68,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                 }
 
                 return (from r in msiBannerNotificationEntityList
-                        orderby r.StartDate ascending
+                        orderby r.StartDate descending
                         select r).FirstOrDefault();
             }
             catch (Exception)
