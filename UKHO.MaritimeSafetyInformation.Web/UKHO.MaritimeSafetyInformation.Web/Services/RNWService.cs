@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<ResponseNewRadioNavigationWarningsModel> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId)
+        public async Task<ResponseNewRadioNavigationWarningsModel> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId, bool skipCheckDuplicateReference)
         {
             ResponseNewRadioNavigationWarningsModel responseNewRadioNavigationWarningsModel = new()
             {
@@ -63,8 +63,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             try
             {
-                bool checkData = await _rnwRepository.CheckDuplicateReferenceNumber(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
-                if (checkData)
+                bool isDuplicateReferenceNumber = false;
+
+                if (!skipCheckDuplicateReference)
+                {
+                    isDuplicateReferenceNumber = await _rnwRepository.CheckDuplicateReferenceNumber(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
+                }
+                
+                if (!isDuplicateReferenceNumber)
                 {
                     _logger.LogInformation(EventIds.AddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
                     await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);

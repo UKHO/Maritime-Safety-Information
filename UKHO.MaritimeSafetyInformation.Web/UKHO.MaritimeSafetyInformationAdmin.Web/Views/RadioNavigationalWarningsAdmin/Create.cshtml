@@ -47,6 +47,9 @@
                     <label asp-for="ExpiryDate" class="form-label">Expiry date and time</label>
                     <input asp-for="ExpiryDate" class="form-control" />
                 </div>
+                 <div class="mb-3">
+                     @Html.Hidden("SkipCheckDuplicate", "")
+                </div>
                 <div class="mb-3">
                     <input type="submit" value="Create" id="btnCreate" class="primary me-4" />
                     <a asp-action="Index">Back to List</a>
@@ -64,11 +67,15 @@
     if (TempData["message"] != null) {
        <script type="text/javascript">
        let confirmAction =  confirm(@Html.Raw(Json.Serialize(TempData["message"])));
-       if (confirmAction) {
-            alert("Action successfully executed");
-       } else {
-            alert("Action canceled");
+       if (confirmAction)
+       {
+           document.getElementById("SkipCheckDuplicate").value = "Yes";
+           document.getElementById('btnCreate').click()
        }
-        </script>
+       else
+       {
+            document.getElementById("SkipCheckDuplicate").value = "No";
+       }
+       </script>
     }
 }

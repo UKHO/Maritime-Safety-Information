@@ -142,14 +142,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                                                                                             Content = rnwWarnings.Content
                                                                                         }).OrderByDescending(a => a.DateTimeGroup)
                                                                                         .ToListAsync();
-            if (RadioNavigationalWarningsAdmin.Count > 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return RadioNavigationalWarningsAdmin.Count > 0;
         }
     }
 }

@@ -39,9 +39,15 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
         {
             _logger.LogInformation(EventIds.CreateNewRNWRecordStart.ToEventId(), "Create RNW request started for _X-Correlation-ID:{correlationId}. Requested by user: {user}", GetCurrentCorrelationId(),User.Identity.Name);
 
+            bool skipCheckDuplicateReference = false;
+            if (!string.IsNullOrWhiteSpace(Request.Form["SkipCheckDuplicate"]))
+            {
+                skipCheckDuplicateReference = Request.Form["SkipCheckDuplicate"] == "Yes";
+            }
+
             if (ModelState.IsValid)
             {
-                ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId());
+                ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipCheckDuplicateReference);
 
                 if (result.IsCreated)
                 {
