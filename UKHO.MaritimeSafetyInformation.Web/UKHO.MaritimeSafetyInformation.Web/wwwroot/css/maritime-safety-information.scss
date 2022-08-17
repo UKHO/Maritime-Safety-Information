@@ -221,3 +221,47 @@ input[type="button"].select-all-button {
         }
     }
 }
+
+.notice-to-mariners-daily-table, .notice-to-mariners-cumulative-table {
+    thead {
+        tr {
+            th {
+                &.th-3 {
+                    flex-basis: 35%;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                &.td-3 {
+                    flex-basis: 35%;
+                }
+            }
+        }
+    }
+}
+
+.notice-to-mariners-weekly-table {
+    thead {
+        tr {
+            th {
+                &.th-3 {
+                    flex-basis: 50%;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                &.td-3 {
+                    flex-basis: 50%;
+                }
+            }
+        }
+    }
+}
