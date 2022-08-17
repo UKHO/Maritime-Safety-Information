@@ -37,13 +37,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexIsCalled_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-
+            const int year = 2022;
+            const int week = 20;
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
             IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
             Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
@@ -51,6 +54,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexIsCalledForNoBatchData_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+            const int year = 2022;
+            const int week = 20;
 
             ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = SetResultForShowWeeklyFilesResponseModel();
 
@@ -60,8 +65,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
+
             string actualView = ((ViewResult)result).ViewName;
+
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
             Assert.AreEqual(true, _controller.ViewBag.HasError);
         }
 
