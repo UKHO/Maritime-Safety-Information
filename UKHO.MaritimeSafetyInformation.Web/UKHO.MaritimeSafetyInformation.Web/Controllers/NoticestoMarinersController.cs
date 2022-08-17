@@ -304,14 +304,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                 _logger.LogInformation(EventIds.DownloadAllWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to all weekly NM files started for {type} with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", type, batchId, fileName, GetCurrentCorrelationId());
 
                 byte[] fileBytes;
-                if (type == "partner")
-                {
-                    fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, true, GetCurrentCorrelationId());
-                }
-                else
-                {
-                    fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, false, GetCurrentCorrelationId());
-                }
+                bool isDistributorUser = type == "partner";
+
+                fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, isDistributorUser, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
 
