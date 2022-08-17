@@ -60,9 +60,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId);
+            A.CallTo(() => _fakeRnwRepository.CheckDuplicateReferenceNumber(A<int>.Ignored, A<string>.Ignored)).Returns(true);
 
-            Assert.IsTrue(result);
+            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId);
+
+            Assert.IsTrue(result.IsCreated);
         }
 
         [Test]
@@ -114,6 +116,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+
+            A.CallTo(() => _fakeRnwRepository.CheckDuplicateReferenceNumber(A<int>.Ignored, A<string>.Ignored)).Returns(true);
 
             A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarning(A<RadioNavigationalWarning>.Ignored)).Throws(new Exception());
 

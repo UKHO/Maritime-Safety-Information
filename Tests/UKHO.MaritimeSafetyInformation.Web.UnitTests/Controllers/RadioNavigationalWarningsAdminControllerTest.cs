@@ -62,7 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
         {
             _controller.TempData = _tempData;
-             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(true);
+             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true});
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
@@ -73,7 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordIsNotCreated()
         {
             _controller.TempData = _tempData;
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated =false});
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.IsNull(_controller.TempData["message"]);

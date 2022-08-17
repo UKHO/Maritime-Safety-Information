@@ -59,3 +59,16 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+@{
+    if (TempData["message"] != null) {
+       <script type="text/javascript">
+       let confirmAction =  confirm(@Html.Raw(Json.Serialize(TempData["message"])));
+       if (confirmAction) {
+            alert("Action successfully executed");
+       } else {
+            alert("Action canceled");
+       }
+        </script>
+    }
+}
