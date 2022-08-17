@@ -83,8 +83,7 @@ test('Should Goto Notices to Mariner Page for Weekly NM files with Distributor R
   await noticeFileDownload.goToNoticeToMariner();
   await noticeFileDownload.verifyDistributorFileCount();
   await noticeFileDownload.verifyIntegrationTestValueForDistributor();
-
-
+  await noticeFileDownload.verifyIntegrationDownloadAll();
+  await noticeFileDownload.verifyIntegrationDownloadPartnerAll();
 })  
-
 });
