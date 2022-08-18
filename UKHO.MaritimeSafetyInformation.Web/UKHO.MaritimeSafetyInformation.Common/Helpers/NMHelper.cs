@@ -146,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public static void ValidateParametersForDownloadSingleFile(List<KeyValuePair<string, string>> parameters, string correlationId, ILogger logger)
         {
-            foreach (var parameter in parameters)
+            foreach (KeyValuePair<string, string> parameter in parameters)
             {
                 if (string.IsNullOrEmpty(parameter.Value))
                 {
