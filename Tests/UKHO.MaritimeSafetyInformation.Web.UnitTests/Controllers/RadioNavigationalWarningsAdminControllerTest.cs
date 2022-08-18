@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using NUnit.Framework;
@@ -62,7 +63,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenAddRadioNavigationWarningsReturnTrueInRequest_ThenNewRecordIsCreated()
         {
             _controller.TempData = _tempData;
-             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true});
+            DefaultHttpContext httpContext = new();
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"SkipCheckDuplicate", "Yes" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true});
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
@@ -73,7 +82,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordIsNotCreated()
         {
             _controller.TempData = _tempData;
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated =false});
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated =false});
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.IsNull(_controller.TempData["message"]);
