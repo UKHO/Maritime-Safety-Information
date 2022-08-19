@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -77,26 +78,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(4, result.Count);
             Assert.AreEqual(5, result[0].Id);
             Assert.AreEqual("010000 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
             Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
-        }
-
-        [Test]
-        public async Task WhenCallGetRadioNavigationWarnings_ThenIsDeletedShouldDisplayYesAndNoRespectively()
-        {
-            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.AreEqual("No", result[0].IsDeleted);
-            Assert.AreEqual("Yes", result[3].IsDeleted);
-        }
+        }        
 
         [Test]
         public async Task WhenCallGetRadioNavigationWarningWithContentLengthGreaterThan300Char_ThenWrapTheContent()
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.IsTrue(result[3].Content.Length <= 303);
-            Assert.IsTrue(result[3].Content.Contains("..."));
+            Assert.IsTrue(result.First(x => x.Id == 1).Content.Length <= 303);
+            Assert.IsTrue(result.First(x => x.Id == 1).Content.Contains("..."));
         }
 
         [Test]
@@ -196,7 +189,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                  + "including those which are no longer being broadcast, are reprinted in Section III of ANMB in weeks 1, 13, 26 and 39"
                  + "and are also available from the UKHO website at: www.admiralty.co.uk/RNW.  Alternatively, these may be requested by"
                  + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22.",
-                IsDeleted = true
+                IsDeleted = false
             });
 
             radioNavigationalWarningList.Add(new RadioNavigationalWarning()

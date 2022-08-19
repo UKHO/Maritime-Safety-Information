@@ -52,7 +52,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             IActionResult result = await _controller.Index(1, null, null);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
 
-            Assert.AreEqual(8, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(7, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
@@ -62,8 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(new DateTime(2022, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].DateTimeGroup);
             Assert.AreEqual("RnwAdminListSummary", adminListFilter.RadioNavigationalWarningsAdminList[2].Summary);
             Assert.AreEqual("RnwAdminListContent", adminListFilter.RadioNavigationalWarningsAdminList[2].Content);
-            Assert.AreEqual(new DateTime(2099, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].ExpiryDate);
-            Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[2].IsDeleted);
+            Assert.AreEqual(new DateTime(2099, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].ExpiryDate);            
             Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
             Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
         }
@@ -74,7 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, WarningTypes.NAVAREA_1, null);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(4, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(3, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
@@ -88,7 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, Year2020);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual(1, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
@@ -139,17 +138,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 0;
             Assert.ThrowsAsync(Is.TypeOf<DivideByZeroException>(),
                          async delegate { await _controller.Index(1, null, null); });
-        }
-
-        [Test]
-        public async Task WhenCallIndex_ThenIsDeletedShouldDisplayYesAndNoRespectively()
-        {
-            FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
-            IActionResult result = await _controller.Index(1, null, Year2020);
-            RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
-            Assert.AreEqual("Yes", adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
-            Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[1].IsDeleted);
         }
 
         [Test]
