@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 DateTimeGroup = new DateTime(2019, 1, 1),
                 Summary = "Test1",
                 Content = "test",
-                IsDeleted = false,
+                IsDeleted = true,
             };
             _rnwRepository = new RNWRepository(_context);
         }
@@ -70,8 +70,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Assert.IsNotNull(warningTypeList);
             Assert.IsInstanceOf(typeof(Task<List<WarningType>>), warningTypeList);
-            Assert.AreEqual(WarningTypes.NAVAREA_1, warningTypeList.Result[0].Id);
-            Assert.AreEqual("NAVAREA 1", warningTypeList.Result[0].Name);
+            Assert.AreEqual("NAVAREA 1", warningTypeList.Result.First(x=>x.Id==1).Name);
+            Assert.AreEqual("UK Coastal", warningTypeList.Result.First(x=>x.Id==2).Name);
         }
 
         [Test]
@@ -79,9 +79,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.AreEqual(4, result.Count);
-            Assert.AreEqual(5, result[0].Id);
-            Assert.AreEqual("010000 UTC Jan 20", result[3].DateTimeGroupRnwFormat);
-            Assert.AreEqual("NAVAREA 1", result[0].WarningTypeName);
+            Assert.AreEqual("010000 UTC Jan 20", result.First(x=>x.Id == 2).DateTimeGroupRnwFormat);
+            Assert.AreEqual("NAVAREA 1", result.First(x => x.Id == 3).WarningTypeName);
         }        
 
         [Test]
