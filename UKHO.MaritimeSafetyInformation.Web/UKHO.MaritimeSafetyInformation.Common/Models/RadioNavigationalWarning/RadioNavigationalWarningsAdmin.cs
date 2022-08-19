@@ -38,5 +38,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
 
         [DisplayName("Deleted")]
         public string IsDeleted { get; set; }
+
+        public string Status { get; set; }
     }
 }

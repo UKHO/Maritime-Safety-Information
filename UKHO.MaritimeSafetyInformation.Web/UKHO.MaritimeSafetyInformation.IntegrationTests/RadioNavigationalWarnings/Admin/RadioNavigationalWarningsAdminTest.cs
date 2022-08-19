@@ -12,6 +12,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
+using System.Linq;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings.Admin
 {
@@ -150,6 +151,17 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
             Assert.AreEqual("Yes", adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
             Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[1].IsDeleted);
+        }
+
+        [Test]
+        public async Task WhenIndexIsCalled_ThenShouldDisplayStatusAsActiveOrExpired()
+        {
+            FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
+            IActionResult result = await _controller.Index(1, null, Year2020);
+            RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
+            Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
+            Assert.AreEqual("Active", adminListFilter.RadioNavigationalWarningsAdminList.First(x=>x.Id == 1).Status);
+            Assert.AreEqual("Expired", adminListFilter.RadioNavigationalWarningsAdminList.First(x=>x.Id == 2).Status);
         }
 
         [Test]

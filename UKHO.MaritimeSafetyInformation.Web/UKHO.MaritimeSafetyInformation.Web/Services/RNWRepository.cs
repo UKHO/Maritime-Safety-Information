@@ -45,7 +45,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                               ExpiryDate = rnwWarnings.ExpiryDate,
                               ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
                               IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
-                              WarningTypeName = warning.Name
+                              WarningTypeName = warning.Name,
+                              Status = DateTime.Compare(rnwWarnings.ExpiryDate ?? DateTime.UtcNow.AddDays(1), DateTime.UtcNow) < 1 ? "Expired" : "Active"
                           }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
         }
 

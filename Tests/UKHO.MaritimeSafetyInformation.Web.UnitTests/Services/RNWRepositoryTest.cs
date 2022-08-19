@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -97,6 +98,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
             Assert.IsTrue(result[3].Content.Length <= 303);
             Assert.IsTrue(result[3].Content.Contains("..."));
+        }
+
+        [Test]
+        public async Task WhenGetRadioNavigationWarningsIsCalled_ThenCheckIsStatusIsDisplayedCorrectly()
+        {
+            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.AreEqual("Active", result.First(x=>x.Id==1).Status);
+            Assert.AreEqual("Expired", result.First(x => x.Id == 2).Status);
+            Assert.AreEqual("Expired", result.First(x => x.Id == 3).Status);
+            Assert.AreEqual("Active", result.First(x => x.Id == 4).Status);
         }
 
         [Test]
