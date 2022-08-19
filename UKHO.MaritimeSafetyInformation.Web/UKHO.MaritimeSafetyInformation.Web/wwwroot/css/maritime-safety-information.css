@@ -956,8 +956,8 @@ input[type=button].select-all-button {
 }
 
 .notice-to-mariners-weekly-table thead tr th.th-3 {
-  flex-basis: 50%;
+  flex-basis: 60%;
 }
 .notice-to-mariners-weekly-table tbody tr td.td-3 {
-  flex-basis: 50%;
+  flex-basis: 60%;
 }

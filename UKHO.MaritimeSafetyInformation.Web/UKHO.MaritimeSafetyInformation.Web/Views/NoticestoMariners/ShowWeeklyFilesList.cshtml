@@ -20,14 +20,14 @@
                     {
                         @if (Model != null && Model.Count > 0)
                         {
-                            <a id="downloadPartner" href="@Url.Action("DownloadAllWeeklyFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "partner" })">Download Partner</a>
+                            <a id="downloadPartner" href="@Url.Action("DownloadAllWeeklyFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "partner" })">Download All Partner</a>
                         }
                     }
                     else
                     {
                         @if (Model != null && Model.Count > 0)
                         {
-                            <a id="downloadAll" href="@Url.Action("DownloadAllWeeklyFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "public" })">Download All</a>
+                            <a id="downloadAll" href="@Url.Action("DownloadAllWeeklyFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "public" })">Download All Public</a>
                         }
                     }
                 }
