@@ -20,7 +20,7 @@ export const options = {
           startVUs: 0,
           stages: [
             { duration: '30m', target: 5 },
-            { duration: '25m', target: 2 },
+            { duration: '25', target: 2 },
             { duration: '5m', target: 0 }
           ] 
           
@@ -144,20 +144,24 @@ const weeklyFiles = new SharedArray('weeklyFileQueries', function () {
 
   export function DownloadNMDailyFiles()
   {
-    const dailyurldata = batchDaily[Math.floor(Math.random() * batchDaily.length)];
-    for(let i=0 ; i<=dailyurldata.length-1;i++)
+    const dailyurldata = batchDaily.length;
+    for(let i=0 ; i<dailyurldata;i++)
     {
-     http.get(config.url,`NoticesToMariners/DownloadDailyFile?batchId=${batchDaily[i].batchid}&fileName=${batchDaily[i].fileName}&mimeType=application%2Fgzip`);
+      const dailyfile=batchDaily[Math.floor(Math.random()*batchDaily.length)];
+     http.get(config.url,`NoticesToMariners/DownloadDailyFile?batchId=${dailyfile.batchid}&fileName=${dailyfile.fileName}&mimeType=application%2Fgzip`);
     
     }  
   }
 
   export function DownloadNMWeeklyFiles()
+  
   {
-    const weeklydata = batchWeely[Math.floor(Math.random() * batchWeely.length)];
-    for(let i=0 ; i<=weeklydata.length-1;i++)
+
+    const weeklydata = batchWeely.length;
+    for(let i=0 ; i<weeklydata;i++)
     {
-     http.get(config.url,`NoticesToMariners/DownloadWeeklyFile?=${batchWeely[i].fileName}&batchId=${batchWeely[i].batchid}&mimeType=application%2Fpdf&frequency=Weekly`);
+      const weekfile=batchWeely[Math.floor(Math.random()*batchWeely.length)];
+     http.get(config.url,`NoticesToMariners/DownloadFile?=${weekfile.fileName}&batchId=${weekfile.batchid}&mimeType=application%2Fpdf&frequency=Weekly`);
     
     }  
   }
