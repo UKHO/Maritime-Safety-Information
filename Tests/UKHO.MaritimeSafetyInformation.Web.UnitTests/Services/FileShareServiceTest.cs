@@ -1,5 +1,4 @@
 ﻿using FakeItEasy;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -73,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 StatusCode = 200
             };
 
-            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, CancellationToken.None)).Returns(expectedResponse);
+            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<int>.Ignored, CancellationToken.None)).Returns(expectedResponse);
 
             Task<IResult<BatchAttributesSearchResponse>> actualResult = _fileShareService.FSSSearchAttributeAsync(FakeAccessToken, CorrelationId, _fileShareApiClient);
 
@@ -86,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssSearchAttributeAsyncWithInvalidData_ThenReturnsException()
         {
             _fileShareServiceConfig.Value.BaseUrl = "www.test.com/";
-            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
+            A.CallTo(() => _fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
 
             Assert.ThrowsAsync(Is.TypeOf<UriFormatException>()
                 .And.Message.EqualTo("Invalid URI: The format of the URI could not be determined.")
@@ -106,7 +105,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(batchId, fileName))
                 .Returns(stream);
-            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId, fileName, "", CorrelationId, _fileShareApiClient);
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync(batchId, fileName, "", CorrelationId, _fileShareApiClient, "");
             Assert.IsInstanceOf<Task<Stream>>(result);
 
         }
@@ -116,7 +115,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             _fileShareServiceConfig.Value.BaseUrl = null;
             A.CallTo(() => _fileShareApiClient.DownloadFileAsync(A<string>.Ignored, A<string>.Ignored)).Throws(new Exception());
-            Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId, _fileShareApiClient);
+            Task<Stream> result = _fileShareService.FSSDownloadFileAsync("", "", "", CorrelationId, _fileShareApiClient, "");
             Assert.IsTrue(result.IsFaulted);
         }
 

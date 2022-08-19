@@ -65,10 +65,12 @@ module "key_vault" {
      "admin_webapp_service" = module.webapp_service.admin_web_app_object_id
   }
   secrets = {
-      "EventHubLoggingConfiguration--ConnectionString"       = module.eventhub.log_primary_connection_string
-      "EventHubLoggingConfiguration--EntityPath"             = module.eventhub.entity_path
-      "RadioNavigationalWarningsContext--ConnectionString"   = local.rnw_db_connection_string
+      "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
+      "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
+      "RadioNavigationalWarningsContext--ConnectionString"        = local.rnw_db_connection_string
       "RadioNavigationalWarningsAdminContext--ConnectionString"   = local.rnw_db_admin_connection_string
+      "CacheConfiguration--CacheStorageAccountName"               = module.cache_storage.cache_storage_name
+      "CacheConfiguration--CacheStorageAccountKey"                = module.cache_storage.cache_storage_primary_access_key
  }
   tags                                                       = local.tags
 }
@@ -81,4 +83,16 @@ module "azure-dashboard" {
   resource_group      = azurerm_resource_group.rg
   web_app_name        = local.web_app_name
   tags                = local.tags
+}
+
+module "cache_storage" {
+  source                                = "./Modules/CacheStorage"
+  name                                  = "${local.service_name}${local.env_name}cachestorage"
+  table_name                            = "MsiBannerNotificationTable"
+  resource_group_name                   = azurerm_resource_group.rg.name
+  allowed_ips                           = var.allowed_ips
+  location                              = azurerm_resource_group.rg.location
+  tags                                  = local.tags
+  m_spoke_subnet                        = data.azurerm_subnet.main_subnet.id
+  agent_subnet                          = data.azurerm_subnet.agent_subnet.id
 }

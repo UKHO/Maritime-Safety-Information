@@ -40,11 +40,21 @@ export default class noticetoMarine
      this.tabannual = this.page.locator("#annual-tab");
      this.navareatab = this.page.locator("#NAVAREA1-tab");
      this.ukcoastaltab = this.page.locator("#ukcoastal-tab");
+     
     }
     
     public async clickToNoticemarine()
     {
-     await this.noticeMarine.click();
+     await this.noticeMarine.first().click();
+    }
+
+    public async clickToNoticemarineAbout()
+    {
+        await this.menuAbout.click();
+    }
+    public async clickToNoticemarineAnnual()
+    {
+     await this.tabannual.click();   
     }
 
     public async checkEnabledYearDropDown()
@@ -65,20 +75,21 @@ export default class noticetoMarine
 
     public async checkurl(locator:Locator,url:string,title:string)
     {
+        
         await locator.click();
-        await expect(this.page).toHaveURL(`${app.url}/${url}`);
-        await expect(this.page).toHaveTitle(title)
+        expect(this.page).toHaveURL(`${app.url}/${url}`);
+        expect(this.page).toHaveTitle(title)
     }
     public async checkNavareaUrl(locator:Locator,url:string,title:string)
     {
         await locator.click();
-        await expect(this.page).toHaveURL(`${app.url}/${url}#navarea1`);
+        await expect(this.page.url()).toContain(`${app.url}/${url}#navarea1`);
         await expect(this.page).toHaveTitle(title);
     }
     public async checkUkcoastalUrl(locator:Locator,url:string,title:string)
     {
         await locator.click();
-        await expect(this.page).toHaveURL(`${app.url}/${url}#ukcoastal`);
+        await expect(this.page.url()).toContain(`${app.url}/${url}#ukcoastal`);
         await expect(this.page).toHaveTitle(title);
     }
    
@@ -107,7 +118,7 @@ export default class noticetoMarine
    
     public async verifyTableContainsDownloadLink()
     {
-     const downloadLinks= await this.page.$$eval('td[id^=download]' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
+     const downloadLinks= await this.page.$$eval('td[id^=download] > a' , (matches: any[]) => { return matches.map(option => option.textContent.trim()) });
      for(let i=0;i<downloadLinks.length;i++)
      {
      expect(downloadLinks[i]).toEqual("Download");
@@ -130,6 +141,8 @@ export default class noticetoMarine
 
      public async checkFileSizeData()
      {
+     await this.page.waitForLoadState();
+     await this.page.waitForSelector("#ddlYears");   
      const yearlyCount = (await this.page.$$("#ddlYears option")).length;
  
      for(var year=1;year<=yearlyCount-1;year++)
@@ -137,9 +150,10 @@ export default class noticetoMarine
      await this.dropDownYearly.selectOption({index:year});
      const weekCount = (await this.page.$$("#ddlWeeks option")).length;
 
-     for(var week=1;week<=weekCount-1;week++)
+     for(var week=1;week<=1;week++)
      {
-     await this.dropDownWeekly.selectOption({index:week});
+     
+     await this.dropDownWeekly.selectOption({index:weekCount-1});
      const fileSizeData = await this.page.$$eval('td[id^=filesize]' , (matches: any[]) => { return matches.map(option => option.textContent) }); ;
      expect(fileSizeData.length).toBeGreaterThan(0); 
      expect(await this.checkFileNameText()).toEqual('File Name');

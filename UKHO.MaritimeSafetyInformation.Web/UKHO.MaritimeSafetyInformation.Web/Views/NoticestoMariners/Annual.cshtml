@@ -1,7 +1,55 @@
-﻿@{
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+@model ShowNMFilesResponseModel
+@{
+    List<ShowFilesResponseModel> showFilesResponseModel = Model.ShowFilesResponseModel;
     Layout = "~/Views/Shared/_MSILayout.cshtml";
     ViewData["Header"] = "Notices to Mariners";
     ViewData["Title"] = "Notices to Mariners - Annual";
 }
 <partial name="_NMHorizontalTab" />
-<partial name="ShowAnnualNMs" />
+<h2>
+    Annual Summary of ADMIRALTY Notices to Mariners 2022 (NP247)
+</h2>
+<p>
+    To supplement Weekly NMs, the UKHO produces an Annual Summary of Notices to Mariners (NP247). This publication contains the Annual Statutory Notices to Mariners Numbers 1-26, a summary of Temporary and Preliminary Notices to Mariners still in force at the start of the year, and a Cumulative Summary of Amendments to ADMIRALTY Sailing Directions. The paper version of the Annual Summary of Notices to Mariners is published annually in January, and copies are available by subscription from ADMIRALTY Chart Agents.
+</p>
+<input type="hidden" id="IsAnnualBatchResponseCached" value= @Model.IsBatchResponseCached />
+
+@if (ViewBag.HasError)
+{
+    <partial name="_Error" />
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" id="divAnnualNMs">
+                <table class="table table-scroll small-first-col notice-to-mariners-annual-table">
+                    <thead>
+                        <tr>
+                            <th class="th-1">Section</th>
+                            <th>File name</th>
+                            <th class="th-3">File size</th>
+                            <th class="th-4"><span class="visually-hidden">Action</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < showFilesResponseModel.Count; i++)
+                        {
+                            <tr>
+                                <td class="td-1" id="section_@i">@showFilesResponseModel[i].Hash</td>
+                                <td id="filename_@i">
+                                    <a target="_blank" aria-label="Download File for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="Annual" })">@showFilesResponseModel[i].FileDescription</a>
+                                </td>
+                                <td class="td-3" id="filesize_@i">@showFilesResponseModel[i].FileSizeinKB (@showFilesResponseModel[i].FileExtension)</td>
+                                <td class="td-4 justify-content-center" id="download_@i">
+                                    <a target="_blank" aria-label="Download File for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="Annual" })">Download</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

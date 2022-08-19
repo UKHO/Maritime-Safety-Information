@@ -19,13 +19,14 @@ import loginPage from '../../pageObject/Login.page';
   };
  
   test.beforeEach(async ({page}) => {
+    test.slow();
     await page.goto(app.url);    
     const login = new loginPage(page);
     await login.goToSignIn();
   });
 
   test('Radio Navigational Warnings page should be accessible', async ({page}) => {
-   
+    
     await injectAxe(page);
     
     await checkA11y(page, undefined, defaultCheckA11yOptions);

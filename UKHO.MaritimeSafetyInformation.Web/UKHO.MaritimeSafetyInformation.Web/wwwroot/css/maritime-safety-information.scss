@@ -4,6 +4,7 @@
 @import "table";
 @import "common";
 @import "print";
+@import "home";
 
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
@@ -120,6 +121,16 @@
     @media screen and (max-width: $large) {
         width: 100%;
     }
+
+    h2 {
+        color: $black;
+        font-size: 21px;
+    }
+
+    p {
+        color: $black;
+        line-height:1.7rem;
+    }
 }
 
 .msi-tabs-container {
@@ -177,8 +188,8 @@ input[type="button"].select-all-button {
 }
 
 .intro-text {
-    font-size: 28px;
-    line-height: 36px;
+    font-size: 1.75rem;
+    line-height: 1.5;
     color: $black;
 }
 
@@ -188,6 +199,25 @@ input[type="button"].select-all-button {
 
         a {
             color: $black;
+        }
+    }
+}
+.msi-list-style {
+    li {
+        transform: none;
+        padding-left:30px;
+        position:relative;
+
+        &:before {
+            content: none;
+        }
+
+        .list-icon{
+            font-size:7px;
+            color:$prussian-blue;
+            position:absolute;
+            left:0;
+            top:1px;
         }
     }
 }

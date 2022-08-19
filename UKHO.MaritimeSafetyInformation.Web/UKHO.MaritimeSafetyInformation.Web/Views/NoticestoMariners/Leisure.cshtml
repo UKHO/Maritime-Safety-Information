@@ -1,23 +1,26 @@
-﻿@{
+﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
+@model ShowNMFilesResponseModel
+@{
+    List<ShowFilesResponseModel> showFilesResponseModel = Model.ShowFilesResponseModel;
     Layout = "~/Views/Shared/_MSILayout.cshtml";
-    ViewData["Header"] = "Leisure Folios";
+    ViewData["Header"] = "Notices to Mariners";
     ViewData["Title"] = "Notices to Mariners - Leisure";
 }
-<h4>
+<h2>
     ADMIRALTY  Notices to Mariners for ADMIRALTY Leisure Folios
-</h4>
+</h2>
 <p>
     Here you will find all relevant ADMIRALTY Notices to Mariners (NMs) released since the publication date of the chart within the leisure range's New Edition. This service is updated weekly and aims to provide you with the best information available to help you navigate safely and effectively. You can be assured that with ADMIRALTY charts you are using the best; they are recognised official standard and trusted worldwide. We pride ourselves on the quality and integrity of our data - no one else promulgates information as well or as quickly as we do.
 </p>
 <p>
-    For further information, guidance notes including the printing of blocks, please click <a href="https://www.admiralty.co.uk/AdmiraltyDownloadMedia/ADMIRALTY%20Leisure%20Charts/Guidance/Keeping%20ADMIRALTY%20Leisure%20Charts%20up-to-date.pdf" target="_blank">here</a>.
+     <a href="~/nms/leisure/Keeping ADMIRALTY Leisure Charts up-to-date.pdf" aria-label="Click here for further guidance about Leisure Folios, keeping them up to date and the printing of blocks. Opens in new tab" target="_blank">Click here for further guidance about Leisure Folios, keeping them up to date and the printing of blocks.</a>.
 </p>
 
-<div class="alert alert-primary p-4" role="alert">
+<div class="alert alert-primary p-4">
     <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
-    <div class="alert-head">
-        Important safety notice:
-    </div>
+    <h3 class="alert-head">
+        Important safety notice
+    </h3>
     <p>
         Unfortunately week 13 Notices to Mariners were not added to the corrections published for ADMIRALTY Leisure Folios in that week. The correct information was published on 14 May 2020. Therefore, if you updated your ADMIRALTY Leisure Folios between 19 March and 14 May 2020, you may have missed these corrections.
     </p>
@@ -26,133 +29,38 @@
     </p>
 </div>
 
-<h4>
-    ADMIRALTY Leisure Folios
-</h4>
-<div class="row">
-    <div class="col">
-        <div class="table-responsive" id="divCumulativeNMs">
-            <table width="100%">
-                <thead>
-                    <tr>
-                        <th width="60%">File name</th>
-                        <th width="30%">File size</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><a href="~/nms/leisure/5600SC5600_The_Solent_and_Approaches.pdf" target="_blank">SC5600 The Solent and Approaches</a></td>
-                        <td>2,005 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5600SC5600_The_Solent_and_Approaches.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5601SC5601_East_Devon_and_Dorset_Coast.pdf" target="_blank">SC5601 East Devon and Dorset Coast</a></td>
-                        <td>988 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5601SC5601_East_Devon_and_Dorset_Coast.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5602SC5602_The_West_Country_Falmouth_to_Teignmouth.pdf" target="_blank">SC5602 The West Country, Falmouth to Teignmouth</a></td>
-                        <td>1,321 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5602SC5602_The_West_Country_Falmouth_to_Teignmouth.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly.pdf" target="_blank">SC5603 Falmouth to Hartland Pt incl Isles of Scilly</a></td>
-                        <td>527 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5603SC5603_Falmouth_to_Hartland_Pt_incl_Isles_of_Scilly.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5604SC5604_The_Channel_Islands.pdf" target="_blank">SC5604 The Channel Islands</a></td>
-                        <td>1,126 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5604SC5604_The_Channel_Islands.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5605SC5605_Chichester_to_Ramsgate_and_Calais_to_Oostende.pdf" target="_blank">SC5605 Chichester to Ramsgate and Calais to Oostende</a></td>
-                        <td>1,788 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5605SC5605_Chichester_to_Ramsgate_and_Calais_to_Oostende.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5606SC5606_Thames_Estuary,_Ramsgate_to_Tower_Bridge.pdf" target="_blank">SC5606 Thames Estuary, Ramsgate to Tower Bridge</a></td>
-                        <td>4,041 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5606SC5606_Thames_Estuary,_Ramsgate_to_Tower_Bridge.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5607SC5607_Thames_Estuary_Essex_and_Suffolk_Coast.pdf" target="_blank">SC5607 Thames Estuary Essex and Suffolk Coast</a></td>
-                        <td>3,049 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5607SC5607_Thames_Estuary_Essex_and_Suffolk_Coast.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5608SC5608_Bristol_Channel.pdf" target="_blank">SC5608 Bristol Channel</a></td>
-                        <td>763 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5608SC5608_Bristol_Channel.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5609SC5609_North_West_Wales_including_Menai_Strait.pdf" target="_blank">SC5609 North West Wales including Menai Strait</a></td>
-                        <td>1,309 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5609SC5609_North_West_Wales_including_Menai_Strait.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5610SC5610_The_Firth_of_Clyde.pdf" target="_blank">SC5610 The Firth of Clyde</a></td>
-                        <td>860 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5610SC5610_The_Firth_of_Clyde.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5611SC5611_West_Coast_of_Scotland.pdf" target="_blank">SC5611 West Coast of Scotland</a></td>
-                        <td>1,005 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5611SC5611_West_Coast_of_Scotland.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5612SC5612_Northern_Ireland.pdf" target="_blank">SC5612 Northern Ireland</a></td>
-                        <td>1,679 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5612SC5612_Northern_Ireland.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5613SC5613_Irish_Sea_-_Eastern_Part.pdf" target="_blank">SC5613 Irish Sea - Eastern Part</a></td>
-                        <td>1,428 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5613SC5613_Irish_Sea_-_Eastern_Part.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5614SC5614_East_Coast_-_Orford_Ness_to_Whitby.pdf" target="_blank">SC5614 East Coast - Orford Ness to Whitby</a></td>
-                        <td>3,046 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5614SC5614_East_Coast_-_Orford_Ness_to_Whitby.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5615SC5615_East_Coast_Whitby_to_Edinburgh.pdf" target="_blank">SC5615 East Coast - Whitby to Edinburgh</a></td>
-                        <td>2,482 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5615SC5615_East_Coast_Whitby_to_Edinburgh.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5616SC5616_Point_of_Ardnamurchan_to_Shiant_Islands.pdf" target="_blank">SC5616 Ardnamurchan to Shiant Islands</a></td>
-                        <td>1,631 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5616SC5616_Point_of_Ardnamurchan_to_Shiant_Islands.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5617SC5617_Fife_Ness_to_Inverness_and_the_Caledonian_Canal.pdf" target="_blank">SC5617 Fife Ness to Inverness and the Caledonian Canal</a></td>
-                        <td>1,209 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5617SC5617_Fife_Ness_to_Inverness_and_the_Caledonian_Canal.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5620SC5620_South_West_Wales.pdf" target="_blank">SC5620 South West Wales</a></td>
-                        <td>464 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5620SC5620_South_West_Wales.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5621SC5621_Carlingford_Lough_to_Waterford.pdf" target="_blank">SC5621 Carlingford Lough to Waterford</a></td>
-                        <td>1,944 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5621SC5621_Carlingford_Lough_to_Waterford.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5622SC5622_Ireland_-_South_Coast.pdf" target="_blank">SC5622 Ireland - South Coast</a></td>
-                        <td>1,066 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5622SC5622_Ireland_-_South_Coast.pdf" target="_blank">Download</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="~/nms/leisure/5623SC5623_Ireland_-_South_West_Coast.pdf" target="_blank">SC5623 Ireland - South West Coast</a></td>
-                        <td>622 KB (pdf)</td>
-                        <td><a href="~/nms/leisure/5623SC5623_Ireland_-_South_West_Coast.pdf" target="_blank">Download</a></td>
-                    </tr>
-                </tbody>
-            </table>
+@if (ViewBag.HasError)
+{
+    <partial name="_Error" />
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" id="divLeisureNMs">
+                <input type="hidden" id="IsLeisureBatchResponseCached" value= @Model.IsBatchResponseCached />
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th width="60%">File name</th>
+                            <th width="30%">File size</th>
+                            <th class="th-3"><span class="visually-hidden">Action</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < showFilesResponseModel.Count; i++)
+                        {
+                            <tr>
+                                <td id="filename_@i"><a target="_blank" aria-label="Download file for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">@showFilesResponseModel[i].FileDescription</a></td>
+                                <td id="filesize_@i">@showFilesResponseModel[i].FileSizeinKB (@showFilesResponseModel[i].FileExtension)</td>
+                                <td class="td-3 justify-content-center" id="download_@i">
+                                    <a target="_blank" aria-label="Download file for @showFilesResponseModel[i].FileDescription. opens in new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @showFilesResponseModel[i].Filename, batchId = @showFilesResponseModel[i].BatchId, mimeType = @showFilesResponseModel[i].MimeType, frequency ="leisure" })">Download</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+}

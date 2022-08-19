@@ -213,59 +213,59 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetSearchAttributeRequestDataNotFound = 910052,
         /// <summary>
-        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Started.
+        /// 910053 -  Event data for Retrieval of MSI Get Weekly File Response Completed.
         /// </summary>
         GetWeeklyFilesResponseCompleted = 910053,
 
         /// <summary>
-        /// 910054 -Request For Download Single Weekly NM File Started.
+        /// 910054 -Request For Download Single NM File Started.
         /// </summary>
-        DownloadSingleWeeklyNMFileStarted = 910054,
+        DownloadSingleNMFileStarted = 910054,
 
         /// <summary>
-        /// 910055 -Request For Download Single Weekly NM File Completed.
+        /// 910055 -Request For Download Single NM File Completed.
         /// </summary>
-        DownloadSingleWeeklyNMFileCompleted = 910055,
+        DownloadSingleNMFileCompleted = 910055,
 
         /// <summary>
-        /// 910056 -Download Single Weekly NM File Called With Invalid Arguments.
+        /// 910056 -Download Single NM File Called With Invalid Arguments.
         /// </summary>
-        DownloadSingleWeeklyNMFileInvalidParameter = 910056,
+        DownloadSingleNMFileInvalidParameter = 910056,
 
         /// <summary>
-        /// 910057 -Download Single Weekly NM File Failed.
+        /// 910057 -Download Single NM File Failed.
         /// </summary>
-        DownloadSingleWeeklyNMFileFailed = 910057,
+        DownloadSingleNMFileFailed = 910057,
 
         /// <summary>
-        /// 910058 - Request To Get Single Weekly NM File Started.
+        /// 910058 - Request To Get Single NM File Started.
         /// </summary>
-        GetSingleWeeklyNMFileStarted = 910058,
+        GetSingleNMFileStarted = 910058,
 
         /// <summary>
-        /// 910059 - Request To Get Single Weekly NM File Completed.
+        /// 910059 - Request To Get Single NM File Completed.
         /// </summary>
-        GetSingleWeeklyNMFileCompleted = 910059,
+        GetSingleNMFileCompleted = 910059,
 
         /// <summary>
-        /// 910060 - Request To Get Single Weekly NM File Failed.
+        /// 910060 - Request To Get Single NM File Failed.
         /// </summary>
-        GetSingleWeeklyNMFileFailed = 910060,
+        GetSingleNMFileFailed = 910060,
 
         /// <summary>
-        /// 910061 - Request For FSS To Get Single Weekly NM File Started.
+        /// 910061 - Request For FSS To Get Single NM File Started.
         /// </summary>
-        FSSGetSingleWeeklyNMFileStarted = 910061,
+        FSSGetSingleNMFileStarted = 910061,
 
         /// <summary>
-        /// 910062 - Request For FSS To Get Single Weekly NM File Completed.
+        /// 910062 - Request For FSS To Get Single NM File Completed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileCompleted = 910062,
+        FSSGetSingleNMFileCompleted = 910062,
 
         /// <summary>
-        /// 910063 - Request For FSS To Get Single Weekly NM File Failed.
+        /// 910063 - Request For FSS To Get Single NM File Failed.
         /// </summary>
-        FSSGetSingleWeeklyNMFileResponseFailed = 910063,
+        FSSGetSingleNMFileResponseFailed = 910063,
         /// <summary> 
         /// 910064 -  Maritime safety information request to get RNW detail started.
         /// </summary>
@@ -420,8 +420,283 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910099 -  Unauthorized Access.
         /// </summary>
-        UnauthorizedAccess = 910099
-
+        UnauthorizedAccess = 910099,
+        /// <summary>
+        /// 910100 -   Event data for Retrieval of MSI Cumulative File Request Started.
+        /// </summary>
+        ShowCumulativeFilesRequestStarted = 910100,
+        /// <summary>
+        /// 910101 -   Event data for Retrieval of MSI Cumulative File Request Completed.
+        /// </summary>
+        ShowCumulativeFilesRequestCompleted = 910101,
+        /// <summary>
+        /// 910102 -    Event data for Retrieval of MSI Show Cumulative File Failed.
+        /// </summary>
+        ShowCumulativeFilesFailed = 910102,
+        /// <summary>
+        /// 910103 -  Event data for Retrieval of MSI Get Cumulative File Response Started.
+        /// </summary>
+        GetCumulativeFilesResponseStarted = 910103,
+        /// <summary>
+        /// 910104 -  Get NM Batch Files Data Not Found.
+        /// </summary>
+        GetCumulativeNMFilesRequestDataNotFound = 910104,
+        /// <summary>
+        /// 910105 -  Event data for Retrieval of MSI Get Cumulative File Response Completed.
+        /// </summary>
+        GetCumulativeFilesResponseCompleted = 910105,
+        /// <summary>
+        /// 910106 -  Event data for Retrieval of MSI Get Cumulative File Response Failed.
+        /// </summary>
+        GetCumulativeFilesResponseFailed = 910106,
+        /// <summary>
+        /// 910107 -  Event data for Retrieval of Leisure file Started.
+        /// </summary>
+        ShowLeisureFilesRequestStarted = 910107,
+        /// <summary>
+        /// 910108 -  Event data for Retrieval of Leisure file Completed.
+        /// </summary>
+        ShowLeisureFilesRequestCompleted = 910108,
+        /// <summary>
+        /// 910109 -  Event data for Retrieval of Leisure file Failed.
+        /// </summary>
+        ShowLeisureFilesRequestFailed = 910109,
+        /// <summary>
+        /// 910110 -  Event data for Retrieval of Leisure file Response Started.
+        /// </summary>
+        ShowLeisureFilesResponseStarted = 910110,
+        /// <summary>
+        /// 910111 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
+        /// </summary>
+        ShowLeisureFilesResponseDataFound = 910111,
+        /// <summary>
+        /// 910112 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
+        /// </summary>
+        ShowLeisureFilesResponseDataNotFound = 910112,
+        /// <summary>
+        /// 910113 -  Event data for Retrieval of Leisure file Response Failed.
+        /// </summary>
+        ShowLeisureFilesResponseFailed = 910113,
+        /// <summary>
+        /// 910114 - Request for searching all year week from cache azure table storage is started.
+        /// </summary>
+        FSSSearchAllYearWeekFromCacheStart = 910114,
+        /// <summary>
+        /// 910115 - Request for searching all year week from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchAllYearWeekFromCacheCompleted = 910115,
+        /// <summary>
+        /// 910116 - Data not found for searching all year week from cache azure table storage.
+        /// </summary>
+        FSSSearchAllYearWeekDataNotFoundFromCache = 910116,
+        /// <summary>
+        /// 910117- Request for searching weekly batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchWeeklyBatchResponseFromCacheStart = 910117,
+        /// <summary>
+        /// 910118 - Request for searching weekly batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchWeeklyBatchResponseFromCacheCompleted = 910118,
+        /// <summary>
+        /// 910119 - Data not found for searching weekly batch files from cache azure table storage.
+        /// </summary>
+        FSSSearchWeeklyBatchResponseDataNotFoundFromCache = 910119,
+        /// <summary>
+        /// 910120 - Request for storing file share service search all year week response in azure table storage is started.
+        /// </summary>
+        FSSSearchAllYearWeekResponseStoreToCacheStart = 910120,
+        /// <summary>
+        /// 910121 - Request for storing file share service search all year week response in azure table storage is completed.
+        /// </summary>
+        FSSSearchAllYearWeekResponseStoreToCacheCompleted = 910121,
+        /// <summary>
+        /// 910122 - Request for storing file share service search weekly batch files response in azure table storage is started.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheStart = 910122,
+        /// <summary>
+        /// 910123 - Request for storing file share service search weekly batch files response in azure table storage is completed.
+        /// </summary>
+        FSSSearchWeeklyBatchFilesResponseStoreToCacheCompleted = 910123,
+        /// <summary>
+        /// 910124 - Deletion started for expired all year and week cache data from table.
+        /// </summary>
+        DeleteExpiredYearWeekCacheDataFromTableStarted = 910124,
+        /// <summary>
+        /// 910125 - Deletion completed for expired all year and week cache data from table.
+        /// </summary>
+        DeleteExpiredYearWeekCacheDataFromTableCompleted = 910125,
+        /// <summary>
+        /// 910126 - Deletion started for expired searching weekly NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchWeeklyBatchResponseFromCacheStarted = 910126,
+        /// <summary>
+        /// 910127 - Deletion completed for expired searching weekly NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchWeeklyBatchResponseFromCacheCompleted = 910127,
+        /// <summary>
+        /// 910128 - Failed to get searching attribute year and week data from cache azure table.
+        /// </summary>
+        FSSSearchAllYearWeekFromCacheFailed = 910128,
+        /// <summary>
+        /// 910129 - Failed to get searching weekly NM files from cache azure table.
+        /// </summary>
+        FSSSearchWeeklyBatchResponseFromCacheFailed = 910129,
+        /// <summary>
+        /// 910130 - Process failed to insert entity value in cache table.
+        /// </summary>
+        FSSCacheDataInsertFailed = 910130,
+        /// <summary>
+        /// 910131 - Started processing the Options request for the New Files Published event webhook
+        /// </summary>
+        NewFilesPublishedWebhookOptionsCallStarted = 910131,
+        /// <summary>
+        /// 910132 - Completed processing the Options request for the New Files Published event webhook
+        /// </summary>
+        NewFilesPublishedWebhookOptionsCallCompleted = 910132,
+        /// <summary>
+        /// 910133 -  Request for clearing FSS search cache data from Azure table started.
+        /// </summary>
+        ClearFSSSearchCacheEventStarted = 910133,
+        /// <summary>
+        /// 910134 - Request for storing file share service search cumulative batch files response in azure table storage is started.
+        /// </summary>
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheStart = 910134,
+        /// <summary>
+        /// 910135 - Request for storing file share service search cumulative batch files response in azure table storage is completed.
+        /// </summary>
+        FSSSearchCumulativeBatchFilesResponseStoreToCacheCompleted = 910135,
+        /// <summary>
+        /// 910136- Request for searching batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchBatchResponseFromCacheStart = 910136,
+        /// <summary>
+        /// 910137 - Request for searching batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchBatchResponseFromCacheCompleted = 910137,
+        /// <summary>
+        /// 910138 - Deletion started for expired searching NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchBatchResponseFromCacheStarted = 910138,
+        /// <summary>
+        /// 910139 - Deletion completed for expired searching NM file cache data from table.
+        /// </summary>
+        DeleteExpiredSearchBatchResponseFromCacheCompleted = 910139,
+        /// <summary>
+        /// 910140 - Data not found for searching batch files from cache azure table storage.
+        /// </summary>
+        FSSSearchBatchResponseDataNotFoundFromCache = 910140,
+        /// <summary>
+        /// 910141 - Failed to get searching NM files from cache azure table.
+        /// </summary>
+        FSSSearchBatchResponseFromCacheFailed = 910141,
+        /// <summary>
+        /// 910142 - Request for storing file share service daily files response in azure table storage is started.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheStart = 910142,
+        /// <summary>
+        /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
+        /// </summary>
+        FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143,
+        /// <summary>
+        /// 910144 - Request for storing Leisure batch file response in azure table storage started.
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheStart = 910144,
+        /// <summary>
+        /// 910145 - Request for storing Leisure batch file response in azure table storage completed
+        /// </summary>
+        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
+        /// <summary>
+        /// 910146 - Request for clearing FSS search cache data from Azure table completed.
+        /// </summary>
+        ClearFSSSearchCacheEventCompleted = 910146,
+        /// <summary>
+        /// 910147 - Request for validation event for clearing FSS search cache from Azure table
+        /// </summary>
+        ClearFSSSearchCacheValidationEvent = 910147,
+        /// <summary>
+        /// 910148 - Request for clearing FSS search cache data from Azure table started.
+        /// </summary>
+        ClearFSSSearchCacheStarted = 910148,
+        /// <summary>
+        /// 910149 - Request for clearing FSS search cache data from Azure table completed.
+        /// </summary>
+        ClearFSSSearchCacheCompleted = 910149,
+        /// <summary>
+        /// 910150 -   Event data for Retrieval of MSI Annual File Request Started.
+        /// </summary>
+        ShowAnnualFilesRequestStarted = 910150,
+        /// <summary>
+        /// 910151 -   Event data for Retrieval of MSI Annual File Request Completed.
+        /// </summary>
+        ShowAnnualFilesRequestCompleted = 910151,
+        /// <summary>
+        /// 910152 -    Event data for Retrieval of MSI Show Annual File Failed.
+        /// </summary>
+        ShowAnnualFilesFailed = 910152,
+        /// <summary>
+        /// 910153 -  Event data for Retrieval of MSI Get Annual File Response Started.
+        /// </summary>
+        GetAnnualFilesResponseStarted = 910153,
+        /// <summary>
+        /// 910154 -  Event data for Retrieval of MSI Get Annual File Response Completed.
+        /// </summary>
+        GetAnnualFilesResponseCompleted = 910154,
+        /// <summary>
+        /// 910155 -  Get NM Batch Files For Annual Data Not Found.
+        /// </summary>
+        GetAnnualNMFilesRequestDataNotFound = 910155,
+        /// <summary>
+        /// 910156 -  Event data for Retrieval of MSI Get Annual File Response Failed.
+        /// </summary>
+        GetAnnualFilesResponseFailed = 910156,
+        /// <summary>
+        /// 910157 - Request for searching annual batch files from cache azure table storage is started.
+        /// </summary>
+        FSSSearchAnnualBatchFilesResponseStoreToCacheStart = 910157,
+        /// <summary>
+        /// 910158 - Request for searching annual batch files from cache azure table storage is completed.
+        /// </summary>
+        FSSSearchAnnualBatchFilesResponseStoreToCacheCompleted = 910158,
+        /// <summary>
+        /// 910159 -  Maritime safety information request to get RNW detail Failed.
+        /// </summary>
+        RNWListDetailFailed = 910159,
+        /// <summary> 
+        /// 910160 -  Maritime safety information request for Show Selection started.
+        /// </summary>
+        RNWShowSelectionStarted = 910160,
+        /// <summary> 
+        /// 910161 -  Maritime safety information request for Show Selection completed.
+        /// </summary>
+        RNWShowSelectionCompleted = 910161,
+        /// <summary>
+        /// 910162 -  Maritime safety information request Show Selection Failed.
+        /// </summary>
+        RNWShowSelectionFailed = 910162,
+        /// <summary>
+        /// 910163 - Maritime safety information request to get banner notification message started.
+        /// </summary>
+        BannerNotificationRequestStarted = 910163,
+        /// <summary>
+        /// 910164 - Maritime safety information request to get banner notification message completed.
+        /// </summary>
+        BannerNotificationRequestCompleted = 910164,
+        /// <summary>
+        /// 910165 - Maritime safety information request to get banner notification message failed.
+        /// </summary>
+        BannerNotificationRequestFailed = 910165,
+        /// <summary>
+        /// 910166 - Maritime safety information request to get banner notification message from azure table started.
+        /// </summary>
+        GetBannerNotificationMessageFromTableStarted = 910166,
+        /// <summary>
+        /// 910167 - Maritime safety information request to get banner notification message from azure table completed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableCompleted = 910167,
+        /// <summary>
+        /// 910168 - Maritime safety information request to get banner notification message from azure table failed.
+        /// </summary>
+        GetBannerNotificationMessageFromTableFailed = 910168
     }
 
     public static class EventIdExtensions

@@ -20,7 +20,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         private ILogger<RadioNavigationalWarningsController> _fakeLogger;
         private IRNWRepository _rnwRepository;
         private RNWService _rnwService;
-
         private RadioNavigationalWarningsController _controller;
 
         [OneTimeSetUp]
@@ -36,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsController>>();
             _rnwRepository = new RNWRepository(FakeContext);
             _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
-
+            
             _controller = new RadioNavigationalWarningsController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
         }
 

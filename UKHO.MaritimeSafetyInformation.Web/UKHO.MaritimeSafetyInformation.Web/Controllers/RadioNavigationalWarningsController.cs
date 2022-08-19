@@ -22,39 +22,69 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         [Route("/RadioNavigationalWarnings")]
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
 
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
+            try
+            {
+                _logger.LogInformation(EventIds.RNWListDetailStarted.ToEventId(), "Maritime safety information request to get RNW details started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
 
-            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+                ViewBag.HasError = false;
 
-            _logger.LogInformation(EventIds.RNWListDetailCompleted.ToEventId(), "Maritime safety information request to get RNW details completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
+                radioNavigationalWarningsData = await _rnwService.GetRadioNavigationalWarningsData(GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.RNWListDetailCompleted.ToEventId(), "Maritime safety information request to get RNW details completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
+
+                _logger.LogError(EventIds.RNWListDetailFailed.ToEventId(), "Maritime safety information request to get RNW details failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+            }
 
             return View("~/Views/RadioNavigationalWarnings/ShowRadioNavigationalWarnings.cshtml", radioNavigationalWarningsData);
         }
 
         [HttpGet]
         [Route("/RadioNavigationalWarnings/About")]
-        public async Task<IActionResult>  About()
+        public async Task<IActionResult> About()
         {
             ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
-
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> ShowSelection()
         {
-            int[] selectedIds = Array.Empty<int>();
-            string data = Request.Form["showSelectionId"];
-            if (!string.IsNullOrWhiteSpace(data))
+            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
+            try
             {
-                selectedIds = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                _logger.LogInformation(EventIds.RNWShowSelectionStarted.ToEventId(), "Maritime safety information request for RNW Show Selection started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
+                ViewBag.HasError = false;
+
+                int[] selectedIds = Array.Empty<int>();
+                string data = Request.Form["showSelectionId"];
+                if (!string.IsNullOrWhiteSpace(data))
+                {
+                    selectedIds = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                }
+
+                ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
+
+                radioNavigationalWarningsData = await _rnwService.GetSelectedRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
+
+                _logger.LogInformation(EventIds.RNWShowSelectionCompleted.ToEventId(), "Maritime safety information request for RNW Show Selection completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
             }
+            catch (Exception ex)
+            {
+                ViewBag.HasError = true;
+                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
 
-            ViewBag.LastModifiedDateTime = await _rnwService.GetRadioNavigationalWarningsLastModifiedDateTime(GetCurrentCorrelationId());
-
-            List<RadioNavigationalWarningsData> radioNavigationalWarningsData = await _rnwService.GetSelectedRadioNavigationalWarningsData(selectedIds, GetCurrentCorrelationId());
+                _logger.LogError(EventIds.RNWShowSelectionFailed.ToEventId(), "Maritime safety information request to RNW Show Selection failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
+            }
 
             return View("~/Views/RadioNavigationalWarnings/ShowSelection.cshtml", radioNavigationalWarningsData);
         }

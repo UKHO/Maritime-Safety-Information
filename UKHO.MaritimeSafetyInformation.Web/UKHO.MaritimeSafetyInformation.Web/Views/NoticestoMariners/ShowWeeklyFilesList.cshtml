@@ -1,42 +1,61 @@
 ﻿@using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners
 @model List<ShowFilesResponseModel>
-@{
-    var a = Model;
-}
 
-@if (Model != null && Model.Count > 0)
+@if (ViewBag.IsDistributor)
 {
-    <table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
-        <caption class="hidden-caption">Notices to Mariners Weekly Updates</caption>
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>File Size</th>
-                <th class="th-3"><span class="visually-hidden">Action</span></th>
-            </tr>
-        </thead>
-        <tbody class="scroll-content scroll-bar">
+    <caption class="table-caption">@ViewBag.TableTitle</caption>
+}
+<table class="table table-scroll small-first-col notice-to-mariners-weekly-table">
+    <caption class="hidden-caption">Notices to Mariners Weekly Updates</caption>
+
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>File Size</th>
+            <th class="th-3"><span class="visually-hidden">Action</span></th>
+        </tr>
+    </thead>
+
+    <tbody class="scroll-content scroll-bar">
+        @if (Model != null && Model.Count > 0)
+        {
             @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
                     <td id="filename_@i">@Model[i].FileDescription</td>
                     <td id="filesize_@i">@Model[i].FileSizeinKB (@Model[i].FileExtension)</td>
                     <td class="td-3 justify-content-center" id="download_@i">
-                        <a target="_blank" href="@Url.Action("DownloadWeeklyFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType })">Download</a>
+                        <a target="_blank" aria-label="Download File for @Model[i].FileDescription. Link open new tab" href="@Url.Action("DownloadFile", "NoticesToMariners", new { fileName = @Model[i].Filename, batchId = @Model[i].BatchId, mimeType = @Model[i].MimeType, frequency = "Weekly" })">Download</a>
+                        @if (@Model[i].IsDistributorUser)
+                        {
+                            <label id="partner_@i" class="hidden-caption">Partner</label>
+                        }
+                        else
+                        {
+                            <label id="public_@i" class="hidden-caption">Public</label>
+                        }
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="alert alert-danger" role="alert" aria-atomic="true">
-        <i class="bi bi-exclamation-lg" aria-hidden="true"></i>
-        <div class="alert-head">There’s a problem</div>
-        <p>It looks like there might be a problem with our system. We’re sorry for the inconvenience. If the problem persists contact <a href="mailto:customerservices@ukho.gov.uk">customerservices@ukho.gov.uk</a></p>
-    </div>
-}
-
-
+        }
+        else
+        {
+            @if (ViewBag.IsDistributor)
+            {
+                @if (ViewBag.TableTitle == "Partner")
+                {
+                    <tr>
+                        <td colspan="3">No Tracings available for Partner for selected year and week</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">No files available for Public for selected year and week</td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
 
