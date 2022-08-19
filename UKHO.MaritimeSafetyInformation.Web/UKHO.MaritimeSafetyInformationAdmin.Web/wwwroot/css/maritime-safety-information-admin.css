@@ -545,3 +545,7 @@ body {
 .custom-error .paragraph a {
   color: #000000;
 }
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}

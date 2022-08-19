@@ -59,23 +59,54 @@
     </div>
 </div>
 
+<div class="modal overlay d-none" tabindex="-1" id="overlay" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" onclick="closeConfirmBox()" class="btn-close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>@TempData["message"]</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="isConfirm(true)">Yes</button>
+                <button onclick="isConfirm(false)">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop d-none" id="backdrop_" ></div>
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
 @{
     if (TempData["message"] != null) {
-       <script type="text/javascript">
-       let confirmAction =  confirm(@Html.Raw(Json.Serialize(TempData["message"])));
-       if (confirmAction)
-       {
-           document.getElementById("SkipCheckDuplicate").value = "Yes";
-           document.getElementById('btnCreate').click()
-       }
-       else
-       {
-            document.getElementById("SkipCheckDuplicate").value = "No";
-       }
-       </script>
+        <script>
+            document.getElementById("overlay").classList.remove("d-none");
+            document.getElementById("overlay").classList.add("d-block");
+            document.getElementById("backdrop_").classList.remove("d-none");
+            document.getElementById("backdrop_").classList.add("d-block");
+
+            function closeConfirmBox() {
+                document.getElementById("overlay").classList.add("d-none");
+                document.getElementById("overlay").classList.remove("d-block");
+                document.getElementById("backdrop_").classList.add("d-none");
+                document.getElementById("backdrop_").classList.remove("d-block");
+            }
+
+            function isConfirm(answer) {
+                if (answer) {
+                    document.getElementById("SkipCheckDuplicate").value = "Yes";
+                    document.getElementById('btnCreate').click()
+                } else {
+                    document.getElementById("SkipCheckDuplicate").value = "No";
+                }
+                closeConfirmBox();
+            }
+        </script>
     }
 }
