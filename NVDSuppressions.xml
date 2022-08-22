@@ -213,4 +213,17 @@
     </notes>
     <cve>CVE-2022-30187</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+    Azure.Storage.Blobs:12.10.0
+    Azure.Storage.Queues:12.8.0
+    https://nvd.nist.gov/vuln/detail/CVE-2022-30187
+    Azure Storage Library Information Disclosure Vulnerability.
+    This is a temporary suppression pending a fix being available.
+	Used to provide working release deployment fallback.
+    ]]>
+    </notes>
+    <cve>CVE-2022-34716</cve>
+  </suppress>
 </suppressions>
