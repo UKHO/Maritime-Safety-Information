@@ -240,13 +240,4 @@
     </notes>
     <cve>CVE-2021-21252</cve>
   </suppress>
-  <suppress>
-     <notes>
-	   <![CDATA[
-       file name: additional-methods.min.js
-       Bug to track the fix - https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_workitems/edit/55095
-       ]]>
-	 </notes>
-     <sha1>373d444372d4336f1b545ceae806467b4f800a0a</sha1>
-  </suppress>
 </suppressions>
