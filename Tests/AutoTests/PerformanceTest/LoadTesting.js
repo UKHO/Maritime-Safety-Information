@@ -20,7 +20,7 @@ export const options = {
           startVUs: 0,
           stages: [
             { duration: '30m', target: 5 },
-            { duration: '25', target: 2 },
+            { duration: '25m', target: 2 },
             { duration: '5m', target: 0 }
           ] 
           
