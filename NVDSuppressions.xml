@@ -241,12 +241,17 @@
     <cve>CVE-2021-21252</cve>
   </suppress>
   <suppress>
-    <notes>
-	  <![CDATA[
-      file name: additional-methods.min.js
-      ]]>
-    </notes>
+    <notes><![CDATA[
+    file name: additional-methods.min.js
+    ]]></notes>
     <packageUrl regex="true">^pkg:javascript/jquery\-validation@.*$</packageUrl>
-    <cvssBelow>8</cvssBelow>
+    <vulnerabilityName>ReDoS vulnerability in URL2 validation</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: jquery.validate.min.js
+    ]]></notes>
+    <packageUrl regex="true">^pkg:javascript/jquery\-validation@.*$</packageUrl>
+    <vulnerabilityName>ReDoS vulnerability in URL2 validation</vulnerabilityName>
   </suppress>
 </suppressions>
