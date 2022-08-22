@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
 
-             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true});
+             A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true});
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
@@ -89,7 +89,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
 
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true });
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true });
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
@@ -107,7 +107,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
 
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = false });
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = false });
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
             Assert.AreEqual("A warning record with this reference number already exists. Would you like to add another record with the same reference?", _controller.TempData["message"].ToString());

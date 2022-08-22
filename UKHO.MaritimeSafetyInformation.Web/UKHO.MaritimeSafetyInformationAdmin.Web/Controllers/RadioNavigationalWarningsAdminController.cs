@@ -47,7 +47,7 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipCheckDuplicateReference);
+                ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipCheckDuplicateReference, User.Identity.Name);
 
                 if (result.IsCreated)
                 {

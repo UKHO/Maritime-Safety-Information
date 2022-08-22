@@ -696,9 +696,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910168 - Maritime safety information request to get banner notification message from azure table failed.
         /// </summary>
-        GetBannerNotificationMessageFromTableFailed = 910168
+        GetBannerNotificationMessageFromTableFailed = 910168,
+        /// <summary>
+        /// 910169 - Maritime safety information user requested to add another record with the same reference number.
+        /// </summary>
+        AddRecordWithSameReferenceNumber = 910169
     }
-
+    
     public static class EventIdExtensions
     {
         public static EventId ToEventId(this EventIds eventId)
