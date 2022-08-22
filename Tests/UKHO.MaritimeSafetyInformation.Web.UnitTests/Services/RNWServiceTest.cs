@@ -55,16 +55,45 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenPostValidRequest_ThenReturnTrue()
+        public async Task WhenPostValidRequestWithFlagSkipCheckDuplicateReferenceAsTrue_ThenReturnTrue()
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            bool skipCheckDuplicateReference = true;
 
-            A.CallTo(() => _fakeRnwRepository.CheckDuplicateReferenceNumber(A<int>.Ignored, A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
 
-            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, false);
+            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference);
 
             Assert.IsTrue(result.IsCreated);
+        }
+
+        [Test]
+        public async Task WhenPostValidRequestWithNewReferenceNumber_ThenReturnTrue()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            bool skipCheckDuplicateReference = false;
+
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
+
+            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference);
+
+            Assert.IsTrue(result.IsCreated);
+        }
+
+        [Test]
+        public async Task WhenPostValidRequestWithExistReferenceNumber_ThenReturnFalse()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            bool skipCheckDuplicateReference = false;
+
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(true);
+
+            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference);
+
+            Assert.IsFalse(result.IsCreated);
         }
 
         [Test]
@@ -117,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
-            A.CallTo(() => _fakeRnwRepository.CheckDuplicateReferenceNumber(A<int>.Ignored, A<string>.Ignored)).Returns(false);
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
 
             A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarning(A<RadioNavigationalWarning>.Ignored)).Throws(new Exception());
 

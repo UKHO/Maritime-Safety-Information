@@ -77,25 +77,40 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
         }
 
+        [Test]
+        public void WhenAddRadioNavigationWarningsWithFlagSkipCheckDuplicateIsNo_ThenNewRecordIsCreated()
+        {
+            _controller.TempData = _tempData;
+            DefaultHttpContext httpContext = new();
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"SkipCheckDuplicate", "No" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = true });
+            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
+            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
+        }
 
         [Test]
         public void WhenAddRadioNavigationWarningsReturnFalseInRequest_ThenNewRecordIsNotCreated()
         {
             _controller.TempData = _tempData;
-            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated =false});
-            Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.IsNull(_controller.TempData["message"]);
-        }
+            DefaultHttpContext httpContext = new();
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"SkipCheckDuplicate", "No" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
 
-        [Test]
-        public void WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
-        {
-            _controller.TempData = _tempData;
-            _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
+            A.CallTo(() => _fakeRnwService.CreateNewRadioNavigationWarningsRecord(A<RadioNavigationalWarning>.Ignored, A<string>.Ignored, A<bool>.Ignored)).Returns(new ResponseNewRadioNavigationWarningsModel() { IsCreated = false });
             Task<IActionResult> result = _controller.Create(new RadioNavigationalWarning());
             Assert.IsInstanceOf<Task<IActionResult>>(result);
-            Assert.IsNull(_controller.TempData["message"]);
+            Assert.AreEqual("A warning record with this reference number already exists. Would you like to add another record with the same reference?", _controller.TempData["message"].ToString());
         }
 
         [Test]

@@ -30,11 +30,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<ResponseNewRadioNavigationWarningsModel> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId, bool skipCheckDuplicateReference)
         {
-            ResponseNewRadioNavigationWarningsModel responseNewRadioNavigationWarningsModel = new()
-            {
-                IsCreated = false,
-                ResponseMessage = ""
-            };
+            ResponseNewRadioNavigationWarningsModel responseNewRadioNavigationWarningsModel = new();
 
             if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {
@@ -67,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (!skipCheckDuplicateReference)
                 {
-                    isDuplicateReferenceNumber = await _rnwRepository.CheckDuplicateReferenceNumber(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
+                    isDuplicateReferenceNumber = await _rnwRepository.CheckReferenceNumberExistOrNot(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
                 }
                 
                 if (!isDuplicateReferenceNumber)
@@ -80,7 +76,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 }
                 else
                 {
-                    responseNewRadioNavigationWarningsModel.ResponseMessage = "A warning record with this reference number already exists. Would you like to add another record with the same reference?";
+                    responseNewRadioNavigationWarningsModel.IsCreated = false;
                 }
             }
             catch (Exception ex)

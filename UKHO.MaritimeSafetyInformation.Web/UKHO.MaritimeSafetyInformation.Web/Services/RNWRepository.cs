@@ -125,7 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> CheckDuplicateReferenceNumber(int warningType, string referenceNumber)
+        public async Task<bool> CheckReferenceNumberExistOrNot(int warningType, string referenceNumber)
         {
             List<RadioNavigationalWarningsData> RadioNavigationalWarningsAdmin = await (from rnwWarnings in _context.RadioNavigationalWarnings
                                                                                         join warningTypes in _context.WarningType on rnwWarnings.WarningType equals warningTypes.Id
