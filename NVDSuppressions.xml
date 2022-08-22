@@ -244,7 +244,7 @@
     <notes><![CDATA[
     file name: additional-methods.min.js
     ]]></notes>
-    <gav regex="true">^pkg:javascript/jquery\-validation@.*$</packageUrl>
+    <gav regex="true">^pkg:javascript/jquery\-validation@.*$</gav>
     <vulnerabilityName>ReDoS vulnerability in URL2 validation</vulnerabilityName>
     <cvssBelow>8</cvssBelow>
   </suppress>
