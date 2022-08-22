@@ -248,6 +248,5 @@
        ]]>
 	 </notes>
      <sha1>373d444372d4336f1b545ceae806467b4f800a0a</sha1>
-     <vulnerabilityName>ReDoS vulnerability in URL2 validation</vulnerabilityName>
   </suppress>
 </suppressions>
