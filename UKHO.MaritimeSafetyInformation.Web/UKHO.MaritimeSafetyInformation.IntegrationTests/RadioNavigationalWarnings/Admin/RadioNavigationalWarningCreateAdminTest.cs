@@ -59,7 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -74,6 +74,61 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
+        public async Task WhenCallCreateWithExistingReferenceNumberAndSkipCheckDuplicateFlagAsNo_ThenReturnAlertMessage()
+        {
+            _controller.TempData = _tempData;
+            const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Create.cshtml";
+            DefaultHttpContext httpContext = new();
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"SkipCheckDuplicate", "No" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+            RadioNavigationalWarning radioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            radioNavigationalWarning.Id++;
+            radioNavigationalWarning.IsDeleted = false;
+
+            await SeedWarningType(GetFakeWarningTypes());
+            await SeedRadioNavigationalWarnings(new List<RadioNavigationalWarning>() { radioNavigationalWarning });
+
+            IActionResult result = await _controller.Create(radioNavigationalWarning);
+
+            Assert.IsInstanceOf<IActionResult>(result);
+            Assert.AreEqual("A warning record with this reference number already exists. Would you like to add another record with the same reference?", _controller.TempData["message"].ToString());
+            Assert.IsInstanceOf<ViewResult>(result);
+            string actualView = ((ViewResult)result).ViewName;
+            Assert.AreEqual(expectedView, actualView);
+            Assert.IsTrue(((ViewResult)result).ViewData.ModelState.IsValid);
+        }
+
+        [Test]
+        public async Task WhenCallCreateWithExistingReferenceNumberAndSkipCheckDuplicateFlagAsYes_ThenNewRecordIsCreated()
+        {
+            _controller.TempData = _tempData;
+            DefaultHttpContext httpContext = new();
+            FormCollection formCol = new(new Dictionary<string, StringValues>
+                                        {
+                                            {"SkipCheckDuplicate", "Yes" }
+                                        });
+            httpContext.Request.Form = formCol;
+            _controller.ControllerContext.HttpContext = httpContext;
+
+            RadioNavigationalWarning radioNavigationalWarningNewEntry = GetFakeRadioNavigationalWarning();
+            radioNavigationalWarningNewEntry.Id += 2;
+            radioNavigationalWarningNewEntry.IsDeleted = false;
+
+            IActionResult result = await _controller.Create(radioNavigationalWarningNewEntry);
+
+            Assert.IsInstanceOf<IActionResult>(result);
+            Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
+            Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
+            Assert.AreEqual(3, FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
+            Assert.IsTrue(FakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
+        }
+
+        [Test]
         public void WhenAddRadioNavigationalWarningsWithInValidValue_ThenNewRecordIsNotCreated()
         {
             _controller.TempData = _tempData;
@@ -82,7 +137,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -102,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -123,7 +178,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -141,7 +196,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -159,7 +214,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -177,7 +232,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipCheckDuplicate", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
