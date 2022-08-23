@@ -237,13 +237,13 @@ const dailyfileNameData = dailyFileName[i].slice(6,14)
 public async verifyIntegrationDownloadAll()
 {
   expect(await this.downloadAll.innerText()).toContain('Download All')
-  expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyFile?fileName=2022%20Wk%2026%20Weekly%20NMs.zip&batchId=3db9e8c4-0dea-43c8-8de3-e875be26c418&mimeType=application%2Fgzip&type=public')
+  expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2026%20Weekly%20NMs.zip&batchId=3db9e8c4-0dea-43c8-8de3-e875be26c418&mimeType=application%2Fgzip&type=public')
 } 
 
 public async verifyIntegrationDownloadPartnerAll()
 {
   expect(await this.downloadPartnerAll.innerText()).toContain('Download All')
-  expect(await this.downloadPartnerAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyFile?fileName=2022%20Wk%2026%20Weekly%20NMs.zip&batchId=51a04be3-8fac-485d-86e3-295da4f924c0&mimeType=application%2Fgzip&type=partner')
+  expect(await this.downloadPartnerAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2026%20Weekly%20NMs.zip&batchId=51a04be3-8fac-485d-86e3-295da4f924c0&mimeType=application%2Fgzip&type=partner')
 } 
 
   public async verifyIntegrationTestValueForDistributor()
