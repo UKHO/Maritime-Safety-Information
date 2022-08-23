@@ -706,7 +706,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         DownloadAllWeeklyNMFileCompleted = 910170,
         /// <summary>
-        /// 910171 - Request For Download Daily NM File Failed.
+        /// 910171 - Request For Download All Weekly NM Files Failed.
         /// </summary>
         DownloadAllWeeklyNMFileFailed = 910171
     }
