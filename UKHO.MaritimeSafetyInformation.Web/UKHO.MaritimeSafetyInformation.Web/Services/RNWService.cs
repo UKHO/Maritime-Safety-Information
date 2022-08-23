@@ -61,26 +61,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             {
                 bool isDuplicateReferenceNumber = false;
 
-                if (!skipCheckDuplicateReference)
-                {
-                    isDuplicateReferenceNumber = await _rnwRepository.CheckReferenceNumberExistOrNot(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
-                }
-                else
+                if (skipCheckDuplicateReference)
                 {
                     _logger.LogInformation(EventIds.AddRecordWithSameReferenceNumber.ToEventId(), "Maritime safety information user requested to add another record with the same reference number for UserName:{userName}, ReferenceNumber:{Reference} and _X-Correlation-ID:{correlationId}", userName, radioNavigationalWarning.Reference, correlationId);
                 }
+                else
+                {
+                    isDuplicateReferenceNumber = await _rnwRepository.CheckReferenceNumberExistOrNot(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
+                }
 
-                if (!isDuplicateReferenceNumber)
+                if (isDuplicateReferenceNumber)
+                {
+                    responseNewRadioNavigationWarningsModel.IsCreated = false;
+                }
+                else
                 {
                     _logger.LogInformation(EventIds.AddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
                     await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
                     _logger.LogInformation(EventIds.AddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
 
                     responseNewRadioNavigationWarningsModel.IsCreated = true;
-                }
-                else
-                {
-                    responseNewRadioNavigationWarningsModel.IsCreated = false;
                 }
             }
             catch (Exception ex)
