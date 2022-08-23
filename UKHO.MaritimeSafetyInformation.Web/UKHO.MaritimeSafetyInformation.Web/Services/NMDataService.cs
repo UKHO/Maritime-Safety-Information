@@ -382,13 +382,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         }
 
-        public async Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, bool isDistributorUser, string correlationId)
+        public async Task<byte[]> DownloadFSSZipFileAsync(string batchId, string fileName, string correlationId)
         {
             try
             {
                 _logger.LogInformation(EventIds.GetNMZipFileStarted.ToEventId(), "Maritime safety information request to get NM zip file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
-                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(isDistributorUser, correlationId);
+                string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 

@@ -698,15 +698,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetBannerNotificationMessageFromTableFailed = 910168,
         /// <summary>
-        /// 910169 -Request For Download Daily NM File Started.
+        /// 910169 - Request For Download All Weekly NM Files Started.
         /// </summary>
         DownloadAllWeeklyNMFileStarted = 910169,
         /// <summary>
-        /// 910170 -Request For Download Daily NM File Completed.
+        /// 910170 - Request For Download All Weekly NM Files Completed.
         /// </summary>
         DownloadAllWeeklyNMFileCompleted = 910170,
         /// <summary>
-        /// 910171 -Request For Download Daily NM File Failed.
+        /// 910171 - Request For Download Daily NM File Failed.
         /// </summary>
         DownloadAllWeeklyNMFileFailed = 910171
     }

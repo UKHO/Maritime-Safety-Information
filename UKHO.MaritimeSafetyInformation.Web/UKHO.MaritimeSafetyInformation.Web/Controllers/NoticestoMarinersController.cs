@@ -274,7 +274,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     new KeyValuePair<string, string>("MimeType", mimeType)
                 }, GetCurrentCorrelationId(), _logger);
 
-                byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, _userService.IsDistributorUser, GetCurrentCorrelationId());
+                byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
 
@@ -289,7 +289,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
         }
 
-        public async Task<FileResult> DownloadAllWeeklyFile(string batchId, string fileName, string mimeType, string type)
+        public async Task<FileResult> DownloadAllWeeklyZipFile(string batchId, string fileName, string mimeType, string type)
         {
             try
             {
@@ -301,12 +301,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
                     new KeyValuePair<string, string>("Type", type)
                 }, GetCurrentCorrelationId(), _logger);
 
-                _logger.LogInformation(EventIds.DownloadAllWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to all weekly NM files started for {type} with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", type, batchId, fileName, GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.DownloadAllWeeklyNMFileStarted.ToEventId(), "Maritime safety information request to download all weekly NM files started for {type} with batchId:{batchId} and fileName:{fileName} for _X-Correlation-ID:{correlationId}", type, batchId, fileName, GetCurrentCorrelationId());
 
-                byte[] fileBytes;
-                bool isDistributorUser = type == "partner";
-
-                fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, isDistributorUser, GetCurrentCorrelationId());
+                byte[] fileBytes = await _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, GetCurrentCorrelationId());
 
                 _contextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", $"inline; filename=\"{fileName}\"");
 

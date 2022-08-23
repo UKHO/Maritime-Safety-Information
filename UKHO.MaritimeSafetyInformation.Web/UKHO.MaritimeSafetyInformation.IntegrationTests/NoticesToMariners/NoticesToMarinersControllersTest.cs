@@ -337,14 +337,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallDownloadAllWeeklyFile_ThenReturnFile()
+        public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnFile()
         {
             const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be26c418";
             const string filename = "WeeklyAll_NM.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            ActionResult result = await _nMController.DownloadAllWeeklyFile(batchId, filename, mimeType, type);
+            ActionResult result = await _nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
             Assert.IsTrue(((FileContentResult)result) != null);
             Assert.AreEqual("application/gzip", ((FileContentResult)result).ContentType);
             Assert.AreEqual(2278920, ((FileContentResult)result).FileContents.Length);
@@ -352,7 +352,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public void WhenCallDownloadAllWeeklyFileWithInvalidData_ThenThrowArgumentException()
+        public void WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException()
         {
             const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be261234";
             const string filename = "WeeklyAll_NM.zip";
@@ -360,7 +360,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string type = "public";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
-                async delegate { await _nMController.DownloadAllWeeklyFile(batchId, filename, mimeType, type); });
+                async delegate { await _nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
         }
     }
 }

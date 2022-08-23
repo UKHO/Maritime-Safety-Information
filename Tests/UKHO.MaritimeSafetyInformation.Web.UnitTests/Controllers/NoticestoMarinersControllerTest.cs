@@ -338,7 +338,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "Daily 16-05-22.zip";
             const string mimeType = "application/gzip";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
             IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
 
             Assert.IsInstanceOf<FileResult>(result);
@@ -351,7 +351,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "Daily 16-05-22.zip";
             const string mimeType = "application/gzip";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 
@@ -480,32 +480,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task WhenDownloadAllWeeklyFileIsCalled_ThenShouldReturnFileResult()
+        public async Task WhenDownloadAllWeeklyZipFileIsCalled_ThenShouldReturnFileResult()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "2022 Wk 29 Weekly NMs.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored));
-            IActionResult result = await _controller.DownloadAllWeeklyFile(batchId, fileName, mimeType, type);
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 
             Assert.IsInstanceOf<FileResult>(result);
         }
 
         [Test]
-        public void WhenDownloadAllWeeklyFileIsCalled_ThenShouldReturnShowDailyFilesAction()
+        public void WhenDownloadAllWeeklyZipFileIsCalledAndExceptionThrownByService_ThenShouldThrowException()
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "2022 Wk 29 Weekly NMs.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<bool>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
             _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 
-            Task<FileResult> result = _controller.DownloadAllWeeklyFile(batchId, fileName, mimeType, type);
+            Task<FileResult> result = _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 
             Assert.IsTrue(result.IsFaulted);
 
@@ -519,9 +519,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "", "application/gzip", "partner", Description = "When Download All Weekly File Is Called With Empty File Name Then Should Then Should Throw Exception")]
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "2022 Wk 26 Weekly NMs.zip", "application/gzip", null, Description = "When Download All Weekly File Is Called With Null type Then Should Then Should Throw Exception")]
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "2022 Wk 26 Weekly NMs.zip", "application/gzip", "", Description = "When Download All Weekly File Is Called With Empty type Then Should Then Should Throw Exception")]
-        public void WhenDownloadAllWeeklyFileIsCalledWithEmptyValue_ThenShouldThrowException(string batchId, string fileName, string mimeType, string type)
+        public void WhenDownloadAllWeeklyZipFileIsCalledWithEmptyValue_ThenShouldThrowException(string batchId, string fileName, string mimeType, string type)
         {
-            Task<FileResult> result = _controller.DownloadAllWeeklyFile(batchId, fileName, mimeType, type);
+            Task<FileResult> result = _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 
             Assert.IsTrue(result.IsFaulted);
         }
