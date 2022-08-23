@@ -337,7 +337,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         }
 
         [Test]
-        public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnFile()
+        public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile()
         {
             const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be26c418";
             const string filename = "WeeklyAll_NM.zip";
