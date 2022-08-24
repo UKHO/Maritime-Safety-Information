@@ -45,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             IActionResult result = await _controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
             string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
-            Assert.AreEqual(6, warningsData.Count);
+            Assert.AreEqual(7, warningsData.Count);
             Assert.AreEqual("RnwAdminListReference", warningsData[2].Reference);
             Assert.AreEqual("RnwAdminListSummary", warningsData[2].Description);
             Assert.AreEqual(new DateTime(2022, 1, 1), warningsData[2].DateTimeGroup);

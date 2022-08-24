@@ -92,6 +92,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
+        public async Task WhenGetRadioNavigationWarningsIsCalled_ThenCheckIsStatusIsDisplayedCorrectly()
+        {
+            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.AreEqual("Active", result.First(x=>x.Id==1).Status);
+            Assert.AreEqual("Expired", result.First(x => x.Id == 2).Status);
+            Assert.AreEqual("Expired", result.First(x => x.Id == 3).Status);
+            Assert.AreEqual("Active", result.First(x => x.Id == 4).Status);
+        }
+
+        [Test]
         public async Task WhenCallGetYears_ThenReturnListAsync()
         {
             List<string> result = await _rnwRepository.GetYears();
