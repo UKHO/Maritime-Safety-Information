@@ -947,3 +947,17 @@ input[type=button].select-all-button {
   left: 0;
   top: 1px;
 }
+
+.notice-to-mariners-daily-table thead tr th.th-3, .notice-to-mariners-cumulative-table thead tr th.th-3 {
+  flex-basis: 35%;
+}
+.notice-to-mariners-daily-table tbody tr td.td-3, .notice-to-mariners-cumulative-table tbody tr td.td-3 {
+  flex-basis: 35%;
+}
+
+.notice-to-mariners-weekly-table thead tr th.th-3 {
+  flex-basis: 60%;
+}
+.notice-to-mariners-weekly-table tbody tr td.td-3 {
+  flex-basis: 60%;
+}

@@ -310,34 +310,34 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         DownloadDailyNMFileFailed = 910073,
 
         /// <summary>
-        /// 910074 - Request To Get Daily Zip NM File Started.
+        /// 910074 - Request To Get NM Zip File Started.
         /// </summary>
-        GetDailyZipNMFileStarted = 910074,
+        GetNMZipFileStarted = 910074,
 
         /// <summary>
-        /// 910075 - Request To Get Daily Zip NM File Completed.
+        /// 910075 - Request To Get NM Zip File Completed.
         /// </summary>
-        GetDailyZipNMFileCompleted = 910075,
+        GetNMZipFileCompleted = 910075,
 
         /// <summary>
-        /// 910076 - Request To Get Daily Zip NM File Failed.
+        /// 910076 - Request To Get NM Zip File Failed.
         /// </summary>
-        GetDailyZipNMFileFailed = 910076,
+        GetNMZipFileFailed = 910076,
 
         /// <summary>
-        /// 910077 - Request For FSS To Get Daily Zip NM File Started.
+        /// 910077 - Request For FSS To Get NM Zip File Started.
         /// </summary>
-        FSSGetDailyZipNMFileStarted = 910077,
+        FSSGetNMZipFileStarted = 910077,
 
         /// <summary>
-        /// 910078 - Request For FSS To Get Daily Zip NM File Completed.
+        /// 910078 - Request For FSS To Get NM Zip File Completed.
         /// </summary>
-        FSSGetDailyZipNMFileCompleted = 910078,
+        FSSGetNMZipFileCompleted = 910078,
 
         /// <summary>
-        /// 910079 - Request For FSS To Get Daily Zip NM File Failed.
+        /// 910079 - Request For FSS To Get NM Zip File Failed.
         /// </summary>
-        FSSGetDailyZipNMFileResponseFailed = 910079,
+        FSSGetNMZipFileResponseFailed = 910079,
 
         /// <summary>
         /// 910080-  Event data for Retrieval of MSI Show Daily File Failed.
@@ -345,9 +345,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         ShowDailyFilesFailed = 910080,
 
         /// <summary>
-        /// 910081-  Request For FSS To Get Daily Zip NM File Return IsSuccess False.
+        /// 910081-  Request For FSS To Get NM Zip File Return IsSuccess False.
         /// </summary>
-        FSSGetDailyZipNMFileReturnIsSuccessFalse = 910081,
+        FSSGetNMZipFileReturnIsSuccessFalse = 910081,
 
         /// <summary>
         /// 910082-  Request For FSS To Get Daily Zip NM File Has Error.
@@ -696,7 +696,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910168 - Maritime safety information request to get banner notification message from azure table failed.
         /// </summary>
-        GetBannerNotificationMessageFromTableFailed = 910168
+        GetBannerNotificationMessageFromTableFailed = 910168,
+        /// <summary>
+        /// 910169 - Request For Download All Weekly NM Files Started.
+        /// </summary>
+        DownloadAllWeeklyNMFileStarted = 910169,
+        /// <summary>
+        /// 910170 - Request For Download All Weekly NM Files Completed.
+        /// </summary>
+        DownloadAllWeeklyNMFileCompleted = 910170,
+        /// <summary>
+        /// 910171 - Request For Download All Weekly NM Files Failed.
+        /// </summary>
+        DownloadAllWeeklyNMFileFailed = 910171
     }
 
     public static class EventIdExtensions
