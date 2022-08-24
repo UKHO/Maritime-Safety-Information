@@ -16,7 +16,7 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
   });
 
   test('Does the Menu , Tabs and Page Text is displayed',async () => { 
-    expect(await rnwListEndUser.checkText(rnwListEndUser.radioNavigationalWarningsEndUser)).toEqual("Radio Navigational Warnings");
+    expect(await rnwListEndUser.checkText(rnwListEndUser.radioNavigationalWarningsEndUser)).toEqual("Radio Navigation Warnings");
     expect(await rnwListEndUser.checkText(rnwListEndUser.radioWarningEndUser)).toEqual("Radio Warnings");
     expect(await rnwListEndUser.checkText(rnwListEndUser.aboutEndUser)).toEqual("About");
     expect(await rnwListEndUser.checkText(rnwListEndUser.allWarningEndUser)).toEqual("All warnings");

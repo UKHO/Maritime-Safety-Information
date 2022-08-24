@@ -52,10 +52,7 @@
                         </th>
                         <th class="th-7">
                             @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().ExpiryDateRnwFormat)
-                        </th>
-                        <th class="th-8">
-                            @Html.DisplayNameFor(model => model.RadioNavigationalWarningsAdminList.FirstOrDefault().IsDeleted)
-                        </th>
+                        </th>                      
                         <th class="th-9">
                             <span class="visually-hidden">Action</span>
                         </th>
@@ -86,10 +83,7 @@
                             </td>
                             <td id="ExpiryDateRnwFormat_@Model.SrNo">
                                 @Html.DisplayFor(modelItem => item.ExpiryDateRnwFormat)
-                            </td>
-                            <td id="IsDeleted_@Model.SrNo">
-                                @Html.DisplayFor(modelItem => item.IsDeleted)
-                            </td>
+                            </td>                           
                             <td id="Edit_@Model.SrNo">
                                 <a asp-action="Edit" asp-route-id="@item.Id" id="Edit_@item.Id">Edit</a>
                             </td>
