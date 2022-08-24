@@ -32,6 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<RadioNavigationalWarningsAdmin>> GetRadioNavigationWarningsAdminList()
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
+                          where !rnwWarnings.IsDeleted
                           join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
                           select new RadioNavigationalWarningsAdmin
                           {
@@ -43,8 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                               Summary = rnwWarnings.Summary,
                               Content = RnwHelper.FormatContent(rnwWarnings.Content),
                               ExpiryDate = rnwWarnings.ExpiryDate,
-                              ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
-                              IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
+                              ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),                              
                               WarningTypeName = warning.Name
                           }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
         }
@@ -129,8 +129,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             List<RadioNavigationalWarningsData> RadioNavigationalWarningsAdmin = await (from rnwWarnings in _context.RadioNavigationalWarnings
                                                                                         join warningTypes in _context.WarningType on rnwWarnings.WarningType equals warningTypes.Id
-                                                                                        where !rnwWarnings.IsDeleted && (rnwWarnings.ExpiryDate == null || rnwWarnings.ExpiryDate >= DateTime.UtcNow)
-                                                                                              && rnwWarnings.WarningType == warningType && rnwWarnings.Reference == referenceNumber
+                                                                                        where !rnwWarnings.IsDeleted && rnwWarnings.WarningType == warningType && rnwWarnings.Reference == referenceNumber
                                                                                         select new RadioNavigationalWarningsData
                                                                                         {
                                                                                             Id = rnwWarnings.Id,
