@@ -14,7 +14,7 @@ export default class RadioNavigationalWarningsList
     readonly btnLast:Locator;
     readonly headerLocator:Locator;
     readonly tableHeader:Locator
-    readonly tableHeaderText =['Sr No.','Warning Type','Reference','Date/Time','Description','Text','Expiry Date','Action'];
+    readonly tableHeaderText =['Sr No.','Warning Type','Reference','Date/Time','Description','Text','Expiry Date','Status','Action'];
     constructor(page:Page)
     {
         this.page = page; 
