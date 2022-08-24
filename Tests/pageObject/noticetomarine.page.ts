@@ -25,7 +25,7 @@ export default class noticetoMarine
     {
      this.page = page; 
      this.noticeMarine =this.page.locator('a:has-text("Notices to Mariners")');
-     this.radioNavigationalWarnings = this.page.locator('a:has-text("Radio Navigational Warnings")');
+     this.radioNavigationalWarnings = this.page.locator('a:has-text("Radio Navigation Warnings")');
      this.dropDownYearly = this.page.locator("#ddlYears");
      this.dropDownWeekly = this.page.locator("#ddlWeeks");
      this.fileName=this.page.locator('#weekly >> text=File Name');
