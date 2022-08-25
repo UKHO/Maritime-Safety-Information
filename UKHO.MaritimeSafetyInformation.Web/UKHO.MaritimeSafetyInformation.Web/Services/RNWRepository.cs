@@ -128,21 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<bool> CheckReferenceNumberExistOrNot(int warningType, string referenceNumber)
         {
-            List<RadioNavigationalWarningsData> RadioNavigationalWarningsAdmin = await (from rnwWarnings in _context.RadioNavigationalWarnings
-                                                                                        join warningTypes in _context.WarningType on rnwWarnings.WarningType equals warningTypes.Id
-                                                                                        where !rnwWarnings.IsDeleted && rnwWarnings.WarningType == warningType && rnwWarnings.Reference == referenceNumber
-                                                                                        select new RadioNavigationalWarningsData
-                                                                                        {
-                                                                                            Id = rnwWarnings.Id,
-                                                                                            WarningType = warningTypes.Name,
-                                                                                            Reference = rnwWarnings.Reference,
-                                                                                            DateTimeGroup = rnwWarnings.DateTimeGroup,
-                                                                                            Description = rnwWarnings.Summary,
-                                                                                            DateTimeGroupRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.DateTimeGroup),
-                                                                                            Content = rnwWarnings.Content
-                                                                                        }).OrderByDescending(a => a.DateTimeGroup)
-                                                                                        .ToListAsync();
-            return RadioNavigationalWarningsAdmin.Count > 0;
+            return await _context.RadioNavigationalWarnings.AnyAsync(rnwWarnings => !rnwWarnings.IsDeleted && rnwWarnings.WarningType == warningType && rnwWarnings.Reference == referenceNumber);
         }
     }
 }

@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<div class="modal overlay d-none" tabindex="-1" id="overlay" >
+<div class="modal overlay d-none" tabindex="-1" id="overlayId" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -76,7 +76,7 @@
         </div>
     </div>
 </div>
-<div class="modal-backdrop d-none" id="backdrop_" ></div>
+<div class="modal-backdrop d-none" id="backdropId" ></div>
 
 
 @section Scripts {
@@ -86,16 +86,16 @@
 @{
     if (TempData["message"] != null) {
         <script>
-            document.getElementById("overlay").classList.remove("d-none");
-            document.getElementById("overlay").classList.add("d-block");
-            document.getElementById("backdrop_").classList.remove("d-none");
-            document.getElementById("backdrop_").classList.add("d-block");
+            document.getElementById("overlayId").classList.remove("d-none");
+            document.getElementById("overlayId").classList.add("d-block");
+            document.getElementById("backdropId").classList.remove("d-none");
+            document.getElementById("backdropId").classList.add("d-block");
 
             function closeConfirmBox() {
-                document.getElementById("overlay").classList.add("d-none");
-                document.getElementById("overlay").classList.remove("d-block");
-                document.getElementById("backdrop_").classList.add("d-none");
-                document.getElementById("backdrop_").classList.remove("d-block");
+                document.getElementById("overlayId").classList.add("d-none");
+                document.getElementById("overlayId").classList.remove("d-block");
+                document.getElementById("backdropId").classList.add("d-none");
+                document.getElementById("backdropId").classList.remove("d-block");
             }
 
             function isConfirm(answer) {
