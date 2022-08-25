@@ -68,7 +68,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
-                IsDeleted = true,
+                IsDeleted = false,
                 ExpiryDate = new DateTime(2099, 1, 1),
             });
 
@@ -79,6 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                 DateTimeGroup = new DateTime(2020, 1, 1),
                 Summary = "RnwAdminListSummary",
                 Content = "RnwAdminListContent",
+                IsDeleted = false,
                 ExpiryDate = new DateTime(2019, 1, 1),
 
             });
