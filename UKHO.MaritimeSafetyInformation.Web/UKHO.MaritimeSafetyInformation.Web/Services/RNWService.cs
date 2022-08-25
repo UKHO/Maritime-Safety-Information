@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (skipCheckDuplicateReference)
                 {
-                    _logger.LogInformation(EventIds.AddRecordWithSameReferenceNumber.ToEventId(), "Maritime safety information user requested to add another record with the same reference number for UserName:{userName}, ReferenceNumber:{Reference} and _X-Correlation-ID:{correlationId}", userName, radioNavigationalWarning.Reference, correlationId);
+                    _logger.LogInformation(EventIds.AddRecordWithSameReferenceNumber.ToEventId(), "Maritime safety information User:{userName} choose to add another record with existing ReferenceNumber:{Reference} and _X-Correlation-ID:{correlationId}", userName, radioNavigationalWarning.Reference, correlationId);
                 }
                 else
                 {
