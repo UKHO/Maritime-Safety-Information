@@ -62,17 +62,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
             FSSNewFilesPublishedEventData data = (eventGridEvent.Data as JObject).ToObject<FSSNewFilesPublishedEventData>();
 
-            
-
             _logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Enterprise event data deserialized. Data:{data} and _X-Correlation-ID:{correlationId}", JsonConvert.SerializeObject(data), GetCurrentCorrelationId());
 
             FluentValidation.Results.ValidationResult validationResult = await _webhookService.ValidateNewFilesPublishedEventData(data);
 
-            string productType = data.Attributes.Where(a => a.Key == "Product Type").Select(a => a.Value).FirstOrDefault();
+            string productType = validationResult.IsValid ? data.Attributes.Where(a => a.Key == "Product Type").Select(a => a.Value).FirstOrDefault() : "";
 
             if (!validationResult.IsValid)
             {
-                _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Required attributes missing in event data from Enterprise event for clear FSS search cache from Azure table for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+                _logger.LogInformation(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Required attributes missing in event data from Enterprise event for clear FSS search cache from Azure table for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear Cache Event completed for Product Type:{productType} as required data was missing in payload with OK response and _X-Correlation-ID:{correlationId}", productType, GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
