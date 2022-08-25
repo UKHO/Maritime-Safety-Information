@@ -297,14 +297,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
                 {
                     if (_cacheConfiguration.Value.IsFssCacheEnabled && !isCached)
-                    {                       
+                    {
                         _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
 
                         await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, partitionKey, correlationId);
 
                         _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is completed with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
                     }
-                   
+
                     List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponseLeisure(searchResult);
                     ShowNMFilesResponseModel showNMFilesResponseModel = new() { ShowFilesResponseModel = ListshowFilesResponseModels, IsBatchResponseCached = isCached };
                     _logger.LogInformation(EventIds.ShowLeisureFilesResponseDataFound.ToEventId(), "Request to get leisure files completed and data found with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
@@ -386,7 +386,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetNMZipFileStarted.ToEventId(), "Maritime safety information request to get NM zip file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
@@ -396,13 +396,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
-                _logger.LogInformation(EventIds.GetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.GetNMZipFileCompleted.ToEventId(), "Maritime safety information request to get NM zip file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 return fileBytes;
             }
             catch (Exception ex)
             {
-                _logger.LogInformation(EventIds.GetDailyZipNMFileFailed.ToEventId(), "Maritime safety information request to get daily zip NM file failed for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{correlationId}", batchId, fileName, ex.Message, correlationId);
+                _logger.LogInformation(EventIds.GetNMZipFileFailed.ToEventId(), "Maritime safety information request to get NM zip file failed for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{correlationId}", batchId, fileName, ex.Message, correlationId);
                 throw;
             }
 

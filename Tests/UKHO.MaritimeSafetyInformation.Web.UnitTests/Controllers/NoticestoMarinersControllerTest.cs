@@ -37,13 +37,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexIsCalled_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
-
+            const int year = 2022;
+            const int week = 20;
             A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
             IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
             Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
         }
 
@@ -51,6 +54,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         public async Task WhenIndexIsCalledForNoBatchData_ThenShouldReturnsExpectedView()
         {
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
+            const int year = 2022;
+            const int week = 20;
 
             ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = SetResultForShowWeeklyFilesResponseModel();
 
@@ -60,11 +65,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             IActionResult result = await _controller.Index();
             Assert.IsInstanceOf<ViewResult>(result);
+
             string actualView = ((ViewResult)result).ViewName;
+
             Assert.AreEqual(expectedView, actualView);
+            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
+            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
             Assert.AreEqual(true, _controller.ViewBag.HasError);
         }
-
 
         [Test]
         public void WhenIndexIsCalledAndExceptionThrownByService_ThenShouldThrowException()
@@ -469,6 +477,53 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string actualView = ((ViewResult)result).ViewName;
             Assert.AreEqual(expectedView, actualView);
             Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
+        }
+
+        [Test]
+        public async Task WhenDownloadAllWeeklyZipFileIsCalled_ThenShouldReturnFileResult()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "2022 Wk 29 Weekly NMs.zip";
+            const string mimeType = "application/gzip";
+            const string type = "public";
+
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
+
+            Assert.IsInstanceOf<FileResult>(result);
+        }
+
+        [Test]
+        public void WhenDownloadAllWeeklyZipFileIsCalledAndExceptionThrownByService_ThenShouldThrowException()
+        {
+            string batchId = Guid.NewGuid().ToString();
+            const string fileName = "2022 Wk 29 Weekly NMs.zip";
+            const string mimeType = "application/gzip";
+            const string type = "public";
+
+            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+
+            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+
+            Task<FileResult> result = _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
+
+            Assert.IsTrue(result.IsFaulted);
+
+        }
+
+        [TestCase(null, "2022 Wk 26 Weekly NMs.zip", "application/gzip", "public", Description = "When Download All Weekly File Is Called With Null BatchID Then Should Throw Exception")]
+        [TestCase("", "2022 Wk 26 Weekly NMs.zip", "application/gzip", "partner", Description = "When Download All Weekly File Is Called With Empty BatchID Then Should Then Should Throw Exception")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d1", "2022 Wk 26 Weekly NMs.zip", null, "public", Description = "When Download All Weekly File Is Called With Null Mime Type Then Should Then Should Throw Exception")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d2", "2022 Wk 26 Weekly NMs.zip", "", "partner", Description = "When Download All Weekly File Is Called With Empty Mime Type Then Should Then Should Throw Exception")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d3", null, "application/gzip", "public", Description = "When Download All Weekly File Is Called With Null File Name Then Should Then Should Throw Exception")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "", "application/gzip", "partner", Description = "When Download All Weekly File Is Called With Empty File Name Then Should Then Should Throw Exception")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "2022 Wk 26 Weekly NMs.zip", "application/gzip", null, Description = "When Download All Weekly File Is Called With Null type Then Should Then Should Throw Exception")]
+        [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "2022 Wk 26 Weekly NMs.zip", "application/gzip", "", Description = "When Download All Weekly File Is Called With Empty type Then Should Then Should Throw Exception")]
+        public void WhenDownloadAllWeeklyZipFileIsCalledWithEmptyValue_ThenShouldThrowException(string batchId, string fileName, string mimeType, string type)
+        {
+            Task<FileResult> result = _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
+
+            Assert.IsTrue(result.IsFaulted);
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()

@@ -264,8 +264,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual(".pdf", showFiles.ShowFilesResponseModel[0].FileExtension);
             Assert.AreEqual(539264, showFiles.ShowFilesResponseModel[0].FileSize);
             Assert.AreEqual("527 KB", showFiles.ShowFilesResponseModel[0].FileSizeinKB);
-            Assert.AreEqual("Leisure", showFiles.ShowFilesResponseModel[0].Attributes.First(x=>x.Key=="Frequency").Value);
-            Assert.AreEqual("SC5603", showFiles.ShowFilesResponseModel[0].Attributes.First(x=>x.Key=="Chart").Value);
+            Assert.AreEqual("Leisure", showFiles.ShowFilesResponseModel[0].Attributes.First(x => x.Key == "Frequency").Value);
+            Assert.AreEqual("SC5603", showFiles.ShowFilesResponseModel[0].Attributes.First(x => x.Key == "Chart").Value);
             Assert.AreEqual("dd36d1d4-3421-4402-b678-b52d19f5d325", showFiles.ShowFilesResponseModel[0].BatchId);
         }
 
@@ -277,7 +277,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.IsTrue(showFiles != null);
 
             List<string> lstChart = new();
-            foreach (ShowFilesResponseModel file in showFiles.ShowFilesResponseModel) 
+            foreach (ShowFilesResponseModel file in showFiles.ShowFilesResponseModel)
             {
                 lstChart.Add(file.Attributes.FirstOrDefault(x => x.Key == "Chart").Value);
             }
@@ -334,6 +334,33 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.AreEqual("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", responseModel.ShowFilesResponseModel[7].Filename);
             Assert.AreEqual("---", responseModel.ShowFilesResponseModel[14].Hash);
             Assert.AreEqual("1", responseModel.ShowFilesResponseModel[1].Hash);
+        }
+
+        [Test]
+        public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile()
+        {
+            const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be26c418";
+            const string filename = "WeeklyAll_NM.zip";
+            const string mimeType = "application/gzip";
+            const string type = "public";
+
+            ActionResult result = await _nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
+            Assert.IsTrue(((FileContentResult)result) != null);
+            Assert.AreEqual("application/gzip", ((FileContentResult)result).ContentType);
+            Assert.AreEqual(2278920, ((FileContentResult)result).FileContents.Length);
+            Assert.AreEqual("https://filesqa.admiralty.co.uk", Config.BaseUrl);
+        }
+
+        [Test]
+        public void WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException()
+        {
+            const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be261234";
+            const string filename = "WeeklyAll_NM.zip";
+            const string mimeType = "application/gzip";
+            const string type = "public";
+
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
+                async delegate { await _nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
         }
     }
 }
