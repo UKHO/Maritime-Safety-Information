@@ -24,6 +24,11 @@ export default class RadioNavigationalWarnings
     readonly delete:Locator;
     readonly edit:Locator;
     readonly expiryDate:Locator;
+    readonly alertMessage:Locator; 
+    readonly confirmAlertNo:Locator;
+    readonly confirmAlertYes:Locator;
+    readonly message="A warning record with this reference number already exists. Would you like to add another record with the same reference?"
+
 
     constructor(page:Page)
     {
@@ -47,6 +52,9 @@ export default class RadioNavigationalWarnings
         this.delete = this.page.locator('#IsDeleted');
         this.edit=this.page.locator("[id^='Edit'] > a");
         this.expiryDate=this.page.locator("#ExpiryDate");
+        this.alertMessage=this.page.locator(".modal-body");
+        this.confirmAlertNo=this.page.locator("button[onclick = 'isConfirm(false)']");
+        this.confirmAlertYes=this.page.locator("button[onclick = 'isConfirm(true)']");
     }
 
     public async SelectRadioNavigationalWarning()
@@ -133,5 +141,25 @@ export default class RadioNavigationalWarnings
         await this.content.type(content);
 
     }
+
+    public async confirmationBox(locator:Locator,text:String,alert:String)
+    {   
+        await this.page.waitForLoadState();
+
+            expect((await locator.textContent()).toString().trim()).toEqual(text);
+        if(alert === 'yes'){
+           
+            await this.confirmAlertYes.click();
+        }
+        else{
+            
+            await this.confirmAlertNo.click();
+        }
+        
+        
+
+
+    }
+
   
 }
