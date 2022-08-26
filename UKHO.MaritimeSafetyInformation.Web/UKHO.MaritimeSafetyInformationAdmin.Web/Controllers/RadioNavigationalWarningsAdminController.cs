@@ -47,9 +47,9 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipCheckDuplicateReference, User.Identity.Name);
+                bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipCheckDuplicateReference, User.Identity.Name);
 
-                if (result.IsCreated)
+                if (result)
                 {
                     TempData["message"] = "Record created successfully!";
                     _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Create RNW request completed successfully with following values WarningType:{WarningType}, Reference:{Reference}, DateTime:{DateTime}, Description:{Description}, Text:{Text}, Expiry Date:{ExpiryDate} for _X-Correlation-ID:{correlationId}. Requested by user: {user}", radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference, radioNavigationalWarning.DateTimeGroup, radioNavigationalWarning.Summary, RnwHelper.FormatContent(radioNavigationalWarning.Content), radioNavigationalWarning.ExpiryDate, GetCurrentCorrelationId(), User.Identity.Name);

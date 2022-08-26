@@ -63,9 +63,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
 
-            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
 
-            Assert.IsTrue(result.IsCreated);
+            Assert.IsTrue(result);
         }
 
         [Test]
@@ -77,9 +77,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
 
-            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
 
-            Assert.IsTrue(result.IsCreated);
+            Assert.IsTrue(result);
         }
 
         [Test]
@@ -91,9 +91,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(true);
 
-            ResponseNewRadioNavigationWarningsModel result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
 
-            Assert.IsFalse(result.IsCreated);
+            Assert.IsFalse(result);
         }
 
         [Test]

@@ -28,10 +28,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<ResponseNewRadioNavigationWarningsModel> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId, bool skipCheckDuplicateReference, string userName)
+        public async Task<bool> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId, bool skipCheckDuplicateReference, string userName)
         {
-            ResponseNewRadioNavigationWarningsModel responseNewRadioNavigationWarningsModel = new();
-
             if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {
                 await Task.CompletedTask;
@@ -72,15 +70,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (isDuplicateReferenceNumber)
                 {
-                    responseNewRadioNavigationWarningsModel.IsCreated = false;
+                    return false;
                 }
                 else
                 {
                     _logger.LogInformation(EventIds.AddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
                     await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
                     _logger.LogInformation(EventIds.AddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
-
-                    responseNewRadioNavigationWarningsModel.IsCreated = true;
                 }
             }
             catch (Exception ex)
@@ -89,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 throw;
             }
 
-            return responseNewRadioNavigationWarningsModel;
+            return true;
         }
 
         public async Task<RadioNavigationalWarningsAdminFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, string correlationId)
