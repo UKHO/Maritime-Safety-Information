@@ -39,17 +39,17 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
         {
             _logger.LogInformation(EventIds.CreateNewRNWRecordStart.ToEventId(), "Create RNW request started for _X-Correlation-ID:{correlationId}. Requested by user: {user}", GetCurrentCorrelationId(),User.Identity.Name);
 
-            bool skipCheckDuplicateReference = false;
-            if (!string.IsNullOrWhiteSpace(Request.Form["SkipCheckDuplicate"]))
+            bool skipDuplicateReferenceCheck = false;
+            if (!string.IsNullOrWhiteSpace(Request.Form["SkipDuplicateReferenceCheck"]))
             {
-                skipCheckDuplicateReference = Request.Form["SkipCheckDuplicate"] == "Yes";
+                skipDuplicateReferenceCheck = Request.Form["SkipCheckDuplicate"] == "Yes";
             }
 
             if (ModelState.IsValid)
             {
-                bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipCheckDuplicateReference, User.Identity.Name);
+                bool isNewRecordCreated = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipDuplicateReferenceCheck, User.Identity.Name);
 
-                if (result)
+                if (isNewRecordCreated)
                 {
                     TempData["message"] = "Record created successfully!";
                     _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Create RNW request completed successfully with following values WarningType:{WarningType}, Reference:{Reference}, DateTime:{DateTime}, Description:{Description}, Text:{Text}, Expiry Date:{ExpiryDate} for _X-Correlation-ID:{correlationId}. Requested by user: {user}", radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference, radioNavigationalWarning.DateTimeGroup, radioNavigationalWarning.Summary, RnwHelper.FormatContent(radioNavigationalWarning.Content), radioNavigationalWarning.ExpiryDate, GetCurrentCorrelationId(), User.Identity.Name);
