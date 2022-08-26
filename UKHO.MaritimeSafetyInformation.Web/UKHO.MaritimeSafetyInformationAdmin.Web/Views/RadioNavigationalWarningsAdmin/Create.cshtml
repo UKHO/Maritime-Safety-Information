@@ -100,10 +100,10 @@
 
             function isConfirm(answer) {
                 if (answer) {
-                    document.getElementById("SkipCheckDuplicate").value = "Yes";
+                    document.getElementById("SkipDuplicateReferenceCheck").value = "Yes";
                     document.getElementById('btnCreate').click()
                 } else {
-                    document.getElementById("SkipCheckDuplicate").value = "No";
+                    document.getElementById("SkipDuplicateReferenceCheck").value = "No";
                 }
                 closeConfirmBox();
             }

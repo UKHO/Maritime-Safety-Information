@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
             bool skipDuplicateReferenceCheck = false;
             if (!string.IsNullOrWhiteSpace(Request.Form["SkipDuplicateReferenceCheck"]))
             {
-                skipDuplicateReferenceCheck = Request.Form["SkipCheckDuplicate"] == "Yes";
+                skipDuplicateReferenceCheck = Request.Form["SkipDuplicateReferenceCheck"] == "Yes";
             }
 
             if (ModelState.IsValid)
