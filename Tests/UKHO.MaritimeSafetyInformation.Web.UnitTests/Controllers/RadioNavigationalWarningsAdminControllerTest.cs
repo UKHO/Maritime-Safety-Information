@@ -66,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipDuplicateReferenceCheck", "Yes" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -78,13 +78,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         }
 
         [Test]
-        public void WhenAddRadioNavigationWarningsWithFlagSkipCheckDuplicateIsNo_ThenNewRecordIsCreated()
+        public void WhenAddRadioNavigationWarningsWithFlagSkipDuplicateReferenceCheckIsNo_ThenNewRecordIsCreated()
         {
             _controller.TempData = _tempData;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -102,7 +102,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;

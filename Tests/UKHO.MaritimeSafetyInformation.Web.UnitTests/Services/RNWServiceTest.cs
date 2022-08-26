@@ -59,11 +59,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
-            bool skipCheckDuplicateReference = true;
+            bool skipDuplicateReferenceCheck = true;
 
             A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipDuplicateReferenceCheck, "testUser");
 
             Assert.IsTrue(result);
         }
@@ -73,11 +73,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
-            bool skipCheckDuplicateReference = false;
+            bool skipDuplicateReferenceCheck = false;
 
             A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipDuplicateReferenceCheck, "testUser");
 
             Assert.IsTrue(result);
         }
@@ -87,11 +87,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
-            bool skipCheckDuplicateReference = false;
+            bool skipDuplicateReferenceCheck = false;
 
             A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(true);
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipCheckDuplicateReference, "testUser");
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipDuplicateReferenceCheck, "testUser");
 
             Assert.IsFalse(result);
         }

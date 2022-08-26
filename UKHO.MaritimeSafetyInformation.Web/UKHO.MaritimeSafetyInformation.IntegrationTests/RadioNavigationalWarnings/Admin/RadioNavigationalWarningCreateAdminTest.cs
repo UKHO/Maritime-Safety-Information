@@ -59,7 +59,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -74,14 +74,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallCreateWithExistingReferenceNumberAndSkipCheckDuplicateFlagAsNo_ThenReturnAlertMessage()
+        public async Task WhenCallCreateWithExistingReferenceNumberAndSkipDuplicateReferenceCheckFlagAsNo_ThenReturnAlertMessage()
         {
             _controller.TempData = _tempData;
             const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Create.cshtml";
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -104,13 +104,13 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallCreateWithExistingReferenceNumberAndSkipCheckDuplicateFlagAsYes_ThenNewRecordIsCreated()
+        public async Task WhenCallCreateWithExistingReferenceNumberAndSkipDuplicateReferenceCheckFlagAsYes_ThenNewRecordIsCreated()
         {
             _controller.TempData = _tempData;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "Yes" }
+                                            {"SkipDuplicateReferenceCheck", "Yes" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -137,7 +137,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -157,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -178,7 +178,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -196,7 +196,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -214,7 +214,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
@@ -232,7 +232,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"SkipCheckDuplicate", "No" }
+                                            {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
