@@ -12,7 +12,27 @@
         <tr>
             <th>File Name</th>
             <th>File Size</th>
-            <th class="th-3"><span class="visually-hidden">Action</span></th>
+            <th class="th-3">
+                <span class="visually-hidden">Action</span>
+                @if (Model != null && Model.Count > 0)
+                {
+                    @if (ViewBag.IsDistributor)
+                    {
+                        @if (ViewBag.TableTitle == "Partner")
+                        {
+                            <a id="downloadPartner" href="@Url.Action("DownloadAllWeeklyZipFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "partner" })">Download All Partner</a>
+                        }
+                        else
+                        {
+                            <a id="downloadAll" href="@Url.Action("DownloadAllWeeklyZipFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "public" })">Download All Public</a>
+                        }
+                    }
+                    else
+                    {
+                        <a id="downloadAll" href="@Url.Action("DownloadAllWeeklyZipFile", "NoticesToMariners", new { fileName = @ViewData["Year"] + " Wk " + @ViewData["Week"] + " Weekly NMs.zip", batchId = @Model[0].BatchId, mimeType = "application/gzip", type = "public" })">Download All</a>
+                    }
+                }
+            </th>
         </tr>
     </thead>
 

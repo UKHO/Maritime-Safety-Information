@@ -12,6 +12,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
+using System.Linq;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings.Admin
 {
@@ -56,14 +57,13 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
-            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.RadioNavigationalWarningsAdminList[2].WarningType);
-            Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[2].WarningTypeName);
-            Assert.AreEqual("RnwAdminListReference", adminListFilter.RadioNavigationalWarningsAdminList[2].Reference);
-            Assert.AreEqual(new DateTime(2022, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].DateTimeGroup);
-            Assert.AreEqual("RnwAdminListSummary", adminListFilter.RadioNavigationalWarningsAdminList[2].Summary);
-            Assert.AreEqual("RnwAdminListContent", adminListFilter.RadioNavigationalWarningsAdminList[2].Content);
-            Assert.AreEqual(new DateTime(2099, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList[2].ExpiryDate);
-            Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[2].IsDeleted);
+            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.RadioNavigationalWarningsAdminList.First(x=>x.Id == 4).WarningType);
+            Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 4).WarningTypeName);
+            Assert.AreEqual("RnwAdminListReference", adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 4).Reference);
+            Assert.AreEqual(new DateTime(2022, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 4).DateTimeGroup);
+            Assert.AreEqual("RnwAdminListSummary", adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 4).Summary);
+            Assert.AreEqual("RnwAdminListContent", adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 4).Content);
+            Assert.AreEqual(new DateTime(2099, 1, 1), adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 4).ExpiryDate);            
             Assert.IsNotNull(((ViewResult)result).ViewData["WarningTypes"]);
             Assert.IsNotNull(((ViewResult)result).ViewData["Years"]);
         }
@@ -78,8 +78,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(1, adminListFilter.PageCount);
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
-            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
-            Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
+            Assert.AreEqual(WarningTypes.NAVAREA_1, adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 7).WarningType);
+            Assert.AreEqual("NAVAREA 1", adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 7).WarningTypeName);
         }
 
         [Test]
@@ -105,8 +105,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.AreEqual(0, adminListFilter.SrNo);
             Assert.AreEqual(1, adminListFilter.CurrentPageIndex);
             Assert.AreEqual(WarningTypes.UK_Coastal, adminListFilter.RadioNavigationalWarningsAdminList[0].WarningType);
-            Assert.AreEqual("UK Coastal", adminListFilter.RadioNavigationalWarningsAdminList[0].WarningTypeName);
-            Assert.AreEqual(Year2024, adminListFilter.RadioNavigationalWarningsAdminList[0].DateTimeGroup.Year);
+            Assert.AreEqual("UK Coastal", adminListFilter.RadioNavigationalWarningsAdminList.First(x=>x.Id==8).WarningTypeName);
+            Assert.AreEqual(Year2024, adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 8).DateTimeGroup.Year);
         }
 
         [Test]
@@ -142,14 +142,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         }
 
         [Test]
-        public async Task WhenCallIndex_ThenIsDeletedShouldDisplayYesAndNoRespectively()
+        public async Task WhenIndexIsCalled_ThenShouldDisplayStatusAsActiveOrExpired()
         {
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, Year2020);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
             Assert.AreEqual(2, adminListFilter.RadioNavigationalWarningsAdminList.Count);
-            Assert.AreEqual("Yes", adminListFilter.RadioNavigationalWarningsAdminList[0].IsDeleted);
-            Assert.AreEqual("No", adminListFilter.RadioNavigationalWarningsAdminList[1].IsDeleted);
+            Assert.AreEqual("Active", adminListFilter.RadioNavigationalWarningsAdminList.First(x=>x.Id == 1).Status);
+            Assert.AreEqual("Expired", adminListFilter.RadioNavigationalWarningsAdminList.First(x=>x.Id == 2).Status);
         }
 
         [Test]
@@ -158,8 +158,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             FakeRadioNavigationalWarningConfiguration.Value.AdminListRecordPerPage = 20;
             IActionResult result = await _controller.Index(1, null, Year2024);
             RadioNavigationalWarningsAdminFilter adminListFilter = (RadioNavigationalWarningsAdminFilter)((ViewResult)result).Model;
-            Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].Content.Length <= 303);
-            Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList[0].Content.Contains("..."));
+            Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 8).Content.Length <= 303);
+            Assert.IsTrue(adminListFilter.RadioNavigationalWarningsAdminList.First(x => x.Id == 8).Content.Contains("..."));
         }
 
         [OneTimeTearDown]

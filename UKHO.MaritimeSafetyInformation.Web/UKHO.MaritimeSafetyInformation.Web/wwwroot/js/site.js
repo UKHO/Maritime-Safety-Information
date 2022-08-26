@@ -124,12 +124,12 @@ function SetHashTitle(hash) {
     let bool = true;
     if (newhash) {
         switch (newhash.toLowerCase()) {
-            case 'allwarnings': document.title = 'Radio Navigational Warnings';
+            case 'allwarnings': document.title = 'Radio Navigation Warnings';
                 break;
-            case 'navarea1': document.title = 'Radio Navigational Warnings - NAVAREA I';
+            case 'navarea1': document.title = 'Radio Navigation Warnings - NAVAREA I';
                 document.querySelector('#NAVAREA1-tab').click();
                 break;
-            case 'ukcoastal': document.title = 'Radio Navigational Warnings - UK Coastal';
+            case 'ukcoastal': document.title = 'Radio Navigation Warnings - UK Coastal';
                 document.querySelector('#ukcoastal-tab').click();
                 break;
             default: bool = false;
@@ -159,11 +159,11 @@ function SetTitle() {
                 break;
             case '/noticestomariners/about': document.title = 'About Notices to Mariners';
                 break;
-            case '/radionavigationalwarnings/about': document.title = 'About Radio Navigational Warnings';
+            case '/radionavigationalwarnings/about': document.title = 'About Radio Navigation Warnings';
                 break;
-            case '/radionavigationalwarnings/showselection': document.title = 'Radio Navigational Warnings';
+            case '/radionavigationalwarnings/showselection': document.title = 'Radio Navigation Warnings';
                 break;
-            case '/radionavigationalwarnings': document.title = 'Radio Navigational Warnings';
+            case '/radionavigationalwarnings': document.title = 'Radio Navigation Warnings';
                 break;
 
         }

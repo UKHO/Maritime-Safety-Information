@@ -86,16 +86,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         {
             try
             {
-                _logger.LogInformation(EventIds.FSSGetDailyZipNMFileStarted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.FSSGetNMZipFileStarted.ToEventId(), "Maritime safety information request for FSS to get NM zip file started for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
 
                 IResult<Stream> stream = await fileShareApiClient.DownloadZipFileAsync(batchId, CancellationToken.None);
                 if (stream.IsSuccess)
                 {
-                    _logger.LogInformation(EventIds.FSSGetDailyZipNMFileCompleted.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
+                    _logger.LogInformation(EventIds.FSSGetNMZipFileCompleted.ToEventId(), "Maritime safety information request for FSS to get NM zip file completed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", batchId, fileName, correlationId);
                     return stream.Data;
                 }
 
-                _logger.LogInformation(EventIds.FSSGetDailyZipNMFileReturnIsSuccessFalse.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file returns IsSuccess false with StatusCode {StatusCode} for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", stream.StatusCode, batchId, fileName, correlationId);
+                _logger.LogInformation(EventIds.FSSGetNMZipFileReturnIsSuccessFalse.ToEventId(), "Maritime safety information request for FSS to get NM zip file returns IsSuccess false with StatusCode {StatusCode} for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", stream.StatusCode, batchId, fileName, correlationId);
 
                 if (stream.Errors.Count > 0)
                 {
@@ -103,13 +103,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                     foreach (Error item in stream.Errors)
                         error.AppendLine(item.Description);
 
-                    _logger.LogInformation(EventIds.FSSDownloadZipFileAsyncHasError.ToEventId(), "Maritime safety information request for FSS to get daily zip NM file has error for batchId:{batchId} and fileName:{fileName} with error:{error} for _X-Correlation-ID:{correlationId}", batchId, fileName, error, correlationId);
+                    _logger.LogInformation(EventIds.FSSDownloadZipFileAsyncHasError.ToEventId(), "Maritime safety information request for FSS to get NM zip file has error for batchId:{batchId} and fileName:{fileName} with error:{error} for _X-Correlation-ID:{correlationId}", batchId, fileName, error, correlationId);
                     throw new ArgumentException(error.ToString());
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(EventIds.FSSGetDailyZipNMFileResponseFailed.ToEventId(), "Failed to get daily zip NM file from FSS for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, ex.Message, fileName, correlationId);
+                _logger.LogError(EventIds.FSSGetNMZipFileResponseFailed.ToEventId(), "Failed to get NM zip file from FSS for batchId:{batchId} and fileName:{fileName} with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", batchId, ex.Message, fileName, correlationId);
                 throw;
             }
             return null;

@@ -24,7 +24,7 @@ export default class Homepage {
     this.navigationalinformation= this.page.locator('text=View the latest safety-critical navigational information');
     this.admiraltyDistributor= this.page.locator('text=If you are an ADMIRALTY Distributor, sign in to see more content');
     this.gotoNoticeMariners=this.page.locator('text=Go to Notices to Mariners');
-    this.gotoNavigationalWarnings= this.page.locator('text=Go to Radio Navigational Warnings');
+    this.gotoNavigationalWarnings= this.page.locator('text=Go to Radio Navigation Warnings');
     this.ukHydrographic=this.page.locator('img[alt="UK Hydrographic Office Logo"]');
     this.privacypolicylink = this.page.locator('#privacypolicylink');
     this.accessibilitylink = this.page.locator('#accessibilitylink');
@@ -47,7 +47,7 @@ export default class Homepage {
   public async verifypage()
   {
    expect(await this.gotoNoticeMariners.innerText()).toContain('Go to Notices to Mariners');
-  expect(await this.gotoNavigationalWarnings.innerText()).toContain('Go to Radio Navigational Warnings'); 
+  expect(await this.gotoNavigationalWarnings.innerText()).toContain('Go to Radio Navigation Warnings'); 
   }
   public async verifyukHydrographic()
   {

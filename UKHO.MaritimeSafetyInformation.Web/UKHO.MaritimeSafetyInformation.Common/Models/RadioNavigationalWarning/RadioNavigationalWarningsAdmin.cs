@@ -34,9 +34,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning
         public DateTime? ExpiryDate { get; set; }
 
         [DisplayName("Expiry Date")]
-        public string ExpiryDateRnwFormat { get; set; }
+        public string ExpiryDateRnwFormat { get; set;}
 
-        [DisplayName("Deleted")]
-        public string IsDeleted { get; set; }
+        public string Status { get; set; }
     }
 }

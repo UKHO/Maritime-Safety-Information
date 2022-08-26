@@ -32,6 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         public async Task<List<RadioNavigationalWarningsAdmin>> GetRadioNavigationWarningsAdminList()
         {
             return await (from rnwWarnings in _context.RadioNavigationalWarnings
+                          where !rnwWarnings.IsDeleted
                           join warning in _context.WarningType on rnwWarnings.WarningType equals warning.Id
                           select new RadioNavigationalWarningsAdmin
                           {
@@ -44,8 +45,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                               Content = RnwHelper.FormatContent(rnwWarnings.Content),
                               ExpiryDate = rnwWarnings.ExpiryDate,
                               ExpiryDateRnwFormat = DateTimeExtensions.ToRnwDateFormat(rnwWarnings.ExpiryDate),
-                              IsDeleted = rnwWarnings.IsDeleted ? "Yes" : "No",
-                              WarningTypeName = warning.Name
+                              WarningTypeName = warning.Name,
+                              Status = DateTime.Compare(rnwWarnings.ExpiryDate ?? DateTime.UtcNow.AddDays(1), DateTime.UtcNow) < 1 ? "Expired" : "Active"
                           }).OrderByDescending(a => a.DateTimeGroup).ToListAsync();
         }
 
