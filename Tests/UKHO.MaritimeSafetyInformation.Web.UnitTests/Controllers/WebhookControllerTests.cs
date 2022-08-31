@@ -145,6 +145,71 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.AreEqual(200, result.StatusCode);
         }
 
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithNullProductType_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithNullProductType();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithProductTypeAttributeMissing_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithProductTypeAttributeMissing();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithNoAttributes_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithNoAttributes();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithAttributeValueAsNull_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithAttributeValueAsNull();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [Test]
+        public async Task WhenNewFilesPublishedIsCalledWithAttributeMissing_ThenShouldNotDeleteCache()
+        {
+            string jsonString = GetRequestStringWithAttributeMissing();
+            MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
+
+            _controller.HttpContext.Request.Body = requestData;
+
+            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
         private static string GetRequestString()
         {
             return "{"
@@ -237,6 +302,234 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
                     + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
                     + "\"Source\": \"https://files.admiralty.co.uk\","
                     + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "}";
+        }
+
+        private static string GetRequestStringWithNullProductType()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                                + "\"BatchId\": \"83d08093-7a67-4b3a-b431-92ba42feqw12\","
+                                + "\"BusinessUnit\": \"MaritimeSafetyInformation\","
+                                + "\"Links\": {"
+                                        + "\"BatchDetails\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0\""
+                                                  + "},"
+                                        + "\"BatchStatus\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/status\""
+                                                   + "}"
+                                + "},"
+                                + "\"Attributes\": ["
+                                        + "{"
+                                        + "\"key\": \"Product Type\","
+                                        + "\"value\": null"
+                                        + "}"
+                                    + "],"
+                                + "\"BatchPublishedDate\": \"2022-04-04T11:22:18.2943076Z\","
+
+                                + "\"Files\": ["
+                                                + "{"
+                                                + "\"FileName\": \"S631-1_Update_Wk45_21_Only.zip\","
+                                                + "\"FileSize\": 99073923,"
+                                                + "\"MIMEType\": \"application/zip\","
+                                                + "\"Hash\": \"yNpJTWFKhD3iasV8B/ePKw==\","
+                                                + "\"Attributes\": [],"
+                                                + "\"Links\": {"
+                                                                + "\"Get\": {"
+                                                                            + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/files/S631-1_Update_Wk45_21_Only.zip\""
+                                                                            + "}"
+                                                            + "}"
+                                                 + "}"
+                                              + "]"
+
+                             + "}"
+
+                    + "}";
+        }
+
+        private static string GetRequestStringWithProductTypeAttributeMissing()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                                + "\"BatchId\": \"83d08093-7a67-4b3a-b431-92ba42feqw12\","
+                                + "\"BusinessUnit\": \"MaritimeSafetyInformation\","
+                                + "\"Links\": {"
+                                        + "\"BatchDetails\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0\""
+                                                  + "},"
+                                        + "\"BatchStatus\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/status\""
+                                                   + "}"
+                                + "},"
+                                + "\"Attributes\": ["
+                                        + "{"
+                                        + "\"key\": \"Cell\","
+                                        + "\"value\": \"Test\""
+                                        + "}"
+                                    + "],"
+                                + "\"BatchPublishedDate\": \"2022-04-04T11:22:18.2943076Z\","
+
+                                + "\"Files\": ["
+                                                + "{"
+                                                + "\"FileName\": \"S631-1_Update_Wk45_21_Only.zip\","
+                                                + "\"FileSize\": 99073923,"
+                                                + "\"MIMEType\": \"application/zip\","
+                                                + "\"Hash\": \"yNpJTWFKhD3iasV8B/ePKw==\","
+                                                + "\"Attributes\": [],"
+                                                + "\"Links\": {"
+                                                                + "\"Get\": {"
+                                                                            + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/files/S631-1_Update_Wk45_21_Only.zip\""
+                                                                            + "}"
+                                                            + "}"
+                                                 + "}"
+                                              + "]"
+
+                             + "}"
+
+                    + "}";
+        }
+
+        private static string GetRequestStringWithNoAttributes()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                                + "\"BatchId\": \"83d08093-7a67-4b3a-b431-92ba42feqw12\","
+                                + "\"BusinessUnit\": \"MaritimeSafetyInformation\","
+                                + "\"Links\": {"
+                                        + "\"BatchDetails\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0\""
+                                                  + "},"
+                                        + "\"BatchStatus\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/status\""
+                                                   + "}"
+                                + "},"
+                                + "\"Attributes\": ["
+                                    + "],"
+                                + "\"BatchPublishedDate\": \"2022-04-04T11:22:18.2943076Z\","
+
+                                + "\"Files\": ["
+                                                + "{"
+                                                + "\"FileName\": \"S631-1_Update_Wk45_21_Only.zip\","
+                                                + "\"FileSize\": 99073923,"
+                                                + "\"MIMEType\": \"application/zip\","
+                                                + "\"Hash\": \"yNpJTWFKhD3iasV8B/ePKw==\","
+                                                + "\"Attributes\": [],"
+                                                + "\"Links\": {"
+                                                                + "\"Get\": {"
+                                                                            + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/files/S631-1_Update_Wk45_21_Only.zip\""
+                                                                            + "}"
+                                                            + "}"
+                                                 + "}"
+                                              + "]"
+
+                             + "}"
+
+                    + "}";
+        }
+
+        private static string GetRequestStringWithAttributeValueAsNull()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                                + "\"BatchId\": \"83d08093-7a67-4b3a-b431-92ba42feqw12\","
+                                + "\"BusinessUnit\": \"MaritimeSafetyInformation\","
+                                + "\"Links\": {"
+                                        + "\"BatchDetails\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0\""
+                                                  + "},"
+                                        + "\"BatchStatus\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/status\""
+                                                   + "}"
+                                + "},"
+                                + "\"Attributes\": null,"
+                                + "\"BatchPublishedDate\": \"2022-04-04T11:22:18.2943076Z\","
+                                + "\"Files\": ["
+                                                + "{"
+                                                + "\"FileName\": \"S631-1_Update_Wk45_21_Only.zip\","
+                                                + "\"FileSize\": 99073923,"
+                                                + "\"MIMEType\": \"application/zip\","
+                                                + "\"Hash\": \"yNpJTWFKhD3iasV8B/ePKw==\","
+                                                + "\"Attributes\": [],"
+                                                + "\"Links\": {"
+                                                                + "\"Get\": {"
+                                                                            + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/files/S631-1_Update_Wk45_21_Only.zip\""
+                                                                            + "}"
+                                                            + "}"
+                                                 + "}"
+                                              + "]"
+
+                             + "}"
+
+                    + "}";
+        }
+
+        private static string GetRequestStringWithAttributeMissing()
+        {
+            return "{"
+                    + "\"Type\": \"uk.gov.UKHO.FileShareService.NewFilesPublished.v1\","
+                    + "\"Time\": \"2021-11-09T14:52:28+00:00\","
+                    + "\"DataContentType\": \"application/json\","
+                    + "\"DataSchema\": null,"
+                    + "\"Subject\": \"83d08093-7a67-4b3a-b431-92ba42feaea0\","
+                    + "\"Source\": \"https://files.admiralty.co.uk\","
+                    + "\"Id\": \"49c67cca-9cca-4655-a38e-583693af55ea\","
+                    + "\"Data\": {"
+                                + "\"BatchId\": \"83d08093-7a67-4b3a-b431-92ba42feqw12\","
+                                + "\"BusinessUnit\": \"MaritimeSafetyInformation\","
+                                + "\"Links\": {"
+                                        + "\"BatchDetails\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0\""
+                                                  + "},"
+                                        + "\"BatchStatus\": {"
+                                                        + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/status\""
+                                                   + "}"
+                                + "},"
+                                + "\"BatchPublishedDate\": \"2022-04-04T11:22:18.2943076Z\","
+                                + "\"Files\": ["
+                                                + "{"
+                                                + "\"FileName\": \"S631-1_Update_Wk45_21_Only.zip\","
+                                                + "\"FileSize\": 99073923,"
+                                                + "\"MIMEType\": \"application/zip\","
+                                                + "\"Hash\": \"yNpJTWFKhD3iasV8B/ePKw==\","
+                                                + "\"Attributes\": [],"
+                                                + "\"Links\": {"
+                                                                + "\"Get\": {"
+                                                                            + "\"Href\": \"https://filesqa.admiralty.co.uk/batch/83d08093-7a67-4b3a-b431-92ba42feaea0/files/S631-1_Update_Wk45_21_Only.zip\""
+                                                                            + "}"
+                                                            + "}"
+                                                 + "}"
+                                              + "]"
+
+                             + "}"
+
                     + "}";
         }
     }

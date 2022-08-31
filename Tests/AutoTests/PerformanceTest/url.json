@@ -1,19 +1,49 @@
 {
-
-   "batchIdDailyURl":
-[
-{"batchid":"726c7052-f198-4a38-9c19-49d7408252c3","fileName":"Daily%2020-06-22.zip"},
-{"batchid":"0fb2f17c-66de-4563-9188-bbb1d38aa39b","fileName":"Daily%2013-06-22.zip"},
-{"batchid":"13976788-f064-4386-ace4-6f7873630d96","fileName":"Daily%2022-06-22.zip"},
-{"batchid":"166a9f8f-00d5-4d6a-a3b3-a7825fe0b935","fileName":"Daily%2016-06-22.zip"}
-],
-"batchIdweeklyURl":[
-    
-{"fileName":"Chart2567NM2542.pdf","batchid":"ff881157-1ed9-4506-916e-5a300c202408"},
-{"fileName":"Chart2106NM2614.pdf","batchid":"ff881157-1ed9-4506-916e-5a300c202408"},
-{"fileName":"Chart2727NM2680.pdf","batchid":"ff881157-1ed9-4506-916e-5a300c202408"}
-    
-    
-]
-}
-
+   "batchIdDailyURl":[
+       {
+   "batchid":"c428245d-4c28-4016-a711-1a93d632218a","fileName":"Daily%2002-08-22.zip"},
+   {"batchid":"db36e5c4-b994-4081-a5f4-cc015bc598be","fileName":"Daily%2003-08-22.zip"},
+   {"batchid":"76673a26-a59e-48e0-bdb1-beccb9adfd43","fileName":"Daily%2029-07-22.zip"}
+   
+   ],
+   "batchIdweeklyURl":[
+       
+           {"fileName":"29snii22.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"29wknm22.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"Chart1100NM3004.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"Chart1426NM3031.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"Chart1443NM3032.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"Chart1443NM3032%202.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"Chart2172NM2990.pdf","batchid":"f694bd9c-83fe-4571-994a-36ddd9fc1feb"},
+           {"fileName":"20snii22.pdf","batchid":"87bb460d-ac3f-460d-bb73-93e1cf3e04bd"},
+           {"fileName":"20wknm22.pdf","batchid":"87bb460d-ac3f-460d-bb73-93e1cf3e04bd"},
+           {"fileName":"15snii22.pdf","batchid":"60508ed2-79ce-47c6-badb-f0b227abea02"},
+           {"fileName":"15wknm22.pdf","batchid":"60508ed2-79ce-47c6-badb-f0b227abea02"}
+       
+       
+   ],
+   
+   
+   
+   "weeklyFileQueries":
+   [
+      {"year":"2020","week":"6"},
+      {"year":"2020","week":"10"},
+      {"year":"2020","week":"17"},
+      {"year":"2020","week":"21"},
+      {"year":"2020","week":"28"},
+      {"year":"2021","week":"8"},
+      {"year":"2021","week":"14"},
+      {"year":"2021","week":"22"},
+      {"year":"2021","week":"26"},
+      {"year":"2021","week":"49"},
+      {"year":"2022","week":"3"},
+      {"year":"2022","week":"9"},
+      {"year":"2022","week":"16"},
+      {"year":"2022","week":"23"},
+      {"year":"2022","week":"29"}
+   ]
+   
+   }
+   
+   

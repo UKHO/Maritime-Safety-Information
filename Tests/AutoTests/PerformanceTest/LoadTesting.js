@@ -7,33 +7,114 @@ import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
 const config = JSON.parse(open('./appConfig.json'));
 
 
+
+
 export const options = {
   scenarios: {
-    DownloadNMFiles: {
-          exec: 'msiHomePage',
-          exec: 'noticedToMariners()',
-          exec: 'noticedToMarinersDailyFiles',
-          exec: 'DownloadNMDailyFiles',
-          exec: 'DownloadNMWeeklyFiles',
-          exec: 'allWarningsRNW',
-          executor: 'per-vu-iterations',
-          startTime: '5s',
-          gracefulStop: '5s',
-          vus: 540,
-          iterations: 6,
-          maxDuration: '1h'
+    MSIPages: {
+           exec: 'msiHomePage',
+           exec: 'noticedToMarinersDailyFiles',
+           exec: 'noticeToMarinersWeeklyFiles',
+           exec: 'allWarningsRNW',
+           executor: 'ramping-vus',
+          startVUs: 0,
+          stages: [
+            { duration: '30m', target: 5 },
+            { duration: '25m', target: 2 },
+            { duration: '5m', target: 0 }
+          ] 
           
-      }
-    }
-  }
+      },
+      NMDailyFiles: {
+        exec: 'noticedToMarinersDailyFiles',
+        executor: 'ramping-vus',
+          startVUs: 0,
+      stages: [
+        { duration: '30m', target: 5 },
+        { duration: '25m', target: 2 },
+        { duration: '5m', target: 0 }
+      ] 
+      },
+      NMWeeklyFiles: {
+        exec: 'noticeToMarinersWeeklyFiles',
+        executor: 'ramping-vus',
+          startVUs: 0,
+      stages: [
+        { duration: '5m', target: 5 },
+        { duration: '5m', target: 2 },
+        { duration: '10m', target: 4 },
+        { duration: '20m', target: 6 },
+        { duration: '15m', target: 2 },
+        { duration: '5m', target: 0 }
+      ] 
+      },
+     
+      DownloadNMWeeklyFiles: {
+        exec: 'DownloadNMWeeklyFiles',
+        executor: 'ramping-vus',
+          startVUs: 0,
+      stages: [
+        { duration: '30m', target: 5 },
+        { duration: '25m', target: 2 },
+        { duration: '5m', target: 0 }
+      ] 
+       },
+      DownloadNMDailyFiles: {
+        exec: 'DownloadNMDailyFiles',
+        executor: 'ramping-vus',
+          startVUs: 0,
+      stages: [
+        { duration: '30m', target: 5 },
+        { duration: '25m', target: 2 },
+        { duration: '5m', target: 0 }
+      ] 
+    },
+     NMCummulativePage: {
+      exec: 'noticedToMarinersCumulative',
+      executor: 'ramping-vus',
+        startVUs: 0,
+    stages: [
+      { duration: '30m', target: 5 },
+      { duration: '25m', target: 2 },
+      { duration: '5m', target: 0 }
+    
+    ] 
+  },
+  NMAnnualPage: {
+    exec: 'noticedToMarinersAnnual',
+    executor: 'ramping-vus',
+      startVUs: 0,
+  stages: [
+    { duration: '30m', target: 5 },
+    { duration: '25m', target: 2 },
+    { duration: '5m', target: 0 }
+  ] 
+},
+NMLeisurePage: {
+  exec: 'noticedToMarinersLeisure',
+  executor: 'ramping-vus',
+    startVUs: 0,
+stages: [
+  { duration: '30m', target: 5 },
+  { duration: '25m', target: 2 },
+  { duration: '5m', target: 0 }
+      ] 
+}
+  }}
 
 const batchDaily = new SharedArray('batchIdDailyURl', function () {
     return JSON.parse(open('./url.json')).batchIdDailyURl; 
     });
 
-    const batchWeely = new SharedArray('batchIdweeklyURl', function () {
+const batchWeely = new SharedArray('batchIdweeklyURl', function () {
      return JSON.parse(open('./url.json')).batchIdweeklyURl; 
               });
+
+const weeklyFiles = new SharedArray('weeklyFileQueries', function () {
+        return JSON.parse(open('./url.json')).weeklyFileQueries;
+
+          });  
+    
 
  export function msiHomePage()
   {
@@ -41,34 +122,67 @@ const batchDaily = new SharedArray('batchIdDailyURl', function () {
      http.get(config.url);
              
   }
-   export function noticedToMariners(){
-
-    http.get(`${config.url}/NoticestoMariners`);
-    
-  }
-            
   export function noticedToMarinersDailyFiles(){
 
-    http.get(`${config.url}/NoticestoMariners/ShowDailyFiles`);
+    const dailyPage=`${config.url}/NoticesToMariners/Daily`;
+    http.get(dailyPage);
   }
   
+  export function noticeToMarinersWeeklyFiles(){
+    
+    const weekURL = weeklyFiles.length;
+     
+    for(var i=0 ; i<weekURL;i++)
+    {
+      const weekly=weeklyFiles[Math.floor(Math.random()*weeklyFiles.length)];
+     http.post(`${config.url}/NoticesToMariners/Weekly?year=${weekly.year}&week=${weekly.week}`);
+    
+     
+    }  
+
+  }
+
   export function DownloadNMDailyFiles()
   {
-    const dailyurldata = batchDaily[Math.floor(Math.random() * batchDaily.length)]; 
-    for(let i=0 ; i<=dailyurldata.length-1;i++)
+    const dailyurldata = batchDaily.length;
+    for(let i=0 ; i<dailyurldata;i++)
     {
-     http.get(config.url,`NoticesToMariners/DownloadDailyFile?batchId=${batchDaily[i].batchid}&fileName=${batchDaily[i].fileName}&mimeType=application%2Fgzip`);
+      const dailyfile=batchDaily[Math.floor(Math.random()*batchDaily.length)];
+     http.get(config.url,`NoticesToMariners/DownloadDailyFile?batchId=${dailyfile.batchid}&fileName=${dailyfile.fileName}&mimeType=application%2Fgzip`);
+    
     }  
   }
 
   export function DownloadNMWeeklyFiles()
+  
   {
-    const weeklydata = batchWeely[Math.floor(Math.random() * batchWeely.length)]; 
-    for(let i=0 ; i<=weeklydata.length-1;i++)
+
+    const weeklydata = batchWeely.length;
+    for(let i=0 ; i<weeklydata;i++)
     {
-     http.get(config.url,`NoticesToMariners/DownloadFile?=${batchWeely[i].fileName}&batchId=${batchWeely[i].batchid}&mimeType=application%2Fpdf`);
+      const weekfile=batchWeely[Math.floor(Math.random()*batchWeely.length)];
+     http.get(config.url,`NoticesToMariners/DownloadFile?=${weekfile.fileName}&batchId=${weekfile.batchid}&mimeType=application%2Fpdf&frequency=Weekly`);
+    
     }  
   }
+
+
+
+  export function noticedToMarinersCumulative()
+  {
+    http.get(`${config.url}/NoticesToMariners/Cumulative`);
+    
+  } 
+
+  export function noticedToMarinersAnnual()
+  {
+    http.get(`${config.url}/NoticesToMariners/Annual`);
+  } 
+  
+  export function noticedToMarinersLeisure()
+  {
+    http.get(`${config.url}/NoticesToMariners/Leisure`);
+  } 
   
 
 export function allWarningsRNW()
@@ -77,6 +191,7 @@ export function allWarningsRNW()
   http.get(`${config.url}/RadioNavigationalWarnings`);
       
 }
+
 
 export function handleSummary(data) {
     console.log("Preparing the end-of-test summary...")

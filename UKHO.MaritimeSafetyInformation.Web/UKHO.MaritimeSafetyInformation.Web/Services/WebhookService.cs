@@ -42,7 +42,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
         public async Task<bool> DeleteBatchSearchResponseCacheData(FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest, string correlationId)
         {
-            string productType = enterpriseEventCacheDataRequest.Attributes.First(a => a.Key == "Product Type").Value;
+            string productType = enterpriseEventCacheDataRequest.Attributes.Where(a => a.Key == "Product Type").Select(a => a.Value).FirstOrDefault();
 
             if (enterpriseEventCacheDataRequest.BusinessUnit == _fileShareServiceConfig.Value.BusinessUnit && productType == _fileShareServiceConfig.Value.ProductType)
             {
