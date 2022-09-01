@@ -90,7 +90,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             radioNavigationalWarning.Id++;
             radioNavigationalWarning.IsDeleted = false;
 
-            await SeedWarningType(GetFakeWarningTypes());
             await SeedRadioNavigationalWarnings(new List<RadioNavigationalWarning>() { radioNavigationalWarning });
 
             IActionResult result = await _controller.Create(radioNavigationalWarning);
@@ -115,6 +114,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             httpContext.Request.Form = formCol;
             _controller.ControllerContext.HttpContext = httpContext;
 
+            await DeSeedRadioNavigationalWarnings();
+
+            RadioNavigationalWarning radioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            radioNavigationalWarning.Id++;
+            radioNavigationalWarning.IsDeleted = false;
+
+            await SeedRadioNavigationalWarnings(new List<RadioNavigationalWarning>() { radioNavigationalWarning });
+
             RadioNavigationalWarning radioNavigationalWarningNewEntry = GetFakeRadioNavigationalWarning();
             radioNavigationalWarningNewEntry.Id += 2;
             radioNavigationalWarningNewEntry.IsDeleted = false;
@@ -124,7 +131,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             Assert.IsInstanceOf<IActionResult>(result);
             Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
             Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-            Assert.AreEqual(3, FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
+            Assert.AreEqual(2, FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
             Assert.IsTrue(FakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
         }
 
