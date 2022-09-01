@@ -13,7 +13,7 @@ steps:
             azureSubscription: "${{ parameters.AzureSubscription }}"
             scriptType: 'pscore'
             scriptLocation: 'scriptPath'
-            scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/test.ps1"
+            scriptPath: "$(Pipeline.Workspace)/terraformartifact/test.ps1"
            # arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -isCacheEnabled $(IsFssCacheEnabledAfterFT) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
   - task: FileTransform@1
