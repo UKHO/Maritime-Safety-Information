@@ -101,6 +101,7 @@ stages:
                   
                                # Save the variable group to a file
                               ConvertTo-Json $_ | New-Item $filePath -Force
+                              }
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
