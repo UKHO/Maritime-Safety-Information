@@ -83,25 +83,6 @@ stages:
           clean: all
         displayName: "Dependencychecker"
         steps:
-          - task: PowerShell@2
-            inputs:
-                targetType: 'inline'
-                script: |
-                  # Checkout the source branch
-                              #git checkout $(Build.SourceBranchName)
-                  
-                              # Get all variable groups
-                              $groups = ConvertFrom-Json "$(az pipelines variable-group list)"
-                              $groups | foreach {
-                              $groupName = $_.name
-                  
-                              # Prepend VariableGroups folder name
-                              $filePath = Join-Path "VariableGroups" "$groupName.json"
-                              ls
-                  
-                               # Save the variable group to a file
-                              ConvertTo-Json $_ | New-Item $filePath -Force
-                              }
           - task: UseDotNet@2
             displayName: 'Use .NET 6.0.x sdk'
             inputs:
