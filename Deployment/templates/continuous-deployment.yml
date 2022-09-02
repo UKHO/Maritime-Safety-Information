@@ -6,18 +6,17 @@ parameters:
     type: string
 
 steps:
-#  - task: AzureCLI@2
-#    displayName: "test"
-#    condition: always()
-#    inputs:
-#            azureSubscription: "${{ parameters.AzureSubscription }}"
-#            scriptType: 'pscore'
-#            scriptLocation: 'scriptPath'
-#            scriptPath: "$(Pipeline.Workspace)/terraformartifact/test.ps1"
+  - task: AzureCLI@2
+    displayName: "test"
+    condition: always()
+    inputs:
+            azureSubscription: "${{ parameters.AzureSubscription }}"
+            scriptType: 'pscore'
+            scriptLocation: 'scriptPath'
+            scriptPath: "$(Pipeline.Workspace)/terraformartifact/test.ps1"
            # arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -isCacheEnabled $(IsFssCacheEnabledAfterFT) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
- # - task: FileTransform@1
-  - task: FileTransform@1.206.0
+  - task: FileTransform@1
     displayName: "File Transform: Msi Config" #Replace msi instance value from pipeline 
     inputs:
       folderPath: '$(Pipeline.Workspace)/terraformartifact/src'
