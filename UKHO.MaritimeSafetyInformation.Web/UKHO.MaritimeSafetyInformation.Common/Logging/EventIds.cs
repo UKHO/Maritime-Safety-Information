@@ -350,7 +350,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         FSSGetNMZipFileReturnIsSuccessFalse = 910081,
 
         /// <summary>
-        /// 910082-  Request For FSS To Get Daily Zip NM File Has Error.
+        /// 910082 -  Request For FSS To Get NM Zip File Has Error.
         /// </summary>
         FSSDownloadZipFileAsyncHasError = 910082,
         /// <summary> 
@@ -708,9 +708,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// <summary>
         /// 910171 - Request For Download All Weekly NM Files Failed.
         /// </summary>
-        DownloadAllWeeklyNMFileFailed = 910171
+        DownloadAllWeeklyNMFileFailed = 910171,
+        /// <summary>
+        /// 910172 - Maritime safety information user requested to add another record with the same reference number.
+        /// </summary>
+        AddRecordWithSameReferenceNumber = 910172
     }
-
+    
     public static class EventIdExtensions
     {
         public static EventId ToEventId(this EventIds eventId)

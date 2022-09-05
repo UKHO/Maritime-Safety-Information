@@ -39,15 +39,29 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
         {
             _logger.LogInformation(EventIds.CreateNewRNWRecordStart.ToEventId(), "Create RNW request started for _X-Correlation-ID:{correlationId}. Requested by user: {user}", GetCurrentCorrelationId(),User.Identity.Name);
 
+            bool skipDuplicateReferenceCheck = false;
+            if (!string.IsNullOrWhiteSpace(Request.Form["SkipDuplicateReferenceCheck"]))
+            {
+                skipDuplicateReferenceCheck = Request.Form["SkipDuplicateReferenceCheck"] == "Yes";
+            }
+
             if (ModelState.IsValid)
             {
-                bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId());
+                bool isNewRecordCreated = await _rnwService.CreateNewRadioNavigationWarningsRecord(radioNavigationalWarning, GetCurrentCorrelationId(), skipDuplicateReferenceCheck, User.Identity.Name);
 
-                if (result)
+                if (isNewRecordCreated)
                 {
                     TempData["message"] = "Record created successfully!";
                     _logger.LogInformation(EventIds.CreateNewRNWRecordCompleted.ToEventId(), "Create RNW request completed successfully with following values WarningType:{WarningType}, Reference:{Reference}, DateTime:{DateTime}, Description:{Description}, Text:{Text}, Expiry Date:{ExpiryDate} for _X-Correlation-ID:{correlationId}. Requested by user: {user}", radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference, radioNavigationalWarning.DateTimeGroup, radioNavigationalWarning.Summary, RnwHelper.FormatContent(radioNavigationalWarning.Content), radioNavigationalWarning.ExpiryDate, GetCurrentCorrelationId(), User.Identity.Name);
+
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.WarningType = await _rnwService.GetWarningTypes();
+                    TempData["message"] = "A warning record with this reference number already exists. Would you like to add another record with the same reference?";
+
+                    return View("~/Views/RadioNavigationalWarningsAdmin/Create.cshtml", radioNavigationalWarning);
                 }
             }
 

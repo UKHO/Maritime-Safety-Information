@@ -36,6 +36,7 @@ test.describe("Create new radio navigational warnings record", ()=> {
     await radioNavigationalWarnings.pageLoad();
     await radioNavigationalWarnings.fillFormWithValidDetails("1","testdata");  
     await radioNavigationalWarnings.createRNW(); 
+    await radioNavigationalWarnings.confirmationBox(radioNavigationalWarnings.alertMessage,radioNavigationalWarnings.message,"yes");
     await radioNavigationalWarnings.getDialogText('Record created successfully!')    
   })
 
@@ -43,8 +44,22 @@ test.describe("Create new radio navigational warnings record", ()=> {
     await radioNavigationalWarnings.pageLoad();
     await radioNavigationalWarnings.fillFormWithValidDetails("2","testdata");  
     await radioNavigationalWarnings.createRNW(); 
-    await radioNavigationalWarnings.getDialogText('Record created successfully!')    
+    await radioNavigationalWarnings.confirmationBox(radioNavigationalWarnings.alertMessage,radioNavigationalWarnings.message,"yes");
+    await radioNavigationalWarnings.getDialogText('Record created successfully!');    
   })
+
+  test('With valid input check for duplicate',async({page})=>{
+
+    await radioNavigationalWarnings.pageLoad();
+    await radioNavigationalWarnings.fillFormWithValidDetails("1","testdata");
+    await radioNavigationalWarnings.createRNW();
+    await radioNavigationalWarnings.confirmationBox(radioNavigationalWarnings.alertMessage,radioNavigationalWarnings.message,"no")
+    
+
+
+
+  })
+
 });
   
 

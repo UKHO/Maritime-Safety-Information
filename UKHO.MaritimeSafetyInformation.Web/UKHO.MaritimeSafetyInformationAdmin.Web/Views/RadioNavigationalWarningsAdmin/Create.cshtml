@@ -47,6 +47,9 @@
                     <label asp-for="ExpiryDate" class="form-label">Expiry date and time</label>
                     <input asp-for="ExpiryDate" class="form-control" />
                 </div>
+                 <div class="mb-3">
+                     @Html.Hidden("SkipDuplicateReferenceCheck", "")
+                </div>
                 <div class="mb-3">
                     <input type="submit" value="Create" id="btnCreate" class="primary me-4" />
                     <a asp-action="Index">Back to List</a>
@@ -56,6 +59,54 @@
     </div>
 </div>
 
+<div class="modal overlay d-none" tabindex="-1" id="overlayId" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" onclick="closeConfirmBox()" class="btn-close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>@TempData["message"]</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="isConfirm(true)">Yes</button>
+                <button onclick="isConfirm(false)">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop d-none" id="backdropId" ></div>
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@{
+    if (TempData["message"] != null) {
+        <script>
+            document.getElementById("overlayId").classList.remove("d-none");
+            document.getElementById("overlayId").classList.add("d-block");
+            document.getElementById("backdropId").classList.remove("d-none");
+            document.getElementById("backdropId").classList.add("d-block");
+
+            function closeConfirmBox() {
+                document.getElementById("overlayId").classList.add("d-none");
+                document.getElementById("overlayId").classList.remove("d-block");
+                document.getElementById("backdropId").classList.add("d-none");
+                document.getElementById("backdropId").classList.remove("d-block");
+            }
+
+            function isConfirm(answer) {
+                if (answer) {
+                    document.getElementById("SkipDuplicateReferenceCheck").value = "Yes";
+                    document.getElementById('btnCreate').click()
+                } else {
+                    document.getElementById("SkipDuplicateReferenceCheck").value = "No";
+                }
+                closeConfirmBox();
+            }
+        </script>
+    }
 }

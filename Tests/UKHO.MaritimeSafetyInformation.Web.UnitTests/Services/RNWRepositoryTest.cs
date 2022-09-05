@@ -174,6 +174,24 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Assert.AreEqual(1, result.Id);
         }
 
+        [Test]
+        public async Task WhenCallCheckReferenceNumberExistOrNot_ThenReturnFalseValue()
+        {
+            const string referenceNumber = "test_Reference";
+            bool result = await _rnwRepository.CheckReferenceNumberExistOrNot(WarningTypes.NAVAREA_1, referenceNumber);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task WhenCallCheckReferenceNumberExistOrNot_ThenReturnTrueValue()
+        {
+            const string referenceNumber = "RnwAdminListReference";
+            bool result = await _rnwRepository.CheckReferenceNumberExistOrNot(WarningTypes.UK_Coastal, referenceNumber);
+
+            Assert.IsTrue(result);
+        }
+
         [OneTimeTearDown]
         public void GlobalTearDown()
         {

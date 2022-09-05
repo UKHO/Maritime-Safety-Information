@@ -126,5 +126,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> CheckReferenceNumberExistOrNot(int warningType, string referenceNumber)
+        {
+            return await _context.RadioNavigationalWarnings.AnyAsync(rnwWarnings => !rnwWarnings.IsDeleted && rnwWarnings.WarningType == warningType && rnwWarnings.Reference == referenceNumber);
+        }
     }
 }

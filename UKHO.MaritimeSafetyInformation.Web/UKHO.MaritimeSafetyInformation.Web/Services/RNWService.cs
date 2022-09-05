@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             _logger = logger;
         }
 
-        public async Task<bool> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId)
+        public async Task<bool> CreateNewRadioNavigationWarningsRecord(RadioNavigationalWarning radioNavigationalWarning, string correlationId, bool skipDuplicateReferenceCheck, string userName)
         {
             if (radioNavigationalWarning.WarningType != WarningTypes.UK_Coastal && radioNavigationalWarning.WarningType != WarningTypes.NAVAREA_1)
             {
@@ -57,17 +57,32 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
             try
             {
-                _logger.LogInformation(EventIds.AddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
-                await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
-                _logger.LogInformation(EventIds.AddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
+                bool isDuplicateReferenceExists = false;
+
+                if (skipDuplicateReferenceCheck)
+                {
+                    _logger.LogInformation(EventIds.AddRecordWithSameReferenceNumber.ToEventId(), "Maritime safety information User:{userName} choose to add another record with existing ReferenceNumber:{Reference} and _X-Correlation-ID:{correlationId}", userName, radioNavigationalWarning.Reference, correlationId);
+                }
+                else
+                {
+                    isDuplicateReferenceExists = await _rnwRepository.CheckReferenceNumberExistOrNot(radioNavigationalWarning.WarningType, radioNavigationalWarning.Reference);
+                }
+
+                //Create new record if its new record with unique reference number OR if user chose to add another record with existing reference number.
+                if (!isDuplicateReferenceExists)
+                {
+                    _logger.LogInformation(EventIds.AddNewRNWRecordStart.ToEventId(), "Maritime safety information add new RNW record to database request started for _X-Correlation-ID:{correlationId}", correlationId);
+                    await _rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
+                    _logger.LogInformation(EventIds.AddNewRNWRecordCompleted.ToEventId(), "Maritime safety information add new RNW record to database request completed for _X-Correlation-ID:{correlationId}", correlationId);
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {
                 _logger.LogError(EventIds.CreateRNWRecordException.ToEventId(), ex, "Maritime safety information error has occurred in the process to add new RNW record to database with Exception:{ex} and _X-Correlation-ID:{correlationId}", ex.Message, correlationId);
                 throw;
             }
-
-            return true;
         }
 
         public async Task<RadioNavigationalWarningsAdminFilter> GetRadioNavigationWarningsForAdmin(int pageIndex, int? warningType, int? year, string correlationId)
@@ -153,7 +168,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             return DateTimeExtensions.ToRnwDateFormat(lastUpdatedDateTime);
         }
 
-       
         public RadioNavigationalWarning GetRadioNavigationalWarningById(int id, string correlationId)
         {
             try

@@ -55,14 +55,45 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         }
 
         [Test]
-        public async Task WhenPostValidRequest_ThenReturnTrue()
+        public async Task WhenPostValidRequestWithFlagSkipCheckDuplicateReferenceAsTrue_ThenReturnTrue()
         {
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            bool skipDuplicateReferenceCheck = true;
 
-            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId);
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
+
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipDuplicateReferenceCheck, "testUser");
 
             Assert.IsTrue(result);
+        }
+
+        [Test]
+        public async Task WhenPostValidRequestWithNewReferenceNumber_ThenReturnTrue()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            bool skipDuplicateReferenceCheck = false;
+
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
+
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipDuplicateReferenceCheck, "testUser");
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public async Task WhenPostValidRequestWithExistReferenceNumber_ThenReturnFalse()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
+            bool skipDuplicateReferenceCheck = false;
+
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(true);
+
+            bool result = await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, skipDuplicateReferenceCheck, "testUser");
+
+            Assert.IsFalse(result);
         }
 
         [Test]
@@ -73,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarning.WarningType = 3;
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, false, "testUser"); });
         }
 
         [Test]
@@ -84,7 +115,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarning.Reference = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, false, "testUser"); });
         }
 
         [Test]
@@ -95,7 +126,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarning.Summary = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter summary"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, false, "testUser"); });
         }
 
         [Test]
@@ -106,7 +137,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             _fakeRadioNavigationalWarning.Content = "";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter content"),
-                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
+                             async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, false, "testUser"); });
         }
 
         [Test]
@@ -115,10 +146,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             DateTime dateTime = DateTime.UtcNow;
             _fakeRadioNavigationalWarning.DateTimeGroup = dateTime;
 
+            A.CallTo(() => _fakeRnwRepository.CheckReferenceNumberExistOrNot(A<int>.Ignored, A<string>.Ignored)).Returns(false);
+
             A.CallTo(() => _fakeRnwRepository.AddRadioNavigationWarning(A<RadioNavigationalWarning>.Ignored)).Throws(new Exception());
 
             Assert.ThrowsAsync(Is.TypeOf<Exception>(),
-                               async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId); });
+                               async delegate { await _rnwService.CreateNewRadioNavigationWarningsRecord(_fakeRadioNavigationalWarning, CorrelationId, false, "testUser"); });
         }
 
         [Test]

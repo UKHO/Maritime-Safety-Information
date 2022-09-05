@@ -14,5 +14,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services.Interfaces
         RadioNavigationalWarning GetRadioNavigationalWarningById(int id);
         Task UpdateRadioNavigationalWarning(RadioNavigationalWarning radioNavigationalWarning);
         Task<List<RadioNavigationalWarningsData>> GetSelectedRadioNavigationalWarningsDataList(int[] selectedIds);
+        Task<bool> CheckReferenceNumberExistOrNot(int warningType, string referenceNumber);
     }
 }
