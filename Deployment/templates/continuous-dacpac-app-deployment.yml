@@ -30,12 +30,12 @@ steps:
       artifact: "MaritimeSafetyInformation"
       path: $(Build.SourcesDirectory)/MaritimeSafetyInformation
 
-  - task: FileTransform@1
+  - task: FileTransform@2
     displayName: "File Transform: WebAppSettings"
     inputs:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
-      fileType: 'json'
-      targetFiles: '**/appsettings.json'
+      xmlTransformationRules:
+      jsonTargetFiles: '**/appsettings.json'
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: msi-$(Environment)-webapp"
@@ -59,12 +59,12 @@ steps:
       artifact: "MaritimeSafetyInformation"
       path: $(Build.SourcesDirectory)/MaritimeSafetyInformationAdmin
 
-  - task: FileTransform@1
+  - task: FileTransform@2
     displayName: "File Transform: Admin-WebAppSettings"
     inputs:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
-      fileType: 'json'
-      targetFiles: '**/appsettings.json'
+      xmlTransformationRules:
+      jsonTargetFiles: '**/appsettings.json'
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: msi-$(Environment)-Admin-webapp"
