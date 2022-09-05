@@ -11,12 +11,12 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
-    - task: FileTransform@1
+    - task: FileTransform@2
       displayName: "File Transform: integrationtests"
       inputs:
        folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
-       fileType: json
-       targetFiles: '**/appsettings.json'
+       xmlTransformationRules:
+       jsonTargetFiles: '**/appsettings.json'
 
     - task: UseDotNet@2
       displayName: 'Use .NET 6.0.x sdk'
@@ -49,11 +49,11 @@ steps:
       displayName: 'npm restore'
       workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-    - task: FileTransform@1
+    - task: FileTransform@2
       inputs:
        folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-       fileType: 'json'
-       targetFiles: 'appConfig.json'
+       xmlTransformationRules:
+       jsonTargetFiles: 'appConfig.json'
 
     - script: |
        npm run test:auto
