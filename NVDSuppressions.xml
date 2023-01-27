@@ -213,4 +213,63 @@
     </notes>
     <cve>CVE-2022-30187</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.Features.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.Extensions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.WebUtilities.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Net.Http.Headers.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Serilog.Extensions.Logging.File:2.0.0
+   ]]>
+    </notes>
+    <cve>CVE-2014-2270</cve>
+    <cve>CVE-2014-3479</cve>
+    <cve>CVE-2014-3480</cve>
+    <cve>CVE-2014-3487</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Private.DataContractSerialization:4.3.0
+   ]]>
+    </notes>
+    <vulnerabilityName>CVE-2023-21538</vulnerabilityName>
+  </suppress>
 </suppressions>
