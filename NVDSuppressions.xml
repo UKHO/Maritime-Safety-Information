@@ -270,6 +270,6 @@
    file name: System.Private.DataContractSerialization:4.3.0
    ]]>
     </notes>
-    <vulnerabilityName>CVE-2023-21538</vulnerabilityName>
+    <cve>CVE-2023-21538</cve>
   </suppress>
 </suppressions>
