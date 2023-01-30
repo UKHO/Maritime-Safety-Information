@@ -104,7 +104,7 @@
     ]]>
     </notes>
     <cve>CVE-2014-8117</cve>
-    <cve>CVE-2014-9652</cve>    
+    <cve>CVE-2014-9652</cve>
   </suppress>
   <suppress>
     <notes>
@@ -117,14 +117,15 @@
     <cve>CVE-2014-9653</cve>
   </suppress>
   <suppress>
-   <notes>
-     <![CDATA[
+    <notes>
+      <![CDATA[
    file name: Serilog.Sinks.Async.dll
    A vulnerability exists in Async through 3.2.1 (fixed in 3.2.2) , which could let a malicious user obtain privileges via the mapValues() method.
    This is a false positive as the vulnerability exists in a NPM Javascript package named 'Async' and not the nuget .NET package named 'Serilog.Sinks.Async'.
-    ]]></notes>
-   <cve>CVE-2021-43138</cve>
-</suppress>
+    ]]>
+    </notes>
+    <cve>CVE-2021-43138</cve>
+  </suppress>
   <suppress>
     <notes>
       <![CDATA[
@@ -173,7 +174,7 @@
     </notes>
     <cve>CVE-2018-8292</cve>
   </suppress>
-<suppress>
+  <suppress>
     <notes>
       <![CDATA[
     file name:  Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
@@ -212,5 +213,73 @@
     ]]>
     </notes>
     <cve>CVE-2022-30187</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.Features.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.Extensions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.WebUtilities.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Net.Http.Headers.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Serilog.Extensions.Logging.File:2.0.0
+   ]]>
+    </notes>
+    <cve>CVE-2014-2270</cve>
+    <cve>CVE-2014-3479</cve>
+    <cve>CVE-2014-3480</cve>
+    <cve>CVE-2014-3487</cve>
+    <cve>CVE-2007-1536</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Private.DataContractSerialization:4.3.0
+   ]]>
+    </notes>
+    <cve>CVE-2023-21538</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.EntityFrameworkCore.SqlServer:6.0.4
+   ]]>
+    </notes>
+    <cve>CVE-2007-5090</cve>
   </suppress>
 </suppressions>
