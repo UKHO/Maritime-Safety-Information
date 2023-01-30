@@ -263,6 +263,7 @@
     <cve>CVE-2014-3479</cve>
     <cve>CVE-2014-3480</cve>
     <cve>CVE-2014-3487</cve>
+    <cve>CVE-2007-1536</cve>
   </suppress>
   <suppress>
     <notes>
@@ -271,5 +272,13 @@
    ]]>
     </notes>
     <cve>CVE-2023-21538</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.EntityFrameworkCore.SqlServer:6.0.4
+   ]]>
+    </notes>
+    <cve>CVE-2007-5090</cve>
   </suppress>
 </suppressions>
