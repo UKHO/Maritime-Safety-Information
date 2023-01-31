@@ -282,4 +282,111 @@
     </notes>
     <cve>CVE-2007-5090</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Azure.EventGrid:3.2.1
+   ]]>
+    </notes>
+    <cve>CVE-2021-42306</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.CSharp:4.0.1, Microsoft.CSharp:4.5.0
+   ]]>
+    </notes>
+    <cve>CVE-2022-41064</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.CSharp:4.3.0, Microsoft.CSharp:4.5.0,
+   Microsoft.Extensions.Caching.Abstractions:5.0.0, Microsoft.Extensions.Caching.Memory:5.0.0,
+   Microsoft.Extensions.Configuration.Abstractions:5.0.0
+   ]]>
+    </notes>
+    <cve>CVE-2022-30184</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Extensions.Configuration.FileExtensions.dll
+   ]]>
+    </notes>
+    <cve>CVE-2018-1000413</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Client.dll
+   ]]>
+    </notes>
+    <cve>CVE-2019-20138</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Web.TokenCache.dll
+   ]]>
+    </notes>
+    <cve>CVE-2017-11826</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Web.UI.dll
+   ]]>
+    </notes>
+    <cve>CVE-2010-3324</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Web.dll
+   ]]>
+    </notes>
+    <cve>CVE-2017-11826</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.IdentityModel.Clients.ActiveDirectory:3.19.1
+   ]]>
+    </notes>
+    <cve>CVE-2021-42306</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.NETCore.Platforms:1.0.1
+   ]]>
+    </notes>
+    <cve>CVE-2022-41064</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.NETCore.Platforms:1.0.1
+   ]]>
+    </notes>
+    <cve>CVE-2022-30184</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.OpenApi.dll
+   ]]>
+    </notes>
+    <cve>CVE-2022-3064</cve>
+    <cve>CVE-2021-4235</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: NETStandard.Library:1.6.0
+   ]]>
+    </notes>
+    <cve>CVE-2001-0152</cve>
+  </suppress>
 </suppressions>
