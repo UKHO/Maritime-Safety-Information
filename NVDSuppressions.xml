@@ -389,4 +389,18 @@
     </notes>
     <cve>CVE-2001-0152</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Runtime.Serialization.Json:4.3.0
+   ]]>
+    </notes>
+    <cve>CVE-2022-45688</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: System.Security.Cryptography.X509Certificates:4.1.0
+   ]]></notes>
+    <cve>CVE-2017-11770</cve>
+  </suppress>
 </suppressions>

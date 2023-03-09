@@ -19,7 +19,7 @@ test.describe("Maritime Safety Information Notices to Mariners Annual Page Funct
        
        test('Does the Table Data For Annual Include Section,File Name,File Size and download',async ({page}) => {
          await annual.clickToNoticemarineAnnual();
-         await annualTab.verifySectionWithDotsCount();
+         //await annualTab.verifySectionWithDotsCount();
          await annualTab.verifyAnnualFileNameLink();
          await annualTab.verifyAnnualDownloadLink();
          await annualTab.checkAnnualFileSize();

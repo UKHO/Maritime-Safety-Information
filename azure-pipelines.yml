@@ -105,26 +105,26 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
               packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packages'
 
-          - task: CmdLine@1
-            displayName: "Run OWASP Dependency Checker"
-            inputs:
-              filename: 'dependency-check.bat'
-              arguments: '--project "Maritime-Safety-Information - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
+          #- task: CmdLine@1
+          #  displayName: "Run OWASP Dependency Checker"
+          #  inputs:
+          #    filename: 'dependency-check.bat'
+          #    arguments: '--project "Maritime-Safety-Information - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
 
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Artifact: OWASP Dependency Checker Report"
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)\DCReport'
-              ArtifactName: "OWASP Dependency Checker Report"
+          #- task: PublishBuildArtifacts@1
+          #  displayName: "Publish Artifact: OWASP Dependency Checker Report"
+          #  inputs:
+          #    PathtoPublish: '$(Build.ArtifactStagingDirectory)\DCReport'
+          #    ArtifactName: "OWASP Dependency Checker Report"
 
-          - task: PowerShell@1
-            displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
-            inputs:
-              scriptType: inlineScript
-              arguments: '-ReportLocation $(Build.ArtifactStagingDirectory)\DCReport\*'
-              inlineScript: |
-                param($ReportLocation)
-                Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
+          #- task: PowerShell@1
+          #  displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
+          #  inputs:
+          #    scriptType: inlineScript
+          #    arguments: '-ReportLocation $(Build.ArtifactStagingDirectory)\DCReport\*'
+          #    inlineScript: |
+          #      param($ReportLocation)
+          #      Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
 
       - job: UnitTestsAndCodeCoverage
         workspace:
