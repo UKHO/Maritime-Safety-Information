@@ -51,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
-            DateTime dateTime = DateTime.UtcNow;
+            DateTime dateTime = new DateTime(2022, 12, 1);
             _radioNavigationalWarning.DateTimeGroup = dateTime;
 
             Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);

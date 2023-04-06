@@ -27,7 +27,7 @@ export default class Login {
     this.btnContinue = this.page.locator('[aria-label="Continue"]');
     this.password = this.page.locator('[placeholder="Password"]');
     this.btnLogin = this.page.locator('button:has-text("Sign in")');
-    this.loginUsername = this.page.locator('text=Test User');
+    this.loginUsername = this.page.locator('text=UKHOTest MSI');
     this.signOut = this.page.locator('text=Sign out');
     this.emailError= this.page.locator('div.error.itemLevel.show');
     this.adUsername = this.page.locator('[placeholder="someone\\@ukho\\.gov\\.uk"]');
@@ -52,7 +52,7 @@ export default class Login {
     await this.password.fill(password);
     await this.btnLogin.click();
     await this.loginUsername.click();
-    expect((await this.loginUsername.innerText()).toString()).toContain("Test User");
+      expect((await this.loginUsername.innerText()).toString()).toContain("UKHOTest MSI");
      }
 
      public async loginWithDistributorDetails(username: string, password: string) {

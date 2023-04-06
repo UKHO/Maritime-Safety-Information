@@ -10,7 +10,9 @@ trigger:
   - main
   - release/*
 
-pool: NautilusBuild
+pool: 
+    name: NautilusBuild
+    demands: vs_16 -equals 1 #exclude agents 13 and 14 as code coverage report fails
 
 variables:
   - name: BuildConfiguration
@@ -28,7 +30,7 @@ variables:
   - name: UKHOAssemblyCopyright
     value: "Copyright © UK Hydrographic Office"
   - name: Container
-    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.1.8"
+    value: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.3.7"
   - name: DeploymentPool
     value: "UKHO Ubuntu 1804"
   - name: coverityPool
@@ -238,7 +240,6 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
               ArtifactName: MaritimeSafetyInformationAdmin
 
-
       - job: PublishTerraformArtifacts
         workspace:
           clean: all
@@ -347,7 +348,10 @@ stages:
       - deployment: DevDeployApp
         dependsOn: DevDeployTerraform
         displayName: "Dev - DACPAC and App Deployment"
-        pool: NautilusBuild
+        pool:
+          name: NautilusBuild
+          demands:
+          - Agent.Name -equals HTFSPRDUAG02-Vic-A01
         environment: "Maritime-Safety-Information-Dev"
         workspace:
           clean: all
