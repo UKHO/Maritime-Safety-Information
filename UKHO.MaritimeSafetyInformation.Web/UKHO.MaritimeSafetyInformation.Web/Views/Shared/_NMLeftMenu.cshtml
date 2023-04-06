@@ -12,13 +12,6 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="@Url.Action("Leisure", "NoticesToMariners")"
-           class="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" || ViewData["ActionName"]?.ToString() == "Leisure" ? "nav-link active" : "nav-link")"
-           aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Leisure" || ViewData["ActionName"]?.ToString() == "Leisure" ? "true" : "")">
-            Leisure Folios
-        </a>
-    </li>
-    <li class="nav-item">
         <a href="@Url.Action("Resellers", "NoticesToMariners")"
            class="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" || ViewData["ActionName"]?.ToString() == "Resellers" ? "nav-link active" : "nav-link")"
            aria-current="@(ViewContext.RouteData.Values["Action"].ToString() == "Resellers" || ViewData["ActionName"]?.ToString() == "Resellers" ? "true" : "")">

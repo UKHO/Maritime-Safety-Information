@@ -76,19 +76,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             return listShowFilesResponseModels;
         }
 
-        public static List<ShowFilesResponseModel> ListFilesResponseLeisure(BatchSearchResponse searchResult)
-        {
-
-            List<ShowFilesResponseModel> listShowFilesResponseModels = GetShowFilesResponseModel(searchResult.Entries);
-
-            return listShowFilesResponseModels
-                .OrderByDescending(x => Convert.ToDateTime(x.Attributes.FirstOrDefault(y => y.Key == "BatchPublishedDate")?.Value))
-                .GroupBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
-                .Select(grp => grp.First())
-                .OrderBy(x => x.Attributes.FirstOrDefault(y => y.Key == "Chart")?.Value)
-                .ToList();
-        }
-
         public static List<ShowDailyFilesResponseModel> GetDailyShowFilesResponse(BatchSearchResponse searchResult)
         {
             List<ShowDailyFilesResponseModel> showDailyFilesResponses = new();

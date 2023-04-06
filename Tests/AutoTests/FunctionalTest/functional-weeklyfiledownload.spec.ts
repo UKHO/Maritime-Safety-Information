@@ -58,7 +58,6 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await notice.checkurl(notice.tabdaily,'NoticesToMariners/Daily','Notices to Mariners - Daily')
     await notice.checkurl(notice.tabcumulative,'NoticesToMariners/Cumulative','Notices to Mariners - Cumulative')
     await notice.checkurl(notice.tabannual,'NoticesToMariners/Annual','Notices to Mariners - Annual')
-    await notice.checkurl(notice.menuLeisureFolios,'NoticesToMariners/Leisure','Notices to Mariners - Leisure')
     await notice.checkurl(notice.menuValueAddedResellers,'NoticesToMariners/Resellers','Notices to Mariners - Value Added Resellers')
     await notice.checkurl(notice.menuAbout,'NoticesToMariners/About','About Notices to Mariners')
     await notice.checkurl(notice.radioNavigationalWarnings,'RadioNavigationalWarnings','Radio Navigation Warnings')
@@ -66,16 +65,6 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
     await notice.checkUkcoastalUrl(notice.ukcoastaltab,'RadioNavigationalWarnings','Radio Navigation Warnings - UK Coastal')
     
   })  
-
- test('Should Goto Notices to Mariner Page for Leisure Folios is displayed', async ({ page, context }) => {
-  await noticeFileDownload.goToNoticeToMariner();
-  await noticeFileDownload.goToLeisureFolios();
-  await noticeFileDownload.checkFurtherInformation();
-  await noticeFileDownload.checkImportantSafetyNotice();
-  await noticeFileDownload.verifyleisureFoliosFileName();
-  await noticeFileDownload.verifyleisureFoliosFileNameDownload();
-  
-})
 
 test('Should Goto Notices to Mariner Page for Weekly NM files with Distributor Role', async ({ page, context }) => {
   await login.goToSignIn();
