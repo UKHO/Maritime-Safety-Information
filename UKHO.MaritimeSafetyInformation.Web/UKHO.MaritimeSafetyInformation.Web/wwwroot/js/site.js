@@ -153,8 +153,6 @@ function SetTitle() {
                 break;
             case '/noticestomariners/annual': document.title = 'Notices to Mariners - Annual';
                 break;
-            case '/noticestomariners/leisure': document.title = 'Notices to Mariners - Leisure';
-                break;
             case '/noticestomariners/resellers': document.title = 'Notices to Mariners - Value Added Resellers';
                 break;
             case '/noticestomariners/about': document.title = 'About Notices to Mariners';

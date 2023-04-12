@@ -11,7 +11,6 @@ export default class noticetoMarine
     readonly fileName:Locator;
     readonly fileSize:Locator;
     readonly menuNoticeToMarine:Locator;
-    readonly menuLeisureFolios:Locator;
     readonly menuValueAddedResellers:Locator;
     readonly menuAbout:Locator;
     readonly tabweekly:Locator;
@@ -31,7 +30,6 @@ export default class noticetoMarine
      this.fileName=this.page.locator('#weekly >> text=File Name');
      this.fileSize= this.page.locator('#weekly >> text=File Size');
      this.menuNoticeToMarine = this.page.locator('#navbarSupportedContent >> text=Notices to Mariners');
-     this.menuLeisureFolios = this.page.locator('text=Leisure Folios');
      this.menuValueAddedResellers = this.page.locator('text=Value Added Resellers');
      this.menuAbout = this.page.locator('text=About');
      this.tabweekly = this.page.locator('#weekly-tab');

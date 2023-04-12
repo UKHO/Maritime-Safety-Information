@@ -89,16 +89,6 @@ export const options = {
     { duration: '25m', target: 2 },
     { duration: '5m', target: 0 }
   ] 
-},
-NMLeisurePage: {
-  exec: 'noticedToMarinersLeisure',
-  executor: 'ramping-vus',
-    startVUs: 0,
-stages: [
-  { duration: '30m', target: 5 },
-  { duration: '25m', target: 2 },
-  { duration: '5m', target: 0 }
-      ] 
 }
   }}
 
@@ -177,13 +167,7 @@ const weeklyFiles = new SharedArray('weeklyFileQueries', function () {
   export function noticedToMarinersAnnual()
   {
     http.get(`${config.url}/NoticesToMariners/Annual`);
-  } 
-  
-  export function noticedToMarinersLeisure()
-  {
-    http.get(`${config.url}/NoticesToMariners/Leisure`);
-  } 
-  
+  }   
 
 export function allWarningsRNW()
 {
