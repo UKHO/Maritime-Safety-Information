@@ -261,68 +261,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<ShowNMFilesResponseModel> GetLeisureFilesAsync(string correlationId)
-        {
-            try
-            {
-                BatchSearchResponse searchResult = new();
-                bool isCached = false;
-                const string frequency = "leisure";
-                const string partitionKey = "Public";
-                const string rowKey = "LeisureKey";
-                if (_cacheConfiguration.Value.IsFssCacheEnabled)
-                {
-                    BatchSearchResponseModel batchSearchResponseModel = await _fileShareServiceCache.GetBatchResponseFromCache(partitionKey, rowKey, frequency, correlationId);
-
-                    if (batchSearchResponseModel.BatchSearchResponse != null)
-                    {
-                        searchResult = batchSearchResponseModel.BatchSearchResponse;
-                        isCached = true;
-                    }
-                }
-                if (searchResult.Entries == null)
-                {
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
-
-                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseStarted.ToEventId(), "Request to get leisure files started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
-
-                    const string searchText = $" and $batch(Frequency) eq '{frequency}'";
-
-                    IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
-
-                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
-
-                    searchResult = result.Data;
-                }
-                if (searchResult != null && searchResult.Entries != null && searchResult.Entries.Count > 0)
-                {
-                    if (_cacheConfiguration.Value.IsFssCacheEnabled && !isCached)
-                    {
-                        _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheStart.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is started with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
-
-                        await _fileShareServiceCache.InsertCacheObject(searchResult, rowKey, _cacheConfiguration.Value.FssCacheResponseTableName, frequency, partitionKey, correlationId);
-
-                        _logger.LogInformation(EventIds.FSSLeisureBatchFilesResponseStoreToCacheCompleted.ToEventId(), "Request for storing file share service search leisure NM files response in azure table storage is completed with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
-                    }
-
-                    List<ShowFilesResponseModel> ListshowFilesResponseModels = NMHelper.ListFilesResponseLeisure(searchResult);
-                    ShowNMFilesResponseModel showNMFilesResponseModel = new() { ShowFilesResponseModel = ListshowFilesResponseModels, IsBatchResponseCached = isCached };
-                    _logger.LogInformation(EventIds.ShowLeisureFilesResponseDataFound.ToEventId(), "Request to get leisure files completed and data found with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
-                    return showNMFilesResponseModel;
-                }
-                else
-                {
-                    _logger.LogError(EventIds.ShowLeisureFilesResponseDataNotFound.ToEventId(), "Request to get leisure files completed and data not found with caching data:{isCached} and _X-Correlation-ID:{correlationId}", isCached, correlationId);
-                    throw new InvalidDataException("Invalid data received for leisure files");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(EventIds.ShowLeisureFilesResponseFailed.ToEventId(), "Request to get leisure files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
-                throw;
-            }
-        }
-
         public async Task<ShowWeeklyFilesResponseModel> GetWeeklyFilesResponseModelsAsync(int year, int week, string correlationId)
         {
             try

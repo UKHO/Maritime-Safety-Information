@@ -221,32 +221,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpGet]
-        [Route("/NoticesToMariners/Leisure")]
-        public async Task<IActionResult> Leisure()
-        {
-            ShowNMFilesResponseModel showNMFilesResponseModel = new();
-            try
-            {
-                _logger.LogInformation(EventIds.ShowLeisureFilesRequestStarted.ToEventId(), "Request to show leisure files started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-
-                ViewBag.HasError = false;
-
-                showNMFilesResponseModel = await _nMDataService.GetLeisureFilesAsync(GetCurrentCorrelationId());
-
-                _logger.LogInformation(EventIds.ShowLeisureFilesRequestCompleted.ToEventId(), "Request to show leisure files completed for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
-            }
-            catch (Exception ex)
-            {
-                ViewBag.HasError = true;
-                ViewData["CurrentCorrelationId"] = GetCurrentCorrelationId();
-
-                _logger.LogError(EventIds.ShowLeisureFilesRequestFailed.ToEventId(), "Request to show leisure files failed to return data with exception:{exceptionMessage} for _X-Correlation-ID:{CorrelationId}", ex.Message, GetCurrentCorrelationId());
-            }
-
-            return View("~/Views/NoticesToMariners/Leisure.cshtml", showNMFilesResponseModel);
-        }
-
-        [HttpGet]
         [Route("/NoticesToMariners/Resellers")]
         public IActionResult Resellers()
         {

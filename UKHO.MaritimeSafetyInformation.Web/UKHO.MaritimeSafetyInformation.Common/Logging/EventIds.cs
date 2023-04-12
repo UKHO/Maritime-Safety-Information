@@ -450,34 +450,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// </summary>
         GetCumulativeFilesResponseFailed = 910106,
         /// <summary>
-        /// 910107 -  Event data for Retrieval of Leisure file Started.
-        /// </summary>
-        ShowLeisureFilesRequestStarted = 910107,
-        /// <summary>
-        /// 910108 -  Event data for Retrieval of Leisure file Completed.
-        /// </summary>
-        ShowLeisureFilesRequestCompleted = 910108,
-        /// <summary>
-        /// 910109 -  Event data for Retrieval of Leisure file Failed.
-        /// </summary>
-        ShowLeisureFilesRequestFailed = 910109,
-        /// <summary>
-        /// 910110 -  Event data for Retrieval of Leisure file Response Started.
-        /// </summary>
-        ShowLeisureFilesResponseStarted = 910110,
-        /// <summary>
-        /// 910111 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
-        /// </summary>
-        ShowLeisureFilesResponseDataFound = 910111,
-        /// <summary>
-        /// 910112 -  Event data for Retrieval of Leisure file Response Completed and Data Found.
-        /// </summary>
-        ShowLeisureFilesResponseDataNotFound = 910112,
-        /// <summary>
-        /// 910113 -  Event data for Retrieval of Leisure file Response Failed.
-        /// </summary>
-        ShowLeisureFilesResponseFailed = 910113,
-        /// <summary>
         /// 910114 - Request for searching all year week from cache azure table storage is started.
         /// </summary>
         FSSSearchAllYearWeekFromCacheStart = 910114,
@@ -597,14 +569,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Logging
         /// 910143 - Request for storing file share service daily files response in azure table storage is completed.
         /// </summary>
         FSSDailyBatchFilesResponseStoreToCacheCompleted = 910143,
-        /// <summary>
-        /// 910144 - Request for storing Leisure batch file response in azure table storage started.
-        /// </summary>
-        FSSLeisureBatchFilesResponseStoreToCacheStart = 910144,
-        /// <summary>
-        /// 910145 - Request for storing Leisure batch file response in azure table storage completed
-        /// </summary>
-        FSSLeisureBatchFilesResponseStoreToCacheCompleted = 910145,
         /// <summary>
         /// 910146 - Request for clearing FSS search cache data from Azure table completed.
         /// </summary>
