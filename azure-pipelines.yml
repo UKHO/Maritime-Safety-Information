@@ -521,3 +521,11 @@ stages:
                 - template: Deployment/templates/continuous-dacpac-app-deployment.yml
                   parameters:
                     AzureSubscription: "Maritime Safety Information Live - A.008.02"
+  
+      - job: PostDeploymentActions
+        dependsOn:
+        - LiveDeployApp                 
+        pool: $(WindowsPool)        
+        displayName: Post Deployment Actions
+        steps:
+          - template: Deployment/templates/retain-pipeline.yml
