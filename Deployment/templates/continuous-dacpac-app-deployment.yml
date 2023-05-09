@@ -37,13 +37,56 @@ steps:
       xmlTransformationRules:
       jsonTargetFiles: '**/appsettings.json'
 
+  #- task: AzureCLI@2
+  #  displayName: "Integrating vNet with Web app"
+  #  inputs:
+  #    azureSubscription: "${{ parameters.AzureSubscription }}"
+  #    scriptType: pscore
+  #    scriptLocation: inlineScript
+  #    inlineScript: |
+  #      az webapp vnet-integration add --name $(WEB_APP_NAME) --resource-group $(spokeRG) --vnet $(spokeVnetName) --subnet $(spokeSubnetName)
+  #      az webapp vnet-integration add -g $(webapp_rg) -n $(WEB_APP_NAME) --vnet /subscriptions/a80c2e56-3694-404a-ad4f-636a344b5896/resourceGroups/m-spokeconfig-rg/providers/Microsoft.Network/virtualNetworks/MSIDev-vnet --subnet /subscriptions/a80c2e56-3694-404a-ad4f-636a344b5896/resourceGroups/m-spokeconfig-rg/providers/Microsoft.Network/virtualNetworks/MSIDev-vnet/subnets/main-subnet
+
+  - task: AzureCLI@2
+    displayName: "Integrating vNet with Web app"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: 'pscore'
+      scriptLocation: 'scriptPath'
+      scriptPath: '$(Pipeline.Workspace)/terraformartifact/webapp-vNet-integration.ps1'
+      arguments: "-resourcegroup '$(webapp_rg)'
+                  -webappname '$(WEB_APP_NAME)'
+                  -slotname '$(WEB_APP_SLOT_NAME)'
+                  -vnetresourcegroupname '$(spokeRG)'
+                  -vnetname '$(spokeVnetName)'
+                  -subnetname '$(spokeSubnetName)'"
+                  
   - task: AzureWebApp@1
-    displayName: "Azure App Deploy: msi-$(Environment)-webapp"
+    displayName: "Azure App Deploy: Staging slot"
     inputs:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(WEB_APP_NAME)"
       package: "$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip"
+      deployToSlotOrASE: true
+      slotName: $(WEB_APP_SLOT_NAME)
+
+  - task: PowerShell@2
+    displayName: "Check the status of staging slot"
+    inputs:
+      targetType: filePath
+      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+      arguments: "-healthEndPointUrl https://$(WEB_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)"
+
+  - task: AzureAppServiceManage@0
+    displayName: "Swap with production slot"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      resourceGroupName: $(webapp_rg)
+      webAppName: $(WEB_APP_NAME)
+      action: "Swap Slots"
+      swapWithProduction: true
+      sourceSlot: $(WEB_APP_SLOT_NAME)
 
   - task: PowerShell@2
     displayName: "Check the status of Service"
@@ -67,12 +110,31 @@ steps:
       jsonTargetFiles: '**/appsettings.json'
 
   - task: AzureWebApp@1
-    displayName: "Azure App Deploy: msi-$(Environment)-Admin-webapp"
+    displayName: "Azure App Deploy: Staging slot Admin"
     inputs:
       azureSubscription: "${{ parameters.AzureSubscription }}"
       appType: webApp
       appName: "$(ADMIN_WEB_APP_NAME)"
       package: "$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformationAdmin.Web.zip"
+      deployToSlotOrASE: true
+      slotName: $(WEB_ADMIN_APP_SLOT_NAME)
+
+  - task: PowerShell@2
+    displayName: "Check the status of staging slot"
+    inputs:
+      targetType: filePath
+      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
+      arguments: "-healthEndPointUrl https://$(WEB_ADMIN_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)"
+
+  - task: AzureAppServiceManage@0
+    displayName: "Swap with production slot"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      resourceGroupName: $(webapp_rg)
+      webAppName: $(ADMIN_WEB_APP_NAME)
+      action: "Swap Slots"
+      swapWithProduction: true
+      sourceSlot: $(WEB_ADMIN_APP_SLOT_NAME)
 
   - task: PowerShell@2
     displayName: "Check the status of Admin Web App"

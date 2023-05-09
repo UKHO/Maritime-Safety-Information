@@ -21,3 +21,19 @@ output "storage_name" {
 output "table_storage_name" {
    value = module.cache_storage.table_storage_name
 }
+
+output "web_app_slot_name" {
+  value = module.webapp_service.slot_name
+}
+
+output "web_app_slot_default_site_hostname" {
+  value = module.webapp_service.slot_default_site_hostname
+}
+
+output "web_admin_app_slot_name" {
+  value = module.webapp_service.slot_admin_name
+}
+
+output "web_admin_app_slot_default_site_hostname" {
+  value = module.webapp_service.slot_admin_default_site_hostname
+}
