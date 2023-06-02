@@ -12,3 +12,4 @@ $subnet = "/subscriptions/$subscriptionid/resourceGroups/$vnetresourcegroupname/
 
 Write-Output "Integrating webapp with vNet..."
 az webapp vnet-integration add -g $resourcegroup -n $webappname --vnet $vnet --subnet $subnet
+az webapp config set -g $resourcegroup -n $webappname --vnet-route-all-enabled false
