@@ -11,4 +11,4 @@ $vnet = "/subscriptions/$subscriptionid/resourceGroups/$vnetresourcegroupname/pr
 $subnet = "/subscriptions/$subscriptionid/resourceGroups/$vnetresourcegroupname/providers/Microsoft.Network/virtualNetworks/$vnetname/subnets/$subnetname";
 
 Write-Output "Integrating webapp with vNet..."
-az webapp vnet-integration add -g $resourcegroup -n $webappname --vnet $vnet  --subnet $subnet
+az webapp vnet-integration add -g $resourcegroup -n $webappname --vnet $vnet --subnet $subnet

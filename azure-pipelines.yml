@@ -364,6 +364,8 @@ stages:
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
           - name: Admin_DNS_URL
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+          - name: webapp_rg
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.webapp_rg']  ]
         strategy:
           runOnce:
             deploy:
