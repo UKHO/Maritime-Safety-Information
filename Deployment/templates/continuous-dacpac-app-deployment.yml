@@ -37,19 +37,6 @@ steps:
       xmlTransformationRules:
       jsonTargetFiles: '**/appsettings.json'
 
-  - task: AzureCLI@2
-    displayName: "Integrating vNet with Web app"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: 'pscore'
-      scriptLocation: 'scriptPath'
-      scriptPath: '$(Pipeline.Workspace)/terraformartifact/webapp-vNet-integration.ps1'
-      arguments: "-resourcegroup '$(webapp_rg)'
-                  -webappname '$(WEB_APP_NAME)'
-                  -vnetresourcegroupname '$(spokeRG)'
-                  -vnetname '$(spokeVnetName)'
-                  -subnetname '$(spokeSubnetName)'"
-
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: msi-$(Environment)-webapp"
     inputs:
