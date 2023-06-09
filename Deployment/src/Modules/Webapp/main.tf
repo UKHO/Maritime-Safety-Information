@@ -43,6 +43,11 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.name} --vnet-route-all-enabled false"    
+  }
+
   }
 
 resource "azurerm_windows_web_app_slot" "webapp_service_staging" {
@@ -79,6 +84,11 @@ resource "azurerm_windows_web_app_slot" "webapp_service_staging" {
     }
 
   https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.name} --slot staging --vnet-route-all-enabled false"    
+  }
+
   }
 
 #Admin Webapp
@@ -116,6 +126,11 @@ resource "azurerm_windows_web_app" "admin_webapp_service" {
     }
 
   https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.admin_webapp_name} --vnet-route-all-enabled false"    
+  }
+
   }
 
 resource "azurerm_windows_web_app_slot" "admin_webapp_service_staging" {
@@ -150,4 +165,9 @@ resource "azurerm_windows_web_app_slot" "admin_webapp_service_staging" {
     }
 
   https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.admin_webapp_name} --slot staging --vnet-route-all-enabled false"    
+  }
+
   }

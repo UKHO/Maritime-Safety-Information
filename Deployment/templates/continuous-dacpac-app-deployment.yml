@@ -35,31 +35,7 @@ steps:
     inputs:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
       xmlTransformationRules:
-      jsonTargetFiles: '**/appsettings.json'
-
-  #- task: AzureCLI@2
-  #  displayName: "Integrating vNet with Web app"
-  #  inputs:
-  #    azureSubscription: "${{ parameters.AzureSubscription }}"
-  #    scriptType: pscore
-  #    scriptLocation: inlineScript
-  #    inlineScript: |
-  #      az webapp vnet-integration add --name $(WEB_APP_NAME) --resource-group $(spokeRG) --vnet $(spokeVnetName) --subnet $(spokeSubnetName)
-  #      az webapp vnet-integration add -g $(webapp_rg) -n $(WEB_APP_NAME) --vnet /subscriptions/a80c2e56-3694-404a-ad4f-636a344b5896/resourceGroups/m-spokeconfig-rg/providers/Microsoft.Network/virtualNetworks/MSIDev-vnet --subnet /subscriptions/a80c2e56-3694-404a-ad4f-636a344b5896/resourceGroups/m-spokeconfig-rg/providers/Microsoft.Network/virtualNetworks/MSIDev-vnet/subnets/main-subnet
-
-  - task: AzureCLI@2
-    displayName: "Integrating vNet with Web app"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: 'pscore'
-      scriptLocation: 'scriptPath'
-      scriptPath: '$(Pipeline.Workspace)/terraformartifact/webapp-vNet-integration.ps1'
-      arguments: "-resourcegroup '$(webapp_rg)'
-                  -webappname '$(WEB_APP_NAME)'
-                  -slotname '$(WEB_APP_SLOT_NAME)'
-                  -vnetresourcegroupname '$(spokeRG)'
-                  -vnetname '$(spokeVnetName)'
-                  -subnetname '$(spokeSubnetName)'"
+      jsonTargetFiles: '**/appsettings.json'  
                   
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
