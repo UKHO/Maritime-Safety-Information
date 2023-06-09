@@ -12,7 +12,8 @@ resource "azurerm_windows_web_app" "webapp_service" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   service_plan_id           = azurerm_service_plan.app_service_plan.id
-  tags                      = var.tags  
+  tags                      = var.tags
+  virtual_network_subnet_id = var.subnet_id
 
   site_config {
      application_stack {    
@@ -48,6 +49,7 @@ resource "azurerm_windows_web_app_slot" "webapp_service_staging" {
   name                      = "staging"
   app_service_id            = azurerm_windows_web_app.webapp_service.id
   tags                      = azurerm_windows_web_app.webapp_service.tags
+  virtual_network_subnet_id = var.subnet_id
   
   site_config {
      application_stack {    
@@ -79,17 +81,6 @@ resource "azurerm_windows_web_app_slot" "webapp_service_staging" {
   https_only = true
   }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_integration" {
-  app_service_id = azurerm_windows_web_app.webapp_service.id
-  subnet_id      = var.subnet_id  
-}
-
-resource "azurerm_app_service_slot_virtual_network_swift_connection" "slot_vnet_integration" {
-  app_service_id = azurerm_windows_web_app.webapp_service.id
-  subnet_id      = var.subnet_id
-  slot_name      = azurerm_windows_web_app_slot.webapp_service_staging.name
-}
-
 #Admin Webapp
 resource "azurerm_windows_web_app" "admin_webapp_service" {
   name                      = var.admin_webapp_name
@@ -97,7 +88,8 @@ resource "azurerm_windows_web_app" "admin_webapp_service" {
   resource_group_name       = var.resource_group_name
   service_plan_id           = azurerm_service_plan.app_service_plan.id
   tags                      = var.tags
-  
+  virtual_network_subnet_id = var.subnet_id
+
   site_config {
      application_stack {    
      current_stack = "dotnet"
@@ -129,7 +121,8 @@ resource "azurerm_windows_web_app" "admin_webapp_service" {
 resource "azurerm_windows_web_app_slot" "admin_webapp_service_staging" {
   name                      = "staging"
   app_service_id            = azurerm_windows_web_app.admin_webapp_service.id
-  tags                      = azurerm_windows_web_app.admin_webapp_service.tags 
+  tags                      = azurerm_windows_web_app.admin_webapp_service.tags
+  virtual_network_subnet_id = var.subnet_id
 
   site_config {
      application_stack {    
@@ -158,14 +151,3 @@ resource "azurerm_windows_web_app_slot" "admin_webapp_service_staging" {
 
   https_only = true
   }
-
-resource "azurerm_app_service_virtual_network_swift_connection" "admin_webapp_vnet_integration" {
-  app_service_id = azurerm_windows_web_app.admin_webapp_service.id
-  subnet_id      = var.subnet_id
-}
-
-resource "azurerm_app_service_slot_virtual_network_swift_connection" "admin_webapp_slot_vnet_integration" {
-  app_service_id = azurerm_windows_web_app.admin_webapp_service.id
-  subnet_id      = var.subnet_id
-  slot_name      = azurerm_windows_web_app_slot.admin_webapp_service_staging.name
-}
