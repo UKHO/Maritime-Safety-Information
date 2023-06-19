@@ -413,4 +413,20 @@
     </notes>
     <cve>CVE-2017-11770</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.NETCore.Platforms:3.1.0
+   ]]>
+    </notes>
+    <cve>CVE-2023-29326</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Security.Cryptography.Pkcs:6.0.1
+   ]]>
+    </notes>
+    <cve>CVE-2023-29331</cve>
+  </suppress>
 </suppressions>
