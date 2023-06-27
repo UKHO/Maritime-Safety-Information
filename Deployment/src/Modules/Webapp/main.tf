@@ -43,6 +43,52 @@ resource "azurerm_windows_web_app" "webapp_service" {
     }
 
   https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.name} --vnet-route-all-enabled false"    
+  }
+
+  }
+
+resource "azurerm_windows_web_app_slot" "webapp_service_staging" {
+  name                      = "staging"
+  app_service_id            = azurerm_windows_web_app.webapp_service.id
+  tags                      = azurerm_windows_web_app.webapp_service.tags
+  virtual_network_subnet_id = var.subnet_id
+  
+  site_config {
+     application_stack {    
+     current_stack = "dotnet"
+     dotnet_version = "v6.0"
+    }
+    always_on  = true
+    ftps_state = "Disabled"
+
+    ip_restriction {
+      virtual_network_subnet_id = var.subnet_id
+    }
+
+    dynamic "ip_restriction" {
+      for_each = var.allowed_ips
+      content {
+          ip_address  = length(split("/",ip_restriction.value)) > 1 ? ip_restriction.value : "${ip_restriction.value}/32"
+      }
+    }
+
+   }
+     
+  app_settings = azurerm_windows_web_app.webapp_service.app_settings
+
+  identity {
+    type = "SystemAssigned"
+    }
+
+  https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.name} --slot staging --vnet-route-all-enabled false"    
+  }
+
   }
 
 #Admin Webapp
@@ -80,4 +126,48 @@ resource "azurerm_windows_web_app" "admin_webapp_service" {
     }
 
   https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.admin_webapp_name} --vnet-route-all-enabled false"    
+  }
+
+  }
+
+resource "azurerm_windows_web_app_slot" "admin_webapp_service_staging" {
+  name                      = "staging"
+  app_service_id            = azurerm_windows_web_app.admin_webapp_service.id
+  tags                      = azurerm_windows_web_app.admin_webapp_service.tags
+  virtual_network_subnet_id = var.subnet_id
+
+  site_config {
+     application_stack {    
+     current_stack = "dotnet"
+     dotnet_version = "v6.0"
+    }
+    always_on  = true
+    ftps_state = "Disabled"
+
+    ip_restriction {
+      virtual_network_subnet_id = var.subnet_id
+    }
+
+    dynamic "ip_restriction" {
+      for_each = var.allowed_ips
+      content {
+        ip_address  = length(split("/",ip_restriction.value)) > 1 ? ip_restriction.value : "${ip_restriction.value}/32"
+      }
+    }
+   }
+  app_settings = azurerm_windows_web_app.admin_webapp_service.app_settings
+
+  identity {
+    type = "SystemAssigned"
+    }
+
+  https_only = true
+
+  provisioner "local-exec" {
+    command = "az webapp config set -g ${var.resource_group_name} -n ${var.admin_webapp_name} --slot staging --vnet-route-all-enabled false"    
+  }
+
   }

@@ -59,7 +59,10 @@ Write-Host "##vso[task.setvariable variable=ADMIN_WEB_APP_NAME;isOutput=true]$($
 Write-Host "##vso[task.setvariable variable=webapp_rg;isOutput=true]$($terraformOutput.webapp_rg.value)"
 Write-Host "##vso[task.setvariable variable=storage_name]$($terraformOutput.storage_name.value)"
 Write-Host "##vso[task.setvariable variable=table_storage_name]$($terraformOutput.table_storage_name.value)"
-
+Write-Host "##vso[task.setvariable variable=WEB_APP_SLOT_NAME;isOutput=true]$($terraformOutput.web_app_slot_name.value)"
+Write-Host "##vso[task.setvariable variable=WEB_APP_SLOT_HOST_NAME;isOutput=true]$($terraformOutput.web_app_slot_default_site_hostname.value)"
+Write-Host "##vso[task.setvariable variable=WEB_ADMIN_APP_SLOT_NAME;isOutput=true]$($terraformOutput.web_admin_app_slot_name.value)"
+Write-Host "##vso[task.setvariable variable=WEB_ADMIN_APP_SLOT_HOST_NAME;isOutput=true]$($terraformOutput.web_admin_app_slot_default_site_hostname.value)"
 
 $terraformOutput | ConvertTo-Json -Depth 5 > $terraformJsonOutputFile
 

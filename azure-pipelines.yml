@@ -350,8 +350,6 @@ stages:
         displayName: "Dev - DACPAC and App Deployment"
         pool:
           name: NautilusBuild
-          demands:
-          - Agent.Name -equals HTFSPRDUAG02-Vic-A01
         environment: "Maritime-Safety-Information-Dev"
         workspace:
           clean: all
@@ -364,6 +362,17 @@ stages:
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
           - name: Admin_DNS_URL
             value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+          - name: WEB_APP_SLOT_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME']  ]
+          - name: WEB_APP_SLOT_HOST_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_HOST_NAME
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME']  ]
+          - name: webapp_rg
+            value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.webapp_rg']  ]
+
         strategy:
           runOnce:
             deploy:
@@ -439,6 +448,17 @@ stages:
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
           - name: Admin_DNS_URL
             value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+          - name: WEB_APP_SLOT_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME']  ]
+          - name: WEB_APP_SLOT_HOST_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_HOST_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME']  ]
+          - name: webapp_rg
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.webapp_rg']  ]
+
         strategy:
           runOnce:
             deploy:
@@ -514,6 +534,17 @@ stages:
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
           - name: Admin_DNS_URL
             value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+          - name: WEB_APP_SLOT_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME']  ]
+          - name: WEB_APP_SLOT_HOST_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_HOST_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME']  ]
+          - name: webapp_rg
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.webapp_rg']  ]
+
         strategy:
           runOnce:
             deploy:

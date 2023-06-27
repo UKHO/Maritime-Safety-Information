@@ -46,6 +46,7 @@ module "webapp_service" {
     "ASPNETCORE_ENVIRONMENT"                                   = local.env_name
     "WEBSITE_RUN_FROM_PACKAGE"                                 = "1"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE"                          = "true"
+    "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG"          = "1"
   }
   tags                                                         = local.tags
   allowed_ips                                                  = var.allowed_ips
@@ -62,7 +63,9 @@ module "key_vault" {
   location            = azurerm_resource_group.rg.location
   read_access_objects = {
      "webapp_service"       = module.webapp_service.web_app_object_id
+     "webapp_slot"          = module.webapp_service.slot_principal_id
      "admin_webapp_service" = module.webapp_service.admin_web_app_object_id
+     "admin_webapp_slot"    = module.webapp_service.slot_admin_principal_id
   }
   secrets = {
       "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
