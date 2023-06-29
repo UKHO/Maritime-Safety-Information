@@ -36,7 +36,25 @@ steps:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
       xmlTransformationRules:
       jsonTargetFiles: '**/appsettings.json'  
-                  
+
+  - task: AzureCLI@2
+    displayName: "Disable vnet route: Main slot"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az webapp config set -g $(webapp_rg) -n $(WEB_APP_NAME) --vnet-route-all-enabled false
+
+  - task: AzureCLI@2
+    displayName: "Disable vnet route: Staging slot"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az webapp config set -g $(webapp_rg) -n $(WEB_APP_NAME) --slot $(WEB_APP_SLOT_NAME) --vnet-route-all-enabled false
+
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot"
     inputs:
@@ -84,6 +102,25 @@ steps:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
       xmlTransformationRules:
       jsonTargetFiles: '**/appsettings.json'
+
+  - task: AzureCLI@2
+    displayName: "Disable vnet route: Main slot Admin"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az webapp config set -g $(webapp_rg) -n $(ADMIN_WEB_APP_NAME) --vnet-route-all-enabled false
+
+  - task: AzureCLI@2
+    displayName: "Disable vnet route: Staging slot Admin"
+    inputs:
+      azureSubscription: "${{ parameters.AzureSubscription }}"
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az webapp config set -g $(webapp_rg) -n $(ADMIN_WEB_APP_NAME) --slot $(WEB_ADMIN_APP_SLOT_NAME) --vnet-route-all-enabled false
+
 
   - task: AzureWebApp@1
     displayName: "Azure App Deploy: Staging slot Admin"
