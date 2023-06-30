@@ -52,16 +52,10 @@
     <PackageReference Include="UKHO.FileShareAdminClient" Version="1.5.20802.4" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.5.20802.4" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.22047.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
-    <PackageReference Include="Azure.Identity" Version="1.6.0" />
   </ItemGroup>
   
   <ItemGroup>

@@ -6,8 +6,9 @@ var ddlselectedweek;
 document.onreadystatechange = function () {
 
     if (document.readyState == "interactive" || document.readyState === "complete") {
+        var requestType = document.getElementById('hdnRequestType');
 
-        if (document.getElementById('hdnRequestType').value != undefined && document.getElementById('hdnRequestType').value === "Weekly") {
+        if (requestType != null && requestType.value != undefined && requestType.value === "Weekly") {
 
             if (document.getElementById('hdnYear').value != undefined && document.getElementById('hdnYear').value != null && document.getElementById('hdnYear').value != '') {
                 ddlselectedyear = document.getElementById('hdnYear').value;
