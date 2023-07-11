@@ -56,6 +56,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ShowSelection()
         {
             List<RadioNavigationalWarningsData> radioNavigationalWarningsData = new();
