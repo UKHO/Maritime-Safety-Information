@@ -24,7 +24,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
         [HttpGet]
         [Route("/")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             _logger.LogInformation(EventIds.Start.ToEventId(), "Maritime safety information request started for correlationId:{correlationId}", GetCurrentCorrelationId());
 
@@ -44,10 +44,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             // In case of MsalUiRequiredException redirect user to sign in to get the account/login hint
             if (exceptionDetails != null && exceptionDetails.Error.InnerException is MsalUiRequiredException)
-            {                
+            {
                 string appLogInUrl = $"{_azureAdB2C.Value.RedirectBaseUrl}/MicrosoftIdentity/Account/SignIn";
-                await _contextAccessor.HttpContext.Request.HttpContext.SignOutAsync();                
-                return Redirect(appLogInUrl);                
+                await _contextAccessor.HttpContext.Request.HttpContext.SignOutAsync();
+                return Redirect(appLogInUrl);
             }
 
             _logger.LogError(EventIds.SystemError.ToEventId(), "System error has occurred while processing request with exception:{ex}, at exception path:{path} for correlationId:{correlationId}", exceptionDetails?.Error.Message, exceptionDetails?.Path, correlationId);
