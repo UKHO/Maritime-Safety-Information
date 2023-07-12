@@ -21,11 +21,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Filters
         }
     }
 
-    /// <summary>
-    /// Extension method used to add the middleware to the HTTP request pipeline.
-    /// </summary>
     public static class CustomSecurityHeadersMiddlewareExtensions
     {
-        public static IApplicationBuilder UseCustomSecurityHeaders(this IApplicationBuilder builder) => builder.UseMiddleware<CustomSecurityHeadersMiddleware>();
+        /// <summary>
+        /// Extension method used to add the security header middleware to the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseCustomSecurityHeaders(this IApplicationBuilder app) => app.UseMiddleware<CustomSecurityHeadersMiddleware>();
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.Identity.Web.UI;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
-using UKHO.MaritimeSafetyInformation.Common.Filters;
+using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
@@ -121,34 +121,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                               IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {
             ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
-
-            app.UseHttpsRedirection();
-            app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
-            app.UseReferrerPolicy(x => x.NoReferrer());
-            app.UseCsp(x => x.DefaultSources(y => y.Self()));
-            app.UseCustomSecurityHeaders();
-            app.UseStaticFiles();
-            app.UseXfo(x => x.SameOrigin());
-            app.UseXContentTypeOptions();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseExceptionHandler("/error");
-
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapHealthChecks("/health");
-            });
+            app.ConfigureRequest("Home", "Index", env.IsDevelopment());
         }
 
         protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
