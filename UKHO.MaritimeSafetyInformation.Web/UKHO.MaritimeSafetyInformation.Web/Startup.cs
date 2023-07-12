@@ -1,15 +1,16 @@
-﻿using Azure.Identity;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Security.Claims;
+using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Filters;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
@@ -69,7 +70,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IWebhookService, WebhookService>();
             services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
-            
+
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
 
@@ -122,12 +123,19 @@ namespace UKHO.MaritimeSafetyInformation.Web
             ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
 
             app.UseHttpsRedirection();
+            app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
+            app.UseReferrerPolicy(x => x.NoReferrer());
+            app.UseCsp(x => x.DefaultSources(y => y.Self()));
+            app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
+            app.UseXfo(x => x.SameOrigin());
+            app.UseXContentTypeOptions();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseExceptionHandler("/error");
 
             app.UseRouting();
