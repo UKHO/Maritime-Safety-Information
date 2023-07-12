@@ -143,7 +143,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             return builder.Build();
         }
 
-        [SuppressMessage("Code Smell", "S1172:Unused method parameters should be removed", Justification = "httpContextAccessor is used in action delegate")]
         private void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
                                       IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {

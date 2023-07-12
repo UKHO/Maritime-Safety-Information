@@ -18,7 +18,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
             app.UseReferrerPolicy(x => x.NoReferrer());
-            app.UseCsp(x => x.DefaultSources(y => y.Self()));
+            app.UseCsp(x =>
+            {
+                x.DefaultSources(y => y.Self());
+                x.ScriptSources(y => y.Self());
+            });
             app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
             app.UseXfo(x => x.SameOrigin());
