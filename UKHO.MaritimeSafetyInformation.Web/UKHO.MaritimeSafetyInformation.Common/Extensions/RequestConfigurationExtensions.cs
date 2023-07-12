@@ -21,7 +21,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseCsp(x =>
             {
                 x.DefaultSources(y => y.Self());
-                x.ScriptSources(y => y.Self());
+                x.ScriptSources(y => y.Self().CustomSources("https://www.googletagmanager.com"));
+                x.StyleSources(y => y.Self().CustomSources(
+                    "https://unpkg.com/%40ukho/styles@1.3.21/dist/ukho.min.css",
+                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"
+                    ));
             });
             app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
