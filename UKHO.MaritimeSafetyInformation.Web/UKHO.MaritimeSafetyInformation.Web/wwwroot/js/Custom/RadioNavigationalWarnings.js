@@ -5,6 +5,10 @@
     }
 }
 
+window.onload = function () {
+    document.getElementById('select_button').addEventListener('click', do_Selection);
+}
+
 function do_Selection() {
     var checkboxes = document.getElementsByName('checkbox');
     var button = document.getElementById('select_button');
