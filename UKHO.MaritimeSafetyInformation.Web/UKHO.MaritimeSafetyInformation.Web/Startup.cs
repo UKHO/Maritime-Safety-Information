@@ -186,10 +186,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                                      });
             }
 
-#if (DEBUG)
+#if DEBUG
             //Add file based logger for development
             loggerFactory.AddFile(configuration.GetSection("Logging"));
-#endif   
+#endif
 
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);
