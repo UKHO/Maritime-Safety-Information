@@ -7,6 +7,13 @@
 
 window.onload = function () {
     document.getElementById('select_button').addEventListener('click', do_Selection);
+    var checkboxes = document.getElementsByName('checkbox');
+
+    for (var i in checkboxes) {
+        i.addEventListener('change', enableDisableShowSelection)
+    }
+
+    document.getElementById('BtnShowSelection').addEventListener('click', showSelection);
 }
 
 function do_Selection() {

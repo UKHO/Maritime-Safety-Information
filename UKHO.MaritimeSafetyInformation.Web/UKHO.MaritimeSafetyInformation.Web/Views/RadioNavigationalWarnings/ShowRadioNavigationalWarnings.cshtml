@@ -73,7 +73,7 @@ else
                                     </button>
                                 </td>
                                 <td id="checkbox_@i" class="td-5 justify-content-center">
-                                    <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" onchange="enableDisableShowSelection()" aria-label="@Html.DisplayNameFor(model => model.Reference) for @Html.DisplayFor(modelItem => item.Reference)" />
+                                    <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" aria-label="@Html.DisplayNameFor(model => model.Reference) for @Html.DisplayFor(modelItem => item.Reference)" />
                                 </td>
                             </tr>
                             <tr id="collapse_@i" class="accordion-collapse @Html.DisplayFor(modelItem => item.WarningType[0]) collapse" data-bs-parent="#accordionAllwarning">
@@ -108,7 +108,7 @@ else
                 @using (Html.BeginForm("ShowSelection", "RadioNavigationalWarnings", FormMethod.Post))
                 {
                     <input type="hidden" id="showSelectionId" name="showSelectionId" value="">
-                    <button disabled="disabled" id="BtnShowSelection" type="submit" onclick="showSelection()">Show selection</button>
+                    <button disabled="disabled" id="BtnShowSelection" type="submit">Show selection</button>
                 }
             </div>
         </div>
