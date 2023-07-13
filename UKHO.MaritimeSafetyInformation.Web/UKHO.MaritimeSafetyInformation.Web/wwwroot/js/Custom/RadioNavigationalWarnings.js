@@ -9,7 +9,7 @@ window.onload = function () {
     document.getElementById('select_button').addEventListener('click', do_Selection);
     var checkboxes = document.getElementsByName('checkbox');
 
-    for (var i in checkboxes) {
+    for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].addEventListener('change', enableDisableShowSelection);
     }
 
