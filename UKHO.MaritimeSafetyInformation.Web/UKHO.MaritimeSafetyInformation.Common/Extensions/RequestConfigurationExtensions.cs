@@ -26,6 +26,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
                     "https://unpkg.com/%40ukho/styles@1.3.21/",
                     "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
                     ));
+                x.FontSources(y => y.Self().CustomSources(
+                    "https://unpkg.com/%40ukho/styles@1.3.21/",
+                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
+                ));
+                x.ImageSources(y => y.Self());
             });
             app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
