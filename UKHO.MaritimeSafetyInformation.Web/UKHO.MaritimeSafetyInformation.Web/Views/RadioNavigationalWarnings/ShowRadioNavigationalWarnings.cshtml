@@ -18,11 +18,6 @@
 }
 else
 {
-	<style nws-csp-add-nonce="true">
-		.tdhide {
-			display: none !important;
-        }
-	</style>
     <div class="tab-content" id="rnwTabContent">
         <div class="tab-pane fade show active" id="allwarnings" role="tabpanel" aria-labelledby="allwarnings-tab">
             <div class="table-responsive-md">
@@ -54,7 +49,7 @@ else
                         @foreach (var item in Model)
                         {
                             <tr class="@Html.DisplayFor(modelItem => item.WarningType[0])">
-                                <td id="Id_@i" class="td-1 tdhide">
+                                <td id="Id_@i" class="td-1-hide">
                                     @Html.DisplayFor(modelItem => item.Id)
                                 </td>
                                 <td id="Reference_@i" class="td-1">
