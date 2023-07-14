@@ -158,11 +158,11 @@ export default class RadioNavigationalWarnings {
         await this.page.waitForLoadState();
 
         if (visible) {
-            await expect(this.overlay.toHaveClass(/d-block/));
-            await expect(this.backdrop.toHaveClass(/d-block/));
+            await expect(this.overlay).toHaveClass(/d-block/);
+            await expect(this.backdrop).toHaveClass(/d-block/);
         } else {
-            await expect(this.overlay.toHaveClass(/d-none/));
-            await expect(this.backdrop.toHaveClass(/d-none/));
+            await expect(this.overlay).toHaveClass(/d-none/);
+            await expect(this.backdrop).toHaveClass(/d-none/);
         }
     }
 }

@@ -52,51 +52,6 @@ stages:
     displayName: "Build (inc DependencyChecker, Dotnet Build , dotnet test and publish artifact )"
     dependsOn: []
     jobs:
-      - job: UnitTestsAndCodeCoverage
-        workspace:
-          clean: all
-        displayName: "Dotnet Test and Publish Code Coverage"
-        steps:
-          - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
-            inputs:
-              packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
-
-          - task: DotNetCoreCLI@2
-            displayName: ".Net Core - NuGet restore test projects only"
-            inputs:
-              command: "restore"
-              projects: "**/*Tests.csproj"
-              feedsToUse: config
-              noCache: true
-              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
-              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packagesForTests'
-
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet test - Perform Unit Tests"
-            inputs:
-              command: "test"
-              projects: "**/*UnitTests.csproj"
-              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml'
-              publishTestResults: true
-              testRunTitle: "UnitTests"
-
-          - task: PowerShell@2
-            displayName: "Generate code coverage report"
-            inputs:
-              targetType: filePath
-              filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
-              arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
-
-          - task: PublishBuildArtifacts@1
-            displayName: "Publish Code coverage"
-            inputs:
-              PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
-              ArtifactName: codecoveragereport
-
       - job: BuildAndPublishAPI
         workspace:
           clean: all
