@@ -18,8 +18,8 @@ export default class RadioNavigationalWarningsList
     constructor(page:Page)
     {
         this.page = page; 
-        this.warningType = this.page.locator("#WarningType");
-        this.year= this.page.locator("#Year");
+        this.warningType = this.page.locator("#warningDropDownId");
+        this.year= this.page.locator("#yearDropDownId");
         this.filter = this.page.locator("#BtnFilter");
         this.createNewRecordText= this.page.locator("#BtnCreate");
         this.btnFirst= this.page.locator("#BtnFirst");
