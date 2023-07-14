@@ -48,10 +48,129 @@ resources:
     ref: refs/heads/master
 
 stages:
+  - stage: CoverityScan
+    displayName: "Coverity Scan"
+    pool:
+      name: $(coverityPool)
+    jobs:
+    - job: Coverity
+      workspace:
+        clean: all
+      steps:
+        - checkout: self
+          submodules: recursive
+        - task: UseDotNet@2
+          displayName: 'Use .NET 6.0.x sdk'
+          inputs:
+            packageType: sdk
+            version: 6.0.x
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+        - checkout: covscan
+        - template: dotnet-cov.yml@covScan
+          parameters:
+            CovHostUrl: "$(CovHostUrl)"
+            CovUser: "$(CovUser)"
+            CovPwd: "$(CovPwd)"
+            StreamName: "maritime-safety-information"
+            BuildCommand: "$(Build.Repository.LocalPath)/maritime-safety-information/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.Web.csproj"
+            StripPath: $(Build.Repository.LocalPath)/maritime-safety-information
+            CoverityScanPath: $(Build.Repository.LocalPath)/coverityscan-buildtemplates
+
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (inc DependencyChecker, Dotnet Build , dotnet test and publish artifact )"
     dependsOn: []
     jobs:
+      - job: Dependencychecker
+        workspace:
+          clean: all
+        displayName: "Dependencychecker"
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore non test projects only"
+            inputs:
+              command: "restore"
+              projects: |
+                **/*.csproj
+                !**/*Tests.csproj
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packages'
+
+          - task: CmdLine@1
+            displayName: "Run OWASP Dependency Checker"
+            inputs:
+              filename: 'dependency-check.bat'
+              arguments: '--project "Maritime-Safety-Information - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact: OWASP Dependency Checker Report"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\DCReport'
+              ArtifactName: "OWASP Dependency Checker Report"
+
+          - task: PowerShell@1
+            displayName: "Fail Build if Dependency Check Finds Any Vulnerabilities"
+            inputs:
+              scriptType: inlineScript
+              arguments: '-ReportLocation $(Build.ArtifactStagingDirectory)\DCReport\*'
+              inlineScript: |
+                param($ReportLocation)
+                Invoke-VulnerabilityCheck -ReportLocation $ReportLocation
+
+      - job: UnitTestsAndCodeCoverage
+        workspace:
+          clean: all
+        displayName: "Dotnet Test and Publish Code Coverage"
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET 6.0.x sdk'
+            inputs:
+              packageType: sdk
+              useGlobalJson: true
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+          - task: DotNetCoreCLI@2
+            displayName: ".Net Core - NuGet restore test projects only"
+            inputs:
+              command: "restore"
+              projects: "**/*Tests.csproj"
+              feedsToUse: config
+              noCache: true
+              nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packagesForTests'
+
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet test - Perform Unit Tests"
+            inputs:
+              command: "test"
+              projects: "**/*UnitTests.csproj"
+              arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml'
+              publishTestResults: true
+              testRunTitle: "UnitTests"
+
+          - task: PowerShell@2
+            displayName: "Generate code coverage report"
+            inputs:
+              targetType: filePath
+              filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
+              arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Code coverage"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
+              ArtifactName: codecoveragereport
+
       - job: BuildAndPublishAPI
         workspace:
           clean: all
@@ -280,3 +399,164 @@ stages:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
               AzureSubscription: "Maritime Safety Information Dev - A.008.02"
+
+  - stage: QADeploy
+    displayName: "QAdeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-QA-TF-Variables"
+      - group: "Maritime-Safety-Information-QA-Variables"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
+      - deployment: QADeployTerraform
+        displayName: "QA - Deploy Terraform and Dotnet App"
+        environment: "Maritime-Safety-Information-QA"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
+
+                - task: AzureCLI@2
+                  displayName: "Set entity in table storage"
+                  inputs:
+                    azureSubscription: "Maritime Safety Information QA - A.008.02"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
+
+      - deployment: QADeployApp
+        dependsOn: QADeployTerraform
+        displayName: "QA - DACPAC and App Deployment"
+        pool: NautilusBuild
+        environment: "Maritime-Safety-Information-QA"
+        workspace:
+          clean: all
+        variables:
+          - name: WEB_APP_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: ADMIN_WEB_APP_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
+          - name: MsiWafUrl
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
+          - name: Admin_DNS_URL
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+          - name: WEB_APP_SLOT_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME']  ]
+          - name: WEB_APP_SLOT_HOST_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_HOST_NAME
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME']  ]
+          - name: webapp_rg
+            value: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.webapp_rg']  ]
+
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information QA - A.008.02"
+
+      - job: FunctionalAndAccessibilityTests
+        dependsOn:
+        - QADeployTerraform
+        - QADeployApp
+        pool: $(WindowsPool)
+        displayName: "QA Functional Automated And Accessibility Tests"
+        variables:
+         WEB_APP_NAME: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
+         url: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.MsiWafUrl']  ]
+         rnwAdminUrl: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+         webapp_rg: $[ dependencies.QADeployTerraform.outputs['QADeployTerraform.TerraformDeploy.webapp_rg']  ]
+         PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
+        workspace:
+         clean: all
+        steps:
+          - template: Deployment/templates/continuous-testing.yml
+            parameters:
+              AzureSubscription: "Maritime Safety Information QA - A.008.02"
+
+  - stage: Livedeploy
+    displayName: "Livedeploy (inc terraform, webapp deploy)"
+    variables:
+      - group: "Maritime-Safety-Information-Live-TF-Variables"
+      - group: "Maritime-Safety-Information-Live-Variables"
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
+    jobs:
+      - deployment: LiveDeployTerraform
+        displayName: "Live - deploy terraform and dotnet App"
+        environment: "Maritime-Safety-Information-Live"
+        pool: $(DeploymentPool)
+        container: ${{variables.Container}}
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-deployment.yml
+                  parameters:
+                    ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"
+
+                - task: AzureCLI@2
+                  displayName: "Set entity in table storage"
+                  inputs:
+                    azureSubscription: "Maritime Safety Information Live - A.008.02"
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
+                    arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
+
+      - deployment: LiveDeployApp
+        dependsOn: LiveDeployTerraform
+        displayName: "Live - DACPAC and App Deployment"
+        pool: NautilusBuild
+        environment: "Maritime-Safety-Information-Live"
+        workspace:
+          clean: all
+        variables:
+          - name: WEB_APP_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
+          - name: ADMIN_WEB_APP_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
+          - name: MsiWafUrl
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
+          - name: Admin_DNS_URL
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
+          - name: WEB_APP_SLOT_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME']  ]
+          - name: WEB_APP_SLOT_HOST_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME']  ]
+          - name: WEB_ADMIN_APP_SLOT_HOST_NAME
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME']  ]
+          - name: webapp_rg
+            value: $[ dependencies.LiveDeployTerraform.outputs['LiveDeployTerraform.TerraformDeploy.webapp_rg']  ]
+
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+                  parameters:
+                    AzureSubscription: "Maritime Safety Information Live - A.008.02"
+  
+      - job: PostDeploymentActions
+        dependsOn:
+        - LiveDeployApp                 
+        pool: $(WindowsPool)        
+        displayName: Post Deployment Actions
+        steps:
+          - template: Deployment/templates/retain-pipeline.yml
