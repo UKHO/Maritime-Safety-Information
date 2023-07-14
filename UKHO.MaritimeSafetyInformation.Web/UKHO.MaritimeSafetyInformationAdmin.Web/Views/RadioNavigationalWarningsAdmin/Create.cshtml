@@ -60,7 +60,7 @@
 </div>
 
 @{
-	const string modalConfirmCloseId = "modalConfirmCloseId";
+    const string modalConfirmCloseId = "modalConfirmCloseId";
     const string modalConfirmYesId = "modalConfirmYesId";
     const string modalConfirmNoId = "modalConfirmNoId";
 }
@@ -70,14 +70,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmation</h5>
-				<button id="@modalConfirmCloseId" type="button" class="btn-close" aria-label="Close"></button>
+                <button id="@modalConfirmCloseId" type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>@TempData["message"]</p>
             </div>
             <div class="modal-footer">
-				<button id="@modalConfirmYesId">Yes</button>
-				<button id="@modalConfirmNoId">No</button>
+                <button id="@modalConfirmYesId">Yes</button>
+                <button id="@modalConfirmNoId">No</button>
             </div>
         </div>
     </div>
@@ -91,11 +91,11 @@
 @{
     if (TempData["message"] != null) {
         <script nws-csp-add-nonce="true">
-			window.onload = function () {
-				document.getElementById('@modalConfirmCloseId').addEventListener('click', closeConfirmBox);
-				document.getElementById('@modalConfirmYesId').addEventListener('click', function() { isConfirm(true); });
-				document.getElementById('@modalConfirmNoId').addEventListener('click', function() { isConfirm(false); });
-			}
+            window.onload = function () {
+                document.getElementById('@modalConfirmCloseId').addEventListener('click', closeConfirmBox);
+                document.getElementById('@modalConfirmYesId').addEventListener('click', function() { isConfirm(true); });
+                document.getElementById('@modalConfirmNoId').addEventListener('click', function() { isConfirm(false); });
+            }
 
             document.getElementById("overlayId").classList.remove("d-none");
             document.getElementById("overlayId").classList.add("d-block");
@@ -118,6 +118,7 @@
                 }
                 closeConfirmBox();
             }
+        
         </script>
     }
 }

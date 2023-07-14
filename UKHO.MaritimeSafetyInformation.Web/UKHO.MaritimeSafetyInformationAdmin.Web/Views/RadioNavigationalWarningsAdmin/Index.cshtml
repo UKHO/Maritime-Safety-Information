@@ -101,10 +101,10 @@
 
         <div>
             <ul class="pagination">
-				@Html.Hidden("firstPageValueId", 1)
-				@Html.Hidden("previousPageValueId", Model.CurrentPageIndex - 1)
-				@Html.Hidden("nextPageValueId", Model.CurrentPageIndex + 1)
-				@Html.Hidden("lastPageValueId", Model.PageCount)
+                @Html.Hidden("firstPageValueId", 1)
+                @Html.Hidden("previousPageValueId", Model.CurrentPageIndex - 1)
+                @Html.Hidden("nextPageValueId", Model.CurrentPageIndex + 1)
+                @Html.Hidden("lastPageValueId", Model.PageCount)
                 <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnFirst" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" role="button">First</a></li>
                 <li class="page-item  @(isFirstPage ? "disabled" : "")"><a id="BtnPrevious" class="page-link" tabindex="@(isFirstPage ? "-1" : "0")" role="button">Previous</a></li>
                 <li class="page-item  @(isLastPage ? "disabled" : "")"><a id="BtnNext" class="page-link" tabindex="@(isLastPage ? "-1" : "0")" role="button">Next</a></li>
@@ -125,7 +125,7 @@
 </div>
 @{
     if (TempData["message"] != null) {
-		<script type="text/javascript" nws-csp-add-nonce="true">
+        <script type="text/javascript" nws-csp-add-nonce="true">
             alert(@Html.Raw(Json.Serialize(TempData["message"])));
         </script>
     }
