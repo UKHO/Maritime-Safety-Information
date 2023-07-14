@@ -6,6 +6,11 @@
     bool isLastPage = Model.CurrentPageIndex == Model.PageCount;
     ViewData["Title"] = "Radio Navigational Warnings Admin List";
 }
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/Custom/RadioNavigationalWarnings-admin.js" asp-append-version="true"></script>
+}
+
 <div class="container-fluid">
     <h1 id="headingLevelOne" class="mt-0">Radio Navigational Warnings Admin List</h1>
     <div class="row">
