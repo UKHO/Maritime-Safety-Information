@@ -47,8 +47,8 @@
                     <label asp-for="ExpiryDate" class="form-label">Expiry date and time</label>
                     <input asp-for="ExpiryDate" class="form-control" />
                 </div>
-                 <div class="mb-3">
-                     @Html.Hidden("SkipDuplicateReferenceCheck", "")
+                <div class="mb-3">
+                    @Html.Hidden("SkipDuplicateReferenceCheck", "")
                 </div>
                 <div class="mb-3">
                     <input type="submit" value="Create" id="btnCreate" class="primary me-4" />
@@ -59,25 +59,30 @@
     </div>
 </div>
 
-<div class="modal overlay d-none" tabindex="-1" id="overlayId" >
+@{
+	const string modalConfirmCloseId = "modalConfirmCloseId";
+    const string modalConfirmYesId = "modalConfirmYesId";
+    const string modalConfirmNoId = "modalConfirmNoId";
+}
+
+<div class="modal overlay d-none" tabindex="-1" id="overlayId">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmation</h5>
-                <button type="button" onclick="closeConfirmBox()" class="btn-close" aria-label="Close"></button>
+				<button id="@modalConfirmCloseId" type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>@TempData["message"]</p>
             </div>
             <div class="modal-footer">
-                <button onclick="isConfirm(true)">Yes</button>
-                <button onclick="isConfirm(false)">No</button>
+				<button id="@modalConfirmYesId">Yes</button>
+				<button id="@modalConfirmNoId">No</button>
             </div>
         </div>
     </div>
 </div>
-<div class="modal-backdrop d-none" id="backdropId" ></div>
-
+<div class="modal-backdrop d-none" id="backdropId"></div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -85,7 +90,13 @@
 
 @{
     if (TempData["message"] != null) {
-        <script>
+        <script nws-csp-add-nonce="true">
+			window.onload = function () {
+				document.getElementById('@modalConfirmCloseId').addEventListener('click', closeConfirmBox);
+				document.getElementById('@modalConfirmYesId').addEventListener('click', function() { isConfirm(true); });
+				document.getElementById('@modalConfirmNoId').addEventListener('click', function() { isConfirm(false); });
+			}
+
             document.getElementById("overlayId").classList.remove("d-none");
             document.getElementById("overlayId").classList.add("d-block");
             document.getElementById("backdropId").classList.remove("d-none");
