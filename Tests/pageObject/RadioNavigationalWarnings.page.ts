@@ -53,8 +53,8 @@ export default class RadioNavigationalWarnings
         this.edit=this.page.locator("[id^='Edit'] > a");
         this.expiryDate=this.page.locator("#ExpiryDate");
         this.alertMessage=this.page.locator(".modal-body");
-        this.confirmAlertNo=this.page.locator("button[onclick = 'isConfirm(false)']");
-        this.confirmAlertYes=this.page.locator("button[onclick = 'isConfirm(true)']");
+        this.confirmAlertNo=this.page.locator("#modalConfirmNoId");
+        this.confirmAlertYes=this.page.locator("#modalConfirmYesId");
     }
 
     public async SelectRadioNavigationalWarning()

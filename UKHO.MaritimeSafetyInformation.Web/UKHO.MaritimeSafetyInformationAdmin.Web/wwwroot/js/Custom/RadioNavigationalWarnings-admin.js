@@ -2,8 +2,8 @@
 var yearSelectedValue;
 
 window.onload = function () {
-    document.getElementById('warningDropDownId').addEventListener('change', WarningTypeValueChange);
-    document.getElementById('yearDropDownId').addEventListener('change', YearValueChange);
+    document.getElementById('WarningType').addEventListener('change', WarningTypeValueChange);
+    document.getElementById('Year').addEventListener('change', YearValueChange);
 
     let firstPageValue = document.getElementById('firstPageValueId').value;
     let previousPageValue = document.getElementById('previousPageValueId').value;
@@ -18,16 +18,16 @@ window.onload = function () {
 }
 
 function WarningTypeValueChange() {
-    warningTypeSelectedValue = $("#warningDropDownId").val();
+    warningTypeSelectedValue = $("#WarningType").val();
 }
 
 function YearValueChange() {
-    yearSelectedValue = $("#yearDropDownId").val();
+    yearSelectedValue = $("#Year").val();
 }
 
 function RnwFilterList(pageSelectedIndex) {
-    warningTypeSelectedValue = $("#warningDropDownId").val();
-    yearSelectedValue = $("#yearDropDownId").val();
+    warningTypeSelectedValue = $("#WarningType").val();
+    yearSelectedValue = $("#Year").val();
 
     if (yearSelectedValue == undefined) {
         yearSelectedValue = null;

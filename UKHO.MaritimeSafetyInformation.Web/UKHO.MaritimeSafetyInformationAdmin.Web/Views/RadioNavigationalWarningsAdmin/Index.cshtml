@@ -11,11 +11,11 @@
     <div class="row">
         <div class="col-md-auto mb-3">
             <label class="form-label" for="WarningType">Warning Type</label>
-            @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"Select Warning Type", new { @class = "form-select", id = "warningDropDownId" } )
+            @Html.DropDownListFor(model => model.WarningType,ViewBag.WarningTypes as SelectList,"Select Warning Type", new { @class = "form-select" } )
         </div>
         <div class="col-md-auto mb-3">
             <label class="form-label" for="Year">Year</label>
-            @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"Select Year",  new { @class = "form-select", id = "yearDropDownId" } )
+            @Html.DropDownListFor(model => model.Year,ViewBag.Years as SelectList,"Select Year",  new { @class = "form-select" } )
         </div>
         <div class="col-md-auto mb-3">
             <button id="BtnFilter" type="button" class="primary inline-btn">Filter</button>
