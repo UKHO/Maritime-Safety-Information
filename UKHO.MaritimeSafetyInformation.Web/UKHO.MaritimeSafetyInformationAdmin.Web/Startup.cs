@@ -1,16 +1,17 @@
-﻿using Azure.Identity;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Security.Claims;
+using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Security.Claims;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
@@ -89,29 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                               IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {
             ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseExceptionHandler("/error");
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=RadioNavigationalWarningsAdmin}/{action=Index}/{id?}");
-                endpoints.MapHealthChecks("/health");
-            });
+            app.ConfigureRequest("RadioNavigationalWarningsAdmin", "Index", env.IsDevelopment());
         }
 
         protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
@@ -133,7 +112,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             return builder.Build();
         }
 
-        [SuppressMessage("Code Smell", "S1172:Unused method parameters should be removed", Justification = "httpContextAccessor is used in action delegate")]
         private void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
                                       IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {
@@ -177,10 +155,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                                      });
             }
 
-#if (DEBUG)
+#if DEBUG
             //Add file based logger for development
             loggerFactory.AddFile(configuration.GetSection("Logging"));
-#endif   
+#endif
 
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);

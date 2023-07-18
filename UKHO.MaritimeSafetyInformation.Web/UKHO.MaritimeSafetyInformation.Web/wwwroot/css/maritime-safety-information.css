@@ -361,10 +361,20 @@
 .rnw-allwarnings-table tbody tr td.td-1 {
   flex-basis: 60%;
 }
+.rnw-allwarnings-table tbody tr td.td-1-hide {
+  flex-basis: 60%;
+  display: none;
+}
 @media screen and (max-width: 576px) {
   .rnw-allwarnings-table tbody tr td.td-1 {
     flex-basis: 71%;
   }
+}
+@media screen and (max-width: 576px) {
+    .rnw-allwarnings-table tbody tr td.td-1-hide {
+        flex-basis: 71%;
+        display: none;
+    }
 }
 .rnw-allwarnings-table tbody tr td.td-2 {
   flex-basis: 90%;

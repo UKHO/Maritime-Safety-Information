@@ -7,9 +7,9 @@
 }
 
 @section Scripts
-    {
-<script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
-    }
+{
+    <script type="text/javascript" src="@Url.Content("~/js/Custom/NoticesToMariners.js")"></script>
+}
 
 @{
     var partnerList = ViewBag.HasError ? new List<ShowFilesResponseModel>() : Model.ShowFilesResponseList.Where(x => x.IsDistributorUser.Equals(true)).ToList();
@@ -21,15 +21,15 @@
 
 <div class="tab-content" id="nmTabContent">
 
-    <input type="hidden" id="IsYearAndWeekAttributesCached" value = @Model.IsYearAndWeekAttributesCached />
-    <input type="hidden" id="IsWeeklyBatchResponseCached" value = @Model.IsWeeklyBatchResponseCached />
+    <input type="hidden" id="IsYearAndWeekAttributesCached" value="@Model.IsYearAndWeekAttributesCached" />
+    <input type="hidden" id="IsWeeklyBatchResponseCached" value="@Model.IsWeeklyBatchResponseCached" />
 
     <div class="tab-pane fade show active" id="weekly" role="tabpanel">
         @using (Html.BeginForm("Index", "NoticestoMariners", FormMethod.Post))
         {
-            <input type="hidden" id="hdnRequestType" value="Weekly" />
-            <input type="hidden" id="hdnYear" value="@ViewData["Year"]" />
-            <input type="hidden" id="hdnWeek" value="@ViewData["Week"]" />
+            <input type="hidden" id="hdnRequestType" value="Weekly"/>
+            <input type="hidden" id="hdnYear" value="@ViewData["Year"]"/>
+            <input type="hidden" id="hdnWeek" value="@ViewData["Week"]"/>
             <div class="row mb-3">
                 <div class="col-md-3 mb-3">
                     <label for="ddlYears" class="form-label">Select year</label>
@@ -48,27 +48,31 @@
         }
         <div class="row">
             <div class="col">
-                @if (@Model != null && @Model.ShowFilesResponseList != null && !ViewBag.HasError)
+                @if (Model != null && Model.ShowFilesResponseList != null && !ViewBag.HasError)
                 {
                     @if (ViewBag.IsDistributor)
                     {
-                        { ViewBag.TableTitle = "Partner"; }
-                        <partial name="ShowWeeklyFilesList" model="@partnerList" />
-                        { ViewBag.TableTitle = "Public"; }
+                        {
+                            ViewBag.TableTitle = "Partner";
+                        }
+                        <partial name="ShowWeeklyFilesList" model="@partnerList"/>
+                        {
+                            ViewBag.TableTitle = "Public";
+                        }
                     }
-                    <partial name="ShowWeeklyFilesList" model="@publicList" />
+                    <partial name="ShowWeeklyFilesList" model="@publicList"/>
                 }
                 else
                 {
-                    <partial name="_Error" />
+                    <partial name="_Error"/>
                 }
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript">
-    var serverData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.YearAndWeekList));
+<script type="text/javascript" nws-csp-add-nonce="true">
+    var serverData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.YearAndWeekList));
     window.onload = function () {
         LoadData(serverData);
     }

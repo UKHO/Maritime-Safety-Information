@@ -35,7 +35,7 @@ else
                                 @Html.DisplayNameFor(model => model.Description)
                             </th>
                             <th class="th-4 justify-content-center" role="cell">
-                                <input type="button" id="select_button" class="select-all-button" value="Select all" onClick="do_Selection()" />
+                                <input type="button" id="select_button" class="select-all-button" value="Select all" />
                             </th>
                             <th class="th-5 justify-content-center" role="cell">
                                 Select
@@ -49,7 +49,7 @@ else
                         @foreach (var item in Model)
                         {
                             <tr class="@Html.DisplayFor(modelItem => item.WarningType[0])">
-                                <td id="Id_@i" class="td-1" style="display:none">
+                                <td id="Id_@i" class="td-1-hide">
                                     @Html.DisplayFor(modelItem => item.Id)
                                 </td>
                                 <td id="Reference_@i" class="td-1">
@@ -68,7 +68,7 @@ else
                                     </button>
                                 </td>
                                 <td id="checkbox_@i" class="td-5 justify-content-center">
-                                    <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" onchange="enableDisableShowSelection()" aria-label="@Html.DisplayNameFor(model => model.Reference) for @Html.DisplayFor(modelItem => item.Reference)" />
+                                    <input id="selectCheckbox_@i" warning-id="@Html.DisplayFor(modelItem => item.Id)" type="checkbox" name="checkbox" class="form-check-input checkbox_warning" aria-label="@Html.DisplayNameFor(model => model.Reference) for @Html.DisplayFor(modelItem => item.Reference)" />
                                 </td>
                             </tr>
                             <tr id="collapse_@i" class="accordion-collapse @Html.DisplayFor(modelItem => item.WarningType[0]) collapse" data-bs-parent="#accordionAllwarning">
@@ -103,7 +103,7 @@ else
                 @using (Html.BeginForm("ShowSelection", "RadioNavigationalWarnings", FormMethod.Post))
                 {
                     <input type="hidden" id="showSelectionId" name="showSelectionId" value="">
-                    <button disabled="disabled" id="BtnShowSelection" type="submit" onclick="showSelection()">Show selection</button>
+                    <button disabled="disabled" id="BtnShowSelection" type="submit">Show selection</button>
                 }
             </div>
         </div>

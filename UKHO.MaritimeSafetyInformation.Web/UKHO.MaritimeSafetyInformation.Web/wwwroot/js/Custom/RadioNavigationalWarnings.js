@@ -5,6 +5,17 @@
     }
 }
 
+window.onload = function () {
+    document.getElementById('select_button').addEventListener('click', do_Selection);
+    var checkboxes = document.getElementsByName('checkbox');
+
+    for (let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('change', enableDisableShowSelection);
+    }
+
+    document.getElementById('BtnShowSelection').addEventListener('click', showSelection);
+}
+
 function do_Selection() {
     var checkboxes = document.getElementsByName('checkbox');
     var button = document.getElementById('select_button');
