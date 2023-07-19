@@ -5,6 +5,7 @@ import RadioNavigationalWarningsListEndUser from '../../pageObject/RadioNavigati
 test.describe("Maritime Safety Information Radio Navigational Warnings About Page Functional Test Scenarios", () => {
     let rnwListEndUser: RadioNavigationalWarningsListEndUser;
     test.beforeEach(async ({ page }) => {
+        test.slow();
         await page.goto(app.url);
         rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
         await rnwListEndUser.goToRadioWarning();
