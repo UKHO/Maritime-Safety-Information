@@ -145,19 +145,23 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
-    let tempValue = await this.showSelection.getAttribute("value");
-    console.log('XXX: ' + tempValue);
-    //expect(this.showSelection.getAttribute("value")).toBe({});
+    let currentValue = await this.showSelection.getAttribute("value");
+    expect(currentValue).toBe('');
+
     await this.selectAll.click({ force: true });
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
-    tempValue = await this.showSelection.getAttribute("value");
-    console.log('XXX: ' + tempValue);
-    //expect(this.showSelection.getAttribute("value")).not.toBe({});
+    currentValue = await this.showSelection.getAttribute("value");
+    expect(currentValue).not.toBe('');
+
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
-    tempValue = await this.showSelection.getAttribute("value");
-    console.log('XXX: ' + tempValue);
-    //expect(this.showSelection.getAttribute("value")).toBe({});
+    await this.selectAll.click({ force: true });
+    expect(this.selectCheckBox.first().isChecked()).not.toBeTruthy();
+    currentValue = await this.showSelection.getAttribute("value");
+    expect(currentValue).toBe('');
+
+    await this.page.waitForLoadState('domcontentloaded')
+    expect(await this.selectAll.inputValue()).toEqual("Select all");
   }
 
   public async verifySelectOptionCheckBox() {
