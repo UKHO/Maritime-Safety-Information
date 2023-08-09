@@ -103,16 +103,16 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifyTableViewDetailsUrl() {
     const viewDetails = await this.page.$('[id^="Viewdetails"] > button > span.view_details');
-    const beforeRefrence = await (await this.page.$('[id^="Reference"]')).innerText();
+    const beforeReference = await (await this.page.$('[id^="Reference"]')).innerText();
     const beforeDatetime = await (await this.page.$('[id^="DateTimeGroupRnwFormat"]')).innerText();
     const beforeViewDetails = await (await this.page.$('[id^="Viewdetails"] > button')).getAttribute("aria-expanded");
     expect(beforeViewDetails).toEqual("false");
     await viewDetails.click({ force: true });
     const newDetails = await (await this.page.$('[id^="Viewdetails"] > button')).getAttribute("aria-expanded");
     expect(newDetails).toBeTruthy();
-    const afterRefrence = await (await this.page.$('[id^="Details_Reference"]')).innerText();
+    const afterReference = await (await this.page.$('[id^="Details_Reference"]')).innerText();
     const afterDateTime = await (await this.page.$('[id^="Details_DateTimeGroupRnwFormat"]')).innerText();
-    expect(beforeRefrence).toEqual(afterRefrence);
+    expect(beforeReference).toEqual(afterReference);
     expect(beforeDatetime).toEqual(afterDateTime);
   }
 
@@ -145,12 +145,13 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
+    expect(this.showSelection).not.toHaveValue();
     await this.selectAll.click({ force: true });
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
-    expect(this.showSelection).not.toBeEmpty();
+    expect(this.showSelection).toHaveValue();
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
-    expect(this.showSelection).toBeEmpty();
+    expect(this.showSelection).not.toHaveValue();
   }
 
   public async verifySelectOptionCheckBox() {
@@ -206,4 +207,4 @@ export default class RadioNavigationalWarningsListEndUser {
     const rnwHeader = (await this.aboutRNW.last().innerText()).toString();
     await this.ImportantBlock(rnwHeader)
   }
-}  
+}

@@ -64,7 +64,7 @@ steps:
       condition: succeededOrFailed()
       displayName: 'Zip FT screenshots and video'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/test-results/'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Tests/'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(System.DefaultWorkingDirectory)/FTmedia.zip'
@@ -96,7 +96,7 @@ steps:
       condition: succeededOrFailed()
       displayName: 'Zip AT screenshots and video'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/test-results/'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Tests/'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(System.DefaultWorkingDirectory)/ATmedia.zip'
