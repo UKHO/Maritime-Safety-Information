@@ -145,6 +145,8 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
+    let tempValue = this.showSelection.getAttribute("value");
+    console.log(tempValue);
     expect(this.showSelection.getAttribute("value")).toBe({});
     await this.selectAll.click({ force: true });
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
