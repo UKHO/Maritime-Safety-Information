@@ -145,13 +145,13 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
-    expect(this.showSelection).not.toHaveValue();
+    expect(this.showSelection.getAttribute("value")).toBeEmpty();
     await this.selectAll.click({ force: true });
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
-    expect(this.showSelection).toHaveValue();
+    expect(this.showSelection.getAttribute("value")).not.toBeEmpty();
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
-    expect(this.showSelection).not.toHaveValue();
+    expect(this.showSelection.getAttribute("value")).toBeEmpty();
   }
 
   public async verifySelectOptionCheckBox() {

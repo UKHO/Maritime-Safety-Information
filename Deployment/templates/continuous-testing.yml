@@ -60,23 +60,6 @@ steps:
       displayName: 'Run Functional Tests'
       workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
-    - task: ArchiveFiles@2
-      condition: succeededOrFailed()
-      displayName: 'Zip FT screenshots and video'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Tests/'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(System.DefaultWorkingDirectory)/FTmedia.zip'
-        replaceExistingArchive: true
-
-    - task: PublishBuildArtifacts@1
-      condition: succeededOrFailed()
-      displayName: 'Publish FT error media'
-      inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/FTmedia.zip'
-        ArtifactName: 'FT output'
-
     - task: PublishTestResults@2
       condition: succeededOrFailed()
       inputs:
@@ -91,24 +74,7 @@ steps:
        npm run test:a11y
       displayName: 'Run Accessibility Tests'
       workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
-
-    - task: ArchiveFiles@2
-      condition: succeededOrFailed()
-      displayName: 'Zip AT screenshots and video'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Tests/'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(System.DefaultWorkingDirectory)/ATmedia.zip'
-        replaceExistingArchive: true
-
-    - task: PublishBuildArtifacts@1
-      condition: succeededOrFailed()
-      displayName: 'Publish AT error media'
-      inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/ATmedia.zip'
-        ArtifactName: 'AT output'
-
+          
     - task: PublishTestResults@2
       condition: succeededOrFailed()
       inputs:
