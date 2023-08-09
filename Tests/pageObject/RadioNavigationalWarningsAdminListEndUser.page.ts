@@ -145,18 +145,18 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
-    let tempValue = this.showSelection.getAttribute("value");
-    console.log(tempValue);
+    let tempValue = await this.showSelection.getAttribute("value");
+    console.log('XXX: ' + tempValue);
     //expect(this.showSelection.getAttribute("value")).toBe({});
     await this.selectAll.click({ force: true });
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
-    tempValue = this.showSelection.getAttribute("value");
-    console.log(tempValue);
+    tempValue = await this.showSelection.getAttribute("value");
+    console.log('XXX: ' + tempValue);
     //expect(this.showSelection.getAttribute("value")).not.toBe({});
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
-    tempValue = this.showSelection.getAttribute("value");
-    console.log(tempValue);
+    tempValue = await this.showSelection.getAttribute("value");
+    console.log('XXX: ' + tempValue);
     //expect(this.showSelection.getAttribute("value")).toBe({});
   }
 
