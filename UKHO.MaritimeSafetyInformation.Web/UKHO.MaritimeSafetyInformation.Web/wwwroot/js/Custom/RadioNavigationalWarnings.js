@@ -6,7 +6,7 @@
 }
 
 window.onload = function () {
-    document.getElementById('select_button').addEventListener('click', do_Selection);
+    //document.getElementById('select_button').addEventListener('click', do_Selection);
     var checkboxes = document.getElementsByName('checkbox');
 
     for (let i = 0; i < checkboxes.length; i++) {
@@ -185,6 +185,8 @@ select_button.addEventListener("click", function (event) {
         selectedIds = [];
     }
     document.getElementById('showSelectionId').value = selectedIds;
+
+    do_Selection();
 })
 
 initEvents();
