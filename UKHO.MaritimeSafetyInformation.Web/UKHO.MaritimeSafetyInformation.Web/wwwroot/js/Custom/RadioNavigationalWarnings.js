@@ -176,6 +176,8 @@ function initEvents() {
 }
 
 select_button.addEventListener("click", function (event) {
+    do_Selection();
+
     if (event.target.value === "Clear all") {
         selectedIds = Array.from(document.querySelectorAll(".checkbox_warning")).map(function (element) {
             return element.getAttribute("warning-id");
@@ -185,8 +187,6 @@ select_button.addEventListener("click", function (event) {
         selectedIds = [];
     }
     document.getElementById('showSelectionId').value = selectedIds;
-
-    do_Selection();
 })
 
 initEvents();
