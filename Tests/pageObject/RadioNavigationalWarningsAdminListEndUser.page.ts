@@ -15,6 +15,7 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly navAreaEndUser: Locator;
   readonly ukCostalEnduser: Locator;
   readonly tableHeader: Locator;
+  readonly showSelection: Locator;
   readonly selectCheckBox: Locator;
   readonly btnShowSelection: Locator;
   readonly selectAll: Locator;
@@ -42,6 +43,7 @@ export default class RadioNavigationalWarningsListEndUser {
     this.allWarningEndUser = this.page.locator('#allwarnings-tab')
     this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
     this.ukCostalEnduser = this.page.locator('#ukcoastal-tab')
+    this.showSelection = this.page.locator('#showSelectionId')
     this.selectCheckBox = this.page.locator("[id^='checkbox'] > input")
     this.btnShowSelection = this.page.locator("#BtnShowSelection")
     this.selectAll = this.page.locator('#select_button')
@@ -145,9 +147,12 @@ export default class RadioNavigationalWarningsListEndUser {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
     await this.selectAll.click({ force: true });
     expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
+    expect(this.showSelection.textContent !== null && this.showSelection.textContent !== '');
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
+    expect(this.showSelection.textContent === null || this.showSelection.textContent === '');
   }
+
   public async verifySelectOptionCheckBox() {
     await this.selectAll.click({ force: true });
     expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
