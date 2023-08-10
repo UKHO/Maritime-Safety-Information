@@ -149,14 +149,14 @@ export default class RadioNavigationalWarningsListEndUser {
     expect(currentValue).toBe('');
 
     await this.selectAll.click({ force: true });
-    expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
+    expect(await this.selectCheckBox.first().isChecked()).toBeTruthy();
     currentValue = await this.showSelection.getAttribute("value");
     expect(currentValue).not.toBe('');
 
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
     await this.selectAll.click({ force: true });
-    expect(this.selectCheckBox.first().isChecked()).not.toBeTruthy();
+    expect(await this.selectCheckBox.first().isChecked()).not.toBeTruthy();
     currentValue = await this.showSelection.getAttribute("value");
     expect(currentValue).toBe('');
 
