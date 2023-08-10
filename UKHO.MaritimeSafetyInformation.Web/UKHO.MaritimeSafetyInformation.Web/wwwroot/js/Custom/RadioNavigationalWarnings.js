@@ -6,7 +6,6 @@
 }
 
 window.onload = function () {
-    document.getElementById('select_button').addEventListener('click', do_Selection);
     var checkboxes = document.getElementsByName('checkbox');
 
     for (let i = 0; i < checkboxes.length; i++) {
@@ -22,12 +21,14 @@ function do_Selection() {
 
     if (button.value == 'Select all') {
         for (var i in checkboxes) {
+            // Note - 'FALSE' means that the box will be ticked.
             checkboxes[i].checked = 'FALSE';
         }
         document.getElementById("BtnShowSelection").disabled = false;
         button.value = 'Clear all'
     } else {
         for (var i in checkboxes) {
+            // The means that the box won't be ticked.
             checkboxes[i].checked = '';
         }
         document.getElementById("BtnShowSelection").disabled = true;
@@ -176,6 +177,8 @@ function initEvents() {
 }
 
 select_button.addEventListener("click", function (event) {
+    do_Selection();
+
     if (event.target.value === "Clear all") {
         selectedIds = Array.from(document.querySelectorAll(".checkbox_warning")).map(function (element) {
             return element.getAttribute("warning-id");

@@ -15,6 +15,7 @@ export default class RadioNavigationalWarningsListEndUser {
   readonly navAreaEndUser: Locator;
   readonly ukCostalEnduser: Locator;
   readonly tableHeader: Locator;
+  readonly showSelection: Locator;
   readonly selectCheckBox: Locator;
   readonly btnShowSelection: Locator;
   readonly selectAll: Locator;
@@ -42,6 +43,7 @@ export default class RadioNavigationalWarningsListEndUser {
     this.allWarningEndUser = this.page.locator('#allwarnings-tab')
     this.navAreaEndUser = this.page.locator('#NAVAREA1-tab')
     this.ukCostalEnduser = this.page.locator('#ukcoastal-tab')
+    this.showSelection = this.page.locator('#showSelectionId')
     this.selectCheckBox = this.page.locator("[id^='checkbox'] > input")
     this.btnShowSelection = this.page.locator("#BtnShowSelection")
     this.selectAll = this.page.locator('#select_button')
@@ -101,16 +103,16 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifyTableViewDetailsUrl() {
     const viewDetails = await this.page.$('[id^="Viewdetails"] > button > span.view_details');
-    const beforeRefrence = await (await this.page.$('[id^="Reference"]')).innerText();
+    const beforeReference = await (await this.page.$('[id^="Reference"]')).innerText();
     const beforeDatetime = await (await this.page.$('[id^="DateTimeGroupRnwFormat"]')).innerText();
     const beforeViewDetails = await (await this.page.$('[id^="Viewdetails"] > button')).getAttribute("aria-expanded");
     expect(beforeViewDetails).toEqual("false");
     await viewDetails.click({ force: true });
     const newDetails = await (await this.page.$('[id^="Viewdetails"] > button')).getAttribute("aria-expanded");
     expect(newDetails).toBeTruthy();
-    const afterRefrence = await (await this.page.$('[id^="Details_Reference"]')).innerText();
+    const afterReference = await (await this.page.$('[id^="Details_Reference"]')).innerText();
     const afterDateTime = await (await this.page.$('[id^="Details_DateTimeGroupRnwFormat"]')).innerText();
-    expect(beforeRefrence).toEqual(afterRefrence);
+    expect(beforeReference).toEqual(afterReference);
     expect(beforeDatetime).toEqual(afterDateTime);
   }
 
@@ -143,24 +145,39 @@ export default class RadioNavigationalWarningsListEndUser {
 
   public async verifySelectOptionText() {
     expect(await this.selectAll.inputValue()).toEqual("Select all");
+    let currentValue = await this.showSelection.getAttribute("value");
+    expect(currentValue).toBe('');
+
     await this.selectAll.click({ force: true });
-    expect(this.selectCheckBox.first().isChecked()).toBeTruthy();
+    expect(await this.selectCheckBox.first().isChecked()).toBeTruthy();
+    currentValue = await this.showSelection.getAttribute("value");
+    expect(currentValue).not.toBe('');
+
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Clear all");
+    await this.selectAll.click({ force: true });
+    expect(await this.selectCheckBox.first().isChecked()).not.toBeTruthy();
+    currentValue = await this.showSelection.getAttribute("value");
+    expect(currentValue).toBe('');
+
+    await this.page.waitForLoadState('domcontentloaded')
+    expect(await this.selectAll.inputValue()).toEqual("Select all");
+    await this.selectAll.click({ force: true });
   }
+
   public async verifySelectOptionCheckBox() {
     await this.selectAll.click({ force: true });
     expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
-    const detailsRefrence = await this.refrence.first().innerText();
-    expect(detailsRefrence.length).toBeGreaterThan(0);
-    const beforeDetailsRefrence = await (await this.refrence.first().innerText()).trim();
+    const detailsReference = await this.refrence.first().innerText();
+    expect(detailsReference.length).toBeGreaterThan(0);
+    const beforeDetailsReference = await (await this.refrence.first().innerText()).trim();
     const beforeDetailsDateTimeGroupRnwFormat = await (await this.dateTimeGroupRnwFormat.first().innerText()).trim();
     await this.selectCheckBox.first().click();
     await this.btnShowSelection.click();
-    const afterDetailsRefrence = await (await this.detailsReference.first().innerText()).trim();
+    const afterDetailsReference = await (await this.detailsReference.first().innerText()).trim();
     const afterDetailsDateTimeGroupRnwFormat = await (await this.detailsDateTimeGroupRnwFormat.first().innerText()).trim();
     expect(beforeDetailsDateTimeGroupRnwFormat).toEqual(afterDetailsDateTimeGroupRnwFormat);
-    expect(beforeDetailsRefrence).toEqual(afterDetailsRefrence);
+    expect(beforeDetailsReference).toEqual(afterDetailsReference);
     await this.backToAllWarning.click();
   }
 
@@ -201,4 +218,4 @@ export default class RadioNavigationalWarningsListEndUser {
     const rnwHeader = (await this.aboutRNW.last().innerText()).toString();
     await this.ImportantBlock(rnwHeader)
   }
-}  
+}
