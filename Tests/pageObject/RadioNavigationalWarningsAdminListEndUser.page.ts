@@ -170,14 +170,14 @@ export default class RadioNavigationalWarningsListEndUser {
     expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
     const detailsReference = await this.refrence.first().innerText();
     expect(detailsReference.length).toBeGreaterThan(0);
-    const beforeDetailsRefrence = await (await this.refrence.first().innerText()).trim();
+    const beforeDetailsReference = await (await this.refrence.first().innerText()).trim();
     const beforeDetailsDateTimeGroupRnwFormat = await (await this.dateTimeGroupRnwFormat.first().innerText()).trim();
     await this.selectCheckBox.first().click();
     await this.btnShowSelection.click();
     const afterDetailsReference = await (await this.detailsReference.first().innerText()).trim();
     const afterDetailsDateTimeGroupRnwFormat = await (await this.detailsDateTimeGroupRnwFormat.first().innerText()).trim();
     expect(beforeDetailsDateTimeGroupRnwFormat).toEqual(afterDetailsDateTimeGroupRnwFormat);
-    expect(beforeDetailsRefrence).toEqual(afterDetailsReference);
+    expect(beforeDetailsReference).toEqual(afterDetailsReference);
     await this.backToAllWarning.click();
   }
 
