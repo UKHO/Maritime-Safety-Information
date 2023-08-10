@@ -162,21 +162,22 @@ export default class RadioNavigationalWarningsListEndUser {
 
     await this.page.waitForLoadState('domcontentloaded')
     expect(await this.selectAll.inputValue()).toEqual("Select all");
+    await this.selectAll.click({ force: true });
   }
 
   public async verifySelectOptionCheckBox() {
     await this.selectAll.click({ force: true });
     expect(await this.selectCheckBox.first().isEnabled()).toBeTruthy();
-    const detailsRefrence = await this.refrence.first().innerText();
-    expect(detailsRefrence.length).toBeGreaterThan(0);
+    const detailsReference = await this.refrence.first().innerText();
+    expect(detailsReference.length).toBeGreaterThan(0);
     const beforeDetailsRefrence = await (await this.refrence.first().innerText()).trim();
     const beforeDetailsDateTimeGroupRnwFormat = await (await this.dateTimeGroupRnwFormat.first().innerText()).trim();
     await this.selectCheckBox.first().click();
     await this.btnShowSelection.click();
-    const afterDetailsRefrence = await (await this.detailsReference.first().innerText()).trim();
+    const afterDetailsReference = await (await this.detailsReference.first().innerText()).trim();
     const afterDetailsDateTimeGroupRnwFormat = await (await this.detailsDateTimeGroupRnwFormat.first().innerText()).trim();
     expect(beforeDetailsDateTimeGroupRnwFormat).toEqual(afterDetailsDateTimeGroupRnwFormat);
-    expect(beforeDetailsRefrence).toEqual(afterDetailsRefrence);
+    expect(beforeDetailsRefrence).toEqual(afterDetailsReference);
     await this.backToAllWarning.click();
   }
 
