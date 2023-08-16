@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.EventGrid.Models;
+﻿using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Text;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -14,9 +13,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         private readonly IWebhookService _webhookService;
         private readonly ILogger<WebhookController> _logger;
 
-        public WebhookController(IHttpContextAccessor contextAccessor, 
-                                 ILogger<WebhookController> logger, 
-                                 IWebhookService webhookService) 
+        public WebhookController(IHttpContextAccessor contextAccessor,
+                                 ILogger<WebhookController> logger,
+                                 IWebhookService webhookService)
         : base(contextAccessor, logger)
         {
             _logger = logger;
@@ -48,20 +47,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             string payload = await reader.ReadToEndAsync();
 
             _logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Clear FSS search cache event started for _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
+
             if (string.IsNullOrEmpty(payload))
             {
                 _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload is null or empty for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
-            EventGridEvent eventGridEvent = new();
 
-            JsonConvert.PopulateObject(payload, eventGridEvent);
-            if (eventGridEvent.Data == null || eventGridEvent.Data.ToString() == "" || eventGridEvent.Data.ToString() == "{}")
+            var payloadExtract = new PayloadExtract();
+            JsonConvert.PopulateObject(payload, payloadExtract);
+
+            if (payloadExtract.Data == null || payloadExtract.Data.ToString() == "" || payloadExtract.Data.ToString() == "{}")
             {
                 _logger.LogError(EventIds.ClearFSSSearchCacheValidationEvent.ToEventId(), "Payload data is null for Enterprise event _X-Correlation-ID:{correlationId}", GetCurrentCorrelationId());
                 return GetCacheResponse();
             }
-            FSSNewFilesPublishedEventData data = (eventGridEvent.Data as JObject).ToObject<FSSNewFilesPublishedEventData>();
+
+            FSSNewFilesPublishedEventData data = (payloadExtract.Data as JObject).ToObject<FSSNewFilesPublishedEventData>();
 
             _logger.LogInformation(EventIds.ClearFSSSearchCacheEventStarted.ToEventId(), "Enterprise event data deserialized. Data:{data} and _X-Correlation-ID:{correlationId}", JsonConvert.SerializeObject(data), GetCurrentCorrelationId());
 
@@ -77,13 +79,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
             }
 
             bool isCacheDeleted = await _webhookService.DeleteBatchSearchResponseCacheData(data, GetCurrentCorrelationId());
+
             if (isCacheDeleted)
             {
                 _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Clear FSS search cache event completed for Product Type:{productType} with OK response and _X-Correlation-ID:{correlationId}", productType, GetCurrentCorrelationId());
             }
-            else {
+            else
+            {
                 _logger.LogInformation(EventIds.ClearFSSSearchCacheEventCompleted.ToEventId(), "Event triggered for different Product Type/Business Unit. Product Type:{productType} Business Unit: {businessUnit} and _X-Correlation-ID:{correlationId}", productType, data.BusinessUnit, GetCurrentCorrelationId());
             }
+
             return GetCacheResponse();
         }
     }
