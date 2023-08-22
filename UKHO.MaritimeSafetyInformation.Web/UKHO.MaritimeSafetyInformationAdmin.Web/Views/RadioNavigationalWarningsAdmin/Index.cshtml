@@ -106,7 +106,6 @@
 
         <div>
             <ul class="pagination">
-                @Html.Hidden("firstPageValueId", 1)
                 @Html.Hidden("previousPageValueId", Model.CurrentPageIndex - 1)
                 @Html.Hidden("nextPageValueId", Model.CurrentPageIndex + 1)
                 @Html.Hidden("lastPageValueId", Model.PageCount)

@@ -5,16 +5,16 @@ window.onload = function () {
     document.getElementById('WarningType').addEventListener('change', WarningTypeValueChange);
     document.getElementById('Year').addEventListener('change', YearValueChange);
 
-    let firstPageValue = document.getElementById('firstPageValueId').value;
-    let previousPageValue = document.getElementById('previousPageValueId').value;
-    let nextPageValue = document.getElementById('nextPageValueId').value;
-    let lastPageValue = document.getElementById('lastPageValueId').value;
+    let firstPageValue = 1;
+    let previousPageValue = document.getElementById('previousPageValueId')?.value;
+    let nextPageValue = document.getElementById('nextPageValueId')?.value;
+    let lastPageValue = document.getElementById('lastPageValueId')?.value;
 
     document.getElementById('BtnFilter').addEventListener('click', function () { RnwFilterList(firstPageValue); });
-    document.getElementById('BtnFirst').addEventListener('click', function () { RnwFilterList(firstPageValue); });
-    document.getElementById('BtnPrevious').addEventListener('click', function () { RnwFilterList(previousPageValue); });
-    document.getElementById('BtnNext').addEventListener('click', function () { RnwFilterList(nextPageValue); });
-    document.getElementById('BtnLast').addEventListener('click', function () { RnwFilterList(lastPageValue); });
+    document.getElementById('BtnFirst')?.addEventListener('click', function () { RnwFilterList(firstPageValue); });
+    document.getElementById('BtnPrevious')?.addEventListener('click', function () { RnwFilterList(previousPageValue); });
+    document.getElementById('BtnNext')?.addEventListener('click', function () { RnwFilterList(nextPageValue); });
+    document.getElementById('BtnLast')?.addEventListener('click', function () { RnwFilterList(lastPageValue); });
 }
 
 function WarningTypeValueChange() {
