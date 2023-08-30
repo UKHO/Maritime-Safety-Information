@@ -40,7 +40,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("/webhook/newfilespublished")]
         public virtual async Task<IActionResult> NewFilesPublished()
         {
