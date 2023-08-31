@@ -56,7 +56,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("/NoticesToMariners/Weekly")]
         public async Task<IActionResult> Index(int year, int week)
         {
@@ -88,7 +87,6 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ShowWeeklyFilesAsync(int year, int week)
         {
             try
