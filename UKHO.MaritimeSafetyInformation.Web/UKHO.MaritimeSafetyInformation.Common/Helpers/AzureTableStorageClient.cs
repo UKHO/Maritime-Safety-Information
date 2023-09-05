@@ -1,8 +1,6 @@
-﻿using Azure;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure;
 using Azure.Data.Tables;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
-using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Models.AzureTableEntities;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Helpers
@@ -10,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     [ExcludeFromCodeCoverage]
     public class AzureTableStorageClient : IAzureTableStorageClient
     {
-        private static async Task<TableClient> GetTableClient(string tableName, string storageAccountConnectionString) 
+        private static async Task<TableClient> GetTableClient(string tableName, string storageAccountConnectionString)
         {
             var serviceClient = new TableServiceClient(storageAccountConnectionString);
             TableClient tableClient = serviceClient.GetTableClient(tableName);
@@ -43,14 +41,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
             await tableClient.AddEntityAsync(customTableEntity);
         }
 
-        public async Task DeleteTablesAsync( List<string> tableNames, string storageAccountConnectionString)
+        public async Task DeleteTablesAsync(List<string> tableNames, string storageAccountConnectionString)
         {
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageAccountConnectionString);
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            foreach (var tableName in tableNames)
+            var tableServiceClient = new TableServiceClient(storageAccountConnectionString);
+
+            foreach (var tableClient in tableNames.Select(x => tableServiceClient.GetTableClient(x)))
             {
-                CloudTable _cloudTable = tableClient.GetTableReference(tableName);
-                await _cloudTable.DeleteIfExistsAsync();
+                await tableClient.DeleteAsync();
             }
         }
 
