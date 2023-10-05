@@ -1,4 +1,4 @@
-﻿using Ganss.XSS;
+﻿using Ganss.Xss;
 using Microsoft.Extensions.Options;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
