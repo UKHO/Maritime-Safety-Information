@@ -45,8 +45,12 @@ steps:
 
     - script: |
        npm ci
-       npx playwright install --with-deps
       displayName: 'npm restore'
+      workingDirectory: '$(Build.SourcesDirectory)/Tests'
+
+    - script: |
+       npx playwright install --with-deps
+      displayName: 'npx playwright install'
       workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
     - task: FileTransform@2
