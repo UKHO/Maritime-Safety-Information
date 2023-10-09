@@ -37,11 +37,10 @@ steps:
 
     - checkout: self
       condition: always()
-      
 
     - task: NodeTool@0
       inputs:
-       versionSpec: '14.x'
+       versionSpec: '18.x'
       displayName: 'Install Node.js'
 
     - script: |
