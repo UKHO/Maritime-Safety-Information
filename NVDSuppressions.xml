@@ -302,4 +302,34 @@
     <packageUrl regex="true">^pkg:nuget/System\.Security\.Cryptography\.X509Certificates@.*$</packageUrl>
     <vulnerabilityName>CVE-2017-11770</vulnerabilityName>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Azure.EventHubs:4.3.2
+   Impacts older versions of Azure AD
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Microsoft\.Azure\.EventHubs@.*$</packageUrl>
+    <cve>CVE-2021-42306</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Azure.Services.AppAuthentication:1.0.3
+   Impacts older versions of Azure AD
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Microsoft\.Azure\.Services\.AppAuthentication@.*$</packageUrl>
+    <cve>CVE-2021-42306</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Web.TokenAcquisition.dll
+   False positive - vulnerability in Microsoft Office software
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web\.TokenAcquisition@.*$</packageUrl>
+    <cve>CVE-2017-11826</cve>
+  </suppress>
 </suppressions>
