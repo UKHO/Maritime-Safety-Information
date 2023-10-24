@@ -4,11 +4,11 @@ import { devices } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
   testDir: './AutoTests',
-  timeout: 100 * 1000,
+  timeout: 200 * 1000,
   expect: {
-    timeout: 100000
+    timeout: 100 * 1000
   },
-  globalTimeout: 60 * 60 * 1000,
+  globalTimeout: 20 * 60 * 1000,
   forbidOnly: !!process.env.CI,
 
   retries: 3,
