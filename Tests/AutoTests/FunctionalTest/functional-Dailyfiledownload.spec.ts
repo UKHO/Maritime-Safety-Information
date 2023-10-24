@@ -10,11 +10,12 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
   let notice:noticeToMariner;
   let login:Login;
   test.beforeEach(async ({ page }) => {
-    test.slow();
-    await page.goto(app.url);
-    noticeFileDownload = new noticeToMarinerWeekDownload(page);
-    notice = new noticeToMariner(page);
-    login=new Login(page);
+      test.setTimeout(test.timeout + 60000);
+
+      await page.goto(app.url);
+      noticeFileDownload = new noticeToMarinerWeekDownload(page);
+      notice = new noticeToMariner(page);
+      login=new Login(page);
   });
 
   test('Should Goto Notices to Mariner Page for Daily download File', async ({ page, context }) => {
