@@ -30,13 +30,14 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
-    <PackageReference Include="Azure.Identity" Version="1.10.3" />
+    <PackageReference Include="Azure.Identity" Version="1.6.0" />
     <PackageReference Include="FluentValidation" Version="11.1.0" />
     <PackageReference Include="HtmlSanitizer" Version="8.0.723" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="6.0.21" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.21" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.43.1" />
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.0" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.25.0" />
     <PackageReference Include="NuGet.ProjectModel" Version="6.2.1" />
