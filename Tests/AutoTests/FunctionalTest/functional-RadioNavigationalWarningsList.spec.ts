@@ -8,7 +8,7 @@ test.describe("Goto maritime-safety-information Home Page", () => {
     let login: loginPage;
 
     test.beforeEach(async ({ page }) => {
-        test.slow(true);
+        test.setTimeout(120 * 1000);
         await page.goto(app.rnwAdminUrl);
         login = new loginPage(page);
         await login.adLogin(app.RNWAdminAutoTest_User, app.RNWAdminAutoTest_Pass);
