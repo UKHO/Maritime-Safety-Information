@@ -5,7 +5,6 @@ import homePage from '../../pageObject/Home.page';
 test.describe("Home Page For The Maritime Safety Information", () => {
   let home: homePage;
     test.beforeEach(async ({ page }) => {
-        test.setTimeout(test.timeout + 60000);
         await page.goto(app.url);
         home=new homePage(page);
   });

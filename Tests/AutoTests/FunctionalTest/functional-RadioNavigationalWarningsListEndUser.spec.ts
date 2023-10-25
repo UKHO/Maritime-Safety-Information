@@ -8,7 +8,6 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
   
 
     test.beforeEach(async ({ page }) => {
-        test.setTimeout(test.timeout + 60000);
  
         await page.goto(app.url);
         rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
