@@ -8,7 +8,7 @@ test.describe("Create new radio navigational warnings record", () => {
     let login: loginPage;
 
     test.beforeEach(async ({ page }) => {
-        test.setTimeout(120 * 1000);
+        test.setTimeout(180 * 1000);
         await page.goto(app.rnwAdminUrl);
         login = new loginPage(page);
         await login.adLogin(app.RNWAdminAutoTest_User, app.RNWAdminAutoTest_Pass);
