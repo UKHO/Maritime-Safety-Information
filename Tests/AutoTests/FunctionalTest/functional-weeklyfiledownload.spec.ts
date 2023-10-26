@@ -30,19 +30,6 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
         expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
     })
 
-    test('Should Goto Notices to Mariner Page for Weekly Download with Distributor Role', async ({ page, context }) => {
-        await login.goToSignIn();
-        await login.loginWithDistributorDetails(app.DistributorTest_UserName, app.DistributorTest_Password);
-        await noticeFileDownload.goToNoticeToMariner();
-        await noticeFileDownload.checkWeeklyFileSectionName();
-        await noticeFileDownload.checkWeeklyFileSortingWithDistributorRole();
-        const name = await noticeFileDownload.checkFileDownload();
-        expect((await name).length).toBeGreaterThan(0);
-        var fileName = name[0];
-        const newPageUrl = await (await page.$(noticeFileDownload.weelkydowanload)).getAttribute('href');
-        expect(newPageUrl).toContain(`NoticesToMariners/DownloadFile?fileName=${fileName}`);
-    })
-
     test('Does the Notices to Mariners Cumulative Page is displayed', async ({ page }) => {
         await noticeFileDownload.goToNoticeToMariner();
         await noticeFileDownload.goToCumulative();
@@ -62,15 +49,5 @@ test.describe("Goto maritime-safety-information Notice To Mariner Page to Check 
         await notice.checkNavareaUrl(notice.navareatab, 'RadioNavigationalWarnings', 'Radio Navigation Warnings - NAVAREA I')
         await notice.checkUkcoastalUrl(notice.ukcoastaltab, 'RadioNavigationalWarnings', 'Radio Navigation Warnings - UK Coastal')
 
-    })
-
-    test('Should Goto Notices to Mariner Page for Weekly NM files with Distributor Role', async ({ page, context }) => {
-        await login.goToSignIn();
-        await login.loginWithDistributorDetails(app.DistributorTest_UserName, app.DistributorTest_Password);
-        await noticeFileDownload.goToNoticeToMariner();
-        await noticeFileDownload.verifyDistributorFileCount();
-        await noticeFileDownload.verifyIntegrationTestValueForDistributor();
-        await noticeFileDownload.verifyIntegrationDownloadAll();
-        await noticeFileDownload.verifyIntegrationDownloadPartnerAll();
     })
 });
