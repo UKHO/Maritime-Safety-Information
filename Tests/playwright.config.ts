@@ -26,7 +26,7 @@ const config: PlaywrightTestConfig = {
     globalTimeout: 60 * 60 * 1000,
 
     /* control the maximum number of parallel worker processes - setting to one disables parallelism */
-    workers: process.env.CI ? 1 : undefined,
+    workers: 1,
 
     /* exit with an error if any tests or groups are marked as test.only() or test.describe.only() */
     forbidOnly: !!process.env.CI,
