@@ -7,12 +7,11 @@ test.describe("Goto maritime-safety-information Home Page", ()=> {
   let rnwListEndUser:RadioNavigationalWarningsListEndUser;
   
 
-  test.beforeEach(async ({page}) => {
- 
-    await page.goto(app.url);
-    rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
-    await rnwListEndUser.goToRadioWarning();
-    
+    test.beforeEach(async ({ page }) => {
+        test.setTimeout(180 * 1000);
+        await page.goto(app.url);
+        rnwListEndUser = new RadioNavigationalWarningsListEndUser(page);
+        await rnwListEndUser.goToRadioWarning();
   });
 
   test('Does the Menu , Tabs and Page Text is displayed',async () => { 

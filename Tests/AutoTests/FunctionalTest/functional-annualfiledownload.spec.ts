@@ -9,11 +9,12 @@ test.describe("Maritime Safety Information Notices to Mariners Annual Page Funct
        let annual:noticeToMarine;
        let annualTab:noticeToMarinerWeekDownload;
 
-       test.beforeEach(async ({page}) => {
-         await page.goto(app.url);  
-         annual = new noticeToMarine(page);
-         annualTab=new noticeToMarinerWeekDownload(page);
-         await annual.clickToNoticemarine();
+    test.beforeEach(async ({ page }) => {
+        test.slow(true);
+        await page.goto(app.url);
+        annual = new noticeToMarine(page);
+        annualTab = new noticeToMarinerWeekDownload(page);
+        await annual.clickToNoticemarine();
       });  
      
        

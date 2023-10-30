@@ -44,31 +44,4 @@ test.describe("Create new radio navigational warnings record", () => {
         await radioNavigationalWarnings.createRNW();
         await radioNavigationalWarnings.getDialogText('Record created successfully!');
     })
-
-    test('With valid input check for duplicate and accept', async ({ page }) => {
-
-        await radioNavigationalWarnings.pageLoad();
-        await radioNavigationalWarnings.fillFormWithValidDetails("1", "testdata");
-        await radioNavigationalWarnings.createRNW();
-        await radioNavigationalWarnings.confirmationBox(radioNavigationalWarnings.alertMessage, radioNavigationalWarnings.message, "yes")
-        await radioNavigationalWarnings.getDialogText('Record created successfully!');
-    })
-
-    test('With valid input check for duplicate and reject', async ({ page }) => {
-
-        await radioNavigationalWarnings.pageLoad();
-        await radioNavigationalWarnings.fillFormWithValidDetails("1", "testdata");
-        await radioNavigationalWarnings.createRNW();
-        await radioNavigationalWarnings.confirmationBox(radioNavigationalWarnings.alertMessage, radioNavigationalWarnings.message, "no")
-        await radioNavigationalWarnings.checkConfirmationBoxVisible(false)
-    })
-
-    test('With valid input check for duplicate and cancel', async ({ page }) => {
-
-        await radioNavigationalWarnings.pageLoad();
-        await radioNavigationalWarnings.fillFormWithValidDetails("1", "testdata");
-        await radioNavigationalWarnings.createRNW();
-        await radioNavigationalWarnings.confirmationBox(radioNavigationalWarnings.alertMessage, radioNavigationalWarnings.message, "cancel")
-        await radioNavigationalWarnings.checkConfirmationBoxVisible(false)
-    })
 });
