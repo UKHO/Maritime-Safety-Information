@@ -60,7 +60,7 @@ steps:
        jsonTargetFiles: 'appConfig.json'
 
     - script: |
-       npx playwright test --workers=1
+       npx playwright test --workers=2 --retries=3
       displayName: 'Run Functional Tests'
       workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
