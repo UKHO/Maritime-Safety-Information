@@ -302,12 +302,11 @@
     <packageUrl regex="true">^pkg:nuget/System\.Security\.Cryptography\.X509Certificates@.*$</packageUrl>
     <vulnerabilityName>CVE-2017-11770</vulnerabilityName>
   </suppress>
-
   <suppress>
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   false posative: fixed in 1.10.3
+   false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
@@ -317,7 +316,7 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   false posative: fixed in 1.10.3
+   false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
@@ -327,7 +326,7 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   false posative: fixed in 1.10.3
+   false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
@@ -337,7 +336,7 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity:1.10.3
-   false posative: fixed in 1.10.3
+   false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
@@ -347,7 +346,7 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity:1.10.3
-   false posative: fixed in 1.10.3
+   false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
