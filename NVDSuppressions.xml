@@ -311,9 +311,17 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
     <cpe>cpe:/a:microsoft:azure_identity_sdk</cpe>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity.dll
+   false positive: vulnerability fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
     <cpe>cpe:/a:microsoft:azure_sdk_for_.net</cpe>
   </suppress>
-  
   <suppress>
     <notes>
       <![CDATA[
