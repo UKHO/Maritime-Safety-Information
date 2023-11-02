@@ -186,9 +186,14 @@ export default class RadioNavigationalWarningsListEndUser {
     await this.btnShowSelection.click();
     await this.page.waitForLoadState();
     expect(this.print.isEnabled()).toBeTruthy();
-    expect((await this.print.innerText()).toString()).toContain("Print");
-  
+    expect((await this.print.innerText()).toString()).toContain("Print");       
+    const msgPromise = this.page.waitForEvent('console');
+    await this.print.click();
+    const msg = (await msgPromise);
+    expect((await msg.args()[0].jsonValue()).toString()).toContain("Print dialog is opened");    
+    this.page.waitForTimeout(5000)       
   }
+
   public async verifyNavareaAndUkCostalFilter(locator:Locator,text:string){
  
     await locator.click();

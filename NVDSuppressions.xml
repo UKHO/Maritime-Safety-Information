@@ -312,4 +312,22 @@
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
     <vulnerabilityName>CVE-2023-36414</vulnerabilityName>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
+    <cve>CVE-2023-36415</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity:1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
+    <cve>CVE-2023-36415</cve>
+  </suppress>
 </suppressions>
