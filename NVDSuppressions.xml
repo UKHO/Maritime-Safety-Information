@@ -302,11 +302,12 @@
     <packageUrl regex="true">^pkg:nuget/System\.Security\.Cryptography\.X509Certificates@.*$</packageUrl>
     <vulnerabilityName>CVE-2017-11770</vulnerabilityName>
   </suppress>
+
   <suppress>
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   false positive: vulnerability fixed in 1.10.3
+   false posative: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
@@ -316,7 +317,7 @@
     <notes>
       <![CDATA[
    file name: Azure.Identity.dll
-   false positive: vulnerability fixed in 1.10.3
+   false posative: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
@@ -325,11 +326,31 @@
   <suppress>
     <notes>
       <![CDATA[
+   file name: Azure.Identity.dll
+   false posative: fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
+    <cve>CVE-2023-36415</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
    file name: Azure.Identity:1.10.3
-   false positive: vulnerability fixed in 1.10.3
+   false posative: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2023-36415</cve>>
+    <cpe>cpe:/a:microsoft:azure_identity_sdk</cpe>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity:1.10.3
+   false posative: fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
+    <cve>CVE-2023-36415</cve>
   </suppress>
 </suppressions>
