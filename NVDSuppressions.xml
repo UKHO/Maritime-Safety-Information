@@ -305,11 +305,51 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Azure.Identity:1.6.0
-   Temp supression to test main
+   file name: Azure.Identity.dll
+   false positive: fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
+    <cpe>cpe:/a:microsoft:azure_identity_sdk</cpe>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity.dll
+   false positive: fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
+    <cpe>cpe:/a:microsoft:azure_sdk_for_.net</cpe>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity.dll
+   false positive: fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
+    <cve>CVE-2023-36415</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity:1.10.3
+   false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
-    <vulnerabilityName>CVE-2023-36414</vulnerabilityName>
+    <cpe>cpe:/a:microsoft:azure_identity_sdk</cpe>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity:1.10.3
+   false positive: fixed in 1.10.3
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
+    <cve>CVE-2023-36415</cve>
   </suppress>
 </suppressions>
