@@ -370,4 +370,13 @@
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
     <cve>CVE-2023-36415</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Serilog.Extensions.Logging.File.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Serilog\.Extensions\.Logging\.File@.*$</packageUrl>
+    <cve>CVE-2015-0897</cve>
+  </suppress>
 </suppressions>
