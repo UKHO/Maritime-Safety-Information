@@ -213,14 +213,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: System.Private.DataContractSerialization:4.3.0
-   ]]>
-    </notes>
-    <cve>CVE-2023-21538</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Various
    False positive - .NET Framework only
    ]]>
@@ -239,18 +231,19 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.Identity.Client.dll
-   ]]>
-    </notes>
-    <cve>CVE-2019-20138</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Microsoft.Identity.Web.TokenCache.dll
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web\.TokenCache@.*$</packageUrl>
+    <cve>CVE-2017-11826</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Web.TokenAcquisition.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web\.TokenAcquisition@.*$</packageUrl>
     <cve>CVE-2017-11826</cve>
   </suppress>
   <suppress>
@@ -269,15 +262,6 @@
     </notes>
     <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web@.*$</packageUrl>
     <cve>CVE-2017-11826</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Clients.ActiveDirectory:3.19.1
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Clients\.ActiveDirectory@.*$</packageUrl>
-    <cve>CVE-2021-42306</cve>
   </suppress>
   <suppress>
     <notes>
@@ -312,50 +296,12 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Azure.Identity.dll
-   false positive: fixed in 1.10.3
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2023-36415</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Azure.Identity:1.10.3
    false positive: fixed in 1.10.3
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
     <cpe>cpe:/a:microsoft:azure_identity_sdk</cpe>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Identity:1.10.3
-   false positive: fixed in 1.10.3
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2023-36415</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Identity.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2023-36415</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Azure.Identity:1.10.3
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
-    <cve>CVE-2023-36415</cve>
   </suppress>
   <suppress>
     <notes>
