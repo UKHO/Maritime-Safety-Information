@@ -37,16 +37,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="6.0.21" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.21" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.57.0" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="1.25.0" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.25.0" />
-    <PackageReference Include="NuGet.ProjectModel" Version="6.2.1" />
+    <PackageReference Include="NuGet.ProjectModel" Version="6.7.0" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
