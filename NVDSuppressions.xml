@@ -312,4 +312,11 @@
     <packageUrl regex="true">^pkg:generic/Serilog\.Extensions\.Logging\.File@.*$</packageUrl>
     <cve>CVE-2015-0897</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: Various Azure.
+   Refers to Azure CLI.
+   ]]></notes>
+    <cve>CVE-2023-36052</cve>
+  </suppress>
 </suppressions>
