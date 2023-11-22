@@ -319,4 +319,22 @@
    ]]></notes>
     <cve>CVE-2023-36052</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: GetDocument.Insider.dll
+   Fixed in latest version of .NET SDK >= 6.0.415
+   ]]></notes>
+    <packageUrl regex="true">^pkg:generic/GetDocument\.Insider@.*$</packageUrl>
+    <cve>CVE-2023-44487</cve>
+    <cve>CVE-2023-36558</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: dotnet-getdocument.dll
+   Fixed in latest version of .NET SDK >= 6.0.415
+   ]]></notes>
+    <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
+    <cve>CVE-2023-44487</cve>
+    <cve>CVE-2023-36558</cve>
+  </suppress>
 </suppressions>
