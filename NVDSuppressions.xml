@@ -313,28 +313,87 @@
     <cve>CVE-2015-0897</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: Various Azure.
    Refers to Azure CLI.
-   ]]></notes>
+   ]]>
+    </notes>
     <cve>CVE-2023-36052</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: GetDocument.Insider.dll
    Fixed in latest version of .NET SDK >= 6.0.415
-   ]]></notes>
+   ]]>
+    </notes>
     <packageUrl regex="true">^pkg:generic/GetDocument\.Insider@.*$</packageUrl>
     <cve>CVE-2023-44487</cve>
     <cve>CVE-2023-36558</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[
+    <notes>
+      <![CDATA[
    file name: dotnet-getdocument.dll
    Fixed in latest version of .NET SDK >= 6.0.415
-   ]]></notes>
+   ]]>
+    </notes>
     <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
     <cve>CVE-2023-44487</cve>
     <cve>CVE-2023-36558</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Various
+   False positive - refers to Drupal
+   ]]>
+    </notes>
+    <cve>CVE-2014-9152</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Threading.Tasks.Extensions.dll
+   False positive - applies to Android app
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/System\.Threading\.Tasks\.Extensions@.*$</packageUrl>
+    <cve>CVE-2020-22475</cve>
+    <cve>CVE-2022-39349</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Threading.Tasks.Extensions:Various
+   False positive - applies to Android app
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Threading\.Tasks\.Extensions@.*$</packageUrl>
+    <cve>CVE-2020-22475</cve>
+    <cve>CVE-2022-39349</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Threading.Tasks.dll
+   False positive - applies to Android app
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/System\.Threading\.Tasks@.*$</packageUrl>
+    <cve>CVE-2020-22475</cve>
+    <cve>CVE-2022-39349</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Threading.Tasks:Various
+   False positive - applies to Android app
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Threading\.Tasks@.*$</packageUrl>
+    <cve>CVE-2020-22475</cve>
+    <cve>CVE-2022-39349</cve>
   </suppress>
 </suppressions>
