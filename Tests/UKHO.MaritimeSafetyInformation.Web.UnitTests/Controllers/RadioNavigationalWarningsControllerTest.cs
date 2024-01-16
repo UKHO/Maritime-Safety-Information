@@ -45,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             Assert.That(result, Is.InstanceOf<IActionResult>());
             string actualView = ((ViewResult)result).ViewName;
             Assert.That(expectedView, Is.EqualTo(actualView));
-            Assert.That(string.IsNullOrEmpty(controller.ViewBag.LastModifiedDateTime), Is.False);
+            Assert.That(controller.ViewBag.LastModifiedDateTime, Is.Not.Empty);
             Assert.That(false, Is.EqualTo(controller.ViewBag.HasError));
         }
 
@@ -63,7 +63,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string actualView = ((ViewResult)result).ViewName;
             Assert.That(expectedView, Is.EqualTo(actualView));
             Assert.That(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
-            Assert.That(string.IsNullOrEmpty(controller.ViewBag.LastModifiedDateTime), Is.False);
+            Assert.That(controller.ViewBag.LastModifiedDateTime, Is.Not.Empty);
             Assert.That(true, Is.EqualTo(controller.ViewBag.HasError));
         }
 
@@ -73,7 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             A.CallTo(() => fakeRnwService.GetRadioNavigationalWarningsLastModifiedDateTime(A<string>.Ignored)).Returns(DateTime.UtcNow.ToString());
 
             IActionResult result = await controller.About();
-            Assert.That(string.IsNullOrEmpty(controller.ViewBag.LastModifiedDateTime), Is.False);
+            Assert.That(controller.ViewBag.LastModifiedDateTime, Is.Not.Empty);
             Assert.That(result, Is.InstanceOf<IActionResult>());
         }
 
@@ -114,7 +114,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string actualView = ((ViewResult)result).ViewName;
             Assert.That(expectedView, Is.EqualTo(actualView));
             Assert.That(true, Is.EqualTo(controller.ViewBag.HasError));
-            Assert.That(string.IsNullOrEmpty(controller.ViewBag.LastModifiedDateTime), Is.False);
+            Assert.That(controller.ViewBag.LastModifiedDateTime, Is.Not.Empty);
         }
     }
 }
