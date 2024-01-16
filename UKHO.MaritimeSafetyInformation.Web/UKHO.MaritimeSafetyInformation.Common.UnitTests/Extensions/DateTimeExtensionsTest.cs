@@ -19,7 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Extensions
         public void WhenCallRnwDateFormatWithNullDate_ThenReturnEmptyString()
         {
             string result = DateTimeExtensions.ToRnwDateFormat(null);
-            Assert.That(string.IsNullOrEmpty(result));
+            Assert.That(string.Empty, Is.EqualTo(result));
         }
     }
 }
