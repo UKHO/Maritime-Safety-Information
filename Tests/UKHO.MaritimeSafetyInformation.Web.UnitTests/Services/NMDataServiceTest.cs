@@ -1,9 +1,4 @@
-﻿using FakeItEasy;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +6,11 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using FakeItEasy;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using NUnit.Framework;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -24,31 +24,31 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class NMDataServiceTest
     {
-        private IFileShareService _fakefileShareService;
-        private ILogger<NMDataService> _fakeLogger;
-        private IAuthFssTokenProvider _fakeAuthFssTokenProvider;
-        private IHttpClientFactory _httpClientFactory;
-        private IFileShareServiceCache _fakeFileShareServiceCache;
-        private IOptions<CacheConfiguration> _fakeCacheConfiguration;
-        private IOptions<FileShareServiceConfiguration> _fileShareServiceConfig;
-        private IUserService _fakeUserService;
-        private NMDataService _nMDataService;
+        private IFileShareService fakeFileShareService;
+        private ILogger<NMDataService> fakeLogger;
+        private IAuthFssTokenProvider fakeAuthFssTokenProvider;
+        private IHttpClientFactory httpClientFactory;
+        private IFileShareServiceCache fakeFileShareServiceCache;
+        private IOptions<CacheConfiguration> fakeCacheConfiguration;
+        private IOptions<FileShareServiceConfiguration> fileShareServiceConfig;
+        private IUserService fakeUserService;
+        private NMDataService nMDataService;
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
         {
-            _fakefileShareService = A.Fake<IFileShareService>();
-            _fakeLogger = A.Fake<ILogger<NMDataService>>();
-            _fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
-            _httpClientFactory = A.Fake<IHttpClientFactory>();
-            _fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
-            _fakeFileShareServiceCache = A.Fake<IFileShareServiceCache>();
-            _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
-            _fakeUserService = A.Fake<IUserService>();
-            _nMDataService = new NMDataService(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
-                                               _fakeCacheConfiguration, _fakeUserService);
-            _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
+            fakeFileShareService = A.Fake<IFileShareService>();
+            fakeLogger = A.Fake<ILogger<NMDataService>>();
+            fakeAuthFssTokenProvider = A.Fake<IAuthFssTokenProvider>();
+            httpClientFactory = A.Fake<IHttpClientFactory>();
+            fileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
+            fakeFileShareServiceCache = A.Fake<IFileShareServiceCache>();
+            fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
+            fakeUserService = A.Fake<IUserService>();
+            nMDataService = new NMDataService(fakeFileShareService, fakeLogger, fakeAuthFssTokenProvider, httpClientFactory, fileShareServiceConfig, fakeFileShareServiceCache,
+                                               fakeCacheConfiguration, fakeUserService);
+            fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
         [Test]
@@ -57,17 +57,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForWeekly();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 2;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
         }
 
         [Test]
@@ -76,15 +76,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(0, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.AreEqual(false, showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(0, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(false, Is.EqualTo(showNMFilesResponseModel.IsBatchResponseCached));
         }
 
         [Test]
@@ -93,96 +93,96 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
-            Task<ShowNMFilesResponseModel> result = _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            Task<ShowNMFilesResponseModel> result = nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int dailyFilesDataCount = 2;
 
-            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
-            Assert.AreEqual(dailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
+            Assert.That(expectedRecordCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count));
+            Assert.That(dailyFilesDataCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count));
         }
 
         [Test]
         public async Task WhenGetDailyBatchDetailsFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
 
-            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
-            Assert.AreEqual(expectedDailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
+            Assert.That(expectedRecordCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count));
+            Assert.That(expectedDailyFilesDataCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count));
         }
 
         [Test]
         public async Task WhenCacheEnabledForGetDailyBatchDetailsFiles_ThenCacheReturnResponse()
         {
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
             BatchSearchResponseModel batchSearchResponseModel = new()
             {
                 BatchSearchResponse = GetDailyBatchSearchResponse()
             };
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
 
-            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
-            Assert.AreEqual(expectedDailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
-            Assert.IsTrue(showDailyFilesResponseListModel.IsDailyFilesResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count));
+            Assert.That(expectedDailyFilesDataCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count));
+            Assert.That(showDailyFilesResponseListModel.IsDailyFilesResponseCached);
         }
 
         [Test]
         public async Task WhenCacheEnabledForGetDailyBatchDetailsButDataNotInTable_ThenFSSReturnResponse()
         {
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
 
-            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
-            Assert.AreEqual(expectedDailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
-            Assert.IsFalse(showDailyFilesResponseListModel.IsDailyFilesResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count));
+            Assert.That(expectedDailyFilesDataCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count));
+            Assert.That(showDailyFilesResponseListModel.IsDailyFilesResponseCached, Is.False);
         }
 
         [Test]
@@ -190,21 +190,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 2022;
             const int week = 07;
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
-            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
             const int expectedRecordCount = 3;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
         }
 
         [Test]
@@ -212,21 +212,21 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 2022;
             const int week = 07;
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             BatchSearchResponseModel batchSearchResponseModel = new();
             batchSearchResponseModel.BatchSearchResponse = GetBatchSearchResponse();
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
+            A.CallTo(() => fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(batchSearchResponseModel);
 
             const int expectedRecordCount = 2;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
@@ -234,138 +234,138 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             const int year = 2022;
             const int week = 07;
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 3;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.IsBatchResponseCached, Is.False);
         }
 
         [Test]
         public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldExecuteCatch()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<ShowDailyFilesResponseListModel> result = _nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
+            Task<ShowDailyFilesResponseListModel> result = nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
         public void WhenGetDailyBatchDetailsFilesIsCalled_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
-                async delegate { await _nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
+                async delegate { await nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
         }
 
         [Test]
         public void WhenGetAllYearWeekIsCalledWithInvalidToken_ThenShouldReturnException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<YearWeekResponseDataModel> result = _nMDataService.GetAllYearWeek(CorrelationId);
-            Assert.IsTrue(result.IsFaulted);
+            Task<YearWeekResponseDataModel> result = nMDataService.GetAllYearWeek(CorrelationId);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
         public void WhenGetAllYearWeekIsCalled_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
-                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
+                async delegate { await nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
         public void WhenGetAllYearWeekIsCalledWithValidTokenNoYearWeekdata_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from File Share Service for request to search attribute year and week"),
-                async delegate { await _nMDataService.GetAllYearWeek(CorrelationId); });
+                async delegate { await nMDataService.GetAllYearWeek(CorrelationId); });
         }
 
         [Test]
         public async Task WhenGetAllYearWeekIsCalledWithValidToken_ThenShouldReturnYearWeekList()
         {
             const int expectedRecordCount = 3;
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
-            A.CallTo(() => _fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+            A.CallTo(() => fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
-            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            YearWeekResponseDataModel result = await nMDataService.GetAllYearWeek(CorrelationId);
 
-            Assert.IsNotEmpty(result.YearWeekModel);
-            Assert.AreEqual(result.YearWeekModel.Count, expectedRecordCount);
+            Assert.That(result.YearWeekModel?.Count > 0);
+            Assert.That(result.YearWeekModel.Count, Is.EqualTo(expectedRecordCount));
         }
 
         [Test]
         public async Task WhenCacheEnabledForYearWeek_ThenCacheReturnYearWeekList()
         {
             const int expectedRecordCount = 3;
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(GetBatchAttributesSearchModel());
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(GetBatchAttributesSearchModel());
 
-            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            YearWeekResponseDataModel result = await nMDataService.GetAllYearWeek(CorrelationId);
 
-            Assert.IsNotEmpty(result.YearWeekModel);
-            Assert.AreEqual(result.YearWeekModel.Count, expectedRecordCount);
-            Assert.IsTrue(result.IsYearAndWeekAttributesCached);
+            Assert.That(result.YearWeekModel?.Count > 0);
+            Assert.That(result.YearWeekModel.Count, Is.EqualTo(expectedRecordCount));
+            Assert.That(result.IsYearAndWeekAttributesCached);
         }
 
         [Test]
         public async Task WhenCacheEnabledForYearWeekButDataNotInTable_ThenFSSReturnYearWeekList()
         {
             const int expectedRecordCount = 3;
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
-            A.CallTo(() => _fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
 
-            YearWeekResponseDataModel result = await _nMDataService.GetAllYearWeek(CorrelationId);
+            YearWeekResponseDataModel result = await nMDataService.GetAllYearWeek(CorrelationId);
 
-            Assert.IsNotEmpty(result.YearWeekModel);
-            Assert.AreEqual(result.YearWeekModel.Count, expectedRecordCount);
-            Assert.IsFalse(result.IsYearAndWeekAttributesCached);
+            Assert.That(result.YearWeekModel?.Count > 0);
+            Assert.That(result.YearWeekModel.Count, Is.EqualTo(expectedRecordCount));
+            Assert.That(result.IsYearAndWeekAttributesCached, Is.False);
         }
 
         [Test]
@@ -376,18 +376,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
-            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+            Assert.That(expectedYearAndWeekRecordCount, Is.EqualTo(showWeeklyFilesResponseModel.YearAndWeekList.Count));
+            Assert.That(expectedShowFilesResponseModelRecordCount, Is.EqualTo(showWeeklyFilesResponseModel.ShowFilesResponseList.Count));
         }
 
         [Test]
@@ -398,18 +398,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int expectedShowFilesResponseModelRecordCount = 2;
             const int expectedYearAndWeekRecordCount = 3;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
-            Assert.AreEqual(expectedYearAndWeekRecordCount, showWeeklyFilesResponseModel.YearAndWeekList.Count);
-            Assert.AreEqual(expectedShowFilesResponseModelRecordCount, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
+            Assert.That(expectedYearAndWeekRecordCount, Is.EqualTo(showWeeklyFilesResponseModel.YearAndWeekList.Count));
+            Assert.That(expectedShowFilesResponseModelRecordCount, Is.EqualTo(showWeeklyFilesResponseModel.ShowFilesResponseList.Count));
         }
 
         [Test]
@@ -418,20 +418,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 2022;
             const int week = 0;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = new();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+            ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
-            Assert.AreEqual(0, showWeeklyFilesResponseModel.ShowFilesResponseList.Count);
-            Assert.AreEqual(false, showWeeklyFilesResponseModel.IsWeeklyBatchResponseCached);
-            Assert.AreEqual(false, showWeeklyFilesResponseModel.IsYearAndWeekAttributesCached);
-            Assert.AreEqual(3, showWeeklyFilesResponseModel.YearAndWeekList.Count);
+            Assert.That(0, Is.EqualTo(showWeeklyFilesResponseModel.ShowFilesResponseList.Count));
+            Assert.That(false, Is.EqualTo(showWeeklyFilesResponseModel.IsWeeklyBatchResponseCached));
+            Assert.That(false, Is.EqualTo(showWeeklyFilesResponseModel.IsYearAndWeekAttributesCached));
+            Assert.That(3, Is.EqualTo(showWeeklyFilesResponseModel.YearAndWeekList.Count));
 
         }
 
@@ -441,15 +441,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const int year = 0;
             const int week = 0;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             Result<BatchSearchResponse> searchResult = new();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<ShowWeeklyFilesResponseModel> result = _nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
+            Task<ShowWeeklyFilesResponseModel> result = nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
             Assert.That(result.IsFaulted, Is.True);
         }
@@ -463,10 +463,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
-            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
-            Assert.IsInstanceOf<Task<byte[]>>(result);
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeFileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
+            Task<byte[]> result = nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
+            Assert.That(result, Is.InstanceOf<Task<byte[]>>());
         }
 
         [Test]
@@ -476,10 +476,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const string filename = "";
             const string frequency = "";
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
-            Task<byte[]> result = _nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
-            Assert.IsTrue(result.IsFaulted);
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeFileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            Task<byte[]> result = nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -487,15 +487,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
-            _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
+            fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeFileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
 
-            Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
+            Task<byte[]> result = nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
 
-            Assert.IsInstanceOf<Task<byte[]>>(result);
+            Assert.That(result, Is.InstanceOf<Task<byte[]>>());
         }
 
         [Test]
@@ -503,122 +503,122 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             string batchId = Guid.NewGuid().ToString();
             const string fileName = "Daily 16-05-22.zip";
-            _fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
+            fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
-            A.CallTo(() => _fakefileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
-            Task<byte[]> result = _nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
+            Task<byte[]> result = nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
         public async Task WhenGetCumulativeBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFilesOrderByFileName()
         {
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 4;
 
-            ShowNMFilesResponseModel showNMFiles = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFiles = await nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFiles.ShowFilesResponseModel.Count);
-            Assert.AreEqual("NP234(B) 2022", showNMFiles.ShowFilesResponseModel[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2022", showNMFiles.ShowFilesResponseModel[1].FileDescription);
-            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[2].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[3].FileDescription);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
+            Assert.That("NP234(B) 2022", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
+            Assert.That("NP234(A) 2022", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
+            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
+            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
         }
 
         [Test]
         public async Task WhenGetCumulativeBatchFilesIsCalledWithDuplicateData_ThenShouldReturnsLatestFile()
         {
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 4;
 
-            ShowNMFilesResponseModel showNMFiles = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFiles = await nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFiles.ShowFilesResponseModel.Count);
-            Assert.AreEqual("NP234(B) 2022", showNMFiles.ShowFilesResponseModel[0].FileDescription);
-            Assert.AreEqual("NP234(A) 2022", showNMFiles.ShowFilesResponseModel[1].FileDescription);
-            Assert.AreEqual("NP234(B) 2021", showNMFiles.ShowFilesResponseModel[2].FileDescription);
-            Assert.AreEqual("NP234(A) 2021", showNMFiles.ShowFilesResponseModel[3].FileDescription);
-            Assert.AreEqual("2", showNMFiles.ShowFilesResponseModel[0].BatchId);
-            Assert.AreEqual("1", showNMFiles.ShowFilesResponseModel[1].BatchId);
-            Assert.AreEqual("5", showNMFiles.ShowFilesResponseModel[2].BatchId);
-            Assert.AreEqual("4", showNMFiles.ShowFilesResponseModel[3].BatchId);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
+            Assert.That("NP234(B) 2022", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
+            Assert.That("NP234(A) 2022", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
+            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
+            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That("2", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].BatchId));
+            Assert.That("1", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].BatchId));
+            Assert.That("5", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].BatchId));
+            Assert.That("4", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].BatchId));
         }
 
         [Test]
         public void WhenGetCumulativeBatchFilesIsCalledWithNoData_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for cumulative NM files"),
-                async delegate { await _nMDataService.GetCumulativeBatchFiles(CorrelationId); });
+                async delegate { await nMDataService.GetCumulativeBatchFiles(CorrelationId); });
         }
 
         [Test]
         public void WhenGetCumulativeBatchFilesIsCalledThrowException_ThenShouldExecuteCatch()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
-            Task<ShowNMFilesResponseModel> result = _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            Task<ShowNMFilesResponseModel> result = nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
         public async Task WhenCacheEnabledForGetCumulativeBatchFiles_ThenCacheReturnResponse()
         {
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new BatchSearchResponseModel { BatchSearchResponse = SetSearchResultForCumulative().Data });
 
             const int expectedRecordCount = 4;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
         public async Task WhenCacheEnabledForCumulativeBatchFilesButDataNotInTable_ThenFSSReturnResponse()
         {
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 4;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetCumulativeBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.IsBatchResponseCached, Is.False);
         }
 
         [Test]
@@ -640,116 +640,116 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             UserService userService = new(mockHttpContextAccessor);
 
-            NMDataService _nMDataServiceDistributor = new(_fakefileShareService, _fakeLogger, _fakeAuthFssTokenProvider, _httpClientFactory, _fileShareServiceConfig, _fakeFileShareServiceCache,
-                                               _fakeCacheConfiguration, userService);
+            NMDataService _nMDataServiceDistributor = new(fakeFileShareService, fakeLogger, fakeAuthFssTokenProvider, httpClientFactory, fileShareServiceConfig, fakeFileShareServiceCache,
+                                               fakeCacheConfiguration, userService);
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDailyDistributorTracings();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int dailyFilesDataCount = 1;
 
             ShowDailyFilesResponseListModel showDailyFilesResponseListModel = await _nMDataServiceDistributor.GetDailyBatchDetailsFiles(CorrelationId);
 
-            Assert.AreEqual(true, userService.IsDistributorUser);
-            Assert.AreEqual(expectedRecordCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count);
-            Assert.AreEqual(dailyFilesDataCount, showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count);
+            Assert.That(true, Is.EqualTo(userService.IsDistributorUser));
+            Assert.That(expectedRecordCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.Count));
+            Assert.That(dailyFilesDataCount, Is.EqualTo(showDailyFilesResponseListModel.ShowDailyFilesResponseModel.FirstOrDefault().DailyFilesData.Count));
         }
 
         [Test]
         public async Task WhenGetAnnualBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForAnnual();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
         }
         [Test]
         public async Task WhenGetAnnualBatchFilesIsCalledWithDuplicateData_ThenShouldReturnLatestFiles()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
 
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
         }
 
         [Test]
         public void WhenGetAnnualBatchFilesIsCalled_ThenShouldThrowInvalidDataException()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for annual NM files"),
-                async delegate { await _nMDataService.GetAnnualBatchFiles(CorrelationId); });
+                async delegate { await nMDataService.GetAnnualBatchFiles(CorrelationId); });
         }
 
         [Test]
         public void WhenGetAnnualBatchFilesIsCalled_ThenShouldExecuteCatch()
         {
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
-            Task<ShowNMFilesResponseModel> result = _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            Task<ShowNMFilesResponseModel> result = nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
         public async Task WhenCacheEnabledForGetAnnualBatchFiles_ThenCacheReturnResponse()
         {
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new BatchSearchResponseModel { BatchSearchResponse = SetSearchResultForAnnual().Data });
 
             const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsTrue(showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.IsBatchResponseCached);
         }
 
         [Test]
         public async Task WhenCacheEnabledForAnnualBatchFilesButDataNotInTable_ThenFSSReturnResponse()
         {
-            _fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
+            fakeCacheConfiguration.Value.IsFssCacheEnabled = true;
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
 
-            A.CallTo(() => _fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => _fakefileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
-            A.CallTo(() => _fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
+            A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 6;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await _nMDataService.GetAnnualBatchFiles(CorrelationId);
+            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetAnnualBatchFiles(CorrelationId);
 
-            Assert.AreEqual(expectedRecordCount, showNMFilesResponseModel.ShowFilesResponseModel.Count);
-            Assert.IsFalse(showNMFilesResponseModel.IsBatchResponseCached);
+            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.IsBatchResponseCached, Is.False);
         }
 
         private static BatchSearchResponse GetBatchSearchResponse()
@@ -1435,7 +1435,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             return searchResult;
         }
-       
+
         private static Result<BatchSearchResponse> SetSearchResultForAnnual()
         {
             Result<BatchSearchResponse> searchResult = new()

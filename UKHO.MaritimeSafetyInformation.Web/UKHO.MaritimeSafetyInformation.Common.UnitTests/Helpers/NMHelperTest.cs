@@ -1,12 +1,12 @@
-﻿using FakeItEasy;
-using Microsoft.Extensions.Logging;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -78,13 +78,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
                 }
             });
         }
@@ -152,14 +152,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
-                    Assert.AreEqual(expected[i].IsDistributorUser, result[i].IsDistributorUser);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
+                    Assert.That(expected[i].IsDistributorUser, Is.EqualTo(result[i].IsDistributorUser));
                 }
             });
         }
@@ -201,13 +201,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
                 }
             });
         }
@@ -275,14 +275,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
-                    Assert.AreEqual(expected[i].IsDistributorUser, result[i].IsDistributorUser);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
+                    Assert.That(expected[i].IsDistributorUser, Is.EqualTo(result[i].IsDistributorUser));
                 }
             });
         }
@@ -373,21 +373,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].Year, result[i].Year);
-                    Assert.AreEqual(expected[i].YearWeek, result[i].YearWeek);
-                    Assert.AreEqual(expected[i].WeekNumber, result[i].WeekNumber);
+                    Assert.That(expected[i].Year, Is.EqualTo(result[i].Year));
+                    Assert.That(expected[i].YearWeek, Is.EqualTo(result[i].YearWeek));
+                    Assert.That(expected[i].WeekNumber, Is.EqualTo(result[i].WeekNumber));
 
                     for (int j = 0; j < expected[i].DailyFilesData.Count; j++)
                     {
-                        Assert.AreEqual(expected[i].DailyFilesData[j].BatchId, result[i].DailyFilesData[j].BatchId);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].DataDate, result[i].DailyFilesData[j].DataDate);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].Filename, result[i].DailyFilesData[j].Filename);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileDescription, result[i].DailyFilesData[j].FileDescription);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileExtension, result[i].DailyFilesData[j].FileExtension);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileSizeInKB, result[i].DailyFilesData[j].FileSizeInKB);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].MimeType, result[i].DailyFilesData[j].MimeType);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].Links, result[i].DailyFilesData[j].Links);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].AllFilesZipSize, result[i].DailyFilesData[j].AllFilesZipSize);
+                        Assert.That(expected[i].DailyFilesData[j].BatchId, Is.EqualTo(result[i].DailyFilesData[j].BatchId));
+                        Assert.That(expected[i].DailyFilesData[j].DataDate, Is.EqualTo(result[i].DailyFilesData[j].DataDate));
+                        Assert.That(expected[i].DailyFilesData[j].Filename, Is.EqualTo(result[i].DailyFilesData[j].Filename));
+                        Assert.That(expected[i].DailyFilesData[j].FileDescription, Is.EqualTo(result[i].DailyFilesData[j].FileDescription));
+                        Assert.That(expected[i].DailyFilesData[j].FileExtension, Is.EqualTo(result[i].DailyFilesData[j].FileExtension));
+                        Assert.That(expected[i].DailyFilesData[j].FileSizeInKB, Is.EqualTo(result[i].DailyFilesData[j].FileSizeInKB));
+                        Assert.That(expected[i].DailyFilesData[j].MimeType, Is.EqualTo(result[i].DailyFilesData[j].MimeType));
+                        Assert.That(expected[i].DailyFilesData[j].Links, Is.EqualTo(result[i].DailyFilesData[j].Links));
+                        Assert.That(expected[i].DailyFilesData[j].AllFilesZipSize, Is.EqualTo(result[i].DailyFilesData[j].AllFilesZipSize));
                     }
                 }
             });
@@ -446,21 +446,21 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].Year, result[i].Year);
-                    Assert.AreEqual(expected[i].YearWeek, result[i].YearWeek);
-                    Assert.AreEqual(expected[i].WeekNumber, result[i].WeekNumber);
+                    Assert.That(expected[i].Year, Is.EqualTo(result[i].Year));
+                    Assert.That(expected[i].YearWeek, Is.EqualTo(result[i].YearWeek));
+                    Assert.That(expected[i].WeekNumber, Is.EqualTo(result[i].WeekNumber));
 
                     for (int j = 0; j < expected[i].DailyFilesData.Count; j++)
                     {
-                        Assert.AreEqual(expected[i].DailyFilesData[j].BatchId, result[i].DailyFilesData[j].BatchId);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].DataDate, result[i].DailyFilesData[j].DataDate);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].Filename, result[i].DailyFilesData[j].Filename);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileDescription, result[i].DailyFilesData[j].FileDescription);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileExtension, result[i].DailyFilesData[j].FileExtension);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].FileSizeInKB, result[i].DailyFilesData[j].FileSizeInKB);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].MimeType, result[i].DailyFilesData[j].MimeType);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].Links, result[i].DailyFilesData[j].Links);
-                        Assert.AreEqual(expected[i].DailyFilesData[j].AllFilesZipSize, result[i].DailyFilesData[j].AllFilesZipSize);
+                        Assert.That(expected[i].DailyFilesData[j].BatchId, Is.EqualTo(result[i].DailyFilesData[j].BatchId));
+                        Assert.That(expected[i].DailyFilesData[j].DataDate, Is.EqualTo(result[i].DailyFilesData[j].DataDate));
+                        Assert.That(expected[i].DailyFilesData[j].Filename, Is.EqualTo(result[i].DailyFilesData[j].Filename));
+                        Assert.That(expected[i].DailyFilesData[j].FileDescription, Is.EqualTo(result[i].DailyFilesData[j].FileDescription));
+                        Assert.That(expected[i].DailyFilesData[j].FileExtension, Is.EqualTo(result[i].DailyFilesData[j].FileExtension));
+                        Assert.That(expected[i].DailyFilesData[j].FileSizeInKB, Is.EqualTo(result[i].DailyFilesData[j].FileSizeInKB));
+                        Assert.That(expected[i].DailyFilesData[j].MimeType, Is.EqualTo(result[i].DailyFilesData[j].MimeType));
+                        Assert.That(expected[i].DailyFilesData[j].Links, Is.EqualTo(result[i].DailyFilesData[j].Links));
+                        Assert.That(expected[i].DailyFilesData[j].AllFilesZipSize, Is.EqualTo(result[i].DailyFilesData[j].AllFilesZipSize));
                     }
                 }
             });
@@ -472,7 +472,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             const string strDate = "2022-05-26";
             string actualDate = NMHelper.GetFormattedDate(strDate);
             const string expectedDate = "26-05-22";
-            Assert.AreEqual(expectedDate, actualDate);
+            Assert.That(expectedDate, Is.EqualTo(actualDate));
         }
 
         [Test]
@@ -481,7 +481,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             const string strDate = "";
             string actualDate = NMHelper.GetFormattedDate(strDate);
             const string expectedDate = "";
-            Assert.AreEqual(expectedDate, actualDate);
+            Assert.That(expectedDate, Is.EqualTo(actualDate));
         }
 
         [Test]
@@ -519,7 +519,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         {
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
             byte[] result = await NMHelper.GetFileBytesFromStream(stream);
-            Assert.IsInstanceOf(typeof(byte[]), result);
+            Assert.That(result, Is.InstanceOf(typeof(byte[])));
         }
 
         [Test]
@@ -581,13 +581,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
                 }
             });
         }
@@ -652,13 +652,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
                 }
             });
         }
@@ -722,13 +722,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
                 }
             });
         }
@@ -821,14 +821,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
-                    Assert.AreEqual(expected[i].Hash, result[i].Hash);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
+                    Assert.That(expected[i].Hash, Is.EqualTo(result[i].Hash));
                 }
             });
         }
@@ -921,14 +921,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
             {
                 for (int i = 0; i < result.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].BatchId, result[i].BatchId);
-                    Assert.AreEqual(expected[i].Filename, result[i].Filename);
-                    Assert.AreEqual(expected[i].FileDescription, result[i].FileDescription);
-                    Assert.AreEqual(expected[i].FileExtension, result[i].FileExtension);
-                    Assert.AreEqual(expected[i].FileSize, result[i].FileSize);
-                    Assert.AreEqual(expected[i].FileSizeinKB, result[i].FileSizeinKB);
-                    Assert.AreEqual(expected[i].MimeType, result[i].MimeType);
-                    Assert.AreEqual(expected[i].Hash, result[i].Hash);
+                    Assert.That(expected[i].BatchId, Is.EqualTo(result[i].BatchId));
+                    Assert.That(expected[i].Filename, Is.EqualTo(result[i].Filename));
+                    Assert.That(expected[i].FileDescription, Is.EqualTo(result[i].FileDescription));
+                    Assert.That(expected[i].FileExtension, Is.EqualTo(result[i].FileExtension));
+                    Assert.That(expected[i].FileSize, Is.EqualTo(result[i].FileSize));
+                    Assert.That(expected[i].FileSizeinKB, Is.EqualTo(result[i].FileSizeinKB));
+                    Assert.That(expected[i].MimeType, Is.EqualTo(result[i].MimeType));
+                    Assert.That(expected[i].Hash, Is.EqualTo(result[i].Hash));
                 }
             });
         }

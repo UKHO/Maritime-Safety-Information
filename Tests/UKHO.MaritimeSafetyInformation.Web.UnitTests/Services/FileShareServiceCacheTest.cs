@@ -1,10 +1,10 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Threading.Tasks;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
@@ -18,50 +18,50 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class FileShareServiceCacheTest
     {
-        private IAzureTableStorageClient _azureTableStorageClient;
-        private IOptions<CacheConfiguration> _cacheConfiguration;
-        private IAzureStorageService _azureStorageService;
-        private IFileShareServiceCache _fileShareServiceCache;
-        private ILogger<FileShareServiceCache> _logger;        
+        private IAzureTableStorageClient azureTableStorageClient;
+        private IOptions<CacheConfiguration> cacheConfiguration;
+        private IAzureStorageService azureStorageService;
+        private IFileShareServiceCache fileShareServiceCache;
+        private ILogger<FileShareServiceCache> logger;
 
         [SetUp]
         public void Setup()
         {
-            _azureTableStorageClient = A.Fake<IAzureTableStorageClient>();
-            _cacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
-            _logger = A.Fake<ILogger<FileShareServiceCache>>();
-            _fileShareServiceCache = A.Fake<IFileShareServiceCache>();
-            _azureStorageService = A.Fake<IAzureStorageService>();    
+            azureTableStorageClient = A.Fake<IAzureTableStorageClient>();
+            cacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
+            logger = A.Fake<ILogger<FileShareServiceCache>>();
+            fileShareServiceCache = A.Fake<IFileShareServiceCache>();
+            azureStorageService = A.Fake<IAzureStorageService>();
 
-            _fileShareServiceCache = new FileShareServiceCache(_azureTableStorageClient, _cacheConfiguration, _azureStorageService, _logger);
+            fileShareServiceCache = new FileShareServiceCache(azureTableStorageClient, cacheConfiguration, azureStorageService, logger);
         }
 
         [Test]
         public async Task WhenFSSCacheCallsGetAllYearsAndWeeksFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
-            Assert.IsNull(result.Data);
+            Assert.That(result, Is.InstanceOf<BatchAttributesSearchModel>());
+            Assert.That(result.Data, Is.Null);
         }
 
         [Test]
         public async Task WhenExceptionInFSSCacheCallsGetAllYearsAndWeeksFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
-            Assert.IsNull(result.Data);
+            Assert.That(result, Is.InstanceOf<BatchAttributesSearchModel>());
+            Assert.That(result.Data, Is.Null);
         }
 
         [Test]
@@ -74,18 +74,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Response = "{\"IsSuccess\":true,\"StatusCode\":200,\"Errors\":[],\"Data\":{ \"searchBatchCount\":264,\"batchAttributes\":[{\"Key\":\"DATA DATE\",\"Values\":[\"2020 - 01 - 02\"]},{\"Key\":\"FREQUENCY\",\"Values\":[\"Weekly\"]},{\"Key\":\"PRODUCT TYPE\",\"Values\":[\"Notices to Mariners\"]},{\"Key\":\"WEEK NUMBER\",\"Values\":[\"1\"]},{\"Key\":\"YEAR\",\"Values\":[\"2020\",\"2021\",\"2022\"]},{\"Key\":\"YEAR / WEEK\",\"Values\":[\"2020 / 1\",\"2020 / 10\",\"2020 / 11\"]},{\"Key\":\"CONTENT\",\"Values\":[\"tracings\"]}]},\"AttributeYearAndWeekIsCache\":false}"
             };
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
-            Assert.IsNull(result.Data);
+            Assert.That(result, Is.InstanceOf<BatchAttributesSearchModel>());
+            Assert.That(result.Data, Is.Null);
         }
 
         [Test]
@@ -101,43 +101,43 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             BatchAttributesSearchModel searchResult = JsonConvert.DeserializeObject<BatchAttributesSearchModel>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchAttributesSearchModel result = await _fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty,string.Empty, string.Empty);
+            BatchAttributesSearchModel result = await fileShareServiceCache.GetAllYearsAndWeeksFromCache(string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchAttributesSearchModel>(result);
-            Assert.AreEqual(searchResult.Data.SearchBatchCount, result.Data.SearchBatchCount);
+            Assert.That(result, Is.InstanceOf<BatchAttributesSearchModel>());
+            Assert.That(searchResult.Data.SearchBatchCount, Is.EqualTo(result.Data.SearchBatchCount));
         }
 
         [Test]
         public async Task WhenFSSCacheCallsGetWeeklyBatchFilesFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
         public async Task WhenExceptionInFSSCacheCallsGetWeeklyBatchFilesFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public",string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
@@ -153,18 +153,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                           .MustNotHaveHappened();
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
@@ -181,43 +181,43 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetWeeklyBatchResponseFromCache(2022, 2, "Public", string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(batchSearchResponseModel.BatchSearchResponse.Count, Is.EqualTo(result.BatchSearchResponse.Count));
         }
 
-         [Test]
+        [Test]
         public async Task WhenFSSCacheCallsGetDailyBatchDetailsFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
         public async Task WhenExceptionInFSSCacheCallsGetDailyBatchDetailsFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
@@ -234,18 +234,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                           .MustNotHaveHappened();
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
@@ -262,70 +262,70 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(batchSearchResponseModel.BatchSearchResponse.Count, Is.EqualTo(result.BatchSearchResponse.Count));
         }
-        
+
 
         [Test]
         public void WhenExecutionFailedForInsertEntityAsync()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            Task response = _fileShareServiceCache.InsertCacheObject(new object(), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+            Task response = fileShareServiceCache.InsertCacheObject(new object(), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsTrue(response.IsCompleted);
+            Assert.That(response.IsCompleted);
         }
 
         [Test]
         public void WhenExecutionSuccessfullyCompletedForInsertEntityAsync()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.InsertEntityAsync(A<CustomTableEntity>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            Task response =  _fileShareServiceCache.InsertCacheObject(new object(), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+            Task response = fileShareServiceCache.InsertCacheObject(new object(), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsTrue(response.IsCompleted);
+            Assert.That(response.IsCompleted);
         }
 
         [Test]
         public async Task WhenFSSCacheCallsGetBatchResponseFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(new CustomTableEntity());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
         public async Task WhenExceptionInFSSCacheCallsGetBatchResponseFromCache_ThenReturnsNullObject()
         {
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Throws(new Exception());
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
@@ -341,18 +341,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustHaveHappened();
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.IsNull(result.BatchSearchResponse);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(result.BatchSearchResponse, Is.Null);
         }
 
         [Test]
@@ -369,18 +369,18 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             batchSearchResponseModel.BatchSearchResponse = JsonConvert.DeserializeObject<BatchSearchResponse>(customTableEntity.Response);
 
-            A.CallTo(() => _azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
+            A.CallTo(() => azureStorageService.GetStorageAccountConnectionString(A<string>.Ignored, A<string>.Ignored)).Returns("testConnectionString");
 
-            A.CallTo(() => _azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.GetEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .Returns(customTableEntity);
 
-            BatchSearchResponseModel result = await _fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
+            BatchSearchResponseModel result = await fileShareServiceCache.GetBatchResponseFromCache(string.Empty, string.Empty, string.Empty, string.Empty);
 
-            A.CallTo(() => _azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
+            A.CallTo(() => azureTableStorageClient.DeleteEntityAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored))
                            .MustNotHaveHappened();
 
-            Assert.IsInstanceOf<BatchSearchResponseModel>(result);
-            Assert.AreEqual(batchSearchResponseModel.BatchSearchResponse.Count, result.BatchSearchResponse.Count);
+            Assert.That(result, Is.InstanceOf<BatchSearchResponseModel>());
+            Assert.That(batchSearchResponseModel.BatchSearchResponse.Count, Is.EqualTo(result.BatchSearchResponse.Count));
         }
     }
 }

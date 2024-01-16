@@ -1,9 +1,8 @@
-﻿using FakeItEasy;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NUnit.Framework;
-using System.Threading;
-using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 
 namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
@@ -11,31 +10,31 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.HealthCheck
     [TestFixture]
     public class RNWDatabaseHealthClientTest
     {
-        private RadioNavigationalWarningsContext _context;
-        private RNWDatabaseHealthClient _rnwDatabaseHealthClient;
+        private RadioNavigationalWarningsContext context;
+        private RNWDatabaseHealthClient rnwDatabaseHealthClient;
 
         [Test]
         public async Task WhenRNWDatabaseIsSetUp_ThenReturnsHealthy()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                         .UseInMemoryDatabase("msi-hc-ut-db");
-            _context = new RadioNavigationalWarningsContext(builder.Options);
+            context = new RadioNavigationalWarningsContext(builder.Options);
 
-            _rnwDatabaseHealthClient = new RNWDatabaseHealthClient(_context);
+            rnwDatabaseHealthClient = new RNWDatabaseHealthClient(context);
 
-            HealthCheckResult response = await _rnwDatabaseHealthClient.CheckHealthAsync(CancellationToken.None);
+            HealthCheckResult response = await rnwDatabaseHealthClient.CheckHealthAsync(CancellationToken.None);
 
-            Assert.AreEqual(HealthStatus.Healthy, response.Status);
+            Assert.That(HealthStatus.Healthy, Is.EqualTo(response.Status));
         }
 
         [Test]
         public async Task WhenRNWDatabaseIsNotSetUp_ThenReturnsUnHealthy()
         {
-            _rnwDatabaseHealthClient = new RNWDatabaseHealthClient(_context);
+            rnwDatabaseHealthClient = new RNWDatabaseHealthClient(context);
 
-            HealthCheckResult response = await _rnwDatabaseHealthClient.CheckHealthAsync(CancellationToken.None);
+            HealthCheckResult response = await rnwDatabaseHealthClient.CheckHealthAsync(CancellationToken.None);
 
-            Assert.AreEqual(HealthStatus.Unhealthy, response.Status);
+            Assert.That(HealthStatus.Unhealthy, Is.EqualTo(response.Status));
         }
     }
 }

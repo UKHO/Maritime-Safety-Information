@@ -1,10 +1,10 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System;
-using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -14,23 +14,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     [TestFixture]
     public class NoticesToMarinersControllerTest
     {
-        private NoticesToMarinersController _controller;
-        private ILogger<NoticesToMarinersController> _fakeLogger;
-        private IHttpContextAccessor _fakeContextAccessor;
-        private INMDataService _fakeNMDataService;
-        private IUserService _fakeUserService;
+        private NoticesToMarinersController controller;
+        private ILogger<NoticesToMarinersController> fakeLogger;
+        private IHttpContextAccessor fakeContextAccessor;
+        private INMDataService fakeNMDataService;
+        private IUserService fakeUserService;
 
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
-            _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeNMDataService = A.Fake<INMDataService>();
-            _fakeUserService = A.Fake<IUserService>();
-            A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new NoticesToMarinersController(_fakeNMDataService, _fakeContextAccessor, _fakeLogger, _fakeUserService);
+            fakeLogger = A.Fake<ILogger<NoticesToMarinersController>>();
+            fakeContextAccessor = A.Fake<IHttpContextAccessor>();
+            fakeNMDataService = A.Fake<INMDataService>();
+            fakeUserService = A.Fake<IUserService>();
+            A.CallTo(() => fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
+            controller = new NoticesToMarinersController(fakeNMDataService, fakeContextAccessor, fakeLogger, fakeUserService);
         }
 
         [Test]
@@ -39,15 +39,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string expectedView = "~/Views/NoticesToMariners/Index.cshtml";
             const int year = 2022;
             const int week = 20;
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Index();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
-            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
-            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(year, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Year"])));
+            Assert.That(week, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Week"])));
+            Assert.That(false, Is.EqualTo(controller.ViewBag.IsDistributor));
         }
 
         [Test]
@@ -61,27 +61,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             showWeeklyFilesResponseModel.ShowFilesResponseList = new System.Collections.Generic.List<ShowFilesResponseModel>();
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
 
-            IActionResult result = await _controller.Index();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Index();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
 
             string actualView = ((ViewResult)result).ViewName;
 
-            Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
-            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
-            Assert.AreEqual(true, _controller.ViewBag.HasError);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(year, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Year"])));
+            Assert.That(week, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Week"])));
+            Assert.That(true, Is.EqualTo(controller.ViewBag.HasError));
         }
 
         [Test]
         public void WhenIndexIsCalledAndExceptionThrownByService_ThenShouldThrowException()
         {
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Index();
+            Task<IActionResult> result = controller.Index();
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -91,17 +91,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const int year = 2022;
             const int week = 20;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week);
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Index(year, week);
+            Assert.That(result, Is.InstanceOf<ViewResult>());
 
             string actualView = ((ViewResult)result).ViewName;
 
-            Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
-            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
-            Assert.AreEqual(false, _controller.ViewBag.IsDistributor);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(year, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Year"])));
+            Assert.That(week, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Week"])));
+            Assert.That(false, Is.EqualTo(controller.ViewBag.IsDistributor));
         }
 
         [Test]
@@ -115,17 +115,17 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             showWeeklyFilesResponseModel.ShowFilesResponseList = new System.Collections.Generic.List<ShowFilesResponseModel>();
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(showWeeklyFilesResponseModel);
 
-            IActionResult result = await _controller.Index(year, week);
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Index(year, week);
+            Assert.That(result, Is.InstanceOf<ViewResult>());
 
             string actualView = ((ViewResult)result).ViewName;
 
-            Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
-            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
-            Assert.AreEqual(true, _controller.ViewBag.HasError);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(year, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Year"])));
+            Assert.That(week, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Week"])));
+            Assert.That(true, Is.EqualTo(controller.ViewBag.HasError));
 
         }
 
@@ -137,15 +137,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const int week = 0;
             const int expectedViewCount = 4;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week);
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Index(year, week);
+            Assert.That(result, Is.InstanceOf<ViewResult>());
 
             string actualView = ((ViewResult)result).ViewName;
 
-            Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(expectedViewCount, ((ViewResult)result).ViewData.Count);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(expectedViewCount, Is.EqualTo(((ViewResult)result).ViewData.Count));
         }
 
         [Test]
@@ -155,16 +155,16 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const int year = 2022;
             const int week = 0;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Returns(SetResultForShowWeeklyFilesResponseModel());
 
-            IActionResult result = await _controller.Index(year, week);
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Index(year, week);
+            Assert.That(result, Is.InstanceOf<ViewResult>());
 
             string actualView = ((ViewResult)result).ViewName;
 
-            Assert.AreEqual(expectedView, actualView);
-            Assert.AreEqual(year, Convert.ToInt32(((ViewResult)result).ViewData["Year"]));
-            Assert.AreEqual(week, Convert.ToInt32(((ViewResult)result).ViewData["Week"]));
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(year, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Year"])));
+            Assert.That(week, Is.EqualTo(Convert.ToInt32(((ViewResult)result).ViewData["Week"])));
         }
 
         [Test]
@@ -173,10 +173,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const int year = -1;
             const int week = -1;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetWeeklyFilesResponseModelsAsync(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.Index(year, week);
-            Assert.IsTrue(result.IsFaulted);
+            Task<IActionResult> result = controller.Index(year, week);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -185,10 +185,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.ShowWeeklyFilesAsync(year, week);
-            Assert.IsTrue(result.IsFaulted);
+            Task<IActionResult> result = controller.ShowWeeklyFilesAsync(year, week);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -199,12 +199,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             const string expectedView = "~/Views/NoticesToMariners/ShowWeeklyFilesList.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored));
 
-            IActionResult result = await _controller.ShowWeeklyFilesAsync(year, week);
-            Assert.IsInstanceOf<PartialViewResult>(result);
+            IActionResult result = await controller.ShowWeeklyFilesAsync(year, week);
+            Assert.That(result, Is.InstanceOf<PartialViewResult>());
             string actualView = ((PartialViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
+            Assert.That(expectedView, Is.EqualTo(actualView));
         }
 
         [Test]
@@ -212,12 +212,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId));
+            A.CallTo(() => fakeNMDataService.GetDailyBatchDetailsFiles(CorrelationId));
 
-            IActionResult result = await _controller.ShowDailyFilesAsync();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.ShowDailyFilesAsync();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
+            Assert.That(expectedView, Is.EqualTo(actualView));
         }
 
         [Test]
@@ -225,13 +225,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/ShowDailyFiles.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetDailyBatchDetailsFiles(A<string>.Ignored)).Throws(new Exception());
 
-            IActionResult result = await _controller.ShowDailyFilesAsync();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.ShowDailyFilesAsync();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string frequency = "Weekly";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
-                async delegate { await _controller.DownloadFile(batchId, fileName, mimeType, frequency); });
+                async delegate { await controller.DownloadFile(batchId, fileName, mimeType, frequency); });
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter BatchId"),
-                async delegate { await _controller.DownloadFile(batchId, fileName, mimeType, frequency); });
+                async delegate { await controller.DownloadFile(batchId, fileName, mimeType, frequency); });
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
-                async delegate { await _controller.DownloadFile(batchId, fileName, mimeType, frequency); });
+                async delegate { await controller.DownloadFile(batchId, fileName, mimeType, frequency); });
         }
 
         [Test]
@@ -276,7 +276,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter FileName"),
-               async delegate { await _controller.DownloadFile(batchId, fileName, mimeType, frequency); });
+               async delegate { await controller.DownloadFile(batchId, fileName, mimeType, frequency); });
         }
 
         [Test]
@@ -287,7 +287,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = null;
             const string frequency = "Weekly";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
-               async delegate { await _controller.DownloadFile(batchId, fileName, mimeType, frequency); });
+               async delegate { await controller.DownloadFile(batchId, fileName, mimeType, frequency); });
         }
 
         [Test]
@@ -298,7 +298,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "";
             const string frequency = "Weekly";
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter MimeType"),
-               async delegate { await _controller.DownloadFile(batchId, fileName, mimeType, frequency); });
+               async delegate { await controller.DownloadFile(batchId, fileName, mimeType, frequency); });
         }
 
         [Test]
@@ -309,10 +309,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
-            IActionResult result = await _controller.DownloadFile(batchId, fileName, mimeType, frequency);
+            A.CallTo(() => fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await controller.DownloadFile(batchId, fileName, mimeType, frequency);
 
-            Assert.IsInstanceOf<FileResult>(result);
+            Assert.That(result, Is.InstanceOf<FileResult>());
         }
 
         [Test]
@@ -323,12 +323,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "wrongmime";
             const string frequency = "Weekly";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
-            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            A.CallTo(() => fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 
-            Task<FileResult> result = _controller.DownloadFile(batchId, fileName, mimeType, frequency);
+            Task<FileResult> result = controller.DownloadFile(batchId, fileName, mimeType, frequency);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -338,10 +338,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "Daily 16-05-22.zip";
             const string mimeType = "application/gzip";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
-            IActionResult result = await _controller.DownloadDailyFile(batchId, fileName, mimeType);
+            A.CallTo(() => fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await controller.DownloadDailyFile(batchId, fileName, mimeType);
 
-            Assert.IsInstanceOf<FileResult>(result);
+            Assert.That(result, Is.InstanceOf<FileResult>());
         }
 
         [Test]
@@ -351,13 +351,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string fileName = "Daily 16-05-22.zip";
             const string mimeType = "application/gzip";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
-            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 
-            Task<FileResult> result = _controller.DownloadDailyFile(batchId, fileName, mimeType);
+            Task<FileResult> result = controller.DownloadDailyFile(batchId, fileName, mimeType);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
 
         }
 
@@ -369,9 +369,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "", "application/gzip", Description = "When Download Daily File Is Called With Empty File Name Then Should Then Should Throw Exception")]
         public void WhenDownloadDailyFileIsCalledWithEmptyValue_ThenShouldThrowException(string batchId, string fileName, string mimeType)
         {
-            Task<FileResult> result = _controller.DownloadDailyFile(batchId, fileName, mimeType);
+            Task<FileResult> result = controller.DownloadDailyFile(batchId, fileName, mimeType);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -379,10 +379,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/About.cshtml";
 
-            IActionResult result = _controller.About();
-            Assert.IsInstanceOf<IActionResult>(result);
+            IActionResult result = controller.About();
+            Assert.That(result, Is.InstanceOf<IActionResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
+            Assert.That(expectedView, Is.EqualTo(actualView));
         }
 
         [Test]
@@ -390,12 +390,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Cumulative.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetCumulativeBatchFiles(CorrelationId));
+            A.CallTo(() => fakeNMDataService.GetCumulativeBatchFiles(CorrelationId));
 
-            IActionResult result = await _controller.Cumulative();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Cumulative();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
+            Assert.That(expectedView, Is.EqualTo(actualView));
         }
 
         [Test]
@@ -403,13 +403,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Cumulative.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetCumulativeBatchFiles(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetCumulativeBatchFiles(A<string>.Ignored)).Throws(new Exception());
 
-            IActionResult result = await _controller.Cumulative();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Cumulative();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [Test]
@@ -418,11 +418,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const int year = 2022;
             const int week = 15;
 
-            A.CallTo(() => _fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetWeeklyBatchFiles(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
-            Task<IActionResult> result = _controller.ShowWeeklyFilesAsync(year, week);
+            Task<IActionResult> result = controller.ShowWeeklyFilesAsync(year, week);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         [Test]
@@ -430,12 +430,12 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetAnnualBatchFiles(CorrelationId));
+            A.CallTo(() => fakeNMDataService.GetAnnualBatchFiles(CorrelationId));
 
-            IActionResult result = await _controller.Annual();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Annual();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
+            Assert.That(expectedView, Is.EqualTo(actualView));
         }
 
         [Test]
@@ -443,13 +443,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         {
             const string expectedView = "~/Views/NoticesToMariners/Annual.cshtml";
 
-            A.CallTo(() => _fakeNMDataService.GetAnnualBatchFiles(A<string>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeNMDataService.GetAnnualBatchFiles(A<string>.Ignored)).Throws(new Exception());
 
-            IActionResult result = await _controller.Annual();
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Annual();
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-            Assert.IsTrue(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(((ViewResult)result).ViewData.ContainsKey("CurrentCorrelationId"));
         }
 
         [Test]
@@ -460,10 +460,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
-            IActionResult result = await _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
+            A.CallTo(() => fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored));
+            IActionResult result = await controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 
-            Assert.IsInstanceOf<FileResult>(result);
+            Assert.That(result, Is.InstanceOf<FileResult>());
         }
 
         [Test]
@@ -474,13 +474,13 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            A.CallTo(() => _fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
-            _fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
 
-            Task<FileResult> result = _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
+            Task<FileResult> result = controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
 
         }
 
@@ -494,9 +494,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [TestCase("03f8ee96-62c4-461a-9fe4-f03e46abc2d4", "2022 Wk 26 Weekly NMs.zip", "application/gzip", "", Description = "When Download All Weekly File Is Called With Empty type Then Should Then Should Throw Exception")]
         public void WhenDownloadAllWeeklyZipFileIsCalledWithEmptyValue_ThenShouldThrowException(string batchId, string fileName, string mimeType, string type)
         {
-            Task<FileResult> result = _controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
+            Task<FileResult> result = controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 
-            Assert.IsTrue(result.IsFaulted);
+            Assert.That(result.IsFaulted);
         }
 
         private static ShowWeeklyFilesResponseModel SetResultForShowWeeklyFilesResponseModel()

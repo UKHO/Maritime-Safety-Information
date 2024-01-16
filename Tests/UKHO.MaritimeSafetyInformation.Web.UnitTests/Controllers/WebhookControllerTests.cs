@@ -1,14 +1,14 @@
-﻿using FakeItEasy;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FakeItEasy;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -18,26 +18,26 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     [TestFixture]
     public class WebhookControllerTest
     {
-        private WebhookController _controller;
-        private ILogger<WebhookController> _fakeLogger;
-        private IHttpContextAccessor _fakeContextAccessor;
-        private IWebhookService _fakeWebhookService;
+        private WebhookController controller;
+        private ILogger<WebhookController> fakeLogger;
+        private IHttpContextAccessor fakeContextAccessor;
+        private IWebhookService fakeWebhookService;
 
-        private MemoryStream _requestData;
+        private MemoryStream requestData;
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<WebhookController>>();
-            _fakeContextAccessor = A.Fake<IHttpContextAccessor>();
-            _fakeWebhookService = A.Fake<IWebhookService>();
-            A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
-            _controller = new WebhookController(_fakeContextAccessor, _fakeLogger, _fakeWebhookService);
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            fakeLogger = A.Fake<ILogger<WebhookController>>();
+            fakeContextAccessor = A.Fake<IHttpContextAccessor>();
+            fakeWebhookService = A.Fake<IWebhookService>();
+            A.CallTo(() => fakeContextAccessor.HttpContext).Returns(new DefaultHttpContext());
+            controller = new WebhookController(fakeContextAccessor, fakeLogger, fakeWebhookService);
+            controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
             string jsonString = GetRequestString();
-            _requestData = new(Encoding.UTF8.GetBytes(jsonString));
-            _controller.HttpContext.Request.Body = _requestData;
+            requestData = new(Encoding.UTF8.GetBytes(jsonString));
+            controller.HttpContext.Request.Body = requestData;
 
         }
 
@@ -48,29 +48,29 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string requestHeaderValue = "test.example.com";
             context.Request.Headers["WebHook-Request-Origin"] = requestHeaderValue;
 
-            A.CallTo(() => _fakeContextAccessor.HttpContext).Returns(context);
+            A.CallTo(() => fakeContextAccessor.HttpContext).Returns(context);
 
-            _controller.ControllerContext = new ControllerContext()
+            controller.ControllerContext = new ControllerContext()
             {
                 HttpContext = context
             };
 
-            OkObjectResult result = (OkObjectResult)_controller.NewFilesPublishedOptions();
+            OkObjectResult result = (OkObjectResult)controller.NewFilesPublishedOptions();
 
-            Assert.AreEqual(200, result.StatusCode);
-            Assert.AreEqual("*", _controller.HttpContext.Response.Headers.Where(a => a.Key == "WebHook-Allowed-Rate").Select(b => b.Value).FirstOrDefault());
-            Assert.AreEqual(requestHeaderValue, _controller.HttpContext.Response.Headers.Where(a => a.Key == "WebHook-Allowed-Origin").Select(b => b.Value).FirstOrDefault());
+            Assert.That(200, Is.EqualTo(result.StatusCode));
+            Assert.That("*", Is.EqualTo(controller.HttpContext.Response.Headers.Where(a => a.Key == "WebHook-Allowed-Rate").Select(b => b.Value).FirstOrDefault()));
+            Assert.That(requestHeaderValue, Is.EqualTo(controller.HttpContext.Response.Headers.Where(a => a.Key == "WebHook-Allowed-Origin").Select(b => b.Value).FirstOrDefault()));
         }
 
 
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithEmptyPayload_ThenShouldNotDeleteCache()
         {
-            _controller.HttpContext.Request.Body = new MemoryStream();
+            controller.HttpContext.Request.Body = new MemoryStream();
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -79,11 +79,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithNoData();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -92,11 +92,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithEmptyDataString();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -105,44 +105,44 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithNullData();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithValidData_ThenShouldReturnOkResponse()
         {
-            A.CallTo(() => _fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
-            A.CallTo(() => _fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored)).Returns(true);
+            A.CallTo(() => fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
+            A.CallTo(() => fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored)).Returns(true);
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithValidDataAndDifferentBusinessUnit_ThenShouldReturnOkResponse()
         {
-            A.CallTo(() => _fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
-            A.CallTo(() => _fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored)).Returns(false);
+            A.CallTo(() => fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
+            A.CallTo(() => fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored)).Returns(false);
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
         public async Task WhenNewFilesPublishedIsCalledWithInvalidData_ThenDeleteCallShouldNotHappen()
         {
-            A.CallTo(() => _fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult(new List<ValidationFailure> { new ValidationFailure() }));
-            A.CallTo(() => _fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeWebhookService.ValidateNewFilesPublishedEventData(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult(new List<ValidationFailure> { new ValidationFailure() }));
+            A.CallTo(() => fakeWebhookService.DeleteBatchSearchResponseCacheData(A<FSSNewFilesPublishedEventData>.Ignored, A<string>.Ignored));
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -151,11 +151,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithNullProductType();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -164,11 +164,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithProductTypeAttributeMissing();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -177,11 +177,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithNoAttributes();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -190,11 +190,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithAttributeValueAsNull();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         [Test]
@@ -203,11 +203,11 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             string jsonString = GetRequestStringWithAttributeMissing();
             MemoryStream requestData = new(Encoding.UTF8.GetBytes(jsonString));
 
-            _controller.HttpContext.Request.Body = requestData;
+            controller.HttpContext.Request.Body = requestData;
 
-            OkObjectResult result = (OkObjectResult)await _controller.NewFilesPublished();
+            OkObjectResult result = (OkObjectResult)await controller.NewFilesPublished();
 
-            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(200, Is.EqualTo(result.StatusCode));
         }
 
         private static string GetRequestString()

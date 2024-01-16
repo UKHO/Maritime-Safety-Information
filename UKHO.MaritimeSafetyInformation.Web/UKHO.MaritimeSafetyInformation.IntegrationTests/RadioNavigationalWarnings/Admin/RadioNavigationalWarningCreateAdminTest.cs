@@ -1,4 +1,9 @@
 ﻿extern alias MSIAdminProjectAlias;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +15,6 @@ using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using MSIAdminProjectAlias::UKHO.MaritimeSafetyInformationAdmin.Web.Controllers;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarnings.Admin
@@ -22,61 +22,61 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
     [TestFixture]
     internal class RadioNavigationalWarningCreateAdminTest : BaseRNWTest
     {
-        private ILogger<RadioNavigationalWarningsAdminController> _fakeLogger;
-        private IRNWRepository _rnwRepository;
-        private IRNWService _rnwService;
-        private TempDataDictionary _tempData;
-        private RadioNavigationalWarning _fakeRadioNavigationalWarning;
-        private ILogger<RNWService> _fakeLoggerRnwService;
+        private ILogger<RadioNavigationalWarningsAdminController> fakeLogger;
+        private IRNWRepository rnwRepository;
+        private IRNWService rnwService;
+        private TempDataDictionary tempData;
+        private RadioNavigationalWarning fakeRadioNavigationalWarning;
+        private ILogger<RNWService> fakeLoggerRnwService;
 
-        private RadioNavigationalWarningsAdminController _controller;
-        private readonly ClaimsPrincipal _user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
+        private RadioNavigationalWarningsAdminController controller;
+        private readonly ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, "Admin User"), }, "mock"));
 
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
-            _fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
-            _rnwRepository = new RNWRepository(FakeContext);
-            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, _fakeLoggerRnwService);
-            _tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
-            _controller = new RadioNavigationalWarningsAdminController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = _user };
+            fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsAdminController>>();
+            fakeLoggerRnwService = A.Fake<ILogger<RNWService>>();
+            rnwRepository = new RNWRepository(FakeContext);
+            rnwService = new RNWService(rnwRepository, FakeRadioNavigationalWarningConfiguration, fakeLoggerRnwService);
+            tempData = new(new DefaultHttpContext(), A.Fake<ITempDataProvider>());
+            controller = new RadioNavigationalWarningsAdminController(FakeHttpContextAccessor, fakeLogger, rnwService);
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
         }
 
         [Test]
         public async Task WhenCallCreate_ThenReturnViewAsync()
         {
-            IActionResult result = await _controller.Create();
-            Assert.IsInstanceOf<IActionResult>(result);
-            Assert.IsNotNull(((ViewResult)result).ViewData["WarningType"]);
+            IActionResult result = await controller.Create();
+            Assert.That(result, Is.InstanceOf<IActionResult>());
+            Assert.That(((ViewResult)result).ViewData["WarningType"], Is.Not.Null);
         }
 
         [Test]
         public async Task WhenCallAddRadioNavigationalWarnings_ThenNewRecordIsCreated()
         {
-            _controller.TempData = _tempData;
+            controller.TempData = tempData;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
-            IActionResult result = await _controller.Create(GetFakeRadioNavigationalWarning());
+            IActionResult result = await controller.Create(GetFakeRadioNavigationalWarning());
 
-            Assert.IsInstanceOf<IActionResult>(result);
-            Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
-            Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-            Assert.AreEqual(1, FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
-            Assert.IsTrue(FakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
+            Assert.That(result, Is.InstanceOf<IActionResult>());
+            Assert.That("Record created successfully!", Is.EqualTo(controller.TempData["message"].ToString()));
+            Assert.That("Index", Is.EqualTo(((RedirectToActionResult)result).ActionName));
+            Assert.That(1, Is.EqualTo(FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count));
+            Assert.That(FakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
         }
 
         [Test]
         public async Task WhenCallCreateWithExistingReferenceNumberAndSkipDuplicateReferenceCheckFlagAsNo_ThenReturnAlertMessage()
         {
-            _controller.TempData = _tempData;
+            controller.TempData = tempData;
             const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Create.cshtml";
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
@@ -84,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
             RadioNavigationalWarning radioNavigationalWarning = GetFakeRadioNavigationalWarning();
             radioNavigationalWarning.Id++;
@@ -92,27 +92,27 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
 
             await SeedRadioNavigationalWarnings(new List<RadioNavigationalWarning>() { radioNavigationalWarning });
 
-            IActionResult result = await _controller.Create(radioNavigationalWarning);
+            IActionResult result = await controller.Create(radioNavigationalWarning);
 
-            Assert.IsInstanceOf<IActionResult>(result);
-            Assert.AreEqual("A warning record with this reference number already exists. Would you like to add another record with the same reference?", _controller.TempData["message"].ToString());
-            Assert.IsInstanceOf<ViewResult>(result);
+            Assert.That(result, Is.InstanceOf<IActionResult>());
+            Assert.That("A warning record with this reference number already exists. Would you like to add another record with the same reference?", Is.EqualTo(controller.TempData["message"].ToString()));
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-            Assert.IsTrue(((ViewResult)result).ViewData.ModelState.IsValid);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(((ViewResult)result).ViewData.ModelState.IsValid);
         }
 
         [Test]
         public async Task WhenCallCreateWithExistingReferenceNumberAndSkipDuplicateReferenceCheckFlagAsYes_ThenNewRecordIsCreated()
         {
-            _controller.TempData = _tempData;
+            controller.TempData = tempData;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "Yes" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
             await DeSeedRadioNavigationalWarnings();
 
@@ -126,127 +126,127 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             radioNavigationalWarningNewEntry.Id += 2;
             radioNavigationalWarningNewEntry.IsDeleted = false;
 
-            IActionResult result = await _controller.Create(radioNavigationalWarningNewEntry);
+            IActionResult result = await controller.Create(radioNavigationalWarningNewEntry);
 
-            Assert.IsInstanceOf<IActionResult>(result);
-            Assert.AreEqual("Record created successfully!", _controller.TempData["message"].ToString());
-            Assert.AreEqual("Index", ((RedirectToActionResult)result).ActionName);
-            Assert.AreEqual(2, FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count);
-            Assert.IsTrue(FakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
+            Assert.That(result, Is.InstanceOf<IActionResult>());
+            Assert.That("Record created successfully!", Is.EqualTo(controller.TempData["message"].ToString()));
+            Assert.That("Index", Is.EqualTo(((RedirectToActionResult)result).ActionName));
+            Assert.That(2, Is.EqualTo(FakeContext.RadioNavigationalWarnings.ToListAsync().Result.Count));
+            Assert.That(FakeContext.RadioNavigationalWarnings.ToListAsync().Result[0].LastModified < DateTime.Now);
         }
 
         [Test]
         public void WhenAddRadioNavigationalWarningsWithInValidValue_ThenNewRecordIsNotCreated()
         {
-            _controller.TempData = _tempData;
-            _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
-            _fakeRadioNavigationalWarning.Reference = string.Empty;
+            controller.TempData = tempData;
+            fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            fakeRadioNavigationalWarning.Reference = string.Empty;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
-            Task<IActionResult> result = _controller.Create(_fakeRadioNavigationalWarning);
-            Assert.IsInstanceOf<Task<IActionResult>>(result);
+            Task<IActionResult> result = controller.Create(fakeRadioNavigationalWarning);
+            Assert.That(result, Is.InstanceOf<Task<IActionResult>>());
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
-                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
+                async delegate { await controller.Create(fakeRadioNavigationalWarning); });
         }
 
         [Test]
         public async Task WhenAddRadioNavigationWarningsWithInValidModel_ThenNewRecordIsNotCreated()
         {
-            _controller.TempData = _tempData;
+            controller.TempData = tempData;
             const string expectedView = "~/Views/RadioNavigationalWarningsAdmin/Create.cshtml";
-            _controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
+            controller.ModelState.AddModelError("WarningType", "In Valid WarningType Selected");
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
-            IActionResult result = await _controller.Create(new RadioNavigationalWarning());
-            Assert.IsInstanceOf<ViewResult>(result);
+            IActionResult result = await controller.Create(new RadioNavigationalWarning());
+            Assert.That(result, Is.InstanceOf<ViewResult>());
             string actualView = ((ViewResult)result).ViewName;
-            Assert.AreEqual(expectedView, actualView);
-            Assert.IsFalse(((ViewResult)result).ViewData.ModelState.IsValid);
+            Assert.That(expectedView, Is.EqualTo(actualView));
+            Assert.That(((ViewResult)result).ViewData.ModelState.IsValid, Is.False);
         }
 
         [Test]
         public void WhenAddRadioNavigationWarningsWithInValidWarningType_ThenReturnInValidDataException()
         {
-            _controller.TempData = _tempData;
-            _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
-            _fakeRadioNavigationalWarning.WarningType = 3;
+            controller.TempData = tempData;
+            fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            fakeRadioNavigationalWarning.WarningType = 3;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid value received for parameter warningType"),
-                                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
+                                async delegate { await controller.Create(fakeRadioNavigationalWarning); });
         }
 
         [Test]
         public void WhenAddRadioNavigationWarningsWithInValidReference_ThenReturnArgumentNullException()
         {
-            _controller.TempData = _tempData;
-            _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
-            _fakeRadioNavigationalWarning.Reference = string.Empty;
+            controller.TempData = tempData;
+            fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            fakeRadioNavigationalWarning.Reference = string.Empty;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>().And.Message.EqualTo("Invalid value received for parameter reference"),
-                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
+                async delegate { await controller.Create(fakeRadioNavigationalWarning); });
         }
 
         [Test]
         public void WhenAddRadioNavigationWarningsWithInValidSummary_ThenReturnArgumentNullException()
         {
-            _controller.TempData = _tempData;
-            _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
-            _fakeRadioNavigationalWarning.Summary = string.Empty;
+            controller.TempData = tempData;
+            fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            fakeRadioNavigationalWarning.Summary = string.Empty;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
-                                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
+                                async delegate { await controller.Create(fakeRadioNavigationalWarning); });
         }
 
         [Test]
         public void WhenAddRadioNavigationWarningsWithInValidContent_ThenReturnArgumentNullException()
         {
-            _controller.TempData = _tempData;
-            _fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
-            _fakeRadioNavigationalWarning.Content = string.Empty;
+            controller.TempData = tempData;
+            fakeRadioNavigationalWarning = GetFakeRadioNavigationalWarning();
+            fakeRadioNavigationalWarning.Content = string.Empty;
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
                                             {"SkipDuplicateReferenceCheck", "No" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentNullException>(),
-                                async delegate { await _controller.Create(_fakeRadioNavigationalWarning); });
+                                async delegate { await controller.Create(fakeRadioNavigationalWarning); });
         }
 
         [OneTimeTearDown]

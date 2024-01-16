@@ -19,8 +19,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
                  + "e-mail from NAVAREA I Co-ordinator at: navwarnings@ukho.gov.uk    2. Cancel NAVAREA I 042/22.";
 
             string result = RnwHelper.FormatContent(content);
-            Assert.IsTrue(result.Length <= 303);
-            Assert.IsTrue(result.Contains("..."));
+            Assert.That(result.Length <= 303);
+            Assert.That(result.Contains("..."));
         }
 
         [Test]
@@ -28,8 +28,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         {
             const string content = "Test Content String";
             string result = RnwHelper.FormatContent(content);
-            Assert.AreEqual(content, result);
-            Assert.IsTrue(!result.Contains("..."));
+            Assert.That(content, Is.EqualTo(result));
+            Assert.That(!result.Contains("..."));
         }
 
         [Test]
@@ -37,15 +37,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.UnitTests.Helpers
         {
             string content = new('x', 300);
             string result = RnwHelper.FormatContent(content);
-            Assert.AreEqual(300, result.Length);
-            Assert.IsTrue(!result.Contains("..."));
+            Assert.That(300, Is.EqualTo(result.Length));
+            Assert.That(!result.Contains("..."));
         }
 
         [Test]
         public void WhenCallFormatContentWithNullContent_ThenReturnEmptyContent()
         {
             string result = RnwHelper.FormatContent(null);
-            Assert.IsEmpty(result);
+            Assert.That(string.Empty, Is.EqualTo(result));
         }
     }
 }
