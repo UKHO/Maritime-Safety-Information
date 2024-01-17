@@ -1,12 +1,12 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FakeItEasy;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
 using UKHO.MaritimeSafetyInformation.Common.Models.WebhookRequest;
@@ -18,34 +18,34 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class WebhookServiceTests
     {
-        private IAzureTableStorageClient _fakeaAzureTableStorageClient;
-        private IOptions<CacheConfiguration> _fakeCacheConfiguration;
-        private IEnterpriseEventCacheDataRequestValidator _fakeEnterpriseEventCacheDataRequestValidator;
-        private IOptions<FileShareServiceConfiguration> _fakeFileShareServiceConfig;
-        private IAzureStorageService _fakeAzureStorageService;
-        private ILogger<WebhookService> _fakeLogger;
+        private IAzureTableStorageClient fakeAzureTableStorageClient;
+        private IOptions<CacheConfiguration> fakeCacheConfiguration;
+        private IEnterpriseEventCacheDataRequestValidator fakeEnterpriseEventCacheDataRequestValidator;
+        private IOptions<FileShareServiceConfiguration> fakeFileShareServiceConfig;
+        private IAzureStorageService fakeAzureStorageService;
+        private ILogger<WebhookService> fakeLogger;
 
         private const string CorrelationId = "7b838400-7d73-4a64-982b-f426bddc1296";
 
-        private WebhookService _webhookService;
+        private WebhookService webhookService;
 
         [SetUp]
         public void Setup()
         {
-            _fakeaAzureTableStorageClient = A.Fake<IAzureTableStorageClient>();
-            _fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
-            _fakeEnterpriseEventCacheDataRequestValidator = A.Fake<IEnterpriseEventCacheDataRequestValidator>();
-            _fakeFileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
-            _fakeFileShareServiceConfig.Value.BusinessUnit = "MaritimeSafetyInformation";
-            _fakeFileShareServiceConfig.Value.ProductType = "Notices to Mariners";
-            _fakeAzureStorageService = A.Fake<IAzureStorageService>();
-            _fakeLogger = A.Fake<ILogger<WebhookService>>();
+            fakeAzureTableStorageClient = A.Fake<IAzureTableStorageClient>();
+            fakeCacheConfiguration = A.Fake<IOptions<CacheConfiguration>>();
+            fakeEnterpriseEventCacheDataRequestValidator = A.Fake<IEnterpriseEventCacheDataRequestValidator>();
+            fakeFileShareServiceConfig = A.Fake<IOptions<FileShareServiceConfiguration>>();
+            fakeFileShareServiceConfig.Value.BusinessUnit = "MaritimeSafetyInformation";
+            fakeFileShareServiceConfig.Value.ProductType = "Notices to Mariners";
+            fakeAzureStorageService = A.Fake<IAzureStorageService>();
+            fakeLogger = A.Fake<ILogger<WebhookService>>();
 
-            _webhookService = new WebhookService(_fakeaAzureTableStorageClient,
-                                                _fakeCacheConfiguration,
-                                                _fakeEnterpriseEventCacheDataRequestValidator,
-                                                _fakeFileShareServiceConfig,
-                                                _fakeAzureStorageService,_fakeLogger);
+            webhookService = new WebhookService(fakeAzureTableStorageClient,
+                                                fakeCacheConfiguration,
+                                                fakeEnterpriseEventCacheDataRequestValidator,
+                                                fakeFileShareServiceConfig,
+                                                fakeAzureStorageService, fakeLogger);
 
         }
 
@@ -53,10 +53,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public async Task WhenValidateNewFilesPublishedEventDataIsCalled_ThenShouldReturnValidationResult()
         {
             FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
-            A.CallTo(() => _fakeEnterpriseEventCacheDataRequestValidator.Validate(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
-            ValidationResult result = await _webhookService.ValidateNewFilesPublishedEventData(enterpriseEventCacheDataRequest);
-            Assert.AreEqual(0, result.Errors.Count);
-            Assert.AreEqual(true, result.IsValid);
+            A.CallTo(() => fakeEnterpriseEventCacheDataRequestValidator.Validate(A<FSSNewFilesPublishedEventData>.Ignored)).Returns(new ValidationResult());
+            ValidationResult result = await webhookService.ValidateNewFilesPublishedEventData(enterpriseEventCacheDataRequest);
+            Assert.That(0, Is.EqualTo(result.Errors.Count));
+            Assert.That(true, Is.EqualTo(result.IsValid));
         }
 
         [Test]
@@ -65,10 +65,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
             enterpriseEventCacheDataRequest.BusinessUnit = "TestBusinessUnit";
 
-            A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
-            bool result = await _webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
-            Assert.AreEqual(false, result);
+            bool result = await webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
+            Assert.That(false, Is.EqualTo(result));
         }
 
         [Test]
@@ -77,10 +77,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
             enterpriseEventCacheDataRequest.Attributes.FirstOrDefault(x => x.Key == "Product Type").Value = "TestProductCode";
 
-            A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
-            bool result = await _webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
-            Assert.AreEqual(false, result);
+            bool result = await webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
+            Assert.That(false, Is.EqualTo(result));
         }
 
         [Test]
@@ -88,10 +88,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             FSSNewFilesPublishedEventData enterpriseEventCacheDataRequest = GetNewFilesPublishedEventData();
 
-            A.CallTo(() => _fakeaAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
+            A.CallTo(() => fakeAzureTableStorageClient.DeleteTablesAsync(A<List<string>>.Ignored, A<string>.Ignored));
 
-            bool result = await _webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
-            Assert.AreEqual(true, result);
+            bool result = await webhookService.DeleteBatchSearchResponseCacheData(enterpriseEventCacheDataRequest, CorrelationId);
+            Assert.That(true, Is.EqualTo(result));
         }
 
         private static FSSNewFilesPublishedEventData GetNewFilesPublishedEventData()
@@ -112,7 +112,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 BatchId = "83d08093-7a67-4b3a-b431-92ba42feqw12",
                 BusinessUnit = "MaritimeSafetyInformation",
                 Attributes = new List<Common.Models.WebhookRequest.Attribute>()
-                {   
+                {
                     new Common.Models.WebhookRequest.Attribute() { Key = "Product Type", Value = "Notices to Mariners" }
                 },
                 BatchPublishedDate = Convert.ToDateTime("2022-04-04T11:22:18.2943076Z"),

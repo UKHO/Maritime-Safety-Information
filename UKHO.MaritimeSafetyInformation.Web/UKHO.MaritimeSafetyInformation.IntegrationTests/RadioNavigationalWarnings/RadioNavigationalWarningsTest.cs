@@ -1,12 +1,12 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 using UKHO.MaritimeSafetyInformation.Web.Services;
@@ -17,10 +17,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
     [TestFixture]
     internal class RadioNavigationalWarningsTest : BaseRNWTest
     {
-        private ILogger<RadioNavigationalWarningsController> _fakeLogger;
-        private IRNWRepository _rnwRepository;
-        private RNWService _rnwService;
-        private RadioNavigationalWarningsController _controller;
+        private ILogger<RadioNavigationalWarningsController> fakeLogger;
+        private IRNWRepository rnwRepository;
+        private RNWService rnwService;
+        private RadioNavigationalWarningsController controller;
 
         [OneTimeSetUp]
         public async Task OneTimeSetUp()
@@ -32,33 +32,33 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         [SetUp]
         public void Setup()
         {
-            _fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsController>>();
-            _rnwRepository = new RNWRepository(FakeContext);
-            _rnwService = new RNWService(_rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
-            
-            _controller = new RadioNavigationalWarningsController(FakeHttpContextAccessor, _fakeLogger, _rnwService);
+            fakeLogger = A.Fake<ILogger<RadioNavigationalWarningsController>>();
+            rnwRepository = new RNWRepository(FakeContext);
+            rnwService = new RNWService(rnwRepository, FakeRadioNavigationalWarningConfiguration, FakeLoggerRnwService);
+
+            controller = new RadioNavigationalWarningsController(FakeHttpContextAccessor, fakeLogger, rnwService);
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
         {
-            IActionResult result = await _controller.Index();
+            IActionResult result = await controller.Index();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
             string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
-            Assert.AreEqual(7, warningsData.Count);
-            Assert.AreEqual("RnwAdminListReference", warningsData[2].Reference);
-            Assert.AreEqual("RnwAdminListSummary", warningsData[2].Description);
-            Assert.AreEqual(new DateTime(2022, 1, 1), warningsData[2].DateTimeGroup);
-            Assert.AreEqual("010000 UTC Jan 22", warningsData[2].DateTimeGroupRnwFormat);  
-            Assert.AreEqual("151415 UTC Aug 19", lastModifiedDateTime);
+            Assert.That(7, Is.EqualTo(warningsData.Count));
+            Assert.That("RnwAdminListReference", Is.EqualTo(warningsData[2].Reference));
+            Assert.That("RnwAdminListSummary", Is.EqualTo(warningsData[2].Description));
+            Assert.That(new DateTime(2022, 1, 1), Is.EqualTo(warningsData[2].DateTimeGroup));
+            Assert.That("010000 UTC Jan 22", Is.EqualTo(warningsData[2].DateTimeGroupRnwFormat));
+            Assert.That("151415 UTC Aug 19", Is.EqualTo(lastModifiedDateTime));
         }
 
         [Test]
         public async Task WhenCallAbout_ThenReturnLastModifiedDateTime()
         {
-            IActionResult result = await _controller.About();
+            IActionResult result = await controller.About();
             string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
-            Assert.AreEqual("151415 UTC Aug 19", lastModifiedDateTime);
+            Assert.That("151415 UTC Aug 19", Is.EqualTo(lastModifiedDateTime));
         }
 
         [Test]
@@ -70,17 +70,17 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
                                             {"showSelectionId", "11" }
                                         });
             httpContext.Request.Form = formCol;
-            _controller.ControllerContext.HttpContext = httpContext;
+            controller.ControllerContext.HttpContext = httpContext;
 
-            IActionResult result = await _controller.ShowSelection();
+            IActionResult result = await controller.ShowSelection();
             List<RadioNavigationalWarningsData> warningsData = (List<RadioNavigationalWarningsData>)((ViewResult)result).Model;
             string lastModifiedDateTime = ((ViewResult)result).ViewData["LastModifiedDateTime"].ToString();
-            Assert.AreEqual(1, warningsData.Count);
-            Assert.AreEqual("RnwAdminListReference", warningsData[0].Reference);
-            Assert.AreEqual("RnwAdminListSummary", warningsData[0].Description);
-            Assert.AreEqual(new DateTime(2021, 1, 1), warningsData[0].DateTimeGroup);
-            Assert.AreEqual("010000 UTC Jan 21", warningsData[0].DateTimeGroupRnwFormat);
-            Assert.AreEqual("151415 UTC Aug 19", lastModifiedDateTime);
+            Assert.That(1, Is.EqualTo(warningsData.Count));
+            Assert.That("RnwAdminListReference", Is.EqualTo(warningsData[0].Reference));
+            Assert.That("RnwAdminListSummary", Is.EqualTo(warningsData[0].Description));
+            Assert.That(new DateTime(2021, 1, 1), Is.EqualTo(warningsData[0].DateTimeGroup));
+            Assert.That("010000 UTC Jan 21", Is.EqualTo(warningsData[0].DateTimeGroupRnwFormat));
+            Assert.That("151415 UTC Aug 19", Is.EqualTo(lastModifiedDateTime));
         }
 
         [OneTimeTearDown]

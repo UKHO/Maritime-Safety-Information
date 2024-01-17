@@ -1,7 +1,7 @@
-﻿using FakeItEasy;
+﻿using System.Security.Claims;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
-using System.Security.Claims;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 
 namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
@@ -10,7 +10,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     public class UserServiceTests
     {
         private const string DistributorRoleName = "Distributor";
-        
+
         [Test]
         public void WhenUserIsUnauthenticated_ThenIsDistributorReturnsFalse()
         {
@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             UserService userService = new(mockHttpContextAccessor);
 
-            Assert.AreEqual(false, userService.IsDistributorUser);
+            Assert.That(false, Is.EqualTo(userService.IsDistributorUser));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             UserService userService = new(mockHttpContextAccessor);
 
-            Assert.AreEqual(false, userService.IsDistributorUser);
+            Assert.That(false, Is.EqualTo(userService.IsDistributorUser));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             UserService userService = new(mockHttpContextAccessor);
 
-            Assert.AreEqual(true, userService.IsDistributorUser);
+            Assert.That(true, Is.EqualTo(userService.IsDistributorUser));
         }
 
         [Test]
@@ -87,8 +87,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             UserService userService = new(mockHttpContextAccessor);
 
-            Assert.AreEqual("TestUser", userService.SignInName);
-            Assert.AreEqual("f457520b-0f1c-44cc-9b5c-2113e2ba1234", userService.UserIdentifier);
+            Assert.That("TestUser", Is.EqualTo(userService.SignInName));
+            Assert.That("f457520b-0f1c-44cc-9b5c-2113e2ba1234", Is.EqualTo(userService.UserIdentifier));
 
         }
     }

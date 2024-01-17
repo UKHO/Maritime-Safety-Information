@@ -7,20 +7,20 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     [TestFixture]
     public class AccessibilityStatementControllerTest
     {
-        private AccessibilityStatementController _controller;
+        private AccessibilityStatementController controller;
 
         [SetUp]
         public void Setup()
         {
-            _controller = new AccessibilityStatementController();
+            controller = new AccessibilityStatementController();
         }
 
         [Test]
-        public void  WhenICallIndexView_ThenReturnView()
+        public void WhenICallIndexView_ThenReturnView()
         {
-            IActionResult result = _controller.Index();
+            IActionResult result = controller.Index();
 
-            Assert.IsInstanceOf<ViewResult>(result);
+            Assert.That(result, Is.InstanceOf<ViewResult>());
         }
     }
 }

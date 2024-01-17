@@ -11,51 +11,51 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
     [TestFixture]
     public class AccountControllerTests
     {
-        private AccountController _controller;
-        private IUrlHelper _fakeUrlHelper;       
+        private AccountController controller;
+        private IUrlHelper fakeUrlHelper;
 
         [SetUp]
         public void Setup()
         {
             var ctx = new DefaultHttpContext();
-            _fakeUrlHelper = A.Fake<IUrlHelper>();
-            
-            _controller = new AccountController()
+            fakeUrlHelper = A.Fake<IUrlHelper>();
+
+            controller = new AccountController()
             {
                 ControllerContext = new() { HttpContext = ctx },
-                Url = _fakeUrlHelper
+                Url = fakeUrlHelper
             };
         }
 
         [Test]
         public void WhenSignOutActionCalled_ThenReturnsSignOutResult()
         {
-            IActionResult result = _controller.SignOut();
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<SignOutResult>(result);
+            IActionResult result = controller.SignOut();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<SignOutResult>());
         }
 
         [Test]
         public void WhenSignOutActionCalled_ThenUsesRequiredAuthenticationScheme()
-        {           
-            IActionResult result = _controller.SignOut();
+        {
+            IActionResult result = controller.SignOut();
 
             SignOutResult signOutResult = ((SignOutResult)result);
 
-            Assert.IsInstanceOf<SignOutResult>(result);           
-            Assert.IsTrue(signOutResult.AuthenticationSchemes.Contains(OpenIdConnectDefaults.AuthenticationScheme));
-            Assert.IsTrue(signOutResult.AuthenticationSchemes.Contains(CookieAuthenticationDefaults.AuthenticationScheme));
+            Assert.That(result, Is.InstanceOf<SignOutResult>());
+            Assert.That(signOutResult.AuthenticationSchemes.Contains(OpenIdConnectDefaults.AuthenticationScheme));
+            Assert.That(signOutResult.AuthenticationSchemes.Contains(CookieAuthenticationDefaults.AuthenticationScheme));
         }
 
         [Test]
         public void WhenSignedOutActionCalled_ThenRedirects()
         {
-            A.CallTo(() => _fakeUrlHelper.Content(A<string>.Ignored)).Returns("test");
+            A.CallTo(() => fakeUrlHelper.Content(A<string>.Ignored)).Returns("test");
 
-            IActionResult result = _controller.SignedOut();
+            IActionResult result = controller.SignedOut();
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<RedirectResult>(result);            
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<RedirectResult>());
         }
     }
 }

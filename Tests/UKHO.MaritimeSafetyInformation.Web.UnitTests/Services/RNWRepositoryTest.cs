@@ -1,10 +1,9 @@
-﻿using FakeItEasy;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning;
@@ -16,27 +15,27 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
     [TestFixture]
     public class RNWRepositoryTest
     {
-        private RNWRepository _rnwRepository;
-        private RadioNavigationalWarningsContext _context;
-        private RadioNavigationalWarning _radioNavigationalWarning;
+        private RNWRepository rnwRepository;
+        private RadioNavigationalWarningsContext context;
+        private RadioNavigationalWarning radioNavigationalWarning;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
                                                                     .UseInMemoryDatabase("msi-ut-db");
-            _context = new RadioNavigationalWarningsContext(builder.Options);
+            context = new RadioNavigationalWarningsContext(builder.Options);
 
-            _context.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
-            _context.WarningType.AddRange(GetFakeWarningTypeList());
-            _context.SaveChanges();
+            context.RadioNavigationalWarnings.AddRange(GetFakeRadioNavigationalWarningList());
+            context.WarningType.AddRange(GetFakeWarningTypeList());
+            context.SaveChanges();
 
         }
 
         [SetUp]
         public void SetUp()
         {
-            _radioNavigationalWarning = new()
+            radioNavigationalWarning = new()
             {
                 WarningType = WarningTypes.NAVAREA_1,
                 Reference = "test",
@@ -45,92 +44,92 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 Content = "test",
                 IsDeleted = true,
             };
-            _rnwRepository = new RNWRepository(_context);
+            rnwRepository = new RNWRepository(context);
         }
 
         [Test]
         public void WhenCallAddRadioNavigationWarningsMethod_ThenCreatedNewRNWRecord()
         {
             DateTime dateTime = new DateTime(2022, 12, 1);
-            _radioNavigationalWarning.DateTimeGroup = dateTime;
+            radioNavigationalWarning.DateTimeGroup = dateTime;
 
-            Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);
+            Task result = rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
 
-            Task<RadioNavigationalWarning> data = _context.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
+            Task<RadioNavigationalWarning> data = context.RadioNavigationalWarnings.SingleOrDefaultAsync(b => b.Summary == "Test1" && b.DateTimeGroup == dateTime);
 
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsNotNull(data.Result.Summary);
-            Assert.IsNotNull(data.Result.LastModified < DateTime.UtcNow);
+            Assert.That(result.IsCompleted);
+            Assert.That(data.Result.Summary, Is.Not.Null);
+            Assert.That(data.Result.LastModified < DateTime.UtcNow);
         }
 
         [Test]
         public void WhenCallGetWarningTypeMethod_ThenReturnWarningType()
         {
-            Task<List<WarningType>> warningTypeList = _rnwRepository.GetWarningTypes();
+            Task<List<WarningType>> warningTypeList = rnwRepository.GetWarningTypes();
 
-            Assert.IsNotNull(warningTypeList);
-            Assert.IsInstanceOf(typeof(Task<List<WarningType>>), warningTypeList);
-            Assert.AreEqual("NAVAREA 1", warningTypeList.Result.First(x=>x.Id==1).Name);
-            Assert.AreEqual("UK Coastal", warningTypeList.Result.First(x=>x.Id==2).Name);
+            Assert.That(warningTypeList, Is.Not.Null);
+            Assert.That(warningTypeList, Is.InstanceOf(typeof(Task<List<WarningType>>)));
+            Assert.That("NAVAREA 1", Is.EqualTo(warningTypeList.Result.First(x => x.Id == 1).Name));
+            Assert.That("UK Coastal", Is.EqualTo(warningTypeList.Result.First(x => x.Id == 2).Name));
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationWarnings_ThenReturnListAsync()
         {
-            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.AreEqual(4, result.Count);
-            Assert.AreEqual("010000 UTC Jan 20", result.First(x=>x.Id == 2).DateTimeGroupRnwFormat);
-            Assert.AreEqual("NAVAREA 1", result.First(x => x.Id == 3).WarningTypeName);
-        }        
+            List<RadioNavigationalWarningsAdmin> result = await rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.That(4, Is.EqualTo(result.Count));
+            Assert.That("010000 UTC Jan 20", Is.EqualTo(result.First(x => x.Id == 2).DateTimeGroupRnwFormat));
+            Assert.That("NAVAREA 1", Is.EqualTo(result.First(x => x.Id == 3).WarningTypeName));
+        }
 
         [Test]
         public async Task WhenCallGetRadioNavigationWarningWithContentLengthGreaterThan300Char_ThenWrapTheContent()
         {
-            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.IsTrue(result.First(x => x.Id == 1).Content.Length <= 303);
-            Assert.IsTrue(result.First(x => x.Id == 1).Content.Contains("..."));
+            List<RadioNavigationalWarningsAdmin> result = await rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.That(result.First(x => x.Id == 1).Content.Length <= 303);
+            Assert.That(result.First(x => x.Id == 1).Content.Contains("..."));
         }
 
         [Test]
         public async Task WhenGetRadioNavigationWarningsIsCalled_ThenCheckIsStatusIsDisplayedCorrectly()
         {
-            List<RadioNavigationalWarningsAdmin> result = await _rnwRepository.GetRadioNavigationWarningsAdminList();
-            Assert.AreEqual("Active", result.First(x=>x.Id==1).Status);
-            Assert.AreEqual("Expired", result.First(x => x.Id == 2).Status);
-            Assert.AreEqual("Expired", result.First(x => x.Id == 3).Status);
-            Assert.AreEqual("Active", result.First(x => x.Id == 4).Status);
+            List<RadioNavigationalWarningsAdmin> result = await rnwRepository.GetRadioNavigationWarningsAdminList();
+            Assert.That("Active", Is.EqualTo(result.First(x => x.Id == 1).Status));
+            Assert.That("Expired", Is.EqualTo(result.First(x => x.Id == 2).Status));
+            Assert.That("Expired", Is.EqualTo(result.First(x => x.Id == 3).Status));
+            Assert.That("Active", Is.EqualTo(result.First(x => x.Id == 4).Status));
         }
 
         [Test]
         public async Task WhenCallGetYears_ThenReturnListAsync()
         {
-            List<string> result = await _rnwRepository.GetYears();
-            Assert.AreEqual(3, result.Count);
-            Assert.AreEqual("2020", result[0]);
-            Assert.AreEqual("2021", result[1]);
-            Assert.AreEqual("2022", result[2]);
+            List<string> result = await rnwRepository.GetYears();
+            Assert.That(3, Is.EqualTo(result.Count));
+            Assert.That("2020", Is.EqualTo(result[0]));
+            Assert.That("2021", Is.EqualTo(result[1]));
+            Assert.That("2022", Is.EqualTo(result[2]));
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
         {
-            List<RadioNavigationalWarningsData> result = await _rnwRepository.GetRadioNavigationalWarningsDataList();
-            Assert.AreEqual(2, result.Count);
+            List<RadioNavigationalWarningsData> result = await rnwRepository.GetRadioNavigationalWarningsDataList();
+            Assert.That(2, Is.EqualTo(result.Count));
         }
 
         [Test]
         public async Task WhenCallGetSelectedRadioNavigationalWarningsDataList_ThenReturnOnlyNonDeletedAndNonExpiredWarnings()
         {
             int[] data = { 4 };
-            List<RadioNavigationalWarningsData> result = await _rnwRepository.GetSelectedRadioNavigationalWarningsDataList(data);
-            Assert.AreEqual(1, result.Count);
+            List<RadioNavigationalWarningsData> result = await rnwRepository.GetSelectedRadioNavigationalWarningsDataList(data);
+            Assert.That(1, Is.EqualTo(result.Count));
         }
 
         [Test]
         public async Task WhenCallGetRadioNavigationalWarningsLastModifiedDateTime_ThenReturnLastModifiedDateTime()
         {
-            DateTime result = await _rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
-            Assert.AreEqual(new DateTime(2099, 02, 03), result);
+            DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
+            Assert.That(new DateTime(2099, 02, 03), Is.EqualTo(result));
         }
 
         [Test]
@@ -142,7 +141,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
 
-            Assert.AreEqual(new DateTime(1, 1, 1), result);
+            Assert.That(new DateTime(1, 1, 1), Is.EqualTo(result));
         }
 
         [Test]
@@ -152,52 +151,52 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             RNWRepository rnwRepository = new(emptyContext);
 
             DateTime result = await rnwRepository.GetRadioNavigationalWarningsLastModifiedDateTime();
-            Assert.AreEqual(new DateTime(1, 1, 1), result);
+            Assert.That(new DateTime(1, 1, 1), Is.EqualTo(result));
         }
 
 
         [Test]
         public void WhenCallUpdateRadioNavigationalWarningsRecord_ThenUpdateRNWRecord()
         {
-            Task result = _rnwRepository.AddRadioNavigationWarning(_radioNavigationalWarning);
-            Task isUpdate = _rnwRepository.UpdateRadioNavigationalWarning(_radioNavigationalWarning);
-            Assert.IsTrue(result.IsCompleted);
-            Assert.IsTrue(isUpdate.IsCompleted);
+            Task result = rnwRepository.AddRadioNavigationWarning(radioNavigationalWarning);
+            Task isUpdate = rnwRepository.UpdateRadioNavigationalWarning(radioNavigationalWarning);
+            Assert.That(result.IsCompleted);
+            Assert.That(isUpdate.IsCompleted);
         }
 
         [Test]
         public void WhenCallEditRadioNavigationalWarningsRecord_ThenReturnRecordForGivenId()
         {
             const int id = 1;
-            RadioNavigationalWarning result = _rnwRepository.GetRadioNavigationalWarningById(id);
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Id);
+            RadioNavigationalWarning result = rnwRepository.GetRadioNavigationalWarningById(id);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(1, Is.EqualTo(result.Id));
         }
 
         [Test]
         public async Task WhenCallCheckReferenceNumberExistOrNot_ThenReturnFalseValue()
         {
             const string referenceNumber = "test_Reference";
-            bool result = await _rnwRepository.CheckReferenceNumberExistOrNot(WarningTypes.NAVAREA_1, referenceNumber);
+            bool result = await rnwRepository.CheckReferenceNumberExistOrNot(WarningTypes.NAVAREA_1, referenceNumber);
 
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
         public async Task WhenCallCheckReferenceNumberExistOrNot_ThenReturnTrueValue()
         {
             const string referenceNumber = "RnwAdminListReference";
-            bool result = await _rnwRepository.CheckReferenceNumberExistOrNot(WarningTypes.UK_Coastal, referenceNumber);
+            bool result = await rnwRepository.CheckReferenceNumberExistOrNot(WarningTypes.UK_Coastal, referenceNumber);
 
-            Assert.IsTrue(result);
+            Assert.That(result);
         }
 
         [OneTimeTearDown]
         public void GlobalTearDown()
         {
-            _context.RadioNavigationalWarnings.RemoveRange(_context.RadioNavigationalWarnings);
-            _context.WarningType.RemoveRange(_context.WarningType);
-            _context.SaveChanges();
+            context.RadioNavigationalWarnings.RemoveRange(context.RadioNavigationalWarnings);
+            context.WarningType.RemoveRange(context.WarningType);
+            context.SaveChanges();
         }
 
         private static List<RadioNavigationalWarning> GetFakeRadioNavigationalWarningList()
