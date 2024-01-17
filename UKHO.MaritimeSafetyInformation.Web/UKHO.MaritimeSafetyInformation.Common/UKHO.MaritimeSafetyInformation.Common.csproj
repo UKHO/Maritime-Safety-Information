@@ -20,8 +20,8 @@
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="3.0.0" />
 	<PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
-	<PackageReference Include="UKHO.FileShareAdminClient" Version="1.5.20907.4" />
-    <PackageReference Include="UKHO.FileShareClient" Version="1.5.20907.4" />
+	<PackageReference Include="UKHO.FileShareAdminClient" Version="1.6.30104.1" />
+    <PackageReference Include="UKHO.FileShareClient" Version="1.6.30104.1" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.23242.1" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.58.1" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
