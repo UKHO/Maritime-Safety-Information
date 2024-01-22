@@ -36,14 +36,6 @@ variables:
   - name: WindowsPool
     value: "NautilusBuild"
 
-resources:
-  repositories:
-  - repository: UKHOTemplates
-    type: github
-    name: UKHO/devops-pipelinetemplates
-    endpoint: UKHO
-    ref: refs/heads/main
-
 stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
     displayName: "Build (inc DependencyChecker, Dotnet Build , dotnet test and publish artifact )"
