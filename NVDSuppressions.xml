@@ -617,4 +617,22 @@
     <packageUrl regex="true">^pkg:generic/System\.IdentityModel\.Tokens\.Jwt@.*$</packageUrl>
     <cve>CVE-2024-21319</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.IdentityModel.LoggingExtensions.dll
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.LoggingExtensions@.*$</packageUrl>
+    <cve>CVE-2024-21643</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.IdentityModel.LoggingExtensions:6.33.0
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.LoggingExtensions@.*$</packageUrl>
+    <cve>CVE-2024-21643</cve>
+  </suppress>
 </suppressions>
