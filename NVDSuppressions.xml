@@ -520,26 +520,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.IdentityModel.LoggingExtensions.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.LoggingExtensions@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.LoggingExtensions:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.LoggingExtensions@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
    Fixed in SDK >= 6.0.418
    ]]>
@@ -585,26 +565,6 @@
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Tokens@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Validators.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Validators@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Validators:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Validators@.*$</packageUrl>
     <cve>CVE-2024-21319</cve>
   </suppress>
   <suppress>
