@@ -567,4 +567,26 @@
     <packageUrl regex="true">^pkg:generic/System\.IdentityModel\.Tokens\.Jwt@.*$</packageUrl>
     <cve>CVE-2024-21319</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: GetDocument.Insider.dll
+   Fixed in latest .NET release
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/GetDocument\.Insider@.*$</packageUrl>
+    <cve>CVE-2024-21386</cve>
+    <cve>CVE-2024-21404</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: dotnet-getdocument.dll
+   Fixed in latest .NET release
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
+    <cve>CVE-2024-21386</cve>
+    <cve>CVE-2024-21404</cve>
+  </suppress>
 </suppressions>
