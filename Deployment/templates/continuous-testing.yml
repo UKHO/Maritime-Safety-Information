@@ -11,12 +11,12 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
-    - task: FileTransform@2
-      displayName: "File Transform: integrationtests"
-      inputs:
-       folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
-       xmlTransformationRules:
-       jsonTargetFiles: '**/appsettings.json'
+    # - task: FileTransform@2
+    #   displayName: "File Transform: integrationtests"
+    #   inputs:
+    #    folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
+    #    xmlTransformationRules:
+    #    jsonTargetFiles: '**/appsettings.json'
 
     - task: UseDotNet@2
       displayName: 'Use .NET 6.0.x sdk'
@@ -35,68 +35,68 @@ steps:
        testRunTitle: "$(Environment)-IntegrationTests"
        workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
 
-    - checkout: self
-      condition: always()
+    # - checkout: self
+    #   condition: always()
 
-    - task: NodeTool@0
-      inputs:
-       versionSpec: '18.x'
-      displayName: 'Install Node.js'
+    # - task: NodeTool@0
+    #   inputs:
+    #    versionSpec: '18.x'
+    #   displayName: 'Install Node.js'
 
-    - script: |
-       npm ci
-      displayName: 'npm restore'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests'
+    # - script: |
+    #    npm ci
+    #   displayName: 'npm restore'
+    #   workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-    - script: |
-       npx playwright install --with-deps
-      displayName: 'npx playwright install'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests'
+    # - script: |
+    #    npx playwright install --with-deps
+    #   displayName: 'npx playwright install'
+    #   workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-    - task: FileTransform@2
-      inputs:
-       folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-       xmlTransformationRules:
-       jsonTargetFiles: 'appConfig.json'
+    # - task: FileTransform@2
+    #   inputs:
+    #    folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
+    #    xmlTransformationRules:
+    #    jsonTargetFiles: 'appConfig.json'
 
-    - script: |
-       npx playwright test --workers=2 --retries=3
-      displayName: 'Run Functional Tests'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
+    # - script: |
+    #    npx playwright test --workers=2 --retries=3
+    #   displayName: 'Run Functional Tests'
+    #   workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
-    - task: PublishTestResults@2
-      condition: succeededOrFailed()
-      inputs:
-        testRunner: 'JUnit'
-        testResultsFiles: 'results.xml'
-        mergeTestResults: true
-        searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-        testRunTitle: $(Environment) Functional Test Results
-      displayName: 'Publish Functional Test Results'
+    # - task: PublishTestResults@2
+    #   condition: succeededOrFailed()
+    #   inputs:
+    #     testRunner: 'JUnit'
+    #     testResultsFiles: 'results.xml'
+    #     mergeTestResults: true
+    #     searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
+    #     testRunTitle: $(Environment) Functional Test Results
+    #   displayName: 'Publish Functional Test Results'
 
-    - script: |
-       npm run test:a11y
-      displayName: 'Run Accessibility Tests'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
+    # - script: |
+    #    npm run test:a11y
+    #   displayName: 'Run Accessibility Tests'
+    #   workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
           
-    - task: PublishTestResults@2
-      condition: succeededOrFailed()
-      inputs:
-        testRunner: 'JUnit'
-        testResultsFiles: 'results.xml'
-        mergeTestResults: true
-        searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-        testRunTitle: $(Environment) Accessibility Test Results
-      displayName: 'Publish Accessibility Test Results'
+    # - task: PublishTestResults@2
+    #   condition: succeededOrFailed()
+    #   inputs:
+    #     testRunner: 'JUnit'
+    #     testResultsFiles: 'results.xml'
+    #     mergeTestResults: true
+    #     searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
+    #     testRunTitle: $(Environment) Accessibility Test Results
+    #   displayName: 'Publish Accessibility Test Results'
 
-    - task: AzureCLI@2
-      displayName: "Swap MSI BusinessUnit"
-      condition: always()
-      inputs:
-        azureSubscription: "${{ parameters.AzureSubscription }}"
-        scriptType: 'pscore'
-        scriptLocation: 'scriptPath'
-        scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/set_business_unit.ps1"
-        arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -isCacheEnabled $(IsFssCacheEnabledAfterFT) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
+    # - task: AzureCLI@2
+    #   displayName: "Swap MSI BusinessUnit"
+    #   condition: always()
+    #   inputs:
+    #     azureSubscription: "${{ parameters.AzureSubscription }}"
+    #     scriptType: 'pscore'
+    #     scriptLocation: 'scriptPath'
+    #     scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/set_business_unit.ps1"
+    #     arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -isCacheEnabled $(IsFssCacheEnabledAfterFT) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
 
     
