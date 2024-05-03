@@ -11,12 +11,12 @@ steps:
        artifactName: 'IntegrationTests'
        downloadPath: '$(Build.SourcesDirectory)'
 
-    # - task: FileTransform@2
-    #   displayName: "File Transform: integrationtests"
-    #   inputs:
-    #    folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
-    #    xmlTransformationRules:
-    #    jsonTargetFiles: '**/appsettings.json'
+    - task: FileTransform@2
+      displayName: "File Transform: integrationtests"
+      inputs:
+       folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
+       xmlTransformationRules:
+       jsonTargetFiles: '**/appsettings.json'
 
     - task: UseDotNet@2
       displayName: 'Use .NET 6.0.x sdk'

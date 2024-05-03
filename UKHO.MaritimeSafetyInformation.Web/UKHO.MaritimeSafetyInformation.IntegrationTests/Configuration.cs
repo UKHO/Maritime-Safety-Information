@@ -18,6 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
         {
             ConfigurationRoot = new ConfigurationBuilder()
                                 .AddJsonFile("appsettings.json", false)
+                                .AddJsonFile("appsettings.test.json", false)
                                 .Build();
 
             BusinessUnit = ConfigurationRoot.GetValue<string>("FileShareService:BusinessUnit");

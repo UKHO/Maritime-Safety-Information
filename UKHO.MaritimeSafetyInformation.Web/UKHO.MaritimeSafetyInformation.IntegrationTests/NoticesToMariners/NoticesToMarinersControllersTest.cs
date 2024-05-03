@@ -19,7 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     internal class NoticesToMarinersControllersTest
     {
         private readonly IServiceProvider services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
-        private FssFixture fss;
+        private FssMock fss;
         private NoticesToMarinersController nMController;
 
         private Configuration Config { get; set; }
@@ -32,7 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             {
                 HttpContext = new DefaultHttpContext()
             };
-            fss = new FssFixture();
+            fss = new FssMock();
 
             nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
         }
@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [TearDown]
         public void TearDown()
         {
-            fss.Stop();
+            fss?.Stop();
         }
 
         //[Test]
@@ -117,16 +117,25 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
         {
+            fss.SetupSearch("Resources/result.json");
+
             IActionResult result = await nMController.ShowWeeklyFilesAsync(2022, 18);
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
             Assert.That(listFiles != null);
-            Assert.That(3, Is.EqualTo(listFiles.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("e6231e8f-2dfa-4c1d-8b68-9913f4d70e55", Is.EqualTo(listFiles[0].BatchId));
-            Assert.That("NM_MSI", Is.EqualTo(listFiles[0].FileDescription));
-            Assert.That("image/jpg", Is.EqualTo(listFiles[0].MimeType));
-            Assert.That(108480, Is.EqualTo(listFiles[0].FileSize));
+            Assert.That(listFiles.Count, Is.EqualTo(3));
+            Assert.That(Config.BusinessUnit, Is.EqualTo("MaritimeSafetyInformationIntegrationTest"));
+            Assert.That(Config.ProductType, Is.EqualTo("Notices to Mariners"));
+
+            for (int i = 0; i < listFiles.Count; i++)
+            {
+                Assert.That(listFiles[i].BatchId, Is.EqualTo("18f384bf-78cb-4c3b-863c-38f3ed9d2f86"));
+                Assert.That(listFiles[i].FileDescription, Is.EqualTo($"file{(i + 1)}"));
+                Assert.That(listFiles[i].MimeType, Is.EqualTo("text/plain"));
+            }
+
+            Assert.That(32452345, Is.EqualTo(listFiles[0].FileSize));
+            Assert.That(456232, Is.EqualTo(listFiles[1].FileSize));
+            Assert.That(98343, Is.EqualTo(listFiles[2].FileSize));
         }
 
         //[Test]
