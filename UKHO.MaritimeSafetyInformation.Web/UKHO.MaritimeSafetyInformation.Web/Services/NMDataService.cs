@@ -58,8 +58,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult.Entries == null)
                 {
-                    //string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
-                    var accessToken = "";
+                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    //var accessToken = "";
 
                     string searchText = $" and $batch(Frequency) eq '{frequency}' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
