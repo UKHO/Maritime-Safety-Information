@@ -9,9 +9,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.Infrastructure
     {
         private readonly WireMockServer wireMockServer;
 
+        public int Port { get; }
+
         public FssMock()
         {
-            wireMockServer = WireMockServer.Start(50000);
+            wireMockServer = WireMockServer.Start();
+            Port = wireMockServer.Port;
         }
 
         public void Stop()

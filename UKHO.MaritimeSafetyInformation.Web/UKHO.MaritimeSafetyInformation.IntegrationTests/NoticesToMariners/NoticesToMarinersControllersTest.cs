@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.IntegrationTests.Infrastructure;
 using UKHO.MaritimeSafetyInformation.Web;
@@ -33,6 +35,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
                 HttpContext = new DefaultHttpContext()
             };
             fss = new FssMock();
+            Config.BaseUrl = Config.BaseUrl.Replace("{port}", fss.Port.ToString());
+            var fssConfig = services.GetService<IOptions<FileShareServiceConfiguration>>().Value;
+            fssConfig.BaseUrl = Config.BaseUrl;
 
             nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
         }
