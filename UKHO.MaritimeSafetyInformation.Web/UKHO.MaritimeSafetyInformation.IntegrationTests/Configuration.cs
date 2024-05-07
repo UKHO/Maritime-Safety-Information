@@ -8,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
 
         public string BusinessUnit { get; set; }
         public string ProductType { get; set; }
-        public string BaseUrl { get; set; }
+        public string MockBaseUrl { get; set; }
         public string FssClientId { get; set; }
         public int MaxAttributeValuesCount { get; set; }
         public int PageSize { get; set; }
@@ -22,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests
 
             BusinessUnit = ConfigurationRoot.GetValue<string>("FileShareService:BusinessUnit");
             ProductType = ConfigurationRoot.GetValue<string>("FileShareService:ProductType");
-            BaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:BaseUrl");
+            MockBaseUrl = ConfigurationRoot.GetValue<string>("FileShareService:MockBaseUrl");
             FssClientId = ConfigurationRoot.GetValue<string>("FileShareService:FssClientId");
             MaxAttributeValuesCount = ConfigurationRoot.GetValue<int>("FileShareService:MaxAttributeValuesCount");
             PageSize = ConfigurationRoot.GetValue<int>("FileShareService:PageSize");

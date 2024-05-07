@@ -5,50 +5,85 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
+using UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices;
 using UKHO.MaritimeSafetyInformation.Web;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
-    /// <summary>
-    /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
-    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
-    /// </summary>
     internal class NoticesToMarinersControllersTest
     {
-        private readonly IServiceProvider services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+        private IServiceProvider services;
         private NoticesToMarinersController nMController;
+        private FssMock fss;
+        private Configuration configuration;
 
-        private Configuration Config { get; set; }
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+            configuration = new Configuration();
+            Assert.That(configuration.BusinessUnit, Is.EqualTo("MaritimeSafetyInformationIntegrationTest"));
+            Assert.That(configuration.ProductType, Is.EqualTo("Notices to Mariners"));
+            fss = new FssMock(configuration);
+            configuration.MockBaseUrl = configuration.MockBaseUrl.Replace("{port}", fss.Port.ToString());
+            var fssConfig = services.GetService<IOptions<FileShareServiceConfiguration>>().Value;
+            fssConfig.BaseUrl = configuration.MockBaseUrl;
+        }
 
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();
-            _ = new HttpContextAccessor
-            {
-                HttpContext = new DefaultHttpContext()
-            };
-
+            _ = new HttpContextAccessor { HttpContext = new DefaultHttpContext() };
             nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            fss?.Stop();
         }
 
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            IActionResult result = await nMController.Index();
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            fss.SetupBatchAttributeSearch("WhenCallIndexOnLoad_ThenReturnList 1");
+            fss.SetupSearch("WhenCallIndexOnLoad_ThenReturnList 2", 2024, 4);
+
+            var result = await nMController.Index();
+            var showWeeklyFiles = (result as ViewResult)?.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(10, Is.EqualTo(showWeeklyFiles.YearAndWeekList.Count));
-            Assert.That(5, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That(2020, Is.EqualTo(showWeeklyFiles.YearAndWeekList[0].Year));
-            Assert.That(14, Is.EqualTo(showWeeklyFiles.YearAndWeekList[0].Week));
-            Assert.That("application/pdf", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[0].MimeType));
-            Assert.That(Config.MaxAttributeValuesCount >= showWeeklyFiles.YearAndWeekList.Count);
+            Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.EqualTo(9));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(3));
+
+            Assert.That(showWeeklyFiles.YearAndWeekList[0].Year, Is.EqualTo(2024));
+            Assert.That(showWeeklyFiles.YearAndWeekList[0].Week, Is.EqualTo(2));
+            Assert.That(showWeeklyFiles.YearAndWeekList[1].Year, Is.EqualTo(2024));
+            Assert.That(showWeeklyFiles.YearAndWeekList[1].Week, Is.EqualTo(3));
+            Assert.That(showWeeklyFiles.YearAndWeekList[2].Year, Is.EqualTo(2024));
+            Assert.That(showWeeklyFiles.YearAndWeekList[2].Week, Is.EqualTo(4));
+            Assert.That(showWeeklyFiles.YearAndWeekList[3].Year, Is.EqualTo(2023));
+            Assert.That(showWeeklyFiles.YearAndWeekList[3].Week, Is.EqualTo(5));
+            Assert.That(showWeeklyFiles.YearAndWeekList[4].Year, Is.EqualTo(2023));
+            Assert.That(showWeeklyFiles.YearAndWeekList[4].Week, Is.EqualTo(6));
+            Assert.That(showWeeklyFiles.YearAndWeekList[5].Year, Is.EqualTo(2023));
+            Assert.That(showWeeklyFiles.YearAndWeekList[5].Week, Is.EqualTo(7));
+            Assert.That(showWeeklyFiles.YearAndWeekList[6].Year, Is.EqualTo(2022));
+            Assert.That(showWeeklyFiles.YearAndWeekList[6].Week, Is.EqualTo(8));
+            Assert.That(showWeeklyFiles.YearAndWeekList[7].Year, Is.EqualTo(2022));
+            Assert.That(showWeeklyFiles.YearAndWeekList[7].Week, Is.EqualTo(9));
+            Assert.That(showWeeklyFiles.YearAndWeekList[8].Year, Is.EqualTo(2022));
+            Assert.That(showWeeklyFiles.YearAndWeekList[8].Week, Is.EqualTo(10));
+
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[0].MimeType, Is.EqualTo("application/pdf"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].MimeType, Is.EqualTo("text/plain"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[2].MimeType, Is.EqualTo("application/pdf"));
+
+            Assert.That(configuration.MaxAttributeValuesCount >= showWeeklyFiles.YearAndWeekList.Count);
         }
 
         [Test]
@@ -59,8 +94,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showWeeklyFiles, Is.Not.Null);
             Assert.That(4, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
             Assert.That(10, Is.EqualTo(showWeeklyFiles.YearAndWeekList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That("msi_img_W2021_30.jpg", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].Filename));
             Assert.That(".jpg", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].FileExtension));
             Assert.That("msi_img_W2021_30", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].FileDescription));
@@ -75,8 +110,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.That(showWeeklyFiles, Is.Not.Null);
             Assert.That(0, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
         }
 
         [Test]
@@ -86,8 +121,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
             Assert.That(listFiles, Is.Not.Null);
             Assert.That(4, Is.EqualTo(listFiles.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That("a738d0d3-bc1e-47ca-892a-9514ccef6464", Is.EqualTo(listFiles[0].BatchId));
             Assert.That("21snii22_week_W2020_14", Is.EqualTo(listFiles[0].FileDescription));
             Assert.That(".pdf", Is.EqualTo(listFiles[0].FileExtension));
@@ -102,23 +137,32 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
             Assert.That(showWeeklyFiles, Is.Not.Null);
             Assert.That(0, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
         }
 
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
         {
-            IActionResult result = await nMController.ShowWeeklyFilesAsync(2022, 18);
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
+            const int year = 2022;
+            const int weekNumber = 18;
+            fss.SetupSearch("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles", year, weekNumber);
+
+            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber);
+            var listFiles = (result as PartialViewResult)?.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles != null);
-            Assert.That(3, Is.EqualTo(listFiles.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("e6231e8f-2dfa-4c1d-8b68-9913f4d70e55", Is.EqualTo(listFiles[0].BatchId));
-            Assert.That("NM_MSI", Is.EqualTo(listFiles[0].FileDescription));
-            Assert.That("image/jpg", Is.EqualTo(listFiles[0].MimeType));
-            Assert.That(108480, Is.EqualTo(listFiles[0].FileSize));
+            Assert.That(listFiles.Count, Is.EqualTo(3));
+
+            for (var i = 0; i < listFiles.Count; i++)
+            {
+                Assert.That(listFiles[i].BatchId, Is.EqualTo("18f384bf-78cb-4c3b-863c-38f3ed9d2f86"));
+                Assert.That(listFiles[i].FileDescription, Is.EqualTo($"file{i + 1}"));
+                Assert.That(listFiles[i].MimeType, Is.EqualTo("text/plain"));
+            }
+
+            Assert.That(32452345, Is.EqualTo(listFiles[0].FileSize));
+            Assert.That(456232, Is.EqualTo(listFiles[1].FileSize));
+            Assert.That(98343, Is.EqualTo(listFiles[2].FileSize));
         }
 
         [Test]
@@ -127,8 +171,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await nMController.ShowDailyFilesAsync();
             List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
             Assert.That(showFiles, Is.Not.Null);
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That(1, Is.EqualTo(showFiles[4].DailyFilesData.Count));
             Assert.That("33", Is.EqualTo(showFiles[4].WeekNumber));
             Assert.That("2021", Is.EqualTo(showFiles[4].Year));
@@ -145,8 +189,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             IActionResult result = await nMController.ShowDailyFilesAsync();
             List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
             Assert.That(showFiles != null);
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That(5, Is.EqualTo(showFiles[0].DailyFilesData.Count));
             Assert.That("21", Is.EqualTo(showFiles[0].WeekNumber));
             Assert.That("2022", Is.EqualTo(showFiles[0].Year));
@@ -167,7 +211,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             FileResult result = await nMController.DownloadFile(batchId, filename, mimeType, frequency);
             Assert.That(result, Is.Not.Null);
             Assert.That("application/pdf", Is.EqualTo(result.ContentType));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
+            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(configuration.MockBaseUrl));
             Assert.That(1072212, Is.EqualTo(((FileContentResult)result).FileContents.Length));
         }
 
@@ -195,7 +239,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That((FileContentResult)result != null);
             Assert.That("application/pdf", Is.EqualTo(((FileContentResult)result).ContentType));
             Assert.That(425602, Is.EqualTo(((FileContentResult)result).FileContents.Length));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
+            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(configuration.MockBaseUrl));
         }
 
         [Test]
@@ -216,8 +260,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.That(showNMFiles, Is.Not.Null);
             Assert.That(6, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That("50044762-231d-41ec-a908-ba9eb59c61ab", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].BatchId));
             Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
             Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileExtension));
@@ -235,8 +279,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.That(showNMFiles, Is.Not.Null);
             Assert.That(6, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That("f5569dc0-a0e4-40f5-b252-fef2e77861e1", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].BatchId));
             Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
             Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileExtension));
@@ -254,8 +298,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
             Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That("10219d3c-15bb-43db-ab51-2f2f4f6038de", Is.EqualTo(responseModel.ShowFilesResponseModel[0].BatchId));
             Assert.That("An overview of the 26 sections", Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileDescription));
             Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileExtension));
@@ -274,8 +318,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
             Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
+            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
             Assert.That("10219d3c-15bb-43db-ab51-2f2f4f6038de", Is.EqualTo(responseModel.ShowFilesResponseModel[0].BatchId));
             Assert.That("Firing Practice and Exercise Areas", Is.EqualTo(responseModel.ShowFilesResponseModel[4].FileDescription));
             Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileExtension));
@@ -299,7 +343,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That((FileContentResult)result != null);
             Assert.That("application/gzip", Is.EqualTo(((FileContentResult)result).ContentType));
             Assert.That(2278920, Is.EqualTo(((FileContentResult)result).FileContents.Length));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
+            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(configuration.MockBaseUrl));
         }
 
         [Test]

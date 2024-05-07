@@ -1,0 +1,11 @@
+{
+    "FileShareService": {
+        "BaseUrl": "",
+        "BusinessUnit": "MaritimeSafetyInformationIntegrationTest",
+        "ProductType": "",
+        "FssClientId": "",
+        "MaxAttributeValuesCount": "25",
+        "PageSize": "100",
+        "Start": "0"
+    }
+}

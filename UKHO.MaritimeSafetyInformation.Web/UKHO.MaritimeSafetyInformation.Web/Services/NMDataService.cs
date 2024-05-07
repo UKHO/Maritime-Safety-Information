@@ -58,7 +58,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult.Entries == null)
                 {
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    //string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    var accessToken = "";
 
                     string searchText = $" and $batch(Frequency) eq '{frequency}' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
@@ -118,7 +119,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchAttributes.Data == null)
                 {
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    //string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    var accessToken = "";
 
                     _logger.LogInformation(EventIds.GetSearchAttributeRequestDataStarted.ToEventId(), "Request to search attribute year and week data from File Share Service started for _X-Correlation-ID:{correlationId}", correlationId);
 
