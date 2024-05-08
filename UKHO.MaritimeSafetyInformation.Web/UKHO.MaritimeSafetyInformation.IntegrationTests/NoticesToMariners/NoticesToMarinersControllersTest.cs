@@ -54,8 +54,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             fss.SetupBatchAttributeSearch("WhenCallIndexOnLoad_ThenReturnList 1");
             fss.SetupSearch("WhenCallIndexOnLoad_ThenReturnList 2", 2024, 4);
 
-            var result = await nMController.Index();
-            var showWeeklyFiles = (result as ViewResult)?.Model as ShowWeeklyFilesResponseModel;
+            var result = await nMController.Index() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
             Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.EqualTo(9));
             Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(3));
@@ -89,56 +90,97 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallIndexWithYearWeek_ThenReturnList()
         {
-            IActionResult result = await nMController.Index(2021, 30);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            const int year = 2021;
+            const int weekNumber = 30;
+            fss.SetupBatchAttributeSearch("WhenCallIndexWithYearWeek_ThenReturnList 1");
+            fss.SetupSearch("WhenCallIndexWithYearWeek_ThenReturnList 2", year, weekNumber);
+
+            var result = await nMController.Index(year, weekNumber) as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(4, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That(10, Is.EqualTo(showWeeklyFiles.YearAndWeekList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That("msi_img_W2021_30.jpg", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].Filename));
-            Assert.That(".jpg", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].FileExtension));
-            Assert.That("msi_img_W2021_30", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].FileDescription));
-            Assert.That(2021, Is.EqualTo(showWeeklyFiles.YearAndWeekList[2].Year));
-            Assert.That(30, Is.EqualTo(showWeeklyFiles.YearAndWeekList[2].Week));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(2));
+            Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.EqualTo(10));
+
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[0].Filename, Is.EqualTo("file1.pdf"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[0].FileDescription, Is.EqualTo("file1"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[0].MimeType, Is.EqualTo("application/pdf"));
+
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].Filename, Is.EqualTo("msi_img_W2021_30.jpg"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].FileExtension, Is.EqualTo(".jpg"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].FileDescription, Is.EqualTo("msi_img_W2021_30"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].MimeType, Is.EqualTo("image/jpeg"));
+
+            Assert.That(showWeeklyFiles.YearAndWeekList[9].Year, Is.EqualTo(year));
+            Assert.That(showWeeklyFiles.YearAndWeekList[9].Week, Is.EqualTo(weekNumber));
         }
 
         [Test]
         public async Task WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            IActionResult result = await nMController.Index(2021, 08);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            const int year = 2021;
+            const int weekNumber = 8;
+            fss.SetupBatchAttributeSearch("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1");
+            fss.SetupSearch("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2", year, weekNumber);
+
+            var result = await nMController.Index(year, weekNumber) as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(0, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(0));
         }
 
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles()
         {
-            IActionResult result = await nMController.ShowWeeklyFilesAsync(2020, 14);
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
+            const int year = 2020;
+            const int weekNumber = 14;
+            fss.SetupSearch("WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles", year, weekNumber);
+
+            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
-            Assert.That(4, Is.EqualTo(listFiles.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That("a738d0d3-bc1e-47ca-892a-9514ccef6464", Is.EqualTo(listFiles[0].BatchId));
-            Assert.That("21snii22_week_W2020_14", Is.EqualTo(listFiles[0].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(listFiles[0].FileExtension));
-            Assert.That(1072212, Is.EqualTo(listFiles[0].FileSize));
+            Assert.That(listFiles.Count, Is.EqualTo(4));
+            Assert.That(listFiles[0].BatchId, Is.EqualTo("a738d0d3-bc1e-47ca-892a-9514ccef6464"));
+            Assert.That(listFiles[0].FileDescription, Is.EqualTo("21snii22_week_W2020_14"));
+            Assert.That(listFiles[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(listFiles[0].FileSize, Is.EqualTo(357367356));
             Assert.That(listFiles[0].IsDistributorUser, Is.False);
+        }
+
+        [Test]
+        public async Task WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles()
+        {
+            const int year = 2020;
+            const int weekNumber = 15;
+            fss.SetupSearch("WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles", year, weekNumber);
+
+            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
+            Assert.That(listFiles.Count, Is.EqualTo(1));
+            Assert.That(listFiles[0].BatchId, Is.EqualTo("9b4f181b-6860-437e-9914-05632021339c"));
+            Assert.That(listFiles[0].FileDescription, Is.EqualTo("21snii22_week_W2020_14"));
+            Assert.That(listFiles[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(listFiles[0].FileSize, Is.EqualTo(357367356));
+            Assert.That(listFiles[0].IsDistributorUser, Is.True);
         }
 
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            IActionResult result = await nMController.Index(2022, 06);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
-            Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(0, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
+            const int year = 2022;
+            const int weekNumber = 6;
+            fss.SetupSearch(null, year, weekNumber);
+
+            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
+            Assert.That(listFiles.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -148,9 +190,10 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const int weekNumber = 18;
             fss.SetupSearch("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles", year, weekNumber);
 
-            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber);
-            var listFiles = (result as PartialViewResult)?.Model as List<ShowFilesResponseModel>;
-            Assert.That(listFiles != null);
+            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
             Assert.That(listFiles.Count, Is.EqualTo(3));
 
             for (var i = 0; i < listFiles.Count; i++)

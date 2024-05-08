@@ -1,0 +1,131 @@
+{
+    "Count": 1,
+    "Total": 8,
+    "Entries": [
+        {
+            "batchId": "a738d0d3-bc1e-47ca-892a-9514ccef6464",
+            "status": "Committed",
+            "allFilesZipSize": 390374276,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2020"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "14"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T15:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T15:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "21snii22_week_W2020_14.pdf",
+                    "fileSize": 357367356,
+                    "mimeType": "application/pdf",
+                    "hash": "21snii22_week_W2020_14hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2020"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "14"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file1link"
+                        }
+                    }
+                },
+                {
+                    "filename": "file1.txt",
+                    "fileSize": 32452345,
+                    "mimeType": "text/plain",
+                    "hash": "file1hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2020"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "14"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file1link"
+                        }
+                    }
+                },
+                {
+                    "filename": "file2.txt",
+                    "fileSize": 456232,
+                    "mimeType": "text/plain",
+                    "hash": "file2hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2020"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "14"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file2link"
+                        }
+                    }
+                },
+                {
+                    "filename": "file3.txt",
+                    "fileSize": 98343,
+                    "mimeType": "text/plain",
+                    "hash": "file3hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2020"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "14"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file3link"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "_Links": null
+}

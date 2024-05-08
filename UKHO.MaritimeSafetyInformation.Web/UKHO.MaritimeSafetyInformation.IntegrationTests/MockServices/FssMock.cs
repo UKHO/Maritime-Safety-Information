@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Runtime.CompilerServices;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -30,8 +29,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices
             wireMockServer.Reset();
         }
 
-        private static byte[] GetResponseBody(string responseBodyResource) => File.ReadAllBytes($"MockResources/{responseBodyResource}.json");
+        private static byte[] GetResponseBody(string responseBodyResource) => string.IsNullOrWhiteSpace(responseBodyResource) ? System.Array.Empty<byte>() : File.ReadAllBytes($"MockResources/{responseBodyResource}.json");
 
+        /// <summary>
+        /// Set up GET to /attributes/search path.
+        /// </summary>
+        /// <param name="responseBodyResource">The name of the file without extension stored under MockResources containing JSON data for the mock endpoint to return. Use null or empty for no data.</param>
+        /// <param name="statusCode">The status code for the mock endpoint to return.</param>
+        /// <returns></returns>
         public IRequestBuilder SetupBatchAttributeSearch(string responseBodyResource, int statusCode = 200)
         {
             var request = Request.Create()
@@ -52,6 +57,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices
             return request;
         }
 
+        /// <summary>
+        /// Set up GET to /batch path.
+        /// </summary>
+        /// <param name="responseBodyResource">The name of the file without extension stored under MockResources containing JSON data for the mock endpoint to return. Use null or empty for no data.</param>
+        /// <param name="year"></param>
+        /// <param name="weekNumber"></param>
+        /// <param name="statusCode">The status code for the mock endpoint to return.</param>
+        /// <returns></returns>
         public IRequestBuilder SetupSearch(string responseBodyResource, int year, int weekNumber, int statusCode = 200)
         {
             var request = Request.Create()

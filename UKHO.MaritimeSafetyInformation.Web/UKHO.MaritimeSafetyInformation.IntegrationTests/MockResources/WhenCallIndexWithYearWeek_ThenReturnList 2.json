@@ -1,0 +1,81 @@
+{
+    "Count": 1,
+    "Total": 5,
+    "Entries": [
+        {
+            "batchId": "f7590ff3-491e-428b-98d0-43d24c6ae77e",
+            "status": "Committed",
+            "allFilesZipSize": 8199593,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2021"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "30"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T14:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T14:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "file1.pdf",
+                    "fileSize": 36737,
+                    "mimeType": "application/pdf",
+                    "hash": "file1hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2021"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "30"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file1link"
+                        }
+                    }
+                },
+                {
+                    "filename": "msi_img_W2021_30.jpg",
+                    "fileSize": 7575433,
+                    "mimeType": "image/jpeg",
+                    "hash": "file2hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2021"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "30"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file2link"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "_Links": null
+}
