@@ -15,6 +15,7 @@
     <None Remove="MockResources\WhenCallIndexOnLoad_ThenReturnList 2.json" />
     <None Remove="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 1.json" />
     <None Remove="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 2.json" />
+    <None Remove="MockResources\WhenCallShowDailyFilesAsync_ThenReturnDailyFiles.json" />
     <None Remove="MockResources\WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles.json" />
     <None Remove="MockResources\WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles.json" />
     <None Remove="MockResources\WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles.json" />
@@ -42,6 +43,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallShowDailyFilesAsync_ThenReturnDailyFiles.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MockResources\WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles.json">

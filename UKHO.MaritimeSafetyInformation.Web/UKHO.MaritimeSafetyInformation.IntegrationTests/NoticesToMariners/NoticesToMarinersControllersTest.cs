@@ -51,8 +51,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            fss.SetupBatchAttributeSearch("WhenCallIndexOnLoad_ThenReturnList 1");
-            fss.SetupSearch("WhenCallIndexOnLoad_ThenReturnList 2", 2024, 4);
+            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 1");
+            fss.SetupSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 2", 2024, 4);
 
             var result = await nMController.Index() as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -92,8 +92,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2021;
             const int weekNumber = 30;
-            fss.SetupBatchAttributeSearch("WhenCallIndexWithYearWeek_ThenReturnList 1");
-            fss.SetupSearch("WhenCallIndexWithYearWeek_ThenReturnList 2", year, weekNumber);
+            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 1");
+            fss.SetupSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 2", year, weekNumber);
 
             var result = await nMController.Index(year, weekNumber) as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -121,8 +121,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2021;
             const int weekNumber = 8;
-            fss.SetupBatchAttributeSearch("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1");
-            fss.SetupSearch("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2", year, weekNumber);
+            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1");
+            fss.SetupSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2", year, weekNumber);
 
             var result = await nMController.Index(year, weekNumber) as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2020;
             const int weekNumber = 14;
-            fss.SetupSearch("WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles", year, weekNumber);
+            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles", year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -155,7 +155,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2020;
             const int weekNumber = 15;
-            fss.SetupSearch("WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles", year, weekNumber);
+            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles", year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -174,7 +174,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2022;
             const int weekNumber = 6;
-            fss.SetupSearch(null, year, weekNumber);
+            fss.SetupSearchWeekly(null, year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -188,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2022;
             const int weekNumber = 18;
-            fss.SetupSearch("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles", year, weekNumber);
+            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles", year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -211,36 +211,51 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallShowDailyFilesAsync_ThenReturnDailyFiles()
         {
-            IActionResult result = await nMController.ShowDailyFilesAsync();
-            List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
-            Assert.That(showFiles, Is.Not.Null);
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That(1, Is.EqualTo(showFiles[4].DailyFilesData.Count));
-            Assert.That("33", Is.EqualTo(showFiles[4].WeekNumber));
-            Assert.That("2021", Is.EqualTo(showFiles[4].Year));
-            Assert.That("2021/33", Is.EqualTo(showFiles[4].YearWeek));
-            Assert.That("2021-08-14", Is.EqualTo(showFiles[4].DailyFilesData[0].DataDate));
-            Assert.That("Daily 14-08-21.zip", Is.EqualTo(showFiles[4].DailyFilesData[0].Filename));
-            Assert.That("416 KB", Is.EqualTo(showFiles[4].DailyFilesData[0].FileSizeInKB));
-            Assert.That("977e771c-1ed6-4345-8d01-fff728952f1b", Is.EqualTo(showFiles[4].DailyFilesData[0].BatchId));
+            fss.SetupSearchDaily("WhenCallShowDailyFilesAsync_ThenReturnDailyFiles");
+
+            var result = await nMController.ShowDailyFilesAsync() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowDailyFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
+            Assert.That(listFiles.Count, Is.EqualTo(2));
+
+            Assert.That(listFiles[0].DailyFilesData.Count, Is.EqualTo(1));
+            Assert.That(listFiles[0].WeekNumber, Is.EqualTo("34"));
+            Assert.That(listFiles[0].Year, Is.EqualTo("2021"));
+            Assert.That(listFiles[0].YearWeek, Is.EqualTo("2021/34"));
+            Assert.That(listFiles[0].DailyFilesData[0].DataDate, Is.EqualTo("2021-08-15"));
+            Assert.That(listFiles[0].DailyFilesData[0].Filename, Is.EqualTo("Daily 15-08-21.zip"));
+            Assert.That(listFiles[0].DailyFilesData[0].FileSizeInKB, Is.EqualTo("418 KB"));
+            Assert.That(listFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("c595789d-443e-4b49-8b5e-0848ebc7c523"));
+
+            Assert.That(listFiles[1].DailyFilesData.Count, Is.EqualTo(1));
+            Assert.That(listFiles[1].WeekNumber, Is.EqualTo("33"));
+            Assert.That(listFiles[1].Year, Is.EqualTo("2021"));
+            Assert.That(listFiles[1].YearWeek, Is.EqualTo("2021/33"));
+            Assert.That(listFiles[1].DailyFilesData[0].DataDate, Is.EqualTo("2021-08-14"));
+            Assert.That(listFiles[1].DailyFilesData[0].Filename, Is.EqualTo("Daily 14-08-21.zip"));
+            Assert.That(listFiles[1].DailyFilesData[0].FileSizeInKB, Is.EqualTo("416 KB"));
+            Assert.That(listFiles[1].DailyFilesData[0].BatchId, Is.EqualTo("ecc0915d-640f-4fb3-8204-afc175e71174"));
         }
 
         [Test]
         public async Task WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles()
         {
-            IActionResult result = await nMController.ShowDailyFilesAsync();
-            List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
-            Assert.That(showFiles != null);
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That(5, Is.EqualTo(showFiles[0].DailyFilesData.Count));
-            Assert.That("21", Is.EqualTo(showFiles[0].WeekNumber));
-            Assert.That("2022", Is.EqualTo(showFiles[0].Year));
-            Assert.That("2022-05-24", Is.EqualTo(showFiles[0].DailyFilesData[0].DataDate));
-            Assert.That("Daily 24-05-22.zip", Is.EqualTo(showFiles[0].DailyFilesData[0].Filename));
-            Assert.That("416 KB", Is.EqualTo(showFiles[0].DailyFilesData[0].FileSizeInKB));
-            Assert.That("a8d14b93-42ab-455b-a4ed-39effecb8536", Is.EqualTo(showFiles[0].DailyFilesData[0].BatchId));
+            fss.SetupSearchDaily("WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles");
+
+            var result = await nMController.ShowDailyFilesAsync() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowDailyFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
+            Assert.That(listFiles.Count, Is.EqualTo(1));
+
+            Assert.That(listFiles[0].DailyFilesData.Count, Is.EqualTo(5));
+            Assert.That(listFiles[0].WeekNumber, Is.EqualTo("21"));
+            Assert.That(listFiles[0].Year, Is.EqualTo("2022"));
+            Assert.That(listFiles[0].DailyFilesData[0].DataDate, Is.EqualTo("2022-05-24"));
+            Assert.That(listFiles[0].DailyFilesData[0].Filename, Is.EqualTo("Daily 24-05-22.zip"));
+            Assert.That(listFiles[0].DailyFilesData[0].FileSizeInKB, Is.EqualTo("416 KB"));
+            Assert.That(listFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("a8d14b93-42ab-455b-a4ed-39effecb8536"));
         }
 
         [Test]

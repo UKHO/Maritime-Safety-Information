@@ -1,0 +1,129 @@
+{
+    "Count": 2,
+    "Total": 8,
+    "Entries": [
+        {
+            "batchId": "ecc0915d-640f-4fb3-8204-afc175e71174",
+            "status": "Committed",
+            "allFilesZipSize": 425984,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2021"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "33"
+                },
+                {
+                    "key": "Year / Week",
+                    "value": "2021 / 33"
+                },
+                {
+                    "key": "Data Date",
+                    "value": "2021-08-14"
+                },
+                {
+                    "key": "Frequency",
+                    "value": "Daily"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T15:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T15:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "Daily 14-08-21.zip",
+                    "fileSize": 425984,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 14-08-21hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2021"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "33"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file1link"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "batchId": "c595789d-443e-4b49-8b5e-0848ebc7c523",
+            "status": "Committed",
+            "allFilesZipSize": 428032,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2021"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "34"
+                },
+                {
+                    "key": "Year / Week",
+                    "value": "2021 / 34"
+                },
+                {
+                    "key": "Data Date",
+                    "value": "2021-08-15"
+                },
+                {
+                    "key": "Frequency",
+                    "value": "Daily"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T15:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T15:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "Daily 15-08-21.zip",
+                    "fileSize": 428032,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 15-08-21hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2021"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "34"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file1link"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "_Links": null
+}
