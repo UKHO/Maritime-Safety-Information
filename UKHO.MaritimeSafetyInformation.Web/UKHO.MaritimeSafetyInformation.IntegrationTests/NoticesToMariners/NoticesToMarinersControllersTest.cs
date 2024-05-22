@@ -321,20 +321,28 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallCumulativeAsync_ThenReturnCumulativeFiles()
         {
-            IActionResult result = await nMController.Cumulative();
-            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            fss.SetupSearchCumulative("WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json");
+
+            var result = await nMController.Cumulative() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
-            Assert.That(6, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That("50044762-231d-41ec-a908-ba9eb59c61ab", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].BatchId));
-            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileExtension));
-            Assert.That(1386825, Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileSize));
-            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("NP234(B) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("NP234(A) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(3, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
+
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].BatchId, Is.EqualTo("bf6bad11-c926-4bec-83f1-c3a5d70a6df0"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(A) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileSize, Is.EqualTo(938465));
+
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].BatchId, Is.EqualTo("1a4511c4-d3ad-4d86-a8ae-57bca3ec3588"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(B) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileSize, Is.EqualTo(94732));
+
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].BatchId, Is.EqualTo("b6736bbd-9931-441d-9181-eab20e755c94"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(C) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileSize, Is.EqualTo(1386825));
         }
 
         [Test]

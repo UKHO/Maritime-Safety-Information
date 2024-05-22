@@ -139,6 +139,24 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices
         }
 
         /// <summary>
+        /// Set up GET to /batch path.
+        /// </summary>
+        /// <param name="responseBodyResource">The name of the file stored under MockResources containing data for the mock endpoint to return. Use null or empty for no data.</param>
+        /// <param name="statusCode">The status code for the mock endpoint to return.</param>
+        /// <returns></returns>
+        public IRequestBuilder SetupSearchCumulative(string responseBodyResource, int statusCode = 200)
+        {
+            var request = Request.Create()
+                .UsingGet()
+                .WithPath("/batch")
+                .WithParam("$filter", $"BusinessUnit eq '{configuration.BusinessUnit}' and $batch(Product Type) eq '{configuration.ProductType}'  and $batch(Frequency) eq 'Cumulative'")
+                .WithParam("limit", "100")
+                .WithParam("start", "0");
+            BuildResponse(request, responseBodyResource, statusCode);
+            return request;
+        }
+
+        /// <summary>
         /// Set up GET to /batch/{batchId}/files/{filename} path.
         /// </summary>
         /// <param name="responseBodyResource">The name of the file stored under MockResources containing data for the mock endpoint to return. Use null or empty for no data.</param>

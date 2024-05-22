@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="MockResources\WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json" />
     <None Remove="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt" />
     <None Remove="MockResources\WhenCallDownloadDailyFile_ThenReturnFile.zip" />
     <None Remove="MockResources\WhenCallDownloadFile_ThenReturnFile.pdf" />
@@ -29,6 +30,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
