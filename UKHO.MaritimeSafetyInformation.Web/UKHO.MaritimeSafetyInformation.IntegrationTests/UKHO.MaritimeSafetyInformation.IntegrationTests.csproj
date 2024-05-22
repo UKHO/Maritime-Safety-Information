@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt" />
+    <None Remove="MockResources\WhenCallDownloadDailyFile_ThenReturnFile.zip" />
+    <None Remove="MockResources\WhenCallDownloadFile_ThenReturnFile.pdf" />
     <None Remove="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1.json" />
     <None Remove="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2.json" />
     <None Remove="MockResources\WhenCallIndexOnLoad_ThenReturnList 1.json" />
@@ -26,6 +29,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadDailyFile_ThenReturnFile.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadFile_ThenReturnFile.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

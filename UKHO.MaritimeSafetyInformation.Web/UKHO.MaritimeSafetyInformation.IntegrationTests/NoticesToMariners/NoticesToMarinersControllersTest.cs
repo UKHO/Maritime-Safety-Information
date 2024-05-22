@@ -51,8 +51,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 1");
-            fss.SetupSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 2", 2024, 4);
+            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 1.json");
+            fss.SetupSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 2.json", 2024, 4);
 
             var result = await nMController.Index() as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -92,8 +92,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2021;
             const int weekNumber = 30;
-            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 1");
-            fss.SetupSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 2", year, weekNumber);
+            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 1.json");
+            fss.SetupSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 2.json", year, weekNumber);
 
             var result = await nMController.Index(year, weekNumber) as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -121,8 +121,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2021;
             const int weekNumber = 8;
-            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1");
-            fss.SetupSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2", year, weekNumber);
+            fss.SetupBatchAttributeSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1.json");
+            fss.SetupSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2.json", year, weekNumber);
 
             var result = await nMController.Index(year, weekNumber) as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2020;
             const int weekNumber = 14;
-            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles", year, weekNumber);
+            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles.json", year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -155,7 +155,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2020;
             const int weekNumber = 15;
-            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles", year, weekNumber);
+            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles.json", year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -188,7 +188,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             const int year = 2022;
             const int weekNumber = 18;
-            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles", year, weekNumber);
+            fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles.json", year, weekNumber);
 
             var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
@@ -211,7 +211,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallShowDailyFilesAsync_ThenReturnDailyFiles()
         {
-            fss.SetupSearchDaily("WhenCallShowDailyFilesAsync_ThenReturnDailyFiles");
+            fss.SetupSearchDaily("WhenCallShowDailyFilesAsync_ThenReturnDailyFiles.json");
 
             var result = await nMController.ShowDailyFilesAsync() as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -241,7 +241,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles()
         {
-            fss.SetupSearchDaily("WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles");
+            fss.SetupSearchDaily("WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles.json");
 
             var result = await nMController.ShowDailyFilesAsync() as ViewResult;
             Assert.That(result, Is.Not.Null);
@@ -261,53 +261,60 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallDownloadFile_ThenReturnFile()
         {
-            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string batchId = "a36f6b68-b990-4e19-8182-6d116e9ca895";
             const string filename = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
+            fss.SetupDownloadFile("WhenCallDownloadFile_ThenReturnFile.pdf", batchId, filename);
 
-            FileResult result = await nMController.DownloadFile(batchId, filename, mimeType, frequency);
+            var result = await nMController.DownloadFile(batchId, filename, mimeType, frequency);
             Assert.That(result, Is.Not.Null);
-            Assert.That("application/pdf", Is.EqualTo(result.ContentType));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(configuration.MockBaseUrl));
-            Assert.That(1072212, Is.EqualTo(((FileContentResult)result).FileContents.Length));
+            Assert.That(result.ContentType, Is.EqualTo(mimeType));
+            var fileContentResult = result as FileContentResult;
+            Assert.That(fileContentResult, Is.Not.Null);
+            Assert.That(fileContentResult.FileContents.Length, Is.EqualTo(27146));
         }
 
         [Test]
         public void WhenCallDownloadFileWithInvalidData_ThenReturnException()
         {
-            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string batchId = "bb517feb-ff7b-4e19-826a-897a3e2f6efe";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
             const string frequency = "Weekly";
+            fss.SetupDownloadFile(null, batchId, filename, 404);
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
-               .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await nMController.DownloadFile(batchId, filename, mimeType, frequency); });
+                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found)."),
+                async delegate { await nMController.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
         [Test]
         public async Task WhenCallDownloadDailyFile_ThenReturnFile()
         {
-            const string batchId = "1882c04c-bc05-41b7-bf9b-11aeb5c5bd4a";
-            const string filename = "DNM_Text.pdf";
-            const string mimeType = "application/pdf";
+            const string batchId = "63d4ffa1-4353-40c3-9d23-b6786c198033";
+            const string filename = "DNM_Text.zip";
+            const string mimeType = "application/x-zip";
+            fss.SetupDownloadZipFile("WhenCallDownloadDailyFile_ThenReturnFile.zip", batchId);
 
-            ActionResult result = await nMController.DownloadDailyFile(batchId, filename, mimeType);
-            Assert.That((FileContentResult)result != null);
-            Assert.That("application/pdf", Is.EqualTo(((FileContentResult)result).ContentType));
-            Assert.That(425602, Is.EqualTo(((FileContentResult)result).FileContents.Length));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(configuration.MockBaseUrl));
+            var result = await nMController.DownloadDailyFile(batchId, filename, mimeType);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ContentType, Is.EqualTo(mimeType));
+            var fileContentResult = result as FileContentResult;
+            Assert.That(fileContentResult, Is.Not.Null);
+            Assert.That(fileContentResult.FileContents.Length, Is.EqualTo(370));
         }
 
         [Test]
         public void WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException()
         {
-            const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
+            const string batchId = "b31000c3-c95f-4aec-ac2a-18a48f1a7f3b";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
+            fss.SetupDownloadZipFile("WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt", batchId, 400);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
+                .And.Message.EqualTo($"Error text{Environment.NewLine}"),
                 async delegate { await nMController.DownloadDailyFile(batchId, filename, mimeType); });
         }
 
