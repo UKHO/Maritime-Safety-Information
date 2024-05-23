@@ -249,13 +249,20 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(listFiles, Is.Not.Null);
             Assert.That(listFiles.Count, Is.EqualTo(1));
 
-            Assert.That(listFiles[0].DailyFilesData.Count, Is.EqualTo(5));
-            Assert.That(listFiles[0].WeekNumber, Is.EqualTo("21"));
+            Assert.That(listFiles[0].DailyFilesData.Count, Is.EqualTo(2));
+
+            Assert.That(listFiles[0].WeekNumber, Is.EqualTo("20"));
             Assert.That(listFiles[0].Year, Is.EqualTo("2022"));
-            Assert.That(listFiles[0].DailyFilesData[0].DataDate, Is.EqualTo("2022-05-24"));
-            Assert.That(listFiles[0].DailyFilesData[0].Filename, Is.EqualTo("Daily 24-05-22.zip"));
+
+            Assert.That(listFiles[0].DailyFilesData[0].DataDate, Is.EqualTo("2022-05-23"));
+            Assert.That(listFiles[0].DailyFilesData[0].Filename, Is.EqualTo("Daily 23-05-22.zip"));
             Assert.That(listFiles[0].DailyFilesData[0].FileSizeInKB, Is.EqualTo("416 KB"));
-            Assert.That(listFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("a8d14b93-42ab-455b-a4ed-39effecb8536"));
+            Assert.That(listFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("00434ef5-97cc-460e-a0de-5e748372cce6"));
+
+            Assert.That(listFiles[0].DailyFilesData[1].DataDate, Is.EqualTo("2022-05-24"));
+            Assert.That(listFiles[0].DailyFilesData[1].Filename, Is.EqualTo("Daily 24-05-22.zip"));
+            Assert.That(listFiles[0].DailyFilesData[1].FileSizeInKB, Is.EqualTo("507 KB"));
+            Assert.That(listFiles[0].DailyFilesData[1].BatchId, Is.EqualTo("54c55160-bc13-4e2a-82f1-19294d05106e"));
         }
 
         [Test]
