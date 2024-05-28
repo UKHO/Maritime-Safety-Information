@@ -18,7 +18,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     internal class NoticesToMarinersControllersTest
     {
         private IServiceProvider services;
-        private NoticesToMarinersController nMController;
+        private NoticesToMarinersController controller;
         private FssMock fss;
         private Configuration configuration;
 
@@ -39,7 +39,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         public void Setup()
         {
             _ = new HttpContextAccessor { HttpContext = new DefaultHttpContext() };
-            nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
+            controller = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
         }
 
         [OneTimeTearDown]
@@ -54,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             fss.SetupBatchAttributeSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 1.json");
             fss.SetupSearchWeekly("WhenCallIndexOnLoad_ThenReturnList 2.json", 2024, 4);
 
-            var result = await nMController.Index() as ViewResult;
+            var result = await controller.Index() as ViewResult;
             Assert.That(result, Is.Not.Null);
             var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
@@ -95,7 +95,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             fss.SetupBatchAttributeSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 1.json");
             fss.SetupSearchWeekly("WhenCallIndexWithYearWeek_ThenReturnList 2.json", year, weekNumber);
 
-            var result = await nMController.Index(year, weekNumber) as ViewResult;
+            var result = await controller.Index(year, weekNumber) as ViewResult;
             Assert.That(result, Is.Not.Null);
             var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
@@ -124,7 +124,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             fss.SetupBatchAttributeSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1.json");
             fss.SetupSearchWeekly("WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2.json", year, weekNumber);
 
-            var result = await nMController.Index(year, weekNumber) as ViewResult;
+            var result = await controller.Index(year, weekNumber) as ViewResult;
             Assert.That(result, Is.Not.Null);
             var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
@@ -138,7 +138,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const int weekNumber = 14;
             fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles.json", year, weekNumber);
 
-            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            var result = await controller.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
             var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
@@ -157,7 +157,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const int weekNumber = 15;
             fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles.json", year, weekNumber);
 
-            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            var result = await controller.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
             var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
@@ -176,7 +176,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const int weekNumber = 6;
             fss.SetupSearchWeekly(null, year, weekNumber);
 
-            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            var result = await controller.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
             var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
@@ -190,7 +190,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const int weekNumber = 18;
             fss.SetupSearchWeekly("WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles.json", year, weekNumber);
 
-            var result = await nMController.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
+            var result = await controller.ShowWeeklyFilesAsync(year, weekNumber) as PartialViewResult;
             Assert.That(result, Is.Not.Null);
             var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
@@ -213,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             fss.SetupSearchDaily("WhenCallShowDailyFilesAsync_ThenReturnDailyFiles.json");
 
-            var result = await nMController.ShowDailyFilesAsync() as ViewResult;
+            var result = await controller.ShowDailyFilesAsync() as ViewResult;
             Assert.That(result, Is.Not.Null);
             var listFiles = result.Model as List<ShowDailyFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
@@ -243,7 +243,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             fss.SetupSearchDaily("WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles.json");
 
-            var result = await nMController.ShowDailyFilesAsync() as ViewResult;
+            var result = await controller.ShowDailyFilesAsync() as ViewResult;
             Assert.That(result, Is.Not.Null);
             var listFiles = result.Model as List<ShowDailyFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
@@ -274,7 +274,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string frequency = "Weekly";
             fss.SetupDownloadFile("WhenCallDownloadFile_ThenReturnFile.pdf", batchId, filename);
 
-            var result = await nMController.DownloadFile(batchId, filename, mimeType, frequency);
+            var result = await controller.DownloadFile(batchId, filename, mimeType, frequency);
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ContentType, Is.EqualTo(mimeType));
             var fileContentResult = result as FileContentResult;
@@ -293,7 +293,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
                 .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found)."),
-                async delegate { await nMController.DownloadFile(batchId, filename, mimeType, frequency); });
+                async delegate { await controller.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
         [Test]
@@ -304,7 +304,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string mimeType = "application/x-zip";
             fss.SetupDownloadZipFile("WhenCallDownloadDailyFile_ThenReturnFile.zip", batchId);
 
-            var result = await nMController.DownloadDailyFile(batchId, filename, mimeType);
+            var result = await controller.DownloadDailyFile(batchId, filename, mimeType);
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ContentType, Is.EqualTo(mimeType));
             var fileContentResult = result as FileContentResult;
@@ -322,7 +322,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
                 .And.Message.EqualTo($"Error text{Environment.NewLine}"),
-                async delegate { await nMController.DownloadDailyFile(batchId, filename, mimeType); });
+                async delegate { await controller.DownloadDailyFile(batchId, filename, mimeType); });
         }
 
         [Test]
@@ -330,10 +330,11 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             fss.SetupSearchCumulative("WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json");
 
-            var result = await nMController.Cumulative() as ViewResult;
+            var result = await controller.Cumulative() as ViewResult;
             Assert.That(result, Is.Not.Null);
             var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
+            Assert.That(showNMFiles.ShowFilesResponseModel, Is.Not.Null);
             Assert.That(3, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
 
             Assert.That(showNMFiles.ShowFilesResponseModel[0].BatchId, Is.EqualTo("bf6bad11-c926-4bec-83f1-c3a5d70a6df0"));
@@ -355,46 +356,60 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
-            IActionResult result = await nMController.Cumulative();
-            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            fss.SetupSearchCumulative("WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles.json");
+
+            var result = await controller.Cumulative() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
-            Assert.That(6, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That("f5569dc0-a0e4-40f5-b252-fef2e77861e1", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].BatchId));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileExtension));
-            Assert.That(1265024, Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileSize));
-            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("NP234(B) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("NP234(A) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(showNMFiles.ShowFilesResponseModel, Is.Not.Null);
+            Assert.That(3, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
+
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].BatchId, Is.EqualTo("93537c88-ca23-4931-b871-843ac202a2c4"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(A) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileSize, Is.EqualTo(938465));
+
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].BatchId, Is.EqualTo("65a917aa-75fc-48f1-b5b2-495dbab4577a"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(B) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileSize, Is.EqualTo(94732));
+
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].BatchId, Is.EqualTo("5b8866be-9baa-4f44-9aaf-ffd1e6e4583d"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(C) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileSize, Is.EqualTo(1386825));
         }
 
         [Test]
         public async Task WhenCallAnnual_ThenReturnAnnualFiles()
         {
-            IActionResult result = await nMController.Annual();
-            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            fss.SetupSearchAnnual("WhenCallAnnual_ThenReturnAnnualFiles.json");
+
+            var result = await controller.Annual() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var responseModel = result.Model as ShowNMFilesResponseModel;
+            Assert.That(responseModel, Is.Not.Null);
             Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
-            Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That("10219d3c-15bb-43db-ab51-2f2f4f6038de", Is.EqualTo(responseModel.ShowFilesResponseModel[0].BatchId));
-            Assert.That("An overview of the 26 sections", Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileExtension));
-            Assert.That(205745, Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileSize));
-            Assert.That("ADMIRALTY Tide Tables 2022 — General Information", Is.EqualTo(responseModel.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("Suppliers of ADMIRALTY Charts and Publications", Is.EqualTo(responseModel.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("Safety of British merchant ships in periods of peace, tension or conflict", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileDescription));
-            Assert.That("---", Is.EqualTo(responseModel.ShowFilesResponseModel[0].Hash));
-            Assert.That("1", Is.EqualTo(responseModel.ShowFilesResponseModel[1].Hash));
+            Assert.That(2, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
+
+            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("0a3593d5-bcb3-4f41-ba4d-a91d683d1e3b"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileSize, Is.EqualTo(205745));
+            Assert.That(responseModel.ShowFilesResponseModel[0].Hash, Is.EqualTo("123"));
+
+            Assert.That(responseModel.ShowFilesResponseModel[1].BatchId, Is.EqualTo("cfea85a9-746c-410c-8f7b-9584b69b5da7"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("An overview of the 27 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileSize, Is.EqualTo(835465));
+            Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("130"));
         }
 
         [Test]
         public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
         {
-            IActionResult result = await nMController.Annual();
+            IActionResult result = await controller.Annual();
             ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
             Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
             Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
@@ -419,7 +434,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            ActionResult result = await nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
+            ActionResult result = await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
             Assert.That((FileContentResult)result != null);
             Assert.That("application/gzip", Is.EqualTo(((FileContentResult)result).ContentType));
             Assert.That(2278920, Is.EqualTo(((FileContentResult)result).FileContents.Length));
@@ -435,7 +450,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             const string type = "public";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
-                async delegate { await nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
+                async delegate { await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
         }
     }
 }

@@ -440,7 +440,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
                 {
                     _logger.LogInformation(EventIds.GetAnnualFilesResponseStarted.ToEventId(), "Maritime safety information request to get annual NM files response started with _X-Correlation-ID:{correlationId}", correlationId);
 
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    //string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    var accessToken = "";
 
                     const string searchText = $" and $batch(Frequency) eq '{frequency}'";
 
