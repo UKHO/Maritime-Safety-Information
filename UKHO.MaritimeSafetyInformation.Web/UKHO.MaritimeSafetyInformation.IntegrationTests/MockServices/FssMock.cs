@@ -11,12 +11,12 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices
         private readonly WireMockServer wireMockServer;
         private readonly Configuration configuration;
 
-        public int Port { get; }
+        public string BaseUrl { get; }
 
         public FssMock(Configuration configuration)
         {
             wireMockServer = WireMockServer.Start();
-            Port = wireMockServer.Port;
+            BaseUrl = wireMockServer.Url;
             this.configuration = configuration;
         }
 

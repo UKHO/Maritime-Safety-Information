@@ -30,9 +30,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(configuration.BusinessUnit, Is.EqualTo("MaritimeSafetyInformationIntegrationTest"));
             Assert.That(configuration.ProductType, Is.EqualTo("Notices to Mariners"));
             fss = new FssMock(configuration);
-            configuration.MockBaseUrl = configuration.MockBaseUrl.Replace("{port}", fss.Port.ToString());
             var fssConfig = services.GetService<IOptions<FileShareServiceConfiguration>>().Value;
-            fssConfig.BaseUrl = configuration.MockBaseUrl;
+            fssConfig.BaseUrl = fss.BaseUrl;
         }
 
         [SetUp]
