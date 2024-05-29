@@ -409,47 +409,56 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
         {
-            IActionResult result = await controller.Annual();
-            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            fss.SetupSearchAnnual("WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles.json");
+
+            var result = await controller.Annual() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var responseModel = result.Model as ShowNMFilesResponseModel;
+            Assert.That(responseModel, Is.Not.Null);
             Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
-            Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(configuration.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(configuration.ProductType));
-            Assert.That("10219d3c-15bb-43db-ab51-2f2f4f6038de", Is.EqualTo(responseModel.ShowFilesResponseModel[0].BatchId));
-            Assert.That("Firing Practice and Exercise Areas", Is.EqualTo(responseModel.ShowFilesResponseModel[4].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileExtension));
-            Assert.That(133291, Is.EqualTo(responseModel.ShowFilesResponseModel[1].FileSize));
-            Assert.That("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", Is.EqualTo(responseModel.ShowFilesResponseModel[5].FileDescription));
-            Assert.That("National Claims to Maritime Jurisdiction", Is.EqualTo(responseModel.ShowFilesResponseModel[6].FileDescription));
-            Assert.That("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[7].Filename));
-            Assert.That("---", Is.EqualTo(responseModel.ShowFilesResponseModel[14].Hash));
-            Assert.That("1", Is.EqualTo(responseModel.ShowFilesResponseModel[1].Hash));
+            Assert.That(2, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
+
+            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("3391da0a-707e-4daa-a84e-1e548e1ad633"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileSize, Is.EqualTo(205745));
+            Assert.That(responseModel.ShowFilesResponseModel[0].Hash, Is.EqualTo("123"));
+
+            Assert.That(responseModel.ShowFilesResponseModel[1].BatchId, Is.EqualTo("f4d7a5a3-c6a1-4cdf-9863-bac35d1f5de0"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("An overview of the 27 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileSize, Is.EqualTo(835465));
+            Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("130"));
         }
 
         [Test]
         public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile()
         {
-            const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be26c418";
+            const string batchId = "8d746e63-2217-4280-bbd0-5a135fc0b02e";
             const string filename = "WeeklyAll_NM.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
+            fss.SetupDownloadZipFile("WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile.zip", batchId);
 
-            ActionResult result = await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
-            Assert.That((FileContentResult)result != null);
-            Assert.That("application/gzip", Is.EqualTo(((FileContentResult)result).ContentType));
-            Assert.That(2278920, Is.EqualTo(((FileContentResult)result).FileContents.Length));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(configuration.MockBaseUrl));
+            var result = await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ContentType, Is.EqualTo(mimeType));
+            var fileContentResult = result as FileContentResult;
+            Assert.That(fileContentResult, Is.Not.Null);
+            Assert.That(fileContentResult.FileContents.Length, Is.EqualTo(216));
         }
 
         [Test]
         public void WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException()
         {
-            const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be261234";
+            const string batchId = "4bb16352-647f-4c83-a750-ca2947aa70dd";
             const string filename = "WeeklyAll_NM.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
+            fss.SetupDownloadZipFile("WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException.txt", batchId, 400);
 
-            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
+            Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
+                .And.Message.EqualTo($"Error text{Environment.NewLine}"),
                 async delegate { await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
         }
     }

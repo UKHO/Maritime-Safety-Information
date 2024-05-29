@@ -9,9 +9,12 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="MockResources\WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles.json" />
     <None Remove="MockResources\WhenCallAnnual_ThenReturnAnnualFiles.json" />
     <None Remove="MockResources\WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles.json" />
     <None Remove="MockResources\WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json" />
+    <None Remove="MockResources\WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException.txt" />
+    <None Remove="MockResources\WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile.zip" />
     <None Remove="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt" />
     <None Remove="MockResources\WhenCallDownloadDailyFile_ThenReturnFile.zip" />
     <None Remove="MockResources\WhenCallDownloadFile_ThenReturnFile.pdf" />
@@ -34,6 +37,9 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="MockResources\WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="MockResources\WhenCallAnnual_ThenReturnAnnualFiles.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -41,6 +47,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MockResources\WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt">
