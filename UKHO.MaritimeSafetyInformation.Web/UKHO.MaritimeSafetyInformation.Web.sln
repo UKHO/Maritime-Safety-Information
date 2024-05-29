@@ -99,6 +99,62 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		..\Deployment\templates\retain-pipeline.yml = ..\Deployment\templates\retain-pipeline.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutoTests", "AutoTests", "{256209B6-561B-472F-A645-AF47C7EF9BED}"
+	ProjectSection(SolutionItems) = preProject
+		..\Tests\playwright.config.ts = ..\Tests\playwright.config.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AccessibilityTest", "AccessibilityTest", "{1C87D43E-1104-4ABB-B17D-1553F440DCB0}"
+	ProjectSection(SolutionItems) = preProject
+		..\Tests\AutoTests\AccessibilityTest\accessebility-LoginPage.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessebility-LoginPage.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-cumulativefiledownload.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-cumulativefiledownload.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-LoginPage.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-LoginPage.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-noticetomarine.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-noticetomarine.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-noticetomarineabout.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-noticetomarineabout.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsList.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsList.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsListEndUser.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsListEndUser.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsListEndUserNavarea.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsListEndUserNavarea.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsListEndUserUkCoastal.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-RadioNavigationalWarningsListEndUserUkCoastal.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessibility-weeklyfiledownload.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessibility-weeklyfiledownload.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessiblity-RadioNavigationalWarnings.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessiblity-RadioNavigationalWarnings.spec.ts
+		..\Tests\AutoTests\AccessibilityTest\accessiblity-RadioNavigationalWarningsUpdaternw.spec.ts = ..\Tests\AutoTests\AccessibilityTest\accessiblity-RadioNavigationalWarningsUpdaternw.spec.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTest", "FunctionalTest", "{A70985E7-5B76-4B3F-AA23-C2266EE5CE34}"
+	ProjectSection(SolutionItems) = preProject
+		..\Tests\AutoTests\FunctionalTest\functional-aboutrnw.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-aboutrnw.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-ADLogin.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-ADLogin.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-annualfiledownload.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-annualfiledownload.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-Dailyfiledownload.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-Dailyfiledownload.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-homepage.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-homepage.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-Login.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-Login.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-noticetomarine.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-noticetomarine.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsAdvan.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsAdvan.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsBasic.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsBasic.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateDuplicateRNWAccept.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateDuplicateRNWAccept.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateDuplicateRNWCancel.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateDuplicateRNWCancel.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateDuplicateRNWReject.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateDuplicateRNWReject.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateRNW.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsCreateRNW.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsList.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsList.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsListEndUser.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsListEndUser.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsUpdateRNW.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-RadioNavigationalWarningsUpdateRNW.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-weeklyfiledownload.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-weeklyfiledownload.spec.ts
+		..\Tests\AutoTests\FunctionalTest\functional-weeklyfiledownloadDistributor.spec.ts = ..\Tests\AutoTests\FunctionalTest\functional-weeklyfiledownloadDistributor.spec.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PerformanceTest", "PerformanceTest", "{16A81A86-5AFB-4585-964F-63FB62482C0C}"
+	ProjectSection(SolutionItems) = preProject
+		..\Tests\AutoTests\PerformanceTest\appConfig.json = ..\Tests\AutoTests\PerformanceTest\appConfig.json
+		..\Tests\AutoTests\PerformanceTest\LoadTesting.js = ..\Tests\AutoTests\PerformanceTest\LoadTesting.js
+		..\Tests\AutoTests\PerformanceTest\url.json = ..\Tests\AutoTests\PerformanceTest\url.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Result", "Result", "{24FF2FDF-C7F4-4FBF-A4DE-5870E025C777}"
+	ProjectSection(SolutionItems) = preProject
+		..\Tests\AutoTests\PerformanceTest\Result\LoadTesting20220822_142524.html = ..\Tests\AutoTests\PerformanceTest\Result\LoadTesting20220822_142524.html
+		..\Tests\AutoTests\PerformanceTest\Result\result.csv = ..\Tests\AutoTests\PerformanceTest\Result\result.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,6 +210,10 @@ Global
 		{15CE629F-43E2-49F8-A27F-556A94292650} = {72FD9337-D831-4327-A38C-B99896BAEA57}
 		{DFF4E9DC-493C-4500-AF59-72C17A6A6C6E} = {72FD9337-D831-4327-A38C-B99896BAEA57}
 		{46ED9487-834C-4683-860C-0AF0A7DBC111} = {23D99271-3711-4421-BF49-7C09D3A6D1AA}
+		{1C87D43E-1104-4ABB-B17D-1553F440DCB0} = {256209B6-561B-472F-A645-AF47C7EF9BED}
+		{A70985E7-5B76-4B3F-AA23-C2266EE5CE34} = {256209B6-561B-472F-A645-AF47C7EF9BED}
+		{16A81A86-5AFB-4585-964F-63FB62482C0C} = {256209B6-561B-472F-A645-AF47C7EF9BED}
+		{24FF2FDF-C7F4-4FBF-A4DE-5870E025C777} = {16A81A86-5AFB-4585-964F-63FB62482C0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7473D48C-027B-4B02-BD3B-0EFFADF1EC72}
