@@ -25,11 +25,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices
             wireMockServer.Stop();
         }
 
-        public void Reset()
-        {
-            wireMockServer.Reset();
-        }
-
         private static (byte[] Data, string ContentType) GetResponseBody(string responseBodyResource)
         {
             if (string.IsNullOrWhiteSpace(responseBodyResource))
@@ -73,23 +68,6 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices
         /// <param name="statusCode">The status code for the mock endpoint to return.</param>
         /// <returns></returns>
         public IRequestBuilder SetupBatchAttributeSearchWeekly(string responseBodyResource, int statusCode = 200)
-        {
-            var request = Request.Create()
-                .UsingGet()
-                .WithPath("/attributes/search")
-                .WithParam("$filter", $"BusinessUnit eq '{configuration.BusinessUnit}' and $batch(Product Type) eq '{configuration.ProductType}' and $batch(Frequency) eq 'Weekly'")
-                .WithParam("maxAttributeValueCount", configuration.MaxAttributeValuesCount.ToString());
-            BuildResponse(request, responseBodyResource, statusCode);
-            return request;
-        }
-
-        /// <summary>
-        /// Set up GET to /attributes/search path.
-        /// </summary>
-        /// <param name="responseBodyResource">The name of the file stored under MockResources containing data for the mock endpoint to return. Use null or empty for no data.</param>
-        /// <param name="statusCode">The status code for the mock endpoint to return.</param>
-        /// <returns></returns>
-        public IRequestBuilder SetupBatchAttributeSearchDaily(string responseBodyResource, int statusCode = 200)
         {
             var request = Request.Create()
                 .UsingGet()
