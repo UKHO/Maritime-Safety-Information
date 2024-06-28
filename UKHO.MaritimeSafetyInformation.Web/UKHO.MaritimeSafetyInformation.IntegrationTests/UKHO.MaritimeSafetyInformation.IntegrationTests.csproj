@@ -103,7 +103,6 @@
     <PackageReference Include="FakeItEasy" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.28" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="NuGet.Frameworks" Version="6.9.1" />
     <PackageReference Include="NuGet.ProjectModel" Version="6.9.1" />
     <PackageReference Include="NUnit" Version="4.1.0" />
@@ -112,7 +111,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WireMock.Net" Version="1.5.52" />
+    <PackageReference Include="WireMock.Net" Version="1.5.59" />
   </ItemGroup>
 
   <ItemGroup>
