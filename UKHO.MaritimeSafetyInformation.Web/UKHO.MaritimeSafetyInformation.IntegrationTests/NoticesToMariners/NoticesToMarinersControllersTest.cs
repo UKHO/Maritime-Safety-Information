@@ -159,7 +159,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallDownloadFile_ThenReturnFile()
         {
-            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string batchId = "2bdec6dd-68be-4763-b805-d57a3a49d3b9";
             const string filename = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
