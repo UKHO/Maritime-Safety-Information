@@ -156,6 +156,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That("a8d14b93-42ab-455b-a4ed-39effecb8536", Is.EqualTo(showFiles[0].DailyFilesData[0].BatchId));
         }
 
+        //hb done
         [Test]
         public async Task WhenCallDownloadFile_ThenReturnFile()
         {
@@ -168,7 +169,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(result, Is.Not.Null);
             Assert.That("application/pdf", Is.EqualTo(result.ContentType));
             Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
-            Assert.That(1072212, Is.EqualTo(((FileContentResult)result).FileContents.Length));
+            Assert.That(839, Is.EqualTo(((FileContentResult)result).FileContents.Length));
         }
 
         [Test]
@@ -184,24 +185,26 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
                , async delegate { await nMController.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
+        //hb done
         [Test]
         public async Task WhenCallDownloadDailyFile_ThenReturnFile()
         {
-            const string batchId = "1882c04c-bc05-41b7-bf9b-11aeb5c5bd4a";
+            const string batchId = "7ef50011-1820-4630-b540-7289526a7c89"; //hb done
             const string filename = "DNM_Text.pdf";
             const string mimeType = "application/pdf";
 
             ActionResult result = await nMController.DownloadDailyFile(batchId, filename, mimeType);
             Assert.That((FileContentResult)result != null);
             Assert.That("application/pdf", Is.EqualTo(((FileContentResult)result).ContentType));
-            Assert.That(425602, Is.EqualTo(((FileContentResult)result).FileContents.Length));
+            Assert.That(1180, Is.EqualTo(((FileContentResult)result).FileContents.Length));
             Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
         }
 
+        //hb done
         [Test]
         public void WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException()
         {
-            const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
+            const string batchId = "6ef2e377-d1e9-42ba-b37b-93231b2397bd"; // BatchId doesn't exist.
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
 
