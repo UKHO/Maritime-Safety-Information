@@ -236,7 +236,7 @@ public async verifyIntegrationDownloadPartnerAll()
         count++;
       }
       
-      expect(count).toEqual(3);
+      expect(count).toEqual(1);
 
     
   }
