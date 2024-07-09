@@ -233,6 +233,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
                 async delegate { await controller.DownloadDailyFile(batchId, fileName, mimeType); });
         }
 
+        // Test data - see 'Upload Cumulative Notices to Mariners 05' for first entry in ShowFilesResponseModel
         [Test]
         public async Task WhenCallCumulativeAsync_ThenReturnCumulativeFiles()
         {
@@ -245,62 +246,75 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2023"));
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileSize, Is.EqualTo(839));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("NP234(B) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("NP234(A) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(A) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(B) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("NP234(A) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[4].FileDescription, Is.EqualTo("NP234(B) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[5].FileDescription, Is.EqualTo("NP234(A) 2021"));
         }
 
+        // Test data - see 'Upload Cumulative Dup Notices to Mariners 03' for latest duplicate entry
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
-            IActionResult result = await controller.Cumulative();
-            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            var result = await controller.Cumulative() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
-            Assert.That(showNMFiles.ShowFilesResponseModel.Count, Is.EqualTo(6));
-            Assert.That("f5569dc0-a0e4-40f5-b252-fef2e77861e1", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].BatchId));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileExtension));
-            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileSize, Is.EqualTo(1265024));
-            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2021"));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("NP234(B) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("NP234(A) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(showNMFiles.ShowFilesResponseModel?.Count, Is.EqualTo(6));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(A) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(B) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].BatchId, Is.EqualTo("f855e708-df72-48f2-bb6b-c1ed1d4c7066"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("NP234(A) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileSize, Is.EqualTo(839));
+            Assert.That(showNMFiles.ShowFilesResponseModel[4].FileDescription, Is.EqualTo("NP234(B) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[5].FileDescription, Is.EqualTo("NP234(A) 2021"));
         }
 
+        // Test data - see 'Upload Annual Notices to Mariners 01'
         [Test]
         public async Task WhenCallAnnual_ThenReturnAnnualFiles()
         {
-            IActionResult result = await controller.Annual();
-            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
-            Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
-            Assert.That(responseModel.ShowFilesResponseModel.Count, Is.EqualTo(15));
-            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("10219d3c-15bb-43db-ab51-2f2f4f6038de"));
+            var result = await controller.Annual() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var responseModel = result.Model as ShowNMFilesResponseModel;
+            Assert.That(responseModel, Is.Not.Null);
+            Assert.That(responseModel.ShowFilesResponseModel?.Count, Is.EqualTo(4));
+            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("9ff0a834-4d12-476f-9d00-98ca69c089ea"));
             Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
             Assert.That(responseModel.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
-            Assert.That(responseModel.ShowFilesResponseModel[0].FileSize, Is.EqualTo(205745));
-            Assert.That("ADMIRALTY Tide Tables 2022 — General Information", Is.EqualTo(responseModel.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("Suppliers of ADMIRALTY Charts and Publications", Is.EqualTo(responseModel.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("Safety of British merchant ships in periods of peace, tension or conflict", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileSize, Is.EqualTo(839));
             Assert.That(responseModel.ShowFilesResponseModel[0].Hash, Is.EqualTo("---"));
-            Assert.That("1", Is.EqualTo(responseModel.ShowFilesResponseModel[1].Hash));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("ADMIRALTY Tide Tables 2024 - General Information"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("1"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("Suppliers of ADMIRALTY Charts and Publications"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].Hash, Is.EqualTo("2"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("Safety of British merchant ships in periods of peace, tension or conflict"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].Hash, Is.EqualTo("3"));
         }
 
+        // Test data - see 'Upload Annual Dup Notices to Mariners 01' for latest duplicate entry
         [Test]
         public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
         {
-            IActionResult result = await controller.Annual();
-            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
-            Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
-            Assert.That(responseModel.ShowFilesResponseModel.Count, Is.EqualTo(15));
-            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("10219d3c-15bb-43db-ab51-2f2f4f6038de"));
-            Assert.That("Firing Practice and Exercise Areas", Is.EqualTo(responseModel.ShowFilesResponseModel[4].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileExtension));
-            Assert.That(responseModel.ShowFilesResponseModel[1].FileSize, Is.EqualTo(133291));
-            Assert.That("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", Is.EqualTo(responseModel.ShowFilesResponseModel[5].FileDescription));
-            Assert.That("National Claims to Maritime Jurisdiction", Is.EqualTo(responseModel.ShowFilesResponseModel[6].FileDescription));
-            Assert.That("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[7].Filename));
-            Assert.That("---", Is.EqualTo(responseModel.ShowFilesResponseModel[14].Hash));
-            Assert.That("1", Is.EqualTo(responseModel.ShowFilesResponseModel[1].Hash));
+            var result = await controller.Annual() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var responseModel = result.Model as ShowNMFilesResponseModel;
+            Assert.That(responseModel, Is.Not.Null);
+            Assert.That(responseModel.ShowFilesResponseModel?.Count, Is.EqualTo(4));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].Hash, Is.EqualTo("---"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("ADMIRALTY Tide Tables 2024 - General Information"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("1"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("Suppliers of ADMIRALTY Charts and Publications"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].Hash, Is.EqualTo("2"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].BatchId, Is.EqualTo("83ed3582-9541-4a72-a87f-cb37849db9e8"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("Safety of British merchant ships in periods of peace, tension or conflict"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileSize, Is.EqualTo(839));
+            Assert.That(responseModel.ShowFilesResponseModel[3].Hash, Is.EqualTo("3"));
         }
 
         // Test Data - see 'Upload weekly Notices to Mariners 02'
