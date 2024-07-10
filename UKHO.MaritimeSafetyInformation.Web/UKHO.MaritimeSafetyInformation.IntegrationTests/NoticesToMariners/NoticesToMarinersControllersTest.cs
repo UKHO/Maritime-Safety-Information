@@ -22,12 +22,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     /// 2022	 5
     /// 2022	11
     /// 2022	18
+    /// 2022    26 (distributor)
     /// The following years and week numbers are used by the daily tests:
     /// 2020	40
     /// 2021	33
     /// 2021	44
     /// 2022	18
     /// 2022	21
+    /// 2022    26 (distributor)
     /// </summary>
     internal class NoticesToMarinersControllersTest
     {
