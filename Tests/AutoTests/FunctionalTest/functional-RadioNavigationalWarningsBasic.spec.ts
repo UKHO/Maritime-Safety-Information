@@ -26,7 +26,7 @@ test.describe("Goto maritime-safety-information Home Page", () => {
         expect(pageHeader).toEqual("Radio Navigational Warnings Admin List");
     })
 
-    test('Dose filter display search result for warning types as "UK Coastal" or  "NAVAREA 1" ', async () => {
+    test('Does filter display search result for warning types as "UK Coastal" or  "NAVAREA 1" ', async () => {
         //search UK Coastal
         await rnwList.searchWithfilter('UK Coastal', '2022');
         await rnwList.verifyTableHeader();
