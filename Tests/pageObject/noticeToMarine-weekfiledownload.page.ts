@@ -187,12 +187,12 @@ export default class noticeToMarinerWeekDownload {
 
     public async verifyIntegrationDownloadAll() {
         expect(await this.downloadAll.innerText()).toContain('Download All')
-        expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2026%20Weekly%20NMs.zip&batchId=b70dea9b-8ce6-4153-a376-1486a82fc3a1&mimeType=application%2Fgzip&type=public')
+        expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=b70dea9b-8ce6-4153-a376-1486a82fc3a1&mimeType=application%2Fgzip&type=public')
     }
 
     public async verifyIntegrationDownloadPartnerAll() {
         expect(await this.downloadPartnerAll.innerText()).toContain('Download All')
-        expect(await this.downloadPartnerAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2026%20Weekly%20NMs.zip&batchId=399ab1a2-ff89-4075-a0d2-971a72a67296&mimeType=application%2Fgzip&type=partner')
+        expect(await this.downloadPartnerAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=399ab1a2-ff89-4075-a0d2-971a72a67296&mimeType=application%2Fgzip&type=partner')
     }
 
     public async verifyIntegrationTestValueForDistributor() {
