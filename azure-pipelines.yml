@@ -5,6 +5,10 @@ parameters:
     displayName: "Continue even if resources are getting destroyed"
     type: boolean
     default: false
+  - name: SkipDependencyCheck
+    displayName: "Skip dependency check"
+    type: boolean
+    default: false
 
 trigger:
   - main
@@ -42,6 +46,7 @@ stages:
     dependsOn: []
     jobs:
       - job: Dependencychecker
+        condition: ne('${{ parameters.SkipDependencyCheck }}', true)
         workspace:
           clean: all
         displayName: "Dependencychecker"
