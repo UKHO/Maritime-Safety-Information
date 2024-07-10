@@ -178,7 +178,7 @@ export default class noticetoMarine
      boolFileSize=true;
      break;
      }
-     case "B":
+     case "Bytes":
      {
      boolFileSize=true;  
      break;
