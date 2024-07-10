@@ -14,7 +14,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
     /// <summary>
     /// These tests require data to be set up in the File Share Service. Instructions can be found on the MSI project Wiki:
-    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
+    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/Notices-to-Mariners-Test-Data-Creation
     /// The following years and week numbers are used by the weekly tests:
     /// 2020	14
     /// 2021	30
@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             controller = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
         }
 
-        // Test data - see 'Upload weekly dup Notices to Mariners 03' for first ShowFilesResponseList as it has the most recent year and week number
+        // Test data - see 'Upload Weekly Dup Notices to Mariners 03' for first ShowFilesResponseList as it has the most recent year and week number
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
@@ -71,7 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.LessThanOrEqualTo(configuration.MaxAttributeValuesCount));
         }
 
-        // Test data - see 'Upload weekly Notices to Mariners 03' for year 2021 week 30
+        // Test data - see 'Upload Weekly Notices to Mariners 03' for year 2021 week 30
         [Test]
         public async Task WhenCallIndexWithYearWeek_ThenReturnList()
         {
@@ -99,7 +99,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(0));
         }
 
-        // Test data - see 'Upload weekly Notices to Mariners 04' for year 2021 week 30
+        // Test data - see 'Upload Weekly Notices to Mariners 04' for year 2021 week 30
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles()
         {
@@ -126,7 +126,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(listFiles.Count, Is.EqualTo(0));
         }
 
-        // Test data - see 'Upload weekly dup Notices to Mariners 03'
+        // Test data - see 'Upload Weekly Dup Notices to Mariners 03'
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
         {
@@ -178,7 +178,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("b3e28981-4e09-4592-9a14-3eac6f6bc8e7"));
         }
 
-        // Test data - see 'Upload weekly Notices to Mariners 04'
+        // Test data - see 'Upload Weekly Notices to Mariners 04'
         [Test]
         public async Task WhenCallDownloadFile_ThenReturnFile()
         {
@@ -317,7 +317,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(responseModel.ShowFilesResponseModel[3].Hash, Is.EqualTo("3"));
         }
 
-        // Test Data - see 'Upload weekly Notices to Mariners 02'
+        // Test Data - see 'Upload Weekly Notices to Mariners 02'
         [Test]
         public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile()
         {

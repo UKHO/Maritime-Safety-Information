@@ -187,7 +187,7 @@ export default class noticeToMarinerWeekDownload {
 
     public async verifyIntegrationDownloadAll() {
         expect(await this.downloadAll.innerText()).toContain('Download All')
-        // Use BatchId from 'Upload weekly dup Notices to Mariners 03' in expected link
+        // Use BatchId from 'Upload Weekly Dup Notices to Mariners 03' in expected link
         expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=b70dea9b-8ce6-4153-a376-1486a82fc3a1&mimeType=application%2Fgzip&type=public')
     }
 
