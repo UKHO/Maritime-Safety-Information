@@ -620,14 +620,4 @@
     <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Client@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
   </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.Identity.Client.dll
-   Temporary suppression - package will be updated soon.
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Client@.*$</packageUrl>
-    <cve>CVE-2024-35255</cve>
-  </suppress>
 </suppressions>
