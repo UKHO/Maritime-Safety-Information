@@ -620,4 +620,22 @@
     <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Client@.*$</packageUrl>
     <cve>CVE-2024-35255</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Formats.Asn1:6.0.0
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Formats\.Asn1@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-38095</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Formats.Asn1:8.0.0
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Formats\.Asn1@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-38095</vulnerabilityName>
+  </suppress>
 </suppressions>
