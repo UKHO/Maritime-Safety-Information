@@ -1,0 +1,260 @@
+{
+    "Count": 2,
+    "Total": 8,
+    "Entries": [
+        {
+            "batchId": "00434ef5-97cc-460e-a0de-5e748372cce6",
+            "status": "Committed",
+            "allFilesZipSize": 425984,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2022"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "20"
+                },
+                {
+                    "key": "Year / Week",
+                    "value": "2022 / 20"
+                },
+                {
+                    "key": "Data Date",
+                    "value": "2022-05-23"
+                },
+                {
+                    "key": "Frequency",
+                    "value": "Daily"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T13:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T13:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "Daily 24-05-22a1.zip",
+                    "fileSize": 425984,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 24-05-22a1hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2022"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "20"
+                        },
+                        {
+                            "key": "Year / Week",
+                            "value": "2022 / 20"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "filea1link"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "batchId": "54c55160-bc13-4e2a-82f1-19294d05106e",
+            "status": "Committed",
+            "allFilesZipSize": 519466,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2022"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "20"
+                },
+                {
+                    "key": "Year / Week",
+                    "value": "2022 / 20"
+                },
+                {
+                    "key": "Data Date",
+                    "value": "2022-05-24"
+                },
+                {
+                    "key": "Frequency",
+                    "value": "Daily"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T14:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T14:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "Daily 24-05-22b1.zip",
+                    "fileSize": 425984,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 24-05-22b1hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2022"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "20"
+                        },
+                        {
+                            "key": "Year / Week",
+                            "value": "2022 / 20"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "fileb1link"
+                        }
+                    }
+                },
+                {
+                    "filename": "Daily 24-05-22b2.zip",
+                    "fileSize": 93482,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 24-05-22b2hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2022"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "20"
+                        },
+                        {
+                            "key": "Year / Week",
+                            "value": "2022 / 20"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "fileb2link"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "batchId": "1aa8634b-66ef-4510-941b-76db4b6e3221",
+            "status": "Committed",
+            "allFilesZipSize": 519466,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2022"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "20"
+                },
+                {
+                    "key": "Year / Week",
+                    "value": "2022 / 20"
+                },
+                {
+                    "key": "Data Date",
+                    "value": "2022-05-24"
+                },
+                {
+                    "key": "Frequency",
+                    "value": "Daily"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T13:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T13:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "Daily 24-05-22b1.zip",
+                    "fileSize": 425984,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 24-05-22b1hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2022"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "20"
+                        },
+                        {
+                            "key": "Year / Week",
+                            "value": "2022 / 20"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "fileb1link"
+                        }
+                    }
+                },
+                {
+                    "filename": "Daily 24-05-22b2.zip",
+                    "fileSize": 93482,
+                    "mimeType": "application/gzip",
+                    "hash": "Daily 24-05-22b2hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2022"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "20"
+                        },
+                        {
+                            "key": "Year / Week",
+                            "value": "2022 / 20"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "fileb2link"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "_Links": null
+}

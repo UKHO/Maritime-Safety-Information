@@ -1,0 +1,64 @@
+{
+    "Count": 1,
+    "Total": 8,
+    "Entries": [
+        {
+            "batchId": "9b4f181b-6860-437e-9914-05632021339c",
+            "status": "Committed",
+            "allFilesZipSize": 357367356,
+            "attributes": [
+                {
+                    "key": "Product Type",
+                    "value": "Notices to Mariners"
+                },
+                {
+                    "key": "Year",
+                    "value": "2020"
+                },
+                {
+                    "key": "Week Number",
+                    "value": "15"
+                },
+                {
+                    "key": "Content",
+                    "value": "tracings"
+                },
+                {
+                    "key": "Content",
+                    "value": "Distributer user"
+                }
+            ],
+            "businessUnit": "MaritimeSafetyInformationIntegrationTest",
+            "batchPublishedDate": "2024-05-03T15:20:33.7510296+01:00",
+            "expiryDate": "2024-05-08T15:20:33.7510814+01:00",
+            "files": [
+                {
+                    "filename": "21snii22_week_W2020_14.pdf",
+                    "fileSize": 357367356,
+                    "mimeType": "application/pdf",
+                    "hash": "21snii22_week_W2020_14hash",
+                    "attributes": [
+                        {
+                            "key": "Product Type",
+                            "value": "Notices to Mariners"
+                        },
+                        {
+                            "key": "Year",
+                            "value": "2020"
+                        },
+                        {
+                            "key": "Week Number",
+                            "value": "15"
+                        }
+                    ],
+                    "links": {
+                        "get": {
+                            "href": "file1link"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "_Links": null
+}
