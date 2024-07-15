@@ -52,6 +52,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="WireMock.Net" Version="1.5.60" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,10 +61,6 @@
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformationAdmin.Web\UKHO.MaritimeSafetyInformationAdmin.Web.csproj">
       <Aliases>MSIAdminProjectAlias</Aliases>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NoticesToMariners\" />
   </ItemGroup>
 
   <ItemGroup>
