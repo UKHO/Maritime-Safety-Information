@@ -638,4 +638,14 @@
     <packageUrl regex="true">^pkg:nuget/System\.Formats\.Asn1@.*$</packageUrl>
     <vulnerabilityName>CVE-2024-38095</vulnerabilityName>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Text.Json:8.0.0
+   Fixed in latest .NET 8 release
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-30105</vulnerabilityName>
+  </suppress>
 </suppressions>
