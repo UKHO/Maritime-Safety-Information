@@ -18,7 +18,7 @@ resource "azurerm_windows_web_app" "webapp_service" {
   site_config {
      application_stack {    
      current_stack = "dotnet"
-     dotnet_version = "v6.0"
+     dotnet_version = "v8.0"
     }
     always_on  = true
     ftps_state = "Disabled"
@@ -55,7 +55,7 @@ resource "azurerm_windows_web_app_slot" "webapp_service_staging" {
   site_config {
      application_stack {    
      current_stack = "dotnet"
-     dotnet_version = "v6.0"
+     dotnet_version = "v8.0"
     }
     always_on  = true
     ftps_state = "Disabled"
@@ -95,7 +95,7 @@ resource "azurerm_windows_web_app" "admin_webapp_service" {
   site_config {
      application_stack {    
      current_stack = "dotnet"
-     dotnet_version = "v6.0"
+     dotnet_version = "v8.0"
     }
     always_on  = true
     ftps_state = "Disabled"
@@ -130,7 +130,7 @@ resource "azurerm_windows_web_app_slot" "admin_webapp_service_staging" {
   site_config {
      application_stack {    
      current_stack = "dotnet"
-     dotnet_version = "v6.0"
+     dotnet_version = "v8.0"
     }
     always_on  = true
     ftps_state = "Disabled"

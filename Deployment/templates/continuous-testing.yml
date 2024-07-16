@@ -19,10 +19,10 @@ steps:
        jsonTargetFiles: '**/appsettings.json'
 
     - task: UseDotNet@2
-      displayName: 'Use .NET 6.0.x sdk'
+      displayName: Use .NET SDK $(DotNetSdkVersion)
       inputs:
-       packageType: sdk
-       version: 6.0.x
+        packageType: sdk
+        version: $(DotNetSdkVersion)
 
     - task: DotNetCoreCLI@2
       displayName: "Run Integration tests"
