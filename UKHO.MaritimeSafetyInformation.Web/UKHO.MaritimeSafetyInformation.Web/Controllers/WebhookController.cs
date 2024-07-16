@@ -30,8 +30,8 @@ namespace UKHO.MaritimeSafetyInformation.Web.Controllers
 
             _logger.LogInformation(EventIds.NewFilesPublishedWebhookOptionsCallStarted.ToEventId(), "Started processing the Options request for the New Files Published event webhook for WebHook-Request-Origin:{webhookRequestOrigin} and _X-Correlation-ID:{correlationId}", webhookRequestOrigin, GetCurrentCorrelationId());
 
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Rate", "*");
-            HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Rate", "*");
+            HttpContext.Response.Headers.Append("WebHook-Allowed-Origin", webhookRequestOrigin);
 
             _logger.LogInformation(EventIds.NewFilesPublishedWebhookOptionsCallCompleted.ToEventId(), "Completed processing the Options request for the New Files Published event webhook for WebHook-Request-Origin and _X-Correlation-ID:{correlationId}:{webhookRequestOrigin}", webhookRequestOrigin, GetCurrentCorrelationId());
 
