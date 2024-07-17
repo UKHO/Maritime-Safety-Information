@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -12,17 +12,17 @@
   <ItemGroup>
     <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.28" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.28" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="6.0.28" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.17.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.7" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.20.0" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="3.0.0" />
-	<PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
+	<PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.1" />
 	<PackageReference Include="UKHO.FileShareAdminClient" Version="1.6.30104.1" />
     <PackageReference Include="UKHO.FileShareClient" Version="1.6.30104.1" />
-    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.24067.2" />
+    <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.24163.8" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />

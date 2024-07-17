@@ -35,7 +35,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 		..\Deployment\SetEntityInTableStorage.ps1 = ..\Deployment\SetEntityInTableStorage.ps1
 		..\Deployment\set_business_unit.ps1 = ..\Deployment\set_business_unit.ps1
 		..\Deployment\terraform_conditional_run.ps1 = ..\Deployment\terraform_conditional_run.ps1
-		..\Deployment\terraform_run.ps1 = ..\Deployment\terraform_run.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6D1C7703-E9A4-4FFC-A839-A8C55227207E}"

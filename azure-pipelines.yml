@@ -39,6 +39,8 @@ variables:
     value: "Mare Nectaris"
   - name: WindowsPool
     value: "NautilusBuild"
+  - name: DotNetSdkVersion
+    value: "8.x"
 
 stages:
   - stage: PERFORM_DEPENDENCYCHECK_DOTNETBUILD_DOTNETTEST_AND_PUBLISH
@@ -52,11 +54,10 @@ stages:
         displayName: "Dependencychecker"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              version: $(DotNetSdkVersion)
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore non test projects only"
@@ -98,11 +99,10 @@ stages:
         displayName: "Dotnet Test and Publish Code Coverage"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              version: $(DotNetSdkVersion)
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore test projects only"
@@ -150,11 +150,10 @@ stages:
               arguments: '-buildNumber "$(Build.BuildNumber)" -solutionDirectory "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\" -UKHOAssemblyCompany "$env:UKHOAssemblyCompany" -UKHOAssemblyCopyright "$(UKHOAssemblyCopyright)" -UKHOAssemblyVersionPrefix "$env:UKHOAssemblyVersionPrefix" -UKHOAssemblyProduct "$env:UKHOAssemblyProduct"'
 
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              version: $(DotNetSdkVersion)
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore"
@@ -248,11 +247,10 @@ stages:
         displayName: "Publish Integration Test Artifacts"
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET 6.0.x sdk'
+            displayName: Use .NET SDK $(DotNetSdkVersion)
             inputs:
               packageType: sdk
-              useGlobalJson: true
-              workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+              version: $(DotNetSdkVersion)
 
           - task: DotNetCoreCLI@2
             displayName: ".Net Core - NuGet restore"

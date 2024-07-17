@@ -602,4 +602,14 @@
     <cve>CVE-2021-21301</cve>
     <cve>CVE-2021-32755</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Text.Json:8.0.0
+   Fixed in latest .NET 8 release
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-30105</vulnerabilityName>
+  </suppress>
 </suppressions>
