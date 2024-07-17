@@ -79,19 +79,6 @@
   <suppress>
     <notes>
       <![CDATA[
-    file name: Microsoft.AspNetCore.Hosting.Abstractions.dll
-    See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
-        Package name: System.Text.RegularExpressions.dll (included as part of the .Net Core runtime)
-      	Vulnerable versions: 4.3.0 and below
-        Secure versions: 4.3.1+
-    This CVE applies to .Net Core versions below 2.2.107 (runtime 2.2.5). MSI is pinned to .Net core SDK > 3.1.408 which is not vulnerable, and deployed to Azure App Service which will have the security patch applied.
-    ]]>
-    </notes>
-    <cve>CVE-2019-0820</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
     file name:  Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
     See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
         Package name: System.Net.Http:4.3.3 (included as part of the .Net Core runtime)
@@ -114,20 +101,6 @@
     ]]>
     </notes>
     <cve>CVE-2007-1652</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-    file name:  Azure.Storage.Blobs:12.10.0
-    See https://github.com/dotnet/announcements/issues/111 for MS details on this CVE.
-        Package name: Azure.Storage.Blobs (included as part of the .Net Core runtime)
-      	Vulnerable versions: 12.10.0 and below
-     This CVE applies to .NET Core 2.1, .NET Core 1.0, .NET Core 1.1, PowerShell Core 6.0. MSI is pinned to .Net core SDK > 3.1.408 for .NET and Visual Studio Information Disclosure Vulnerability.
-     This is a temporary suppression pending a fix being available.
-     Bug to track the fix - https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_workitems/edit/52293
-    ]]>
-    </notes>
-    <cve>CVE-2022-30187</cve>
   </suppress>
   <suppress>
     <notes>
@@ -231,37 +204,10 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.Identity.Web.TokenCache.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web\.TokenCache@.*$</packageUrl>
-    <cve>CVE-2017-11826</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.Identity.Web.TokenAcquisition.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web\.TokenAcquisition@.*$</packageUrl>
-    <cve>CVE-2017-11826</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Microsoft.Identity.Web.UI.dll
    ]]>
     </notes>
     <cve>CVE-2010-3324</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.Identity.Web.dll
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Web@.*$</packageUrl>
-    <cve>CVE-2017-11826</cve>
   </suppress>
   <suppress>
     <notes>
@@ -410,142 +356,12 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.Data.SqlClient:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.Data\.SqlClient@.*$</packageUrl>
-    <vulnerabilityName>CVE-2024-0056</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.JsonWebTokens:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.JsonWebTokens@.*$</packageUrl>
-    <vulnerabilityName>CVE-2024-21319</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Tokens:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Tokens@.*$</packageUrl>
-    <vulnerabilityName>CVE-2024-21319</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: System.IdentityModel.Tokens.Jwt:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/System\.IdentityModel\.Tokens\.Jwt@.*$</packageUrl>
-    <vulnerabilityName>CVE-2024-21319</vulnerabilityName>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Microsoft.Data.SqlClient.SNI.runtime:2.1.1
    Fixed in SDK >= 6.0.418
    ]]>
     </notes>
     <packageUrl regex="true">^pkg:nuget/Microsoft\.Data\.SqlClient\.SNI\.runtime@.*$</packageUrl>
     <cve>CVE-2024-0056</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.JsonWebTokens.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.JsonWebTokens@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Logging.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Logging@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Logging:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Logging@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Protocols\.OpenIdConnect@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Protocols.OpenIdConnect:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Protocols\.OpenIdConnect@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Protocols.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Protocols@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Protocols:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Protocols@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Tokens.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Tokens@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: System.IdentityModel.Tokens.Jwt.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/System\.IdentityModel\.Tokens\.Jwt@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
   </suppress>
   <suppress>
     <notes>
