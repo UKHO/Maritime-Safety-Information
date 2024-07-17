@@ -29,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
     /// 2022	18
     /// 2022	21
     /// </summary>
+    [Category("FssApi")]
     internal class NoticesToMarinersControllersTest
     {
         private IServiceProvider services;

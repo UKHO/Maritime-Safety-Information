@@ -1,6 +1,8 @@
 parameters:
   - name: AzureSubscription
     type: string
+  - name: UseFssMock
+    type: boolean
 
 steps:
     - task: DownloadBuildArtifacts@0
@@ -27,13 +29,17 @@ steps:
     - task: DotNetCoreCLI@2
       displayName: "Run Integration tests"
       inputs:
-       command: "test"
-       projects: |
+        command: "test"
+        projects: |
           **/*IntegrationTest*.dll
           !**/*TestAdapter.dll
           !**/obj/**
-       testRunTitle: "$(Environment)-IntegrationTests"
-       workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
+        ${{ if eq(parameters.UseFssMock, true) }}:
+          arguments: '--filter Category!=FssApi'
+        ${{ else }}:
+          arguments: '--filter Category!=FssMock'
+        testRunTitle: "$(Environment)-IntegrationTests"
+        workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
 
     - checkout: self
       condition: always()
