@@ -11,7 +11,7 @@
       ]
     },
     {
-      "library": "jquery-validate@1.20.0",
+      "library": "jquery-validate@1.21.0",
       "destination": "wwwroot/lib/jquery-validate/",
       "files": [
         "jquery.validate.min.js",
