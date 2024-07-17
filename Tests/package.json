@@ -1,22 +1,22 @@
 {
-  "name": "msi",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "playwright test",
-    "test:a11y": "playwright test --config=Autotests/AccessibilityTest --reporter=junit",
-    "test:auto": "playwright test --config=Autotests/FunctionalTest --reporter=junit"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@playwright/test": "^1.21.0",
-    "@types/luxon": "^2.3.2",
-    "axe-playwright": "1.1.11",
-    "eslint": "^8.57.0",
-    "luxon": "^2.4.0",
-    "playwright": "^1.21.1"
-  }
+    "name": "msi",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "playwright test",
+        "test:a11y": "playwright test --config=Autotests/AccessibilityTest --reporter=junit",
+        "test:auto": "playwright test --workers=2 --retries=3 --config=Autotests/FunctionalTest --reporter=junit"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.21.0",
+        "@types/luxon": "^2.3.2",
+        "axe-playwright": "1.1.11",
+        "eslint": "^8.57.0",
+        "luxon": "^2.4.0",
+        "playwright": "^1.21.1"
+    }
 }
