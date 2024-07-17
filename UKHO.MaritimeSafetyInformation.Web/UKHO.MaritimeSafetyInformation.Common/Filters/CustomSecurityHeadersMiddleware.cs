@@ -7,12 +7,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Filters
     [ExcludeFromCodeCoverage] //Used in Startup.cs
     public class CustomSecurityHeadersMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate next = next;
+        private readonly RequestDelegate _next = next;
 
         public Task Invoke(HttpContext httpContext)
         {
             httpContext.Response.Headers.Append("Permissions-Policy", "camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), usb=()");
-            return next(httpContext);
+            return _next(httpContext);
         }
     }
 
