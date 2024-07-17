@@ -460,26 +460,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Microsoft.IdentityModel.Abstractions.dll
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Abstractions@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
-   file name: Microsoft.IdentityModel.Abstractions:Various
-   Fixed in SDK >= 6.0.418
-   ]]>
-    </notes>
-    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Abstractions@.*$</packageUrl>
-    <cve>CVE-2024-21319</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: Microsoft.IdentityModel.JsonWebTokens.dll
    Fixed in SDK >= 6.0.418
    ]]>
@@ -588,5 +568,38 @@
     <packageUrl regex="true">^pkg:generic/dotnet\-getdocument@.*$</packageUrl>
     <cve>CVE-2024-21386</cve>
     <cve>CVE-2024-21404</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Formats.Asn1:various
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Formats\.Asn1@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-38095</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: WireMock.Net:1.5.60
+   Used in testing only, not deployed.
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/WireMock\.Net@.*$</packageUrl>
+    <cve>CVE-2020-27853</cve>
+    <cve>CVE-2021-41093</cve>
+    <cve>CVE-2018-9116</cve>
+    <cve>CVE-2020-15258</cve>
+    <cve>CVE-2018-8909</cve>
+    <cve>CVE-2023-41329</cve>
+    <cve>CVE-2021-32665</cve>
+    <cve>CVE-2021-32666</cve>
+    <cve>CVE-2022-23625</cve>
+    <cve>CVE-2022-31009</cve>
+    <cve>CVE-2023-22737</cve>
+    <cve>CVE-2018-9117</cve>
+    <cve>CVE-2022-43673</cve>
+    <cve>CVE-2021-21301</cve>
+    <cve>CVE-2021-32755</cve>
   </suppress>
 </suppressions>

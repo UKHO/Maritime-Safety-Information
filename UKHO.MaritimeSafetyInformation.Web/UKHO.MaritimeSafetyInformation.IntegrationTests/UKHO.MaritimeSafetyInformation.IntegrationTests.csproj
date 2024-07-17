@@ -9,6 +9,26 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="MockResources\WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles.json" />
+    <None Remove="MockResources\WhenCallAnnual_ThenReturnAnnualFiles.json" />
+    <None Remove="MockResources\WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles.json" />
+    <None Remove="MockResources\WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json" />
+    <None Remove="MockResources\WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException.txt" />
+    <None Remove="MockResources\WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile.zip" />
+    <None Remove="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt" />
+    <None Remove="MockResources\WhenCallDownloadDailyFile_ThenReturnFile.zip" />
+    <None Remove="MockResources\WhenCallDownloadFile_ThenReturnFile.pdf" />
+    <None Remove="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1.json" />
+    <None Remove="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2.json" />
+    <None Remove="MockResources\WhenCallIndexOnLoad_ThenReturnList 1.json" />
+    <None Remove="MockResources\WhenCallIndexOnLoad_ThenReturnList 2.json" />
+    <None Remove="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 1.json" />
+    <None Remove="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 2.json" />
+    <None Remove="MockResources\WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles.json" />
+    <None Remove="MockResources\WhenCallShowDailyFilesAsync_ThenReturnDailyFiles.json" />
+    <None Remove="MockResources\WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles.json" />
+    <None Remove="MockResources\WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles.json" />
+    <None Remove="MockResources\WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,18 +40,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="8.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.28" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.28" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="NuGet.Frameworks" Version="6.9.1" />
-    <PackageReference Include="NuGet.ProjectModel" Version="6.9.1" />
+    <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.31" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.31" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="NuGet.Frameworks" Version="6.10.1" />
+    <PackageReference Include="NuGet.ProjectModel" Version="6.10.1" />
     <PackageReference Include="NUnit" Version="4.1.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="coverlet.collector" Version="3.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="WireMock.Net" Version="1.5.60" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,7 +64,66 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NoticesToMariners\" />
+    <Content Include="MockResources\WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallAnnual_ThenReturnAnnualFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallCumulativeAsync_ThenReturnCumulativeFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadDailyFile_ThenReturnFile.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallDownloadFile_ThenReturnFile.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList 2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallIndexOnLoad_ThenReturnList 1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallIndexOnLoad_ThenReturnList 2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallIndexWithYearWeek_ThenReturnList 2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallShowDailyFilesAsync_ThenReturnDailyFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallShowWeeklyFilesAsyncForDistributerUser_ThenReturnWeeklyFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MockResources\WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

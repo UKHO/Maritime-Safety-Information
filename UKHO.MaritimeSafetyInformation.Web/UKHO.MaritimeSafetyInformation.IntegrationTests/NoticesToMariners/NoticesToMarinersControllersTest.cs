@@ -13,305 +13,337 @@ using UKHO.MaritimeSafetyInformation.Web.Controllers;
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
     /// <summary>
-    /// These tests require data to be set up in the File Share Service.Instructions can be found on the MSI project Wiki :
-    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/MSI-Notices-to-Mariners-Integration-Tests
+    /// These tests require data to be set up in the File Share Service. Instructions can be found on the MSI project Wiki:
+    /// https://dev.azure.com/ukhydro/Maritime%20Safety%20Information/_wiki/wikis/Maritime-Safety-Information.wiki/329/Notices-to-Mariners-Test-Data-Creation
+    /// The following years and week numbers are used by the weekly tests:
+    /// 2020	14
+    /// 2021	30
+    /// 2021	44
+    /// 2022	 5
+    /// 2022	11
+    /// 2022	18
+    /// The following years and week numbers are used by the daily tests:
+    /// 2020	40
+    /// 2021	33
+    /// 2021	44
+    /// 2022	18
+    /// 2022	21
     /// </summary>
+    [Category("FssApi")]
     internal class NoticesToMarinersControllersTest
     {
-        private readonly IServiceProvider services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
-        private NoticesToMarinersController nMController;
+        private IServiceProvider services;
+        private NoticesToMarinersController controller;
+        private Configuration configuration;
 
-        private Configuration Config { get; set; }
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+            configuration = new Configuration();
+            // Ensure that we're looking for test data in the right place.
+            Assert.That(configuration.BusinessUnit, Is.EqualTo("MaritimeSafetyInformationIntegrationTest"));
+            Assert.That(configuration.ProductType, Is.EqualTo("Notices to Mariners"));
+            Assert.That(configuration.BaseUrl, Is.EqualTo("https://filesqa.admiralty.co.uk"));
+        }
 
         [SetUp]
         public void Setup()
         {
-            Config = new Configuration();
-            _ = new HttpContextAccessor
-            {
-                HttpContext = new DefaultHttpContext()
-            };
-
-            nMController = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
+            _ = new HttpContextAccessor { HttpContext = new DefaultHttpContext() };
+            controller = ActivatorUtilities.CreateInstance<NoticesToMarinersController>(services);
         }
 
+        // Test data - see 'Upload Weekly Dup Notices to Mariners 03' for first ShowFilesResponseList as it has the most recent year and week number
         [Test]
         public async Task WhenCallIndexOnLoad_ThenReturnList()
         {
-            IActionResult result = await nMController.Index();
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            var result = await controller.Index() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(10, Is.EqualTo(showWeeklyFiles.YearAndWeekList.Count));
-            Assert.That(5, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That(2020, Is.EqualTo(showWeeklyFiles.YearAndWeekList[0].Year));
-            Assert.That(14, Is.EqualTo(showWeeklyFiles.YearAndWeekList[0].Week));
-            Assert.That("application/pdf", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[0].MimeType));
-            Assert.That(Config.MaxAttributeValuesCount >= showWeeklyFiles.YearAndWeekList.Count);
+            Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.EqualTo(6));
+            Assert.That(showWeeklyFiles.YearAndWeekList[0].Year, Is.EqualTo(2020));
+            Assert.That(showWeeklyFiles.YearAndWeekList[0].Week, Is.EqualTo(14));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(3));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[0].MimeType, Is.EqualTo("image/jpg"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].MimeType, Is.EqualTo("application/text"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[2].MimeType, Is.EqualTo("application/text"));
+            Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.LessThanOrEqualTo(configuration.MaxAttributeValuesCount));
         }
 
+        // Test data - see 'Upload Weekly Notices to Mariners 03' for year 2021 week 30
         [Test]
         public async Task WhenCallIndexWithYearWeek_ThenReturnList()
         {
-            IActionResult result = await nMController.Index(2021, 30);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            var result = await controller.Index(2021, 30) as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(4, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That(10, Is.EqualTo(showWeeklyFiles.YearAndWeekList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("msi_img_W2021_30.jpg", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].Filename));
-            Assert.That(".jpg", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].FileExtension));
-            Assert.That("msi_img_W2021_30", Is.EqualTo(showWeeklyFiles.ShowFilesResponseList[1].FileDescription));
-            Assert.That(2021, Is.EqualTo(showWeeklyFiles.YearAndWeekList[2].Year));
-            Assert.That(30, Is.EqualTo(showWeeklyFiles.YearAndWeekList[2].Week));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(4));
+            Assert.That(showWeeklyFiles.YearAndWeekList.Count, Is.EqualTo(6));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].Filename, Is.EqualTo("msi_img_W2021_30.jpg"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].FileExtension, Is.EqualTo(".jpg"));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList[1].FileDescription, Is.EqualTo("msi_img_W2021_30"));
+            Assert.That(showWeeklyFiles.YearAndWeekList[1].Year, Is.EqualTo(2021));
+            Assert.That(showWeeklyFiles.YearAndWeekList[1].Week, Is.EqualTo(30));
         }
 
+        // Test data - there's no weekly data for 2021 week 8
         [Test]
         public async Task WhenCallIndexForWeekWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            IActionResult result = await nMController.Index(2021, 08);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
+            var result = await controller.Index(2021, 8) as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showWeeklyFiles = result.Model as ShowWeeklyFilesResponseModel;
             Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(0, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            Assert.That(showWeeklyFiles.ShowFilesResponseList.Count, Is.EqualTo(0));
         }
 
+        // Test data - see 'Upload Weekly Notices to Mariners 04' for year 2021 week 30
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncForPublicUser_ThenReturnWeeklyFiles()
         {
-            IActionResult result = await nMController.ShowWeeklyFilesAsync(2020, 14);
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
+            var result = await controller.ShowWeeklyFilesAsync(2020, 14) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
-            Assert.That(4, Is.EqualTo(listFiles.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("a738d0d3-bc1e-47ca-892a-9514ccef6464", Is.EqualTo(listFiles[0].BatchId));
-            Assert.That("21snii22_week_W2020_14", Is.EqualTo(listFiles[0].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(listFiles[0].FileExtension));
-            Assert.That(1072212, Is.EqualTo(listFiles[0].FileSize));
+            Assert.That(listFiles.Count, Is.EqualTo(4));
+            Assert.That(listFiles[0].BatchId, Is.EqualTo("2bdec6dd-68be-4763-b805-d57a3a49d3b9"));
+            Assert.That(listFiles[0].FileDescription, Is.EqualTo("21snii22_week_W2020_14"));
+            Assert.That(listFiles[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(listFiles[0].FileSize, Is.EqualTo(839));
             Assert.That(listFiles[0].IsDistributorUser, Is.False);
         }
 
+        // Test data - there's no weekly data for 2022 week 6
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithNoData_ThenShouldReturnEmptyShowFilesResponseList()
         {
-            IActionResult result = await nMController.Index(2022, 06);
-            ShowWeeklyFilesResponseModel showWeeklyFiles = (ShowWeeklyFilesResponseModel)((ViewResult)result).Model;
-            Assert.That(showWeeklyFiles, Is.Not.Null);
-            Assert.That(0, Is.EqualTo(showWeeklyFiles.ShowFilesResponseList.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
+            var result = await controller.ShowWeeklyFilesAsync(2022, 6) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
+            Assert.That(listFiles.Count, Is.EqualTo(0));
         }
 
+        // Test data - see 'Upload Weekly Dup Notices to Mariners 03'
         [Test]
         public async Task WhenCallShowWeeklyFilesAsyncWithDuplicateData_ThenReturnLatestWeeklyFiles()
         {
-            IActionResult result = await nMController.ShowWeeklyFilesAsync(2022, 18);
-            List<ShowFilesResponseModel> listFiles = (List<ShowFilesResponseModel>)((PartialViewResult)result).Model;
-            Assert.That(listFiles != null);
-            Assert.That(3, Is.EqualTo(listFiles.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("e6231e8f-2dfa-4c1d-8b68-9913f4d70e55", Is.EqualTo(listFiles[0].BatchId));
-            Assert.That("NM_MSI", Is.EqualTo(listFiles[0].FileDescription));
-            Assert.That("image/jpg", Is.EqualTo(listFiles[0].MimeType));
-            Assert.That(108480, Is.EqualTo(listFiles[0].FileSize));
+            var result = await controller.ShowWeeklyFilesAsync(2022, 18) as PartialViewResult;
+            Assert.That(result, Is.Not.Null);
+            var listFiles = result.Model as List<ShowFilesResponseModel>;
+            Assert.That(listFiles, Is.Not.Null);
+            Assert.That(listFiles.Count, Is.EqualTo(3));
+            Assert.That(listFiles[0].BatchId, Is.EqualTo("b70dea9b-8ce6-4153-a376-1486a82fc3a1"));
+            Assert.That(listFiles[0].FileDescription, Is.EqualTo("NM_MSI"));
+            Assert.That(listFiles[0].MimeType, Is.EqualTo("image/jpg"));
+            Assert.That(listFiles[0].FileSize, Is.EqualTo(2925));
         }
 
+        // Test data - see 'Upload Daily Notices to Mariners 02'
         [Test]
         public async Task WhenCallShowDailyFilesAsync_ThenReturnDailyFiles()
         {
-            IActionResult result = await nMController.ShowDailyFilesAsync();
-            List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
+            var result = await controller.ShowDailyFilesAsync() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showFiles = result.Model as List<ShowDailyFilesResponseModel>;
             Assert.That(showFiles, Is.Not.Null);
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That(1, Is.EqualTo(showFiles[4].DailyFilesData.Count));
-            Assert.That("33", Is.EqualTo(showFiles[4].WeekNumber));
-            Assert.That("2021", Is.EqualTo(showFiles[4].Year));
-            Assert.That("2021/33", Is.EqualTo(showFiles[4].YearWeek));
-            Assert.That("2021-08-14", Is.EqualTo(showFiles[4].DailyFilesData[0].DataDate));
-            Assert.That("Daily 14-08-21.zip", Is.EqualTo(showFiles[4].DailyFilesData[0].Filename));
-            Assert.That("416 KB", Is.EqualTo(showFiles[4].DailyFilesData[0].FileSizeInKB));
-            Assert.That("977e771c-1ed6-4345-8d01-fff728952f1b", Is.EqualTo(showFiles[4].DailyFilesData[0].BatchId));
+            Assert.That(showFiles.Count, Is.EqualTo(5));
+            Assert.That(showFiles[4].DailyFilesData.Count, Is.EqualTo(1));
+            Assert.That(showFiles[4].WeekNumber, Is.EqualTo("40"));
+            Assert.That(showFiles[4].Year, Is.EqualTo("2020"));
+            Assert.That(showFiles[4].YearWeek, Is.EqualTo("2020/40"));
+            Assert.That(showFiles[4].DailyFilesData[0].DataDate, Is.EqualTo("2020-10-02"));
+            Assert.That(showFiles[4].DailyFilesData[0].Filename, Is.EqualTo("Daily 02-10-20.zip"));
+            Assert.That(showFiles[4].DailyFilesData[0].FileSizeInKB, Is.EqualTo("1 KB"));
+            Assert.That(showFiles[4].DailyFilesData[0].BatchId, Is.EqualTo("1951be83-6abf-42ff-bc77-540546500954"));
         }
 
+        // Test data - see 'Upload Daily Dup Notices to Mariners 01'
         [Test]
         public async Task WhenCallShowDailyFilesAsyncWithDuplicateData_ThenReturnDailyLatestFiles()
         {
-            IActionResult result = await nMController.ShowDailyFilesAsync();
-            List<ShowDailyFilesResponseModel> showFiles = (List<ShowDailyFilesResponseModel>)((ViewResult)result).Model;
-            Assert.That(showFiles != null);
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That(5, Is.EqualTo(showFiles[0].DailyFilesData.Count));
-            Assert.That("21", Is.EqualTo(showFiles[0].WeekNumber));
-            Assert.That("2022", Is.EqualTo(showFiles[0].Year));
-            Assert.That("2022-05-24", Is.EqualTo(showFiles[0].DailyFilesData[0].DataDate));
-            Assert.That("Daily 24-05-22.zip", Is.EqualTo(showFiles[0].DailyFilesData[0].Filename));
-            Assert.That("416 KB", Is.EqualTo(showFiles[0].DailyFilesData[0].FileSizeInKB));
-            Assert.That("a8d14b93-42ab-455b-a4ed-39effecb8536", Is.EqualTo(showFiles[0].DailyFilesData[0].BatchId));
+            var result = await controller.ShowDailyFilesAsync() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showFiles = result.Model as List<ShowDailyFilesResponseModel>;
+            Assert.That(showFiles, Is.Not.Null);
+            Assert.That(showFiles.Count, Is.EqualTo(5));
+            Assert.That(showFiles[0].DailyFilesData.Count, Is.EqualTo(5));
+            Assert.That(showFiles[0].WeekNumber, Is.EqualTo("21"));
+            Assert.That(showFiles[0].Year, Is.EqualTo("2022"));
+            Assert.That(showFiles[0].DailyFilesData[0].DataDate, Is.EqualTo("2022-05-24"));
+            Assert.That(showFiles[0].DailyFilesData[0].Filename, Is.EqualTo("Daily 24-05-22.zip"));
+            Assert.That(showFiles[0].DailyFilesData[0].FileSizeInKB, Is.EqualTo("1 KB"));
+            Assert.That(showFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("b3e28981-4e09-4592-9a14-3eac6f6bc8e7"));
         }
 
+        // Test data - see 'Upload Weekly Notices to Mariners 04'
         [Test]
         public async Task WhenCallDownloadFile_ThenReturnFile()
         {
-            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
-            const string filename = "21snii22_week_W2020_14.pdf";
+            const string batchId = "2bdec6dd-68be-4763-b805-d57a3a49d3b9";
+            const string fileName = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
 
-            FileResult result = await nMController.DownloadFile(batchId, filename, mimeType, frequency);
+            var result = await controller.DownloadFile(batchId, fileName, mimeType, frequency) as FileContentResult;
             Assert.That(result, Is.Not.Null);
-            Assert.That("application/pdf", Is.EqualTo(result.ContentType));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
-            Assert.That(1072212, Is.EqualTo(((FileContentResult)result).FileContents.Length));
+            Assert.That(result.ContentType, Is.EqualTo(mimeType));
+            Assert.That(result.FileContents.Length, Is.EqualTo(839));
         }
 
+        // Test data - use same BatchId as WhenCallDownloadFile_ThenReturnFile()
         [Test]
         public void WhenCallDownloadFileWithInvalidData_ThenReturnException()
         {
-            const string batchId = "a738d0d3-bc1e-47ca-892a-9514ccef6464";
+            const string batchId = "2bdec6dd-68be-4763-b805-d57a3a49d3b9";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
             const string frequency = "Weekly";
 
             Assert.ThrowsAsync(Is.TypeOf<HttpRequestException>()
-               .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found).")
-               , async delegate { await nMController.DownloadFile(batchId, filename, mimeType, frequency); });
+                .And.Message.EqualTo("Response status code does not indicate success: 404 (Not Found)."),
+                async delegate { await controller.DownloadFile(batchId, filename, mimeType, frequency); });
         }
 
+        // Test data - see 'Upload Daily Notices to Mariners 01'
         [Test]
         public async Task WhenCallDownloadDailyFile_ThenReturnFile()
         {
-            const string batchId = "1882c04c-bc05-41b7-bf9b-11aeb5c5bd4a";
-            const string filename = "DNM_Text.pdf";
-            const string mimeType = "application/pdf";
+            const string batchId = "7ef50011-1820-4630-b540-7289526a7c89";
+            const string fileName = "Daily 06-05-22.zip";
+            const string mimeType = "application/x-zip";
 
-            ActionResult result = await nMController.DownloadDailyFile(batchId, filename, mimeType);
-            Assert.That((FileContentResult)result != null);
-            Assert.That("application/pdf", Is.EqualTo(((FileContentResult)result).ContentType));
-            Assert.That(425602, Is.EqualTo(((FileContentResult)result).FileContents.Length));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
+            var result = await controller.DownloadDailyFile(batchId, fileName, mimeType) as FileContentResult;
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ContentType, Is.EqualTo(mimeType));
+            Assert.That(result.FileContents.Length, Is.EqualTo(1180));
         }
 
+        // Test data - none, but BatchId doesn't exist
         [Test]
         public void WhenCallDownloadDailyFileWithInvalidData_ThenThrowArgumentException()
         {
-            const string batchId = "08e8cce6-e69d-46bd-832d-6fd3d4ef8740";
-            const string filename = "Test.txt";
+            const string batchId = "6ef2e377-d1e9-42ba-b37b-93231b2397bd";
+            const string fileName = "Test.txt";
             const string mimeType = "application/txt";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
-                async delegate { await nMController.DownloadDailyFile(batchId, filename, mimeType); });
+                async delegate { await controller.DownloadDailyFile(batchId, fileName, mimeType); });
         }
 
+        // Test data - see 'Upload Cumulative Notices to Mariners 05' for first entry in ShowFilesResponseModel
         [Test]
         public async Task WhenCallCumulativeAsync_ThenReturnCumulativeFiles()
         {
-            IActionResult result = await nMController.Cumulative();
-            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            var result = await controller.Cumulative() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
-            Assert.That(6, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("50044762-231d-41ec-a908-ba9eb59c61ab", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].BatchId));
-            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileExtension));
-            Assert.That(1386825, Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileSize));
-            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("NP234(B) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("NP234(A) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(showNMFiles.ShowFilesResponseModel?.Count, Is.EqualTo(6));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].BatchId, Is.EqualTo("3cf9d879-cd72-4559-9c6f-6960c891d529"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileSize, Is.EqualTo(839));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(A) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(B) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("NP234(A) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[4].FileDescription, Is.EqualTo("NP234(B) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[5].FileDescription, Is.EqualTo("NP234(A) 2021"));
         }
 
+        // Test data - see 'Upload Cumulative Dup Notices to Mariners 03' for latest duplicate entry
         [Test]
         public async Task WhenCallCumulativeAsyncForDuplicateData_ThenReturnLatestCumulativeFiles()
         {
-            IActionResult result = await nMController.Cumulative();
-            ShowNMFilesResponseModel showNMFiles = (ShowNMFilesResponseModel)((ViewResult)result).Model;
+            var result = await controller.Cumulative() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
-            Assert.That(6, Is.EqualTo(showNMFiles.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("f5569dc0-a0e4-40f5-b252-fef2e77861e1", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].BatchId));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileExtension));
-            Assert.That(1265024, Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileSize));
-            Assert.That("NP234(B) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[0].FileDescription));
-            Assert.That("NP234(A) 2021", Is.EqualTo(showNMFiles.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("NP234(B) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("NP234(A) 2020", Is.EqualTo(showNMFiles.ShowFilesResponseModel[3].FileDescription));
+            Assert.That(showNMFiles.ShowFilesResponseModel?.Count, Is.EqualTo(6));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(A) 2023"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(B) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].BatchId, Is.EqualTo("f855e708-df72-48f2-bb6b-c1ed1d4c7066"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("NP234(A) 2022"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].FileSize, Is.EqualTo(839));
+            Assert.That(showNMFiles.ShowFilesResponseModel[4].FileDescription, Is.EqualTo("NP234(B) 2021"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[5].FileDescription, Is.EqualTo("NP234(A) 2021"));
         }
 
+        // Test data - see 'Upload Annual Notices to Mariners 01'
         [Test]
         public async Task WhenCallAnnual_ThenReturnAnnualFiles()
         {
-            IActionResult result = await nMController.Annual();
-            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
-            Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
-            Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("10219d3c-15bb-43db-ab51-2f2f4f6038de", Is.EqualTo(responseModel.ShowFilesResponseModel[0].BatchId));
-            Assert.That("An overview of the 26 sections", Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileExtension));
-            Assert.That(205745, Is.EqualTo(responseModel.ShowFilesResponseModel[0].FileSize));
-            Assert.That("ADMIRALTY Tide Tables 2022 — General Information", Is.EqualTo(responseModel.ShowFilesResponseModel[1].FileDescription));
-            Assert.That("Suppliers of ADMIRALTY Charts and Publications", Is.EqualTo(responseModel.ShowFilesResponseModel[2].FileDescription));
-            Assert.That("Safety of British merchant ships in periods of peace, tension or conflict", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileDescription));
-            Assert.That("---", Is.EqualTo(responseModel.ShowFilesResponseModel[0].Hash));
-            Assert.That("1", Is.EqualTo(responseModel.ShowFilesResponseModel[1].Hash));
+            var result = await controller.Annual() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var responseModel = result.Model as ShowNMFilesResponseModel;
+            Assert.That(responseModel, Is.Not.Null);
+            Assert.That(responseModel.ShowFilesResponseModel?.Count, Is.EqualTo(4));
+            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("9ff0a834-4d12-476f-9d00-98ca69c089ea"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileSize, Is.EqualTo(839));
+            Assert.That(responseModel.ShowFilesResponseModel[0].Hash, Is.EqualTo("---"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("ADMIRALTY Tide Tables 2024 - General Information"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("1"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("Suppliers of ADMIRALTY Charts and Publications"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].Hash, Is.EqualTo("2"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("Safety of British merchant ships in periods of peace, tension or conflict"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].Hash, Is.EqualTo("3"));
         }
 
+        // Test data - see 'Upload Annual Dup Notices to Mariners 01' for latest duplicate entry
         [Test]
         public async Task WhenCallAnnualWithDuplicateData_ThenReturnUniqueAnnualFiles()
         {
-            IActionResult result = await nMController.Annual();
-            ShowNMFilesResponseModel responseModel = (ShowNMFilesResponseModel)((ViewResult)result).Model;
-            Assert.That(responseModel.ShowFilesResponseModel, Is.Not.Null);
-            Assert.That(15, Is.EqualTo(responseModel.ShowFilesResponseModel.Count));
-            Assert.That("MaritimeSafetyInformationIntegrationTest", Is.EqualTo(Config.BusinessUnit));
-            Assert.That("Notices to Mariners", Is.EqualTo(Config.ProductType));
-            Assert.That("10219d3c-15bb-43db-ab51-2f2f4f6038de", Is.EqualTo(responseModel.ShowFilesResponseModel[0].BatchId));
-            Assert.That("Firing Practice and Exercise Areas", Is.EqualTo(responseModel.ShowFilesResponseModel[4].FileDescription));
-            Assert.That(".pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[3].FileExtension));
-            Assert.That(133291, Is.EqualTo(responseModel.ShowFilesResponseModel[1].FileSize));
-            Assert.That("Mine-Laying and Mine Countermeasures Exercises - Waters around the British Isles", Is.EqualTo(responseModel.ShowFilesResponseModel[5].FileDescription));
-            Assert.That("National Claims to Maritime Jurisdiction", Is.EqualTo(responseModel.ShowFilesResponseModel[6].FileDescription));
-            Assert.That("19 Global Navigational Satellite System Positions, Horizontal Datums and Position Shifts.pdf", Is.EqualTo(responseModel.ShowFilesResponseModel[7].Filename));
-            Assert.That("---", Is.EqualTo(responseModel.ShowFilesResponseModel[14].Hash));
-            Assert.That("1", Is.EqualTo(responseModel.ShowFilesResponseModel[1].Hash));
+            var result = await controller.Annual() as ViewResult;
+            Assert.That(result, Is.Not.Null);
+            var responseModel = result.Model as ShowNMFilesResponseModel;
+            Assert.That(responseModel, Is.Not.Null);
+            Assert.That(responseModel.ShowFilesResponseModel?.Count, Is.EqualTo(4));
+            Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].Hash, Is.EqualTo("---"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("ADMIRALTY Tide Tables 2024 - General Information"));
+            Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("1"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("Suppliers of ADMIRALTY Charts and Publications"));
+            Assert.That(responseModel.ShowFilesResponseModel[2].Hash, Is.EqualTo("2"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].BatchId, Is.EqualTo("83ed3582-9541-4a72-a87f-cb37849db9e8"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("Safety of British merchant ships in periods of peace, tension or conflict"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileExtension, Is.EqualTo(".pdf"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].FileSize, Is.EqualTo(839));
+            Assert.That(responseModel.ShowFilesResponseModel[3].Hash, Is.EqualTo("3"));
         }
 
+        // Test Data - see 'Upload Weekly Notices to Mariners 02'
         [Test]
         public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile()
         {
-            const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be26c418";
+            const string batchId = "b3b7aa54-1e15-4a04-85f6-f3b0b1472c89";
             const string filename = "WeeklyAll_NM.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
 
-            ActionResult result = await nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type);
-            Assert.That((FileContentResult)result != null);
-            Assert.That("application/gzip", Is.EqualTo(((FileContentResult)result).ContentType));
-            Assert.That(2278920, Is.EqualTo(((FileContentResult)result).FileContents.Length));
-            Assert.That("https://filesqa.admiralty.co.uk", Is.EqualTo(Config.BaseUrl));
+            var result = await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type) as FileContentResult;
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ContentType, Is.EqualTo("application/gzip"));
+            Assert.That(result.FileContents.Length, Is.EqualTo(3499));
         }
 
+        // Test data - none, but BatchId doesn't exist
         [Test]
         public void WhenCallDownloadAllWeeklyZipFileWithInvalidData_ThenThrowArgumentException()
         {
-            const string batchId = "3db9e8c4-0dea-43c8-8de3-e875be261234";
+            const string batchId = "70ea968b-26f9-461e-8d16-4b488eb454bc";
             const string filename = "WeeklyAll_NM.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>(),
-                async delegate { await nMController.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
+                async delegate { await controller.DownloadAllWeeklyZipFile(batchId, filename, mimeType, type); });
         }
     }
 }
