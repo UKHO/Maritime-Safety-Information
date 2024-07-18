@@ -5,19 +5,14 @@ using Microsoft.AspNetCore.Http;
 namespace UKHO.MaritimeSafetyInformation.Common.Filters
 {
     [ExcludeFromCodeCoverage] //Used in Startup.cs
-    public class CustomSecurityHeadersMiddleware
+    public class CustomSecurityHeadersMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate next;
-
-        public CustomSecurityHeadersMiddleware(RequestDelegate next)
-        {
-            this.next = next;
-        }
+        private readonly RequestDelegate _next = next;
 
         public Task Invoke(HttpContext httpContext)
         {
-            httpContext.Response.Headers.Add("Permissions-Policy", "camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), usb=()");
-            return next(httpContext);
+            httpContext.Response.Headers.Append("Permissions-Policy", "camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), usb=()");
+            return _next(httpContext);
         }
     }
 

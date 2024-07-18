@@ -324,7 +324,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             const string frequency = "Weekly";
 
             A.CallTo(() => fakeNMDataService.DownloadFssFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
-            fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            fakeContextAccessor.HttpContext.Response.Headers.Append("Content-Disposition", "Test");
 
             Task<FileResult> result = controller.DownloadFile(batchId, fileName, mimeType, frequency);
 
@@ -353,7 +353,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
-            fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            fakeContextAccessor.HttpContext.Response.Headers.Append("Content-Disposition", "Test");
 
             Task<FileResult> result = controller.DownloadDailyFile(batchId, fileName, mimeType);
 
@@ -476,7 +476,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
 
             A.CallTo(() => fakeNMDataService.DownloadFSSZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
 
-            fakeContextAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "Test");
+            fakeContextAccessor.HttpContext.Response.Headers.Append("Content-Disposition", "Test");
 
             Task<FileResult> result = controller.DownloadAllWeeklyZipFile(batchId, fileName, mimeType, type);
 

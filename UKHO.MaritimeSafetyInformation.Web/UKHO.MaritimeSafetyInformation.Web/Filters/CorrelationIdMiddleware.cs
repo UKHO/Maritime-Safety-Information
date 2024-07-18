@@ -16,10 +16,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.Filters
                 if (string.IsNullOrEmpty(correlationId))
                 {
                     correlationId = Guid.NewGuid().ToString();
-                    context.Request.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+                    context.Request.Headers.Append(XCorrelationIdHeaderKey, correlationId);
                 }
 
-                context.Response.Headers.Add(XCorrelationIdHeaderKey, correlationId);
+                context.Response.Headers.Append(XCorrelationIdHeaderKey, correlationId);
 
                 await func();
             });

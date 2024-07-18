@@ -43,7 +43,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const string searchText = "";
             IResult<BatchSearchResponse> expected = new Result<BatchSearchResponse>();
 
-            A.CallTo(() => fileShareApiClient.Search("", 100, 0, CancellationToken.None)).Returns(expected);
+            A.CallTo(() => fileShareApiClient.SearchAsync("", 100, 0, CancellationToken.None)).Returns(expected);
             Task<IResult<BatchSearchResponse>> result = fileShareService.FSSBatchSearchAsync(searchText, FakeAccessToken, CorrelationId, fileShareApiClient);
             Assert.That(result, Is.InstanceOf<Task<IResult<BatchSearchResponse>>>());
         }
@@ -53,7 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         {
             fileShareServiceConfig.Value.PageSize = -100;
             fileShareServiceConfig.Value.BaseUrl = "https://www.test.com/";
-            A.CallTo(() => fileShareApiClient.Search(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new ArgumentException());
+            A.CallTo(() => fileShareApiClient.SearchAsync(A<string>.Ignored, A<int>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new ArgumentException());
 
             Assert.ThrowsAsync(Is.TypeOf<ArgumentException>()
                    .And.Message.EqualTo("Value does not fall within the expected range.")
@@ -72,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
                 StatusCode = 200
             };
 
-            A.CallTo(() => fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<int>.Ignored, CancellationToken.None)).Returns(expectedResponse);
+            A.CallTo(() => fileShareApiClient.BatchAttributeSearchAsync(A<string>.Ignored, A<int>.Ignored, CancellationToken.None)).Returns(expectedResponse);
 
             Task<IResult<BatchAttributesSearchResponse>> actualResult = fileShareService.FSSSearchAttributeAsync(FakeAccessToken, CorrelationId, fileShareApiClient);
 
@@ -85,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
         public void WhenFileShareServiceCallsFssSearchAttributeAsyncWithInvalidData_ThenReturnsException()
         {
             fileShareServiceConfig.Value.BaseUrl = "www.test.com/";
-            A.CallTo(() => fileShareApiClient.BatchAttributeSearch(A<string>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
+            A.CallTo(() => fileShareApiClient.BatchAttributeSearchAsync(A<string>.Ignored, A<int>.Ignored, A<CancellationToken>.Ignored)).Throws(new UriFormatException("Invalid URI: The format of the URI could not be determined."));
 
             Assert.ThrowsAsync(Is.TypeOf<UriFormatException>()
                 .And.Message.EqualTo("Invalid URI: The format of the URI could not be determined.")
