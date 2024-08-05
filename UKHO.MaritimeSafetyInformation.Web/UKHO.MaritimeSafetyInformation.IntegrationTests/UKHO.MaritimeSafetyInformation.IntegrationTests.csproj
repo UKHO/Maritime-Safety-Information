@@ -47,12 +47,12 @@
     <PackageReference Include="NuGet.Frameworks" Version="6.10.1" />
     <PackageReference Include="NuGet.ProjectModel" Version="6.10.1" />
     <PackageReference Include="NUnit" Version="4.1.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WireMock.Net" Version="1.5.60" />
+    <PackageReference Include="WireMock.Net" Version="1.5.62" />
   </ItemGroup>
 
   <ItemGroup>
