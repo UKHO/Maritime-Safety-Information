@@ -363,7 +363,7 @@ stages:
           - template: Deployment/templates/continuous-testing.yml
             parameters:
               AzureSubscription: "Maritime Safety Information Dev - A.008.02"
-              UseFssMock: true
+              UseFssMock: false
 
   - stage: QADeploy
     displayName: "QAdeploy (inc terraform, webapp deploy)"

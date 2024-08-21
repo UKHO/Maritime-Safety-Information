@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
             Assert.That(listFiles.Count, Is.EqualTo(4));
-            Assert.That(listFiles[0].BatchId, Is.EqualTo("2bdec6dd-68be-4763-b805-d57a3a49d3b9"));
+            Assert.That(listFiles[0].BatchId, Is.EqualTo("4297143b-bfa2-4146-8278-7331850b76fa"));
             Assert.That(listFiles[0].FileDescription, Is.EqualTo("21snii22_week_W2020_14"));
             Assert.That(listFiles[0].FileExtension, Is.EqualTo(".pdf"));
             Assert.That(listFiles[0].FileSize, Is.EqualTo(839));
@@ -136,7 +136,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             var listFiles = result.Model as List<ShowFilesResponseModel>;
             Assert.That(listFiles, Is.Not.Null);
             Assert.That(listFiles.Count, Is.EqualTo(3));
-            Assert.That(listFiles[0].BatchId, Is.EqualTo("b70dea9b-8ce6-4153-a376-1486a82fc3a1"));
+            Assert.That(listFiles[0].BatchId, Is.EqualTo("9bb956d4-f565-4db7-bbe0-0af5f478ba13"));
             Assert.That(listFiles[0].FileDescription, Is.EqualTo("NM_MSI"));
             Assert.That(listFiles[0].MimeType, Is.EqualTo("image/jpg"));
             Assert.That(listFiles[0].FileSize, Is.EqualTo(2925));
@@ -158,7 +158,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showFiles[4].DailyFilesData[0].DataDate, Is.EqualTo("2020-10-02"));
             Assert.That(showFiles[4].DailyFilesData[0].Filename, Is.EqualTo("Daily 02-10-20.zip"));
             Assert.That(showFiles[4].DailyFilesData[0].FileSizeInKB, Is.EqualTo("1 KB"));
-            Assert.That(showFiles[4].DailyFilesData[0].BatchId, Is.EqualTo("1951be83-6abf-42ff-bc77-540546500954"));
+            Assert.That(showFiles[4].DailyFilesData[0].BatchId, Is.EqualTo("64b9676d-aa20-4283-8e53-b1bd14bb6b0b"));
         }
 
         // Test data - see 'Upload Daily Dup Notices to Mariners 01'
@@ -176,14 +176,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showFiles[0].DailyFilesData[0].DataDate, Is.EqualTo("2022-05-24"));
             Assert.That(showFiles[0].DailyFilesData[0].Filename, Is.EqualTo("Daily 24-05-22.zip"));
             Assert.That(showFiles[0].DailyFilesData[0].FileSizeInKB, Is.EqualTo("1 KB"));
-            Assert.That(showFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("b3e28981-4e09-4592-9a14-3eac6f6bc8e7"));
+            Assert.That(showFiles[0].DailyFilesData[0].BatchId, Is.EqualTo("4fd433d7-f4af-4ced-996d-4a3150983be4"));
         }
 
         // Test data - see 'Upload Weekly Notices to Mariners 04'
         [Test]
         public async Task WhenCallDownloadFile_ThenReturnFile()
         {
-            const string batchId = "2bdec6dd-68be-4763-b805-d57a3a49d3b9";
+            const string batchId = "4297143b-bfa2-4146-8278-7331850b76fa";
             const string fileName = "21snii22_week_W2020_14.pdf";
             const string mimeType = "application/pdf";
             const string frequency = "Weekly";
@@ -198,7 +198,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public void WhenCallDownloadFileWithInvalidData_ThenReturnException()
         {
-            const string batchId = "2bdec6dd-68be-4763-b805-d57a3a49d3b9";
+            const string batchId = "4297143b-bfa2-4146-8278-7331850b76fa";
             const string filename = "Test.txt";
             const string mimeType = "application/txt";
             const string frequency = "Weekly";
@@ -212,7 +212,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallDownloadDailyFile_ThenReturnFile()
         {
-            const string batchId = "7ef50011-1820-4630-b540-7289526a7c89";
+            const string batchId = "459b73c5-0062-4279-aff7-21a4d4b81188";
             const string fileName = "Daily 06-05-22.zip";
             const string mimeType = "application/x-zip";
 
@@ -243,7 +243,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             var showNMFiles = result.Model as ShowNMFilesResponseModel;
             Assert.That(showNMFiles, Is.Not.Null);
             Assert.That(showNMFiles.ShowFilesResponseModel?.Count, Is.EqualTo(6));
-            Assert.That(showNMFiles.ShowFilesResponseModel[0].BatchId, Is.EqualTo("3cf9d879-cd72-4559-9c6f-6960c891d529"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[0].BatchId, Is.EqualTo("883ca6b1-bc8b-43a4-9e99-0864c4179f10"));
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2023"));
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileSize, Is.EqualTo(839));
@@ -266,7 +266,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showNMFiles.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("NP234(B) 2023"));
             Assert.That(showNMFiles.ShowFilesResponseModel[1].FileDescription, Is.EqualTo("NP234(A) 2023"));
             Assert.That(showNMFiles.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("NP234(B) 2022"));
-            Assert.That(showNMFiles.ShowFilesResponseModel[3].BatchId, Is.EqualTo("f855e708-df72-48f2-bb6b-c1ed1d4c7066"));
+            Assert.That(showNMFiles.ShowFilesResponseModel[3].BatchId, Is.EqualTo("f53ecd55-3dec-48ec-bc02-3673a27e65b5"));
             Assert.That(showNMFiles.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("NP234(A) 2022"));
             Assert.That(showNMFiles.ShowFilesResponseModel[3].FileExtension, Is.EqualTo(".pdf"));
             Assert.That(showNMFiles.ShowFilesResponseModel[3].FileSize, Is.EqualTo(839));
@@ -283,7 +283,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             var responseModel = result.Model as ShowNMFilesResponseModel;
             Assert.That(responseModel, Is.Not.Null);
             Assert.That(responseModel.ShowFilesResponseModel?.Count, Is.EqualTo(4));
-            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("9ff0a834-4d12-476f-9d00-98ca69c089ea"));
+            Assert.That(responseModel.ShowFilesResponseModel[0].BatchId, Is.EqualTo("d13e7e92-1942-421a-9827-d4e9bb48825c"));
             Assert.That(responseModel.ShowFilesResponseModel[0].FileDescription, Is.EqualTo("An overview of the 26 sections"));
             Assert.That(responseModel.ShowFilesResponseModel[0].FileExtension, Is.EqualTo(".pdf"));
             Assert.That(responseModel.ShowFilesResponseModel[0].FileSize, Is.EqualTo(839));
@@ -311,7 +311,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(responseModel.ShowFilesResponseModel[1].Hash, Is.EqualTo("1"));
             Assert.That(responseModel.ShowFilesResponseModel[2].FileDescription, Is.EqualTo("Suppliers of ADMIRALTY Charts and Publications"));
             Assert.That(responseModel.ShowFilesResponseModel[2].Hash, Is.EqualTo("2"));
-            Assert.That(responseModel.ShowFilesResponseModel[3].BatchId, Is.EqualTo("83ed3582-9541-4a72-a87f-cb37849db9e8"));
+            Assert.That(responseModel.ShowFilesResponseModel[3].BatchId, Is.EqualTo("7ad75d53-ed9b-4283-865a-187950bb032a"));
             Assert.That(responseModel.ShowFilesResponseModel[3].FileDescription, Is.EqualTo("Safety of British merchant ships in periods of peace, tension or conflict"));
             Assert.That(responseModel.ShowFilesResponseModel[3].FileExtension, Is.EqualTo(".pdf"));
             Assert.That(responseModel.ShowFilesResponseModel[3].FileSize, Is.EqualTo(839));
@@ -322,7 +322,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [Test]
         public async Task WhenCallDownloadAllWeeklyZipFile_ThenReturnZipFile()
         {
-            const string batchId = "b3b7aa54-1e15-4a04-85f6-f3b0b1472c89";
+            const string batchId = "22a9d5db-afa5-4a8e-a26d-935e7888c720";
             const string filename = "WeeklyAll_NM.zip";
             const string mimeType = "application/gzip";
             const string type = "public";
