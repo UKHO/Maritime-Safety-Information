@@ -158,7 +158,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
             Assert.That(showFiles[4].DailyFilesData[0].DataDate, Is.EqualTo("2020-10-02"));
             Assert.That(showFiles[4].DailyFilesData[0].Filename, Is.EqualTo("Daily 02-10-20.zip"));
             Assert.That(showFiles[4].DailyFilesData[0].FileSizeInKB, Is.EqualTo("1 KB"));
-            Assert.That(showFiles[4].DailyFilesData[0].BatchId, Is.EqualTo("679c4ec7-1c25-4856-9f62-5202d97a7416"));
+            Assert.That(showFiles[4].DailyFilesData[0].BatchId, Is.EqualTo("25dff927-796b-4fa2-af90-4f63b4885127"));
         }
 
         // Test data - see 'Upload Daily Dup Notices to Mariners 01'
