@@ -188,13 +188,13 @@ export default class noticeToMarinerWeekDownload {
     public async verifyIntegrationDownloadAll() {
         expect(await this.downloadAll.innerText()).toContain('Download All')
         // Use BatchId from 'Upload Weekly Dup Notices to Mariners 03' in expected link
-        expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=b70dea9b-8ce6-4153-a376-1486a82fc3a1&mimeType=application%2Fgzip&type=public')
+        expect(await this.downloadAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=ba66b732-e67e-4219-bbd4-76b703ba18c0&mimeType=application%2Fgzip&type=public')
     }
 
     public async verifyIntegrationDownloadPartnerAll() {
         expect(await this.downloadPartnerAll.innerText()).toContain('Download All')
         // Use BatchId from 'Upload Weekly Distributor Notices to Mariners 01' in expected link
-        expect(await this.downloadPartnerAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=399ab1a2-ff89-4075-a0d2-971a72a67296&mimeType=application%2Fgzip&type=partner')
+        expect(await this.downloadPartnerAll.getAttribute('href')).toContain('/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=c6ae5916-2794-40e8-a7dd-acff27c23859&mimeType=application%2Fgzip&type=partner')
     }
 
     public async verifyIntegrationTestValueForDistributor() {
