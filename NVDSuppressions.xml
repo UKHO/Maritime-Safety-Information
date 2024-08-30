@@ -292,15 +292,6 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: Various
-   False positive - refers to Drupal
-   ]]>
-    </notes>
-    <cve>CVE-2014-9152</cve>
-  </suppress>
-  <suppress>
-    <notes>
-      <![CDATA[
    file name: System.Threading.Tasks.Extensions.dll
    False positive - applies to Android app
    ]]>
