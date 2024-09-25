@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/UKHO.MaritimeSafetyInformation.Web"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
