@@ -412,11 +412,10 @@
   <suppress>
     <notes>
       <![CDATA[
-   file name: System.Text.Json:8.0.0
-   Fixed in latest .NET 8 release
+   file name: Various
+   Refers to Azure CLI and service connector: https://msrc.microsoft.com/update-guide/en-US/advisory/CVE-2024-43591
    ]]>
     </notes>
-    <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
-    <vulnerabilityName>CVE-2024-30105</vulnerabilityName>
+    <cve>CVE-2024-43591</cve>
   </suppress>
 </suppressions>
