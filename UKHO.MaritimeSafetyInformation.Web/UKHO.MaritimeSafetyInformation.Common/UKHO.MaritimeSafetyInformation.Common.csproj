@@ -20,6 +20,7 @@
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="3.0.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.2" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="UKHO.FileShareAdminClient" Version="2.0.41028.2" />
     <PackageReference Include="UKHO.FileShareClient" Version="2.0.41028.2" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.24163.8" />
