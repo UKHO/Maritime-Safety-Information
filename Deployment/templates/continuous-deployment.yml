@@ -10,7 +10,7 @@ steps:
     displayName: "File Transform: Msi Config" #Replace msi instance value from pipeline 
     inputs:
       folderPath: '$(Pipeline.Workspace)/terraformartifact/src'
-      xmlTransformationRules: false
+      enableXmlTransform: false
       jsonTargetFiles: 'appsettings.json'
 
   - task: PowerShell@2
