@@ -34,7 +34,7 @@ steps:
     displayName: "File Transform: WebAppSettings"
     inputs:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
-      xmlTransformationRules:
+      xmlTransformationRules: false
       jsonTargetFiles: '**/appsettings.json'  
 
   - task: AzureCLI@2
@@ -100,7 +100,7 @@ steps:
     displayName: "File Transform: Admin-WebAppSettings"
     inputs:
       folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
-      xmlTransformationRules:
+      xmlTransformationRules: false
       jsonTargetFiles: '**/appsettings.json'
 
   - task: AzureCLI@2
