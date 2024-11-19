@@ -72,10 +72,10 @@ stages:
               workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
               packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packages'
 
-          - task: CmdLine@2
+          - task: CmdLine@1
             displayName: "Run OWASP Dependency Checker"
             inputs:
-              script: 'dependency-check.bat'
+              filename: 'dependency-check.bat'
               arguments: '--project "Maritime-Safety-Information - $(Build.SourceBranchName)" --scan "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web" --out "$(Build.ArtifactStagingDirectory)\DCReport" --suppression $(Build.SourcesDirectory)\NVDSuppressions.xml --noupdate'
 
           - task: PublishBuildArtifacts@1
