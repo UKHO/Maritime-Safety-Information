@@ -17,7 +17,7 @@ steps:
       displayName: "File Transform: integrationtests"
       inputs:
        folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
-       xmlTransformationRules:
+       xmlTransformationRules: ''
        jsonTargetFiles: '**/appsettings.json'
 
     - task: UseDotNet@2
@@ -62,7 +62,7 @@ steps:
     - task: FileTransform@2
       inputs:
        folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-       xmlTransformationRules:
+       xmlTransformationRules: ''
        jsonTargetFiles: 'appConfig.json'
 
     - script: |
