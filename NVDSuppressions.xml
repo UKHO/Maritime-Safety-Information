@@ -418,4 +418,14 @@
     </notes>
     <cve>CVE-2024-43591</cve>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Text.Json:9.0.0
+   This is the current version and will be updated once the next release is available
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-43485</vulnerabilityName>
+  </suppress>
 </suppressions>
