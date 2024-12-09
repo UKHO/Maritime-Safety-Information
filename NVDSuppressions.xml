@@ -428,4 +428,80 @@
     <packageUrl regex="true">^pkg:nuget/System\.Text\.Json@.*$</packageUrl>
     <vulnerabilityName>CVE-2024-43485</vulnerabilityName>
   </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Azure.Identity:1.10.3
+   False positive - 1.10.3 not used.
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Azure\.Identity@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-35255</vulnerabilityName>
+    <vulnerabilityName>CVE-2024-29992</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.AspNetCore.Http.dll
+   False positive - applies to old versions of .NET and System.IO.Pipelines. See https://msrc.microsoft.com/update-guide/en-US/advisory/CVE-2018-8409
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.AspNetCore\.Http@.*$</packageUrl>
+    <cve>CVE-2018-8409</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.Identity.Client.dll
+   False positive - fixed in latest version of Azure Identity. See https://msrc.microsoft.com/update-guide/en-US/advisory/CVE-2024-35255
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.Identity\.Client@.*$</packageUrl>
+    <cve>CVE-2024-35255</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+   False positive. Fixed in latest package versions and .NET 8. See https://msrc.microsoft.com/update-guide/en-US/advisory/CVE-2024-21319
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:generic/Microsoft\.IdentityModel\.Protocols\.OpenIdConnect@.*$</packageUrl>
+    <cve>CVE-2024-21319</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: Microsoft.IdentityModel.Protocols.OpenIdConnect:7.0.3
+   False positive. Fixed in latest package versions and .NET 8. See https://msrc.microsoft.com/update-guide/en-US/advisory/CVE-2024-21319
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/Microsoft\.IdentityModel\.Protocols\.OpenIdConnect@.*$</packageUrl>
+    <cve>CVE-2024-21319</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: System.Net.Security:4.3.0
+   False positive - fixed in later package versions. See https://learn.microsoft.com/en-us/security-updates/securityadvisories/2017/4021279
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/System\.Net\.Security@.*$</packageUrl>
+    <cve>CVE-2017-0247</cve>
+    <vulnerabilityName>CVE-2017-0248</vulnerabilityName>
+    <cve>CVE-2017-0249</cve>
+    <cve>CVE-2017-0256</cve>
+  </suppress>
+  <suppress>
+    <notes>
+      <![CDATA[
+   file name: runtime.native.System.Net.Security:4.3.0
+   False positive - fixed in later package versions. See https://learn.microsoft.com/en-us/security-updates/securityadvisories/2017/4021279
+   ]]>
+    </notes>
+    <packageUrl regex="true">^pkg:nuget/runtime\.native\.System\.Net\.Security@.*$</packageUrl>
+    <cve>CVE-2017-0247</cve>
+    <cve>CVE-2017-0249</cve>
+    <cve>CVE-2017-0256</cve>
+  </suppress>
 </suppressions>
