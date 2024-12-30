@@ -12,14 +12,14 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
     public class AuthFssTokenProvider : IAuthFssTokenProvider
     {
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfiguration;
-        private readonly ILogger<AuthFssTokenProvider> _logger;        
+        private readonly ILogger<AuthFssTokenProvider> _logger;
         private readonly IOptions<AzureAdB2C> _azureAdB2C;
         private readonly ITokenAcquisition _tokenAcquisition;
 
         public AuthFssTokenProvider(IOptions<FileShareServiceConfiguration> fileShareServiceConfiguration, ILogger<AuthFssTokenProvider> logger, IOptions<AzureAdB2C> azureAdB2C, ITokenAcquisition tokenAcquisition)
         {
             _fileShareServiceConfiguration = fileShareServiceConfiguration;
-            _logger = logger;         
+            _logger = logger;
             _azureAdB2C = azureAdB2C;
             _tokenAcquisition = tokenAcquisition;
         }

@@ -641,7 +641,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             UserService userService = new(mockHttpContextAccessor);
 
             NMDataService _nMDataServiceDistributor = new(fakeFileShareService, fakeLogger, fakeAuthFssTokenProvider, httpClientFactory, fileShareServiceConfig, fakeFileShareServiceCache,
-                                               fakeCacheConfiguration, userService);
+                                              fakeCacheConfiguration, userService);
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 

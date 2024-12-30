@@ -24,8 +24,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
     public class Startup
     {
         private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment env;
         public Startup(IWebHostEnvironment env)
         {
+            this.env = env;
             configuration = BuildConfiguration(env);
         }
 
@@ -58,7 +60,19 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             services.AddScoped<INMDataService, NMDataService>();
             services.AddScoped<IFileShareService, FileShareService>();
-            services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+            //services.AddScoped<IFileShareService, FileShareServiceMock>();
+
+            if (env.IsDevelopment())
+            {
+                // Register the mock implementation for local development
+                services.AddScoped<IAuthFssTokenProvider, MockAuthFssTokenProvider>();
+            }
+            else
+            {
+                // Register the actual implementation for other environments
+                services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+            }
+
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();

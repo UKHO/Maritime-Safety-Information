@@ -98,6 +98,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		..\Deployment\templates\retain-pipeline.yml = ..\Deployment\templates\retain-pipeline.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Mock", "UKHO.MaritimeSafetyInformation.Mock\UKHO.MaritimeSafetyInformation.Mock.csproj", "{BEB00CA4-DB2D-4706-BA27-732592B4C07B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -134,6 +136,10 @@ Global
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEB00CA4-DB2D-4706-BA27-732592B4C07B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEB00CA4-DB2D-4706-BA27-732592B4C07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEB00CA4-DB2D-4706-BA27-732592B4C07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEB00CA4-DB2D-4706-BA27-732592B4C07B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
