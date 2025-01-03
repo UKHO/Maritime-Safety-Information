@@ -98,7 +98,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		..\Deployment\templates\retain-pipeline.yml = ..\Deployment\templates\retain-pipeline.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Mock", "UKHO.MaritimeSafetyInformation.Mock\UKHO.MaritimeSafetyInformation.Mock.csproj", "{BEB00CA4-DB2D-4706-BA27-732592B4C07B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Local", "UKHO.MaritimeSafetyInformation.Mock\UKHO.MaritimeSafetyInformation.Local.csproj", "{BEB00CA4-DB2D-4706-BA27-732592B4C07B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
