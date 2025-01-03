@@ -19,7 +19,8 @@ namespace UKHO.MaritimeSafetyInformation.Local.Services
                 Tag = "latest"
             };
 
-            var progress = new Progress<JSONMessage>(message => Console.WriteLine(message.Stream));
+            //var progress = new Progress<JSONMessage>(message => Console.WriteLine(message.Stream));
+            var progress = new Progress<JSONMessage>();
 
             try
             {
@@ -40,45 +41,45 @@ namespace UKHO.MaritimeSafetyInformation.Local.Services
         {
             if (await ImageAlreadyExists(imageName)) return;
 
-            using (var tarStream = new MemoryStream())
+            using var tarStream = new MemoryStream();
+            await using (var tar = new TarOutputStream(tarStream, Encoding.UTF8))
             {
-                using (var tar = new TarOutputStream(tarStream, Encoding.UTF8))
+                tar.IsStreamOwner = false;
+                var entry = TarEntry.CreateTarEntry(Path.GetFileName(dockerfilePath));
+                entry.Size = new FileInfo(dockerfilePath).Length;
+                tar.PutNextEntry(entry);
+                await using (var fileStream = File.OpenRead(dockerfilePath))
                 {
-                    tar.IsStreamOwner = false;
-                    var entry = TarEntry.CreateTarEntry(Path.GetFileName(dockerfilePath));
-                    entry.Size = new FileInfo(dockerfilePath).Length;
-                    tar.PutNextEntry(entry);
-                    using (var fileStream = File.OpenRead(dockerfilePath))
-                    {
-                        await fileStream.CopyToAsync(tar);
-                    }
-                    tar.CloseEntry();
+                    await fileStream.CopyToAsync(tar);
                 }
-                tarStream.Seek(0, SeekOrigin.Begin);
+                tar.CloseEntry();
+            }
+            tarStream.Seek(0, SeekOrigin.Begin);
 
-                var parameters = new ImageBuildParameters
-                {
-                    Tags = new[] { imageName }
-                };
+            var parameters = new ImageBuildParameters
+            {
+                Tags = new[] { imageName }
+            };
 
-                var progress = new Progress<JSONMessage>(message =>
-                {
-                    Console.WriteLine(message.Stream);
-                });
+            //var progress = new Progress<JSONMessage>(message =>
+            //{
+            //    Console.WriteLine(message.Stream);
+            //});
 
-                try
+            var progress = new Progress<JSONMessage>();
+
+            try
+            {
+                await _dockerClient.Images.BuildImageFromDockerfileAsync(parameters, tarStream, null, null, progress, CancellationToken.None);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Request error: {ex.Message}");
+                if (ex.InnerException != null)
                 {
-                    await _dockerClient.Images.BuildImageFromDockerfileAsync(parameters, tarStream, null, null, progress, CancellationToken.None);
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
-                catch (HttpRequestException ex)
-                {
-                    Console.WriteLine($"Request error: {ex.Message}");
-                    if (ex.InnerException != null)
-                    {
-                        Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                    }
-                    throw;
-                }
+                throw;
             }
         }
 

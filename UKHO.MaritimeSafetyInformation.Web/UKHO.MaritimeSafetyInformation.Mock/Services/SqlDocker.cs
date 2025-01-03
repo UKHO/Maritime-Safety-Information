@@ -21,7 +21,7 @@ namespace UKHO.MaritimeSafetyInformation.Local.Services
                     { "1433/tcp", new EmptyStruct() }
                 }
             };
-
+            
             var hostConfig = new HostConfig
             {
                 PortBindings = new Dictionary<string, IList<PortBinding>>
