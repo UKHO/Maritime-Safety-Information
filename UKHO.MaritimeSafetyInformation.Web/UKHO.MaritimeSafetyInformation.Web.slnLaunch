@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Local",
+    "Projects": [
+      {
+        "Path": "UKHO.MaritimeSafetyInformation.Mock\\UKHO.MaritimeSafetyInformation.Local.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "UKHO.MaritimeSafetyInformation.Web\\UKHO.MaritimeSafetyInformation.Web.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
