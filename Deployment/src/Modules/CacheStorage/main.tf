@@ -6,6 +6,7 @@ resource "azurerm_storage_account" "cache_storage" {
   account_replication_type           = "LRS"
   account_kind                       = "StorageV2"
   allow_nested_items_to_be_public    = false
+  min_tls_version                    = "TLS1_2"
   network_rules {
     default_action                   = "Deny"
     ip_rules                         = var.allowed_ips
