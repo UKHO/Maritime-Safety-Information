@@ -24,7 +24,7 @@
     <PackageReference Include="UKHO.FileShareAdminClient" Version="2.0.50123.9" />
     <PackageReference Include="UKHO.FileShareClient" Version="2.0.50123.9" />
     <PackageReference Include="UKHO.Logging.EventHubLogProvider" Version="1.24163.8" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.67.1" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.66.2" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
