@@ -67,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
             DefaultHttpContext httpContext = new();
             FormCollection formCol = new(new Dictionary<string, StringValues>
                                         {
-                                            {"showSelectionId", "11" }
+                                            {"showSelectionId", "2,3" }
                                         });
             httpContext.Request.Form = formCol;
             controller.ControllerContext.HttpContext = httpContext;
