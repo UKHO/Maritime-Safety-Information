@@ -23,7 +23,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.RadioNavigationalWarni
         public BaseRNWTest()
         {
             DbContextOptionsBuilder<RadioNavigationalWarningsContext> builder = new DbContextOptionsBuilder<RadioNavigationalWarningsContext>()
-                                                                    .UseInMemoryDatabase("msi-in-db");
+                                                                    .UseInMemoryDatabase($"msi-in-db{Guid.NewGuid()}");
             FakeContext = new RadioNavigationalWarningsContext(builder.Options);
             FakeRadioNavigationalWarningConfiguration = A.Fake<IOptions<RadioNavigationalWarningConfiguration>>();
             FakeHttpContextAccessor = A.Fake<IHttpContextAccessor>();
