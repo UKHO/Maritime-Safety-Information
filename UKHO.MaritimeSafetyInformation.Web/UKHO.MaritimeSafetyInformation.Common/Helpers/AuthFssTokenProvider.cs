@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using System.Diagnostics.CodeAnalysis;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
+using UKHO.MaritimeSafetyInformation.Common.Logging;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 {
@@ -26,6 +27,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public async Task<string> GenerateADAccessToken(bool isDistributorUser, string correlationId)
         {
+            _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken _fileShareServiceConfiguration.Value.FssClientId: {0}, isDristributorUser: {1}", _fileShareServiceConfiguration.Value.FssClientId, isDistributorUser);
+
             try
             {
                 if (isDistributorUser)
