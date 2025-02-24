@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using Azure.Core;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 using UKHO.FileShareClient;
 using UKHO.FileShareClient.Models;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -302,6 +305,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken2: {0}", accessToken);
+
+
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
                 Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient, frequency);
@@ -312,8 +318,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 return fileBytes;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken3: {0}", ex.Message);
                 _logger.LogInformation(EventIds.GetSingleNMFileFailed.ToEventId(), "Maritime safety information request to get single {frequency} NM file failed for batchId:{batchId} and fileName:{fileName} with _X-Correlation-ID:{correlationId}", frequency, batchId, fileName, correlationId);
                 throw;
             }

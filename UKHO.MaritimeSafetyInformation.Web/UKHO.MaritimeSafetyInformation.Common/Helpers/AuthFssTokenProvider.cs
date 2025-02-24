@@ -40,6 +40,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     DefaultAzureCredential azureCredential = new();
                     TokenRequestContext tokenRequestContext = new(new string[] { _fileShareServiceConfiguration.Value.FssClientId + "/.default" });
                     AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
+                    _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken1 tokenResult.Token: {0}, isDristributorUser: {1}", tokenResult.Token, isDistributorUser);
+
                     return tokenResult.Token;
                 }
             }
