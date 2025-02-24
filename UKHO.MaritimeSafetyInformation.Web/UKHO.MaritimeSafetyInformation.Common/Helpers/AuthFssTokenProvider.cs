@@ -29,6 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         {
             _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken _fileShareServiceConfiguration.Value.FssClientId: {0}, isDristributorUser: {1}", _fileShareServiceConfiguration.Value.FssClientId, isDistributorUser);
 
+
             try
             {
                 if (isDistributorUser)
