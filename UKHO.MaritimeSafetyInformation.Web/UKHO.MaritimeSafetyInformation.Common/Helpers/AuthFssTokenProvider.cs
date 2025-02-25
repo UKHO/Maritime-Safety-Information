@@ -27,7 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
 
         public async Task<string> GenerateADAccessToken(bool isDistributorUser, string correlationId)
         {
-            _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken _fileShareServiceConfiguration.Value.FssClientId: {0}, isDristributorUser: {1}", _fileShareServiceConfiguration.Value.FssClientId, isDistributorUser);
+            _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken _fileShareServiceConfiguration.Value.FssClientId: {0}, isDristributorUser: {1}, _X-Correlation-ID:{2}", _fileShareServiceConfiguration.Value.FssClientId, isDistributorUser, correlationId);
 
             try
             {
@@ -40,17 +40,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
                     DefaultAzureCredential azureCredential = new();
                     TokenRequestContext tokenRequestContext = new(new string[] { _fileShareServiceConfiguration.Value.FssClientId + "/.default" });
                     AccessToken tokenResult = await azureCredential.GetTokenAsync(tokenRequestContext);
-                    _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken1 tokenResult.Token: {0}, isDristributorUser: {1}", tokenResult.Token, isDistributorUser);
+                    _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken1 tokenResult.Token: {0}, isDristributorUser: {1}, _X-Correlation-ID:{2}", tokenResult, isDistributorUser, correlationId);
 
                     return tokenResult.Token;
                 }
             }
-            catch (MicrosoftIdentityWebChallengeUserException)
+            catch (MicrosoftIdentityWebChallengeUserException ex)
             {
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken3: {0}", ex.Message);
+
                 throw;
             }
             catch (Exception ex)
             {
+                _logger.LogInformation(EventIds.GetSingleNMFileStarted.ToEventId(), "GenerateADAccessToken5: {0}", ex.Message);
                 _logger.LogInformation("AD Authentication failed with message:{ex} for _X-Correlation-ID:{CorrelationId}", ex.Message, correlationId);
                 return string.Empty;
             }
