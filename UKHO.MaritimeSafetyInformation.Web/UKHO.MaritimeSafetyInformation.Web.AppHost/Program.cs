@@ -1,5 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-maritimesafetyinformation-web");
+var rnwDb = builder.AddSqlServer("sql")
+    .WithDataVolume()
+    .AddDatabase("RadioNavigationalWarningsDb");
+
+builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
+    .WithReference(rnwDb)
+    .WaitFor(rnwDb);
 
 builder.Build().Run();
