@@ -23,10 +23,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private readonly IConfiguration configuration;
-        public Startup(IWebHostEnvironment env)
+        private readonly IConfiguration _configuration;
+        public Startup(IConfiguration configuration)
         {
-            configuration = BuildConfiguration(env);
+            _configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -37,22 +37,22 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
+                loggingBuilder.AddConfiguration(_configuration.GetSection("Logging"));
                 loggingBuilder.AddConsole();
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddAzureWebAppDiagnostics();
             });
 
-            services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
-            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
-            services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
-            services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
-            services.Configure<BannerNotificationConfiguration>(configuration.GetSection("BannerNotificationConfiguration"));
-            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
+            services.Configure<EventHubLoggingConfiguration>(_configuration.GetSection("EventHubLoggingConfiguration"));
+            services.Configure<RadioNavigationalWarningConfiguration>(_configuration.GetSection("RadioNavigationalWarningConfiguration"));
+            services.Configure<FileShareServiceConfiguration>(_configuration.GetSection("FileShareService"));
+            services.Configure<RadioNavigationalWarningsContextConfiguration>(_configuration.GetSection("RadioNavigationalWarningsContext"));
+            services.Configure<CacheConfiguration>(_configuration.GetSection("CacheConfiguration"));
+            services.Configure<BannerNotificationConfiguration>(_configuration.GetSection("BannerNotificationConfiguration"));
+            services.Configure<AzureAdB2C>(_configuration.GetSection("AzureAdB2C"));
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
-            configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
+            _configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
             services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
             services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
@@ -76,7 +76,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             //Configuring appsettings section AzureAdB2C, into IOptions
             services.AddOptions();
-            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAdB2C"));
+            services.Configure<OpenIdConnectOptions>(_configuration.GetSection("AzureAdB2C"));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
@@ -87,21 +87,21 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApp(options =>
             {
-                configuration.Bind("AzureAdB2C", options);
+                _configuration.Bind("AzureAdB2C", options);
                 options.Events ??= new OpenIdConnectEvents();
                 options.SaveTokens = true; // this saves the token for the downstream api
                 options.Events.OnRedirectToIdentityProvider = async context =>
                 {
-                    context.ProtocolMessage.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"];
+                    context.ProtocolMessage.RedirectUri = _configuration["AzureAdB2C:RedirectBaseUrl"] + _configuration["AzureAdB2C:CallbackPath"];
                     await Task.FromResult(0);
                 };
                 options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
                 {
-                    context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:SignedOutCallbackPath"];
+                    context.ProtocolMessage.PostLogoutRedirectUri = _configuration["AzureAdB2C:RedirectBaseUrl"] + _configuration["AzureAdB2C:SignedOutCallbackPath"];
                     await Task.FromResult(0);
                 };
             })
-            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })
+            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { _configuration["AzureAdB2C:Scope"] })
             .AddInMemoryTokenCaches();
 
             services.AddHttpClient();
@@ -124,23 +124,44 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.ConfigureRequest("Home", "Index", env.IsDevelopment());
         }
 
-        protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
-        {
-            IConfigurationBuilder builder = new ConfigurationBuilder()
-                .SetBasePath(hostingEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
+        //protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
+        //{
+        //    IConfigurationBuilder builder = new ConfigurationBuilder()
+        //        .SetBasePath(hostingEnvironment.ContentRootPath)
+        //        .AddJsonFile("appsettings.json", false, true)
+        //        .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
 
-            builder.AddEnvironmentVariables();
-            IConfigurationRoot tempConfig = builder.Build();
+        //    builder.AddEnvironmentVariables();
+        //    IConfigurationRoot tempConfig = builder.Build();
+        //    string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
+
+        //    if (!string.IsNullOrWhiteSpace(kvServiceUri))
+        //    {
+        //        builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+        //    }
+
+        //    return builder.Build();
+        //}
+
+        protected IConfigurationRoot BuildConfiguration(HostApplicationBuilder builder)
+        {
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder()
+                .SetBasePath(builder.Environment.ContentRootPath)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true);
+
+            builder.AddServiceDefaults();
+
+            configBuilder.AddEnvironmentVariables();
+            IConfigurationRoot tempConfig = configBuilder.Build();
             string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
 
             if (!string.IsNullOrWhiteSpace(kvServiceUri))
             {
-                builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+                configBuilder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
             }
 
-            return builder.Build();
+            return configBuilder.Build();
         }
 
         private void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
@@ -188,7 +209,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 #if DEBUG
             //Add file based logger for development
-            loggerFactory.AddFile(configuration.GetSection("Logging"));
+            loggerFactory.AddFile(_configuration.GetSection("Logging"));
 #endif
 
             app.UseCorrelationIdMiddleware()
