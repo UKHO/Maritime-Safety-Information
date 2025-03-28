@@ -101,6 +101,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults", "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults.csproj", "{B738101A-4479-C30C-6562-AD0BF74ACB85}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mock", "Mock", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADDSMock", "UKHO.ADDS.Mocks\src\ADDSMock\ADDSMock.csproj", "{012DF7F2-F475-1398-C142-5492F4A6B722}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +149,10 @@ Global
 		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{012DF7F2-F475-1398-C142-5492F4A6B722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{012DF7F2-F475-1398-C142-5492F4A6B722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{012DF7F2-F475-1398-C142-5492F4A6B722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{012DF7F2-F475-1398-C142-5492F4A6B722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +172,7 @@ Global
 		{15CE629F-43E2-49F8-A27F-556A94292650} = {72FD9337-D831-4327-A38C-B99896BAEA57}
 		{DFF4E9DC-493C-4500-AF59-72C17A6A6C6E} = {72FD9337-D831-4327-A38C-B99896BAEA57}
 		{46ED9487-834C-4683-860C-0AF0A7DBC111} = {23D99271-3711-4421-BF49-7C09D3A6D1AA}
+		{012DF7F2-F475-1398-C142-5492F4A6B722} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7473D48C-027B-4B02-BD3B-0EFFADF1EC72}
