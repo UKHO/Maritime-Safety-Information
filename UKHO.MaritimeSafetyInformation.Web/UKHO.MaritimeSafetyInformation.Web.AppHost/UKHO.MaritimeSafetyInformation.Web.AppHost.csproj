@@ -13,10 +13,12 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.1.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj" />
   </ItemGroup>
 
