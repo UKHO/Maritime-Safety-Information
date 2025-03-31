@@ -3,7 +3,9 @@ using System.Reflection;
 using System.Security.Claims;
 using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -13,6 +15,7 @@ using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -38,9 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             //RHZ Testing Start:
             //if development environment, then use the aspire connection string for the database
             var sqlConnecton = _configuration.GetSection("ConnectionStrings").GetSection("MSI-RNWDB-1").Value;
-            _configuration.GetSection("RadioNavigationalWarningConfiguration").GetSection("ConnectionString").Value = sqlConnecton;
-            //the one below we actually need:
-            //_configuration.GetSection("RadioNavigationalWarningsContext").GetSection("ConnectionString").Value = sqlConnecton;
+            _configuration.GetSection("RadioNavigationalWarningsContext").GetSection("ConnectionString").Value = sqlConnecton;
 
             //if development environment, then use the aspire connection for adds mock
             var addsMockUrl = _configuration.GetSection("services").GetSection("adds-mock").GetSection("mock-endpoint").GetSection("0").Value;
@@ -164,7 +165,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true);
 
-            builder.AddServiceDefaults();
+            // RHZ: It looks like these are not needed probably because the connection string is already in the appsettings.json and overridden by the environment variables set by aspire
+            //builder.AddSqlServerClient(connectionName: "MSI-RNWDB-1");
+            //builder.AddSqlServerClient(connectionName: "sql");  // to access connectionStrings section in appsettings.json
+            //builder.AddServiceDefaults();
 
             configBuilder.AddEnvironmentVariables();
             IConfigurationRoot tempConfig = configBuilder.Build();
@@ -228,6 +232,90 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);
+
+            SeedData(new SqlConnection(_configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
+        }
+
+
+        public bool TableExists(SqlConnection connection, string tableName)
+        {
+            if(connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+                
+            using var command = new SqlCommand($"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}'", connection);
+            return (int)command.ExecuteScalar() > 0;
+        }
+
+        public async Task SeedData(SqlConnection connection)
+        {
+            var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
+            //context.Database.Migrate();
+            context.Database.EnsureCreated();
+
+            if (!TableExists(connection, "WarningType"))
+            {
+                context.Database.ExecuteSqlRaw("CREATE TABLE WarningType (Id INT PRIMARY KEY, Name NVARCHAR(50))");
+            }
+            if (!TableExists(connection, "RadioNavigationalWarnings"))
+            {
+                context.Database.ExecuteSqlRaw("CREATE TABLE RadioNavigationalWarnings (Id INT PRIMARY KEY, WarningType INT, Reference NVARCHAR(50), DateTimeGroup DATETIME, Summary NVARCHAR(100), Content NVARCHAR(500), ExpiryDate DATETIME, IsDeleted BIT, LastModified DATETIME)");
+            }
+            connection.Close();
+
+            if (!context.WarningType.Any(w => w.Id == 1))
+            {
+                context.WarningType.Add(new WarningType { Id = 1, Name = "NAVAREA" });
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.WarningType.Any(w => w.Id == 2))
+            {
+                context.WarningType.Add(new WarningType { Id = 2, Name = "UK Coastal" });
+                await context.SaveChangesAsync();
+            }
+
+            if (context.RadioNavigationalWarnings.Any()) return;
+
+
+            context.RadioNavigationalWarnings.AddRange(
+                new RadioNavigationalWarning
+                {
+                    Id = 1,
+                    WarningType = 1,
+                    Reference = "NAVAREA I 240/24",
+                    DateTimeGroup = DateTime.UtcNow,
+                    Summary = "SPACE WEATHER. SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
+                    Content = @"NAVAREA
+                                     NAVAREA I 240/24
+                                     301040 UTC Dec 24
+                                     SPACE WEATHER.
+                                     SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.
+                                     RADIO AND SATELLITE NAVIGATION SERVICES MAY BE AFFECTED.",
+                    IsDeleted = false,
+                    LastModified = DateTime.UtcNow
+                },
+                new RadioNavigationalWarning
+                {
+                    Id = 2,
+                    WarningType = 2,
+                    Reference = "WZ 897/24",
+                    DateTimeGroup = DateTime.UtcNow,
+                    Summary = "HUMBER. HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
+                    Content = @"UK Coastal
+                                     WZ 897/24
+                                     301510 UTC Dec 24
+                                     HUMBER.
+                                     HORNSEA 1 AND 2 WINDFARMS.
+                                     1.TURBINES T25 54-00.3N 001-36.7E, A16 53-50.0N 001-58.7E AND S16 53-59.4N 001-48.3E, FOG SIGNALS INOPERATIVE.
+                                     2.CANCEL WZ 895.",
+                    IsDeleted = false,
+                    LastModified = DateTime.UtcNow
+                }
+            );
+
+            await context.SaveChangesAsync();
         }
     }
 }
