@@ -144,7 +144,8 @@ jobs:
   - task: VSBuild@1
     displayName: Build MSI database
     inputs:
-      solution: **/UKHO.MaritimeSafetyInformation.Web.Database.sqlproj
+      solution: |
+        **/UKHO.MaritimeSafetyInformation.Web.Database.sqlproj
       configuration: $(BuildConfiguration)
       platform: $(BuildPlatform)
 
