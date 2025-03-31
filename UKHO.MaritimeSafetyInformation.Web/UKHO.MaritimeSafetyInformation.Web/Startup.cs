@@ -35,6 +35,20 @@ namespace UKHO.MaritimeSafetyInformation.Web
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
 
+            //RHZ Testing Start:
+            //if development environment, then use the aspire connection string for the database
+            var sqlConnecton = _configuration.GetSection("ConnectionStrings").GetSection("MSI-RNWDB-1").Value;
+            _configuration.GetSection("RadioNavigationalWarningConfiguration").GetSection("ConnectionString").Value = sqlConnecton;
+            //the one below we actually need:
+            //_configuration.GetSection("RadioNavigationalWarningsContext").GetSection("ConnectionString").Value = sqlConnecton;
+
+            //if development environment, then use the aspire connection for adds mock
+            var addsMockUrl = _configuration.GetSection("services").GetSection("adds-mock").GetSection("mock-endpoint").GetSection("0").Value;
+            _configuration.GetSection("FileShareService").GetSection("BaseUrl").Value = new UriBuilder(addsMockUrl) { Path = "fss" }.Uri.ToString();
+
+            //RHZ Testing End:
+
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(_configuration.GetSection("Logging"));

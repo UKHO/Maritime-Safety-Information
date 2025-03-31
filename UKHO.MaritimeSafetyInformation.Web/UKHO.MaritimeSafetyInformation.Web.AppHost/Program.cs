@@ -1,7 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var mockcontainer = builder.AddDockerfile("adds-mock", @"..\UKHO.ADDS.Mocks\src\ADDSMock")
-    .WithHttpEndpoint(port: 5000, targetPort: 5678, "mock-endpoint");
+    .WithHttpEndpoint(port: 5678, targetPort: 5678, "mock-endpoint");
 var mockEndpoint = mockcontainer.GetEndpoint("mock-endpoint");
 
 var storage = builder.AddAzureStorage("storageConnection").RunAsEmulator(
@@ -14,7 +14,7 @@ var tableStorage = storage.AddTables("fss-tables-connection");
 
 var rnwDb = builder.AddSqlServer("sql")
     .WithDataVolume()
-    .AddDatabase("RadioNavigationalWarningsDb");
+    .AddDatabase("MSI-RNWDB-1");
 
 
 
