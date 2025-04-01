@@ -1,0 +1,5 @@
+variables:
+- group: "Maritime-Safety-Information-Live-TF-Variables"
+- group: "Maritime-Safety-Information-Live-Variables"
+- name: AzureSubscription
+  value: "Maritime Safety Information Live - A.008.02"

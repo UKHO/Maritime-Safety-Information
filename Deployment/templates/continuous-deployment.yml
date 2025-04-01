@@ -12,8 +12,8 @@ parameters:
 # A display environment name. Will be used to generate job names and, in lower case, used to select the correct var/x-deploy.yml variable file.
 - name: ShortName
   type: string
-# Run functional tests.
-- name: RunFunctionalTests
+# Run functional and accessibility tests.
+- name: RunFunctionalAndAccessibilityTests
   type: boolean
   default: false
 # Use mocked FSS for testing.
@@ -124,7 +124,7 @@ jobs:
           parameters:
             AzureSubscription: ${{ variables.AzureSubscription }}
 
-- ${{ if eq(parameters.RunFunctionalTests, true) }}:
+- ${{ if eq(parameters.RunFunctionalAndAccessibilityTests, true) }}:
   - job: ${{ parameters.ShortName }}FunctionalAndAccessibilityTests
     dependsOn:
     - ${{ parameters.ShortName }}DeployTerraform
