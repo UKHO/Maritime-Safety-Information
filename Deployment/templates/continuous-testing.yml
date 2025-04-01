@@ -64,7 +64,7 @@ steps:
 
 - script: |
     npm run test:auto
-  displayName: Run functional tests'
+  displayName: Run functional tests
   workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
 - task: PublishTestResults@2
