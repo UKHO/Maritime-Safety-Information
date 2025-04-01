@@ -111,7 +111,7 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+        - template: /Deployment/templates/continuous-dacpac-app-deployment.yml
           parameters:
             AzureSubscription: ${{ variables.AzureSubscription }}
 
@@ -137,7 +137,7 @@ jobs:
     workspace:
       clean: all
     steps:
-    - template: Deployment/templates/continuous-testing.yml
+    - template: /Deployment/templates/continuous-testing.yml
       parameters:
         AzureSubscription: ${{ variables.AzureSubscription }}
         UseFssMock: true

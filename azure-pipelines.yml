@@ -51,14 +51,14 @@ stages:
   displayName: Build, test and publish
   dependsOn: []
   jobs:
-  - template: Deployment/templates/build-test-publish.yml
+  - template: /Deployment/templates/build-test-publish.yml
 
 - stage: DevDeploy
   displayName: Dev deploy
   dependsOn:
   - BuildTestPublish
   jobs:
-  - template: Deployment/templates/continuous-deployment.yml
+  - template: /Deployment/templates/continuous-deployment.yml
     parameters:
       AzureDevOpsEnvironment: Maritime-Safety-Information-Dev
       ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
