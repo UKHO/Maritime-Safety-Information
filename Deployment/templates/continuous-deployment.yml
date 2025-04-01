@@ -16,6 +16,10 @@ parameters:
 - name: RunFunctionalTests
   type: boolean
   default: false
+# Use mocked FSS for testing.
+- name: UseFssMock
+  type: boolean
+  default: false
 
 jobs:
 - deployment: ${{ parameters.ShortName }}DeployTerraform
@@ -45,6 +49,7 @@ jobs:
             jsonTargetFiles: 'appsettings.json'
 
         - task: PowerShell@2
+          name: TerraformDeploy
           displayName: Terraform deploy
           inputs:
             targetType: filePath
@@ -116,7 +121,7 @@ jobs:
             AzureSubscription: ${{ variables.AzureSubscription }}
 
 - ${{ if eq(parameters.RunFunctionalTests, true) }}:
-  - job: FunctionalAndAccessibilityTests
+  - job: ${{ parameters.ShortName }}FunctionalAndAccessibilityTests
     dependsOn:
     - ${{ parameters.ShortName }}DeployTerraform
     - ${{ parameters.ShortName }}DeployApp
@@ -140,4 +145,4 @@ jobs:
     - template: /Deployment/templates/continuous-testing.yml
       parameters:
         AzureSubscription: ${{ variables.AzureSubscription }}
-        UseFssMock: true
+        UseFssMock: ${{ parameters.UseFssMock }}

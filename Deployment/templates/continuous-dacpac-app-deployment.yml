@@ -18,6 +18,7 @@ steps:
   artifact: MaritimeSafetyInformationAdmin
 
 - task: SqlAzureDacpacDeployment@1
+  displayName: Deploy dacpac
   inputs:
     azureSubscription: SharedServicesPre
     AuthenticationType: server
