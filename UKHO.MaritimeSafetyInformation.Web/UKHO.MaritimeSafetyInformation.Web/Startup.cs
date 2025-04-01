@@ -27,9 +27,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            _configuration = configuration;
+            _configuration = BuildConfiguration(env);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
