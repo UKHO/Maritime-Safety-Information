@@ -28,7 +28,7 @@ jobs:
       command: test
       projects: |
         **/*UnitTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml'
+      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml --no-restore'
       publishTestResults: true
       testRunTitle: UnitTests
 
@@ -82,7 +82,7 @@ jobs:
       projects: |
         **/*.csproj
         !**/*Tests.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory)'
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory) --no-restore'
 
   - task: DotNetCoreCLI@2
     displayName: Publish web app
@@ -91,7 +91,7 @@ jobs:
       publishWebProjects: false
       projects: |
         **/*UKHO.MaritimeSafetyInformation.Web.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb --no-restore'
       zipAfterPublish: true
       modifyOutputPath: true
 
@@ -108,7 +108,7 @@ jobs:
       publishWebProjects: false
       projects: |
         **/*UKHO.MaritimeSafetyInformationAdmin.Web.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb --no-restore'
       zipAfterPublish: true
       modifyOutputPath: true
 
@@ -184,7 +184,7 @@ jobs:
       publishWebProjects: false
       projects: |
         **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
       zipAfterPublish: false
 
   - task: PublishBuildArtifacts@1

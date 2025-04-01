@@ -20,6 +20,10 @@ parameters:
 - name: UseFssMock
   type: boolean
   default: false
+# Set the pipeline retention period. Typically used after a successful live deployment.
+- name: RetainPipeline
+  type: boolean
+  default: false
 
 jobs:
 - deployment: ${{ parameters.ShortName }}DeployTerraform
@@ -146,3 +150,14 @@ jobs:
       parameters:
         AzureSubscription: ${{ variables.AzureSubscription }}
         UseFssMock: ${{ parameters.UseFssMock }}
+
+- ${{ if eq(parameters.RetainPipeline, true) }}:
+  - job: ${{ parameters.ShortName }}RetainPipeline
+    displayName: ${{ upper(parameters.ShortName) }} - retain pipeline
+    dependsOn:
+    - ${{ parameters.ShortName }}DeployApp
+    steps:
+    - checkout: UKHOTemplates
+    - template: retain-pipelinerun/retain-pipelinerun.yml@UKHOTemplates
+      parameters:
+        DaysValid: 365

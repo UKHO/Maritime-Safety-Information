@@ -17,6 +17,10 @@ steps:
   displayName: Download admin web app artifact
   artifact: MaritimeSafetyInformationAdmin
 
+- download: current
+  displayName: Download Terraform artifact
+  artifact: terraformartifact
+
 - task: SqlAzureDacpacDeployment@1
   displayName: Deploy dacpac
   inputs:
