@@ -38,18 +38,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             //Enables Application Insights telemetry.
             services.AddApplicationInsightsTelemetry();
 
-            //RHZ Testing Start:
-            //if development environment, then use the aspire connection string for the database
-            var sqlConnecton = _configuration.GetSection("ConnectionStrings").GetSection("MSI-RNWDB-1").Value;
-            _configuration.GetSection("RadioNavigationalWarningsContext").GetSection("ConnectionString").Value = sqlConnecton;
-
-            //if development environment, then use the aspire connection for adds mock
-            var addsMockUrl = _configuration.GetSection("services").GetSection("adds-mock").GetSection("mock-endpoint").GetSection("0").Value;
-            _configuration.GetSection("FileShareService").GetSection("BaseUrl").Value = new UriBuilder(addsMockUrl) { Path = "fss" }.Uri.ToString();
-
-            //RHZ Testing End:
-
-
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(_configuration.GetSection("Logging"));
@@ -139,48 +127,25 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.ConfigureRequest("Home", "Index", env.IsDevelopment());
         }
 
-        //protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
-        //{
-        //    IConfigurationBuilder builder = new ConfigurationBuilder()
-        //        .SetBasePath(hostingEnvironment.ContentRootPath)
-        //        .AddJsonFile("appsettings.json", false, true)
-        //        .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
-
-        //    builder.AddEnvironmentVariables();
-        //    IConfigurationRoot tempConfig = builder.Build();
-        //    string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
-
-        //    if (!string.IsNullOrWhiteSpace(kvServiceUri))
-        //    {
-        //        builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
-        //    }
-
-        //    return builder.Build();
-        //}
-
-        protected IConfigurationRoot BuildConfiguration(HostApplicationBuilder builder)
+        protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
         {
-            IConfigurationBuilder configBuilder = new ConfigurationBuilder()
-                .SetBasePath(builder.Environment.ContentRootPath)
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true);
+                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
 
-            // RHZ: It looks like these are not needed probably because the connection string is already in the appsettings.json and overridden by the environment variables set by aspire
-            //builder.AddSqlServerClient(connectionName: "MSI-RNWDB-1");
-            //builder.AddSqlServerClient(connectionName: "sql");  // to access connectionStrings section in appsettings.json
-            //builder.AddServiceDefaults();
-
-            configBuilder.AddEnvironmentVariables();
-            IConfigurationRoot tempConfig = configBuilder.Build();
+            builder.AddEnvironmentVariables();
+            IConfigurationRoot tempConfig = builder.Build();
             string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
 
             if (!string.IsNullOrWhiteSpace(kvServiceUri))
             {
-                configBuilder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+                builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
             }
 
-            return configBuilder.Build();
+            return builder.Build();
         }
+
 
         private void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
                                       IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
@@ -237,9 +202,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
         }
 
 
-        public bool TableExists(SqlConnection connection, string tableName)
+        internal bool TableExists(SqlConnection connection, string tableName)
         {
-            if(connection.State == System.Data.ConnectionState.Closed)
+            if (connection.State == System.Data.ConnectionState.Closed)
             {
                 connection.Open();
             }
@@ -248,7 +213,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             return (int)command.ExecuteScalar() > 0;
         }
 
-        public async Task SeedData(SqlConnection connection)
+        internal async Task SeedData(SqlConnection connection)
         {
             var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
             //context.Database.Migrate();

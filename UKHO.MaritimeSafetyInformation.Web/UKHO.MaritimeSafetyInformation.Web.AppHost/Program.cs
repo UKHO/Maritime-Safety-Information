@@ -18,10 +18,17 @@ var rnwDb = builder.AddSqlServer("sql")
 
 
 
-builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
+var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
     .WithReference(mockEndpoint)
     .WaitFor(mockcontainer)
     .WithReference(rnwDb)
     .WaitFor(rnwDb);
+
+mvcApp.WithEnvironment(callback =>
+{
+    callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
+    callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
+   
+});
 
 builder.Build().Run();
