@@ -1,41 +1,143 @@
 parameters:
-  - name: ContinueEvenIfResourcesAreGettingDestroyed
-    type: boolean
-    default: false
-  - name: AzureSubscription
-    type: string
+# The name of the environment to be used in Azure DevOps.
+- name: AzureDevOpsEnvironment
+  type: string
+# Continue even if resources will be destroyed.
+- name: ContinueEvenIfResourcesAreGettingDestroyed
+  type: boolean
+  default: false
+# The Terraform Azure PowerShell container.
+- name: Container
+  type: string
+# A display environment name. Will be used to generate job names and, in lower case, used to select the correct var/x-deploy.yml variable file.
+- name: ShortName
+  type: string
+# Run functional tests.
+- name: RunFunctionalTests
+  type: boolean
+  default: false
 
-steps:
-  - task: FileTransform@2
-    displayName: "File Transform: Msi Config" #Replace msi instance value from pipeline 
-    inputs:
-      folderPath: '$(Pipeline.Workspace)/terraformartifact/src'
-      xmlTransformationRules: ''
-      jsonTargetFiles: 'appsettings.json'
+jobs:
+- deployment: ${{ parameters.ShortName }}DeployTerraform
+  displayName: '${{ upper(parameters.ShortName) }} - deploy terraform'
+  environment: ${{ parameters.AzureDevOpsEnvironment }}
+  pool: $(DeploymentPool)
+  container: ${{ parameters.Container }}
+  variables:
+  - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+  workspace:
+    clean: all
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: none
 
-  - task: PowerShell@2
-    displayName: "terraform $(Environment)deploy"
-    name: TerraformDeploy
-    inputs:
-      targetType: filePath
-      filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
-      arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
-    env:
-      ARM_CLIENT_ID: $(TERRAFORM-CLIENT-ID)
-      ARM_CLIENT_SECRET: $(TERRAFORM-CLIENT-SECRET)
-      ARM_TENANT_ID: $(TERRAFORM-TENANT-ID)
-      ARM_SUBSCRIPTION_ID: $(TERRAFORM-SUBSCRIPTION-ID)
-      TF_VAR_spoke_rg: $(spokeRG)
-      TF_VAR_spoke_vnet_name: $(spokeVnetName)
-      TF_VAR_spoke_subnet_name: $(spokeSubnetName)
-      TF_VAR_agent_rg: $(agentRG)
-      TF_VAR_agent_vnet_name: $(agentVnetName)
-      TF_VAR_agent_subnet_name: $(agentSubnetName)
-      TF_VAR_agent_subscription_id: $(agentSubscriptionId)
-      TF_VAR_allowed_ips: $(whiteListedIps)
-      TF_VAR_rnw_db_server: $(RNW_DB_Server)
-      TF_VAR_rnw_db_name: $(RNW_DB_Name)
-      TF_VAR_rnw_db_app_sqluser: $(RNW_DB_App_SQLUser)
-      TF_VAR_rnw_db_app_sqlpass: $(RNW_DB_App_SQLPass)
-      TF_VAR_rnw_db_admin_app_sqluser: $(RNW_DB_Admin_SQLUser)
-      TF_VAR_rnw_db_admin_app_sqlpass: $(RNW_DB_Admin_SQLPass)
+        - download: current
+          displayName: Download terraformartifact
+          artifact: terraformartifact
+
+        - task: FileTransform@2
+          displayName: Transform config
+          inputs:
+            folderPath: '$(Pipeline.Workspace)/terraformartifact/src'
+            xmlTransformationRules: ''
+            jsonTargetFiles: 'appsettings.json'
+
+        - task: PowerShell@2
+          displayName: Terraform deploy
+          inputs:
+            targetType: filePath
+            filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
+            arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
+          env:
+            ARM_CLIENT_ID: $(TERRAFORM-CLIENT-ID)
+            ARM_CLIENT_SECRET: $(TERRAFORM-CLIENT-SECRET)
+            ARM_TENANT_ID: $(TERRAFORM-TENANT-ID)
+            ARM_SUBSCRIPTION_ID: $(TERRAFORM-SUBSCRIPTION-ID)
+            TF_VAR_spoke_rg: $(spokeRG)
+            TF_VAR_spoke_vnet_name: $(spokeVnetName)
+            TF_VAR_spoke_subnet_name: $(spokeSubnetName)
+            TF_VAR_agent_rg: $(agentRG)
+            TF_VAR_agent_vnet_name: $(agentVnetName)
+            TF_VAR_agent_subnet_name: $(agentSubnetName)
+            TF_VAR_agent_subscription_id: $(agentSubscriptionId)
+            TF_VAR_allowed_ips: $(whiteListedIps)
+            TF_VAR_rnw_db_server: $(RNW_DB_Server)
+            TF_VAR_rnw_db_name: $(RNW_DB_Name)
+            TF_VAR_rnw_db_app_sqluser: $(RNW_DB_App_SQLUser)
+            TF_VAR_rnw_db_app_sqlpass: $(RNW_DB_App_SQLPass)
+            TF_VAR_rnw_db_admin_app_sqluser: $(RNW_DB_Admin_SQLUser)
+            TF_VAR_rnw_db_admin_app_sqlpass: $(RNW_DB_Admin_SQLPass)
+
+        - task: AzureCLI@2
+          displayName: Set entity in table storage
+          inputs:
+            azureSubscription: ${{ variables.AzureSubscription }}
+            scriptType: pscore
+            scriptLocation: scriptPath
+            scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
+            arguments: '-Storageaccountname $(storage_name) -Tablename $(table_storage_name)'
+
+- deployment: ${{ parameters.ShortName }}DeployApp
+  dependsOn: ${{ parameters.ShortName }}DeployTerraform
+  displayName: '${{ upper(parameters.ShortName) }} - app deploy'
+  pool:
+    name: $(WindowsPool)
+  environment: ${{ parameters.AzureDevOpsEnvironment }}
+  workspace:
+    clean: all
+  variables:
+  - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+  - name: WEB_APP_NAME
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP_NAME'] ]
+  - name: ADMIN_WEB_APP_NAME
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME'] ]
+  - name: MsiWafUrl
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.MsiWafUrl'] ]
+  - name: Admin_DNS_URL
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.Admin_DNS_URL'] ]
+  - name: WEB_APP_SLOT_NAME
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME'] ]
+  - name: WEB_ADMIN_APP_SLOT_NAME
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME'] ]
+  - name: WEB_APP_SLOT_HOST_NAME
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME'] ]
+  - name: WEB_ADMIN_APP_SLOT_HOST_NAME
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME'] ]
+  - name: webapp_rg
+    value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.webapp_rg'] ]
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: Deployment/templates/continuous-dacpac-app-deployment.yml
+          parameters:
+            AzureSubscription: ${{ variables.AzureSubscription }}
+
+- ${{ if eq(parameters.RunFunctionalTests, true) }}:
+  - job: FunctionalAndAccessibilityTests
+    dependsOn:
+    - ${{ parameters.ShortName }}DeployTerraform
+    - ${{ parameters.ShortName }}DeployApp
+    pool: $(WindowsPool)
+    displayName: '${{ upper(parameters.ShortName) }} - functional and accessibility tests'
+    variables:
+    - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
+    - name: WEB_APP_NAME
+      value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.WEB_APP_NAME'] ]        
+    - name: url
+      value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.MsiWafUrl'] ]
+    - name: rnwAdminUrl
+      value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.Admin_DNS_URL'] ]
+    - name: webapp_rg
+      value: $[ dependencies.${{ parameters.ShortName }}DeployTerraform.outputs['${{ parameters.ShortName }}DeployTerraform.TerraformDeploy.webapp_rg'] ]        
+    - name: PLAYWRIGHT_JUNIT_OUTPUT_NAME
+      value: results.xml
+    workspace:
+      clean: all
+    steps:
+    - template: Deployment/templates/continuous-testing.yml
+      parameters:
+        AzureSubscription: ${{ variables.AzureSubscription }}
+        UseFssMock: true

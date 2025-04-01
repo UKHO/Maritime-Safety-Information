@@ -1,108 +1,103 @@
 parameters:
-  - name: AzureSubscription
-    type: string
-  - name: UseFssMock
-    type: boolean
+- name: AzureSubscription
+  type: string
+- name: UseFssMock
+  type: boolean
 
 steps:
-    - task: DownloadBuildArtifacts@0
-      displayName: "Download Integration test Artifact"
-      inputs:
-       buildType: 'current'
-       downloadType: 'single'
-       artifactName: 'IntegrationTests'
-       downloadPath: '$(Build.SourcesDirectory)'
+- checkout: self
+  clean: true
 
-    - task: FileTransform@2
-      displayName: "File Transform: integrationtests"
-      inputs:
-       folderPath: '$(Build.SourcesDirectory)/IntegrationTests/'
-       xmlTransformationRules: ''
-       jsonTargetFiles: '**/appsettings.json'
+- download: current
+  displayName: Download integration test artifact
+  artifact: IntegrationTests
 
-    - task: UseDotNet@2
-      displayName: Use .NET SDK $(DotNetSdkVersion)
-      inputs:
-        packageType: sdk
-        version: $(DotNetSdkVersion)
+- task: FileTransform@2
+  displayName: Transform - integration tests
+  inputs:
+    folderPath: '$(Pipeline.Workspace)/IntegrationTests'
+    xmlTransformationRules: ''
+    jsonTargetFiles: '**/appsettings.json'
 
-    - task: DotNetCoreCLI@2
-      displayName: "Run Integration tests"
-      inputs:
-        command: "test"
-        projects: |
-          **/*IntegrationTest*.dll
-          !**/*TestAdapter.dll
-          !**/obj/**
-        ${{ if eq(parameters.UseFssMock, true) }}:
-          arguments: '--filter Category!=FssApi'
-        ${{ else }}:
-          arguments: '--filter Category!=FssMock'
-        testRunTitle: "$(Environment)-IntegrationTests"
-        workingDirectory: '$(Build.SourcesDirectory)/IntegrationTests'
+- task: UseDotNet@2
+  displayName: Use .NET SDK $(DotNetSdkVersion)
+  inputs:
+    packageType: sdk
+    version: $(DotNetSdkVersion)
 
-    - checkout: self
-      condition: always()
+- task: DotNetCoreCLI@2
+  displayName: Run integration tests
+  inputs:
+    command: test
+    projects: |
+      **/*IntegrationTest*.dll
+      !**/*TestAdapter.dll
+      !**/obj/**
+    ${{ if eq(parameters.UseFssMock, true) }}:
+      arguments: '--filter Category!=FssApi'
+    ${{ else }}:
+      arguments: '--filter Category!=FssMock'
+    testRunTitle: $(Environment)-IntegrationTests
+    workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
 
-    - task: NodeTool@0
-      inputs:
-       versionSpec: '18.x'
-      displayName: 'Install Node.js'
+- task: NodeTool@0
+  displayName: Install Node.js
+  inputs:
+    versionSpec: '18.x'
 
-    - script: |
-       npm ci
-      displayName: 'npm restore'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests'
+- script: |
+    npm ci
+  displayName: npm restore
+  workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-    - script: |
-       npx playwright install --with-deps
-      displayName: 'npx playwright install'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests'
+- script: |
+    npx playwright install --with-deps
+  displayName: npx playwright install
+  workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-    - task: FileTransform@2
-      inputs:
-       folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-       xmlTransformationRules: ''
-       jsonTargetFiles: 'appConfig.json'
+- task: FileTransform@2
+  displayName: Transform - test configuration
+  inputs:
+    folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
+    xmlTransformationRules: ''
+    jsonTargetFiles: 'appConfig.json'
 
-    - script: |
-       npm run test:auto
-      displayName: 'Run Functional Tests'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
+- script: |
+    npm run test:auto
+  displayName: Run functional tests'
+  workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
-    - task: PublishTestResults@2
-      condition: succeededOrFailed()
-      inputs:
-        testRunner: 'JUnit'
-        testResultsFiles: 'results.xml'
-        mergeTestResults: true
-        searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-        testRunTitle: $(Environment) Functional Test Results
-      displayName: 'Publish Functional Test Results'
+- task: PublishTestResults@2
+  displayName: Publish functional test results
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: results.xml
+    mergeTestResults: true
+    searchFolder:  '$(Build.SourcesDirectory)\Tests'
+    testRunTitle: $(Environment)-FunctionalTests
 
-    - script: |
-       npm run test:a11y
-      displayName: 'Run Accessibility Tests'
-      workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
+- script: |
+    npm run test:a11y
+  displayName: Run accessibility tests
+  workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
           
-    - task: PublishTestResults@2
-      condition: succeededOrFailed()
-      inputs:
-        testRunner: 'JUnit'
-        testResultsFiles: 'results.xml'
-        mergeTestResults: true
-        searchFolder:  '$(System.DefaultWorkingDirectory)\Tests'
-        testRunTitle: $(Environment) Accessibility Test Results
-      displayName: 'Publish Accessibility Test Results'
+- task: PublishTestResults@2
+  displayName: Publish accessibility test results
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: results.xml
+    mergeTestResults: true
+    searchFolder:  '$(Build.SourcesDirectory)\Tests'
+    testRunTitle: $(Environment)-AccessibilityTests
 
-    - task: AzureCLI@2
-      displayName: "Swap MSI BusinessUnit"
-      condition: always()
-      inputs:
-        azureSubscription: "${{ parameters.AzureSubscription }}"
-        scriptType: 'pscore'
-        scriptLocation: 'scriptPath'
-        scriptPath: "$(System.DefaultWorkingDirectory)/Deployment/set_business_unit.ps1"
-        arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -isCacheEnabled $(IsFssCacheEnabledAfterFT) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'
-
-    
+- task: AzureCLI@2
+  displayName: Swap MSI BusinessUnit
+  condition: always()
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    scriptType: pscore
+    scriptLocation: scriptPath
+    scriptPath: '$(Build.SourcesDirectory)/Deployment/set_business_unit.ps1'
+    arguments: '-businessUnit $(FileShareService.BusinessUnitMsi) -isCacheEnabled $(IsFssCacheEnabledAfterFT) -resourceGroup $(webapp_rg) -webappName $(WEB_APP_NAME)'

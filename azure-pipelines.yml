@@ -38,6 +38,14 @@ variables:
 - name: DotNetSdkVersion
   value: "8.x"
 
+resources:
+  repositories:
+  - repository: UKHOTemplates
+    type: github
+    name: UKHO/devops-pipelinetemplates
+    endpoint: UKHO
+    ref: refs/heads/main
+
 stages:
 - stage: BuildTestPublish
   displayName: Build, test and publish
@@ -45,92 +53,23 @@ stages:
   jobs:
   - template: Deployment/templates/build-test-publish.yml
 
-- stage: Devdeploy
-  displayName: "Devdeploy (inc terraform, webapp deploy)"
-  variables:
-    - group: "Maritime-Safety-Information-Dev-TF-Variables"
-    - group: "Maritime-Safety-Information-Dev-Variables"
+- stage: DevDeploy
+  displayName: Dev deploy
+  dependsOn:
+  - BuildTestPublish
   jobs:
-    - deployment: DevDeployTerraform
-      displayName: "Dev - Deploy Terraform and Dotnet App"
-      environment: "Maritime-Safety-Information-Dev"
-      pool: $(DeploymentPool)
-      container: ${{variables.Container}}
-      workspace:
-        clean: all
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - template: Deployment/templates/continuous-deployment.yml
-                parameters:
-                  ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                  AzureSubscription: "Maritime Safety Information Dev - A.008.02"
+  - template: Deployment/templates/continuous-deployment.yml
+    parameters:
+      AzureDevOpsEnvironment: Maritime-Safety-Information-Dev
+      ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+      Container: ${{ variables.Container }}
+      ShortName: dev
+      RunFunctionalTests: true
 
-              - task: AzureCLI@2
-                displayName: "Set entity in table storage"
-                inputs:
-                  azureSubscription: "Maritime Safety Information Dev - A.008.02"
-                  scriptType: 'pscore'
-                  scriptLocation: 'scriptPath'
-                  scriptPath: '$(Pipeline.Workspace)/terraformartifact/SetEntityInTableStorage.ps1'
-                  arguments: "-Storageaccountname $(storage_name) -Tablename $(table_storage_name)"
 
-    - deployment: DevDeployApp
-      dependsOn: DevDeployTerraform
-      displayName: "Dev - DACPAC and App Deployment"
-      pool:
-        name: NautilusBuild
-      environment: "Maritime-Safety-Information-Dev"
-      workspace:
-        clean: all
-      variables:
-        - name: WEB_APP_NAME
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]
-        - name: ADMIN_WEB_APP_NAME
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.ADMIN_WEB_APP_NAME']  ]
-        - name: MsiWafUrl
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
-        - name: Admin_DNS_URL
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
-        - name: WEB_APP_SLOT_NAME
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_NAME']  ]
-        - name: WEB_ADMIN_APP_SLOT_NAME
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_NAME']  ]
-        - name: WEB_APP_SLOT_HOST_NAME
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_SLOT_HOST_NAME']  ]
-        - name: WEB_ADMIN_APP_SLOT_HOST_NAME
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_ADMIN_APP_SLOT_HOST_NAME']  ]
-        - name: webapp_rg
-          value: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.webapp_rg']  ]
 
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - template: Deployment/templates/continuous-dacpac-app-deployment.yml
-                parameters:
-                  AzureSubscription: "Maritime Safety Information Dev - A.008.02"
 
-    - job: FunctionalAndAccessibilityTests
-      dependsOn:
-      - DevDeployTerraform
-      - DevDeployApp
-      pool: $(WindowsPool)
-      displayName: "Dev Functional Automated And Accessibility Tests"
-      variables:
-        WEB_APP_NAME: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.WEB_APP_NAME']  ]        
-        url: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.MsiWafUrl']  ]
-        rnwAdminUrl: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.Admin_DNS_URL']  ]
-        webapp_rg: $[ dependencies.DevDeployTerraform.outputs['DevDeployTerraform.TerraformDeploy.webapp_rg']  ]        
-        PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
-      workspace:
-        clean: all
-      steps:
-        - template: Deployment/templates/continuous-testing.yml
-          parameters:
-            AzureSubscription: "Maritime Safety Information Dev - A.008.02"
-            UseFssMock: true
+
 
 - stage: QADeploy
   displayName: "QAdeploy (inc terraform, webapp deploy)"

@@ -1,0 +1,9 @@
+variables:
+- group: "Maritime-Safety-Information-Dev-TF-Variables"
+- group: "Maritime-Safety-Information-Dev-Variables"
+#- name: DeploymentResourceGroupName
+#  value: "m-spokeconnect-rg"
+#- name: DeploymentStorageAccountName
+#  value: "fileshareserdevp4052"
+- name: AzureSubscription
+  value: "Maritime Safety Information Dev - A.008.02"

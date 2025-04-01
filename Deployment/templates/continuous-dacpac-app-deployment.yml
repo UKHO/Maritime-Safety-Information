@@ -1,157 +1,149 @@
 parameters:
-  - name: AzureSubscription
-    type: string
+- name: AzureSubscription
+  type: string
 
 steps:
-  - task: DownloadPipelineArtifact@2
-    displayName: "Download DACPAC Artifact"
-    inputs:
-      source: "current"
-      artifact: "DACPAC"
-      path: $(Build.SourcesDirectory)/DACPAC
+- checkout: none
 
-  - task: SqlAzureDacpacDeployment@1
-    inputs:
-      azureSubscription: SharedServicesPre
-      AuthenticationType: "server"
-      ServerName: $(RNW_DB_Server)
-      DatabaseName: $(RNW_DB_Name)
-      SqlUsername: $(RNW_DB_Deploy_SQLUser)
-      SqlPassword: $(RNW_DB_Deploy_SQLPass)
-      deployType: "DacpacTask"
-      DeploymentAction: "Publish"
-      IpDetectionMethod: "AutoDetect"
-      DacpacFile: $(Build.SourcesDirectory)/DACPAC/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
+- download: current
+  displayName: Download dacpac artifact
+  artifact: DACPAC
 
-  - task: DownloadPipelineArtifact@2
-    displayName: "Download App service Artifact"
-    inputs:
-      source: "current"
-      artifact: "MaritimeSafetyInformation"
-      path: $(Build.SourcesDirectory)/MaritimeSafetyInformation
+- download: current
+  displayName: Download web app artifact
+  artifact: MaritimeSafetyInformation
 
-  - task: FileTransform@2
-    displayName: "File Transform: WebAppSettings"
-    inputs:
-      folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
-      xmlTransformationRules: ''
-      jsonTargetFiles: '**/appsettings.json'  
+- download: current
+  displayName: Download admin web app artifact
+  artifact: MaritimeSafetyInformationAdmin
 
-  - task: AzureCLI@2
-    displayName: "Disable vnet route: Main slot"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        az webapp config set -g $(webapp_rg) -n $(WEB_APP_NAME) --vnet-route-all-enabled false
+- task: SqlAzureDacpacDeployment@1
+  inputs:
+    azureSubscription: SharedServicesPre
+    AuthenticationType: server
+    ServerName: $(RNW_DB_Server)
+    DatabaseName: $(RNW_DB_Name)
+    SqlUsername: $(RNW_DB_Deploy_SQLUser)
+    SqlPassword: $(RNW_DB_Deploy_SQLPass)
+    deployType: DacpacTask
+    DeploymentAction: Publish
+    IpDetectionMethod: AutoDetect
+    DacpacFile: $(Pipeline.Workspace)/DACPAC/UKHO.MaritimeSafetyInformation.Web.Database.dacpac
 
-  - task: AzureCLI@2
-    displayName: "Disable vnet route: Staging slot"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        az webapp config set -g $(webapp_rg) -n $(WEB_APP_NAME) --slot $(WEB_APP_SLOT_NAME) --vnet-route-all-enabled false
+- task: FileTransform@2
+  displayName: Transform web app settings
+  inputs:
+    folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformation/*.zip'
+    xmlTransformationRules: ''
+    jsonTargetFiles: '**/appsettings.json'  
 
-  - task: AzureWebApp@1
-    displayName: "Azure App Deploy: Staging slot"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      appType: webApp
-      appName: "$(WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip"
-      deployToSlotOrASE: true
-      slotName: $(WEB_APP_SLOT_NAME)
+- task: AzureCLI@2
+  displayName: Disable vnet route - main slot
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    scriptType: pscore
+    scriptLocation: inlineScript
+    inlineScript: |
+      az webapp config set -g $(webapp_rg) -n $(WEB_APP_NAME) --vnet-route-all-enabled false
 
-  - task: PowerShell@2
-    displayName: "Check the status of staging slot"
-    inputs:
-      targetType: filePath
-      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthEndPointUrl https://$(WEB_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)"
+- task: AzureCLI@2
+  displayName: Disable vnet route - staging slot
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    scriptType: pscore
+    scriptLocation: inlineScript
+    inlineScript: |
+      az webapp config set -g $(webapp_rg) -n $(WEB_APP_NAME) --slot $(WEB_APP_SLOT_NAME) --vnet-route-all-enabled false
 
-  - task: AzureAppServiceManage@0
-    displayName: "Swap with production slot"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      resourceGroupName: $(webapp_rg)
-      webAppName: $(WEB_APP_NAME)
-      action: "Swap Slots"
-      swapWithProduction: true
-      sourceSlot: $(WEB_APP_SLOT_NAME)
+- task: AzureWebApp@1
+  displayName: Azure app deploy - staging slot
+  inputs:
+    azureSubscription: "${{ parameters.AzureSubscription }}"
+    appType: webApp
+    appName: $(WEB_APP_NAME)
+    package: '$(Pipeline.Workspace)/MaritimeSafetyInformation/UKHO.MaritimeSafetyInformation.Web.zip'
+    deployToSlotOrASE: true
+    slotName: $(WEB_APP_SLOT_NAME)
 
-  - task: PowerShell@2
-    displayName: "Check the status of Service"
-    inputs:
-      targetType: filePath
-      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthEndPointUrl $(MsiWafUrl)/health -waitTimeInMinute $(waitTimeInMinute)"
+- task: PowerShell@2
+  displayName: Check status of staging slot
+  inputs:
+    targetType: filePath
+    filePath: '$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1'
+    arguments: '-healthEndPointUrl https://$(WEB_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)'
 
-  - task: DownloadPipelineArtifact@2
-    displayName: "Download Admin App service Artifact"
-    inputs:
-      source: "current"
-      artifact: "MaritimeSafetyInformation"
-      path: $(Build.SourcesDirectory)/MaritimeSafetyInformationAdmin
+- task: AzureAppServiceManage@0
+  displayName: Swap with production slot
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    resourceGroupName: $(webapp_rg)
+    webAppName: $(WEB_APP_NAME)
+    action: Swap Slots
+    swapWithProduction: true
+    sourceSlot: $(WEB_APP_SLOT_NAME)
 
-  - task: FileTransform@2
-    displayName: "File Transform: Admin-WebAppSettings"
-    inputs:
-      folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
-      xmlTransformationRules: ''
-      jsonTargetFiles: '**/appsettings.json'
+- task: PowerShell@2
+  displayName: Check status of live slot
+  inputs:
+    targetType: filePath
+    filePath: '$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1'
+    arguments: '-healthEndPointUrl $(MsiWafUrl)/health -waitTimeInMinute $(waitTimeInMinute)'
 
-  - task: AzureCLI@2
-    displayName: "Disable vnet route: Main slot Admin"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        az webapp config set -g $(webapp_rg) -n $(ADMIN_WEB_APP_NAME) --vnet-route-all-enabled false
+- task: FileTransform@2
+  displayName: Transform admin web app settings
+  inputs:
+    folderPath: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/*.zip'
+    xmlTransformationRules: ''
+    jsonTargetFiles: '**/appsettings.json'
 
-  - task: AzureCLI@2
-    displayName: "Disable vnet route: Staging slot Admin"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        az webapp config set -g $(webapp_rg) -n $(ADMIN_WEB_APP_NAME) --slot $(WEB_ADMIN_APP_SLOT_NAME) --vnet-route-all-enabled false
+- task: AzureCLI@2
+  displayName: Disable vnet route main slot admin
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    scriptType: pscore
+    scriptLocation: inlineScript
+    inlineScript: |
+      az webapp config set -g $(webapp_rg) -n $(ADMIN_WEB_APP_NAME) --vnet-route-all-enabled false
 
+- task: AzureCLI@2
+  displayName: Disable vnet route - staging slot admin
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    scriptType: pscore
+    scriptLocation: inlineScript
+    inlineScript: |
+      az webapp config set -g $(webapp_rg) -n $(ADMIN_WEB_APP_NAME) --slot $(WEB_ADMIN_APP_SLOT_NAME) --vnet-route-all-enabled false
 
-  - task: AzureWebApp@1
-    displayName: "Azure App Deploy: Staging slot Admin"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      appType: webApp
-      appName: "$(ADMIN_WEB_APP_NAME)"
-      package: "$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformationAdmin.Web.zip"
-      deployToSlotOrASE: true
-      slotName: $(WEB_ADMIN_APP_SLOT_NAME)
+- task: AzureWebApp@1
+  displayName: Azure app deploy - staging slot admin
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    appType: webApp
+    appName: $(ADMIN_WEB_APP_NAME)
+    package: '$(Pipeline.Workspace)/MaritimeSafetyInformationAdmin/UKHO.MaritimeSafetyInformationAdmin.Web.zip'
+    deployToSlotOrASE: true
+    slotName: $(WEB_ADMIN_APP_SLOT_NAME)
 
-  - task: PowerShell@2
-    displayName: "Check the status of staging slot"
-    inputs:
-      targetType: filePath
-      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthEndPointUrl https://$(WEB_ADMIN_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)"
+- task: PowerShell@2
+  displayName: Check the status of staging slot admin
+  inputs:
+    targetType: filePath
+    filePath: '$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1'
+    arguments: '-healthEndPointUrl https://$(WEB_ADMIN_APP_SLOT_HOST_NAME)/health -waitTimeInMinute $(waitTimeInMinute)'
 
-  - task: AzureAppServiceManage@0
-    displayName: "Swap with production slot"
-    inputs:
-      azureSubscription: "${{ parameters.AzureSubscription }}"
-      resourceGroupName: $(webapp_rg)
-      webAppName: $(ADMIN_WEB_APP_NAME)
-      action: "Swap Slots"
-      swapWithProduction: true
-      sourceSlot: $(WEB_ADMIN_APP_SLOT_NAME)
+- task: AzureAppServiceManage@0
+  displayName: Swap with production slot admin
+  inputs:
+    azureSubscription: ${{ parameters.AzureSubscription }}
+    resourceGroupName: $(webapp_rg)
+    webAppName: $(ADMIN_WEB_APP_NAME)
+    action: Swap Slots
+    swapWithProduction: true
+    sourceSlot: $(WEB_ADMIN_APP_SLOT_NAME)
 
-  - task: PowerShell@2
-    displayName: "Check the status of Admin Web App"
-    inputs:
-      targetType: filePath
-      filePath: "$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1"
-      arguments: "-healthEndPointUrl $(Admin_DNS_URL)/health -waitTimeInMinute $(waitTimeInMinute)"
+- task: PowerShell@2
+  displayName: Check status of live slot admin
+  inputs:
+    targetType: filePath
+    filePath: '$(Pipeline.Workspace)/terraformartifact/check_service_status.ps1'
+    arguments: '-healthEndPointUrl $(Admin_DNS_URL)/health -waitTimeInMinute $(waitTimeInMinute)'
