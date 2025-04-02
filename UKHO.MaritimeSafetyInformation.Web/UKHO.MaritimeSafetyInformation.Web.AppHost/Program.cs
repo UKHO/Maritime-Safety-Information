@@ -12,6 +12,7 @@ var storage = builder.AddAzureStorage("storageConnection").RunAsEmulator(
 
 var tableStorage = storage.AddTables("fss-tables-connection");
 
+
 var rnwDb = builder.AddSqlServer("sql")
     .WithDataVolume()
     .AddDatabase("MSI-RNWDB-1");
@@ -22,13 +23,18 @@ var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("uk
     .WithReference(mockEndpoint)
     .WaitFor(mockcontainer)
     .WithReference(rnwDb)
-    .WaitFor(rnwDb);
+    .WaitFor(rnwDb)
+    .WithReference(tableStorage)
+    .WaitFor(tableStorage);
+
 
 mvcApp.WithEnvironment(callback =>
 {
     callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
     callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
+    callback.EnvironmentVariables["CacheConfiguration__ConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
    
 });
+
 
 builder.Build().Run();

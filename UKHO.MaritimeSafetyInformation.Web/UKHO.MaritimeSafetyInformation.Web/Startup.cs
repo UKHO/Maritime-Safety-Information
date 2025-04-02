@@ -198,36 +198,43 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);
 
-            SeedData(new SqlConnection(_configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
+            if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+            {
+                SeedData(new SqlConnection(_configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
+            }
+            
         }
 
 
-        internal bool TableExists(SqlConnection connection, string tableName)
+        internal bool TableExists(SqlConnection connection, params string[] tables)
         {
             if (connection.State == System.Data.ConnectionState.Closed)
             {
                 connection.Open();
             }
-                
-            using var command = new SqlCommand($"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}'", connection);
-            return (int)command.ExecuteScalar() > 0;
+            var tableNames =  string.Join(",", tables.Select(t => $"'{t}'"));
+            using var command = new SqlCommand($"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME in ({tableNames})", connection);
+            var result = (int)command.ExecuteScalar() > (tables.Length -1);
+            connection.Close();
+            return result;
         }
 
         internal async Task SeedData(SqlConnection connection)
         {
             var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
-            //context.Database.Migrate();
             context.Database.EnsureCreated();
+            if (!TableExists(connection, "WarningType", "RadioNavigationalWarnings"))
+            {
+                if (!TableExists(connection, "WarningType"))
+                {
+                    context.Database.ExecuteSqlRaw("CREATE TABLE WarningType (Id INT PRIMARY KEY, Name NVARCHAR(50))");
+                }
+                if (!TableExists(connection, "RadioNavigationalWarnings"))
+                {
+                    context.Database.ExecuteSqlRaw("CREATE TABLE RadioNavigationalWarnings (Id INT PRIMARY KEY, WarningType INT, Reference NVARCHAR(50), DateTimeGroup DATETIME, Summary NVARCHAR(100), Content NVARCHAR(500), ExpiryDate DATETIME, IsDeleted BIT, LastModified DATETIME)");
+                }
+            }
 
-            if (!TableExists(connection, "WarningType"))
-            {
-                context.Database.ExecuteSqlRaw("CREATE TABLE WarningType (Id INT PRIMARY KEY, Name NVARCHAR(50))");
-            }
-            if (!TableExists(connection, "RadioNavigationalWarnings"))
-            {
-                context.Database.ExecuteSqlRaw("CREATE TABLE RadioNavigationalWarnings (Id INT PRIMARY KEY, WarningType INT, Reference NVARCHAR(50), DateTimeGroup DATETIME, Summary NVARCHAR(100), Content NVARCHAR(500), ExpiryDate DATETIME, IsDeleted BIT, LastModified DATETIME)");
-            }
-            connection.Close();
 
             if (!context.WarningType.Any(w => w.Id == 1))
             {
