@@ -105,6 +105,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mock", "Mock", "{02EA681E-C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADDSMock", "UKHO.ADDS.Mocks\src\ADDSMock\ADDSMock.csproj", "{012DF7F2-F475-1398-C142-5492F4A6B722}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests", "UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests\UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj", "{53456EBB-9134-4F2D-8DE5-A1F096828B96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{012DF7F2-F475-1398-C142-5492F4A6B722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012DF7F2-F475-1398-C142-5492F4A6B722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012DF7F2-F475-1398-C142-5492F4A6B722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53456EBB-9134-4F2D-8DE5-A1F096828B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53456EBB-9134-4F2D-8DE5-A1F096828B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53456EBB-9134-4F2D-8DE5-A1F096828B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53456EBB-9134-4F2D-8DE5-A1F096828B96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
