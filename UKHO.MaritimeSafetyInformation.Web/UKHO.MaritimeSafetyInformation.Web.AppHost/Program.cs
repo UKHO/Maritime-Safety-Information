@@ -37,4 +37,18 @@ mvcApp.WithEnvironment(callback =>
 });
 
 
+var mvcadminApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
+    .WithReference(mockEndpoint)
+    .WaitFor(mockcontainer)
+    .WithReference(rnwDb)
+    .WaitFor(rnwDb)
+    .WithReference(tableStorage)
+    .WaitFor(tableStorage)
+    .WithEnvironment(callback =>
+    {
+        callback.EnvironmentVariables["RadioNavigationalWarningsAdminContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
+        callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
+
+    });
+
 builder.Build().Run();
