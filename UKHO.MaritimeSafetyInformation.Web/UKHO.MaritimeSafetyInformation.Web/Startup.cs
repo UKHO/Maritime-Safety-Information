@@ -227,24 +227,44 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 if (!TableExists(connection, "WarningType"))
                 {
-                    context.Database.ExecuteSqlRaw("CREATE TABLE WarningType (Id INT PRIMARY KEY, Name NVARCHAR(50))");
+                    context.Database.ExecuteSqlRaw("""
+                        CREATE TABLE [dbo].[WarningType]
+                        (
+                        [Id] INT IDENTITY(1,1)
+                        ,[Name] VARCHAR(32) NOT NULL
+                        CONSTRAINT [PK_WarningType] PRIMARY KEY CLUSTERED ([Id] ASC)
+                        ) 
+                        """);
                 }
                 if (!TableExists(connection, "RadioNavigationalWarnings"))
                 {
-                    context.Database.ExecuteSqlRaw("CREATE TABLE RadioNavigationalWarnings (Id INT PRIMARY KEY, WarningType INT, Reference NVARCHAR(50), DateTimeGroup DATETIME, Summary NVARCHAR(100), Content NVARCHAR(500), ExpiryDate DATETIME, IsDeleted BIT, LastModified DATETIME)");
+                    context.Database.ExecuteSqlRaw("""
+                        CREATE TABLE [dbo].[RadioNavigationalWarnings] (
+                        [Id] INT IDENTITY (1, 1), 
+                        [WarningType] INT NOT NULL, 
+                        [Reference] VARCHAR(32) NOT NULL, 
+                        [DateTimeGroup] DATETIME NOT NULL, 
+                        [Summary] VARCHAR(256) NOT NULL, 
+                        [Content] VARCHAR(MAX) NOT NULL, 
+                        [ExpiryDate] DATETIME NULL, 
+                        [IsDeleted] BIT NOT NULL DEFAULT 0, 
+                        [LastModified] DATETIME NOT NULL DEFAULT GETUTCDATE() INDEX [IDX_RadioNavigationalWarnings_LastModified] NONCLUSTERED, 
+                        CONSTRAINT [PK_RadioNavigationalWarnings] PRIMARY KEY CLUSTERED ([Id] ASC) ,
+                        CONSTRAINT [FK_WarningType] FOREIGN KEY ([WarningType]) REFERENCES [dbo].[WarningType]([Id]) ON DELETE NO ACTION ) 
+                        """);
                 }
             }
 
 
             if (!context.WarningType.Any(w => w.Id == 1))
             {
-                context.WarningType.Add(new WarningType { Id = 1, Name = "NAVAREA" });
+                context.WarningType.Add(new WarningType {  Name = "NAVAREA" });
                 await context.SaveChangesAsync();
             }
 
             if (!context.WarningType.Any(w => w.Id == 2))
             {
-                context.WarningType.Add(new WarningType { Id = 2, Name = "UK Coastal" });
+                context.WarningType.Add(new WarningType {  Name = "UK Coastal" });
                 await context.SaveChangesAsync();
             }
 
@@ -254,11 +274,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
             context.RadioNavigationalWarnings.AddRange(
                 new RadioNavigationalWarning
                 {
-                    Id = 1,
                     WarningType = 1,
                     Reference = "NAVAREA I 240/24",
                     DateTimeGroup = DateTime.UtcNow,
-                    Summary = "SPACE WEATHER. SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
+                    Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
                     Content = @"NAVAREA
                                      NAVAREA I 240/24
                                      301040 UTC Dec 24
@@ -270,11 +289,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 },
                 new RadioNavigationalWarning
                 {
-                    Id = 2,
                     WarningType = 2,
                     Reference = "WZ 897/24",
                     DateTimeGroup = DateTime.UtcNow,
-                    Summary = "HUMBER. HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
+                    Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
                     Content = @"UK Coastal
                                      WZ 897/24
                                      301510 UTC Dec 24
