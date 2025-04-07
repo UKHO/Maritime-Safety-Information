@@ -30,9 +30,9 @@ steps:
   inputs:
     command: test
     projects: |
-      **/*IntegrationTest*.dll
-      !**/*TestAdapter.dll
-      !**/obj/**
+      '$(Pipeline.Workspace)/**/*IntegrationTest*.dll'
+      '!$(Pipeline.Workspace)/**/*TestAdapter.dll'
+      '!$(Pipeline.Workspace)/**/obj/**'
     ${{ if eq(parameters.UseFssMock, true) }}:
       arguments: '--filter Category!=FssApi'
     ${{ else }}:
