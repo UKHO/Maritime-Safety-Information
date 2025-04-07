@@ -29,10 +29,7 @@ steps:
   displayName: Run integration tests
   inputs:
     command: test
-    projects: |
-      **/*IntegrationTest*.dll
-      !**/*TestAdapter.dll
-      !**/obj/**
+    projects: '$(Pipeline.Workspace)\IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.dll'
     ${{ if eq(parameters.UseFssMock, true) }}:
       arguments: '--filter Category!=FssApi'
     ${{ else }}:
