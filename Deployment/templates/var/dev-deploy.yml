@@ -1,0 +1,5 @@
+variables:
+- group: "Maritime-Safety-Information-Dev-TF-Variables"
+- group: "Maritime-Safety-Information-Dev-Variables"
+- name: AzureSubscription
+  value: "Maritime Safety Information Dev - A.008.02"

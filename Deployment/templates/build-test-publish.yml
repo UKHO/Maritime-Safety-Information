@@ -1,0 +1,194 @@
+jobs:
+- job: UnitTestsAndCodeCoverage
+  workspace:
+    clean: all
+  displayName: Unit test and publish code coverage
+  steps:
+  - task: UseDotNet@2
+    displayName: Use .NET SDK $(DotNetSdkVersion)
+    inputs:
+      packageType: sdk
+      version: $(DotNetSdkVersion)
+
+  - task: DotNetCoreCLI@2
+    displayName: NuGet restore test projects
+    inputs:
+      command: restore
+      projects: |
+        **/*Tests.csproj
+      feedsToUse: config
+      noCache: true
+      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+      packagesDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\packagesForTests'
+
+  - task: DotNetCoreCLI@2
+    displayName: Perform unit tests
+    inputs:
+      command: test
+      projects: |
+        **/*UnitTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[UKHO.MaritimeSafetyInformation.Web.Views]* /p:ExcludeByFile=**/UKHO.MaritimeSafetyInformation.Web/Views/**/*.cshtml%2c**/UKHO.MaritimeSafetyInformationAdmin.Web/Views/**/*.cshtml --no-restore'
+      publishTestResults: true
+      testRunTitle: UnitTests
+
+  - task: PowerShell@2
+    displayName: Generate code coverage report
+    inputs:
+      targetType: filePath
+      filePath: '$(Build.SourcesDirectory)\CodeCoverageReport.ps1'
+      arguments: '-source "$(Build.SourcesDirectory)" -reportFolder "$(Build.ArtifactStagingDirectory)"'
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish code coverage
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
+      ArtifactName: codecoveragereport
+
+- job: BuildAndPublish
+  workspace:
+    clean: all
+  displayName: Build and publish
+  steps:
+  - task: PowerShell@2
+    displayName: Set assembly version numbers based on build ID
+    inputs:
+      targetType: filePath
+      filePath: '$(Build.SourcesDirectory)\Apply-AssemblyVersionAndDefaults.ps1'
+      arguments: '-buildNumber "$(Build.BuildNumber)" -solutionDirectory "$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\" -UKHOAssemblyCompany "$env:UKHOAssemblyCompany" -UKHOAssemblyCopyright "$(UKHOAssemblyCopyright)" -UKHOAssemblyVersionPrefix "$env:UKHOAssemblyVersionPrefix" -UKHOAssemblyProduct "$env:UKHOAssemblyProduct"'
+
+  - task: UseDotNet@2
+    displayName: Use .NET SDK $(DotNetSdkVersion)
+    inputs:
+      packageType: sdk
+      version: $(DotNetSdkVersion)
+
+  - task: DotNetCoreCLI@2
+    displayName: NuGet restore non-test projects
+    inputs:
+      command: restore
+      projects: |
+        **/*.csproj
+        !**/*Tests.csproj
+      feedsToUse: config
+      noCache: true
+      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'              
+
+  - task: DotNetCoreCLI@2
+    displayName: Build web app
+    inputs:
+      command: build
+      projects: |
+        **/*.csproj
+        !**/*Tests.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory) --no-restore'
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish web app
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.Web.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb --no-restore'
+      zipAfterPublish: true
+      modifyOutputPath: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish web artifact
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb'
+      ArtifactName: MaritimeSafetyInformation
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish admin web app
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: |
+        **/*UKHO.MaritimeSafetyInformationAdmin.Web.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb --no-restore'
+      zipAfterPublish: true
+      modifyOutputPath: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish admin web artifact
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationAdminWeb'
+      ArtifactName: MaritimeSafetyInformationAdmin
+
+- job: PublishTerraformArtifacts
+  workspace:
+    clean: all
+  displayName: Publish Terraform artifact
+  steps:
+  - task: CopyFiles@2
+    displayName: Copy MSI config
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web\'
+      Contents: 'appsettings.json'
+      TargetFolder: '$(Build.SourcesDirectory)\Deployment\src'
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish artifact
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\Deployment'
+      ArtifactName: terraformartifact
+
+- job: BuildAndPublishDacpac
+  workspace:
+    clean: all
+  displayName: Build and publish dacpac
+  steps:
+  - task: VSBuild@1
+    displayName: Build MSI database
+    inputs:
+      solution: |
+        **/UKHO.MaritimeSafetyInformation.Web.Database.sqlproj
+      configuration: $(BuildConfiguration)
+      platform: $(BuildPlatform)
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish database dacpac artifact
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
+      ArtifactName: DACPAC
+
+- job: PublishIntegrationTestsArtifacts
+  workspace:
+    clean: all
+  displayName: Publish integration test artifact
+  steps:
+  - task: UseDotNet@2
+    displayName: Use .NET SDK $(DotNetSdkVersion)
+    inputs:
+      packageType: sdk
+      version: $(DotNetSdkVersion)
+
+  - task: DotNetCoreCLI@2
+    displayName: NuGet restore
+    inputs:
+      command: restore
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
+      feedsToUse: config
+      noCache: true
+      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish integration tests
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
+      zipAfterPublish: false
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish integration test artifact
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+      ArtifactName: IntegrationTests  
