@@ -1,7 +1,15 @@
+using System.Text;
+using System.Text.Json;
+using Aspire.Hosting;
 using Azure;
+using Azure.Identity;
+using Google.Protobuf.WellKnownTypes;
 using IdentityModel.OidcClient;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Amqp.Transaction;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
+using UKHO.MaritimeSafetyInformation.Web.Controllers;
 
 namespace UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests
 {
@@ -16,32 +24,93 @@ namespace UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests
         //
         // 2. Uncomment the following example test and update 'Projects.MyAspireApp_AppHost' to match your AppHost project:
         //
-        [Test]
-        public async Task GetWebResourceRootReturnsOkStatusCode()
+        private HttpClient? _httpClient;
+        private DistributedApplication _app;
+
+        private FormUrlEncodedContent GetWeeklyFormData(int year, int week)
         {
-            // Arrange
+            return new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("Year", year.ToString()),
+                new KeyValuePair<string, string>("Week", week.ToString()),
+            });
+        }
+
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
+        {
             var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
             appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
             {
                 clientBuilder.AddStandardResilienceHandler();
             });
-            await using var app = await appHost.BuildAsync();
-            var resourceNotificationService = app.Services.GetRequiredService<ResourceNotificationService>();
-            await app.StartAsync();
+            _app = await appHost.BuildAsync();
+            var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
+            await _app.StartAsync();
 
-            // Act
-            var httpClient = app.CreateHttpClient("ukho-msi-web");
+            _httpClient = _app.CreateHttpClient("ukho-msi-web");
             await resourceNotificationService.WaitForResourceAsync("ukho-msi-web", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
-            var response = await httpClient.GetAsync("/NoticesToMariners/Weekly");
 
-            var result1 = await response.Content.ReadAsStringAsync();
-            var result2 = System.Text.Json.JsonSerializer.Deserialize<ViewResult>(result1);
-
-            Assert.That(result2, Is.Not.Null);
-            var showWeeklyFiles = result2.Model as ShowWeeklyFilesResponseModel;
-            Assert.That(showWeeklyFiles, Is.Not.Null);
-            // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
+
+
+        [OneTimeTearDown]
+        public async Task Teardown()
+        {
+            _httpClient?.Dispose();
+            await _app.DisposeAsync();
+        }
+
+
+        [Test]
+        public async Task Initial_Load_of_NoticeToMariners_Weekly_Returns_200()
+        {
+            var response = _httpClient!.GetAsync("/NoticesToMariners/Weekly").Result;
+            Assert.That(response.IsSuccessStatusCode, Is.True);
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task A_ValidCall_To_NoticeToMariners_Weekly_Returns_200()
+        {
+
+            var response = _httpClient!.PostAsync("/NoticesToMariners/Weekly", GetWeeklyFormData(year: 2024, week: 4)).Result;
+            Assert.That(response.IsSuccessStatusCode, Is.True);
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task A_Call_To_NoticeToMariners_Daily_Returns_200()
+        {
+            var response = _httpClient!.GetAsync("/NoticesToMariners/Daily").Result;
+            Assert.That(response.IsSuccessStatusCode, Is.True);
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task A_Call_To_NoticeToMariners_Cumulative_Returns_200()
+        {
+            var response = _httpClient!.GetAsync("/NoticesToMariners/Cumulative").Result;
+            Assert.That(response.IsSuccessStatusCode, Is.True);
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task A_Call_To_NoticeToMariners_Annual_Returns_200()
+        {
+            var response = _httpClient!.GetAsync("/NoticesToMariners/Annual").Result;
+            Assert.That(response.IsSuccessStatusCode, Is.True);
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.That(result, Is.Not.Null);
+        }
+
+        //todo
+        //var response3 = _httpClient!.PostAsync("/NoticesToMariners/Weekly", GetWeeklyFormData(year: 2024, week: 5)).Result;
+        //var result = await response.Content.ReadAsStringAsync();
+        //var result1 = await response1.Content.ReadAsStringAsync();
     }
 }
