@@ -28,7 +28,7 @@ var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("uk
     {
         callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
         callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
-        callback.EnvironmentVariables["CacheConfiguration__ConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
+        callback.EnvironmentVariables["CacheConfiguration__LocalConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
     });
 
 
