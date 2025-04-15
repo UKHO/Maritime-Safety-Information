@@ -16,7 +16,9 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<BannerNotificationConfiguration> _bannerNotificationConfiguration;
         private readonly ILogger<MSIBannerNotificationService> _logger;
 
-        private string ConnectionString => _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
+        private string ConnectionString => _cacheConfiguration.Value.LocalConnectionString ??
+                      _azureStorageService.GetStorageAccountConnectionString(_cacheConfiguration.Value.CacheStorageAccountName, _cacheConfiguration.Value.CacheStorageAccountKey);
+
 
         public MSIBannerNotificationService(IOptions<CacheConfiguration> cacheConfiguration, IAzureStorageService azureStorageService, IAzureTableStorageClient azureTableStorageClient, IOptions<BannerNotificationConfiguration> bannerNotificationConfiguration, ILogger<MSIBannerNotificationService> logger)
         {

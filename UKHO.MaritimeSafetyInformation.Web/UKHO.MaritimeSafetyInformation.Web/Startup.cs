@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Security.Claims;
 using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
@@ -13,6 +14,7 @@ using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
 using UKHO.MaritimeSafetyInformation.Common.HealthCheck;
 using UKHO.MaritimeSafetyInformation.Common.Helpers;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
@@ -193,6 +195,65 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             app.UseCorrelationIdMiddleware()
             .UseErrorLogging(loggerFactory);
+
+            // RHZ to be removed
+            if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+            {
+                SeedData(new SqlConnection(configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
+            }
         }
+
+
+        internal async Task SeedData(SqlConnection connection)
+        {
+            var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
+
+            if (!context.WarningType.Any())
+            {
+                context.WarningType.Add(new WarningType { Name = "NAVAREA" });
+                context.WarningType.Add(new WarningType { Name = "UK Coastal" });
+                await context.SaveChangesAsync();
+            }
+
+            if (context.RadioNavigationalWarnings.Any()) return;
+
+
+            context.RadioNavigationalWarnings.AddRange(
+                new RadioNavigationalWarning
+                {
+                    WarningType = 1,
+                    Reference = "NAVAREA I 240/24",
+                    DateTimeGroup = DateTime.UtcNow,
+                    Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
+                    Content = @"NAVAREA
+                                     NAVAREA I 240/24
+                                     301040 UTC Dec 24
+                                     SPACE WEATHER.
+                                     SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.
+                                     RADIO AND SATELLITE NAVIGATION SERVICES MAY BE AFFECTED.",
+                    IsDeleted = false,
+                    LastModified = DateTime.UtcNow
+                },
+                new RadioNavigationalWarning
+                {
+                    WarningType = 2,
+                    Reference = "WZ 897/24",
+                    DateTimeGroup = DateTime.UtcNow,
+                    Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
+                    Content = @"UK Coastal
+                                     WZ 897/24
+                                     301510 UTC Dec 24
+                                     HUMBER.
+                                     HORNSEA 1 AND 2 WINDFARMS.
+                                     1.TURBINES T25 54-00.3N 001-36.7E, A16 53-50.0N 001-58.7E AND S16 53-59.4N 001-48.3E, FOG SIGNALS INOPERATIVE.
+                                     2.CANCEL WZ 895.",
+                    IsDeleted = false,
+                    LastModified = DateTime.UtcNow
+                }
+            );
+
+            await context.SaveChangesAsync();
+        }
+
     }
 }

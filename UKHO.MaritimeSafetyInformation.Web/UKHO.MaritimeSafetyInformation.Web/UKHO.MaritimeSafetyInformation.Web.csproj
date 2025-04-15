@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
+    <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>

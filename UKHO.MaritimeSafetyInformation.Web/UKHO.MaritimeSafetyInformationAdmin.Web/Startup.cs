@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
@@ -91,6 +92,19 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
             app.ConfigureRequest("RadioNavigationalWarningsAdmin", "Index", env.IsDevelopment());
+
+            //Rhz: start
+            if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+            {
+                app.UseEndpoints(endpoints =>
+                {
+                    if (env.IsDevelopment())
+                        endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
+                    else
+                        endpoints.MapControllers();
+                });
+            }
+            // Rhz: end
         }
 
         protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
