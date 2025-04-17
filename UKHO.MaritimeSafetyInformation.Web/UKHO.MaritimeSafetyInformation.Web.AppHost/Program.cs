@@ -1,5 +1,10 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+var mockcontainer = builder.AddDockerfile("adds-mock", @"C:\Source\Repos\UKHO.ADDS.Mocks\src\ADDSMock")
+    .WithHttpEndpoint(port: 5678, targetPort: 5678, "mock-endpoint");
+var mockEndpoint = mockcontainer.GetEndpoint("mock-endpoint");
+
+
 var storage = builder.AddAzureStorage("local-storage-connection").RunAsEmulator(
     azr =>
     {
@@ -61,6 +66,8 @@ var rnwDb = sql.AddDatabase(databaseName)
 
 
 builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
+    .WithReference(mockEndpoint)
+    .WaitFor(mockcontainer)
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
@@ -68,11 +75,10 @@ builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
     .WithEnvironment(callback =>
     {
         callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
-        //callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
+        callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
         callback.EnvironmentVariables["CacheConfiguration__LocalConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
         callback.EnvironmentVariables["AzureAdB2C__Instance"] = "https://login.microsoftonline.com/";
         callback.EnvironmentVariables["AzureAdB2C__ClientId"] = "ClientID";
-        callback.EnvironmentVariables["AzureAdB2C__ClientSecret"] = "secret";
         callback.EnvironmentVariables["AzureAdB2C__Domain"] = "domain";
         callback.EnvironmentVariables["CacheConfiguration__FssWeeklyBatchSearchTableName"] = "FssWeeklyBatchSearchResponseCache";
         callback.EnvironmentVariables["CacheConfiguration__FssCacheResponseTableName"] = "FssCacheResponseTable";
