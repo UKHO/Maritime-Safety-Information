@@ -1,5 +1,8 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
+var mockApi = builder.AddProject<UKHO_ADDS_Mocks_MSI>("mock");
 
 var storage = builder.AddAzureStorage("local-storage-connection").RunAsEmulator(
     azr =>
@@ -62,16 +65,17 @@ var rnwDb = sql.AddDatabase(databaseName)
 
 
 builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
-    //.WithReference(mockEndpoint)
-    //.WaitFor(mockcontainer)
+    .WithReference(mockApi)
+    .WaitFor(mockApi)
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
     .WaitFor(tableStorage)
     .WithEnvironment(callback =>
     {
+        var mockEndpoint = mockApi.GetEndpoint("http");
         callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
-        //callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fss" }.Uri.ToString();
+        callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockEndpoint.Url) { Path = "fssmsi/" }.Uri.ToString();
         callback.EnvironmentVariables["CacheConfiguration__LocalConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
         callback.EnvironmentVariables["AzureAdB2C__Instance"] = "https://login.microsoftonline.com/";
         callback.EnvironmentVariables["AzureAdB2C__ClientId"] = "ClientID";
