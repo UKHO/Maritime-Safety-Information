@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="D:\Source\Repos\UKHO.ADDS.Mocks\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj" />
+    <ProjectReference Include="..\mock\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj" />
   </ItemGroup>
 
 </Project>
