@@ -36,7 +36,7 @@ variables:
 - name: WindowsPool
   value: "NautilusBuild"
 - name: DotNetSdkVersion
-  value: "8.x"
+  value: "9.x"
 
 resources:
   repositories:
