@@ -1,0 +1,3 @@
+[submodule "UKHO.MaritimeSafetyInformation.Web/mock"]
+	path = UKHO.MaritimeSafetyInformation.Web/mock
+	url = https://github.com/UKHO/UKHO.ADDS.Mocks
