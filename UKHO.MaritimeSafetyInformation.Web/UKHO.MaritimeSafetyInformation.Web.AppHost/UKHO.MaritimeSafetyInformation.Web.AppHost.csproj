@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UKHO.ADDS.Mocks.MSI\UKHO.ADDS.Mocks.MSI.csproj" />
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj" />
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformationAdmin.Web\UKHO.MaritimeSafetyInformationAdmin.Web.csproj" />
   </ItemGroup>
