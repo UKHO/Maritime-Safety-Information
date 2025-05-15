@@ -35,83 +35,84 @@ namespace UKHO.MaritimeSafetyInformation.Web
         public void ConfigureServices(IServiceCollection services)
         {
             //Enables Application Insights telemetry.
-            services.AddApplicationInsightsTelemetry();
+            // Rhz
+            //services.AddApplicationInsightsTelemetry();
 
-            services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
-                loggingBuilder.AddConsole();
-                loggingBuilder.AddDebug();
-                loggingBuilder.AddAzureWebAppDiagnostics();
-            });
+            //services.AddLogging(loggingBuilder =>
+            //{
+            //    loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
+            //    loggingBuilder.AddConsole();
+            //    loggingBuilder.AddDebug();
+            //    loggingBuilder.AddAzureWebAppDiagnostics();
+            //});
 
-            services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
-            services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
-            services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
-            services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
-            services.Configure<BannerNotificationConfiguration>(configuration.GetSection("BannerNotificationConfiguration"));
-            services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
+            //services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            //services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
+            //services.Configure<FileShareServiceConfiguration>(configuration.GetSection("FileShareService"));
+            //services.Configure<RadioNavigationalWarningsContextConfiguration>(configuration.GetSection("RadioNavigationalWarningsContext"));
+            //services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
+            //services.Configure<BannerNotificationConfiguration>(configuration.GetSection("BannerNotificationConfiguration"));
+            //services.Configure<AzureAdB2C>(configuration.GetSection("AzureAdB2C"));
 
-            var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
-            configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
-            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
+            //var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
+            //configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
+            //services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
-            services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
-            services.AddScoped<INMDataService, NMDataService>();
-            services.AddScoped<IFileShareService, FileShareService>();
-            services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
-            services.AddScoped<IRNWService, RNWService>();
-            services.AddScoped<IRNWRepository, RNWRepository>();
-            services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
-            services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
-            services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
-            services.AddScoped<IAzureStorageService, AzureStorageService>();
-            services.AddScoped<IWebhookService, WebhookService>();
-            services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
-            services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
+            //services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
+            //services.AddScoped<INMDataService, NMDataService>();
+            //services.AddScoped<IFileShareService, FileShareService>();
+            //services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+            //services.AddScoped<IRNWService, RNWService>();
+            //services.AddScoped<IRNWRepository, RNWRepository>();
+            //services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
+            //services.AddScoped<IFileShareServiceHealthClient, FileShareServiceHealthClient>();
+            //services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
+            //services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
+            //services.AddScoped<IAzureStorageService, AzureStorageService>();
+            //services.AddScoped<IWebhookService, WebhookService>();
+            //services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
+            //services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
 
-            services.AddControllersWithViews()
-            .AddMicrosoftIdentityUI();
+            //services.AddControllersWithViews()
+            //.AddMicrosoftIdentityUI();
 
             //Configuring appsettings section AzureAdB2C, into IOptions
-            services.AddOptions();
-            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAdB2C"));
+            //services.AddOptions();
+            //services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAdB2C"));
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddHeaderPropagation(options =>
-            {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
-            });
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddHeaderPropagation(options =>
+            //{
+            //    options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+            //});
 
-            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(options =>
-            {
-                configuration.Bind("AzureAdB2C", options);
-                options.Events ??= new OpenIdConnectEvents();
-                options.SaveTokens = true; // this saves the token for the downstream api
-                options.Events.OnRedirectToIdentityProvider = async context =>
-                {
-                    context.ProtocolMessage.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"];
-                    await Task.FromResult(0);
-                };
-                options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
-                {
-                    context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:SignedOutCallbackPath"];
-                    await Task.FromResult(0);
-                };
-            })
-            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })
-            .AddInMemoryTokenCaches();
+            //services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            //.AddMicrosoftIdentityWebApp(options =>
+            //{
+            //    configuration.Bind("AzureAdB2C", options);
+            //    options.Events ??= new OpenIdConnectEvents();
+            //    options.SaveTokens = true; // this saves the token for the downstream api
+            //    options.Events.OnRedirectToIdentityProvider = async context =>
+            //    {
+            //        context.ProtocolMessage.RedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:CallbackPath"];
+            //        await Task.FromResult(0);
+            //    };
+            //    options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
+            //    {
+            //        context.ProtocolMessage.PostLogoutRedirectUri = configuration["AzureAdB2C:RedirectBaseUrl"] + configuration["AzureAdB2C:SignedOutCallbackPath"];
+            //        await Task.FromResult(0);
+            //    };
+            //})
+            //.EnableTokenAcquisitionToCallDownstreamApi(new string[] { configuration["AzureAdB2C:Scope"] })
+            //.AddInMemoryTokenCaches();
 
-            services.AddHttpClient();
-            services.AddHealthChecks()
-                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
-                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck")
-                .AddCheck<FileShareServiceHealthCheck>("FileShareServiceHealthCheck");
-            services.AddApplicationInsightsTelemetry();
+            //services.AddHttpClient();
+            //services.AddHealthChecks()
+            //    .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
+            //    .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck")
+            //    .AddCheck<FileShareServiceHealthCheck>("FileShareServiceHealthCheck");
+            //services.AddApplicationInsightsTelemetry();
 
         }
 

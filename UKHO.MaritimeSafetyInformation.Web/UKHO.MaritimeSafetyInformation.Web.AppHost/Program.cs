@@ -18,6 +18,8 @@ var sql = builder.AddSqlServer("local-sql")
 
 var databaseName = "MSI-RNWDB-1";
 
+
+
 var creationScript = $$"""
                         IF DB_ID('{{databaseName}}') IS NULL
                             CREATE DATABASE [{{databaseName}}];
