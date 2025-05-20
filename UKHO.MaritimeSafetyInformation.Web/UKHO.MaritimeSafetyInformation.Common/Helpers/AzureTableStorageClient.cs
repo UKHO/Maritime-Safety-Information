@@ -11,8 +11,13 @@ namespace UKHO.MaritimeSafetyInformation.Common.Helpers
         private static async Task<TableClient> GetTableClient(string tableName, string storageAccountConnectionString)
         {
             var serviceClient = new TableServiceClient(storageAccountConnectionString);
-            TableClient tableClient = serviceClient.GetTableClient(tableName);
-            await tableClient.CreateIfNotExistsAsync();
+            var tableItem = serviceClient.Query().FirstOrDefault(sc => sc.Name.Equals(tableName,StringComparison.InvariantCultureIgnoreCase));
+
+            var tableClient = serviceClient.GetTableClient(tableName);
+            if (tableItem is null)
+            {
+                await tableClient.CreateAsync();
+            }
             return tableClient;
         }
 

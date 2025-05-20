@@ -27,8 +27,14 @@ namespace UKHO.MaritimeSafetyInformation.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            
+
             // Rhz Start
+            // Do we actually need this? (Rhz)  
+            //var kvServiceUri = builder.Configuration["KeyVaultSettings:ServiceUri"];
+            //if (!string.IsNullOrWhiteSpace(kvServiceUri))
+            //{
+            //    builder.Configuration.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+            //}
 
             //Enables Application Insights telemetry.
             builder.Services.AddApplicationInsightsTelemetry();
@@ -61,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
             builder.Services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
             builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
-            builder.Services.AddScoped<IWebhookService, WebhookService>();
+            //builder.Services.AddScoped<IWebhookService, WebhookService>();  // Do we need this here? (Rhz)
             builder.Services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             builder.Services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
 

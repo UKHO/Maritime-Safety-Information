@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         private readonly IConfiguration configuration;
         public Startup(IWebHostEnvironment env)
         {
-            configuration = BuildConfiguration(env);
+            //configuration = BuildConfiguration(env);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -127,24 +127,24 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.ConfigureRequest("Home", "Index", env.IsDevelopment());
         }
 
-        protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
-        {
-            IConfigurationBuilder builder = new ConfigurationBuilder()
-                .SetBasePath(hostingEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
+        //protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
+        //{
+        //    IConfigurationBuilder builder = new ConfigurationBuilder()
+        //        .SetBasePath(hostingEnvironment.ContentRootPath)
+        //        .AddJsonFile("appsettings.json", false, true)
+        //        .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
 
-            builder.AddEnvironmentVariables();
-            IConfigurationRoot tempConfig = builder.Build();
-            string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
+        //    builder.AddEnvironmentVariables();
+        //    IConfigurationRoot tempConfig = builder.Build();
+        //    string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
 
-            if (!string.IsNullOrWhiteSpace(kvServiceUri))
-            {
-                builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
-            }
+        //    if (!string.IsNullOrWhiteSpace(kvServiceUri))
+        //    {
+        //        builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+        //    }
 
-            return builder.Build();
-        }
+        //    return builder.Build();
+        //}
 
         private void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
                                       IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
