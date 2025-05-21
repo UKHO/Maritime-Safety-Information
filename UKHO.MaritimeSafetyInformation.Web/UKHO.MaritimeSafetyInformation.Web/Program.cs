@@ -135,6 +135,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapHealthChecks("/health");
+            
             app.Run();
         }
 
