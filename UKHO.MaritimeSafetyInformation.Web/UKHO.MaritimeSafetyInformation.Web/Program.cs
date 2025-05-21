@@ -3,9 +3,6 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using UKHO.MaritimeSafetyInformation.Common;
@@ -125,17 +122,18 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 SeedData(new SqlConnection(builder.Configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
             }
 
-        // Rhz End
-            
+            app.ConfigureRequest("Home", "Index", app.Environment.IsDevelopment());
+            // Rhz End
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapHealthChecks("/health");
+
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseRouting();
+            //app.UseAuthorization();
+            //app.MapControllerRoute(
+            //    name: "default",
+            //    pattern: "{controller=Home}/{action=Index}/{id?}");
+            //app.MapHealthChecks("/health");
             
             app.Run();
         }
