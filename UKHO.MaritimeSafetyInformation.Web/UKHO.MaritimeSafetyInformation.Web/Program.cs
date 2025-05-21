@@ -29,12 +29,12 @@ namespace UKHO.MaritimeSafetyInformation.Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Rhz Start
-            // Do we actually need this? (Rhz)  
-            //var kvServiceUri = builder.Configuration["KeyVaultSettings:ServiceUri"];
-            //if (!string.IsNullOrWhiteSpace(kvServiceUri))
-            //{
-            //    builder.Configuration.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
-            //}
+            // Do we actually need this here? (Rhz)  
+            var kvServiceUri = builder.Configuration["KeyVaultSettings:ServiceUri"];
+            if (!string.IsNullOrWhiteSpace(kvServiceUri))
+            {
+                builder.Configuration.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+            }
 
             //Enables Application Insights telemetry.
             builder.Services.AddApplicationInsightsTelemetry();
@@ -75,8 +75,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             .AddMicrosoftIdentityUI();
 
             //Configuring appsettings section AzureAdB2C, into IOptions (Rhz MAY NOT NEED THIS HERE)
-            //builder.Services.AddOptions();
-            //builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
+            builder.Services.AddOptions();
+            builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //(Rhz Look at implimentation, is it needed, is it correct. )
             builder.Services.AddHeaderPropagation(options =>
