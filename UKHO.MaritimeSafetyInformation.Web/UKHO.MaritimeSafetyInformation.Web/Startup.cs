@@ -124,7 +124,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                               IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {
             ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
-            app.ConfigureRequest("Home", "Index", env.IsDevelopment());
+            //app.ConfigureRequest("Home", "Index", env.IsDevelopment());  //Rhz using new ConfigureRequestPipeline from Common project
         }
 
         //protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)

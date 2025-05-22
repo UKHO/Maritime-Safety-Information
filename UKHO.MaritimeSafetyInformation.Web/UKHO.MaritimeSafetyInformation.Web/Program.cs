@@ -1,10 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Security.Claims;
 using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
@@ -37,6 +41,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddApplicationInsightsTelemetry();
 
             builder.Logging.AddAzureWebAppDiagnostics();
+            // not yet builder.Logging.AddEventHub();
+
 
             builder.AddServiceDefaults();
 
@@ -64,12 +70,14 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
             builder.Services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
             builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
-            //builder.Services.AddScoped<IWebhookService, WebhookService>();  // Do we need this here? (Rhz)
+            builder.Services.AddScoped<IWebhookService, WebhookService>();  // Do we need this here? (Rhz)
             builder.Services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             builder.Services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
 
             builder.Services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
+
+            builder.Services.AddHttpContextAccessor();
 
             //Configuring appsettings section AzureAdB2C, into IOptions (Rhz MAY NOT NEED THIS HERE)
             builder.Services.AddOptions();
@@ -113,30 +121,34 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
             var app = builder.Build();
+            //app.AddCustomLogging(ILoggerFactory factory);
 
-                // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            app.UseCorrelationIdMiddleware();
+            //  .UseErrorLogging(loggerFactory)
+
+            // Configure the HTTP request pipeline.
+            app.ConfigureRequestPipeline("Home","Index");
+
+
+            if (app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                // Build test data
                 SeedData(new SqlConnection(builder.Configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
             }
 
-            app.ConfigureRequest("Home", "Index", app.Environment.IsDevelopment());
+
             // Rhz End
 
-
-            //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
-            //app.UseRouting();
-            //app.UseAuthorization();
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller=Home}/{action=Index}/{id?}");
-            //app.MapHealthChecks("/health");
-            
             app.Run();
+            
         }
+
+        
+
+           
+
+            
+       
 
         internal static async Task SeedData(SqlConnection connection)
         {
