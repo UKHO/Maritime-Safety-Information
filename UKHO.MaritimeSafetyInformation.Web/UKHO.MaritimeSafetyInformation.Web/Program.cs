@@ -86,7 +86,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //(Rhz Look at implimentation, is it needed, is it correct. )
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);  //Rhz this is bad
             });
 
             builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)  //Look at this, is it needed, is it correct. )

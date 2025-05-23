@@ -26,60 +26,60 @@ namespace UKHO.MaritimeSafetyInformation.Web
         private readonly IConfiguration configuration;
         public Startup(IWebHostEnvironment env)
         {
-            configuration = BuildConfiguration(env);
+            //configuration = BuildConfiguration(env);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             //Enables Application Insights telemetry.
-            services.AddApplicationInsightsTelemetry();
+            //services.AddApplicationInsightsTelemetry();
 
-            services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
-                loggingBuilder.AddConsole();
-                loggingBuilder.AddDebug();
-                loggingBuilder.AddAzureWebAppDiagnostics();
-            });
-            services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
-            services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
-            services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAd);
-            var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
-            configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
-            services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
+            //services.AddLogging(loggingBuilder =>
+            //{
+            //    loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
+            //    loggingBuilder.AddConsole();
+            //    loggingBuilder.AddDebug();
+            //    loggingBuilder.AddAzureWebAppDiagnostics();
+            //});
+            //services.Configure<EventHubLoggingConfiguration>(configuration.GetSection("EventHubLoggingConfiguration"));
+            //services.Configure<RadioNavigationalWarningConfiguration>(configuration.GetSection("RadioNavigationalWarningConfiguration"));
+            //services.AddMicrosoftIdentityWebAppAuthentication(configuration, Constants.AzureAd);
+            //var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
+            //configuration.Bind("RadioNavigationalWarningsAdminContext", msiDBConfiguration);
+            //services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
 
-            services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
-            services.AddScoped<IRNWService, RNWService>();
-            services.AddScoped<IRNWRepository, RNWRepository>();
-            services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
-            services.AddControllersWithViews()
-            .AddMicrosoftIdentityUI();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddHeaderPropagation(options =>
-            {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
-            });
-            services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
-            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
-            options => options.AccessDeniedPath = "/accessdenied");
+            //services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
+            //services.AddScoped<IRNWService, RNWService>();
+            //services.AddScoped<IRNWRepository, RNWRepository>();
+            //services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
+            //services.AddControllersWithViews()
+            //.AddMicrosoftIdentityUI();
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddHeaderPropagation(options =>
+            //{
+            //    options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+            //});
+            //services.Configure<OpenIdConnectOptions>(configuration.GetSection("AzureAd"));
+            //services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
+            //options => options.AccessDeniedPath = "/accessdenied");
 
-            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {
-                options.SaveTokens = true; // this saves the token for the downstream api
-                options.Events.OnRedirectToIdentityProvider = async context =>
-                {
-                    context.ProtocolMessage.RedirectUri = configuration["AzureAd:RedirectBaseUrl"] + configuration["AzureAd:CallbackPath"];
-                    await Task.FromResult(0);
-                };
-            });
+            //services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            //{
+            //    options.SaveTokens = true; // this saves the token for the downstream api
+            //    options.Events.OnRedirectToIdentityProvider = async context =>
+            //    {
+            //        context.ProtocolMessage.RedirectUri = configuration["AzureAd:RedirectBaseUrl"] + configuration["AzureAd:CallbackPath"];
+            //        await Task.FromResult(0);
+            //    };
+            //});
 
-            services.AddHttpClient();
+            //services.AddHttpClient();
 
-            services.AddHealthChecks()
-                .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
-                .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck");
-            services.AddApplicationInsightsTelemetry();
+            //services.AddHealthChecks()
+            //    .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
+            //    .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck");
+            //services.AddApplicationInsightsTelemetry();
 
         }
 
@@ -91,40 +91,40 @@ namespace UKHO.MaritimeSafetyInformation.Web
                               IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {
             ConfigureLogging(app, loggerFactory, httpContextAccessor, eventHubLoggingConfiguration);
-            app.ConfigureRequest("RadioNavigationalWarningsAdmin", "Index", env.IsDevelopment());
+            //app.ConfigureRequest("RadioNavigationalWarningsAdmin", "Index", env.IsDevelopment()); //Rhz using new ConfigureRequestPipeline from Common project
 
             //Rhz: start
-            if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
-            {
-                app.UseEndpoints(endpoints =>
-                {
-                    if (env.IsDevelopment())
-                        endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
-                    else
-                        endpoints.MapControllers();
-                });
-            }
+            //if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+            //{
+            //    app.UseEndpoints(endpoints =>
+            //    {
+            //        if (env.IsDevelopment())
+            //            endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
+            //        else
+            //            endpoints.MapControllers();
+            //    });
+            //}
             // Rhz: end
         }
 
-        protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
-        {
-            IConfigurationBuilder builder = new ConfigurationBuilder()
-                .SetBasePath(hostingEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
+        //protected IConfigurationRoot BuildConfiguration(IWebHostEnvironment hostingEnvironment)
+        //{
+        //    IConfigurationBuilder builder = new ConfigurationBuilder()
+        //        .SetBasePath(hostingEnvironment.ContentRootPath)
+        //        .AddJsonFile("appsettings.json", false, true)
+        //        .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", true, true);
 
-            builder.AddEnvironmentVariables();
-            IConfigurationRoot tempConfig = builder.Build();
-            string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
+        //    builder.AddEnvironmentVariables();
+        //    IConfigurationRoot tempConfig = builder.Build();
+        //    string kvServiceUri = tempConfig["KeyVaultSettings:ServiceUri"];
 
-            if (!string.IsNullOrWhiteSpace(kvServiceUri))
-            {
-                builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
-            }
+        //    if (!string.IsNullOrWhiteSpace(kvServiceUri))
+        //    {
+        //        builder.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
+        //    }
 
-            return builder.Build();
-        }
+        //    return builder.Build();
+        //}
 
         private void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
                                       IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
