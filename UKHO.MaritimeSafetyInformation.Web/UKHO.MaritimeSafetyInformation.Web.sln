@@ -113,7 +113,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks", "UKHO.ADD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks.MSI", "UKHO.ADDS.Mocks.MSI\UKHO.ADDS.Mocks.MSI.csproj", "{A01DE3C7-A649-4D9E-A0C0-4EF5C671CC8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests", "UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests\UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests.csproj", "{FD93074E-D3A2-4835-87BB-627B519176B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests", "UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests\UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj", "{FD93074E-D3A2-4835-87BB-627B519176B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
