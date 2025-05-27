@@ -175,7 +175,7 @@ jobs:
     inputs:
       command: restore
       projects: |
-        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
+        **/*UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj
       feedsToUse: config
       noCache: true
       nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
