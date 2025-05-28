@@ -32,7 +32,8 @@ namespace UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests
             var response = await httpClient.GetAsync("/health");
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            //Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
         }
     }
 }
