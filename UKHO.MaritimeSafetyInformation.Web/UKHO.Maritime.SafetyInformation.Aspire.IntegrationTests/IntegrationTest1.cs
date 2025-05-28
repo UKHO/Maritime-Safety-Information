@@ -19,6 +19,8 @@ namespace UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests
             appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
             {
                 clientBuilder.AddStandardResilienceHandler();
+                
+
             });
             await using var app = await appHost.BuildAsync();
             var resourceNotificationService = app.Services.GetRequiredService<ResourceNotificationService>();
@@ -27,7 +29,7 @@ namespace UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests
             // Act
             var httpClient = app.CreateHttpClient("ukho-msi-web");
             await resourceNotificationService.WaitForResourceAsync("ukho-msi-web", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
-            var response = await httpClient.GetAsync("/");
+            var response = await httpClient.GetAsync("/health");
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
