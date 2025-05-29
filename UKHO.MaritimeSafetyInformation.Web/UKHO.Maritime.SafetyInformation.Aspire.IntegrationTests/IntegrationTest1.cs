@@ -1,5 +1,6 @@
 namespace UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests
 {
+    [Category("FssMock")]
     public class IntegrationTest1
     {
         // Instructions:
@@ -32,8 +33,8 @@ namespace UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests
             var response = await httpClient.GetAsync("/health");
 
             // Assert
-            //Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            //Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
         }
     }
 }
