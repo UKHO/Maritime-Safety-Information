@@ -1,6 +1,6 @@
-namespace UKHO.Maritime.SafetyInformation.Aspire.IntegrationTests
+namespace UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests
 {
-    [Category("FssMock")]
+    
     public class IntegrationTest1
     {
         // Instructions:
