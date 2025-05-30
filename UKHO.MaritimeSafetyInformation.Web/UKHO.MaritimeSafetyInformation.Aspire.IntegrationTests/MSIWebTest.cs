@@ -71,6 +71,7 @@ namespace UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests
             var httpClient = _app.CreateHttpClient("ukho-msi-web");
             await resourceNotificationService.WaitForResourceAsync("ukho-msi-web", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
             var response = await httpClient.GetAsync("/health");
+            
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
