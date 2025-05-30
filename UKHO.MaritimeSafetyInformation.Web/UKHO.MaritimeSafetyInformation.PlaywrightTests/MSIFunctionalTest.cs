@@ -1,8 +1,9 @@
 using Aspire.Hosting;
+using Microsoft.Playwright.NUnit;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
-    public class MSIFunctionalTest
+    public class MSIFunctionalTest : PageTest
     {
         private DistributedApplication _app;
         private const string _frontend = "ukho-msi-web";
@@ -34,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        public async Task GetWebResourceRootReturnsOkStatusCode()
+        public async Task CanGetToLandingPage()
         {
             // Arrange
             var httpClient = _app.CreateHttpClient(_frontend);
@@ -44,6 +45,25 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+
+            var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
+
+            await Page.GotoAsync(httpEndpoint!);
+
+            var heading = await Page.GetByTestId("headingLevelOne").IsVisibleAsync();
+            var heading2 = await Page.GetByTestId("headingLevelOne").InnerTextAsync();
+        }
+
+        [Test]
+        public async Task CanNavigateToAboutPage()
+        {
+            // Arrange
+            await Page.GotoAsync("http://localhost:5000/"); // Adjust the URL as needed
+            // Act
+            await Page.ClickAsync("text=About"); // Assuming there's a link with text "About"
+            // Assert
+            var url = Page.Url;
+            Assert.That(url, Does.Contain("/about")); // Adjust the expected URL as needed
         }
     }
 }

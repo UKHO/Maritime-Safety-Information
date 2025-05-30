@@ -1,8 +1,9 @@
 ﻿using Aspire.Hosting;
+using Microsoft.Playwright.NUnit;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
-    public class MSIAdminFunctionalTests
+    public class MSIAdminFunctionalTests : PageTest
     {
         private DistributedApplication _app;
         private const string _frontend = "ukho-msi-admin-web";
@@ -35,7 +36,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        public async Task GetWebResourceRootReturnsOkStatusCode()
+        public async Task CanGetToLandingPage()
         {
             // Arrange
             var httpClient = _app.CreateHttpClient(_frontend);
