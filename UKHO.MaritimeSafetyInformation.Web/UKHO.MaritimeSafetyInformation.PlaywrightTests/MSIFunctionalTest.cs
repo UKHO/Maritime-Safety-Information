@@ -1,4 +1,5 @@
 using Aspire.Hosting;
+using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
@@ -45,25 +46,40 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
 
+
+        [Test]
+        public async Task LandingPageNavigationInPlace()
+        {
+            // Arrange
             var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
 
-            await Page.GotoAsync(httpEndpoint!);
+            // Act
+            await Page.GotoAsync(httpEndpoint);
 
-            var heading = await Page.GetByTestId("headingLevelOne").IsVisibleAsync();
-            var heading2 = await Page.GetByTestId("headingLevelOne").InnerTextAsync();
+            // Assert
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Admiralty Maritime Data" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Notices to Mariners", Exact = true })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Radio Navigation Warnings", Exact = true })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Sign in" })).ToBeVisibleAsync();
         }
 
         [Test]
-        public async Task CanNavigateToAboutPage()
+        public async Task HomePageBodyIsValid()
         {
             // Arrange
-            await Page.GotoAsync("http://localhost:5000/"); // Adjust the URL as needed
+            var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
             // Act
-            await Page.ClickAsync("text=About"); // Assuming there's a link with text "About"
+            await Page.GotoAsync(httpEndpoint);
             // Assert
-            var url = Page.Url;
-            Assert.That(url, Does.Contain("/about")); // Adjust the expected URL as needed
+            await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Radio Navigation" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Privacy and cookies opens in" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Accessibility opens in new tab" })).ToBeVisibleAsync();
+            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "UK Hydrographic Office Logo" })).ToBeVisibleAsync();
         }
     }
 }
