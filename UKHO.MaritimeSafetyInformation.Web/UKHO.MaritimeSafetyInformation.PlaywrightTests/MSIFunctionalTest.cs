@@ -81,5 +81,16 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Accessibility opens in new tab" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "UK Hydrographic Office Logo" })).ToBeVisibleAsync();
         }
+
+        [Test]
+        public async Task HomePageOldStyle()
+        {
+            // Arrange
+            var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
+            // Act
+            var page = await Page.GotoAsync(httpEndpoint);
+
+            var home = new PageObjects.HomePageObject(page.);
+        }
     }
 }
