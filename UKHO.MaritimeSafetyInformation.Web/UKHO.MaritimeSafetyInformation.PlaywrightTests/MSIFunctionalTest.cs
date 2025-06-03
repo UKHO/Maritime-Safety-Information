@@ -1,6 +1,7 @@
 using Aspire.Hosting;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
+using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
@@ -12,8 +13,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
-            // This method is called once before any tests are run.
-            // You can use it to set up any shared resources or configurations needed for the tests.
             var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
             appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
             {
@@ -30,8 +29,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [OneTimeTearDown]
         public async Task TearDownAsync()
         {
-            // This method is called once after all tests have run.
-            // You can use it to clean up any shared resources or configurations.
             await _app.DisposeAsync();
         }
 
@@ -83,14 +80,21 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        public async Task HomePageOldStyle()
+        public async Task HomePageTest()
         {
             // Arrange
             var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
             // Act
-            var page = await Page.GotoAsync(httpEndpoint);
+            await Page.GotoAsync(httpEndpoint);
 
-            var home = new PageObjects.HomePageObject(page.);
+            var home = new HomePageObject(Page);
+            await home.VerifyAdmiraltyHomePageAsync();
+            await home.VerifyAdmiraltyAsync();
+            await home.VerifyHomePageTitleAsync();
+            await home.VerifyPageAsync();
+            await home.VerifyUkHydrographicAsync();
+            await home.VerifyPrivacyPolicyAsync();
+            await home.VerifyAccessibilityAsync();
         }
     }
 }
