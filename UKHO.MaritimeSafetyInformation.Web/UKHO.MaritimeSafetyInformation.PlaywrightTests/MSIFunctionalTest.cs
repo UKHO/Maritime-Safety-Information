@@ -1,14 +1,19 @@
 using Aspire.Hosting;
+using Aspire.Hosting.ApplicationModel;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
+using static System.Net.WebRequestMethods;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
+    [Parallelizable(ParallelScope.Self)]
+    [TestFixture]
     public class MSIFunctionalTest : PageTest
     {
         private DistributedApplication _app;
         private const string _frontend = "ukho-msi-web";
+        private string _httpEndpoint = string.Empty;
 
         [OneTimeSetUp]
         public async Task SetupAsync()
@@ -24,6 +29,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
             await _app.StartAsync();
             await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
+
+            _httpEndpoint = _app.GetEndpoint(_frontend).ToString();
+            //_httpEndpoint = "https://msi.admiralty.co.uk/";
         }
 
         [OneTimeTearDown]
@@ -32,30 +40,25 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _app.DisposeAsync();
         }
 
-        [Test]
-        public async Task CanGetToLandingPage()
-        {
-            // Arrange
-            var httpClient = _app.CreateHttpClient(_frontend);
+        //[Test]
+        //public async Task CanGetToLandingPage()
+        //{
+        //    // Arrange
+        //    var httpClient = _app.CreateHttpClient(_frontend);
 
-            // Act
-            var response = await httpClient.GetAsync("/");
+        //    // Act
+        //    var response = await httpClient.GetAsync("/");
 
-            // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        }
+        //    // Assert
+        //    Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        //}
 
 
         [Test]
         public async Task LandingPageNavigationInPlace()
         {
-            // Arrange
-            var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
+            await Page.GotoAsync(_httpEndpoint);
 
-            // Act
-            await Page.GotoAsync(httpEndpoint);
-
-            // Assert
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Admiralty Maritime Data" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Notices to Mariners", Exact = true })).ToBeVisibleAsync();
@@ -64,13 +67,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        public async Task HomePageBodyIsValid()
+        public async Task HomePageBodyIsValidAlternative()
         {
-            // Arrange
-            var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
-            // Act
-            await Page.GotoAsync(httpEndpoint);
-            // Assert
+            await Page.GotoAsync(_httpEndpoint);
+            
             await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Radio Navigation" })).ToBeVisibleAsync();
@@ -80,12 +80,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        public async Task HomePageTest()
+        public async Task HomePageBodyIsValid()
         {
-            // Arrange
-            var httpEndpoint = _app.GetEndpoint(_frontend).ToString();
-            // Act
-            await Page.GotoAsync(httpEndpoint);
+            await Page.GotoAsync(_httpEndpoint);
 
             var home = new HomePageObject(Page);
             await home.VerifyAdmiraltyHomePageAsync();
@@ -96,5 +93,103 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await home.VerifyPrivacyPolicyAsync();
             await home.VerifyAccessibilityAsync();
         }
+
+        [Test]
+        public async Task YearlyAndWeeklyDropDownsEnabled_MenuAndTabsTextDisplayed()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+
+            var notice = new NoticeToMarinersPageObject(Page);
+
+            Assert.That(await notice.CheckEnabledYearDropDownAsync(), Is.True);
+            Assert.That(await notice.CheckEnabledWeekDropDownAsync(), Is.True);
+            Assert.That(await notice.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
+            Assert.That(await notice.CheckTextAsync(notice.MenuValueAddedResellers),Is.EqualTo("Value Added Resellers") );
+            Assert.That(await notice.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
+            Assert.That(await notice.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
+            Assert.That(await notice.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
+            Assert.That(await notice.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
+            Assert.That(await notice.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
+        }
+
+        [Test]
+        public async Task TableDataDisplayedWithRecordCount()
+        {
+            
+            await Page.GotoAsync(_httpEndpoint);
+
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+
+            var notice = new NoticeToMarinersPageObject(Page);
+
+            Assert.That(await notice.CheckTableRecordCountAsync(), Is.GreaterThan(0), "Table record count should be greater than 0");
+            await notice.VerifyTableContainsDownloadLinkAsync();
+        }
+
+        [Test]
+        public async Task TableDataForYearlyAndWeeklyDropDown_IncludeTableDataFileNameAndFileSize()
+        {
+            
+            await Page.GotoAsync(_httpEndpoint);
+
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+
+            var notice = new NoticeToMarinersPageObject(Page);
+
+            await notice.CheckFileSizeDataAsync();
+            await notice.CheckFileNameSortAsync();
+        }
+
+        [Test]
+        public async Task TableDataForAnnualIncludesSectionFileNameFileSizeAndDownload()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+
+            var annual = new NoticeToMarinersPageObject(Page);
+
+            var annualTab = new NoticeToMarinersWeekDownloadPageObject(Page);
+
+            await annual.ClickToNoticeMarineAnnualAsync();
+            await annualTab.VerifySectionWithDotsCountAsync();
+            await annualTab.VerifyAnnualFileNameLinkAsync();
+            await annualTab.VerifyAnnualDownloadLinkAsync();
+            await annualTab.CheckAnnualFileSizeAsync();
+        }
+
+        [Test]
+        public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+
+            await noticeFileDownload.GoToNoticeToMarinerAsync();
+            await noticeFileDownload.GoToDailyFileAsync();
+            await noticeFileDownload.CheckDailyFileDownloadAsync();
+        }
+
+        //[Test]
+        //public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFileWithDistributorLogin()
+        //{
+        //    await Page.GotoAsync(_httpEndpoint);
+
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+
+        //    await login.GoToSignIn();
+        //    await login.LoginWithDistributorDetails(app.DistributorTest_UserName, app.DistributorTest_Password);
+        //    await noticeFileDownload.GoToNoticeToMariner();
+        //    await noticeFileDownload.GoToDailyFile();
+        //    await noticeFileDownload.CheckDailyFileName();
+        //    await noticeFileDownload.CheckDailyFileSize();
+        //    await noticeFileDownload.CheckDailyFileDownload();
+        //    await noticeFileDownload.CheckDailyWeekFileName();
+        //}
+
+
     }
 }

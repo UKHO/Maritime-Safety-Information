@@ -102,6 +102,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await DropDownYearly.SelectOptionAsync(new SelectOptionValue { Index = 1 });
             var weekLength = (await _page.QuerySelectorAllAsync("#ddlWeeks option")).Count;
             await DropDownWeekly.SelectOptionAsync(new SelectOptionValue { Index = weekLength - 1 });
+
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle); //Rhz
+
             var result = await _page.EvalOnSelectorAllAsync<string[]>("td[id^=filename]", "els => els.map(e => e.textContent)");
             return result.Length;
         }
@@ -132,6 +135,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var weekLength = (await _page.QuerySelectorAllAsync("#ddlWeeks option")).Count;
             await DropDownWeekly.SelectOptionAsync(new SelectOptionValue { Index = weekLength - 1 });
 
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle); //Rhz
+
             var fileNameData = await _page.EvalOnSelectorAllAsync<string[]>("td[id^=filename]", "els => els.map(e => e.textContent)");
             var beforeSortFilename = fileNameData.ToArray();
             var afterSortFileName = fileNameData.OrderBy(x => x).ToArray();
@@ -152,6 +157,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                 for (var week = 1; week <= 1; week++)
                 {
                     await DropDownWeekly.SelectOptionAsync(new SelectOptionValue { Index = weekCount - 1 });
+
+                    await _page.WaitForLoadStateAsync(LoadState.NetworkIdle); //Rhz
+                    await _page.WaitForSelectorAsync("td[id^=filesize]"); //Rhz
+
                     var fileSizeData = await _page.EvalOnSelectorAllAsync<string[]>("td[id^=filesize]", "els => els.map(e => e.textContent)");
                     Assert.That(fileSizeData.Length, Is.GreaterThan(0));
                     Assert.That(await CheckFileNameTextAsync(), Is.EqualTo("File Name"));
@@ -166,8 +175,5 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                 }
             }
         }
-
-
-        //====
     }
 }
