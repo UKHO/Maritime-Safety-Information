@@ -7,7 +7,7 @@ using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
-    public class HomePageObject
+    internal class HomePageObject
     {
         private readonly IPage _page;
         public ILocator SiteTitle { get; }

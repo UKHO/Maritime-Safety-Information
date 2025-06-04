@@ -60,36 +60,36 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             return await DropDownWeekly.IsEnabledAsync();
         }
 
-        //public async Task CheckPageUrlAsync(string url, string title)
-        //{
-        //    var baseUrl = _appConfig["url"]?.ToString();
-        //    Assert.That(_page.Url, Is.EqualTo(baseUrl));
-        //    Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
-        //}
+        public async Task CheckPageUrlAsync(string url, string title)
+        {
+            var baseUrl = _appConfig["url"]?.ToString();
+            Assert.That(_page.Url, Is.EqualTo(baseUrl));
+            Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
+        }
 
-        //public async Task CheckUrlAsync(ILocator locator, string url, string title)
-        //{
-        //    var baseUrl = _appConfig["url"]?.ToString();
-        //    await locator.ClickAsync();
-        //    Assert.That(_page.Url, Is.EqualTo($"{baseUrl}/{url}"));
-        //    Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
-        //}
+        public async Task CheckUrlAsync(ILocator locator, string url, string title)
+        {
+            var baseUrl = _appConfig["url"]?.ToString();
+            await locator.ClickAsync();
+            Assert.That(_page.Url, Is.EqualTo($"{baseUrl}/{url}"));
+            Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
+        }
 
-        //public async Task CheckNavareaUrlAsync(ILocator locator, string url, string title)
-        //{
-        //    var baseUrl = _appConfig["url"]?.ToString();
-        //    await locator.ClickAsync();
-        //    Assert.That(_page.Url, Does.Contain($"{baseUrl}/{url}#navarea1"));
-        //    Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
-        //}
+        public async Task CheckNavareaUrlAsync(ILocator locator, string url, string title)
+        {
+            var baseUrl = _appConfig["url"]?.ToString();
+            await locator.ClickAsync();
+            Assert.That(_page.Url, Does.Contain($"{baseUrl}/{url}#navarea1"));
+            Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
+        }
 
-        //public async Task CheckUkCoastalUrlAsync(ILocator locator, string url, string title)
-        //{
-        //    var baseUrl = _appConfig["url"]?.ToString();
-        //    await locator.ClickAsync();
-        //    Assert.That(_page.Url, Does.Contain($"{baseUrl}/{url}#ukcoastal"));
-        //    Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
-        //}
+        public async Task CheckUkCoastalUrlAsync(ILocator locator, string url, string title)
+        {
+            var baseUrl = _appConfig["url"]?.ToString();
+            await locator.ClickAsync();
+            Assert.That(_page.Url, Does.Contain($"{baseUrl}/{url}#ukcoastal"));
+            Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
+        }
 
         public async Task<string> CheckTextAsync(ILocator locator)
         {

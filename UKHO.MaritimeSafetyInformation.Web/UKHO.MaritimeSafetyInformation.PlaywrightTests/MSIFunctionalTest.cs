@@ -1,5 +1,6 @@
 using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
+using Microsoft.Identity.Client;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
@@ -173,6 +174,43 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await noticeFileDownload.CheckDailyFileDownloadAsync();
         }
 
+        [Test]
+        public async Task DoesTheNoticesToMarinersCumulativePageIsDisplayed()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+
+            await noticeFileDownload.GoToNoticeToMarinerAsync();
+            await noticeFileDownload.GoToCumulativeAsync();
+            await noticeFileDownload.VerifyCumulativeFileNameAsync();
+            await noticeFileDownload.VerifyCumulativeFileNameDownloadAsync();
+        }
+
+        //[Test]
+        //public async Task DoesTheNoticesToMarinersPageUrlsAreDisplayedWithPageTitle()
+        //{
+        //    await Page.GotoAsync(_httpEndpoint);
+
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+
+        //    var notice = new NoticeToMarinersPageObject(Page);
+
+        //    await notice.CheckPageUrlAsync(_httpEndpoint, "Maritime Safety Information");
+        //    await notice.CheckUrlAsync(notice.NoticeMarine.Nth(0), "NoticesToMariners/Weekly", "Notices to Mariners - Weekly");
+        //    await notice.CheckUrlAsync(notice.TabDaily, "NoticesToMariners/Daily", "Notices to Mariners - Daily");
+        //    await notice.CheckUrlAsync(notice.TabCumulative, "NoticesToMariners/Cumulative", "Notices to Mariners - Cumulative");
+        //    await notice.CheckUrlAsync(notice.TabAnnual, "NoticesToMariners/Annual", "Notices to Mariners - Annual");
+        //    await notice.CheckUrlAsync(notice.MenuValueAddedResellers, "NoticesToMariners/Resellers", "Notices to Mariners - Value Added Resellers");
+        //    await notice.CheckUrlAsync(notice.MenuAbout, "NoticesToMariners/About", "About Notices to Mariners");
+        //    await notice.CheckUrlAsync(notice.RadioNavigationalWarnings, "RadioNavigationalWarnings", "Radio Navigation Warnings");
+        //    await notice.CheckNavareaUrlAsync(notice.NavareaTab, "RadioNavigationalWarnings", "Radio Navigation Warnings - NAVAREA I");
+        //    await notice.CheckUkCoastalUrlAsync(notice.UkCoastalTab, "RadioNavigationalWarnings", "Radio Navigation Warnings - UK Coastal");
+        //}
+
+
+
         //[Test]
         //public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFileWithDistributorLogin()
         //{
@@ -190,6 +228,19 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    await noticeFileDownload.CheckDailyWeekFileName();
         //}
 
+
+        //[Test]
+        //public async Task Login_WithValidDetails_ShouldSignInAndSignOut()
+        //{
+        //    await Page.GotoAsync(_httpEndpoint);
+        //    var loginPage = new LoginPage(Page);
+
+        //    await loginPage.GoToSignInAsync();
+
+        //   //await loginPage.LoginWithValidDetailsAsync((string)_appConfig.B2CAutoTest_User, (string)_appConfig.B2CAutoTest_Pass);
+        //    await loginPage.LoginWithValidDetailsAsync("Test_User", "Test_Pass");
+        //    await loginPage.SignOutAsync();
+        //}
 
     }
 }
