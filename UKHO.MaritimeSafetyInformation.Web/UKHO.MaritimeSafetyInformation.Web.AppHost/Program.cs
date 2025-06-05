@@ -66,7 +66,7 @@ var rnwDb = sql.AddDatabase(databaseName)
             .WithCreationScript(creationScript);
 
 
-builder.AddProject<UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
+var mvcApp = builder.AddProject<UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
     .WithReference(mockApi)
     .WaitFor(mockApi)
     .WithReference(rnwDb)
@@ -78,9 +78,9 @@ builder.AddProject<UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
         callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
         callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockApi.GetEndpoint("http").Url) { Path = "fssmsi/" }.Uri.ToString();
         callback.EnvironmentVariables["CacheConfiguration__LocalConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
-        callback.EnvironmentVariables["AzureAdB2C__Instance"] = "https://login.microsoftonline.com/";
-        callback.EnvironmentVariables["AzureAdB2C__ClientId"] = "ClientID";
-        callback.EnvironmentVariables["AzureAdB2C__Domain"] = "domain";
+        //callback.EnvironmentVariables["AzureAdB2C__Instance"] = "https://login.microsoftonline.com/";
+        //callback.EnvironmentVariables["AzureAdB2C__ClientId"] = "ClientID";
+        //callback.EnvironmentVariables["AzureAdB2C__RedirectBaseUrl"] = mvcApp.GetEndpoint("http").Url;
         callback.EnvironmentVariables["CacheConfiguration__FssWeeklyBatchSearchTableName"] = "FssWeeklyBatchSearchResponseCache";
         callback.EnvironmentVariables["CacheConfiguration__FssCacheResponseTableName"] = "FssCacheResponseTable";
         callback.EnvironmentVariables["CacheConfiguration__IsFssCacheEnabled"] = true;

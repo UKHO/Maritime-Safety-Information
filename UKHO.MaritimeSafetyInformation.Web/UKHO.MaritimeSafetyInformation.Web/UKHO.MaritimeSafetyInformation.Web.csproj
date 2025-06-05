@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>e39b0bf3-a7b1-47bf-8854-f4bb460f1f23</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Compile Remove="Configuration\**" />
     <Compile Remove="Logs\**" />
     <Content Remove="Configuration\**" />
@@ -14,7 +15,7 @@
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Configuration\**" />
     <None Remove="Logs\**" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />

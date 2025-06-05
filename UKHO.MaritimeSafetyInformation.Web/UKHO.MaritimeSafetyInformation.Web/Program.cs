@@ -1,14 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Security.Claims;
 using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
@@ -36,6 +32,16 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 builder.Configuration.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
             }
+
+            // Rhz : This gets urls that represent this application but are not the same as published in aspire dashboard
+            //var urls = builder.Configuration["ASPNETCORE_URLS"]?.Split(';') ?? Array.Empty<string>();
+
+            // Rhz : Get the port from configuration or use a default value
+            var port = builder.Configuration["ASPNETCORE_HTTPS_PORT"] ?? "5000"; // Default port if not specified
+            var adRedirectBaseUrl = builder.Configuration["AzureAd:RedirectBaseUrl"]; // Default base URL for local development
+            // Rhz : Try using AzureAd redirect for B2C authentication
+            builder.Configuration["AzureAdB2C:RedirectBaseUrl"] = adRedirectBaseUrl;
+
 
             //Enables Application Insights telemetry.
             builder.Services.AddApplicationInsightsTelemetry();
