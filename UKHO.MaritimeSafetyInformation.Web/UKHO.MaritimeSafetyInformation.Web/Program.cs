@@ -15,7 +15,7 @@ using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using UKHO.MaritimeSafetyInformation.Web.Validation;
-
+using UKHO.ADDS.Mocks.MSI.Extensions;
 namespace UKHO.MaritimeSafetyInformation.Web
 {
     [ExcludeFromCodeCoverage]
@@ -33,14 +33,24 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 builder.Configuration.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
             }
 
-            // Rhz : This gets urls that represent this application but are not the same as published in aspire dashboard
-            //var urls = builder.Configuration["ASPNETCORE_URLS"]?.Split(';') ?? Array.Empty<string>();
+            
+            if (builder.Environment.IsDevelopment())
+            {
+                // Rhz : Trying to get Sign in to work 
+                var port = builder.Configuration["ASPNETCORE_HTTPS_PORT"] ?? "5000"; // Default port if not specified
+                var adRedirectBaseUrl = builder.Configuration["AzureAd:RedirectBaseUrl"]; // Default base URL for local development
+                                                                                          // Rhz : Try using AzureAd redirect for B2C authentication
+                builder.Configuration["AzureAdB2C:RedirectBaseUrl"] = adRedirectBaseUrl;
+                // Rhz : Trying to get Sign in to work end.
 
-            // Rhz : Get the port from configuration or use a default value
-            var port = builder.Configuration["ASPNETCORE_HTTPS_PORT"] ?? "5000"; // Default port if not specified
-            var adRedirectBaseUrl = builder.Configuration["AzureAd:RedirectBaseUrl"]; // Default base URL for local development
-            // Rhz : Try using AzureAd redirect for B2C authentication
-            builder.Configuration["AzureAdB2C:RedirectBaseUrl"] = adRedirectBaseUrl;
+
+                // Rhz : configure aspire resources 
+                builder.AddMockClientConfig(resource: "mock-api", prefix: "fssmsi/", target: "FileShareService:BaseUrl");
+                builder.Configuration["CacheConfiguration:LocalConnectionString"] = builder.Configuration.GetConnectionString("local-table-connection");
+                builder.Configuration["RadioNavigationalWarningsContext:ConnectionString"] = builder.Configuration.GetConnectionString("MSI-RNWDB-1");
+                // Rhz : configure aspire resources end.
+            }
+
 
 
             //Enables Application Insights telemetry.
