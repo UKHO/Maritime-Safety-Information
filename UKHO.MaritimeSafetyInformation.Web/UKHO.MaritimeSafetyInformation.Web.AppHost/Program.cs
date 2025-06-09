@@ -72,22 +72,23 @@ var mvcApp = builder.AddProject<UKHO_MaritimeSafetyInformation_Web>("ukho-msi-we
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
-    .WaitFor(tableStorage);
-    //.WithEnvironment(callback =>
-    //{
+    .WaitFor(tableStorage)
+    .WithEnvironment(callback =>
+    {
     //    callback.EnvironmentVariables["RadioNavigationalWarningsContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
     //    callback.EnvironmentVariables["FileShareService__BaseUrl"] = new UriBuilder(mockApi.GetEndpoint("http").Url) { Path = "fssmsi/" }.Uri.ToString();
     //    callback.EnvironmentVariables["CacheConfiguration__LocalConnectionString"] = tableStorage.Resource.ConnectionStringExpression;
-    //    callback.EnvironmentVariables["AzureAdB2C__Instance"] = "https://login.microsoftonline.com/";
-    //    callback.EnvironmentVariables["AzureAdB2C__ClientId"] = "ClientID";
+    //    callback.EnvironmentVariables["AzureAdB2C__Instance"] = "https://mock-b2c-instance.com/";
+    //    callback.EnvironmentVariables["AzureAdB2C__TenantId"] = "mock-tenant";
+    //    callback.EnvironmentVariables["AzureAdB2C__ClientId"] = "mock-client-id";
     //    callback.EnvironmentVariables["AzureAdB2C__RedirectBaseUrl"] = mvcApp.GetEndpoint("http").Url;
     //    callback.EnvironmentVariables["CacheConfiguration__FssWeeklyBatchSearchTableName"] = "FssWeeklyBatchSearchResponseCache";
     //    callback.EnvironmentVariables["CacheConfiguration__FssCacheResponseTableName"] = "FssCacheResponseTable";
-    //    callback.EnvironmentVariables["CacheConfiguration__IsFssCacheEnabled"] = true;
+    //    callback.EnvironmentVariables["CacheConfiguration__IsFssCacheEnabled"] = false;
     //    callback.EnvironmentVariables["CacheConfiguration__CacheTimeOutInMins"] = 30;
     //    callback.EnvironmentVariables["BannerNotificationConfiguration__IsBannerNotificationEnabled"] = true;
     //    callback.EnvironmentVariables["BannerNotificationConfiguration__MsiBannerNotificationTableName"] = "MsiBannerNotificationTable";
-    //});
+    });
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
     .WithReference(rnwDb)

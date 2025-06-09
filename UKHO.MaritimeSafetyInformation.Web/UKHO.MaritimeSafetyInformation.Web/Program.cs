@@ -1,10 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using UKHO.ADDS.Mocks.MSI.Extensions;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Extensions;
@@ -15,7 +17,6 @@ using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using UKHO.MaritimeSafetyInformation.Web.Validation;
-using UKHO.ADDS.Mocks.MSI.Extensions;
 namespace UKHO.MaritimeSafetyInformation.Web
 {
     [ExcludeFromCodeCoverage]
@@ -45,7 +46,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
                 // Rhz : configure aspire resources 
-                builder.AddMockClientConfig(resource: "mock-api", prefix: "fssmsi/", target: "FileShareService:BaseUrl");
+                builder.AddMockClientConfig(resource: "mock-api", prefix: "fssmsi/");
+                builder.Configuration["FileShareService:BaseUrl"] = builder.Configuration.GetConnectionString("mock-api-https");
                 builder.Configuration["CacheConfiguration:LocalConnectionString"] = builder.Configuration.GetConnectionString("local-table-connection");
                 builder.Configuration["RadioNavigationalWarningsContext:ConnectionString"] = builder.Configuration.GetConnectionString("MSI-RNWDB-1");
                 // Rhz : configure aspire resources end.
@@ -105,30 +107,47 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);  //Rhz this is bad
             });
 
-            builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)  //Look at this, is it needed, is it correct. )
-                                                                                            //Is this an alternative: Add Microsoft Identity Web App authentication
-                                                                                            //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"))
-                                                                                            //.EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["AzureAdB2C:Scope"] })
-                                                                                            //.AddInMemoryTokenCaches(); 
-            .AddMicrosoftIdentityWebApp(options =>
+            // Rhz : Add Mock Authentication Handler for Development
+            if (builder.Environment.IsDevelopment())
             {
-                builder.Configuration.Bind("AzureAdB2C", options);
-                options.Events ??= new OpenIdConnectEvents();
-                options.SaveTokens = true; // this saves the token for the downstream api
-                options.Events.OnRedirectToIdentityProvider = async context =>
-                {
-                    context.ProtocolMessage.RedirectUri = builder.Configuration["AzureAdB2C:RedirectBaseUrl"] + builder.Configuration["AzureAdB2C:CallbackPath"];
-                    await Task.FromResult(0);
-                };
-                options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
-                {
-                    context.ProtocolMessage.PostLogoutRedirectUri = builder.Configuration["AzureAdB2C:RedirectBaseUrl"] + builder.Configuration["AzureAdB2C:SignedOutCallbackPath"];
-                    await Task.FromResult(0);
-                };
-            })
-            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["AzureAdB2C:Scope"] })
-            .AddInMemoryTokenCaches();
+                builder.Services.AddAuthentication("Mock")
+                        .AddScheme<AuthenticationSchemeOptions, MockAuthHandler>("Mock", options => { });
+                        
+                //create a mock token acquisition service
+                builder.Services.AddSingleton<ITokenAcquisition, MockTokenAcquisition>();
+                
 
+                //builder.Services.PostConfigure<AuthenticationOptions>(options =>
+                //{
+                //    options.RequireAuthenticatedSignIn = true;
+                //    options.DefaultAuthenticateScheme = "Mock";
+                //    options.DefaultChallengeScheme = "Mock";
+                //});
+            }
+            else
+            {
+
+                builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+                //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"))   //Alternative                                                                            
+                .AddMicrosoftIdentityWebApp(options =>
+                {
+                    builder.Configuration.Bind("AzureAdB2C", options);
+                    options.Events ??= new OpenIdConnectEvents();
+                    options.SaveTokens = true; // this saves the token for the downstream api
+                    options.Events.OnRedirectToIdentityProvider = async context =>
+                    {
+                        context.ProtocolMessage.RedirectUri = builder.Configuration["AzureAdB2C:RedirectBaseUrl"] + builder.Configuration["AzureAdB2C:CallbackPath"];
+                        await Task.FromResult(0);
+                    };
+                    options.Events.OnRedirectToIdentityProviderForSignOut = async context =>
+                    {
+                        context.ProtocolMessage.PostLogoutRedirectUri = builder.Configuration["AzureAdB2C:RedirectBaseUrl"] + builder.Configuration["AzureAdB2C:SignedOutCallbackPath"];
+                        await Task.FromResult(0);
+                    };
+                })
+                .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["AzureAdB2C:Scope"] })
+                .AddInMemoryTokenCaches();
+            }
             builder.Services.AddHttpClient();
             builder.Services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
+/// <summary>
+/// Rhz
+/// In Development, this extension is used to configure the mock client url to ADDS.Mock for the MSI service.
 namespace UKHO.ADDS.Mocks.MSI.Extensions
 {
     public static class AddsMockClientExtension
@@ -20,8 +23,8 @@ namespace UKHO.ADDS.Mocks.MSI.Extensions
 
             var configValues = new Dictionary<string, string>
             {
-                {"MockApiBaseUrl:https", httpsEndpoint! },
-                {"MockApiBaseUrl:http", httpEndpoint! },
+                {$"ConnectionStrings:{resource}-https", httpsEndpoint! },
+                {$"ConnectionStrings:{resource}-http", httpEndpoint! },
 
             };
             builder.Configuration.AddInMemoryCollection(configValues!);
