@@ -110,6 +110,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task AdUnathorisedDetailsAsync()
         {
+            await _page.ScreenshotAsync(new() { Path = "a_rhz_AdUnathorisedError.png" });
             var text = await AdUnathorisedError.InnerTextAsync();
             Assert.That(text.Contains("Sorry, you do not have access to this website."), Is.True, "Login was not successful, username not found on page.");
         }

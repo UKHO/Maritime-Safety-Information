@@ -1,19 +1,21 @@
 ﻿using Aspire.Hosting;
 using Microsoft.Playwright.NUnit;
+using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
+    [Parallelizable(ParallelScope.Self)]
+    [TestFixture]
     public class MSIAdminFunctionalTests : PageTest
     {
         private DistributedApplication _app;
         private const string _frontend = "ukho-msi-admin-web";
+        private string _httpEndpoint = string.Empty;
 
 
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
-            // This method is called once before any tests are run.
-            // You can use it to set up any shared resources or configurations needed for the tests.
             var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
             appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
             {
@@ -25,13 +27,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
             await _app.StartAsync();
             await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
+
+            _httpEndpoint = _app.GetEndpoint(_frontend).ToString();
         }
 
         [OneTimeTearDown]
         public async Task TearDownAsync()
         {
-            // This method is called once after all tests have run.
-            // You can use it to clean up any shared resources or configurations.
             await _app.DisposeAsync();
         }
 
@@ -47,5 +49,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
+
+        
     }
 }

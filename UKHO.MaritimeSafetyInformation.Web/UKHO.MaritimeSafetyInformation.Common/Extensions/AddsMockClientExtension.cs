@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 /// <summary>
 /// Rhz
 /// In Development, this extension is used to configure the mock client url to ADDS.Mock for the MSI service.
+/// This,seems
+/// </summary>  
 namespace UKHO.ADDS.Mocks.MSI.Extensions
 {
     public static class AddsMockClientExtension

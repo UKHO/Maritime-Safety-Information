@@ -27,7 +27,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             return Task.FromResult("mock-app-access-token");
         }
 
-        public Task<string> GetAccessTokenForUserAsync(IEnumerable<string> scopes, string authenticationScheme, string tenantId = null, string userFlow = null, ClaimsPrincipal user = null, TokenAcquisitionOptions tokenAcquisitionOptions = null) => throw new NotImplementedException();
+        public Task<string> GetAccessTokenForUserAsync(IEnumerable<string> scopes, string authenticationScheme, string tenantId = null, string userFlow = null, ClaimsPrincipal user = null, TokenAcquisitionOptions tokenAcquisitionOptions = null) => Task.FromResult("mock-user-access-token");
         public Task<AuthenticationResult> GetAuthenticationResultForUserAsync(IEnumerable<string> scopes, string authenticationScheme, string tenantId = null, string userFlow = null, ClaimsPrincipal user = null, TokenAcquisitionOptions tokenAcquisitionOptions = null) => throw new NotImplementedException();
         public Task<string> GetAccessTokenForAppAsync(string scope, string authenticationScheme, string tenant = null, TokenAcquisitionOptions tokenAcquisitionOptions = null) => throw new NotImplementedException();
         public Task<AuthenticationResult> GetAuthenticationResultForAppAsync(string scope, string authenticationScheme, string tenant = null, TokenAcquisitionOptions tokenAcquisitionOptions = null) => throw new NotImplementedException();

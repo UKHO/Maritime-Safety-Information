@@ -26,8 +26,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Rhz Start
-            // Do we actually need this here? (Rhz)  
             var kvServiceUri = builder.Configuration["KeyVaultSettings:ServiceUri"];
             if (!string.IsNullOrWhiteSpace(kvServiceUri))
             {
@@ -37,14 +35,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             
             if (builder.Environment.IsDevelopment())
             {
-                // Rhz : Trying to get Sign in to work 
-                var port = builder.Configuration["ASPNETCORE_HTTPS_PORT"] ?? "5000"; // Default port if not specified
-                var adRedirectBaseUrl = builder.Configuration["AzureAd:RedirectBaseUrl"]; // Default base URL for local development
-                                                                                          // Rhz : Try using AzureAd redirect for B2C authentication
-                builder.Configuration["AzureAdB2C:RedirectBaseUrl"] = adRedirectBaseUrl;
-                // Rhz : Trying to get Sign in to work end.
-
-
                 // Rhz : configure aspire resources 
                 builder.AddMockClientConfig(resource: "mock-api", prefix: "fssmsi/");
                 builder.Configuration["FileShareService:BaseUrl"] = builder.Configuration.GetConnectionString("mock-api-https");
@@ -53,13 +43,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 // Rhz : configure aspire resources end.
             }
 
-
-
-            //Enables Application Insights telemetry.
             builder.Services.AddApplicationInsightsTelemetry();
 
             builder.Logging.AddAzureWebAppDiagnostics();
-            // not yet builder.Logging.AddEventHub();
+            // Rhz : not yet builder.Logging.AddEventHub();
 
 
             builder.AddServiceDefaults();
@@ -79,7 +66,15 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             builder.Services.AddScoped<INMDataService, NMDataService>();
             builder.Services.AddScoped<IFileShareService, FileShareService>();
-            builder.Services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+            if (builder.Environment.IsDevelopment())
+            {
+                // Rhz : Add Mock Token Provider for Development
+                builder.Services.AddScoped<IAuthFssTokenProvider, MockAuthFssTokenProvider>();
+            }
+            else
+            {
+                builder.Services.AddScoped<IAuthFssTokenProvider, AuthFssTokenProvider>();
+            }
             builder.Services.AddScoped<IRNWService, RNWService>();
             builder.Services.AddScoped<IRNWRepository, RNWRepository>();
             builder.Services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
@@ -88,7 +83,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
             builder.Services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
             builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
-            builder.Services.AddScoped<IWebhookService, WebhookService>();  // Do we need this here? (Rhz)
+            builder.Services.AddScoped<IWebhookService, WebhookService>();  // What is this fore? (Rhz)
             builder.Services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             builder.Services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
 
@@ -112,23 +107,19 @@ namespace UKHO.MaritimeSafetyInformation.Web
             {
                 builder.Services.AddAuthentication("Mock")
                         .AddScheme<AuthenticationSchemeOptions, MockAuthHandler>("Mock", options => { });
-                        
+
                 //create a mock token acquisition service
                 builder.Services.AddSingleton<ITokenAcquisition, MockTokenAcquisition>();
-                
 
-                //builder.Services.PostConfigure<AuthenticationOptions>(options =>
-                //{
-                //    options.RequireAuthenticatedSignIn = true;
-                //    options.DefaultAuthenticateScheme = "Mock";
-                //    options.DefaultChallengeScheme = "Mock";
-                //});
+                builder.Services.PostConfigure<AuthenticationOptions>(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Mock";
+                    options.DefaultChallengeScheme = "Mock";
+                });
             }
             else
             {
-
                 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-                //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"))   //Alternative                                                                            
                 .AddMicrosoftIdentityWebApp(options =>
                 {
                     builder.Configuration.Bind("AzureAdB2C", options);
@@ -148,6 +139,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["AzureAdB2C:Scope"] })
                 .AddInMemoryTokenCaches();
             }
+
             builder.Services.AddHttpClient();
             builder.Services.AddHealthChecks()
                 .AddCheck<EventHubLoggingHealthCheck>("EventHubLoggingHealthCheck")
@@ -156,12 +148,12 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
             var app = builder.Build();
-            //app.AddCustomLogging(ILoggerFactory factory);
+            // Rhz : app.AddCustomLogging(ILoggerFactory factory);
 
             app.UseCorrelationIdMiddleware();
-            //  .UseErrorLogging(loggerFactory)
+            // Rhz : .UseErrorLogging(loggerFactory)
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline. This replaces ConfigureRequest extension.
             app.ConfigureRequestPipeline("Home","Index");
 
 
@@ -171,19 +163,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 SeedData(new SqlConnection(builder.Configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
             }
 
-
-            // Rhz End
-
             app.Run();
-            
         }
 
         
-
-           
-
-            
-       
 
         internal static async Task SeedData(SqlConnection connection)
         {
