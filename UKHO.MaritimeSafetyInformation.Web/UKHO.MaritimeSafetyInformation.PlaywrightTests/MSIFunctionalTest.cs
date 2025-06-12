@@ -28,14 +28,14 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             });
 
             _app = await appHost.BuildAsync();
-            
+
 
             var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
             await _app.StartAsync();
             await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
-            _httpEndpoint = _app.GetEndpoint(_frontend,"https").ToString(); //this does not return https.
-            
+            _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString();
+
             //_httpEndpoint = "https://msi-dev.admiralty.co.uk/";
         }
 
@@ -44,21 +44,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             await _app.DisposeAsync();
         }
-
-        //[Test]
-        //public async Task CanGetToLandingPage()
-        //{
-        //    // Arrange
-        //    var httpClient = _app.CreateHttpClient(_frontend);
-
-        //    // Act
-        //    var response = await httpClient.GetAsync("/");
-
-        //    // Assert
-        //    Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-
-        //    _httpEndpoint = response.RequestMessage.RequestUri.ToString();
-        //}
 
 
         [Test]
@@ -161,7 +146,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var annualTab = new NoticeToMarinersWeekDownloadPageObject(Page);
 
             await annual.ClickToNoticeMarineAnnualAsync();
-            //await annualTab.VerifySectionWithDotsCountAsync(); // this seems to be checking the existance of the section with "---", why test for data?
+            await annualTab.VerifySectionWithDotsCountAsync(); // this seems to be checking the existance of the section with "---", why test for data?
             await annualTab.VerifyAnnualFileNameLinkAsync();
             await annualTab.VerifyAnnualDownloadLinkAsync();
             await annualTab.CheckAnnualFileSizeAsync();
@@ -261,6 +246,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await Page.GotoAsync(_httpEndpoint);
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUser(Page);
 
+            await _rnwListEndUser.GoToRadioWarningAsync();
+
+
             Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
             Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
             Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
@@ -274,6 +262,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             await Page.GotoAsync(_httpEndpoint);
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUser(Page);
+
+            await _rnwListEndUser.GoToRadioWarningAsync();
 
             await _rnwListEndUser.VerifyTableHeaderAsync();
             await _rnwListEndUser.VerifyTableContainsViewDetailsLinkAsync();

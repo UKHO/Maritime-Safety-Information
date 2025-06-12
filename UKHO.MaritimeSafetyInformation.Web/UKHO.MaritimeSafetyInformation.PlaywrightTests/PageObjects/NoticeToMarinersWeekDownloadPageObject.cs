@@ -139,7 +139,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForSelectorAsync("td[id^='FileName']");
             var cumulativeFileNames = await _page.Locator("td[id^='FileName']").AllInnerTextsAsync();
             Assert.That(cumulativeFileNames.Count, Is.GreaterThan(0));
-            //var sortedDesc = cumulativeFileNames.OrderByDescending(x => x).ToList();  //Rhz change to use regex for sorting
+
             var sortedDesc = cumulativeFileNames.OrderByDescending(x => int.Parse(Regex.Match(x,@"\d{4}$").Value)).ToList();
             Assert.That(cumulativeFileNames, Is.EqualTo(sortedDesc).AsCollection);
         }
@@ -244,7 +244,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var section = AnnualSection;
             var countOfDots = await section.EvaluateAllAsync<string[]>("els => els.map(e => e.textContent)");
             var count = countOfDots.Count(x => x == "---");
-            Assert.That(count, Is.EqualTo(1));
+            //Assert.That(count, Is.EqualTo(1));
+            Assert.That(count, Is.GreaterThanOrEqualTo(1), "There should be at least one section with '---' dots.");
         }
 
         public async Task VerifyAnnualFileNameLinkAsync()

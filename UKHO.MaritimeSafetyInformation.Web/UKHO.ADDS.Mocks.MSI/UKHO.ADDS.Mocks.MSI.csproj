@@ -11,4 +11,8 @@
     <ProjectReference Include="..\UKHO.ADDS.Mocks\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Override\Files\fssmsi\" />
+  </ItemGroup>
+
 </Project>
