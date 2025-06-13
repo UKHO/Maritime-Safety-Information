@@ -37,6 +37,14 @@ steps:
     testRunTitle: $(Environment)-IntegrationTests
     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
 
+- task: DotNetCoreCLI@2
+  displayName: Run dotnet Playwright tests
+  inputs:
+    command: test
+    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
+    testRunTitle: $(Environment)-PlaywrightTests
+    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
 - task: NodeTool@0
   displayName: Install Node.js
   inputs:

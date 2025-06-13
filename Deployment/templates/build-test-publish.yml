@@ -175,7 +175,7 @@ jobs:
     workingDirectory: '$(Build.SourcesDirectory)'
 
   - task: DotNetCoreCLI@2
-    displayName: NuGet restore
+    displayName: NuGet restore integration test projects
     inputs:
       command: restore
       projects: |
@@ -199,4 +199,31 @@ jobs:
     displayName: Publish integration test artifact
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
-      ArtifactName: IntegrationTests  
+      ArtifactName: IntegrationTests
+
+  - task: DotNetCoreCLI@2
+    displayName: NuGet restore Playwright test projects
+    inputs:
+      command: restore
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj
+      feedsToUse: config
+      noCache: true
+      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish playwright tests
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.PlaywrightTests --no-restore'
+      zipAfterPublish: false
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish Playwright test artifact
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.PlaywrightTests'
+      ArtifactName: PlaywrightTests

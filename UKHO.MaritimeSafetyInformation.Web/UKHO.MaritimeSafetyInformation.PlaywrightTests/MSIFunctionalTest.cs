@@ -21,27 +21,37 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
-            var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
-            appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
+            if (IsRunningInPipeline())
             {
-                clientBuilder.AddStandardResilienceHandler();
-            });
+                _httpEndpoint = "https://msi-dev.admiralty.co.uk/";
+            }
+            else
+            {
+                var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
+                appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
+                {
+                    clientBuilder.AddStandardResilienceHandler();
+                });
 
-            _app = await appHost.BuildAsync();
+                _app = await appHost.BuildAsync();
 
 
-            var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
-            await _app.StartAsync();
-            await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
+                var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
+                await _app.StartAsync();
+                await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
-            _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString();
+                _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString();
 
-            //_httpEndpoint = "https://msi-dev.admiralty.co.uk/";
+            }
         }
 
         [OneTimeTearDown]
         public async Task TearDownAsync()
         {
+            if (IsRunningInPipeline())
+            {
+                return; // No need to dispose in pipeline, as it is managed by the CI/CD environment
+            }
             await _app.DisposeAsync();
         }
 
@@ -171,13 +181,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await Page.GotoAsync(_httpEndpoint);
 
 
-            await Page.ScreenshotAsync(new() { Path = "rhz_PageScreenshot1.png" });
-
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
 
             await noticeFileDownload.GoToNoticeToMarinerAsync();
-
-            await Page.ScreenshotAsync(new() { Path = "rhz_PageScreenshot2.png" });
 
             var names = await noticeFileDownload.CheckFileDownloadAsync();
             Assert.That(names.Count > 0,Is.True);
@@ -273,6 +279,19 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _rnwListEndUser.VerifySelectOptionTextAsync();
             await _rnwListEndUser.VerifySelectOptionCheckBoxAsync();
             //await _rnwListEndUser.VerifyPrint();
+        }
+        private static bool IsRunningInPipeline()
+        {
+            // Common environment variables for CI/CD pipelines
+            var ci = Environment.GetEnvironmentVariable("CI");
+            var tfBuild = Environment.GetEnvironmentVariable("TF_BUILD");
+            var githubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
+            var azurePipeline = Environment.GetEnvironmentVariable("AGENT_NAME");
+
+            return !string.IsNullOrEmpty(ci)
+                || !string.IsNullOrEmpty(tfBuild)
+                || !string.IsNullOrEmpty(githubActions)
+                || !string.IsNullOrEmpty(azurePipeline);
         }
 
         //[Test]

@@ -67,7 +67,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public async Task GoToRadioWarningAsync()
         {
             await RadioNavigationalWarnings.HighlightAsync();
-            await RadioNavigationalWarnings.ScreenshotAsync(new LocatorScreenshotOptions { Path = "rhz_RadioNavigationalWarnings.png" });
             await RadioNavigationalWarnings.ClickAsync();
         }
 
