@@ -41,6 +41,10 @@ steps:
     testRunTitle: $(Environment)-IntegrationTests
     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
 
+- pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
+  displayName: Install Playwright dependencies
+  workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
 - task: DotNetCoreCLI@2
   displayName: Run dotnet Playwright tests
   inputs:
