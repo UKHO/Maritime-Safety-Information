@@ -55,6 +55,23 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _app.DisposeAsync();
         }
 
+        [Test]
+        public async Task RunningAppropriateTestEnvironment()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            if (IsRunningInPipeline())
+            {
+                Assert.That(_httpEndpoint, Does.Contain("msi-dev.admiralty.co.uk"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
+            }
+            else
+            {
+                //var expectedUrl = Page.Url;
+                Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
+            }
+        }
+
+
+
 
         [Test]
         public async Task LandingPageNavigationInPlace()
