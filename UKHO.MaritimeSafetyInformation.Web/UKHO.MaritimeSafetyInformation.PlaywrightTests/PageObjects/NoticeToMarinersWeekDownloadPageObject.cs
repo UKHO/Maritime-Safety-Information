@@ -282,7 +282,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             {
                 var parts = size.Split(" ");
                 Assert.That(parts.Length, Is.GreaterThan(1));
-                Assert.That(regex.IsMatch($"{parts[0]} {parts[1]}"),Is.True);
+                Assert.That(regex.IsMatch($"{parts[0]} {parts[1]}"),Is.True,$"Error no match P0: {parts[0]} P1: {parts[1]}");
             }
         }
     }

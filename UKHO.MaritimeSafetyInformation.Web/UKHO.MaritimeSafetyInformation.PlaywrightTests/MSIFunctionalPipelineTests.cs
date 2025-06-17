@@ -56,10 +56,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await login.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
             await noticeFileDownload.GoToNoticeToMarinerAsync();
             await noticeFileDownload.GoToDailyFileAsync();
-            //await noticeFileDownload.CheckDailyFileNameAsync();
-            //await noticeFileDownload.CheckDailyFileSizeAsync();
-            //await noticeFileDownload.CheckDailyFileDownloadAsync();
-            //await noticeFileDownload.CheckDailyWeekFileNameAsync();
+            await noticeFileDownload.CheckForErrorPage();
+            await noticeFileDownload.CheckDailyFileNameAsync();
+            await noticeFileDownload.CheckDailyFileSizeAsync();
+            await noticeFileDownload.CheckDailyFileDownloadAsync();
+            await noticeFileDownload.CheckDailyWeekFileNameAsync();
         }
 
 
@@ -101,5 +102,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, "1111111");
             await loginPage.AdPasswordErrorCheckAsync();
         }
+
+       
     }
 }
