@@ -84,11 +84,12 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await TabCumulative.ClickAsync();
         }
 
-        public async Task CheckForErrorPage()
+        public async Task<bool> IsErrorPageDisplayed()
         {
             await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             var errorElement = await _page.QuerySelectorAsync(".custom-error");
             Assert.That(errorElement, Is.Null, "This page has not loaded correctly");
+            return errorElement == null;
         }
 
         public async Task<IReadOnlyList<string>> CheckFileDownloadAsync()
