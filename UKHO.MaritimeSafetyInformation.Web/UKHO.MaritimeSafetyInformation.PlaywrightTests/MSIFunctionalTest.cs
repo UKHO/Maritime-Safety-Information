@@ -189,6 +189,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             await noticeFileDownload.GoToNoticeToMarinerAsync();
             await noticeFileDownload.GoToDailyFileAsync();
+            await noticeFileDownload.CheckForErrorPage();
             await noticeFileDownload.CheckDailyFileDownloadAsync();
         }
 

@@ -82,7 +82,17 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
             var resultdate = (await _page.Locator("[id^=\"DateTimeGroupRnwFormat\"]").AllInnerTextsAsync())
                 .Select(x => x.Trim().Substring(6)).ToList();
-            var sortedDesc = resultdate.OrderByDescending(x => x).ToList();
+
+            //To do a date sort , we need to remove "UTC " and trim the string but also keep the original format for comparison
+            var sortedDesc = resultdate
+                .Select(x => x.Trim().Replace("UTC ", "")) // Remove "UTC " and trim
+                .Select(x => DateTime.TryParseExact(x, "MMM yy", null, DateTimeStyles.None, out var dt)
+                    ? new { Original = $" UTC {x}", Date = dt }
+                    : null)
+                .Where(x => x != null)
+                .OrderByDescending(x => x.Date)
+                .Select(x => x.Original)
+                .ToList();
             Assert.That(resultdate, Is.EqualTo(sortedDesc));
         }
 

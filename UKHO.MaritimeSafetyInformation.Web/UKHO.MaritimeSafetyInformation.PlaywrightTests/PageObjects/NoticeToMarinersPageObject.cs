@@ -137,6 +137,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await DropDownWeekly.SelectOptionAsync(new SelectOptionValue { Index = weekLength - 1 });
 
             await _page.WaitForLoadStateAsync(LoadState.NetworkIdle); //Rhz
+            await _page.WaitForSelectorAsync("td[id^=filename]");
 
             var fileNameData = await _page.EvalOnSelectorAllAsync<string[]>("td[id^=filename]", "els => els.map(e => e.textContent)");
             var beforeSortFilename = fileNameData.ToArray();

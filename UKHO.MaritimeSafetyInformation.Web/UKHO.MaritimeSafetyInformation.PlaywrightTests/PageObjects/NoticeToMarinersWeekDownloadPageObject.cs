@@ -84,6 +84,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await TabCumulative.ClickAsync();
         }
 
+        public async Task CheckForErrorPage()
+        {
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            var errorElement = await _page.QuerySelectorAsync(".custom-error");
+            Assert.That(errorElement, Is.Null, "This page has not loaded correctly");
+        }
+
         public async Task<IReadOnlyList<string>> CheckFileDownloadAsync()
         {
             await Year.SelectOptionAsync(new SelectOptionValue { Index = 1 });
