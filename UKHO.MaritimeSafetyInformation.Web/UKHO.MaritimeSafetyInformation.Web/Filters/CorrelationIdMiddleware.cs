@@ -1,27 +1,51 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Filters
 {
     [ExcludeFromCodeCoverage]
     public static class CorrelationIdMiddleware
     {
-        public const string XCorrelationIdHeaderKey = "X-Correlation-ID";
+        private const string XCorrelationIdHeaderKey = "X-Correlation-ID";
 
         public static IApplicationBuilder UseCorrelationIdMiddleware(this IApplicationBuilder builder)
         {
-            return builder.Use(async (context, func) =>
+            return builder.Use(async (context, next) =>
             {
-                var correlationId = context.Request.Headers[XCorrelationIdHeaderKey].FirstOrDefault();
-
-                if (string.IsNullOrEmpty(correlationId))
+                // Try to get the correlation ID header value directly for performance
+                string correlationId;
+                if (!context.Request.Headers.TryGetValue(XCorrelationIdHeaderKey, out var headerValues) ||
+                    string.IsNullOrEmpty(headerValues))
                 {
                     correlationId = Guid.NewGuid().ToString();
-                    context.Request.Headers.Append(XCorrelationIdHeaderKey, correlationId);
+                    context.Request.Headers[XCorrelationIdHeaderKey] = correlationId;
+                }
+                else
+                {
+                    correlationId = headerValues.ToString();
                 }
 
-                context.Response.Headers.Append(XCorrelationIdHeaderKey, correlationId);
+                //rhz : Create a new activity with the correlation ID
+                using (var activity = new Activity("Request"))
+                {
+                    activity.SetIdFormat(ActivityIdFormat.W3C);
+                    activity.SetParentId(correlationId);
+                    activity.Start();
+                    //activity.AddTag("correlationId", correlationId);
+                    //context.Features.Set(activity);
 
-                await func();
+                    context.Response.OnStarting(() =>
+                    {
+                        context.Response.Headers[XCorrelationIdHeaderKey] = correlationId;
+                        return Task.CompletedTask;
+                    });
+                    await next(context);
+                }
+                // rhz : End created activity
+
+                //context.Response.Headers[XCorrelationIdHeaderKey] = correlationId;
+
+                // await next();
             });
         }
     }
