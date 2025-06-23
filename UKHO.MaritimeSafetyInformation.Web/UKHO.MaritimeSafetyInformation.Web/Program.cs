@@ -100,10 +100,12 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddOptions();
             builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
 
-            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //(Rhz Look at implimentation, is it needed, is it correct. )
+            //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //(Rhz Look at implimentation, is it needed, is it correct. )
+            builder.Services.AddHttpContextAccessor(); //Rhz new
+
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);  //Rhz this is bad
+                options.Headers.Add(UkhoHeaderNames.XCorrelationId); 
             });
 
             // Rhz : Add Mock Authentication Handler for Development
@@ -152,7 +154,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
             var app = builder.Build();
-            // Rhz : app.AddCustomLogging(ILoggerFactory factory);
+            app.AddCustomLogging();  //Rhz new 
 
             app.UseCorrelationIdMiddleware();
             // Rhz : .UseErrorLogging(loggerFactory)
@@ -241,7 +243,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                         additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                         additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
                         additionalValues["_X-Correlation-ID"] =
-                            httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            httpContextAccessor.HttpContext.Request.Headers?[UkhoHeaderNames.XCorrelationId].FirstOrDefault() ?? string.Empty;
 
                         if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                         {

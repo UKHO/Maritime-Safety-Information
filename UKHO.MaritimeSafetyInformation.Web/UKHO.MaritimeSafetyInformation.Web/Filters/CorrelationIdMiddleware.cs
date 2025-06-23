@@ -1,24 +1,23 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 
 namespace UKHO.MaritimeSafetyInformation.Web.Filters
 {
     [ExcludeFromCodeCoverage]
     public static class CorrelationIdMiddleware
     {
-        private const string XCorrelationIdHeaderKey = "X-Correlation-ID";
-
         public static IApplicationBuilder UseCorrelationIdMiddleware(this IApplicationBuilder builder)
         {
             return builder.Use(async (context, next) =>
             {
                 // Try to get the correlation ID header value directly for performance
                 string correlationId;
-                if (!context.Request.Headers.TryGetValue(XCorrelationIdHeaderKey, out var headerValues) ||
+                if (!context.Request.Headers.TryGetValue(UkhoHeaderNames.XCorrelationId, out var headerValues) ||
                     string.IsNullOrEmpty(headerValues))
                 {
                     correlationId = Guid.NewGuid().ToString();
-                    context.Request.Headers[XCorrelationIdHeaderKey] = correlationId;
+                    context.Request.Headers[UkhoHeaderNames.XCorrelationId] = correlationId;
                 }
                 else
                 {
@@ -36,14 +35,14 @@ namespace UKHO.MaritimeSafetyInformation.Web.Filters
 
                     context.Response.OnStarting(() =>
                     {
-                        context.Response.Headers[XCorrelationIdHeaderKey] = correlationId;
+                        context.Response.Headers[UkhoHeaderNames.XCorrelationId] = correlationId;
                         return Task.CompletedTask;
                     });
                     await next(context);
                 }
                 // rhz : End created activity
 
-                //context.Response.Headers[XCorrelationIdHeaderKey] = correlationId;
+                //context.Response.Headers[UkhoHeaderNames.XCorrelationId] = correlationId;
 
                 // await next();
             });

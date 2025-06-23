@@ -60,7 +60,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey); //Rhz this is Bad
+                options.Headers.Add(UkhoHeaderNames.XCorrelationId); 
             });
             builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAd"));
             builder.Services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
