@@ -51,7 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             // Rhz : Trying to indicate that the page is not loading properly
             await Page.GotoAsync(_httpEndpoint);
 
-            var login = new LoginPage(Page);
+            var login = new LoginPageObject(Page);
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
             await login.GoToSignInAsync();
             await login.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
@@ -72,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task Login_WithValidDetails_ShouldSignInAndSignOut()
         {
             await Page.GotoAsync(_httpEndpoint);
-            var loginPage = new LoginPage(Page);
+            var loginPage = new LoginPageObject(Page);
 
             await loginPage.GoToSignInAsync();
 
@@ -84,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithValidDetails()
         {
             await Page.GotoAsync(_httpRnwEndpoint);
-            var loginPage = new LoginPage(Page);
+            var loginPage = new LoginPageObject(Page);
             await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
             await loginPage.AdSignOutAsync();
         }
@@ -93,7 +93,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithUnauthorisedDetails()
         {
             await Page.GotoAsync(_httpRnwEndpoint);
-            var loginPage = new LoginPage(Page);
+            var loginPage = new LoginPageObject(Page);
             await loginPage.AdLoginAsync(_rnwAdminAutoTestNoAccess_User, _rnwAdminAutoTestNoAccess_Pass);
             await loginPage.AdUnathorisedDetailsAsync();
         }
@@ -102,7 +102,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithInvalidDetails()
         {
             await Page.GotoAsync(_httpRnwEndpoint);
-            var loginPage = new LoginPage(Page);
+            var loginPage = new LoginPageObject(Page);
             await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, "1111111");
             await loginPage.AdPasswordErrorCheckAsync();
         }

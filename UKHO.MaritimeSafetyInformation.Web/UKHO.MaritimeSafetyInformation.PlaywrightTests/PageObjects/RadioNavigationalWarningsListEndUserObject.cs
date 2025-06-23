@@ -8,7 +8,7 @@ using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
-    internal class RadioNavigationalWarningsListEndUser
+    internal class RadioNavigationalWarningsListEndUserObject
     {
         private readonly IPage _page;
         public ILocator RadioNavigationalWarningsPage { get; }
@@ -37,7 +37,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public readonly string[] TableHeaderText = { "Reference", "Date Time Group", "Description", "Select all", "Select" };
 
-        public RadioNavigationalWarningsListEndUser(IPage page)
+        public RadioNavigationalWarningsListEndUserObject(IPage page)
         {
             _page = page;
             RadioNavigationalWarningsPage = _page.Locator("a:has-text(\"Radio Navigation Warnings\")");

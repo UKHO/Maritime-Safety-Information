@@ -7,7 +7,7 @@ using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
-    internal class LoginPage
+    internal class LoginPageObject
     {
         private readonly IPage _page;
         public ILocator SignIn { get; }
@@ -28,7 +28,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator AdPasswordError { get; }
         public ILocator AdUnathorisedError { get; }
 
-        public LoginPage(IPage page)
+        public LoginPageObject(IPage page)
         {
             _page = page;
             SignIn = _page.Locator("a:has-text(\"Sign in\")");

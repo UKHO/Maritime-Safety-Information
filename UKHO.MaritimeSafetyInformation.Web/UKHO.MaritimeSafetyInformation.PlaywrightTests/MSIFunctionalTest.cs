@@ -264,7 +264,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             await Page.GotoAsync(_httpEndpoint);
 
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUser(Page);
+            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
 
             await _rnwListEndUser.GoToRadioWarningAsync();
 
@@ -276,7 +276,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task MenuTabsAndPageTextIsDisplayed()
         {
             await Page.GotoAsync(_httpEndpoint);
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUser(Page);
+            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
 
             await _rnwListEndUser.GoToRadioWarningAsync();
 
@@ -293,7 +293,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task TableDataHeaderTextAndViewDetailsLinkWithDateSortingIsDisplayed()
         {
             await Page.GotoAsync(_httpEndpoint);
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUser(Page);
+            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
 
             await _rnwListEndUser.GoToRadioWarningAsync();
 
