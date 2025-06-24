@@ -64,6 +64,85 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
         }
 
+        [Test]
+        public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
+        {
+            
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2025");
+            await _rnwList.VerifyTableHeaderAsync();
+            await _rnwList.VerifyTableDateColumnDataAsync("2025");
+        }
+
+        [Test]
+        public async Task DoesTheTableDataIsDisplayedWithPagination()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2025");
+            await _rnwList.VerifyTableHeaderAsync();
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnFirst);
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnLast);
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnNext);
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnPrevious);
+        }
+
+        [Test]
+        public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            var warningTypeEnabled = await _rnwList.CheckEnabledWarningTypeDropDownAsync();
+            Assert.That(warningTypeEnabled, Is.True);
+
+            var yearEnabled = await _rnwList.CheckEnabledYearDropDownAsync();
+            Assert.That(yearEnabled, Is.True);
+
+            var createRecordList = await _rnwList.CheckCreateNewRecordTextAsync();
+            Assert.That(string.IsNullOrWhiteSpace(createRecordList), Is.False);
+
+            var pageHeader = await _rnwList.CheckPageHeaderTextAsync();
+            Assert.That(pageHeader,Is.EqualTo("Radio Navigational Warnings Admin List"));
+        }
+
+        [Test]
+        public async Task FilterDisplaysSearchResultsForWarningTypes()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            // search UK Coastal
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2025");
+            await _rnwList.VerifyTableHeaderAsync();
+            await _rnwList.VerifyTableColumnWarningTypeDataAsync("UK Coastal");
+            await _rnwList.VerifyTableContainsEditLinkAsync();
+
+            // search NAVAREA 1
+            await _rnwList.SearchWithFilterAsync("NAVAREA", "2025");
+            await _rnwList.VerifyTableHeaderAsync();
+            await _rnwList.VerifyTableColumnWarningTypeDataAsync("NAVAREA");
+            await _rnwList.VerifyTableContainsEditLinkAsync();
+        }
+
+
+        //[Test]
+        //public async Task WithValidInputCheckForDuplicateAndAccept()
+        //{
+        //    await Page.GotoAsync(_httpEndpoint);
+        //    var _rnwList = new RadioNavigationalWarningsObject(Page);
+
+        //    await radioNavigationalWarnings.PageLoad();
+        //    await radioNavigationalWarnings.FillFormWithValidDetails("1", "testdata");
+        //    await radioNavigationalWarnings.CreateRNW();
+        //    await radioNavigationalWarnings.ConfirmationBox(radioNavigationalWarnings.AlertMessage, radioNavigationalWarnings.Message, "yes");
+        //    await radioNavigationalWarnings.GetDialogText("Record created successfully!");
+        //}
+
+
 
         private static bool IsRunningInPipeline()
         {
