@@ -1,4 +1,5 @@
 ﻿using Aspire.Hosting;
+using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
 
@@ -129,20 +130,236 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
 
-        //[Test]
-        //public async Task WithValidInputCheckForDuplicateAndAccept()
-        //{
-        //    await Page.GotoAsync(_httpEndpoint);
-        //    var _rnwList = new RadioNavigationalWarningsObject(Page);
+        [Test]
+        public async Task WithValidInputCheckForDuplicateAndAccept()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
-        //    await radioNavigationalWarnings.PageLoad();
-        //    await radioNavigationalWarnings.FillFormWithValidDetails("1", "testdata");
-        //    await radioNavigationalWarnings.CreateRNW();
-        //    await radioNavigationalWarnings.ConfirmationBox(radioNavigationalWarnings.AlertMessage, radioNavigationalWarnings.Message, "yes");
-        //    await radioNavigationalWarnings.GetDialogText("Record created successfully!");
-        //}
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.ConfirmationBoxAsync(radioNavigationalWarnings.AlertMessage, radioNavigationalWarnings.Message, "yes");
+            await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
+        }
+
+        [Test]
+        public async Task WithValidInputCheckForDuplicateAndCancel()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.ConfirmationBoxAsync(
+                radioNavigationalWarnings.AlertMessage,
+                radioNavigationalWarnings.Message,
+                "cancel"
+            );
+            await radioNavigationalWarnings.CheckConfirmationBoxVisibleAsync(false);
+        }
+
+        [Test]
+        public async Task WithValidInputCheckForDuplicateAndReject()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.ConfirmationBoxAsync(
+                radioNavigationalWarnings.AlertMessage,
+                radioNavigationalWarnings.Message,
+                "no"
+            );
+            await radioNavigationalWarnings.CheckConfirmationBoxVisibleAsync(false);
+        }
+
+        [Test]
+        public async Task WithoutEnteredInputFields()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.WarningError, "The Warning Type field is required.");
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ReferenceError, "The Reference field is required.");
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ContentError, "The Text field is required.");
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.DatetimeError, "The Date Time Group field is required.");
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.SummaryError, "The Description field is required.");
+        }
+
+        [Test]
+        public async Task WithContentTextAsBlank()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "");
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ContentError, "The Text field is required.");
+        }
+
+        [Test]
+        public async Task WithValidInputDetailsWithNavarea()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
+        }
+
+        [Test]
+        public async Task WithValidInputDetailsWithUKCoastal()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.PageLoadAsync();
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("2", "testdata");
+            await radioNavigationalWarnings.CreateRNWAsync();
+            await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
+        }
+        
+        [Test]
+        public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsAreDisplayed()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            Assert.That(await _rnwList.CheckEnabledWarningTypeDropDownAsync());
+            Assert.That(await _rnwList.CheckEnabledYearDropDownAsync());
+            var createRecordText = await _rnwList.CheckCreateNewRecordTextAsync();
+            Assert.That(string.IsNullOrWhiteSpace(createRecordText), Is.False);
+            Assert.That(await _rnwList.CheckPageHeaderTextAsync(), Is.EqualTo("Radio Navigational Warnings Admin List") );
+        }
+
+        [Test]
+        public async Task FilterDisplaysSearchResultsSortedDescending()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
+            await _rnwList.VerifyTableHeaderAsync();
+            await _rnwList.VerifyTableDateColumnDataAsync("2022");
+        }
+
+        [Test]
+        public async Task TableDataIsDisplayedWithPagination()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
+            await _rnwList.VerifyTableHeaderAsync();
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnFirst);
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnLast);
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnNext);
+            await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnPrevious);
+        }
+        
+
+        [Test]
+        public async Task Update_WithSummaryReferenceAndContentTextAsBlank()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.GetEditUrlAsync();
+            await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Description);
+            await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Reference);
+            await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Content);
+            await radioNavigationalWarnings.EditRNWAsync();
+            //await _page.WaitForTimeoutAsync(5000);
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.SummaryError, "The Description field is required.");
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ReferenceError, "The Reference field is required.");
+            await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ContentError, "The Text field is required.");
+        }
+
+        [Test]
+        public async Task Update_WithValidInputDetailsWithUKCoastal()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.SearchListWithFilterAsync("UK Coastal");
+            await radioNavigationalWarnings.GetEditUrlAsync();
+            await radioNavigationalWarnings.IsDeleteAsync();
+            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("testdata");
+            await radioNavigationalWarnings.EditRNWAsync();
+            await radioNavigationalWarnings.GetDialogTextAsync("Record updated successfully!");
+        }
+
+        [Test]
+        public async Task Update_WithValidInputDetailsWithNAVAREA()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+            var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
+
+            await radioNavigationalWarnings.SearchListWithFilterAsync("NAVAREA");
+            await radioNavigationalWarnings.GetEditUrlAsync();
+            await radioNavigationalWarnings.IsDeleteAsync();
+            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("testdata");
+            await radioNavigationalWarnings.EditRNWAsync();
+            await radioNavigationalWarnings.GetDialogTextAsync("Record updated successfully!");
+        }
+
+        //===
+
+        [Test]
+        [Ignore("Not working yet")]
+        public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownloadWithDistributorRole()
+        {
+
+            await Page.GotoAsync(_httpEndpoint);
 
 
+            var notice = new NoticeToMarinersPageObject(Page);
+
+            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+
+            
+
+
+            //await _login.GoToSignIn();
+            //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
+            await noticeFileDownload.GoToNoticeToMarinerAsync();
+            await noticeFileDownload.CheckWeeklyFileSectionNameAsync();
+            await noticeFileDownload.CheckWeeklyFileSortingWithDistributorRoleAsync();
+            var names = await noticeFileDownload.CheckFileDownloadAsync();
+            Assert.That(names.Count > 0);
+            var fileName = names[0];
+            //var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownloadSelector);
+            //var newPageUrl = await element.GetAttributeAsync("href");
+            //Assert.That(newPageUrl.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
+        }
+
+        [Test]
+        [Ignore("Not working yet")]
+        public async Task ShouldGotoNoticesToMarinerPageForWeeklyNMFilesWithDistributorRole()
+        {
+            await Page.GotoAsync(_httpEndpoint);
+
+            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+
+            //await _login.GoToSignIn();
+            //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
+            await noticeFileDownload.GoToNoticeToMarinerAsync();
+            await noticeFileDownload.VerifyDistributorFileCountAsync();
+            await noticeFileDownload.VerifyIntegrationTestValueForDistributorAsync();
+            await noticeFileDownload.VerifyIntegrationDownloadAllAsync();
+            await noticeFileDownload.VerifyIntegrationDownloadPartnerAllAsync();
+        }
+
+        //===
 
         private static bool IsRunningInPipeline()
         {

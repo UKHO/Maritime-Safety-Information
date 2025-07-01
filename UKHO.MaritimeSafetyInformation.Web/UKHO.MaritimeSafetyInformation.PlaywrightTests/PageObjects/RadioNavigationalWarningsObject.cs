@@ -107,12 +107,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             await Warning.SelectOptionAsync(new SelectOptionValue { Value = warningType });
             await Reference.FillAsync("reference");
-            await _page.WaitForTimeoutAsync(3000);
-            await Datetime.FillAsync("05072022 05533");
+            await Datetime.FillAsync("2022-07-05T05:53");
             await _page.Keyboard.PressAsync("ArrowDown");
             await Description.FillAsync("testdata");
             await Content.FillAsync(content);
-            await ExpiryDate.FillAsync("05072022 06000");
+            await ExpiryDate.FillAsync("2022-07-05T06:00");
         }
 
         public async Task ClearInputAsync(ILocator locator)
@@ -151,7 +150,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             await Reference.FillAsync("reference");
             await _page.WaitForTimeoutAsync(3000);
-            await Datetime.FillAsync("05072022 05533");
+            await Datetime.FillAsync("2022-07-05T05:53");
             await _page.Keyboard.PressAsync("ArrowDown");
             await Description.FillAsync("testdata");
             await Content.FillAsync(content);
