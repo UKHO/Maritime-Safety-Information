@@ -12,14 +12,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private DistributedApplication _app;
         private const string _frontend = "ukho-msi-admin-web";
         private string _httpEndpoint = string.Empty;
+        private bool _isRunningInPipeline = IsRunningInPipeline();
 
 
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
-            if (IsRunningInPipeline())
+            if (_isRunningInPipeline)
             {
-                _httpEndpoint = "https://rnwadmin.ukho.gov.uk/";
+                _httpEndpoint = "https://rnwadmin-dev.ukho.gov.uk/";
             }
             else
             {
@@ -43,47 +44,56 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [OneTimeTearDown]
         public async Task TearDownAsync()
         {
-            if (IsRunningInPipeline())
+            if (_isRunningInPipeline)
             {
                 return; // No need to dispose in pipeline, as it is managed by the CI/CD environment
             }
             await _app.DisposeAsync();
         }
 
-        [Test]
-        public async Task RunningAppropriateTestEnvironment()
+        [SetUp]
+        public async Task SetUpAsync()
         {
+            // Navigate to the MSI Admin page before each test
+            if (_isRunningInPipeline)
+            {
+                //await _login.GoToSignIn();
+                //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
+            }
             await Page.GotoAsync(_httpEndpoint);
+        }
+
+        [Test]
+        public async Task AppropriateEnvironmentTest()
+        {
             if (IsRunningInPipeline())
             {
-                Assert.That(_httpEndpoint, Does.Contain("https://rnwadmin.ukho.gov.uk/"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
+                Assert.That(_httpEndpoint, Does.Contain("https://rnwadmin-dev.ukho.gov.uk/"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
             }
             else
             {
                 //var expectedUrl = Page.Url;
                 Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
             }
+            await Task.CompletedTask;
         }
 
         [Test]
         public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
         {
-            
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
-            await _rnwList.SearchWithFilterAsync("UK Coastal", "2025");
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
-            await _rnwList.VerifyTableDateColumnDataAsync("2025");
+            await _rnwList.VerifyTableDateColumnDataAsync("2022");
         }
 
         [Test]
         public async Task DoesTheTableDataIsDisplayedWithPagination()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
-            await _rnwList.SearchWithFilterAsync("UK Coastal", "2025");
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnFirst);
             await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnLast);
@@ -94,7 +104,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             var warningTypeEnabled = await _rnwList.CheckEnabledWarningTypeDropDownAsync();
@@ -113,17 +122,16 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task FilterDisplaysSearchResultsForWarningTypes()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             // search UK Coastal
-            await _rnwList.SearchWithFilterAsync("UK Coastal", "2025");
+            await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.VerifyTableColumnWarningTypeDataAsync("UK Coastal");
             await _rnwList.VerifyTableContainsEditLinkAsync();
 
             // search NAVAREA 1
-            await _rnwList.SearchWithFilterAsync("NAVAREA", "2025");
+            await _rnwList.SearchWithFilterAsync("NAVAREA", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.VerifyTableColumnWarningTypeDataAsync("NAVAREA");
             await _rnwList.VerifyTableContainsEditLinkAsync();
@@ -133,7 +141,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithValidInputCheckForDuplicateAndAccept()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -146,7 +153,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithValidInputCheckForDuplicateAndCancel()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -163,7 +169,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithValidInputCheckForDuplicateAndReject()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -180,7 +185,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithoutEnteredInputFields()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -195,7 +199,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithContentTextAsBlank()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -207,7 +210,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithValidInputDetailsWithNavarea()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -219,7 +221,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithValidInputDetailsWithUKCoastal()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
@@ -231,7 +232,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsAreDisplayed()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             Assert.That(await _rnwList.CheckEnabledWarningTypeDropDownAsync());
@@ -244,7 +244,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task FilterDisplaysSearchResultsSortedDescending()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
@@ -255,7 +254,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task TableDataIsDisplayedWithPagination()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
@@ -270,7 +268,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task Update_WithSummaryReferenceAndContentTextAsBlank()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.GetEditUrlAsync();
@@ -278,7 +275,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Reference);
             await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Content);
             await radioNavigationalWarnings.EditRNWAsync();
-            //await _page.WaitForTimeoutAsync(5000);
             await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.SummaryError, "The Description field is required.");
             await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ReferenceError, "The Reference field is required.");
             await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.ContentError, "The Text field is required.");
@@ -287,7 +283,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task Update_WithValidInputDetailsWithUKCoastal()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.SearchListWithFilterAsync("UK Coastal");
@@ -301,7 +296,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task Update_WithValidInputDetailsWithNAVAREA()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.SearchListWithFilterAsync("NAVAREA");
@@ -319,7 +313,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownloadWithDistributorRole()
         {
 
-            await Page.GotoAsync(_httpEndpoint);
 
 
             var notice = new NoticeToMarinersPageObject(Page);
@@ -346,7 +339,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Ignore("Not working yet")]
         public async Task ShouldGotoNoticesToMarinerPageForWeeklyNMFilesWithDistributorRole()
         {
-            await Page.GotoAsync(_httpEndpoint);
 
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
 
