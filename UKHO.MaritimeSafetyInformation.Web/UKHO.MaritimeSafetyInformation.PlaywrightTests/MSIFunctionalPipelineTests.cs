@@ -40,7 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             _rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
             _rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
 
-
+            Console.WriteLine($"Login Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
         }
 
         [Test]

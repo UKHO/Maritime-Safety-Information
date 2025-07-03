@@ -41,17 +41,19 @@ steps:
     testRunTitle: $(Environment)-IntegrationTests
     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
 
-- pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
-  displayName: Install Playwright dependencies
-  workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+- pwsh:  'ls env:'
 
-- task: DotNetCoreCLI@2
-  displayName: Run dotnet Playwright tests
-  inputs:
-    command: test
-    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
-    testRunTitle: $(Environment)-PlaywrightTests
-    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+# - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
+#   displayName: Install Playwright dependencies
+#   workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
+# - task: DotNetCoreCLI@2
+#   displayName: Run dotnet Playwright tests
+#   inputs:
+#     command: test
+#     projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
+#     testRunTitle: $(Environment)-PlaywrightTests
+#     workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
 
 - task: NodeTool@0
   displayName: Install Node.js
@@ -74,6 +76,20 @@ steps:
     folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
     xmlTransformationRules: ''
     jsonTargetFiles: 'appConfig.json'
+
+- pwsh:  'ls env:'
+
+- pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
+  displayName: Install Playwright dependencies
+  workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
+- task: DotNetCoreCLI@2
+  displayName: Run dotnet Playwright tests
+  inputs:
+    command: test
+    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
+    testRunTitle: $(Environment)-PlaywrightTests
+    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
 
 - script: |
     npm run test:auto

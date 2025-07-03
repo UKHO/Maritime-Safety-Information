@@ -1,6 +1,7 @@
 using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 using Json.More;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
@@ -19,12 +20,23 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _httpEndpoint = string.Empty;
         private bool _isRunningInPipeline = IsRunningInPipeline();
 
+
+        // Configuration settings for pipeline running
+        private IConfiguration _configuration;
+
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
             if (_isRunningInPipeline)
             {
-                _httpEndpoint = "https://msi-dev.admiralty.co.uk/";
+
+                var builder = new ConfigurationBuilder()
+                        .AddUserSecrets<MSIFunctionalPipelineTests>()
+                        .AddEnvironmentVariables();
+                _configuration = builder.Build();
+
+
+                _httpEndpoint = _configuration["url"] ?? "Not Found";
             }
             else
             {
@@ -73,10 +85,12 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             if (IsRunningInPipeline())
             {
+                Console.WriteLine($"Regular Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
                 Assert.That(_httpEndpoint, Does.Contain("msi-dev.admiralty.co.uk"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
             }
             else
             {
+                Console.WriteLine($"Regular Tests Running Distributed App. {_httpEndpoint}  ");
                 //var expectedUrl = Page.Url;
                 Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
             }
@@ -239,7 +253,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This fails sometimes!!")]
+        //[Ignore("This fails sometimes!!")]
         public async Task DoesTheNoticesToMarinersPageUrlsAreDisplayedWithPageTitle()
         {
 
