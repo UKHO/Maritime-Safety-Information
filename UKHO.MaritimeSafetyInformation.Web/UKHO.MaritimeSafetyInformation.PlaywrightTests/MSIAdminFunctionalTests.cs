@@ -109,7 +109,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             if (_isRunningInPipeline)
             {
                 var _login = new LoginPageObject(Page);
-                await _login.GoToSignInAsync();
                 await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass); 
             }
 
@@ -126,7 +125,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             if (_isRunningInPipeline)
             {
                 var _login = new LoginPageObject(Page);
-                await _login.GoToSignInAsync();
                 await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass); 
             }
 
