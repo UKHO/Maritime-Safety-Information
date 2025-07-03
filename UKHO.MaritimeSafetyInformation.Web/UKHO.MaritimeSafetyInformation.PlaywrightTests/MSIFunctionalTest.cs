@@ -37,9 +37,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
                 _httpEndpoint = _configuration["url"] ?? "Not Found";
+                _httpEndpoint = new Uri(_httpEndpoint).ToString();
             }
             else
             {
+
                 var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
                 appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
                 {
@@ -54,6 +56,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
                 _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString();
+                
 
             }
         }
@@ -72,11 +75,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task SetUpAsync()
         {
             // Navigate to the MSI Admin page before each test
-            if (_isRunningInPipeline)
-            {
-                //await _login.GoToSignIn();
-                //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
-            }
+            
             await Page.GotoAsync(_httpEndpoint);
         }
 

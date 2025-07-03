@@ -40,6 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
                 
                 _httpEndpoint = _configuration["rnwAdminUrl"] ?? "Not Found";
+                _httpEndpoint = new Uri(_httpEndpoint).ToString();   // to be improved
                 _b2cAutoTest_UserName = _configuration["B2CAutoTest_User"] ?? "";
                 _b2cAutoTest_Password = _configuration["B2CAutoTest_Pass"] ?? "";
                 _distributorTest_UserName = _configuration["DistributorTest_UserName"] ?? "";
@@ -83,13 +84,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             // Navigate to the MSI Admin page before each test
             await Page.GotoAsync(_httpEndpoint);
-
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.GoToSignInAsync();
-                await _login.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
-            }
         }
 
         [Test]  //Probably don't need this test, but keeping it for now
@@ -112,6 +106,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
         {
+            if (_isRunningInPipeline)
+            {
+                var _login = new LoginPageObject(Page);
+                await _login.GoToSignInAsync();
+                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass); 
+            }
+
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
@@ -122,6 +123,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task DoesTheTableDataIsDisplayedWithPagination()
         {
+            if (_isRunningInPipeline)
+            {
+                var _login = new LoginPageObject(Page);
+                await _login.GoToSignInAsync();
+                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass); 
+            }
+
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
