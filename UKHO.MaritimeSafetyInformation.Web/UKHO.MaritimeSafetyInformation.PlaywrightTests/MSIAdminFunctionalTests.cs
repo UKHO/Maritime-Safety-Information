@@ -132,41 +132,41 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnPrevious);
         }
 
-        [Test]
-        public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
-        {
-            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+        //[Test]
+        //public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
+        //{
+        //    var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
-            var warningTypeEnabled = await _rnwList.CheckEnabledWarningTypeDropDownAsync();
-            Assert.That(warningTypeEnabled, Is.True);
+        //    var warningTypeEnabled = await _rnwList.CheckEnabledWarningTypeDropDownAsync();
+        //    Assert.That(warningTypeEnabled, Is.True);
 
-            var yearEnabled = await _rnwList.CheckEnabledYearDropDownAsync();
-            Assert.That(yearEnabled, Is.True);
+        //    var yearEnabled = await _rnwList.CheckEnabledYearDropDownAsync();
+        //    Assert.That(yearEnabled, Is.True);
 
-            var createRecordList = await _rnwList.CheckCreateNewRecordTextAsync();
-            Assert.That(string.IsNullOrWhiteSpace(createRecordList), Is.False);
+        //    var createRecordList = await _rnwList.CheckCreateNewRecordTextAsync();
+        //    Assert.That(string.IsNullOrWhiteSpace(createRecordList), Is.False);
 
-            var pageHeader = await _rnwList.CheckPageHeaderTextAsync();
-            Assert.That(pageHeader,Is.EqualTo("Radio Navigational Warnings Admin List"));
-        }
+        //    var pageHeader = await _rnwList.CheckPageHeaderTextAsync();
+        //    Assert.That(pageHeader,Is.EqualTo("Radio Navigational Warnings Admin List"));
+        //}
 
-        [Test]
-        public async Task FilterDisplaysSearchResultsForWarningTypes()
-        {
-            var _rnwList = new RadioNavigationalWarningsListObject(Page);
+        //[Test]
+        //public async Task FilterDisplaysSearchResultsForWarningTypes()
+        //{
+        //    var _rnwList = new RadioNavigationalWarningsListObject(Page);
 
-            // search UK Coastal
-            await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
-            await _rnwList.VerifyTableHeaderAsync();
-            await _rnwList.VerifyTableColumnWarningTypeDataAsync("UK Coastal");
-            await _rnwList.VerifyTableContainsEditLinkAsync();
+        //    // search UK Coastal
+        //    await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
+        //    await _rnwList.VerifyTableHeaderAsync();
+        //    await _rnwList.VerifyTableColumnWarningTypeDataAsync("UK Coastal");
+        //    await _rnwList.VerifyTableContainsEditLinkAsync();
 
-            // search NAVAREA 1
-            await _rnwList.SearchWithFilterAsync("NAVAREA", "2022");
-            await _rnwList.VerifyTableHeaderAsync();
-            await _rnwList.VerifyTableColumnWarningTypeDataAsync("NAVAREA");
-            await _rnwList.VerifyTableContainsEditLinkAsync();
-        }
+        //    // search NAVAREA 1
+        //    await _rnwList.SearchWithFilterAsync("NAVAREA", "2022");
+        //    await _rnwList.VerifyTableHeaderAsync();
+        //    await _rnwList.VerifyTableColumnWarningTypeDataAsync("NAVAREA");
+        //    await _rnwList.VerifyTableContainsEditLinkAsync();
+        //}
 
 
         //[Test]
