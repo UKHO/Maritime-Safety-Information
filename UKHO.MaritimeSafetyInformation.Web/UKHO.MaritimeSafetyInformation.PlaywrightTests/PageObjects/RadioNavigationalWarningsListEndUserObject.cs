@@ -217,13 +217,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                 .Select(x => x.Trim().Substring(6)).ToList();
             var sortedDesc = resultdate.OrderByDescending(x => x).ToList();
             Assert.That(resultdate, Is.EqualTo(sortedDesc));
-            await _page.WaitForTimeoutAsync(5000);
             var anchor = await locator.GetAttributeAsync("href");
-            await _page.WaitForTimeoutAsync(5000);
-            var urlName = $"{appUrl}/RadioNavigationalWarnings{anchor}";
-            await _page.WaitForTimeoutAsync(5000);
+            var urlName = new UriBuilder(appUrl) { Path = $"/RadioNavigationalWarnings"}.Uri.ToString();
+            urlName += anchor;
             Assert.That(_page.Url, Is.EqualTo(urlName));
-            await _page.WaitForTimeoutAsync(5000);
+            //await _page.WaitForTimeoutAsync(5000);
         }
 
         public async Task VerifyAboutRnwAsync()

@@ -22,7 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         // Configuration settings for pipeline running
-        private IConfiguration _configuration;
+        private IConfiguration? _configuration;
 
         [OneTimeSetUp]
         public async Task SetupAsync()
@@ -82,7 +82,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task AppropriateEnvironmentTest()
         {
-            if (IsRunningInPipeline())
+            if (_isRunningInPipeline)
             {
                 Console.WriteLine($"Regular Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
                 Assert.That(_httpEndpoint, Does.Contain("msi-dev.admiralty.co.uk"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
@@ -93,6 +93,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 //var expectedUrl = Page.Url;
                 Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
             }
+            await Task.CompletedTask;
         }
 
 
@@ -106,13 +107,16 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Notices to Mariners", Exact = true })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Radio Navigation Warnings", Exact = true })).ToBeVisibleAsync();
-            //await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Sign in" })).ToBeVisibleAsync();
+
+            if (_isRunningInPipeline)
+            {
+                await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Sign in" })).ToBeVisibleAsync(); 
+            }
         }
 
         [Test]
         public async Task HomePageBodyIsValidAlternative()
         {
-            
             await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Radio Navigation" })).ToBeVisibleAsync();
@@ -124,7 +128,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task HomePageBodyIsValid()
         {
-
             var home = new HomePageObject(Page);
             await home.VerifyAdmiraltyHomePageAsync();
             await home.VerifyAdmiraltyAsync();
@@ -138,7 +141,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task YearlyAndWeeklyDropDownsEnabled_MenuAndTabsTextDisplayed()
         {
-
             await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
             var notice = new NoticeToMarinersPageObject(Page);
@@ -157,7 +159,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task TableDataDisplayedWithRecordCount()
         {
-            
 
             await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
@@ -171,7 +172,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task TableDataForYearlyAndWeeklyDropDown_IncludeTableDataFileNameAndFileSize()
         {
             
-
             await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
             var notice = new NoticeToMarinersPageObject(Page);
@@ -181,7 +181,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Works locally even when pointing to deployed app!")]
+        //[Ignore("Works locally even when pointing to deployed app!")]
         public async Task TableDataForAnnualIncludesSectionFileNameFileSizeAndDownload()
         {
 
@@ -230,7 +230,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var fileName = names[0];
 
             var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownload);
-            var newPageUrl = await element.GetAttributeAsync("href");
+            var newPageUrl = await element!.GetAttributeAsync("href");
             var decodedUrl = WebUtility.UrlDecode(newPageUrl);
             Assert.That(decodedUrl, Does.Contain($"NoticesToMariners/DownloadFile?fileName={fileName}"));
         }
@@ -239,8 +239,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task DoesTheNoticesToMarinersCumulativePageIsDisplayed()
         {
-
-            //await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
             // Rhz need to change data for this to work. Filenames should be  NP234(A) 2024 or similar.
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
 
@@ -271,7 +269,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
 
-        //Rnw
         [Test]
         public async Task TableDataForRadioNavigationalWarningsAboutPageIsDisplayed()
         {
@@ -314,7 +311,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _rnwListEndUser.VerifyImportantBlockAsync();
             await _rnwListEndUser.VerifySelectOptionTextAsync();
             await _rnwListEndUser.VerifySelectOptionCheckBoxAsync();
-            //await _rnwListEndUser.VerifyPrint();
+            // Rhz: await _rnwListEndUser.VerifyPrint();
         }
 
 
@@ -333,23 +330,22 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Not working yet")]
+        //[Ignore("Not working yet")]
         public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
         {
-            await Page.GotoAsync(_httpEndpoint);
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA 1", Page.Url);
+            await _rnwListEndUser.GoToRadioWarningAsync();
+            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA", _httpEndpoint);
         }
 
         [Test]
-        [Ignore("Not working yet")]
+        //[Ignore("Not working yet")]
         public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
         {
-            await Page.GotoAsync(_httpEndpoint);
+           
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", Page.Url);
+            await _rnwListEndUser.GoToRadioWarningAsync();
+            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
         }
 
 
