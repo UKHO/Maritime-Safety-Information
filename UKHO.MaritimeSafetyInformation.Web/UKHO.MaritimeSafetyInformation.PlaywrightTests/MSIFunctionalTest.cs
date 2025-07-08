@@ -199,7 +199,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Possible data problem")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
         {
             // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
