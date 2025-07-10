@@ -19,7 +19,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _rnwAdminAutoTest_Pass = string.Empty;
         private string _rnwAdminAutoTestNoAccess_User = string.Empty;
         private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
-
+        private bool _isRunningInPipeline = IsRunningInPipeline();
 
         [OneTimeSetUp]
         public async Task SetupAsync()
@@ -44,11 +44,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Possible data problem") ]
+        //[Ignore("Possible data problem")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFileWithDistributorLogin()
         {
-            // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
-            // Rhz : Trying to indicate that the page is not loading properly
+            if (!_isRunningInPipeline)
+            {
+                Assert.Ignore("Test only runs in CI/CD pipeline.");
+            }
             await Page.GotoAsync(_httpEndpoint);
 
             var login = new LoginPageObject(Page);
@@ -64,13 +66,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 await noticeFileDownload.CheckDailyFileDownloadAsync();
                 await noticeFileDownload.CheckDailyWeekFileNameAsync();
             }
-            
         }
-
 
         [Test]
         public async Task Login_WithValidDetails_ShouldSignInAndSignOut()
         {
+            if (!_isRunningInPipeline)
+            {
+                Assert.Ignore("Test only runs in CI/CD pipeline.");
+            }
             await Page.GotoAsync(_httpEndpoint);
             var loginPage = new LoginPageObject(Page);
 
@@ -83,6 +87,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithValidDetails()
         {
+            if (!_isRunningInPipeline)
+            {
+                Assert.Ignore("Test only runs in CI/CD pipeline.");
+            }
             await Page.GotoAsync(_httpRnwEndpoint);
             var loginPage = new LoginPageObject(Page);
             await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
@@ -92,6 +100,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithUnauthorisedDetails()
         {
+            if (!_isRunningInPipeline)
+            {
+                Assert.Ignore("Test only runs in CI/CD pipeline.");
+            }
             await Page.GotoAsync(_httpRnwEndpoint);
             var loginPage = new LoginPageObject(Page);
             await loginPage.AdLoginAsync(_rnwAdminAutoTestNoAccess_User, _rnwAdminAutoTestNoAccess_Pass);
@@ -101,12 +113,28 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task WithInvalidDetails()
         {
+            if (!_isRunningInPipeline)
+            {
+                Assert.Ignore("Test only runs in CI/CD pipeline.");
+            }
             await Page.GotoAsync(_httpRnwEndpoint);
             var loginPage = new LoginPageObject(Page);
             await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, "1111111");
             await loginPage.AdPasswordErrorCheckAsync();
         }
 
-       
+        private static bool IsRunningInPipeline()
+        {
+            // Common environment variables for CI/CD pipelines
+            var ci = Environment.GetEnvironmentVariable("CI");
+            var tfBuild = Environment.GetEnvironmentVariable("TF_BUILD");
+            var githubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
+            var azurePipeline = Environment.GetEnvironmentVariable("AGENT_NAME");
+
+            return !string.IsNullOrEmpty(ci)
+                || !string.IsNullOrEmpty(tfBuild)
+                || !string.IsNullOrEmpty(githubActions)
+                || !string.IsNullOrEmpty(azurePipeline);
+        }
     }
 }

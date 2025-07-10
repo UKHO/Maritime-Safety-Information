@@ -11,7 +11,7 @@ using static System.Net.WebRequestMethods;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
-    [Parallelizable(ParallelScope.Self)]
+    //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
     public class MSIFunctionalTest : PageTest
     {

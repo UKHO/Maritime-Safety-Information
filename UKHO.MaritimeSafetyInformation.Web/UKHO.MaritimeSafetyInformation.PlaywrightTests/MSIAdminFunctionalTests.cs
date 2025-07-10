@@ -6,7 +6,7 @@ using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
-    [Parallelizable(ParallelScope.Self)]
+    //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
     public class MSIAdminFunctionalTests : PageTest
     {
