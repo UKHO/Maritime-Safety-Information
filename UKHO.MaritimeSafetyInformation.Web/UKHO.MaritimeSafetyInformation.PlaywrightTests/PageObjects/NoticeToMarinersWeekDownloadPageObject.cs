@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using Microsoft.Playwright;
-using NUnit.Framework.Legacy;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
@@ -163,7 +157,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task CheckDailyFileNameAsync()
         {
-            //await _page.WaitForLoadStateAsync();
             await _page.WaitForSelectorAsync("[id^='filename']");
             var dailyFileNames = await _page.Locator("[id^='filename']").AllInnerTextsAsync();
             foreach (var name in dailyFileNames)
@@ -278,7 +271,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForSelectorAsync("[id^='filesize']");
             var annualFileSizeData = FileSize;
             var dailyFileSizes = await annualFileSizeData.EvaluateAllAsync<string[]>("els => els.map(e => e.textContent.trim())");
-            var regex = new Regex(@"^\S+\s(B|MB|KB|GB)$");
+            var regex = new Regex(@"^\S+\s(B|MB|KB|GB|Bytes)$");
             foreach (var size in dailyFileSizes)
             {
                 var parts = size.Split(" ");

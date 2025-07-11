@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
@@ -64,6 +59,20 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             AboutRNW = _page.Locator(" div >  p:nth-child(3)");
         }
 
+        private List<string> SortDateListDescending(List<string> dateList)
+        {
+            //To do a date sort
+            // Remove "UTC ", trim the string and convert to date for sorting, return the original format in a new list.
+            return [.. dateList
+                .Select(x => x.Trim().Replace("UTC ", "")) // Remove "UTC " and trim
+                .Select(x => DateTime.TryParseExact(x, "MMM yy", null, DateTimeStyles.None, out var dt)
+                    ? new { Original = $" UTC {x}", Date = dt }
+                    : null)
+                .Where(x => x != null)
+                .OrderByDescending(x => x!.Date)
+                .Select(x => x!.Original)];
+        }
+
         public async Task GoToRadioWarningAsync()
         {
             await RadioNavigationalWarnings.HighlightAsync();
@@ -83,16 +92,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var resultdate = (await _page.Locator("[id^=\"DateTimeGroupRnwFormat\"]").AllInnerTextsAsync())
                 .Select(x => x.Trim().Substring(6)).ToList();
 
-            //To do a date sort , we need to remove "UTC " and trim the string but also keep the original format for comparison
-            var sortedDesc = resultdate
-                .Select(x => x.Trim().Replace("UTC ", "")) // Remove "UTC " and trim
-                .Select(x => DateTime.TryParseExact(x, "MMM yy", null, DateTimeStyles.None, out var dt)
-                    ? new { Original = $" UTC {x}", Date = dt }
-                    : null)
-                .Where(x => x != null)
-                .OrderByDescending(x => x.Date)
-                .Select(x => x.Original)
-                .ToList();
+            var sortedDesc = SortDateListDescending(resultdate);
             Assert.That(resultdate, Is.EqualTo(sortedDesc));
         }
 
@@ -215,7 +215,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             Assert.That(detailWarningType, Does.Contain(text));
             var resultdate = (await _page.Locator("[id^=\"DateTimeGroupRnwFormat\"]").AllInnerTextsAsync())
                 .Select(x => x.Trim().Substring(6)).ToList();
-            var sortedDesc = resultdate.OrderByDescending(x => x).ToList();
+            var sortedDesc = SortDateListDescending(resultdate);
             Assert.That(resultdate, Is.EqualTo(sortedDesc));
             var anchor = await locator.GetAttributeAsync("href");
             var urlName = new UriBuilder(appUrl) { Path = $"/RadioNavigationalWarnings"}.Uri.ToString();

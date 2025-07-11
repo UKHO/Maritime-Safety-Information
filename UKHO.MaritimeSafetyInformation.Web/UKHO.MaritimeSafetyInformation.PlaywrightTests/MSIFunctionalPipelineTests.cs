@@ -57,6 +57,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
             await login.GoToSignInAsync();
             await login.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
+
+            await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
             await noticeFileDownload.GoToNoticeToMarinerAsync();
             await noticeFileDownload.GoToDailyFileAsync();
             if (!await noticeFileDownload.IsErrorPageDisplayed())

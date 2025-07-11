@@ -1,13 +1,8 @@
 using Aspire.Hosting;
-using Aspire.Hosting.ApplicationModel;
-using Json.More;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
-using static System.Net.WebRequestMethods;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
@@ -41,7 +36,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
             else
             {
-
                 var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.UKHO_MaritimeSafetyInformation_Web_AppHost>();
                 appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
                 {
@@ -56,7 +50,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
                 _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString();
-                
 
             }
         }
@@ -315,6 +308,26 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
 
+        [Test]
+        //[Ignore("Not working yet")]
+        public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
+        {
+            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+            await _rnwListEndUser.GoToRadioWarningAsync();
+            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA", _httpEndpoint);
+        }
+
+        [Test]
+        //[Ignore("Not working yet")]
+        public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
+        {
+
+            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+            await _rnwListEndUser.GoToRadioWarningAsync();
+            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
+        }
+
+
         private static bool IsRunningInPipeline()
         {
             // Common environment variables for CI/CD pipelines
@@ -329,24 +342,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 || !string.IsNullOrEmpty(azurePipeline);
         }
 
-        [Test]
-        //[Ignore("Not working yet")]
-        public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
-        {
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-            await _rnwListEndUser.GoToRadioWarningAsync();
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA", _httpEndpoint);
-        }
-
-        [Test]
-        //[Ignore("Not working yet")]
-        public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
-        {
-           
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-            await _rnwListEndUser.GoToRadioWarningAsync();
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
-        }
+        
 
 
 
