@@ -92,7 +92,7 @@ export default class RadioNavigationalWarnings {
         await this.page.waitForTimeout(3000);
         await this.datetime.type("05072022 05533");
         await this.page.keyboard.press("ArrowDown");
-        await this.description.fill("testdata");
+        await this.description.fill("testdata 01");
         await this.content.fill(content);
         await this.expiryDate.type("05072022 06000");
     }
@@ -131,7 +131,7 @@ export default class RadioNavigationalWarnings {
         await this.page.waitForTimeout(3000);
         await this.datetime.type("05072022 05533");
         await this.page.keyboard.press("ArrowDown");
-        await this.description.fill("testdata");
+        await this.description.fill("testdata 01");
         await this.content.type(content);
     }
 

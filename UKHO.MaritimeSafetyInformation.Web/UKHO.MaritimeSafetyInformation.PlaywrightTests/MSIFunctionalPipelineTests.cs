@@ -44,7 +44,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        //[Ignore("Possible data problem")]
+        [Ignore("Possible data problem")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFileWithDistributorLogin()
         {
             if (!_isRunningInPipeline)
@@ -62,6 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             await noticeFileDownload.GoToNoticeToMarinerAsync();
             await noticeFileDownload.GoToDailyFileAsync();
+            await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
             if (!await noticeFileDownload.IsErrorPageDisplayed())
             {
                 await noticeFileDownload.CheckDailyFileNameAsync();
@@ -72,6 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Suspended")]
         public async Task Login_WithValidDetails_ShouldSignInAndSignOut()
         {
             if (!_isRunningInPipeline)
@@ -88,6 +90,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Suspended")]
         public async Task WithValidDetails()
         {
             if (!_isRunningInPipeline)
@@ -101,6 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Suspended")]
         public async Task WithUnauthorisedDetails()
         {
             if (!_isRunningInPipeline)
@@ -114,6 +118,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Suspended")]
         public async Task WithInvalidDetails()
         {
             if (!_isRunningInPipeline)

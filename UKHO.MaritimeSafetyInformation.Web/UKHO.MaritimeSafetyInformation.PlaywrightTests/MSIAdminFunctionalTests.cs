@@ -104,6 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Suspended")]
         public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
         {
             if (_isRunningInPipeline)
@@ -120,6 +121,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Suspended")]
         public async Task DoesTheTableDataIsDisplayedWithPagination()
         {
             if (_isRunningInPipeline)

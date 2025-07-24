@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await Reference.FillAsync("reference");
             await Datetime.FillAsync("2022-07-05T05:53");
             await _page.Keyboard.PressAsync("ArrowDown");
-            await Description.FillAsync("testdata");
+            await Description.FillAsync("testdata 01");
             await Content.FillAsync(content);
             await ExpiryDate.FillAsync("2022-07-05T06:00");
         }
@@ -152,7 +152,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForTimeoutAsync(3000);
             await Datetime.FillAsync("2022-07-05T05:53");
             await _page.Keyboard.PressAsync("ArrowDown");
-            await Description.FillAsync("testdata");
+            await Description.FillAsync("testdata 01");
             await Content.FillAsync(content);
         }
 
