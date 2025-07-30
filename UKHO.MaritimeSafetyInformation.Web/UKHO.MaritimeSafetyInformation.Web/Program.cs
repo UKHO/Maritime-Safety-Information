@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using UKHO.ADDS.Mocks.MSI.Extensions;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.MaritimeSafetyInformation.Common;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
@@ -39,9 +38,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             
             if (builder.Environment.IsDevelopment())
             {
-                // Rhz : configure aspire resources 
-                builder.AddMockClientConfig(resource: "mock-api", prefix: "fssmsi/");
-                builder.Configuration["FileShareService:BaseUrl"] = builder.Configuration.GetConnectionString("mock-api-https");
+                // Rhz : configure aspire resources with change to use service discovery. 
+                builder.Configuration["FileShareService:BaseUrl"] = "https+http://mock-api/fssmsi/";
                 builder.Configuration["CacheConfiguration:LocalConnectionString"] = builder.Configuration.GetConnectionString("local-table-connection");
                 builder.Configuration["RadioNavigationalWarningsContext:ConnectionString"] = builder.Configuration.GetConnectionString("MSI-RNWDB-1");
                 // Rhz : configure aspire resources end.
