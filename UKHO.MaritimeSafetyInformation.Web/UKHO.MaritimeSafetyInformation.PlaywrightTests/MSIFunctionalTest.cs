@@ -310,7 +310,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
-        [Ignore("Not working yet")]
+        //[Ignore("Not working yet")]
         public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
@@ -319,13 +319,44 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Not working yet?")]
+        //[Ignore("Not working yet?")]
         public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
         {
 
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
             await _rnwListEndUser.GoToRadioWarningAsync();
             await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
+        }
+
+
+        [Test]
+        [Ignore("Not working yet?")]
+        //Imported from Admin tests, but not working yet. Need to check original javascript test.
+        public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownloadWithDistributorRole()
+        {
+
+
+            var notice = new NoticeToMarinersPageObject(Page);
+
+            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+
+            //await _login.GoToSignIn();
+            //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
+            await Page.ScreenshotAsync(new PageScreenshotOptions
+            {
+                Path = "a_rhz_screenshot2.png",
+                FullPage = true
+            });
+
+            //await noticeFileDownload.GoToNoticeToMarinerAsync();
+            await noticeFileDownload.CheckWeeklyFileSectionNameAsync();
+            await noticeFileDownload.CheckWeeklyFileSortingWithDistributorRoleAsync();
+            var names = await noticeFileDownload.CheckFileDownloadAsync();
+            Assert.That(names.Count > 0);
+            var fileName = names[0];
+            //var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownloadSelector);
+            //var newPageUrl = await element.GetAttributeAsync("href");
+            //Assert.That(newPageUrl.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
         }
 
 

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -14,7 +15,9 @@ var tableStorage = storage.AddTables("local-table-connection");
 
 
 var sql = builder.AddSqlServer("local-sql")
-    .WithDataVolume("local-msi-data");
+    .WithDataVolume("local-msi-data")
+    .WithResetCommand();
+     
 
 var databaseName = "MSI-RNWDB-1";
 
@@ -73,7 +76,7 @@ var mvcApp = builder.AddProject<UKHO_MaritimeSafetyInformation_Web>("ukho-msi-we
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
     .WaitFor(tableStorage);
-    
+
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
     .WithReference(rnwDb)
@@ -89,3 +92,6 @@ var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("u
     });
 
 builder.Build().Run();
+
+
+
