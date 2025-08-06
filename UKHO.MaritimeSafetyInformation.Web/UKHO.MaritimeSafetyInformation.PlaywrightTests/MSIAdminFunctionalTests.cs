@@ -34,7 +34,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             if (_isRunningInPipeline)
             {
                 var builder = new ConfigurationBuilder()
-                        .AddUserSecrets<MSIFunctionalPipelineTests>()
                         .AddEnvironmentVariables();
                 _configuration = builder.Build();
 
@@ -181,7 +180,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(radioNavigationalWarnings.AlertMessage, radioNavigationalWarnings.Message, "yes");
             await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
@@ -193,7 +192,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(
                 radioNavigationalWarnings.AlertMessage,
@@ -209,7 +208,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(
                 radioNavigationalWarnings.AlertMessage,
@@ -250,7 +249,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "testdata");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
         }
@@ -261,7 +260,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
 
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("2", "testdata");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("2", "UK Coastal");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
         }
@@ -325,7 +324,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await radioNavigationalWarnings.SearchListWithFilterAsync("UK Coastal");
             await radioNavigationalWarnings.GetEditUrlAsync();
             await radioNavigationalWarnings.IsDeleteAsync();
-            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("testdata");
+            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("UK Coastal");
             await radioNavigationalWarnings.EditRNWAsync();
             await radioNavigationalWarnings.GetDialogTextAsync("Record updated successfully!");
         }
@@ -338,32 +337,12 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await radioNavigationalWarnings.SearchListWithFilterAsync("NAVAREA");
             await radioNavigationalWarnings.GetEditUrlAsync();
             await radioNavigationalWarnings.IsDeleteAsync();
-            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("testdata");
+            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("NAVAREA");
             await radioNavigationalWarnings.EditRNWAsync();
             await radioNavigationalWarnings.GetDialogTextAsync("Record updated successfully!");
         }
 
-        //===
-
         
-
-        [Test]
-        [Ignore("Not working yet")]
-        public async Task ShouldGotoNoticesToMarinerPageForWeeklyNMFilesWithDistributorRole()
-        {
-
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
-
-            //await _login.GoToSignIn();
-            //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
-            await noticeFileDownload.GoToNoticeToMarinerAsync();
-            await noticeFileDownload.VerifyDistributorFileCountAsync();
-            await noticeFileDownload.VerifyIntegrationTestValueForDistributorAsync();
-            await noticeFileDownload.VerifyIntegrationDownloadAllAsync();
-            await noticeFileDownload.VerifyIntegrationDownloadPartnerAllAsync();
-        }
-
-        //===
 
         private static bool IsRunningInPipeline()
         {

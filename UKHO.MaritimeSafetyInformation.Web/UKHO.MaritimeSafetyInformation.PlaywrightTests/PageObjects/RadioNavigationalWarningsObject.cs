@@ -10,6 +10,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
     internal class RadioNavigationalWarningsObject
     {
+        private const string NavAreaTestReference = "NAVAREA TEST/25";
+        private const string UKCoastalTestReference = "UK Coastal TEST/25";
         private readonly IPage _page;
         public ILocator Reference { get; }
         public ILocator Datetime { get; }
@@ -105,13 +107,27 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task FillFormWithValidDetailsAsync(string warningType, string content)
         {
+            switch (content)
+            {
+                case "NAVAREA":
+                    await Reference.FillAsync(NavAreaTestReference);
+                    break;
+                case "UK Coastal":
+                    await Reference.FillAsync(UKCoastalTestReference);
+                    break;
+
+                default:
+                    await Reference.FillAsync("reference");
+                    break;
+            }
+
             await Warning.SelectOptionAsync(new SelectOptionValue { Value = warningType });
-            await Reference.FillAsync("reference");
-            await Datetime.FillAsync("2022-07-05T05:53");
+            //await Reference.FillAsync("reference");
+            await Datetime.FillAsync("2025-07-04T05:53");
             await _page.Keyboard.PressAsync("ArrowDown");
-            await Description.FillAsync("testdata 01");
+            await Description.FillAsync($"testdata for {content}");
             await Content.FillAsync(content);
-            await ExpiryDate.FillAsync("2022-07-05T06:00");
+            await ExpiryDate.FillAsync("2025-07-04T06:00");
         }
 
         public async Task ClearInputAsync(ILocator locator)
@@ -148,11 +164,24 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task FillEditFormWithValidDetailsAsync(string content)
         {
-            await Reference.FillAsync("reference");
+            switch (content)
+            {
+                case "NAVAREA":
+                    await Reference.FillAsync(NavAreaTestReference);
+                    break;
+                case "UK Coastal":
+                    await Reference.FillAsync(UKCoastalTestReference);
+                    break;
+
+                default:
+                    await Reference.FillAsync("reference");
+                    break;
+            }
+            //await Reference.FillAsync("reference");
             await _page.WaitForTimeoutAsync(3000);
-            await Datetime.FillAsync("2022-07-05T05:53");
+            await Datetime.FillAsync("2025-07-04T12:00");
             await _page.Keyboard.PressAsync("ArrowDown");
-            await Description.FillAsync("testdata 01");
+            await Description.FillAsync($"testdata for {content}");
             await Content.FillAsync(content);
         }
 

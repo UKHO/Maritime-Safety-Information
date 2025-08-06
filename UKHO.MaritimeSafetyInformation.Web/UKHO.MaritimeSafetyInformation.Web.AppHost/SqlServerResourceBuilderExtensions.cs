@@ -63,12 +63,12 @@ namespace Aspire.Hosting
                     new RadioNavigationalWarning
                     {
                         WarningType = 1,
-                        Reference = "NAVAREA I 240/24",
-                        DateTimeGroup = DateTime.UtcNow,
+                        Reference = "NAVAREA TEST/25",
+                        DateTimeGroup = new DateTime(year:2025,month:7,day:4,hour:12,minute:0,second:0,kind:DateTimeKind.Utc),
                         Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
                         Content = @"NAVAREA
-                                     NAVAREA I 240/24
-                                     301040 UTC Dec 24
+                                     NAVAREA TEST/24
+                                     301040 UTC Dec 25
                                      SPACE WEATHER.
                                      SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.
                                      RADIO AND SATELLITE NAVIGATION SERVICES MAY BE AFFECTED.",
@@ -78,12 +78,12 @@ namespace Aspire.Hosting
                     new RadioNavigationalWarning
                     {
                         WarningType = 2,
-                        Reference = "WZ 897/24",
-                        DateTimeGroup = DateTime.UtcNow,
+                        Reference = "UK Coastal TEST/25",
+                        DateTimeGroup = new DateTime(year: 2025, month: 7, day: 4, hour: 12, minute: 0, second: 0, kind: DateTimeKind.Utc),
                         Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
                         Content = @"UK Coastal
-                                                 WZ 897/24
-                                                 301510 UTC Dec 24
+                                                 TEST/24
+                                                 301510 UTC Dec 25
                                                  HUMBER.
                                                  HORNSEA 1 AND 2 WINDFARMS.
                                                  1.TURBINES T25 54-00.3N 001-36.7E, A16 53-50.0N 001-58.7E AND S16 53-59.4N 001-48.3E, FOG SIGNALS INOPERATIVE.

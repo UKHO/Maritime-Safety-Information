@@ -192,7 +192,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Suspended")]
+        //[Ignore("Suspended")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
         {
             // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
@@ -329,35 +329,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
 
-        [Test]
-        [Ignore("Not working yet?")]
-        //Imported from Admin tests, but not working yet. Need to check original javascript test.
-        public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownloadWithDistributorRole()
-        {
-
-
-            var notice = new NoticeToMarinersPageObject(Page);
-
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
-
-            //await _login.GoToSignIn();
-            //await _login.LoginWithDistributorDetails(_appConfig["DistributorTest_UserName"].ToString(), _appConfig["DistributorTest_Password"].ToString());
-            await Page.ScreenshotAsync(new PageScreenshotOptions
-            {
-                Path = "a_rhz_screenshot2.png",
-                FullPage = true
-            });
-
-            //await noticeFileDownload.GoToNoticeToMarinerAsync();
-            await noticeFileDownload.CheckWeeklyFileSectionNameAsync();
-            await noticeFileDownload.CheckWeeklyFileSortingWithDistributorRoleAsync();
-            var names = await noticeFileDownload.CheckFileDownloadAsync();
-            Assert.That(names.Count > 0);
-            var fileName = names[0];
-            //var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownloadSelector);
-            //var newPageUrl = await element.GetAttributeAsync("href");
-            //Assert.That(newPageUrl.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
-        }
+        
 
 
         private static bool IsRunningInPipeline()
