@@ -311,7 +311,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
             await _rnwListEndUser.GoToRadioWarningAsync();
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA", _httpEndpoint);
+            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA 1", _httpEndpoint);
         }
 
         [Test]
@@ -338,6 +338,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 || !string.IsNullOrEmpty(tfBuild)
                 || !string.IsNullOrEmpty(githubActions)
                 || !string.IsNullOrEmpty(azurePipeline);
+
         }
 
         

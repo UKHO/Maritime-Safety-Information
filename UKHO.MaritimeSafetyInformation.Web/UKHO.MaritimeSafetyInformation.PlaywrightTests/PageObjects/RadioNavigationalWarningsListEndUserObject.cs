@@ -209,8 +209,23 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task VerifyNavareaAndUkCostalFilterAsync(ILocator locator, string text, string appUrl)
         {
+            await _page.ScreenshotAsync(new PageScreenshotOptions
+            {
+                Path = $"a_rhz_screenshot_{text}_01.png",
+                FullPage = true
+            });
             await locator.ClickAsync();
+            await _page.ScreenshotAsync(new PageScreenshotOptions
+            {
+                Path = $"a_rhz_screenshot_{text}_02.png",
+                FullPage = true
+            });
             await ViewDetails.First.ClickAsync();
+            await _page.ScreenshotAsync(new PageScreenshotOptions
+            {
+                Path = $"a_rhz_screenshot_{text}_03.png",
+                FullPage = true
+            });
             var detailWarningType = await DetailWarningType.First.InnerTextAsync();
             Assert.That(detailWarningType, Does.Contain(text));
             var resultdate = (await _page.Locator("[id^=\"DateTimeGroupRnwFormat\"]").AllInnerTextsAsync())
