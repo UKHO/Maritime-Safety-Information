@@ -63,8 +63,8 @@ namespace Aspire.Hosting
                     new RadioNavigationalWarning
                     {
                         WarningType = 1,
-                        Reference = "NAVAREA TEST/25",
-                        DateTimeGroup = new DateTime(year:2025,month:7,day:4,hour:12,minute:0,second:0,kind:DateTimeKind.Utc),
+                        Reference = "NAVAREA 1 TEST/22",
+                        DateTimeGroup = new DateTime(year:2022,month:7,day:4,hour:12,minute:0,second:0,kind:DateTimeKind.Utc),
                         Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
                         Content = @"NAVAREA
                                      NAVAREA TEST/24
@@ -78,8 +78,8 @@ namespace Aspire.Hosting
                     new RadioNavigationalWarning
                     {
                         WarningType = 2,
-                        Reference = "UK Coastal TEST/25",
-                        DateTimeGroup = new DateTime(year: 2025, month: 7, day: 4, hour: 12, minute: 0, second: 0, kind: DateTimeKind.Utc),
+                        Reference = "UK Coastal TEST/22",
+                        DateTimeGroup = new DateTime(year: 2022, month: 7, day: 4, hour: 12, minute: 0, second: 0, kind: DateTimeKind.Utc),
                         Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
                         Content = @"UK Coastal
                                                  TEST/24

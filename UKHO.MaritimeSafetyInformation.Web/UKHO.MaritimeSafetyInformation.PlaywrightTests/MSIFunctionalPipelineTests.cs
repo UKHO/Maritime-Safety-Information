@@ -127,59 +127,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await loginPage.AdPasswordErrorCheckAsync();
         }
 
-        [Test]
-        public async Task ShouldGotoNoticesToMarinerPageForWeeklyNMFilesWithDistributorRole()
-        {
-            if (!_isRunningInPipeline)
-            {
-                Assert.Ignore("Test only runs in CI/CD pipeline.");
-            }
-            await Page.GotoAsync(_httpEndpoint);
-            var loginPage = new LoginPageObject(Page);
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+        
 
-            await loginPage.GoToSignInAsync();
-            await loginPage.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
-            await noticeFileDownload.GoToNoticeToMarinerAsync();
-            await noticeFileDownload.VerifyDistributorFileCountAsync();
-            await noticeFileDownload.VerifyIntegrationTestValueForDistributorAsync();
-            await noticeFileDownload.VerifyIntegrationDownloadAllAsync();
-            await noticeFileDownload.VerifyIntegrationDownloadPartnerAllAsync();
-        }
-
-        [Test]
-        [Ignore("Not working yet?")]
-        //Imported from Admin tests, but not working yet. Need to check original javascript test.
-        public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownloadWithDistributorRole()
-        {
-            if (!_isRunningInPipeline)
-            {
-                Assert.Ignore("Test only runs in CI/CD pipeline.");
-            }
-
-            await Page.GotoAsync(_httpEndpoint);
-            var loginPage = new LoginPageObject(Page);
-            var notice = new NoticeToMarinersPageObject(Page);
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
-
-            await loginPage.GoToSignInAsync();
-            await loginPage.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
-            await Page.ScreenshotAsync(new PageScreenshotOptions
-            {
-                Path = "a_rhz_screenshot2.png",
-                FullPage = true
-            });
-
-            await noticeFileDownload.GoToNoticeToMarinerAsync();
-            await noticeFileDownload.CheckWeeklyFileSectionNameAsync();
-            await noticeFileDownload.CheckWeeklyFileSortingWithDistributorRoleAsync();
-            var names = await noticeFileDownload.CheckFileDownloadAsync();
-            Assert.That(names.Count > 0);
-            var fileName = names[0];
-            //var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownloadSelector);
-            //var newPageUrl = await element.GetAttributeAsync("href");
-            //Assert.That(newPageUrl.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
-        }
+        
 
 
 

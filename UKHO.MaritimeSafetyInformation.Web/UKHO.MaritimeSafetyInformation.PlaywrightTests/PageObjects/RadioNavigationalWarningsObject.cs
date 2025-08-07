@@ -10,8 +10,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
     internal class RadioNavigationalWarningsObject
     {
-        private const string NavAreaTestReference = "NAVAREA TEST/25";
-        private const string UKCoastalTestReference = "UK Coastal TEST/25";
+        private const string NavAreaTestReference = "NAVAREA TEST/22";
+        private const string UKCoastalTestReference = "UK Coastal TEST/22";
         private readonly IPage _page;
         public ILocator Reference { get; }
         public ILocator Datetime { get; }
@@ -109,7 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             switch (content)
             {
-                case "NAVAREA":
+                case "NAVAREA 1":
                     await Reference.FillAsync(NavAreaTestReference);
                     break;
                 case "UK Coastal":
@@ -123,7 +123,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
             await Warning.SelectOptionAsync(new SelectOptionValue { Value = warningType });
             //await Reference.FillAsync("reference");
-            await Datetime.FillAsync("2025-07-04T05:53");
+            await Datetime.FillAsync("2022-07-04T05:53");
             await _page.Keyboard.PressAsync("ArrowDown");
             await Description.FillAsync($"testdata for {content}");
             await Content.FillAsync(content);
@@ -166,7 +166,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             switch (content)
             {
-                case "NAVAREA":
+                case "NAVAREA 1":
                     await Reference.FillAsync(NavAreaTestReference);
                     break;
                 case "UK Coastal":
@@ -179,7 +179,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             }
             //await Reference.FillAsync("reference");
             await _page.WaitForTimeoutAsync(3000);
-            await Datetime.FillAsync("2025-07-04T12:00");
+            await Datetime.FillAsync("2022-07-04T12:00");
             await _page.Keyboard.PressAsync("ArrowDown");
             await Description.FillAsync($"testdata for {content}");
             await Content.FillAsync(content);

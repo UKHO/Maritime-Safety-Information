@@ -202,7 +202,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public async Task VerifyDistributorFileCountAsync()
         {
             await Year.SelectOptionAsync(new SelectOptionValue { Label = "2022" });
-            await Week.SelectOptionAsync(new SelectOptionValue { Label = "18" });
+
+            await Week.SelectOptionAsync(new SelectOptionValue { Label = "10" }); // rhz originally 18
             await _page.WaitForLoadStateAsync();
             await _page.WaitForSelectorAsync("[id^='partner']");
             var fileNumber = await DistributorFileNumber.CountAsync();

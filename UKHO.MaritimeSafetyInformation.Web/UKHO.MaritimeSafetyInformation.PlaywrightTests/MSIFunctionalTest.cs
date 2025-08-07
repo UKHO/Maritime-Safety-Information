@@ -174,7 +174,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        //[Ignore("Works locally even when pointing to deployed app!")]
         public async Task TableDataForAnnualIncludesSectionFileNameFileSizeAndDownload()
         {
 
@@ -192,7 +191,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        //[Ignore("Suspended")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
         {
             // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
@@ -243,7 +241,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        //[Ignore("This fails sometimes!!")]
         public async Task DoesTheNoticesToMarinersPageUrlsAreDisplayedWithPageTitle()
         {
 
@@ -310,7 +307,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
-        //[Ignore("Not working yet")]
         public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
@@ -319,7 +315,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        //[Ignore("Not working yet?")]
         public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
         {
 
@@ -327,7 +322,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _rnwListEndUser.GoToRadioWarningAsync();
             await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
         }
-
 
         
 

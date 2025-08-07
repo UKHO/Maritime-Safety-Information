@@ -73,6 +73,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task SearchWithFilterAsync(string selectWarnings, string selectYear)
         {
+            
             await WarningType.SelectOptionAsync(new SelectOptionValue { Label = selectWarnings });
             await Year.SelectOptionAsync(new SelectOptionValue { Label = selectYear });
             await Filter.ClickAsync();

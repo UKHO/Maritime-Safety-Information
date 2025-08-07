@@ -178,7 +178,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             if (!context.WarningType.Any())
             {
-                context.WarningType.Add(new WarningType { Name = "NAVAREA" });
+                context.WarningType.Add(new WarningType { Name = "NAVAREA 1" });
                 context.WarningType.Add(new WarningType { Name = "UK Coastal" });
                 await context.SaveChangesAsync();
             }
