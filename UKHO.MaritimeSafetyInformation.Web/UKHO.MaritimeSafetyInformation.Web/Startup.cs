@@ -71,6 +71,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
 
+            services.AddAllElasticApm();
+
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
 
