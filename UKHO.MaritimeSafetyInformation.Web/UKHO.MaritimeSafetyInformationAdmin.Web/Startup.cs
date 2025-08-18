@@ -52,6 +52,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddScoped<IRNWService, RNWService>();
             services.AddScoped<IRNWRepository, RNWRepository>();
             services.AddScoped<IRNWDatabaseHealthClient, RNWDatabaseHealthClient>();
+
+            services.AddAllElasticApm();
+
             services.AddControllersWithViews()
             .AddMicrosoftIdentityUI();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
