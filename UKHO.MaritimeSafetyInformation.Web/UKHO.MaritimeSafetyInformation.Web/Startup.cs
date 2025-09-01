@@ -83,7 +83,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add(CorrelationIdMiddleware.XCorrelationIdHeaderKey);
+                options.Headers.Add(UkhoHeaderNames.XCorrelationId);
             });
 
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -162,7 +162,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                         additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
                         additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
                         additionalValues["_X-Correlation-ID"] =
-                            httpContextAccessor.HttpContext.Request.Headers?[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault() ?? string.Empty;
+                            httpContextAccessor.HttpContext.Request.Headers?[UkhoHeaderNames.XCorrelationId].FirstOrDefault() ?? string.Empty;
 
                         if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                         {
