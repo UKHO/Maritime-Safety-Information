@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
@@ -27,13 +29,15 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         private NoticesToMarinersController controller;
         private FssMock fss;
         private Configuration configuration;
+        private WebApplicationFactory<Program> _factory = null!;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            
+
             //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services; //Rhz : possibly replace.
-            services = Program.builder.Services.BuildServiceProvider();
+            _factory = new WebApplicationFactory<Program>();
+            services = _factory.Services;
             configuration = new Configuration();
             Assert.That(string.IsNullOrWhiteSpace(configuration.BusinessUnit), Is.False);
             Assert.That(string.IsNullOrWhiteSpace(configuration.ProductType), Is.False);

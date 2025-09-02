@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.Web;
@@ -36,12 +38,14 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         private IServiceProvider services;
         private NoticesToMarinersController controller;
         private Configuration configuration;
-
+        private WebApplicationFactory<Program> _factory = null!;
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;  // Rhz : Possibly replace.
-            services = Program.builder.Services.BuildServiceProvider();
+            
+            _factory = new WebApplicationFactory<Program>();
+            services = _factory.Services;
             configuration = new Configuration();
             // Ensure that we're looking for test data in the right place.
             Assert.That(configuration.BusinessUnit, Is.EqualTo("MaritimeSafetyInformationIntegrationTest"));

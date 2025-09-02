@@ -20,15 +20,15 @@ using UKHO.MaritimeSafetyInformation.Web.Filters;
 using UKHO.MaritimeSafetyInformation.Web.Services;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 using UKHO.MaritimeSafetyInformation.Web.Validation;
-namespace UKHO.MaritimeSafetyInformation.Web
-{
-    [ExcludeFromCodeCoverage]
-    public static class Program
-    {
-        public static WebApplicationBuilder builder; //Rhz : need to introduce this static variable to configure tests. may have to change
-        public static void Main(string[] args)
-        {
-            builder = WebApplication.CreateBuilder(args);
+//namespace UKHO.MaritimeSafetyInformation.Web
+//{
+    //[ExcludeFromCodeCoverage]
+    //public static class Program
+    //{
+        //public static WebApplicationBuilder builder; //Rhz : need to introduce this static variable to configure tests. may have to change
+        //public static void Main(string[] args)
+        //{
+            var builder = WebApplication.CreateBuilder(args);
 
             var kvServiceUri = builder.Configuration["KeyVaultSettings:ServiceUri"];
             if (!string.IsNullOrWhiteSpace(kvServiceUri))
@@ -176,7 +176,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
 
-        internal static async Task SeedData(SqlConnection connection)
+         static async Task SeedData(SqlConnection connection)
         {
             var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
 
@@ -228,7 +228,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
         }
 
         //=====================================
-        private static void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
+        void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
                                       IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
         {
             if (!string.IsNullOrEmpty(eventHubLoggingConfiguration.Value.ConnectionString))
@@ -278,5 +278,5 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
         }
         //=========================================
-    }
-}
+    //}
+//}
