@@ -172,11 +172,11 @@ using UKHO.MaritimeSafetyInformation.Web.Validation;
             }
 
             app.Run();
-        }
+        //}
 
 
 
-         static async Task SeedData(SqlConnection connection)
+        async Task SeedData(SqlConnection connection)
         {
             var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
 
@@ -278,5 +278,4 @@ using UKHO.MaritimeSafetyInformation.Web.Validation;
 
         }
         //=========================================
-    //}
-//}
+
