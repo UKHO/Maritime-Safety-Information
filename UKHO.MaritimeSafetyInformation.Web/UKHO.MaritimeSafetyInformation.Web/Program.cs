@@ -25,10 +25,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
     [ExcludeFromCodeCoverage]
     public static class Program
     {
-        //public static WebApplicationBuilder builder; //Rhz : need to introduce this static variable to configure tests. may have to change
+        public static WebApplicationBuilder builder; //Rhz : need to introduce this static variable to configure tests. may have to change
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            builder = WebApplication.CreateBuilder(args);
 
             var kvServiceUri = builder.Configuration["KeyVaultSettings:ServiceUri"];
             if (!string.IsNullOrWhiteSpace(kvServiceUri))

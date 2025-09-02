@@ -33,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             
             //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services; //Rhz : possibly replace.
-            services = WebApplication.CreateBuilder().Build().Services;
+            services = Program.builder.Services.BuildServiceProvider();
             configuration = new Configuration();
             Assert.That(string.IsNullOrWhiteSpace(configuration.BusinessUnit), Is.False);
             Assert.That(string.IsNullOrWhiteSpace(configuration.ProductType), Is.False);

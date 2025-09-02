@@ -41,7 +41,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         public void OneTimeSetup()
         {
             //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;  // Rhz : Possibly replace.
-            services = WebApplication.CreateBuilder().Build().Services;
+            services = Program.builder.Services.BuildServiceProvider();
             configuration = new Configuration();
             // Ensure that we're looking for test data in the right place.
             Assert.That(configuration.BusinessUnit, Is.EqualTo("MaritimeSafetyInformationIntegrationTest"));
