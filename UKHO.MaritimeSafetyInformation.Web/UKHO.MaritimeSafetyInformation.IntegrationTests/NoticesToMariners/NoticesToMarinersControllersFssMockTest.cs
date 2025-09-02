@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         {
             
             //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services; //Rhz : possibly replace.
-            services = Program.builder.Build().Services;
+            services = WebApplication.CreateBuilder().Build().Services;
             configuration = new Configuration();
             Assert.That(string.IsNullOrWhiteSpace(configuration.BusinessUnit), Is.False);
             Assert.That(string.IsNullOrWhiteSpace(configuration.ProductType), Is.False);
