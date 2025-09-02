@@ -31,8 +31,8 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         public void OneTimeSetup()
         {
             
-            //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
-            services = Program.builder.Build().Services;
+            services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+            //services = Program.builder.Build().Services;
             configuration = new Configuration();
             Assert.That(string.IsNullOrWhiteSpace(configuration.BusinessUnit), Is.False);
             Assert.That(string.IsNullOrWhiteSpace(configuration.ProductType), Is.False);
