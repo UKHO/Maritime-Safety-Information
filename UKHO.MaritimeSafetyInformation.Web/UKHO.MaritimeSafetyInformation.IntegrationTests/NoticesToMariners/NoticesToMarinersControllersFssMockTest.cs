@@ -12,6 +12,7 @@ using UKHO.MaritimeSafetyInformation.Common.Models.NoticesToMariners;
 using UKHO.MaritimeSafetyInformation.IntegrationTests.MockServices;
 using UKHO.MaritimeSafetyInformation.Web;
 using UKHO.MaritimeSafetyInformation.Web.Controllers;
+//using WireMock.Net.Abstractions.FluentBuilder;
 
 namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
 {
@@ -29,7 +30,9 @@ namespace UKHO.MaritimeSafetyInformation.IntegrationTests.NoticesToMariners
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+            
+            //services = Program.CreateHostBuilder(Array.Empty<string>()).Build().Services;
+            services = Program.builder.Build().Services;
             configuration = new Configuration();
             Assert.That(string.IsNullOrWhiteSpace(configuration.BusinessUnit), Is.False);
             Assert.That(string.IsNullOrWhiteSpace(configuration.ProductType), Is.False);
