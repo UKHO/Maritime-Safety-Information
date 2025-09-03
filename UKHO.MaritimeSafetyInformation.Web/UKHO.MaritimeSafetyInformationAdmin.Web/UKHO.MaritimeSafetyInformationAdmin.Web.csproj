@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Common\UKHO.MaritimeSafetyInformation.Common.csproj" />
+    <ProjectReference Include="..\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

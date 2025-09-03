@@ -103,6 +103,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "var", "var", "{4D22B97D-E82
 		..\Deployment\templates\var\qa-deploy.yml = ..\Deployment\templates\var\qa-deploy.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Web.AppHost", "UKHO.MaritimeSafetyInformation.Web.AppHost\UKHO.MaritimeSafetyInformation.Web.AppHost.csproj", "{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults", "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults.csproj", "{B738101A-4479-C30C-6562-AD0BF74ACB85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +139,14 @@ Global
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -40,8 +40,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             builder.Logging.AddAzureWebAppDiagnostics();
 
-            // Rhz : when Aspire is added.
-            //builder.AddServiceDefaults();
+            builder.AddServiceDefaults();
 
             builder.Services.Configure<EventHubLoggingConfiguration>(builder.Configuration.GetSection("EventHubLoggingConfiguration"));
             builder.Services.Configure<RadioNavigationalWarningConfiguration>(builder.Configuration.GetSection("RadioNavigationalWarningConfiguration"));
@@ -87,6 +86,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 .AddCheck<RNWDatabaseHealthCheck>("RNWDatabaseHealthCheck");
 
             var app = builder.Build();
+
+            app.MapDefaultEndpoints();
             //app.AddCustomLogging(ILoggerFactory factory);
 
             app.UseCorrelationIdMiddleware();

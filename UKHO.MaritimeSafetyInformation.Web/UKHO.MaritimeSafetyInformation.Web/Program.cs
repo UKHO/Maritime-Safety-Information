@@ -51,8 +51,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             // Rhz : not yet builder.Logging.AddEventHub();  //see AddCustomLogging below
 
 
-            // Rhz : when Aspire is added.
-            //builder.AddServiceDefaults();
+            builder.AddServiceDefaults();
 
             builder.Services.Configure<EventHubLoggingConfiguration>(builder.Configuration.GetSection("EventHubLoggingConfiguration"));
             builder.Services.Configure<RadioNavigationalWarningConfiguration>(builder.Configuration.GetSection("RadioNavigationalWarningConfiguration"));
@@ -156,6 +155,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
 
             var app = builder.Build();
+
+
+            app.MapDefaultEndpoints();
             app.AddCustomLogging();  //Rhz new 
 
             app.UseCorrelationIdMiddleware();
