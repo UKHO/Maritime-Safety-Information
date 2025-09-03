@@ -8,16 +8,17 @@ steps:
 - checkout: self
   clean: true
 
-- download: current
-  displayName: Download integration test artifact
-  artifact: IntegrationTests
+# - download: current
+#   displayName: Download integration test artifact
+#   artifact: IntegrationTests
 
-- task: FileTransform@2
-  displayName: Transform - integration tests
-  inputs:
-    folderPath: '$(Pipeline.Workspace)/IntegrationTests'
-    xmlTransformationRules: ''
-    jsonTargetFiles: '**/appsettings.json'
+# Rhz Will need this for test settings.json transformation
+# - task: FileTransform@2
+#   displayName: Transform - integration tests
+#   inputs:
+#     folderPath: '$(Pipeline.Workspace)/IntegrationTests'
+#     xmlTransformationRules: ''
+#     jsonTargetFiles: '**/appsettings.json'
 
 - task: UseDotNet@2
   displayName: Use .NET SDK $(DotNetSdkVersion)
