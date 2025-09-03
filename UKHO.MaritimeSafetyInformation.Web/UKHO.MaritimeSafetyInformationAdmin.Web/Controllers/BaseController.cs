@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.CodeAnalysis;
+using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Web.Filters;
 
 namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
@@ -18,7 +19,7 @@ namespace UKHO.MaritimeSafetyInformationAdmin.Web.Controllers
 
         protected string GetCurrentCorrelationId()
         {
-            return _httpContextAccessor.HttpContext.Request.Headers[CorrelationIdMiddleware.XCorrelationIdHeaderKey].FirstOrDefault();
+            return _httpContextAccessor.HttpContext.Request.Headers[UkhoHeaderNames.XCorrelationId].FirstOrDefault();
         }
     }
 }
