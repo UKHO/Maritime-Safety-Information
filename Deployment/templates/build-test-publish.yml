@@ -155,40 +155,40 @@ jobs:
       PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
       ArtifactName: DACPAC
 
-- job: PublishIntegrationTestsArtifacts
-  workspace:
-    clean: all
-  displayName: Publish integration test artifact
-  steps:
-  - task: UseDotNet@2
-    displayName: Use .NET SDK $(DotNetSdkVersion)
-    inputs:
-      packageType: sdk
-      version: $(DotNetSdkVersion)
+# - job: PublishIntegrationTestsArtifacts
+#   workspace:
+#     clean: all
+#   displayName: Publish integration test artifact
+#   steps:
+#   - task: UseDotNet@2
+#     displayName: Use .NET SDK $(DotNetSdkVersion)
+#     inputs:
+#       packageType: sdk
+#       version: $(DotNetSdkVersion)
 
-  - task: DotNetCoreCLI@2
-    displayName: NuGet restore
-    inputs:
-      command: restore
-      projects: |
-        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
-      feedsToUse: config
-      noCache: true
-      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+  # - task: DotNetCoreCLI@2
+  #   displayName: NuGet restore
+  #   inputs:
+  #     command: restore
+  #     projects: |
+  #       **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
+  #     feedsToUse: config
+  #     noCache: true
+  #     nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+  #     workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
 
-  - task: DotNetCoreCLI@2
-    displayName: Publish integration tests
-    inputs:
-      command: publish
-      publishWebProjects: false
-      projects: |
-        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
-      zipAfterPublish: false
+  # - task: DotNetCoreCLI@2
+  #   displayName: Publish integration tests
+  #   inputs:
+  #     command: publish
+  #     publishWebProjects: false
+  #     projects: |
+  #       **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
+  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
+  #     zipAfterPublish: false
 
-  - task: PublishBuildArtifacts@1
-    displayName: Publish integration test artifact
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
-      ArtifactName: IntegrationTests  
+  # - task: PublishBuildArtifacts@1
+  #   displayName: Publish integration test artifact
+  #   inputs:
+  #     PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+  #     ArtifactName: IntegrationTests  

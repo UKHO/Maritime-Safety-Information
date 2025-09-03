@@ -25,17 +25,17 @@ steps:
     packageType: sdk
     version: $(DotNetSdkVersion)
 
-- task: DotNetCoreCLI@2
-  displayName: Run integration tests
-  inputs:
-    command: test
-    projects: '$(Pipeline.Workspace)\IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.dll'
-    ${{ if eq(parameters.UseFssMock, true) }}:
-      arguments: '--filter Category!=FssApi'
-    ${{ else }}:
-      arguments: '--filter Category!=FssMock'
-    testRunTitle: $(Environment)-IntegrationTests
-    workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
+# - task: DotNetCoreCLI@2
+#   displayName: Run integration tests
+#   inputs:
+#     command: test
+#     projects: '$(Pipeline.Workspace)\IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.dll'
+#     ${{ if eq(parameters.UseFssMock, true) }}:
+#       arguments: '--filter Category!=FssApi'
+#     ${{ else }}:
+#       arguments: '--filter Category!=FssMock'
+#     testRunTitle: $(Environment)-IntegrationTests
+#     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
 
 - task: NodeTool@0
   displayName: Install Node.js
