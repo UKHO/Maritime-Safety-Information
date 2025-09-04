@@ -63,6 +63,10 @@ jobs:
       packageType: sdk
       version: $(DotNetSdkVersion)
 
+  - script: git submodule update --init --recursive
+    displayName: Restore Github Submodule
+    workingDirectory: '$(Build.SourcesDirectory)'
+
   - task: DotNetCoreCLI@2
     displayName: NuGet restore non-test projects
     inputs:
