@@ -2,8 +2,7 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Rhz : not yet. var mockApi = builder.AddProject<UKHO_ADDS_Mocks_MSI>("mock-api");
-//var mockApi = 
+var mockApi = builder.AddProject<UKHO_ADDS_Mocks_MSI>("mock-api");
 
 var storage = builder.AddAzureStorage("local-storage-connection").RunAsEmulator(
     azr =>
@@ -66,8 +65,8 @@ var rnwDb = sql.AddDatabase(databaseName)
 
 
 builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
-    //.WithReference(mockApi)
-    //.WaitFor(mockApi)
+    .WithReference(mockApi)
+    .WaitFor(mockApi)
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)

@@ -35,15 +35,14 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 builder.Configuration.AddAzureKeyVault(new Uri(kvServiceUri), new DefaultAzureCredential());
             }
 
-            // Rhz : when Aspire is added.
-            //if (builder.Environment.IsDevelopment())
-            //{
-            //    // Rhz : configure aspire resources with change to use service discovery. 
-            //    builder.Configuration["FileShareService:BaseUrl"] = "https+http://mock-api/fssmsi/";
-            //    builder.Configuration["CacheConfiguration:LocalConnectionString"] = builder.Configuration.GetConnectionString("local-table-connection");
-            //    builder.Configuration["RadioNavigationalWarningsContext:ConnectionString"] = builder.Configuration.GetConnectionString("MSI-RNWDB-1");
-            //    // Rhz : configure aspire resources end.
-            //}
+            if (builder.Environment.IsDevelopment())
+            {
+                // Rhz : configure aspire resources with change to use service discovery. 
+                builder.Configuration["FileShareService:BaseUrl"] = "https+http://mock-api/fssmsi/";
+                builder.Configuration["CacheConfiguration:LocalConnectionString"] = builder.Configuration.GetConnectionString("local-table-connection");
+                builder.Configuration["RadioNavigationalWarningsContext:ConnectionString"] = builder.Configuration.GetConnectionString("MSI-RNWDB-1");
+                // Rhz : configure aspire resources end.
+            }
 
             builder.Services.AddApplicationInsightsTelemetry();
 

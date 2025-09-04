@@ -107,6 +107,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults", "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults.csproj", "{B738101A-4479-C30C-6562-AD0BF74ACB85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks.MSI", "UKHO.ADDS.Mocks.MSI\UKHO.ADDS.Mocks.MSI.csproj", "{5FE035EA-E303-2518-FC1E-57A6E744A6F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks", "UKHO.ADDS.Mocks\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj", "{FBDADAAD-61F0-F890-E12F-5362F2E2D643}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +151,14 @@ Global
 		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
