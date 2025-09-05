@@ -159,16 +159,20 @@ jobs:
       PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
       ArtifactName: DACPAC
 
-# - job: PublishIntegrationTestsArtifacts
-#   workspace:
-#     clean: all
-#   displayName: Publish integration test artifact
-#   steps:
-#   - task: UseDotNet@2
-#     displayName: Use .NET SDK $(DotNetSdkVersion)
-#     inputs:
-#       packageType: sdk
-#       version: $(DotNetSdkVersion)
+- job: PublishPlaywrightTestsArtifacts
+  workspace:
+    clean: all
+  displayName: Publish Playwright test artifact
+  steps:
+  - task: UseDotNet@2
+    displayName: Use .NET SDK $(DotNetSdkVersion)
+    inputs:
+      packageType: sdk
+      version: $(DotNetSdkVersion)
+
+  - script: git submodule update --init --recursive
+    displayName: Restore Github Submodule
+    workingDirectory: '$(Build.SourcesDirectory)'
 
   # - task: DotNetCoreCLI@2
   #   displayName: NuGet restore
