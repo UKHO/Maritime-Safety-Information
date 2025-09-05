@@ -12,6 +12,12 @@ steps:
 #   displayName: Download integration test artifact
 #   artifact: IntegrationTests
 
+# Rhz: these tests will replace the javascript functional tests
+- download: current
+  displayName: Download playwright test artifact
+  artifact: PlaywrightTests
+
+
 # Rhz Will need this for test settings.json transformation
 # - task: FileTransform@2
 #   displayName: Transform - integration tests
@@ -37,6 +43,23 @@ steps:
 #       arguments: '--filter Category!=FssMock'
 #     testRunTitle: $(Environment)-IntegrationTests
 #     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
+
+
+# Rhz: Run Playwright tests 
+- pwsh:  'ls env:'
+
+- pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
+  displayName: Install Playwright dependencies
+  workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
+- task: DotNetCoreCLI@2
+  displayName: Run dotnet Playwright tests
+  inputs:
+    command: test
+    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
+    testRunTitle: $(Environment)-PlaywrightTests
+    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
 
 - task: NodeTool@0
   displayName: Install Node.js
