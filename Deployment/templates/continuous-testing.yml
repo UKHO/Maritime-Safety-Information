@@ -52,6 +52,11 @@ steps:
   displayName: Install Playwright dependencies
   workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
 
+# Rhz: Not sure about this. May be wrong or wrong place.
+- script: git submodule update --init --recursive
+  displayName: Restore Github Submodule
+  workingDirectory: '$(Build.SourcesDirectory)'
+
 - task: DotNetCoreCLI@2
   displayName: Run dotnet Playwright tests
   inputs:
