@@ -47,9 +47,9 @@ steps:
 
 
 # Rhz:
-# - pwsh:  'ls env:'
+- pwsh:  'ls env:'
 
-- pwsh:  'ls ./$(Pipeline.Workspace) -Recurse -File'
+- pwsh:  'ls -Recurse -File'
 
 - task: DotNetCoreCLI@2
   displayName: Build dotnet Playwright tests
