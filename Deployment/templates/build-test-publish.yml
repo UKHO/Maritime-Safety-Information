@@ -56,7 +56,8 @@ jobs:
       packageType: sdk
       version: $(DotNetSdkVersion)
 
-  - task:
+  - checkout: self
+    clean: true
     submodules: true
   
   - task: DotNetCoreCLI@2
