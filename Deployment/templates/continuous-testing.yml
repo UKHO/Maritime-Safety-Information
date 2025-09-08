@@ -55,7 +55,7 @@ steps:
   displayName: Build dotnet Playwright tests
   inputs:
     command: build
-    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
+    projects: '.\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
     arguments: '--configuration Debug'
     workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
 
