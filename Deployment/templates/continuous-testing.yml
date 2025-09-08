@@ -7,15 +7,14 @@ parameters:
 steps:
 - checkout: self
   clean: true
+  submodules: true
 
-# - download: current
-#   displayName: Download integration test artifact
-#   artifact: IntegrationTests
 
 # Rhz: these tests will replace the javascript functional tests
-- download: current
-  displayName: Download playwright test artifact
-  artifact: PlaywrightTests
+#      We have pulled the repo to run locally so artifacts are not needed
+# - download: current
+#   displayName: Download playwright test artifact
+#   artifact: PlaywrightTests
 
 
 # Rhz Will need this for test settings.json transformation
@@ -31,6 +30,8 @@ steps:
   inputs:
     packageType: sdk
     version: $(DotNetSdkVersion)
+
+
 
 # - task: DotNetCoreCLI@2
 #   displayName: Run integration tests
@@ -48,20 +49,18 @@ steps:
 # Rhz: Run Playwright tests 
 - pwsh:  'ls env:'
 
+
 - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   displayName: Install Playwright dependencies
   workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
 
-# Rhz: Not sure about this. May be wrong or wrong place.
-- script: git submodule update --init --recursive
-  displayName: Restore Github Submodule
-  workingDirectory: '$(Build.SourcesDirectory)'
+
 
 - task: DotNetCoreCLI@2
   displayName: Run dotnet Playwright tests
   inputs:
     command: test
-    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
+    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
     testRunTitle: $(Environment)-PlaywrightTests
     workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
 

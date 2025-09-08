@@ -99,6 +99,8 @@ jobs:
       zipAfterPublish: true
       modifyOutputPath: true
 
+ # Rhz: Probably have to build and publish ADDS.Mocks
+
   - task: PublishBuildArtifacts@1
     displayName: Publish web artifact
     inputs:
