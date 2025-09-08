@@ -45,6 +45,37 @@ jobs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
       ArtifactName: codecoveragereport
 
+- job: LocalFunctionalTests
+  workspace:
+    clean: all
+  displayName: Local functional test
+  steps:
+  - task: UseDotNet@2
+    displayName: Use .NET SDK $(DotNetSdkVersion)
+    inputs:
+      packageType: sdk
+      version: $(DotNetSdkVersion)
+  - submodules: true
+  - task: DotNetCoreCLI@2
+    displayName: NuGet restore test projects
+    inputs:
+      command: restore
+      projects: |
+        **/*PlaywrightTests.csproj
+      feedsToUse: config
+      noCache: true
+      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+  - task: DotNetCoreCLI@2
+    displayName: Perform local functional tests
+    inputs:
+      command: test
+      projects: |
+        **/*PlaywrightTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" --no-restore'
+      publishTestResults: true
+      testRunTitle: LocalFunctionalTests
+
 - job: BuildAndPublish
   workspace:
     clean: all

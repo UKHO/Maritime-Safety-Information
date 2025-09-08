@@ -52,6 +52,18 @@ steps:
 - pwsh:  'ls -Recurse -File'
 
 - task: DotNetCoreCLI@2
+  displayName: NuGet restore test projects
+  inputs:
+    command: restore
+    projects: |
+      **/*.csproj
+      !**/*Tests.csproj
+    feedsToUse: config
+    noCache: true
+    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+    workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+- task: DotNetCoreCLI@2
   displayName: Build dotnet Playwright tests
   inputs:
     command: build
