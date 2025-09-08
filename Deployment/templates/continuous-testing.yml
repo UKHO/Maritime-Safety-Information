@@ -46,8 +46,10 @@ steps:
 #     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
 
 
-# Rhz: Run Playwright tests 
-- pwsh:  'ls env:'
+# Rhz:
+# - pwsh:  'ls env:'
+
+- pwsh:  'ls ./$(Pipeline.Workspace) -Recurse -File'
 
 - task: DotNetCoreCLI@2
   displayName: Build dotnet Playwright tests
