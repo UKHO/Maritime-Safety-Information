@@ -50,6 +50,12 @@ jobs:
     clean: all
   displayName: Local functional test
   steps:
+
+  - script: |
+      echo "Docker version:"
+      docker --version
+    displayName: Verify Docker is available
+
   - task: UseDotNet@2
     displayName: Use .NET SDK $(DotNetSdkVersion)
     inputs:
