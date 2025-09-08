@@ -49,6 +49,15 @@ steps:
 # Rhz: Run Playwright tests 
 - pwsh:  'ls env:'
 
+- task: DotNetCoreCLI@2
+  displayName: Build dotnet Playwright tests
+  inputs:
+    command: build
+    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
+    arguments: '--configuration Debug'
+    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
+- pwsh:  'ls ./UKHO.MaritimeSafetyInformation.PlaywrightTests'
 
 - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   displayName: Install Playwright dependencies
