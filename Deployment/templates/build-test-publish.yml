@@ -86,7 +86,7 @@ jobs:
   #   displayName: List files in source directory
   #   workingDirectory: '$(Build.BinariesDirectory)'
 
-  - pwsh: ./playwright.ps1 install -deps
+  - pwsh: ./playwright.ps1 install --with-deps
     displayName: Install Playwright dependencies
     workingDirectory: '$(Build.BinariesDirectory)'
 
