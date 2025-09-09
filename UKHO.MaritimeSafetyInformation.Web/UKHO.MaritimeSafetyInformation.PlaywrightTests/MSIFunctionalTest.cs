@@ -8,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
     //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    [Ignore("Temporarily ignoring all tests")]
+    //[Ignore("Temporarily ignoring all tests")]
     public class MSIFunctionalTest : PageTest
     {
         private DistributedApplication _app;
@@ -109,6 +109,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task HomePageBodyIsValidAlternative()
         {
             await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
@@ -120,6 +121,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task HomePageBodyIsValid()
         {
             var home = new HomePageObject(Page);
@@ -133,6 +135,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task YearlyAndWeeklyDropDownsEnabled_MenuAndTabsTextDisplayed()
         {
             await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
@@ -151,6 +154,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataDisplayedWithRecordCount()
         {
 
@@ -163,6 +167,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataForYearlyAndWeeklyDropDown_IncludeTableDataFileNameAndFileSize()
         {
             
@@ -175,6 +180,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataForAnnualIncludesSectionFileNameFileSizeAndDownload()
         {
 
@@ -192,6 +198,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
         {
             // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
@@ -210,6 +217,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownload()
         {
 
@@ -230,6 +238,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task DoesTheNoticesToMarinersCumulativePageIsDisplayed()
         {
             // Rhz need to change data for this to work. Filenames should be  NP234(A) 2024 or similar.
@@ -242,6 +251,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task DoesTheNoticesToMarinersPageUrlsAreDisplayedWithPageTitle()
         {
 
@@ -262,6 +272,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataForRadioNavigationalWarningsAboutPageIsDisplayed()
         {
 
@@ -274,6 +285,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task MenuTabsAndPageTextIsDisplayed()
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
@@ -290,6 +302,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataHeaderTextAndViewDetailsLinkWithDateSortingIsDisplayed()
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
@@ -308,6 +321,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
@@ -316,6 +330,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("Temporarily ignoring all tests")]
         public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
         {
 
