@@ -88,6 +88,15 @@ jobs:
       nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
       workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
 
+  - task: DotNetCoreCLI@2
+    displayName: Build Local Functional Test projects
+    inputs:
+      command: build
+      projects: |
+        **/*.csproj
+        !**/*PlaywrightTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory) --no-restore'
+
   - pwsh:  'ls -Recurse -File'
     displayName: List files in source directory
     workingDirectory: '$(Build.SourcesDirectory)'
