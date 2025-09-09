@@ -97,14 +97,14 @@ jobs:
         **/*PlaywrightTests.csproj
       arguments: '--configuration Debug --output $(Build.BinariesDirectory) --no-restore'
 
-  - pwsh:  'ls -Recurse -File'
-    displayName: List files in source directory
-    workingDirectory: '$(Build.BinariesDirectory)'
+  # - pwsh:  'ls -Recurse -File'
+  #   displayName: List files in source directory
+  #   workingDirectory: '$(Build.BinariesDirectory)'
 
-  # - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
-  #   displayName: Install Playwright dependencies
-  #   workingDirectory: '$(Build.SourcesDirectory)/PlaywrightTests'
-  
+  - pwsh: $(Build.BinariesDirectory)/playwright.ps1 install
+    displayName: Install Playwright dependencies
+    workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.PlaywrightTests'
+
   # - task: DotNetCoreCLI@2
   #   displayName: Perform local functional tests
   #   inputs:
