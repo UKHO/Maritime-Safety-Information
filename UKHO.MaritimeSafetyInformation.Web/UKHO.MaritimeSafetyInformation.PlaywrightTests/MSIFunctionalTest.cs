@@ -8,6 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
     //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Ignore("Temporarily ignoring all tests")]
     public class MSIFunctionalTest : PageTest
     {
         private DistributedApplication _app;

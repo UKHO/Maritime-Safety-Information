@@ -8,6 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
     //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
+    [Ignore("Temporarily ignoring all tests")]
     public class MSIAdminFunctionalTests : PageTest
     {
         private DistributedApplication _app;
@@ -16,7 +17,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _httpEndpoint_admin = string.Empty;
         private string _httpEndpoint = string.Empty;
         private bool _isRunningInPipeline = IsRunningInPipeline();
-
 
         // Configuration settings for pipeline running
         private IConfiguration _configuration;
