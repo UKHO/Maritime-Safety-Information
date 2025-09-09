@@ -95,7 +95,7 @@ jobs:
       projects: |
         !**/*.csproj
         **/*PlaywrightTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory) --no-restore'
+      arguments: '--configuration Debug --output $(Build.BinariesDirectory) --no-restore'
 
   - pwsh:  'ls -Recurse -File'
     displayName: List files in source directory
