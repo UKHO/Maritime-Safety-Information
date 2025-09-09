@@ -93,7 +93,6 @@ jobs:
     inputs:
       command: build
       projects: |
-        **/*.csproj
         !**/*PlaywrightTests.csproj
       arguments: '--configuration $(BuildConfiguration) --output $(Build.BinariesDirectory) --no-restore'
 
