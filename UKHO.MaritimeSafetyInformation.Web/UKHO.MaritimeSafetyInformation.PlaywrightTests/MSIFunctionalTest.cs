@@ -108,236 +108,236 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
         }
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task HomePageBodyIsValidAlternative()
-        {
-            await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" })).ToBeVisibleAsync();
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Radio Navigation" })).ToBeVisibleAsync();
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Privacy and cookies opens in" })).ToBeVisibleAsync();
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Accessibility opens in new tab" })).ToBeVisibleAsync();
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "UK Hydrographic Office Logo" })).ToBeVisibleAsync();
-        }
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task HomePageBodyIsValidAlternative()
+        //{
+        //    await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
+        //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" })).ToBeVisibleAsync();
+        //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Go to Radio Navigation" })).ToBeVisibleAsync();
+        //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Privacy and cookies opens in" })).ToBeVisibleAsync();
+        //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Accessibility opens in new tab" })).ToBeVisibleAsync();
+        //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "UK Hydrographic Office Logo" })).ToBeVisibleAsync();
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task HomePageBodyIsValid()
-        {
-            var home = new HomePageObject(Page);
-            await home.VerifyAdmiraltyHomePageAsync();
-            await home.VerifyAdmiraltyAsync();
-            await home.VerifyHomePageTitleAsync();
-            await home.VerifyPageAsync();
-            await home.VerifyUkHydrographicAsync();
-            await home.VerifyPrivacyPolicyAsync();
-            await home.VerifyAccessibilityAsync();
-        }
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task HomePageBodyIsValid()
+        //{
+        //    var home = new HomePageObject(Page);
+        //    await home.VerifyAdmiraltyHomePageAsync();
+        //    await home.VerifyAdmiraltyAsync();
+        //    await home.VerifyHomePageTitleAsync();
+        //    await home.VerifyPageAsync();
+        //    await home.VerifyUkHydrographicAsync();
+        //    await home.VerifyPrivacyPolicyAsync();
+        //    await home.VerifyAccessibilityAsync();
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task YearlyAndWeeklyDropDownsEnabled_MenuAndTabsTextDisplayed()
-        {
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task YearlyAndWeeklyDropDownsEnabled_MenuAndTabsTextDisplayed()
+        //{
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
-            var notice = new NoticeToMarinersPageObject(Page);
+        //    var notice = new NoticeToMarinersPageObject(Page);
 
-            Assert.That(await notice.CheckEnabledYearDropDownAsync(), Is.True);
-            Assert.That(await notice.CheckEnabledWeekDropDownAsync(), Is.True);
-            Assert.That(await notice.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
-            Assert.That(await notice.CheckTextAsync(notice.MenuValueAddedResellers),Is.EqualTo("Value Added Resellers") );
-            Assert.That(await notice.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
-            Assert.That(await notice.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
-            Assert.That(await notice.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
-            Assert.That(await notice.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
-            Assert.That(await notice.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
-        }
+        //    Assert.That(await notice.CheckEnabledYearDropDownAsync(), Is.True);
+        //    Assert.That(await notice.CheckEnabledWeekDropDownAsync(), Is.True);
+        //    Assert.That(await notice.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
+        //    Assert.That(await notice.CheckTextAsync(notice.MenuValueAddedResellers),Is.EqualTo("Value Added Resellers") );
+        //    Assert.That(await notice.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
+        //    Assert.That(await notice.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
+        //    Assert.That(await notice.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
+        //    Assert.That(await notice.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
+        //    Assert.That(await notice.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataDisplayedWithRecordCount()
-        {
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataDisplayedWithRecordCount()
+        //{
 
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
-            var notice = new NoticeToMarinersPageObject(Page);
+        //    var notice = new NoticeToMarinersPageObject(Page);
 
-            Assert.That(await notice.CheckTableRecordCountAsync(), Is.GreaterThan(0), "Table record count should be greater than 0");
-            await notice.VerifyTableContainsDownloadLinkAsync();
-        }
+        //    Assert.That(await notice.CheckTableRecordCountAsync(), Is.GreaterThan(0), "Table record count should be greater than 0");
+        //    await notice.VerifyTableContainsDownloadLinkAsync();
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataForYearlyAndWeeklyDropDown_IncludeTableDataFileNameAndFileSize()
-        {
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataForYearlyAndWeeklyDropDown_IncludeTableDataFileNameAndFileSize()
+        //{
             
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
-            var notice = new NoticeToMarinersPageObject(Page);
+        //    var notice = new NoticeToMarinersPageObject(Page);
 
-            await notice.CheckFileSizeDataAsync();
-            await notice.CheckFileNameSortAsync();
-        }
+        //    await notice.CheckFileSizeDataAsync();
+        //    await notice.CheckFileNameSortAsync();
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataForAnnualIncludesSectionFileNameFileSizeAndDownload()
-        {
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataForAnnualIncludesSectionFileNameFileSizeAndDownload()
+        //{
 
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
-            var annual = new NoticeToMarinersPageObject(Page);
+        //    var annual = new NoticeToMarinersPageObject(Page);
 
-            var annualTab = new NoticeToMarinersWeekDownloadPageObject(Page);
+        //    var annualTab = new NoticeToMarinersWeekDownloadPageObject(Page);
 
-            await annual.ClickToNoticeMarineAnnualAsync();
-            await annualTab.VerifySectionWithDotsCountAsync(); // this seems to be checking the existance of the section with "---", why test for data?
-            await annualTab.VerifyAnnualFileNameLinkAsync();
-            await annualTab.VerifyAnnualDownloadLinkAsync();
-            await annualTab.CheckAnnualFileSizeAsync();
-        }
+        //    await annual.ClickToNoticeMarineAnnualAsync();
+        //    await annualTab.VerifySectionWithDotsCountAsync(); // this seems to be checking the existance of the section with "---", why test for data?
+        //    await annualTab.VerifyAnnualFileNameLinkAsync();
+        //    await annualTab.VerifyAnnualDownloadLinkAsync();
+        //    await annualTab.CheckAnnualFileSizeAsync();
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
-        {
-            // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
-            // Rhz : Trying to indicate that the page is not loading properly
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFile()
+        //{
+        //    // Rhz : THis test is not working because the daily tab is not working in Dev & QA.
+        //    // Rhz : Trying to indicate that the page is not loading properly
 
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
+        //    var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
 
-            await noticeFileDownload.GoToNoticeToMarinerAsync();
-            await noticeFileDownload.GoToDailyFileAsync();
-            if (!await noticeFileDownload.IsErrorPageDisplayed())
-            {
-                await noticeFileDownload.CheckDailyFileDownloadAsync();
-            }
+        //    await noticeFileDownload.GoToNoticeToMarinerAsync();
+        //    await noticeFileDownload.GoToDailyFileAsync();
+        //    if (!await noticeFileDownload.IsErrorPageDisplayed())
+        //    {
+        //        await noticeFileDownload.CheckDailyFileDownloadAsync();
+        //    }
             
-        }
+        //}
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownload()
-        {
-
-
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
-
-            await noticeFileDownload.GoToNoticeToMarinerAsync();
-
-            var names = await noticeFileDownload.CheckFileDownloadAsync();
-            Assert.That(names.Count > 0,Is.True);
-            var fileName = names[0];
-
-            var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownload);
-            var newPageUrl = await element!.GetAttributeAsync("href");
-            var decodedUrl = WebUtility.UrlDecode(newPageUrl);
-            Assert.That(decodedUrl, Does.Contain($"NoticesToMariners/DownloadFile?fileName={fileName}"));
-        }
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownload()
+        //{
 
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task DoesTheNoticesToMarinersCumulativePageIsDisplayed()
-        {
-            // Rhz need to change data for this to work. Filenames should be  NP234(A) 2024 or similar.
-            var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
+        //    var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
 
-            await noticeFileDownload.GoToNoticeToMarinerAsync();
-            await noticeFileDownload.GoToCumulativeAsync();
-            await noticeFileDownload.VerifyCumulativeFileNameAsync();
-            await noticeFileDownload.VerifyCumulativeFileNameDownloadAsync();
-        }
+        //    await noticeFileDownload.GoToNoticeToMarinerAsync();
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task DoesTheNoticesToMarinersPageUrlsAreDisplayedWithPageTitle()
-        {
+        //    var names = await noticeFileDownload.CheckFileDownloadAsync();
+        //    Assert.That(names.Count > 0,Is.True);
+        //    var fileName = names[0];
 
-            var notice = new NoticeToMarinersPageObject(Page);
-            // Rhz : These tests involve comparing the current url with the expected url in config, why?
-            // Rhz : That comparison is currently commented out.
-            await notice.CheckPageUrlAsync(_httpEndpoint, "Maritime Safety Information");
-            await notice.CheckUrlAsync(notice.NoticeMarine.Nth(0), "NoticesToMariners/Weekly", "Notices to Mariners - Weekly");
-            await notice.CheckUrlAsync(notice.TabDaily, "NoticesToMariners/Daily", "Notices to Mariners - Daily");
-            await notice.CheckUrlAsync(notice.TabCumulative, "NoticesToMariners/Cumulative", "Notices to Mariners - Cumulative");
-            await notice.CheckUrlAsync(notice.TabAnnual, "NoticesToMariners/Annual", "Notices to Mariners - Annual");
-            await notice.CheckUrlAsync(notice.MenuValueAddedResellers, "NoticesToMariners/Resellers", "Notices to Mariners - Value Added Resellers");
-            await notice.CheckUrlAsync(notice.MenuAbout, "NoticesToMariners/About", "About Notices to Mariners");
-            await notice.CheckUrlAsync(notice.RadioNavigationalWarnings, "RadioNavigationalWarnings", "Radio Navigation Warnings");
-            await notice.CheckNavareaUrlAsync(notice.NavareaTab, "RadioNavigationalWarnings", "Radio Navigation Warnings - NAVAREA I");
-            await notice.CheckUkCoastalUrlAsync(notice.UkCoastalTab, "RadioNavigationalWarnings", "Radio Navigation Warnings - UK Coastal");
-        }
+        //    var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownload);
+        //    var newPageUrl = await element!.GetAttributeAsync("href");
+        //    var decodedUrl = WebUtility.UrlDecode(newPageUrl);
+        //    Assert.That(decodedUrl, Does.Contain($"NoticesToMariners/DownloadFile?fileName={fileName}"));
+        //}
 
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataForRadioNavigationalWarningsAboutPageIsDisplayed()
-        {
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task DoesTheNoticesToMarinersCumulativePageIsDisplayed()
+        //{
+        //    // Rhz need to change data for this to work. Filenames should be  NP234(A) 2024 or similar.
+        //    var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
 
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+        //    await noticeFileDownload.GoToNoticeToMarinerAsync();
+        //    await noticeFileDownload.GoToCumulativeAsync();
+        //    await noticeFileDownload.VerifyCumulativeFileNameAsync();
+        //    await noticeFileDownload.VerifyCumulativeFileNameDownloadAsync();
+        //}
 
-            await _rnwListEndUser.GoToRadioWarningAsync();
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task DoesTheNoticesToMarinersPageUrlsAreDisplayedWithPageTitle()
+        //{
 
-            await _rnwListEndUser.VerifyAboutRnwAsync();
-            await _rnwListEndUser.VerifyAboutRNWImportantBlockAsync();
-        }
-
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task MenuTabsAndPageTextIsDisplayed()
-        {
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-
-            await _rnwListEndUser.GoToRadioWarningAsync();
-
-
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AllWarningEndUser), Is.EqualTo("All warnings"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.NavAreaEndUser),Is.EqualTo("NAVAREA 1"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.UkCostalEnduser), Is.EqualTo("UK Coastal"));
-        }
-
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataHeaderTextAndViewDetailsLinkWithDateSortingIsDisplayed()
-        {
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-
-            await _rnwListEndUser.GoToRadioWarningAsync();
-
-            await _rnwListEndUser.VerifyTableHeaderAsync();
-            await _rnwListEndUser.VerifyTableContainsViewDetailsLinkAsync();
-            await _rnwListEndUser.VerifyTableDateColumnDataAsync();
-            await _rnwListEndUser.VerifyTableViewDetailsUrlAsync();
-            await _rnwListEndUser.VerifyImportantBlockAsync();
-            await _rnwListEndUser.VerifySelectOptionTextAsync();
-            await _rnwListEndUser.VerifySelectOptionCheckBoxAsync();
-            // Rhz: await _rnwListEndUser.VerifyPrint();
-        }
+        //    var notice = new NoticeToMarinersPageObject(Page);
+        //    // Rhz : These tests involve comparing the current url with the expected url in config, why?
+        //    // Rhz : That comparison is currently commented out.
+        //    await notice.CheckPageUrlAsync(_httpEndpoint, "Maritime Safety Information");
+        //    await notice.CheckUrlAsync(notice.NoticeMarine.Nth(0), "NoticesToMariners/Weekly", "Notices to Mariners - Weekly");
+        //    await notice.CheckUrlAsync(notice.TabDaily, "NoticesToMariners/Daily", "Notices to Mariners - Daily");
+        //    await notice.CheckUrlAsync(notice.TabCumulative, "NoticesToMariners/Cumulative", "Notices to Mariners - Cumulative");
+        //    await notice.CheckUrlAsync(notice.TabAnnual, "NoticesToMariners/Annual", "Notices to Mariners - Annual");
+        //    await notice.CheckUrlAsync(notice.MenuValueAddedResellers, "NoticesToMariners/Resellers", "Notices to Mariners - Value Added Resellers");
+        //    await notice.CheckUrlAsync(notice.MenuAbout, "NoticesToMariners/About", "About Notices to Mariners");
+        //    await notice.CheckUrlAsync(notice.RadioNavigationalWarnings, "RadioNavigationalWarnings", "Radio Navigation Warnings");
+        //    await notice.CheckNavareaUrlAsync(notice.NavareaTab, "RadioNavigationalWarnings", "Radio Navigation Warnings - NAVAREA I");
+        //    await notice.CheckUkCoastalUrlAsync(notice.UkCoastalTab, "RadioNavigationalWarnings", "Radio Navigation Warnings - UK Coastal");
+        //}
 
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
-        {
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-            await _rnwListEndUser.GoToRadioWarningAsync();
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA 1", _httpEndpoint);
-        }
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataForRadioNavigationalWarningsAboutPageIsDisplayed()
+        //{
 
-        [Test]
-        [Ignore("Temporarily ignoring all tests")]
-        public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
-        {
+        //    var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
 
-            var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
-            await _rnwListEndUser.GoToRadioWarningAsync();
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
-        }
+        //    await _rnwListEndUser.GoToRadioWarningAsync();
+
+        //    await _rnwListEndUser.VerifyAboutRnwAsync();
+        //    await _rnwListEndUser.VerifyAboutRNWImportantBlockAsync();
+        //}
+
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task MenuTabsAndPageTextIsDisplayed()
+        //{
+        //    var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+
+        //    await _rnwListEndUser.GoToRadioWarningAsync();
+
+
+        //    Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
+        //    Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
+        //    Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
+        //    Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AllWarningEndUser), Is.EqualTo("All warnings"));
+        //    Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.NavAreaEndUser),Is.EqualTo("NAVAREA 1"));
+        //    Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.UkCostalEnduser), Is.EqualTo("UK Coastal"));
+        //}
+
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataHeaderTextAndViewDetailsLinkWithDateSortingIsDisplayed()
+        //{
+        //    var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+
+        //    await _rnwListEndUser.GoToRadioWarningAsync();
+
+        //    await _rnwListEndUser.VerifyTableHeaderAsync();
+        //    await _rnwListEndUser.VerifyTableContainsViewDetailsLinkAsync();
+        //    await _rnwListEndUser.VerifyTableDateColumnDataAsync();
+        //    await _rnwListEndUser.VerifyTableViewDetailsUrlAsync();
+        //    await _rnwListEndUser.VerifyImportantBlockAsync();
+        //    await _rnwListEndUser.VerifySelectOptionTextAsync();
+        //    await _rnwListEndUser.VerifySelectOptionCheckBoxAsync();
+        //    // Rhz: await _rnwListEndUser.VerifyPrint();
+        //}
+
+
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
+        //{
+        //    var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+        //    await _rnwListEndUser.GoToRadioWarningAsync();
+        //    await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA 1", _httpEndpoint);
+        //}
+
+        //[Test]
+        //[Ignore("Temporarily ignoring all tests")]
+        //public async Task TableDataHasUkCoastalDataWithDateSortingIsDisplayed()
+        //{
+
+        //    var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
+        //    await _rnwListEndUser.GoToRadioWarningAsync();
+        //    await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
+        //}
 
         
 
