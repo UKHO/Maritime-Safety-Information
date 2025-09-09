@@ -70,13 +70,15 @@ builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
-    .WaitFor(tableStorage)
-    .WithHttpsEndpoint();
+    .WaitFor(tableStorage);
+    //.WithHttpEndpoint();
+    //.WithHttpsEndpoint();
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
-    .WithHttpsEndpoint()
+    //.WithHttpEndpoint()
+    //.WithHttpsEndpoint()
     .WithEnvironment(callback =>
     {
         callback.EnvironmentVariables["RadioNavigationalWarningsAdminContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;

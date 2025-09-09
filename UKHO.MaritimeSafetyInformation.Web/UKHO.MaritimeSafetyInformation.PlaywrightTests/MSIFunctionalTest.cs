@@ -50,7 +50,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 await _app.StartAsync();
                 await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
-                _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString(); 
+                _httpEndpoint = _app.GetEndpoint(_frontend, "http").ToString(); 
 
             }
         }
