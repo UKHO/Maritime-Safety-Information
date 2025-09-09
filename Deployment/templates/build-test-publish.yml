@@ -46,26 +46,11 @@ jobs:
       ArtifactName: codecoveragereport
 
 - job: LocalFunctionalTests
+  pool: Mare Nectaris
   workspace:
     clean: all
   displayName: Local functional test
   steps:
-
-  # Install Docker (Linux agents)
-  - script: |
-      set -euo pipefail
-      if command -v docker >/dev/null 2>&1; then
-        echo "Docker already installed: $(docker --version)"
-        exit 0
-      fi
-      echo "Installing Docker (Linux)..."
-      curl -fsSL https://get.docker.com -o get-docker.sh
-      sh get-docker.sh
-      sudo systemctl enable docker || true
-      sudo systemctl start docker || true
-      docker --version
-    displayName: Install Docker (Linux)
-    condition: and(succeeded(), ne( variables['Agent.OS'], 'Windows_NT'))
 
   - task: UseDotNet@2
     displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -101,9 +86,9 @@ jobs:
   #   displayName: List files in source directory
   #   workingDirectory: '$(Build.BinariesDirectory)'
 
-  - pwsh: $(Build.BinariesDirectory)/playwright.ps1 install
+  - pwsh: playwright.ps1 install
     displayName: Install Playwright dependencies
-    workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.PlaywrightTests'
+    workingDirectory: '$(Build.BinariesDirectory)'
 
   - task: DotNetCoreCLI@2
     displayName: Perform local functional tests
