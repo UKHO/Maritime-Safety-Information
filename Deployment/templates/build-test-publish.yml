@@ -99,7 +99,7 @@ jobs:
 
   - pwsh:  'ls -Recurse -File'
     displayName: List files in source directory
-    workingDirectory: '$(Build.SourcesDirectory)'
+    workingDirectory: '$(Build.BinariesDirectory)'
 
   # - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   #   displayName: Install Playwright dependencies
