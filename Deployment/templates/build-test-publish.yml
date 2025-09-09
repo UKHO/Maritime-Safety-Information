@@ -70,8 +70,8 @@ jobs:
         **/*PlaywrightTests.csproj
       feedsToUse: config
       noCache: true
-      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+      nugetConfigPath: '$(Build.SourcesDirectory)/BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)/UKHO.MaritimeSafetyInformation.Web'
 
   - task: DotNetCoreCLI@2
     displayName: Build Local Functional Test projects
@@ -96,7 +96,7 @@ jobs:
       command: test
       projects: |
         **/*PlaywrightTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)\test.runsettings" --no-restore'
+      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)/test.runsettings" --no-restore'
       publishTestResults: true
       testRunTitle: LocalFunctionalTests
 
