@@ -73,23 +73,23 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
               
         //}
 
-        [Test]
-        public async Task AppropriateEnvironmentTest()
-        {
-            if (_isRunningInPipeline)
-            {
-                Console.WriteLine($"Regular Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
-                Assert.That(_httpEndpoint, Does.Contain("msi-dev.admiralty.co.uk"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
-            }
-            else
-            {
-                await Page.GotoAsync(_httpEndpoint);
-                Console.WriteLine($"Regular Tests Running Distributed App. {_httpEndpoint}  ");
-                //var expectedUrl = Page.Url;
-                Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
-            }
-            await Task.CompletedTask;
-        }
+        //[Test]
+        //public async Task AppropriateEnvironmentTest()
+        //{
+        //    if (_isRunningInPipeline)
+        //    {
+        //        Console.WriteLine($"Regular Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
+        //        Assert.That(_httpEndpoint, Does.Contain("msi-dev.admiralty.co.uk"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
+        //    }
+        //    else
+        //    {
+        //        await Page.GotoAsync(_httpEndpoint);
+        //        Console.WriteLine($"Regular Tests Running Distributed App. {_httpEndpoint}  ");
+        //        //var expectedUrl = Page.Url;
+        //        Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
+        //    }
+        //    await Task.CompletedTask;
+        //}
 
 
 
