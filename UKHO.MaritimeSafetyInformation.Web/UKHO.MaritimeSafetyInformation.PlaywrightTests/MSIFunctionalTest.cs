@@ -104,7 +104,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             
             var shotPath = Path.Combine("screenshots", $"LandingPage_{DateTime.Now:yyyyMMdd_HHmmss}.png");
             Console.WriteLine($"LandingPageNavigationInPlace Test Running. {_httpEndpoint}  ");
-            await Page.GotoAsync(_httpEndpoint);
+            //await Page.GotoAsync(_httpEndpoint);
             await Page.ScreenshotAsync(new PageScreenshotOptions { Path = shotPath });
 
             //await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Admiralty Maritime Data" })).ToBeVisibleAsync();
