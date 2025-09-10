@@ -64,13 +64,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _app.DisposeAsync();
         }
 
-        [SetUp]
-        public async Task SetUpAsync()
-        {
-            // Navigate to the MSI Admin page before each test
+        //[SetUp]
+        //public async Task SetUpAsync()
+        //{
+        //    // Navigate to the MSI Admin page before each test
             
-            await Page.GotoAsync(_httpEndpoint);
-        }
+        //    await Page.GotoAsync(_httpEndpoint);
+        //}
 
         [Test]
         public async Task AppropriateEnvironmentTest()
@@ -82,6 +82,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
             else
             {
+                await Page.GotoAsync(_httpEndpoint);
                 Console.WriteLine($"Regular Tests Running Distributed App. {_httpEndpoint}  ");
                 //var expectedUrl = Page.Url;
                 Assert.That(Page.Url, Does.Contain("localhost"), "Running locally, expected URL to contain 'localhost'.");
@@ -95,7 +96,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task LandingPageNavigationInPlace()
         {
-
+            Console.WriteLine($"LandingPageNavigationInPlace Test Running. {_httpEndpoint}  ");
+            await Page.GotoAsync(_httpEndpoint);
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Admiralty Maritime Data" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Notices to Mariners", Exact = true })).ToBeVisibleAsync();
@@ -122,6 +124,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task HomePageBodyIsValid()
         {
+            Console.WriteLine($"Homepage body is valid Test Running. {_httpEndpoint}  ");
+            await Page.GotoAsync(_httpEndpoint);
             var home = new HomePageObject(Page);
             await home.VerifyAdmiraltyHomePageAsync();
             await home.VerifyAdmiraltyAsync();
