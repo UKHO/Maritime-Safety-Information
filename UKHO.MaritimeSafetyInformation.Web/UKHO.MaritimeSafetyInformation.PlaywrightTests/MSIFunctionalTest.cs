@@ -70,6 +70,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    // Navigate to the MSI Admin page before each test
             
         //    await Page.GotoAsync(_httpEndpoint);
+              
         //}
 
         [Test]
@@ -96,8 +97,16 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task LandingPageNavigationInPlace()
         {
+            if (!Directory.Exists("screenshots"))
+            {
+                Directory.CreateDirectory("screenshots");
+            }   
+            
+            var shotPath = Path.Combine("screenshots", $"LandingPage_{DateTime.Now:yyyyMMdd_HHmmss}.png");
             Console.WriteLine($"LandingPageNavigationInPlace Test Running. {_httpEndpoint}  ");
             await Page.GotoAsync(_httpEndpoint);
+            await Page.ScreenshotAsync(new PageScreenshotOptions { Path = shotPath });
+
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Admiralty Maritime Data" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Maritime Safety Information" })).ToBeVisibleAsync();
             await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Notices to Mariners", Exact = true })).ToBeVisibleAsync();
@@ -124,8 +133,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task HomePageBodyIsValid()
         {
+            if (!Directory.Exists("screenshots"))
+            {
+                Directory.CreateDirectory("screenshots");
+            }
+            var shotPath = Path.Combine("screenshots", $"HomePageBodyIsValid_{DateTime.Now:yyyyMMdd_HHmmss}.png");
+            
             Console.WriteLine($"Homepage body is valid Test Running. {_httpEndpoint}  ");
             await Page.GotoAsync(_httpEndpoint);
+            await Page.ScreenshotAsync(new PageScreenshotOptions { Path = shotPath });
             var home = new HomePageObject(Page);
             await home.VerifyAdmiraltyHomePageAsync();
             await home.VerifyAdmiraltyAsync();

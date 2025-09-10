@@ -50,6 +50,8 @@ jobs:
   workspace:
     clean: all
   displayName: Local functional test
+  variables:
+    PLAYWRIGHT_SCREENSHOTS_DIR: 'screenshots'
   steps:
 
   - task: UseDotNet@2
@@ -99,6 +101,13 @@ jobs:
       arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)/test.runsettings" --no-restore'
       publishTestResults: true
       testRunTitle: LocalFunctionalTests
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(PLAYWRIGHT_SCREENSHOTS_DIR)'
+      ArtifactName: 'Screenshots'
+      publishLocation: 'Container'
+    displayName: 'Publish Screenshots as artifact'
 
 - job: BuildAndPublish
   workspace:
