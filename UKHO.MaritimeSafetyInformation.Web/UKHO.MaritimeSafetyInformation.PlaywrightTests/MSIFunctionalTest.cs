@@ -22,6 +22,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
+            if (!Directory.Exists("screenshots"))
+            {
+                Directory.CreateDirectory("screenshots");
+            }
+
             if (_isRunningInPipeline)
             {
 
@@ -97,10 +102,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task LandingPageNavigationInPlace()
         {
-            if (!Directory.Exists("screenshots"))
-            {
-                Directory.CreateDirectory("screenshots");
-            }   
+            //if (!Directory.Exists("screenshots"))
+            //{
+            //    Directory.CreateDirectory("screenshots");
+            //}   
             
             var shotPath = Path.Combine("screenshots", $"LandingPage_{DateTime.Now:yyyyMMdd_HHmmss}.png");
             Console.WriteLine($"LandingPageNavigationInPlace Test Running. {_httpEndpoint}  ");
