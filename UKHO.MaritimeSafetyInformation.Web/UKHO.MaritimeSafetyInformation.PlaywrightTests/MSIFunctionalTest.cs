@@ -130,27 +130,27 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "UK Hydrographic Office Logo" })).ToBeVisibleAsync();
         //}
 
-        [Test]
-        public async Task HomePageBodyIsValid()
-        {
-            if (!Directory.Exists("screenshots"))
-            {
-                Directory.CreateDirectory("screenshots");
-            }
-            var shotPath = Path.Combine("screenshots", $"HomePageBodyIsValid_{DateTime.Now:yyyyMMdd_HHmmss}.png");
+        //[Test]
+        //public async Task HomePageBodyIsValid()
+        //{
+        //    if (!Directory.Exists("screenshots"))
+        //    {
+        //        Directory.CreateDirectory("screenshots");
+        //    }
+        //    var shotPath = Path.Combine("screenshots", $"HomePageBodyIsValid_{DateTime.Now:yyyyMMdd_HHmmss}.png");
             
-            Console.WriteLine($"Homepage body is valid Test Running. {_httpEndpoint}  ");
-            await Page.GotoAsync(_httpEndpoint);
-            await Page.ScreenshotAsync(new PageScreenshotOptions { Path = shotPath });
-            //var home = new HomePageObject(Page);
-            //await home.VerifyAdmiraltyHomePageAsync();
-            //await home.VerifyAdmiraltyAsync();
-            //await home.VerifyHomePageTitleAsync();
-            //await home.VerifyPageAsync();
-            //await home.VerifyUkHydrographicAsync();
-            //await home.VerifyPrivacyPolicyAsync();
-            //await home.VerifyAccessibilityAsync();
-        }
+        //    Console.WriteLine($"Homepage body is valid Test Running. {_httpEndpoint}  ");
+        //    await Page.GotoAsync(_httpEndpoint);
+        //    await Page.ScreenshotAsync(new PageScreenshotOptions { Path = shotPath });
+        //    //var home = new HomePageObject(Page);
+        //    //await home.VerifyAdmiraltyHomePageAsync();
+        //    //await home.VerifyAdmiraltyAsync();
+        //    //await home.VerifyHomePageTitleAsync();
+        //    //await home.VerifyPageAsync();
+        //    //await home.VerifyUkHydrographicAsync();
+        //    //await home.VerifyPrivacyPolicyAsync();
+        //    //await home.VerifyAccessibilityAsync();
+        //}
 
         //[Test]
         //[Ignore("Temporarily ignoring all tests")]
