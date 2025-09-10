@@ -1,4 +1,5 @@
 using Projects;
+var isInPipeline = IsRunningInPipeline();
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -64,20 +65,18 @@ var rnwDb = sql.AddDatabase(databaseName)
             .WithCreationScript(creationScript);
 
 
-builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
+var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
     .WithReference(mockApi)
     .WaitFor(mockApi)
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
-    .WithHttpEndpoint()
     .WaitFor(tableStorage);
     
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
-    .WithHttpEndpoint()
     .WithEnvironment(callback =>
     {
         callback.EnvironmentVariables["RadioNavigationalWarningsAdminContext__ConnectionString"] = rnwDb.Resource.ConnectionStringExpression;
@@ -88,4 +87,24 @@ var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("u
         callback.EnvironmentVariables["AzureAd__RedirectBaseUrl"] = "localhost";
     });
 
-builder.Build().Run();
+if (isInPipeline)
+{
+    mvcApp.WithHttpEndpoint();
+    mvcadminApp.WithHttpEndpoint();
+}
+
+    builder.Build().Run();
+
+bool IsRunningInPipeline()
+{
+    // Common environment variables for CI/CD pipelines
+    var ci = Environment.GetEnvironmentVariable("CI");
+    var tfBuild = Environment.GetEnvironmentVariable("TF_BUILD");
+    var githubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
+    var azurePipeline = Environment.GetEnvironmentVariable("AGENT_NAME");
+
+    return !string.IsNullOrEmpty(ci)
+        || !string.IsNullOrEmpty(tfBuild)
+        || !string.IsNullOrEmpty(githubActions)
+        || !string.IsNullOrEmpty(azurePipeline);
+}
