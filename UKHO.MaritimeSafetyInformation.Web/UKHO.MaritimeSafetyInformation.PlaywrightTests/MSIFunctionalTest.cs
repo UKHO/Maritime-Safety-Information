@@ -8,7 +8,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
     //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    //[Ignore("Temporarily ignoring all tests")]
     public class MSIFunctionalTest : PageTest
     {
         private DistributedApplication _app;
@@ -120,19 +119,18 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "UK Hydrographic Office Logo" })).ToBeVisibleAsync();
         //}
 
-        //[Test]
-        //[Ignore("Temporarily ignoring all tests")]
-        //public async Task HomePageBodyIsValid()
-        //{
-        //    var home = new HomePageObject(Page);
-        //    await home.VerifyAdmiraltyHomePageAsync();
-        //    await home.VerifyAdmiraltyAsync();
-        //    await home.VerifyHomePageTitleAsync();
-        //    await home.VerifyPageAsync();
-        //    await home.VerifyUkHydrographicAsync();
-        //    await home.VerifyPrivacyPolicyAsync();
-        //    await home.VerifyAccessibilityAsync();
-        //}
+        [Test]
+        public async Task HomePageBodyIsValid()
+        {
+            var home = new HomePageObject(Page);
+            await home.VerifyAdmiraltyHomePageAsync();
+            await home.VerifyAdmiraltyAsync();
+            await home.VerifyHomePageTitleAsync();
+            await home.VerifyPageAsync();
+            await home.VerifyUkHydrographicAsync();
+            await home.VerifyPrivacyPolicyAsync();
+            await home.VerifyAccessibilityAsync();
+        }
 
         //[Test]
         //[Ignore("Temporarily ignoring all tests")]
@@ -170,7 +168,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //[Ignore("Temporarily ignoring all tests")]
         //public async Task TableDataForYearlyAndWeeklyDropDown_IncludeTableDataFileNameAndFileSize()
         //{
-            
+
         //    await Page.GetByRole(AriaRole.Link, new() { Name = "Go to Notices to Mariners" }).ClickAsync();
 
         //    var notice = new NoticeToMarinersPageObject(Page);
@@ -213,7 +211,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    {
         //        await noticeFileDownload.CheckDailyFileDownloadAsync();
         //    }
-            
+
         //}
 
         //[Test]
@@ -339,7 +337,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
         //}
 
-        
+
 
 
         private static bool IsRunningInPipeline()

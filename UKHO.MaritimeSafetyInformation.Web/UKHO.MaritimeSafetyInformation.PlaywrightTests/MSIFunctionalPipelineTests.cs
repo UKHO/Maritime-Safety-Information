@@ -43,23 +43,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             Console.WriteLine($"Login Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
         }
 
-        [Test]  //Probably don't need this test, but keeping it for now
-        public async Task AppropriateEnvironmentTest()
-        {
-            if (_isRunningInPipeline)
-            {
-                Console.WriteLine($"Admin Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
-                Assert.That(_httpEndpoint, Does.Contain("https://rnwadmin-dev.ukho.gov.uk/"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
-            }
-            else
-            {
-                Console.WriteLine($"Admin Tests Running Distributed App. {_httpEndpoint}  ");
-                //var expectedUrl = Page.Url;
-                Assert.That(Page.Url, Does.Contain("about:blank"), "Running locally, expected URL to contain 'localhost'.");
-            }
-            await Task.CompletedTask;
-        }
-
 
         [Test]
         [Ignore("All tests temporarily disabled")]
