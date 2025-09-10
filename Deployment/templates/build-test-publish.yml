@@ -84,10 +84,6 @@ jobs:
         **/*PlaywrightTests.csproj
       arguments: '--configuration Debug --output $(Build.BinariesDirectory) --no-restore'
 
-  # - pwsh:  'ls -Recurse -File'
-  #   displayName: List files in source directory
-  #   workingDirectory: '$(Build.BinariesDirectory)'
-
   - pwsh: ./playwright.ps1 install --with-deps
     displayName: Install Playwright dependencies
     workingDirectory: '$(Build.BinariesDirectory)'
@@ -101,6 +97,14 @@ jobs:
       arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)/test.runsettings" --no-restore'
       publishTestResults: true
       testRunTitle: LocalFunctionalTests
+
+  - pwsh:  'ls -Recurse -File'
+    displayName: List files in source directory
+    workingDirectory: '$(Build.SourcesDirectory)'
+
+  - pwsh:  'ls -Recurse -File'
+    displayName: List files in binaries directory
+    workingDirectory: '$(Build.BinariesDirectory)'
 
   - task: PublishBuildArtifacts@1
     inputs:
