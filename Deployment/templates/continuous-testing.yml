@@ -16,12 +16,12 @@ steps:
   displayName: Download playwright test artifact
   artifact: PlaywrightTests
 
-- task: FileTransform@2
-  displayName: Transform - integration tests
-  inputs:
-    folderPath: '$(Pipeline.Workspace)/IntegrationTests'
-    xmlTransformationRules: ''
-    jsonTargetFiles: '**/appsettings.json'
+# - task: FileTransform@2
+#   displayName: Transform - integration tests
+#   inputs:
+#     folderPath: '$(Pipeline.Workspace)/IntegrationTests'
+#     xmlTransformationRules: ''
+#     jsonTargetFiles: '**/appsettings.json'
 
 - task: UseDotNet@2
   displayName: Use .NET SDK $(DotNetSdkVersion)
