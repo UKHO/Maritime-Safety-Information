@@ -45,75 +45,6 @@ jobs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)/codecoveragereport"
       ArtifactName: codecoveragereport
 
-- job: LocalFunctionalTests
-  pool: Mare Nectaris
-  workspace:
-    clean: all
-  displayName: Local functional test
-  variables:
-    PLAYWRIGHT_SCREENSHOTS_DIR: 'screenshots'
-  steps:
-
-  - task: UseDotNet@2
-    displayName: Use .NET SDK $(DotNetSdkVersion)
-    inputs:
-      packageType: sdk
-      version: $(DotNetSdkVersion)
-
-  - checkout: self
-    clean: true
-    submodules: true
-  
-  - task: DotNetCoreCLI@2
-    displayName: NuGet restore test projects
-    inputs:
-      command: restore
-      projects: |
-        **/*PlaywrightTests.csproj
-      feedsToUse: config
-      noCache: true
-      nugetConfigPath: '$(Build.SourcesDirectory)/BuildNuget.config'
-      workingDirectory: '$(Build.SourcesDirectory)/UKHO.MaritimeSafetyInformation.Web'
-
-  - task: DotNetCoreCLI@2
-    displayName: Build Local Functional Test projects
-    inputs:
-      command: build
-      projects: |
-        !**/*.csproj
-        **/*PlaywrightTests.csproj
-      arguments: '--configuration Debug --output $(Build.BinariesDirectory) --no-restore'
-
-  - pwsh: ./playwright.ps1 install --with-deps
-    displayName: Install Playwright dependencies
-    workingDirectory: '$(Build.BinariesDirectory)'
-
-  - task: DotNetCoreCLI@2
-    displayName: Perform local functional tests
-    inputs:
-      command: test
-      projects: |
-        **/*PlaywrightTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --settings "$(Build.SourcesDirectory)/test.runsettings" --no-restore'
-      publishTestResults: true
-      testRunTitle: LocalFunctionalTests
-
-  - pwsh:  ls -Recurse -File
-    displayName: List files in source directory
-    workingDirectory: '$(Build.SourcesDirectory)'
-
-
-  - pwsh:  ls -Recurse -File
-    displayName: List files in binaries directory
-    workingDirectory: '$(Build.BinariesDirectory)'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(PLAYWRIGHT_SCREENSHOTS_DIR)'
-      ArtifactName: 'Screenshots'
-      publishLocation: 'Container'
-    displayName: 'Publish Screenshots as artifact'
-
 - job: BuildAndPublish
   workspace:
     clean: all
@@ -167,8 +98,6 @@ jobs:
       arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\MaritimeSafetyInformationWeb --no-restore'
       zipAfterPublish: true
       modifyOutputPath: true
-
- # Rhz: Probably have to build and publish ADDS.Mocks
 
   - task: PublishBuildArtifacts@1
     displayName: Publish web artifact
@@ -230,10 +159,10 @@ jobs:
       PathtoPublish: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.Database\bin\output'
       ArtifactName: DACPAC
 
-- job: PublishPlaywrightTestsArtifacts
+- job: PublishIntegrationTestsArtifacts
   workspace:
     clean: all
-  displayName: Publish Playwright test artifact
+  displayName: Publish integration test artifact
   steps:
   - task: UseDotNet@2
     displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -245,34 +174,33 @@ jobs:
     displayName: Restore Github Submodule
     workingDirectory: '$(Build.SourcesDirectory)'
 
-  # - task: DotNetCoreCLI@2
-  #   displayName: NuGet restore
-  #   inputs:
-  #     command: restore
-  #     projects: |
-  #       **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
-  #     feedsToUse: config
-  #     noCache: true
-  #     nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-  #     workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+  - task: DotNetCoreCLI@2
+    displayName: NuGet restore integration test projects
+    inputs:
+      command: restore
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj
+      feedsToUse: config
+      noCache: true
+      nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+      workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
 
-  # - task: DotNetCoreCLI@2
-  #   displayName: Publish integration tests
-  #   inputs:
-  #     command: publish
-  #     publishWebProjects: false
-  #     projects: |
-  #       **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
-  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
-  #     zipAfterPublish: false
+  - task: DotNetCoreCLI@2
+    displayName: Publish integration tests
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: |
+        **/*UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
+      zipAfterPublish: false
 
-  # - task: PublishBuildArtifacts@1
-  #   displayName: Publish integration test artifact
-  #   inputs:
-  #     PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
-  #     ArtifactName: IntegrationTests
+  - task: PublishBuildArtifacts@1
+    displayName: Publish integration test artifact
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+      ArtifactName: IntegrationTests
 
-  # Rhz: Added job for publishing Playwright test artifacts
   - task: DotNetCoreCLI@2
     displayName: NuGet restore Playwright test projects
     inputs:
@@ -299,4 +227,3 @@ jobs:
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.PlaywrightTests'
       ArtifactName: PlaywrightTests
-
