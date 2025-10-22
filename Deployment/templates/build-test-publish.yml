@@ -102,6 +102,7 @@ jobs:
     displayName: List files in source directory
     workingDirectory: '$(Build.SourcesDirectory)'
 
+
   - pwsh:  ls -Recurse -File
     displayName: List files in binaries directory
     workingDirectory: '$(Build.BinariesDirectory)'

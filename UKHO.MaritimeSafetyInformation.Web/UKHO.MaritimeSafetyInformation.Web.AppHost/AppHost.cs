@@ -9,6 +9,7 @@ var storage = builder.AddAzureStorage("local-storage-connection").RunAsEmulator(
     azr =>
     {
         azr.WithDataVolume("local-storage");
+        azr.WithContainerName("mocks-storage");
     });
 
 var tableStorage = storage.AddTables("local-table-connection");
