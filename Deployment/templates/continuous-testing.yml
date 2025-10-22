@@ -8,9 +8,9 @@ steps:
 - checkout: self
   clean: true
 
-- download: current
-  displayName: Download integration test artifact
-  artifact: IntegrationTests
+# - download: current
+#   displayName: Download integration test artifact
+#   artifact: IntegrationTests
 
 - download: current
   displayName: Download playwright test artifact
