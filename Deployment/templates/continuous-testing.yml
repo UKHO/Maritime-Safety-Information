@@ -67,9 +67,10 @@ steps:
   displayName: Build dotnet Playwright tests
   inputs:
     command: build
-    projects: '.\UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
+    # Use an absolute path rooted at Build.SourcesDirectory for reliability across agents
+    projects: '$(Build.SourcesDirectory)/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
     arguments: '--configuration Debug'
-    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+    workingDirectory: '$(Build.SourcesDirectory)'
 
 - pwsh:  'ls ./UKHO.MaritimeSafetyInformation.PlaywrightTests'
 
