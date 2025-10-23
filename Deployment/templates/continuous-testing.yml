@@ -9,21 +9,9 @@ steps:
   clean: true
   submodules: true
 
-
-# Rhz: these tests will replace the javascript functional tests
-#      We have pulled the repo to run locally so artifacts are not needed
-# - download: current
-#   displayName: Download playwright test artifact
-#   artifact: PlaywrightTests
-
-
-# Rhz Will need this for test settings.json transformation
-# - task: FileTransform@2
-#   displayName: Transform - integration tests
-#   inputs:
-#     folderPath: '$(Pipeline.Workspace)/IntegrationTests'
-#     xmlTransformationRules: ''
-#     jsonTargetFiles: '**/appsettings.json'
+- download: current
+  displayName: Download playwright test artifact
+  artifact: PlaywrightTests
 
 - task: UseDotNet@2
   displayName: Use .NET SDK $(DotNetSdkVersion)
@@ -32,45 +20,9 @@ steps:
     version: $(DotNetSdkVersion)
 
 
-
-# - task: DotNetCoreCLI@2
-#   displayName: Run integration tests
-#   inputs:
-#     command: test
-#     projects: '$(Pipeline.Workspace)\IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.dll'
-#     ${{ if eq(parameters.UseFssMock, true) }}:
-#       arguments: '--filter Category!=FssApi'
-#     ${{ else }}:
-#       arguments: '--filter Category!=FssMock'
-#     testRunTitle: $(Environment)-IntegrationTests
-#     workingDirectory: '$(Pipeline.Workspace)/IntegrationTests'
-
-
-# Rhz:
 - pwsh:  'ls env:'
 
 - pwsh:  'ls -Recurse -File'
-
-- task: DotNetCoreCLI@2
-  displayName: NuGet restore test projects
-  inputs:
-    command: restore
-    projects: |
-      **/*.csproj
-      !**/*UnitTests.csproj
-    feedsToUse: config
-    noCache: true
-    nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
-    workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
-
-- task: DotNetCoreCLI@2
-  displayName: Build dotnet Playwright tests
-  inputs:
-    command: build
-    # Use an absolute path rooted at Build.SourcesDirectory for reliability across agents
-    projects: '$(Build.SourcesDirectory)/UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
-    arguments: '--configuration Debug'
-    workingDirectory: '$(Build.SourcesDirectory)'
 
 - pwsh:  'ls ./UKHO.MaritimeSafetyInformation.PlaywrightTests'
 
