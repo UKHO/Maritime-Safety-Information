@@ -57,7 +57,7 @@ steps:
     command: restore
     projects: |
       **/*.csproj
-      !**/*Tests.csproj
+      !**/*UnitTests.csproj
     feedsToUse: config
     noCache: true
     nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
