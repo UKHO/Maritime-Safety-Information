@@ -24,7 +24,16 @@ steps:
 
 - pwsh:  'ls -Recurse -File'
 
-- pwsh:  'ls ./UKHO.MaritimeSafetyInformation.PlaywrightTests'
+- pwsh:  'ls ./UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests'
+
+- task: DotNetCoreCLI@2
+  displayName: Build dotnet Playwright tests
+  inputs:
+    command: build
+    projects: './UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
+    arguments: '--configuration Debug'
+    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+
 
 - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   displayName: Install Playwright dependencies
