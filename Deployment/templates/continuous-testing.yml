@@ -26,18 +26,10 @@ steps:
 
 - pwsh:  'ls ./UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests'
 
-- task: DotNetCoreCLI@2
-  displayName: Build dotnet Playwright tests
-  inputs:
-    command: build
-    projects: './UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
-    arguments: '--configuration Debug'
-    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
-
 
 - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   displayName: Install Playwright dependencies
-  workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+  workingDirectory: '$(System.ArtifactsDirectory)/PlaywrightTests'
 
 
 
@@ -45,9 +37,9 @@ steps:
   displayName: Run dotnet Playwright tests
   inputs:
     command: test
-    projects: '$(Pipeline.Workspace)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj'
+    projects: '$(System.ArtifactsDirectory)\PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
     testRunTitle: $(Environment)-PlaywrightTests
-    workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+    workingDirectory: '$(System.ArtifactsDirectory)/PlaywrightTests'
 
 
 - task: NodeTool@0
