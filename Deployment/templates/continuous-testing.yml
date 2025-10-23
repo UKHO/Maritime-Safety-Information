@@ -25,13 +25,13 @@ steps:
 - pwsh:  'ls -Recurse -File'
 
 - pwsh:  'ls ./UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests'
-
-- pwsh:  'ls $(System.ArtifactsDirectory) -Recurse -File'
+- pwsh:  'ls $(AGENT_BUILDDIRECTORY) -Recurse -File'
+- pwsh:  'ls $(SYSTEM_ARTIFACTSDIRECTORY) -Recurse -File'
 
 
 - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   displayName: Install Playwright dependencies
-  workingDirectory: '$(System.ArtifactsDirectory)/PlaywrightTests'
+  workingDirectory: '$(SYSTEM_ARTIFACTSDIRECTORY)/PlaywrightTests'
 
 
 
