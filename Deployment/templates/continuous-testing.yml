@@ -27,7 +27,7 @@ steps:
 - pwsh:  'ls ./UKHO.MaritimeSafetyInformation.Web/UKHO.MaritimeSafetyInformation.PlaywrightTests'
 
 - pwsh:  'ls $(Build.ArtifactStagingDirectory) -Recurse -File'
-  displayName: List files in Build.ArtifactStagingDirectory
+  displayName: List files in $(Build.ArtifactStagingDirectory)
 
 
 
