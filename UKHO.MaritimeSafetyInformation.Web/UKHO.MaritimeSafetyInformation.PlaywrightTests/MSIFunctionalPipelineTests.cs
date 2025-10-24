@@ -146,12 +146,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var githubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
             var azurePipeline = Environment.GetEnvironmentVariable("AGENT_NAME");
 
-            //return !string.IsNullOrEmpty(ci)
-            //    || !string.IsNullOrEmpty(tfBuild)
-            //    || !string.IsNullOrEmpty(githubActions)
-            //    || !string.IsNullOrEmpty(azurePipeline);
+            return !string.IsNullOrEmpty(ci)
+                || !string.IsNullOrEmpty(tfBuild)
+                || !string.IsNullOrEmpty(githubActions)
+                || !string.IsNullOrEmpty(azurePipeline);
 
-            return false; // Temporarily disabled as these tests are not running in pipeline currently
         }
     }
 }
