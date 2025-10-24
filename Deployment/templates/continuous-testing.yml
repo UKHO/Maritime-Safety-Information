@@ -24,10 +24,7 @@ steps:
 
 - pwsh:  'ls -Recurse -File'
 
-- pwsh:  'ls ./$(Pipeline.Workspace)/PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests -Recurse -File'
-
-- pwsh:  'ls $(Build.ArtifactStagingDirectory) -Recurse -File'
-  displayName: List files in $(Build.ArtifactStagingDirectory)
+- pwsh:  'ls $(Pipeline.Workspace)/PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests -Recurse -File'
 
 
 
