@@ -74,7 +74,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("All tests temporarily disabled")]
+        //[Ignore("All tests temporarily disabled")]
         public async Task Login_WithValidDetails_ShouldSignInAndSignOut()
         {
             if (!_isRunningInPipeline)
@@ -105,7 +105,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("All tests temporarily disabled")]
+        //[Ignore("All tests temporarily disabled")]
         public async Task WithUnauthorisedDetails()
         {
             if (!_isRunningInPipeline)
