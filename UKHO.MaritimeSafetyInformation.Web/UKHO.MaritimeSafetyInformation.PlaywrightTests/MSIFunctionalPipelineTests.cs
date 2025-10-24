@@ -45,7 +45,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
-        [Ignore("All tests temporarily disabled")]
+        //[Ignore("All tests temporarily disabled")]
         public async Task ShouldGotoNoticesToMarinerPageForDailyDownloadFileWithDistributorLogin()
         {
             if (!_isRunningInPipeline)

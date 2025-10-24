@@ -400,7 +400,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 var _login = new LoginPageObject(Page);
                 await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
             }
-
+            await Page.ScreenshotAsync(new PageScreenshotOptions { Path = "a_rhz_before-search.png" });
             await radioNavigationalWarnings.SearchListWithFilterAsync("UK Coastal");
             await radioNavigationalWarnings.GetEditUrlAsync();
             await radioNavigationalWarnings.IsDeleteAsync();
