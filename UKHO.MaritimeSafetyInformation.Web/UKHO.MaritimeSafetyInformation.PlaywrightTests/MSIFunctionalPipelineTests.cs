@@ -15,11 +15,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _b2cAutoTest_Password = string.Empty;
         private string _distributorTest_UserName = string.Empty;
         private string _distributorTest_Password = string.Empty;
-        private string _rnwAdminAutoTest_User = string.Empty;
-        private string _rnwAdminAutoTest_Pass = string.Empty;
-        private string _rnwAdminAutoTestNoAccess_User = string.Empty;
-        private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
-        private bool _isRunningInPipeline = IsRunningInPipeline();
+        //private string _rnwAdminAutoTest_User = string.Empty;
+        //private string _rnwAdminAutoTest_Pass = string.Empty;
+        //private string _rnwAdminAutoTestNoAccess_User = string.Empty;
+        //private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
+        private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
         [OneTimeSetUp]
         public async Task SetupAsync()
@@ -35,10 +35,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             _b2cAutoTest_Password = _configuration["B2CAutoTest_Pass"] ?? "";
             _distributorTest_UserName = _configuration["DistributorTest_UserName"] ?? "";
             _distributorTest_Password = _configuration["DistributorTest_Password"] ?? "";
-            _rnwAdminAutoTest_User = _configuration["RNWAdminAutoTest_User"] ?? "";
-            _rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
-            _rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
-            _rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
+            //_rnwAdminAutoTest_User = _configuration["RNWAdminAutoTest_User"] ?? "";
+            //_rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
+            //_rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
+            //_rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
 
             Console.WriteLine($"Login Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
         }
@@ -90,47 +90,47 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await loginPage.SignOutAsync();
         }
 
-        [Test]
-        [Ignore("All tests temporarily disabled")]
-        public async Task WithValidDetails()
-        {
-            if (!_isRunningInPipeline)
-            {
-                Assert.Ignore("Test only runs in CI/CD pipeline.");
-            }
-            await Page.GotoAsync(_httpRnwEndpoint);
-            var loginPage = new LoginPageObject(Page);
-            await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            await loginPage.AdSignOutAsync();
-        }
-
-        [Test]
+        //[Test]
         //[Ignore("All tests temporarily disabled")]
-        public async Task WithUnauthorisedDetails()
-        {
-            if (!_isRunningInPipeline)
-            {
-                Assert.Ignore("Test only runs in CI/CD pipeline.");
-            }
-            await Page.GotoAsync(_httpRnwEndpoint);
-            var loginPage = new LoginPageObject(Page);
-            await loginPage.AdLoginAsync(_rnwAdminAutoTestNoAccess_User, _rnwAdminAutoTestNoAccess_Pass);
-            await loginPage.AdUnathorisedDetailsAsync();
-        }
+        //public async Task WithValidDetails()
+        //{
+        //    if (!_isRunningInPipeline)
+        //    {
+        //        Assert.Ignore("Test only runs in CI/CD pipeline.");
+        //    }
+        //    await Page.GotoAsync(_httpRnwEndpoint);
+        //    var loginPage = new LoginPageObject(Page);
+        //    await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
+        //    await loginPage.AdSignOutAsync();
+        //}
 
-        [Test]
-        [Ignore("All tests temporarily disabled")]
-        public async Task WithInvalidDetails()
-        {
-            if (!_isRunningInPipeline)
-            {
-                Assert.Ignore("Test only runs in CI/CD pipeline.");
-            }
-            await Page.GotoAsync(_httpRnwEndpoint);
-            var loginPage = new LoginPageObject(Page);
-            await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, "1111111");
-            await loginPage.AdPasswordErrorCheckAsync();
-        }
+        //[Test]
+        ////[Ignore("All tests temporarily disabled")]
+        //public async Task WithUnauthorisedDetails()
+        //{
+        //    if (!_isRunningInPipeline)
+        //    {
+        //        Assert.Ignore("Test only runs in CI/CD pipeline.");
+        //    }
+        //    await Page.GotoAsync(_httpRnwEndpoint);
+        //    var loginPage = new LoginPageObject(Page);
+        //    await loginPage.AdLoginAsync(_rnwAdminAutoTestNoAccess_User, _rnwAdminAutoTestNoAccess_Pass);
+        //    await loginPage.AdUnathorisedDetailsAsync();
+        //}
+
+        //[Test]
+        //[Ignore("All tests temporarily disabled")]
+        //public async Task WithInvalidDetails()
+        //{
+        //    if (!_isRunningInPipeline)
+        //    {
+        //        Assert.Ignore("Test only runs in CI/CD pipeline.");
+        //    }
+        //    await Page.GotoAsync(_httpRnwEndpoint);
+        //    var loginPage = new LoginPageObject(Page);
+        //    await loginPage.AdLoginAsync(_rnwAdminAutoTest_User, "1111111");
+        //    await loginPage.AdPasswordErrorCheckAsync();
+        //}
 
         
 

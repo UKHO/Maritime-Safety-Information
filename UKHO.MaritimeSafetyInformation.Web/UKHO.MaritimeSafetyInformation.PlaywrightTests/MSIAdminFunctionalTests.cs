@@ -8,7 +8,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
     //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    [Ignore("Temporarily ignoring all tests")]
+    //[Ignore("Temporarily ignoring all tests")]
     public class MSIAdminFunctionalTests : PageTest
     {
         private DistributedApplication _app;
@@ -16,7 +16,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private const string _frontend = "ukho-msi-web";
         private string _httpEndpoint_admin = string.Empty;
         private string _httpEndpoint = string.Empty;
-        private bool _isRunningInPipeline = IsRunningInPipeline();
+        private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
         // Configuration settings for pipeline running
         private IConfiguration _configuration;
@@ -24,10 +24,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _b2cAutoTest_Password = string.Empty;
         private string _distributorTest_UserName = string.Empty;
         private string _distributorTest_Password = string.Empty;
-        private string _rnwAdminAutoTest_User = string.Empty;
-        private string _rnwAdminAutoTest_Pass = string.Empty;
-        private string _rnwAdminAutoTestNoAccess_User = string.Empty;
-        private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
+        //private string _rnwAdminAutoTest_User = string.Empty;
+        //private string _rnwAdminAutoTest_Pass = string.Empty;
+        //private string _rnwAdminAutoTestNoAccess_User = string.Empty;
+        //private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
 
 
         [OneTimeSetUp]
@@ -48,10 +48,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 _b2cAutoTest_Password = _configuration["B2CAutoTest_Pass"] ?? "";
                 _distributorTest_UserName = _configuration["DistributorTest_UserName"] ?? "";
                 _distributorTest_Password = _configuration["DistributorTest_Password"] ?? "";
-                _rnwAdminAutoTest_User = _configuration["RNWAdminAutoTest_User"] ?? "";
-                _rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
-                _rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
-                _rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
+                //_rnwAdminAutoTest_User = _configuration["RNWAdminAutoTest_User"] ?? "";
+                //_rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
+                //_rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
+                //_rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
             }
             else
             {
@@ -108,6 +108,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
         {
             if (_isRunningInPipeline)
@@ -124,6 +125,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task DoesTheTableDataIsDisplayedWithPagination()
         {
             if (_isRunningInPipeline)
@@ -143,6 +145,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -167,6 +170,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task FilterDisplaysSearchResultsForWarningTypes()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -192,6 +196,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithValidInputCheckForDuplicateAndAccept()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -209,6 +214,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithValidInputCheckForDuplicateAndCancel()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -230,6 +236,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithValidInputCheckForDuplicateAndReject()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -251,6 +258,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithoutEnteredInputFields()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -270,6 +278,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithContentTextAsBlank()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -286,6 +295,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithValidInputDetailsWithNavarea()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -302,6 +312,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WithValidInputDetailsWithUKCoastal()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -318,6 +329,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsAreDisplayed()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -335,6 +347,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task FilterDisplaysSearchResultsSortedDescending()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -351,6 +364,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task TableDataIsDisplayedWithPagination()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -371,6 +385,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task Update_WithSummaryReferenceAndContentTextAsBlank()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -392,6 +407,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task Update_WithValidInputDetailsWithUKCoastal()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -410,6 +426,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
+        [Ignore("This password may not be working")]
         public async Task Update_WithValidInputDetailsWithNAVAREA()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);

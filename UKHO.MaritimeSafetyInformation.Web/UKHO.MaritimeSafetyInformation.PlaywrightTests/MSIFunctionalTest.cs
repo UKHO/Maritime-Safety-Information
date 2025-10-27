@@ -13,7 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private DistributedApplication _app;
         private const string _frontend = "ukho-msi-web";
         private string _httpEndpoint = string.Empty;
-        private bool _isRunningInPipeline = IsRunningInPipeline();
+        private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
 
         // Configuration settings for pipeline running
