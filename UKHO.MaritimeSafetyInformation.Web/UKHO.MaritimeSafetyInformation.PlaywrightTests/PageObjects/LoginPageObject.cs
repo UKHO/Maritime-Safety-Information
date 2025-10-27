@@ -62,6 +62,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await BtnContinue.ClickAsync();
             await Password.FillAsync(password);
             await BtnLogin.ClickAsync();
+            await _page.WaitForLoadStateAsync(); //Rhz Added to ensure page is loaded before checking for username
             await LoginUsername.ClickAsync();
             var text = await LoginUsername.InnerTextAsync();
             Assert.That(text.Contains("UKHOTest MSI"), Is.True, "Login was not successful, username not found on page.");

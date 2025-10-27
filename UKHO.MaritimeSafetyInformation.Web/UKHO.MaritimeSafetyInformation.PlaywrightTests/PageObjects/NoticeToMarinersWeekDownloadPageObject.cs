@@ -65,7 +65,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task GoToNoticeToMarinerAsync()
         {
-            await NoticeToMarine.First.ClickAsync();
+            //Rhz changed to use a variable to hold the locator before clicking and add delay for load state
+            var thePage = NoticeToMarine.First;
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            //await NoticeToMarine.First.ClickAsync();
+            await thePage.ClickAsync();
         }
 
         public async Task GoToDailyFileAsync()
