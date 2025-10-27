@@ -24,10 +24,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _b2cAutoTest_Password = string.Empty;
         private string _distributorTest_UserName = string.Empty;
         private string _distributorTest_Password = string.Empty;
-        //private string _rnwAdminAutoTest_User = string.Empty;
-        //private string _rnwAdminAutoTest_Pass = string.Empty;
-        //private string _rnwAdminAutoTestNoAccess_User = string.Empty;
-        //private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
+        private string _rnwAdminAutoTest_User = string.Empty;
+        private string _rnwAdminAutoTest_Pass = string.Empty;
+        private string _rnwAdminAutoTestNoAccess_User = string.Empty;
+        private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
 
 
         [OneTimeSetUp]
@@ -48,10 +48,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 _b2cAutoTest_Password = _configuration["B2CAutoTest_Pass"] ?? "";
                 _distributorTest_UserName = _configuration["DistributorTest_UserName"] ?? "";
                 _distributorTest_Password = _configuration["DistributorTest_Password"] ?? "";
-                //_rnwAdminAutoTest_User = _configuration["RNWAdminAutoTest_User"] ?? "";
-                //_rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
-                //_rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
-                //_rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
+                _rnwAdminAutoTest_User = _configuration["RNWAdminAutoTest_User"] ?? "";
+                _rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
+                _rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
+                _rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
             }
             else
             {
