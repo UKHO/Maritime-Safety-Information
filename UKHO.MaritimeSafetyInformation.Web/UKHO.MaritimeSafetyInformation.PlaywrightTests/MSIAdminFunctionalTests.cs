@@ -28,6 +28,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         private string _rnwAdminAutoTest_Pass = string.Empty;
         private string _rnwAdminAutoTestNoAccess_User = string.Empty;
         private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
+        // Added MFA secret (Base32 or otpauth URI) pulled from user secrets / env vars
+        private string _rnwAdminAutoTest_MfaSecret = string.Empty;
 
 
         [OneTimeSetUp]
@@ -37,7 +39,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 var builder = new ConfigurationBuilder()
                     .AddUserSecrets<MSIAdminFunctionalTests>()
-                        .AddEnvironmentVariables();
+                    .AddEnvironmentVariables();
                 _configuration = builder.Build();
 
                 _httpEndpoint = _configuration["url"] ?? "Not Found";
@@ -52,6 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 _rnwAdminAutoTest_Pass = _configuration["RNWAdminAutoTest_Pass"] ?? "";
                 _rnwAdminAutoTestNoAccess_User = _configuration["RNWAdminAutoTestNoAccess_User"] ?? "";
                 _rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
+                _rnwAdminAutoTest_MfaSecret = _configuration["RNWAdminAutoTest_MfaSecret"] ?? ""; // new
             }
             else
             {
@@ -90,6 +93,23 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await Page.GotoAsync(_httpEndpoint_admin);
         }
 
+        private async Task AdminLoginAsync()
+        {
+            if (_isRunningInPipeline)
+            {
+                var login = new LoginPageObject(Page);
+                // Use MFA capable login if secret supplied
+                if (!string.IsNullOrWhiteSpace(_rnwAdminAutoTest_MfaSecret))
+                {
+                    await login.AdLoginWithMfaAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass, _rnwAdminAutoTest_MfaSecret);
+                }
+                else
+                {
+                    await login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
+                }
+            }
+        }
+
         [Test]  //Probably don't need this test, but keeping it for now
         public async Task AppropriateEnvironmentTest()
         {
@@ -111,14 +131,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Ignore("This password may not be working")]
         public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
         {
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass); 
-            }
-
+            await AdminLoginAsync();
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.VerifyTableDateColumnDataAsync("2022");
@@ -128,14 +142,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Ignore("This password may not be working")]
         public async Task DoesTheTableDataIsDisplayedWithPagination()
         {
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass); 
-            }
-
+            await AdminLoginAsync();
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnFirst);
@@ -149,22 +157,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
-
+            await AdminLoginAsync();
             var warningTypeEnabled = await _rnwList.CheckEnabledWarningTypeDropDownAsync();
             Assert.That(warningTypeEnabled, Is.True);
-
             var yearEnabled = await _rnwList.CheckEnabledYearDropDownAsync();
             Assert.That(yearEnabled, Is.True);
-
             var createRecordList = await _rnwList.CheckCreateNewRecordTextAsync();
             Assert.That(string.IsNullOrWhiteSpace(createRecordList), Is.False);
-
             var pageHeader = await _rnwList.CheckPageHeaderTextAsync();
             Assert.That(pageHeader, Is.EqualTo("Radio Navigational Warnings Admin List"));
         }
@@ -174,23 +173,14 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task FilterDisplaysSearchResultsForWarningTypes()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
-            // search UK Coastal
+            await AdminLoginAsync();
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.VerifyTableColumnWarningTypeDataAsync("UK Coastal");
             await _rnwList.VerifyTableContainsEditLinkAsync();
-
-            // search NAVAREA 1
-            await _rnwList.SearchWithFilterAsync("NAVAREA 1", "2022");
+            await _rnwList.SearchWithFilterAsync("NAVAREA1", "2022");
             await _rnwList.VerifyTableHeaderAsync();
-            await _rnwList.VerifyTableColumnWarningTypeDataAsync("NAVAREA 1");
+            await _rnwList.VerifyTableColumnWarningTypeDataAsync("NAVAREA1");
             await _rnwList.VerifyTableContainsEditLinkAsync();
         }
 
@@ -200,14 +190,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithValidInputCheckForDuplicateAndAccept()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA 1");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA1");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(radioNavigationalWarnings.AlertMessage, radioNavigationalWarnings.Message, "yes");
             await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
@@ -218,14 +203,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithValidInputCheckForDuplicateAndCancel()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA 1");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA1");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(
                 radioNavigationalWarnings.AlertMessage,
@@ -240,14 +220,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithValidInputCheckForDuplicateAndReject()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA 1");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA1");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(
                 radioNavigationalWarnings.AlertMessage,
@@ -262,12 +237,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithoutEnteredInputFields()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.CheckErrorMessageAsync(radioNavigationalWarnings.WarningError, "The Warning Type field is required.");
@@ -282,12 +252,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithContentTextAsBlank()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
             await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "");
             await radioNavigationalWarnings.CreateRNWAsync();
@@ -299,14 +264,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithValidInputDetailsWithNavarea()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
-            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA 1");
+            await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA1");
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
         }
@@ -316,12 +276,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WithValidInputDetailsWithUKCoastal()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.PageLoadAsync();
             await radioNavigationalWarnings.FillFormWithValidDetailsAsync("2", "UK Coastal");
             await radioNavigationalWarnings.CreateRNWAsync();
@@ -333,12 +288,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsAreDisplayed()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             Assert.That(await _rnwList.CheckEnabledWarningTypeDropDownAsync());
             Assert.That(await _rnwList.CheckEnabledYearDropDownAsync());
             var createRecordText = await _rnwList.CheckCreateNewRecordTextAsync();
@@ -351,13 +301,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task FilterDisplaysSearchResultsSortedDescending()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.VerifyTableDateColumnDataAsync("2022");
@@ -368,13 +312,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task TableDataIsDisplayedWithPagination()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
-
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await _rnwList.SearchWithFilterAsync("UK Coastal", "2022");
             await _rnwList.VerifyTableHeaderAsync();
             await _rnwList.CheckPaginationLinkAsync(_rnwList.BtnFirst);
@@ -389,13 +327,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task Update_WithSummaryReferenceAndContentTextAsBlank()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
+            await AdminLoginAsync();
             await radioNavigationalWarnings.GetEditUrlAsync();
             await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Description);
             await radioNavigationalWarnings.ClearInputAsync(radioNavigationalWarnings.Reference);
@@ -411,11 +343,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task Update_WithValidInputDetailsWithUKCoastal()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
+            await AdminLoginAsync();
             await Page.ScreenshotAsync(new PageScreenshotOptions { Path = "a_rhz_before-search.png" });
             await radioNavigationalWarnings.SearchListWithFilterAsync("UK Coastal");
             await radioNavigationalWarnings.GetEditUrlAsync();
@@ -430,16 +358,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         public async Task Update_WithValidInputDetailsWithNAVAREA()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
-            if (_isRunningInPipeline)
-            {
-                var _login = new LoginPageObject(Page);
-                await _login.AdLoginAsync(_rnwAdminAutoTest_User, _rnwAdminAutoTest_Pass);
-            }
-
-            await radioNavigationalWarnings.SearchListWithFilterAsync("NAVAREA 1");
+            await AdminLoginAsync();
+            await radioNavigationalWarnings.SearchListWithFilterAsync("NAVAREA1");
             await radioNavigationalWarnings.GetEditUrlAsync();
             await radioNavigationalWarnings.IsDeleteAsync();
-            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("NAVAREA 1");
+            await radioNavigationalWarnings.FillEditFormWithValidDetailsAsync("NAVAREA1");
             await radioNavigationalWarnings.EditRNWAsync();
             await radioNavigationalWarnings.GetDialogTextAsync("Record updated successfully!");
         }
@@ -448,10 +371,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Ignore("Failed Waiting for Locator(\"a:has-text(\"Notices to Mariners\")\").First ")]
         public async Task ShouldGotoNoticesToMarinerPageForWeeklyNMFilesWithDistributorRole()
         {
-            //if (!_isRunningInPipeline)
-            //{
-            //    Assert.Ignore("Test only runs in CI/CD pipeline.");
-            //}
             await Page.GotoAsync(_httpEndpoint);
             var loginPage = new LoginPageObject(Page);
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);

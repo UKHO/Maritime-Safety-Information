@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using OtpNet; // ensure reference for Totp and Base32 encoding in v1.4.0
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
@@ -27,6 +25,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator AdSignOutText { get; }
         public ILocator AdPasswordError { get; }
         public ILocator AdUnathorisedError { get; }
+        // MFA specific locators (Azure AD TOTP prompt)
+        public ILocator MfaOtpInput { get; }
+        public ILocator MfaVerifyButton { get; }
 
         public LoginPageObject(IPage page)
         {
@@ -48,6 +49,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             AdSignOutText = _page.Locator("#navbarSupportedContent > ul > li > ul > li > a");
             AdPasswordError = _page.Locator("#passwordError");
             AdUnathorisedError = _page.Locator("#headingLevelOne");
+            // Common Azure AD OTP input & continue button IDs (may vary depending on policy)
+            MfaOtpInput = _page.Locator("#idTxtBx_SAOTCC_OTC");
+            MfaVerifyButton = _page.Locator("#idSubmit_SAOTCC_Continue");
         }
 
         public async Task GoToSignInAsync()
@@ -62,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await BtnContinue.ClickAsync();
             await Password.FillAsync(password);
             await BtnLogin.ClickAsync();
-            await _page.WaitForLoadStateAsync(); //Rhz Added to ensure page is loaded before checking for username
+            await _page.WaitForLoadStateAsync(); // Ensure page loaded
             await LoginUsername.ClickAsync();
             var text = await LoginUsername.InnerTextAsync();
             Assert.That(text.Contains("UKHOTest MSI"), Is.True, "Login was not successful, username not found on page.");
@@ -91,7 +95,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             await AdUsername.FillAsync(username);
             await Task.WhenAll(
-                //_page.WaitForURLAsync("**/signin.microsoftonline.com/*"),
                 _page.WaitForNavigationAsync(),
                 AdNext.ClickAsync()
             );
@@ -100,6 +103,66 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                 _page.WaitForNavigationAsync(),
                 LoginButton.ClickAsync()
             );
+        }
+
+        public async Task AdLoginWithMfaAsync(string username, string password, string totpSecret)
+        {
+            // Perform basic AAD login first
+            await AdLoginAsync(username, password);
+
+            if (string.IsNullOrWhiteSpace(totpSecret))
+            {
+                return; // No MFA secret configured
+            }
+
+            // If MFA field appears, submit current TOTP
+            try
+            {
+                if (await MfaOtpInput.IsVisibleAsync())
+                {
+                    var code = GenerateTotp(totpSecret);
+                    await MfaOtpInput.FillAsync(code);
+                    // Some tenants auto-verify after fill; attempt click if button present
+                    if (await MfaVerifyButton.IsVisibleAsync())
+                    {
+                        await Task.WhenAll(
+                            _page.WaitForNavigationAsync(new PageWaitForNavigationOptions { Timeout = 10000 }),
+                            MfaVerifyButton.ClickAsync()
+                        );
+                    }
+                }
+            }
+            catch (PlaywrightException)
+            {
+                // Ignore if elements not found; indicates MFA not required for this user/session
+            }
+        }
+
+        private static string GenerateTotp(string secret)
+        {
+            // Allow otpauth:// URIs or raw Base32 secrets
+            if (secret.StartsWith("otpauth://", StringComparison.OrdinalIgnoreCase))
+            {
+                var parts = secret.Split('?');
+                if (parts.Length > 1)
+                {
+                    var query = parts[1].Split('&');
+                    foreach (var kv in query)
+                    {
+                        var pair = kv.Split('=');
+                        if (pair.Length == 2 && pair[0] == "secret")
+                        {
+                            secret = pair[1];
+                            break;
+                        }
+                    }
+                }
+            }
+            secret = secret.Replace(" ", "").Trim();
+            // Uppercase for Base32 decoding
+            var bytes = Base32Encoding.ToBytes(secret.ToUpperInvariant());
+            var totp = new Totp(bytes); // v1.4.0 supports this
+            return totp.ComputeTotp();
         }
 
         public async Task AdSignOutAsync()
@@ -121,5 +184,4 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             Assert.That(text.Contains("Your account or password is incorrect"), Is.True, "Login was not successful, username not found on page.");
         }
     }
-
 }
