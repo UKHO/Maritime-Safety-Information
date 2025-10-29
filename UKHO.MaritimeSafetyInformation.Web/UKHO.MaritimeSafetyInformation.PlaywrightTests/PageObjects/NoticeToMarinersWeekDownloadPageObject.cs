@@ -7,7 +7,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
     {
         private readonly IPage _page;
 
-        public ILocator NoticeToMarine { get; }
+        //public ILocator NoticeToMarine { get; }
         public ILocator Year { get; }
         public ILocator Week { get; }
         public ILocator Daily { get; }
@@ -30,13 +30,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator FileSize { get; }
         public ILocator AnnualSection { get; }
         public string WeeklyDownload { get; }
+        public string NoticeToMarinerLinkId { get; }
         public ILocator DownloadAll { get; }
         public ILocator DownloadPartnerAll { get; }
 
         public NoticeToMarinersWeekDownloadPageObject(IPage page)
         {
             _page = page;
-            NoticeToMarine = _page.Locator("a:has-text(\"Notices to Mariners\")");
+            //NoticeToMarine = _page.Locator("a:has-text(\"Notices to Mariners\")");  Rhz replaced with test id
+            NoticeToMarinerLinkId = "NMs";
             Year = _page.Locator("#ddlYears");
             Week = _page.Locator("#ddlWeeks");
             Daily = _page.Locator("a[role=\"listitem\"]:has-text(\"Daily\")");
@@ -65,12 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task GoToNoticeToMarinerAsync()
         {
-            //Rhz changed to use a variable to hold the locator before clicking and add delay for load state
-            //var thePage = NoticeToMarine.First;
-            await _page.GetByTestId("NMs").ClickAsync();
-            //await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-            //await NoticeToMarine.First.ClickAsync();
-            //await thePage.ClickAsync();
+            await _page.GetByTestId(NoticeToMarinerLinkId).ClickAsync();
         }
 
         public async Task GoToDailyFileAsync()
