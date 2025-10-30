@@ -1,0 +1,27 @@
+{
+  "searchBatchCount": 2,
+  "batchAttributes": [
+    {
+      "key": "PRODUCT TYPE",
+      "values": [
+        "AVCS",
+        "Paper Chart"
+      ]
+    },
+    {
+      "key": "YEAR / WEEK",
+      "values": [
+        "2024 / 2",
+        "2024 / 3",
+        "2024 / 4",
+        "2023 / 5",
+        "2023 / 6",
+        "2023 / 7",
+        "2022 / 8",
+        "2022 / 9",
+        "2022 / 10",
+        "2021 / 30"
+      ]
+    }
+  ]
+}
