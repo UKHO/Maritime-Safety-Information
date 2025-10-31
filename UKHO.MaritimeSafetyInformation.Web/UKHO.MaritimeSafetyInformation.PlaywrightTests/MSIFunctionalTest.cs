@@ -332,7 +332,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             var _rnwListEndUser = new RadioNavigationalWarningsListEndUserObject(Page);
             await _rnwListEndUser.GoToRadioWarningAsync();
-            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA 1", _httpEndpoint);
+            await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.NavAreaEndUser, "NAVAREA1", _httpEndpoint);
         }
 
         [Test]

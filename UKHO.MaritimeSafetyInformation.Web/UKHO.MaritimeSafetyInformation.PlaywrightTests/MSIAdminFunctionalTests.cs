@@ -128,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task DoesFilterDisplaySearchResultSortedInDescendingOrder()
         {
             await AdminLoginAsync();
@@ -139,7 +139,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task DoesTheTableDataIsDisplayedWithPagination()
         {
             await AdminLoginAsync();
@@ -153,7 +153,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsDisplayed()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -169,7 +169,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task FilterDisplaysSearchResultsForWarningTypes()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -186,7 +186,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithValidInputCheckForDuplicateAndAccept()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -199,7 +199,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithValidInputCheckForDuplicateAndCancel()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -216,7 +216,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithValidInputCheckForDuplicateAndReject()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -233,7 +233,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithoutEnteredInputFields()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -248,7 +248,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithContentTextAsBlank()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -260,7 +260,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithValidInputDetailsWithNavarea()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -272,7 +272,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WithValidInputDetailsWithUKCoastal()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -284,7 +284,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task WarningTypeAndYearDropDownsAreEnabledAndHeaderTextsAreDisplayed()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -297,7 +297,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task FilterDisplaysSearchResultsSortedDescending()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -308,7 +308,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task TableDataIsDisplayedWithPagination()
         {
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
@@ -323,7 +323,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task Update_WithSummaryReferenceAndContentTextAsBlank()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -339,7 +339,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task Update_WithValidInputDetailsWithUKCoastal()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -354,7 +354,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("This password may not be working")]
+        //[Ignore("This password may not be working")]
         public async Task Update_WithValidInputDetailsWithNAVAREA()
         {
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
@@ -368,7 +368,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Failed Waiting for Locator(\"a:has-text(\"Notices to Mariners\")\").First ")]
+        [Ignore("This test needs the distributor login so cannot run locally")]
         public async Task ShouldGotoNoticesToMarinerPageForWeeklyNMFilesWithDistributorRole()
         {
             await Page.GotoAsync(_httpEndpoint);
@@ -389,7 +389,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         }
 
         [Test]
-        [Ignore("Not working yet?")]
+        [Ignore("This test needs the distributor login so cannot run locally")]
         public async Task ShouldGotoNoticesToMarinerPageForWeeklyDownloadWithDistributorRole()
         {
 
@@ -403,7 +403,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 await loginPage.GoToSignInAsync();
                 await loginPage.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password); 
             }
-
 
             await noticeFileDownload.GoToNoticeToMarinerAsync();
             await noticeFileDownload.CheckWeeklyFileSectionNameAsync();
