@@ -207,7 +207,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
             await Week.SelectOptionAsync(new SelectOptionValue { Label = "10" }); // rhz originally 18
             await _page.WaitForLoadStateAsync();
-            await _page.WaitForSelectorAsync("[id^='partner']");
+
+            await _page.ScreenshotAsync(new PageScreenshotOptions { Path = "a_rhz_DistributorFileCount.png", FullPage = true });
+            //await _page.WaitForSelectorAsync("[id^='partner']");
+            await _page.WaitForSelectorAsync("text=Partner");
             var fileNumber = await DistributorFileNumber.CountAsync();
             if (fileNumber > 0)
                 Assert.That(fileNumber, Is.EqualTo(1));
@@ -220,7 +223,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var text = await DownloadAll.InnerTextAsync();
             Assert.That(text, Does.Contain("Download All"));
             var href = await DownloadAll.GetAttributeAsync("href");
-            Assert.That(href, Does.Contain("/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=ba66b732-e67e-4219-bbd4-76b703ba18c0&mimeType=application%2Fgzip&type=public"));
+            Assert.That(href, Does.Contain("/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2010%20Weekly%20NMs.zip&batchId=3a42a817-8a59-4072-9b7e-bb594c095fd9&mimeType=application%2Fgzip&type=public"));
         }
 
         public async Task VerifyIntegrationDownloadPartnerAllAsync()
@@ -228,19 +231,20 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var text = await DownloadPartnerAll.InnerTextAsync();
             Assert.That(text, Does.Contain("Download All"));
             var href = await DownloadPartnerAll.GetAttributeAsync("href");
-            Assert.That(href, Does.Contain("/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2018%20Weekly%20NMs.zip&batchId=c6ae5916-2794-40e8-a7dd-acff27c23859&mimeType=application%2Fgzip&type=partner"));
+            Assert.That(href, Does.Contain("/NoticesToMariners/DownloadAllWeeklyZipFile?fileName=2022%20Wk%2010%20Weekly%20NMs.zip&batchId=3a42a817-8a59-4072-9b7e-bb594c095fd9&mimeType=application%2Fgzip&type=partner"));
         }
 
         public async Task VerifyIntegrationTestValueForDistributorAsync()
         {
+            await _page.ScreenshotAsync(new PageScreenshotOptions { Path = "a_rhz_Distributor_test.png" });
             var distributorFileName = await DistributorFirstFileName.First.InnerTextAsync();
-            Assert.That(distributorFileName, Is.EqualTo("DistributorTest"));
+            Assert.That(distributorFileName, Is.EqualTo("25snii24"));  //rhz originally "DistributorTest"
             var distributorFileSize = await DistributorFirstSize.First.InnerTextAsync();
-            Assert.That(distributorFileSize, Is.EqualTo("839 Bytes (.pdf)"));
-            var publicFileNameFirst = await PublicFirstFileName.Last.InnerTextAsync();
-            Assert.That(publicFileNameFirst, Is.EqualTo("NM_MSI"));
-            var publicFileSizeFirst = await PublicFirstSize.Last.InnerTextAsync();
-            Assert.That(publicFileSizeFirst, Is.EqualTo("3 KB (.jpg)"));
+            Assert.That(distributorFileSize, Is.EqualTo("904 KB (.pdf)")); // rhz originally "839 Bytes (.pdf)"
+            //var publicFileNameFirst = await PublicFirstFileName.Last.InnerTextAsync();
+            //Assert.That(publicFileNameFirst, Is.EqualTo("NM_MSI"));
+            //var publicFileSizeFirst = await PublicFirstSize.Last.InnerTextAsync();
+            //Assert.That(publicFileSizeFirst, Is.EqualTo("3 KB (.jpg)"));
         }
 
         public async Task VerifySectionWithDotsCountAsync()

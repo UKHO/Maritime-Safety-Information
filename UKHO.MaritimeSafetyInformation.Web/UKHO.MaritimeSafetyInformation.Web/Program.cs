@@ -111,17 +111,18 @@ namespace UKHO.MaritimeSafetyInformation.Web
             // Rhz : Add Mock Authentication Handler for Development
             if (builder.Environment.IsDevelopment())
             {
-                builder.Services.AddAuthentication("Mock")
-                        .AddScheme<AuthenticationSchemeOptions, MockAuthHandler>("Mock", options => { });
+                builder.Services.AddAuthentication()
+                        .AddScheme<AuthenticationSchemeOptions, MockAuthHandler>("MockUser1", options => { })
+                        .AddScheme<AuthenticationSchemeOptions, MockAuthHandlerDistro>("MockDistributorUser", options => { });
 
                 //create a mock token acquisition service
                 builder.Services.AddSingleton<ITokenAcquisition, MockTokenAcquisition>();
 
-                builder.Services.PostConfigure<AuthenticationOptions>(options =>
-                {
-                    options.DefaultAuthenticateScheme = "Mock";
-                    options.DefaultChallengeScheme = "Mock";
-                });
+                //builder.Services.PostConfigure<AuthenticationOptions>(options =>
+                //{
+                //    options.DefaultAuthenticateScheme = "MockDistributorUser";
+                //    options.DefaultChallengeScheme = "MockDistributorUser";
+                //});
             }
             else
             {

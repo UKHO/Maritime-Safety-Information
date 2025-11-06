@@ -22,14 +22,33 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             // Add a name claim to the mock identity
-            //var claims = new List<System.Security.Claims.Claim>
-            //{
-            //    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "MockUser")
-            //};
-            var claims = new[] { new Claim(ClaimTypes.Name, "MockUser") };
-            var identity = new System.Security.Claims.ClaimsIdentity(claims, "MockAuth");
-            var principal = new System.Security.Claims.ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, "MockAuth");
+            
+            //, new Claim(ClaimTypes.Role, "Distributor") // add this role to the following claim but we want to add this dynamically.
+            var claims = new[] { new Claim(ClaimTypes.Name, "MockUser1") };
+            var identity = new ClaimsIdentity(claims, "MockDynamic");
+            var principal = new ClaimsPrincipal(identity);
+            var ticket = new AuthenticationTicket(principal, "MockDynamic");
+            return Task.FromResult(AuthenticateResult.Success(ticket));
+        }
+    }
+
+    public class MockAuthHandlerDistro : AuthenticationHandler<AuthenticationSchemeOptions>
+    {
+        public MockAuthHandlerDistro(
+        IOptionsMonitor<AuthenticationSchemeOptions> options,
+        ILoggerFactory logger,
+        UrlEncoder encoder)
+        : base(options, logger, encoder) { }
+
+        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+        {
+            // Add a name claim to the mock identity
+
+            //, new Claim(ClaimTypes.Role, "Distributor") // add this role to the following claim but we want to add this dynamically.
+            var claims = new[] { new Claim(ClaimTypes.Name, "MockDistributorUser"), new Claim(ClaimTypes.Role, "Distributor") };
+            var identity = new ClaimsIdentity(claims, "MockDynamic");
+            var principal = new ClaimsPrincipal(identity);
+            var ticket = new AuthenticationTicket(principal, "MockDynamic");
             return Task.FromResult(AuthenticateResult.Success(ticket));
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -11,6 +12,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Filters
 
         public Task Invoke(HttpContext httpContext)
         {
+
             httpContext.Response.Headers.Append("Permissions-Policy", "camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), usb=()");
             return _next(httpContext);
         }
