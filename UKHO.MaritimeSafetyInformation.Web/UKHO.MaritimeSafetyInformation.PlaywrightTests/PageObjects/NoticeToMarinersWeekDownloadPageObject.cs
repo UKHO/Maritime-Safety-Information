@@ -57,7 +57,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             DistributorThirdSize = _page.Locator("#filesize_2");
             PublicFirstFileName = _page.Locator("#filename_0");
             PublicFirstSize = _page.Locator("#filesize_0");
-            WeeklyDownload = "[id^='download'] > a";
+            WeeklyDownload = "[id^='download_0'] > a";
             FileNameDownload = _page.Locator("[id^='filename'] > a");
             FileSize = _page.Locator("[id^='filesize']");
             AnnualSection = _page.Locator("[id^=\"section\"]");

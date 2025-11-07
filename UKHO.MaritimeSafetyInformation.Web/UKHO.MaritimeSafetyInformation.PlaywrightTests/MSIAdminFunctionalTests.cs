@@ -412,10 +412,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             var names = await noticeFileDownload.CheckFileDownloadAsync();
             Assert.That(names.Count > 0);
             var fileName = names[0];
-            //Rhz: The following is disabled because of data inconsistency.
-            //var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownloadSelector);
-            //var newPageUrl = await element.GetAttributeAsync("href");
-            //Assert.That(newPageUrl.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
+            var newPageUrl = await activePage.Locator(noticeFileDownload.WeeklyDownload).GetAttributeAsync("href");
+            Assert.That(newPageUrl!.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
         }
 
 
