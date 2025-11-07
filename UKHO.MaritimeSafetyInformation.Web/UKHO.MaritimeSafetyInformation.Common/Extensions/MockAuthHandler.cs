@@ -23,7 +23,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
         {
             // Add a name claim to the mock identity
             
-            //, new Claim(ClaimTypes.Role, "Distributor") // add this role to the following claim but we want to add this dynamically.
             var claims = new[] { new Claim(ClaimTypes.Name, "MockUser1") };
             var identity = new ClaimsIdentity(claims, "MockDynamic");
             var principal = new ClaimsPrincipal(identity);
@@ -44,7 +43,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
         {
             // Add a name claim to the mock identity
 
-            //, new Claim(ClaimTypes.Role, "Distributor") // add this role to the following claim but we want to add this dynamically.
             var claims = new[] { new Claim(ClaimTypes.Name, "MockDistributorUser"), new Claim(ClaimTypes.Role, "Distributor") };
             var identity = new ClaimsIdentity(claims, "MockDynamic");
             var principal = new ClaimsPrincipal(identity);

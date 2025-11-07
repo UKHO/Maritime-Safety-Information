@@ -15,7 +15,7 @@ var storage = builder.AddAzureStorage("local-storage-connection").RunAsEmulator(
 var tableStorage = storage.AddTables("local-table-connection");
 
 var sql = builder.AddSqlServer("local-sql")
-    .WithDataVolume("local-msi-data")
+    .WithDataVolume("local-msi-data-v2")
     .WithResetCommand();
 
 var databaseName = "MSI-RNWDB-1";
@@ -72,7 +72,8 @@ var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("uk
     .WithReference(rnwDb)
     .WaitFor(rnwDb)
     .WithReference(tableStorage)
-    .WaitFor(tableStorage);
+    .WaitFor(tableStorage)
+    .WithLoginCommand();
     
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")

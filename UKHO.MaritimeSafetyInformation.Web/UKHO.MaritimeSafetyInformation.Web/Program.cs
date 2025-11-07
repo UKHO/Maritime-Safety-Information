@@ -47,7 +47,8 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddApplicationInsightsTelemetry();
 
             builder.Logging.AddAzureWebAppDiagnostics();
-            // Rhz : not yet builder.Logging.AddEventHub();  //see AddCustomLogging below
+            // Rhz :
+            // builder.Logging.AddEventHub();  //see AddCustomLogging below
 
 
             builder.AddServiceDefaults();
@@ -96,7 +97,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             builder.Services.AddHttpContextAccessor();
 
-            //Configuring appsettings section AzureAdB2C, into IOptions (Rhz MAY NOT NEED THIS HERE)
             builder.Services.AddOptions();
             builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
 
@@ -118,11 +118,16 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 //create a mock token acquisition service
                 builder.Services.AddSingleton<ITokenAcquisition, MockTokenAcquisition>();
 
-                //builder.Services.PostConfigure<AuthenticationOptions>(options =>
-                //{
-                //    options.DefaultAuthenticateScheme = "MockDistributorUser";
-                //    options.DefaultChallengeScheme = "MockDistributorUser";
-                //});
+                //Login scheme selection based on LOCAL_USER_FLAG app setting
+                var msiUserFlag = builder.Configuration["LOCAL_USER_FLAG"];
+                if (!string.IsNullOrWhiteSpace(msiUserFlag))
+                {
+                    builder.Services.PostConfigure<AuthenticationOptions>(options =>
+                    {
+                        options.DefaultAuthenticateScheme = msiUserFlag;
+                        options.DefaultChallengeScheme = msiUserFlag;
+                    });
+                }
             }
             else
             {
@@ -196,11 +201,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 new RadioNavigationalWarning
                 {
                     WarningType = 1,
-                    Reference = "NAVAREA I 240/24",
+                    Reference = "NAVAREA 1 TEST/22",
                     DateTimeGroup = DateTime.UtcNow,
                     Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
                     Content = @"NAVAREA
-                                     NAVAREA I 240/24
+                                     NAVAREA TEST/24
                                      301040 UTC Dec 24
                                      SPACE WEATHER.
                                      SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.
@@ -211,11 +216,11 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 new RadioNavigationalWarning
                 {
                     WarningType = 2,
-                    Reference = "WZ 897/24",
+                    Reference = "UK Coastal TEST/22",
                     DateTimeGroup = DateTime.UtcNow,
                     Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
                     Content = @"UK Coastal
-                                     WZ 897/24
+                                     TEST/24
                                      301510 UTC Dec 24
                                      HUMBER.
                                      HORNSEA 1 AND 2 WINDFARMS.
