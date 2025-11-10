@@ -57,10 +57,12 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
 
             app.UseExceptionHandler("/error");
             app.UseRouting();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseMockAuthSelection();
             }
+
             app.UseAuthentication();
             app.UseAuthorization();
 

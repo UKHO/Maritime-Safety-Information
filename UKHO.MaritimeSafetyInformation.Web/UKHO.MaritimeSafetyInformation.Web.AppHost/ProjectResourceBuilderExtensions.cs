@@ -17,8 +17,8 @@ namespace Aspire.Hosting
          {
             var commandOptions = new CommandOptions
              {
-                 Description = "Set an environment variable 'LOCAL_USER_FLAG' and restart resource. ", 
-                 IconName = "ArrowClockwise",
+                 Description = "Set an environment variable 'LOCAL_USER_FLAG' and restart resource. ",
+                 IconName = "PersonCircle",
                  IconVariant = IconVariant.Filled,
                  UpdateState = OnUpdateResourceState
              };

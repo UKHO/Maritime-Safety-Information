@@ -88,10 +88,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
             var app = builder.Build();
 
             app.MapDefaultEndpoints();
-            //app.AddCustomLogging(ILoggerFactory factory);
+            //app.AddCustomLogging(ILoggerFactory factory);  // Rhz: implimented in ConfigureRequestPipeline
 
             app.UseCorrelationIdMiddleware();
-            //  .UseErrorLogging(loggerFactory)
+            //  .UseErrorLogging(loggerFactory)    //Rhz: not sure about this
 
             // Configure the HTTP request pipeline.
             app.ConfigureRequestPipeline("RadioNavigationalWarningsAdmin", "Index");
