@@ -17,7 +17,7 @@ namespace Aspire.Hosting
          {
             var commandOptions = new CommandOptions
              {
-                 //Description = "Set an environment variable (process-level). Restart of individual project resource is not currently supported; perform manual rebuild if needed.",
+                 Description = "Set an environment variable 'LOCAL_USER_FLAG' and restart resource. ", 
                  IconName = "ArrowClockwise",
                  IconVariant = IconVariant.Filled,
                  UpdateState = OnUpdateResourceState
@@ -37,6 +37,10 @@ namespace Aspire.Hosting
              ExecuteCommandContext context)
          {
             //=====================
+            const string variable = "LOCAL_USER_FLAG";
+            string? selectedUser = null;
+            var logger = context.ServiceProvider.GetService<ILogger<ProjectResource>>();
+
 #pragma warning disable ASPIREINTERACTION001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             var interactionService = context.ServiceProvider.GetRequiredService<IInteractionService>();
 
@@ -61,10 +65,7 @@ namespace Aspire.Hosting
                 title: "Login User Configuration",
                 message: "Set login user :",
                 inputs: inputs);
-
-            const string variable = "LOCAL_USER_FLAG";
-            string? selectedUser = null;
-            var logger = context.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            
 
             if (!appConfigurationInput.Canceled)
             {
@@ -76,6 +77,7 @@ namespace Aspire.Hosting
             {
                 Environment.SetEnvironmentVariable(variable, null);
             }
+#pragma warning restore ASPIREINTERACTION001
 
             // Update mockconfig.json with the selected user flag.
             try
@@ -132,7 +134,6 @@ namespace Aspire.Hosting
                     rootNode = obj;
                 }
 
-                // Optional: also mirror the environment variable name if consumers expect that.
                 obj["LOCAL_USER_FLAG"] = string.IsNullOrWhiteSpace(selectedUser) ? null : selectedUser;
 
                 var jsonOptions = new JsonSerializerOptions
@@ -160,13 +161,14 @@ namespace Aspire.Hosting
                 // Continue without failing the command.
             }
 
-            if (builder.Resource.TryGetAnnotationsOfType<ResourceCommandAnnotation>(out var cmd))
+            // Restart the resource to apply the environment variable change.
+            if (builder.Resource.TryGetAnnotationsOfType<ResourceCommandAnnotation>(out var command))
             {
-                var cmdadnotation = cmd.First(a => a.Name == "resource-restart");
+                var requiredCommand = command.First(a => a.Name == "resource-restart");
 
-                if (cmdadnotation != null)
+                if (requiredCommand != null)
                 {
-                    var result = await cmdadnotation.ExecuteCommand(context);
+                    var result = await requiredCommand.ExecuteCommand(context);
                     if (!result.Success)
                     {
                         return CommandResults.Failure($"Failed to restart resource: {result.ErrorMessage}");
@@ -175,8 +177,6 @@ namespace Aspire.Hosting
             }
 
             return CommandResults.Success();
-#pragma warning restore ASPIREINTERACTION001
-
             
          }
 
