@@ -136,16 +136,16 @@ namespace Aspire.Hosting
 
                 obj["LOCAL_USER_FLAG"] = string.IsNullOrWhiteSpace(selectedUser) ? null : selectedUser;
 
-                var jsonOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
+                //var jsonOptions = new JsonSerializerOptions
+                //{
+                //    WriteIndented = true
+                //};
 
                 // Write atomically.
                 var tempFile = mockConfigPath + ".tmp";
                 await using (var writeStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    await JsonSerializer.SerializeAsync(writeStream, rootNode, jsonOptions);
+                    await JsonSerializer.SerializeAsync(writeStream, rootNode);
                     await writeStream.FlushAsync();
                 }
 
