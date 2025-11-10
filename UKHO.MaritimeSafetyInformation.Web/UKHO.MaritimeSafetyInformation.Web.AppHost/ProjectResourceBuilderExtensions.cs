@@ -36,7 +36,6 @@ namespace Aspire.Hosting
              IResourceBuilder<ProjectResource> builder,
              ExecuteCommandContext context)
          {
-            //=====================
             const string variable = "LOCAL_USER_FLAG";
             string? selectedUser = null;
             var logger = context.ServiceProvider.GetService<ILogger<ProjectResource>>();
@@ -65,7 +64,6 @@ namespace Aspire.Hosting
                 title: "Login User Configuration",
                 message: "Set login user :",
                 inputs: inputs);
-            
 
             if (!appConfigurationInput.Canceled)
             {
@@ -177,7 +175,6 @@ namespace Aspire.Hosting
             }
 
             return CommandResults.Success();
-            
          }
 
          private static ResourceCommandState OnUpdateResourceState(UpdateCommandStateContext context)
