@@ -111,6 +111,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             // Rhz : Add Mock Authentication Handler for Development
             if (builder.Environment.IsDevelopment())
             {
+                //add optional mockconfig.json file
+                builder.Configuration.AddJsonFile("mockconfig.json", optional: true, reloadOnChange:true);
+
                 builder.Services.AddAuthentication()
                         .AddScheme<AuthenticationSchemeOptions, MockAuthHandler>("MockUser1", options => { })
                         .AddScheme<AuthenticationSchemeOptions, MockAuthHandlerDistro>("MockDistributorUser", options => { });

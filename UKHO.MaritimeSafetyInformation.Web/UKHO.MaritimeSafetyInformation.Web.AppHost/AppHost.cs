@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Projects;
 var isInPipeline = IsRunningInPipeline();
 
@@ -74,6 +76,7 @@ var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("uk
     .WithReference(tableStorage)
     .WaitFor(tableStorage)
     .WithLoginCommand();
+    
     
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
