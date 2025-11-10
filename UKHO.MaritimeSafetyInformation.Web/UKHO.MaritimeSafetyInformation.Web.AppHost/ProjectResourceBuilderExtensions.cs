@@ -63,18 +63,18 @@ namespace Aspire.Hosting
                 inputs: inputs);
 
             const string variable = "LOCAL_USER_FLAG";
-            string selectedUser = "";
+            string? selectedUser = null;
             var logger = context.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
             if (!appConfigurationInput.Canceled)
             {
                 selectedUser = appConfigurationInput.Data[0].Value;
-                selectedUser = selectedUser == "none" ? "" : selectedUser;
+                selectedUser = selectedUser == "none" ? null : selectedUser;
                 Environment.SetEnvironmentVariable(variable, selectedUser);
             }
             else
             {
-                Environment.SetEnvironmentVariable(variable, "");
+                Environment.SetEnvironmentVariable(variable, null);
             }
 
             // Update mockconfig.json with the selected user flag.

@@ -41,7 +41,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 builder.Configuration["FileShareService:BaseUrl"] = "https+http://mock-api/fssmsi/";
                 builder.Configuration["CacheConfiguration:LocalConnectionString"] = builder.Configuration.GetConnectionString("local-table-connection");
                 builder.Configuration["RadioNavigationalWarningsContext:ConnectionString"] = builder.Configuration.GetConnectionString("MSI-RNWDB-1");
-                // Rhz : configure aspire resources end.
             }
 
             builder.Services.AddApplicationInsightsTelemetry();
@@ -86,7 +85,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddScoped<IAzureTableStorageClient, AzureTableStorageClient>();
             builder.Services.AddScoped<IFileShareServiceCache, FileShareServiceCache>();
             builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
-            builder.Services.AddScoped<IWebhookService, WebhookService>();  // What is this fore? (Rhz)
+            builder.Services.AddScoped<IWebhookService, WebhookService>(); 
             builder.Services.AddScoped<IEnterpriseEventCacheDataRequestValidator, EnterpriseEventCacheDataRequestValidator>();
             builder.Services.AddScoped<IMSIBannerNotificationService, MSIBannerNotificationService>();
 
@@ -121,7 +120,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 //create a mock token acquisition service
                 builder.Services.AddSingleton<ITokenAcquisition, MockTokenAcquisition>();
 
-                //Login scheme selection based on LOCAL_USER_FLAG app setting
+                //Login scheme selection based on LOCAL_USER_FLAG app setting defined in mockconfig.json
                 var msiUserFlag = builder.Configuration["LOCAL_USER_FLAG"];
                 if (!string.IsNullOrWhiteSpace(msiUserFlag))
                 {
@@ -169,7 +168,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             app.AddCustomLogging();  //Rhz new 
 
             app.UseCorrelationIdMiddleware();
-            // Rhz : .UseErrorLogging(loggerFactory) This will be added to CustomLogging extension later.
+
+            // Rhz : .UseErrorLogging(loggerFactory)
+            // This will be added to CustomLogging extension later, not sure if needed.
 
             // Configure the HTTP request pipeline. This replaces ConfigureRequest extension.
             app.ConfigureRequestPipeline("Home", "Index");
