@@ -1,13 +1,10 @@
-using System;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Aspire.Hosting;
-using Aspire.Hosting.ApplicationModel;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Projects;
 
 namespace Aspire.Hosting
 {
@@ -36,7 +33,6 @@ namespace Aspire.Hosting
              IResourceBuilder<ProjectResource> builder,
              ExecuteCommandContext context)
          {
-            const string variable = "LOCAL_USER_FLAG";
             string? selectedUser = null;
             var logger = context.ServiceProvider.GetService<ILogger<ProjectResource>>();
 
@@ -69,28 +65,70 @@ namespace Aspire.Hosting
             {
                 selectedUser = appConfigurationInput.Data[0].Value;
                 selectedUser = selectedUser == "none" ? null : selectedUser;
-                Environment.SetEnvironmentVariable(variable, selectedUser);
-            }
-            else
-            {
-                Environment.SetEnvironmentVariable(variable, null);
-            }
-#pragma warning restore ASPIREINTERACTION001
 
-            // Update mockconfig.json with the selected user flag.
+                if (await UpdateMockUserFlag(builder,logger,selectedUser))
+                {
+                   return await RestartCommand(builder,context);
+                }
+                else
+                {
+                   return CommandResults.Failure("Failed to update mockconfig.json with user flag.");
+                }
+            }
+            return CommandResults.Canceled();
+            
+#pragma warning restore ASPIREINTERACTION001
+        }
+
+
+
+        private static async Task<ExecuteCommandResult> RestartCommand(
+            IResourceBuilder<ProjectResource> builder,
+            ExecuteCommandContext context)
+        {
+            ExecuteCommandResult result = CommandResults.Failure("Resource restart command not found.");
+
+            if (builder.Resource.TryGetAnnotationsOfType<ResourceCommandAnnotation>(out var command))
+            {
+                var requiredCommand = command.First(a => a.Name == "resource-restart");
+
+                if (requiredCommand != null)
+                {
+                    result = await requiredCommand.ExecuteCommand(context);
+                    if (!result.Success)
+                    {
+                        result = CommandResults.Failure("Failed to restart resource");
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+        private static async Task<bool> UpdateMockUserFlag(
+            IResourceBuilder<ProjectResource> builder,
+            ILogger<ProjectResource>? logger,
+            string? selectedUser,
+            string configFileName = "mockconfig.json")
+        {
+            var result = true;
             try
             {
                 // Attempt to resolve the project directory via reflection (Aspire internal type).
                 string? projectDir = null;
                 try
                 {
-                    var projectResource = builder.Resource;
-                    var annotation = projectResource.Annotations[0];  // there is probably a better way to get this
-
+                    if (!builder.Resource.TryGetAnnotationsOfType<UKHO_MaritimeSafetyInformation_Web>(out var annotationType))
+                    {
+                        logger?.LogWarning("Failed to get UKHO_MaritimeSafetyInformation_Web annotation.");
+                        return false;
+                    }
+                    var annotation = annotationType.First();
                     var projectPathProp = annotation.GetType()
                         .GetProperty("ProjectPath", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     var projectPath = projectPathProp?.GetValue(annotation) as string;
-                    
+
                     if (!string.IsNullOrWhiteSpace(projectPath) && File.Exists(projectPath))
                     {
                         projectDir = Path.GetDirectoryName(projectPath);
@@ -104,7 +142,7 @@ namespace Aspire.Hosting
                 // Fallback: use base directory.
                 projectDir ??= AppContext.BaseDirectory;
 
-                var mockConfigPath = Path.Combine(projectDir, "mockconfig.json");
+                var mockConfigPath = Path.Combine(projectDir, configFileName);
 
                 JsonNode rootNode;
                 if (File.Exists(mockConfigPath))
@@ -156,33 +194,18 @@ namespace Aspire.Hosting
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Failed to update mockconfig.json with user flag.");
-                // Continue without failing the command.
+                result = false;
             }
+            return result;
+        }
 
-            // Restart the resource to apply the environment variable change.
-            if (builder.Resource.TryGetAnnotationsOfType<ResourceCommandAnnotation>(out var command))
-            {
-                var requiredCommand = command.First(a => a.Name == "resource-restart");
 
-                if (requiredCommand != null)
-                {
-                    var result = await requiredCommand.ExecuteCommand(context);
-                    if (!result.Success)
-                    {
-                        return CommandResults.Failure($"Failed to restart resource: {result.ErrorMessage}");
-                    }
-                }
-            }
-
-            return CommandResults.Success();
-         }
-
-         private static ResourceCommandState OnUpdateResourceState(UpdateCommandStateContext context)
-         {
-             return context.ResourceSnapshot.HealthStatus == HealthStatus.Healthy
-             ? ResourceCommandState.Enabled
-             : ResourceCommandState.Disabled;
-         }
+        private static ResourceCommandState OnUpdateResourceState(UpdateCommandStateContext context)
+        {
+            return context.ResourceSnapshot.HealthStatus == HealthStatus.Healthy
+            ? ResourceCommandState.Enabled
+            : ResourceCommandState.Disabled;
+        }
 
         
     }
