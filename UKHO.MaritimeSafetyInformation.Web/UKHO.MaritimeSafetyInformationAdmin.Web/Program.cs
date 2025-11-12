@@ -88,7 +88,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             var app = builder.Build();
 
             app.MapDefaultEndpoints();
-            //app.AddCustomLogging(ILoggerFactory factory);  // Rhz: implimented in ConfigureRequestPipeline
 
             app.UseCorrelationIdMiddleware();
             //  .UseErrorLogging(loggerFactory)    //Rhz: not sure about this
@@ -96,19 +95,20 @@ namespace UKHO.MaritimeSafetyInformation.Web
             // Configure the HTTP request pipeline.
             app.ConfigureRequestPipeline("RadioNavigationalWarningsAdmin", "Index");
 
-            //Rhz: start allow anonymous access for development purposes
             app.UseEndpoints(endpoints =>
             {
                 if (app.Environment.IsDevelopment())
+                {
+                    // Rhz: allow anonymous access for development purposes
                     endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
+                }
                 else
+                {
                     endpoints.MapControllers();
+                }
             });
-            // Rhz: end
 
             app.Run();
-
-
         }
 
 

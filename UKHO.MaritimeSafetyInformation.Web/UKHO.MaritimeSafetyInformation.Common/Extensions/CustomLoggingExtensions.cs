@@ -47,21 +47,20 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
 
 
                 var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();  //Rhz new
-                loggerFactory.AddEventHub(
-                                     config =>
-                                     {
-                                         config.Environment = eventHubLoggingConfiguration.Value.Environment;
-                                         config.DefaultMinimumLogLevel =
-                                             (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.Value.MinimumLoggingLevel, true);
-                                         config.MinimumLogLevels["UKHO"] =
-                                             (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.Value.UkhoMinimumLoggingLevel, true);
-                                         config.EventHubConnectionString = eventHubLoggingConfiguration.Value.ConnectionString;
-                                         config.EventHubEntityPath = eventHubLoggingConfiguration.Value.EntityPath;
-                                         config.System = eventHubLoggingConfiguration.Value.System;
-                                         config.Service = eventHubLoggingConfiguration.Value.Service;
-                                         config.NodeName = eventHubLoggingConfiguration.Value.NodeName;
-                                         config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
-                                     });
+                loggerFactory.AddEventHub(config =>
+                    {
+                        config.Environment = eventHubLoggingConfiguration.Value.Environment;
+                        config.DefaultMinimumLogLevel =
+                            (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.Value.MinimumLoggingLevel, true);
+                        config.MinimumLogLevels["UKHO"] =
+                            (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.Value.UkhoMinimumLoggingLevel, true);
+                        config.EventHubConnectionString = eventHubLoggingConfiguration.Value.ConnectionString;
+                        config.EventHubEntityPath = eventHubLoggingConfiguration.Value.EntityPath;
+                        config.System = eventHubLoggingConfiguration.Value.System;
+                        config.Service = eventHubLoggingConfiguration.Value.Service;
+                        config.NodeName = eventHubLoggingConfiguration.Value.NodeName;
+                        config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
+                    });
             };
 
 

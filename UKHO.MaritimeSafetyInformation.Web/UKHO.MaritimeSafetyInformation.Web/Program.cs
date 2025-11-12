@@ -99,7 +99,6 @@ namespace UKHO.MaritimeSafetyInformation.Web
             builder.Services.AddOptions();
             builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
 
-            //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //(Rhz Look at implimentation, is it needed, is it correct. )
             builder.Services.AddHttpContextAccessor(); //Rhz new
 
             builder.Services.AddHeaderPropagation(options =>
@@ -107,10 +106,10 @@ namespace UKHO.MaritimeSafetyInformation.Web
                 options.Headers.Add(UkhoHeaderNames.XCorrelationId);
             });
 
-            // Rhz : Add Mock Authentication Handler for Development
             if (builder.Environment.IsDevelopment())
             {
-                //add optional mockconfig.json file
+                // Rhz : Add Mock Authentication Handler for and  optional mockconfig.json Development
+
                 builder.Configuration.AddJsonFile("mockconfig.json", optional: true, reloadOnChange:true);
 
                 builder.Services.AddAuthentication()
@@ -172,122 +171,9 @@ namespace UKHO.MaritimeSafetyInformation.Web
             // Rhz : .UseErrorLogging(loggerFactory)
             // This will be added to CustomLogging extension later, not sure if needed.
 
-            // Configure the HTTP request pipeline. This replaces ConfigureRequest extension.
             app.ConfigureRequestPipeline("Home", "Index");
-
-
-            if (app.Environment.IsDevelopment())
-            {
-                // Build test data
-                SeedData(new SqlConnection(builder.Configuration.GetConnectionString("MSI-RNWDB-1"))).Wait();
-            }
 
             app.Run();
         }
-
-
-
-        internal static async Task SeedData(SqlConnection connection)
-        {
-            var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
-
-            if (!context.WarningType.Any())
-            {
-                context.WarningType.Add(new WarningType { Name = "NAVAREA1" });
-                context.WarningType.Add(new WarningType { Name = "UK Coastal" });
-                await context.SaveChangesAsync();
-            }
-
-            if (context.RadioNavigationalWarnings.Any()) return;
-
-
-            context.RadioNavigationalWarnings.AddRange(
-                new RadioNavigationalWarning
-                {
-                    WarningType = 1,
-                    Reference = "NAVAREA 1 TEST/22",
-                    DateTimeGroup = DateTime.UtcNow,
-                    Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
-                    Content = @"NAVAREA
-                                     NAVAREA TEST/24
-                                     301040 UTC Dec 24
-                                     SPACE WEATHER.
-                                     SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.
-                                     RADIO AND SATELLITE NAVIGATION SERVICES MAY BE AFFECTED.",
-                    IsDeleted = false,
-                    LastModified = DateTime.UtcNow
-                },
-                new RadioNavigationalWarning
-                {
-                    WarningType = 2,
-                    Reference = "UK Coastal TEST/22",
-                    DateTimeGroup = DateTime.UtcNow,
-                    Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
-                    Content = @"UK Coastal
-                                     TEST/24
-                                     301510 UTC Dec 24
-                                     HUMBER.
-                                     HORNSEA 1 AND 2 WINDFARMS.
-                                     1.TURBINES T25 54-00.3N 001-36.7E, A16 53-50.0N 001-58.7E AND S16 53-59.4N 001-48.3E, FOG SIGNALS INOPERATIVE.
-                                     2.CANCEL WZ 895.",
-                    IsDeleted = false,
-                    LastModified = DateTime.UtcNow
-                }
-            );
-
-            await context.SaveChangesAsync();
-        }
-
-        //=====================================
-        private static void ConfigureLogging(IApplicationBuilder app, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor,
-                                      IOptions<EventHubLoggingConfiguration> eventHubLoggingConfiguration)
-        {
-            if (!string.IsNullOrEmpty(eventHubLoggingConfiguration.Value.ConnectionString))
-            {
-                void ConfigAdditionalValuesProvider(IDictionary<string, object> additionalValues)
-                {
-                    if (httpContextAccessor.HttpContext != null)
-                    {
-                        additionalValues["_Environment"] = eventHubLoggingConfiguration.Value.Environment;
-                        additionalValues["_System"] = eventHubLoggingConfiguration.Value.System;
-                        additionalValues["_Service"] = eventHubLoggingConfiguration.Value.Service;
-                        additionalValues["_NodeName"] = eventHubLoggingConfiguration.Value.NodeName;
-                        additionalValues["_RemoteIPAddress"] = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-                        additionalValues["_User-Agent"] = httpContextAccessor.HttpContext.Request.Headers["User-Agent"].FirstOrDefault() ?? string.Empty;
-                        additionalValues["_AssemblyVersion"] = Assembly.GetExecutingAssembly().GetCustomAttributes<AssemblyFileVersionAttribute>().Single().Version;
-                        additionalValues["_X-Correlation-ID"] =
-                            httpContextAccessor.HttpContext.Request.Headers?[UkhoHeaderNames.XCorrelationId].FirstOrDefault() ?? string.Empty;
-
-                        if (httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-                        {
-                            additionalValues["_UserId"] = httpContextAccessor.HttpContext.User.FindFirstValue("http://schemas.microsoft.com/identity/claims/objectidentifier");
-                        }
-                    }
-                }
-
-                loggerFactory.AddEventHub(
-                                     config =>
-                                     {
-                                         config.Environment = eventHubLoggingConfiguration.Value.Environment;
-                                         config.DefaultMinimumLogLevel =
-                                             (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.Value.MinimumLoggingLevel, true);
-                                         config.MinimumLogLevels["UKHO"] =
-                                             (LogLevel)Enum.Parse(typeof(LogLevel), eventHubLoggingConfiguration.Value.UkhoMinimumLoggingLevel, true);
-                                         config.EventHubConnectionString = eventHubLoggingConfiguration.Value.ConnectionString;
-                                         config.EventHubEntityPath = eventHubLoggingConfiguration.Value.EntityPath;
-                                         config.System = eventHubLoggingConfiguration.Value.System;
-                                         config.Service = eventHubLoggingConfiguration.Value.Service;
-                                         config.NodeName = eventHubLoggingConfiguration.Value.NodeName;
-                                         config.AdditionalValuesProvider = ConfigAdditionalValuesProvider;
-                                     });
-            }
-
-
-
-
-
-
-        }
-        //=========================================
     }
 }

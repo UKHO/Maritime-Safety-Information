@@ -21,7 +21,6 @@ namespace Aspire.Hosting
                 UpdateState = OnUpdateResourceState,
 
                 Description = "Reset the Local database ",
-                //Parameter = new[] {" "," " },
                 ConfirmationMessage = "Are you sure you want to reset the database?",
 
                 IconName = "ArrowClockwise",

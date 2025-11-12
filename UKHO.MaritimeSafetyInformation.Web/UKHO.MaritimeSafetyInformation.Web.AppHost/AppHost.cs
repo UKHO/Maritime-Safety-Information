@@ -1,6 +1,10 @@
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Projects;
+using UKHO.MaritimeSafetyInformation.Common;
+using UKHO.MaritimeSafetyInformation.Common.Models.RadioNavigationalWarning.DTO;
 var isInPipeline = IsRunningInPipeline();
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -17,8 +21,26 @@ var storage = builder.AddAzureStorage("local-storage-connection").RunAsEmulator(
 var tableStorage = storage.AddTables("local-table-connection");
 
 var sql = builder.AddSqlServer("local-sql")
-    .WithDataVolume("local-msi-data-v2")
-    .WithResetCommand();
+    .WithDataVolume("local-msi-data-v4")
+    .WithResetCommand()
+    .OnResourceReady(static async Task (resource, @event, cancellationToken) =>
+    {
+        var logger = @event.Services.GetRequiredService<ILogger<Program>>();
+
+        logger.LogInformation("1.Resource ready, create database if necessary");
+
+        var connectionString = await resource.GetConnectionStringAsync() ??
+                throw new InvalidOperationException("Connection string is not available.");
+
+        var databaseName = resource.Databases.FirstOrDefault().Value ??
+                throw new InvalidOperationException("Database name is not available.");
+
+        connectionString += $";Initial Catalog={databaseName}";
+
+        await SeedData(new SqlConnection(connectionString));
+
+    });
+
 
 var databaseName = "MSI-RNWDB-1";
 
@@ -66,7 +88,7 @@ var creationScript = $$"""
 
 var rnwDb = sql.AddDatabase(databaseName)
             .WithCreationScript(creationScript);
-
+            
 
 var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("ukho-msi-web")
     .WithReference(mockApi)
@@ -76,7 +98,6 @@ var mvcApp = builder.AddProject<Projects.UKHO_MaritimeSafetyInformation_Web>("uk
     .WithReference(tableStorage)
     .WaitFor(tableStorage)
     .WithLoginCommand();
-    
     
 
 var mvcadminApp = builder.AddProject<UKHO_MaritimeSafetyInformationAdmin_Web>("ukho-msi-admin-web")
@@ -98,7 +119,7 @@ if (isInPipeline)
     mvcadminApp.WithHttpEndpoint();
 }
 
-    builder.Build().Run();
+builder.Build().Run();
 
 bool IsRunningInPipeline()
 {
@@ -112,4 +133,55 @@ bool IsRunningInPipeline()
         || !string.IsNullOrEmpty(tfBuild)
         || !string.IsNullOrEmpty(githubActions)
         || !string.IsNullOrEmpty(azurePipeline);
+}
+
+static async Task SeedData(SqlConnection connection)
+{
+    var context = new RadioNavigationalWarningsContext(new DbContextOptionsBuilder<RadioNavigationalWarningsContext>().UseSqlServer(connection).Options);
+
+    if (!context.WarningType.Any())
+    {
+        context.WarningType.Add(new WarningType { Name = "NAVAREA1" });
+        context.WarningType.Add(new WarningType { Name = "UK Coastal" });
+        await context.SaveChangesAsync();
+    }
+
+    if (context.RadioNavigationalWarnings.Any()) return;
+
+
+    context.RadioNavigationalWarnings.AddRange(
+        new RadioNavigationalWarning
+        {
+            WarningType = 1,
+            Reference = "NAVAREA 1 TEST/22",
+            DateTimeGroup = new DateTime(year: 2022, month: 7, day: 4, hour: 12, minute: 0, second: 0, kind: DateTimeKind.Utc),
+            Summary = "SPACE WEATHER. BIG SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.",
+            Content = @"NAVAREA
+                         NAVAREA TEST/24
+                         301040 UTC Dec 25
+                         SPACE WEATHER.
+                         SOLAR STORM IN PROGRESS FROM 311200 UTC DEC 24.
+                         RADIO AND SATELLITE NAVIGATION SERVICES MAY BE AFFECTED.",
+            IsDeleted = false,
+            LastModified = DateTime.UtcNow
+        },
+        new RadioNavigationalWarning
+        {
+            WarningType = 2,
+            Reference = "UK Coastal TEST/22",
+            DateTimeGroup = new DateTime(year: 2022, month: 7, day: 4, hour: 12, minute: 0, second: 0, kind: DateTimeKind.Utc),
+            Summary = "HUMBER. RHZ HORNSEA 1 AND 2 WINDFARMS. TURBINE FOG SIGNALS INOPERATIVE.",
+            Content = @"UK Coastal
+                                     TEST/24
+                                     301510 UTC Dec 25
+                                     HUMBER.
+                                     HORNSEA 1 AND 2 WINDFARMS.
+                                     1.TURBINES T25 54-00.3N 001-36.7E, A16 53-50.0N 001-58.7E AND S16 53-59.4N 001-48.3E, FOG SIGNALS INOPERATIVE.
+                                     2.CANCEL WZ 895.",
+            IsDeleted = false,
+            LastModified = DateTime.UtcNow
+        }
+    );
+
+    await context.SaveChangesAsync();
 }
