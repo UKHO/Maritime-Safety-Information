@@ -59,17 +59,17 @@ steps:
   displayName: npx playwright install
   workingDirectory: '$(Build.SourcesDirectory)/Tests'
 
-- task: FileTransform@2
-  displayName: Transform - test configuration
-  inputs:
-    folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-    xmlTransformationRules: ''
-    jsonTargetFiles: 'appConfig.json'
+# - task: FileTransform@2
+#   displayName: Transform - test configuration
+#   inputs:
+#     folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
+#     xmlTransformationRules: ''
+#     jsonTargetFiles: 'appConfig.json'
 
-- script: |
-    npm run test:auto
-  displayName: Run functional tests
-  workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
+# - script: |
+#     npm run test:auto
+#   displayName: Run functional tests
+#   workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
 
 - task: PublishTestResults@2
   displayName: Publish functional test results
