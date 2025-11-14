@@ -335,7 +335,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         [Test]
         public async Task TableDataHasNavarea1DataWithDateSortingIsDisplayed()
         {
-            var tempFix = "NAVAREA1"
+            var tempFix = "NAVAREA1";
             if (_isRunningInPipeline)
             {
                 //Rhz: Inconsistancy between test data and data contained in QA database
