@@ -92,7 +92,7 @@ jobs:
   dependsOn: ${{ parameters.ShortName }}DeployTerraform
   displayName: '${{ upper(parameters.ShortName) }} - app deploy'
   pool:
-    name: $(WindowsPool)
+    name: $(WindowsPool1)
   environment: ${{ parameters.AzureDevOpsEnvironment }}
   workspace:
     clean: all
@@ -129,7 +129,7 @@ jobs:
     dependsOn:
     - ${{ parameters.ShortName }}DeployTerraform
     - ${{ parameters.ShortName }}DeployApp
-    pool: $(WindowsPool)
+    pool: $(WindowsPool1)
     displayName: '${{ upper(parameters.ShortName) }} - functional and accessibility tests'
     variables:
     - template: var/${{ lower(parameters.ShortName) }}-deploy.yml
