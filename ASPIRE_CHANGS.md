@@ -2,6 +2,37 @@
 
 A .NET 9 MVC solution orchestrated with Aspire.
 
+## Prerequisites
+
+Please ensure the following are installed on your development machine before building MSI.
+
+* Git
+* Docker Desktop
+
+### Cloning this repository
+
+This repository includes a submodule reference to the ADDS Mock solution. 
+
+To initialise the submodule (pull the code):
+
+* Open a command prompt (cmd.exe)
+* Change to the repository root directory
+
+ ```csharp
+git submodule update --init --recursive
+```
+
+### Updating ADDS Mock to the latest version
+
+If you have already cloned the project and just want to update the submodule reference in this repository to the latest version of ADDS Mock:
+
+* Open a command prompt (cmd.exe)
+* Change to the repository root directory
+
+ ```csharp
+git submodule update --remote --merge
+```
+
 ## Changes required to run locally and retrieve telemetry
 
 ## 1. Introduce minimum hosting model, this involves removing startup.cs and rewriting that startup code in program.cs thus replacing IHostBuilder with WebApplicationBuilder which is needed for aspire to work properly.
