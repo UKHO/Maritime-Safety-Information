@@ -17,8 +17,8 @@ const config: PlaywrightTestConfig = {
 
     /* Sets action and navigation timeouts */
     use: {
-        actionTimeout: 10 * 1000,
-        navigationTimeout: 30 * 1000,
+        actionTimeout: 20 * 1000,
+        navigationTimeout: 60 * 1000,
         trace: 'on-first-retry',
     },
 

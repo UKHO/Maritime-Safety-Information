@@ -63,6 +63,10 @@ jobs:
       packageType: sdk
       version: $(DotNetSdkVersion)
 
+  - script: git submodule update --init --recursive
+    displayName: Restore Github Submodule
+    workingDirectory: '$(Build.SourcesDirectory)'
+
   - task: DotNetCoreCLI@2
     displayName: NuGet restore non-test projects
     inputs:
@@ -166,29 +170,60 @@ jobs:
       packageType: sdk
       version: $(DotNetSdkVersion)
 
+  - script: git submodule update --init --recursive
+    displayName: Restore Github Submodule
+    workingDirectory: '$(Build.SourcesDirectory)'
+
+  # - task: DotNetCoreCLI@2
+  #   displayName: NuGet restore integration test projects
+  #   inputs:
+  #     command: restore
+  #     projects: |
+  #       **/*UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj
+  #     feedsToUse: config
+  #     noCache: true
+  #     nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
+  #     workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
+
+  # - task: DotNetCoreCLI@2
+  #   displayName: Publish integration tests
+  #   inputs:
+  #     command: publish
+  #     publishWebProjects: false
+  #     projects: |
+  #       **/*UKHO.MaritimeSafetyInformation.Aspire.IntegrationTests.csproj
+  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
+  #     zipAfterPublish: false
+
+  # - task: PublishBuildArtifacts@1
+  #   displayName: Publish integration test artifact
+  #   inputs:
+  #     PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
+  #     ArtifactName: IntegrationTests
+
   - task: DotNetCoreCLI@2
-    displayName: NuGet restore
+    displayName: NuGet restore Playwright test projects
     inputs:
       command: restore
       projects: |
-        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
+        **/*UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj
       feedsToUse: config
       noCache: true
       nugetConfigPath: '$(Build.SourcesDirectory)\BuildNuget.config'
       workingDirectory: '$(Build.SourcesDirectory)\UKHO.MaritimeSafetyInformation.Web'
 
   - task: DotNetCoreCLI@2
-    displayName: Publish integration tests
+    displayName: Publish playwright tests
     inputs:
       command: publish
       publishWebProjects: false
       projects: |
-        **/*UKHO.MaritimeSafetyInformation.IntegrationTests.csproj
-      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests --no-restore'
+        **/*UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.PlaywrightTests --no-restore'
       zipAfterPublish: false
 
   - task: PublishBuildArtifacts@1
-    displayName: Publish integration test artifact
+    displayName: Publish Playwright test artifact
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.IntegrationTests'
-      ArtifactName: IntegrationTests  
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\UKHO.MaritimeSafetyInformation.Web.PlaywrightTests'
+      ArtifactName: PlaywrightTests

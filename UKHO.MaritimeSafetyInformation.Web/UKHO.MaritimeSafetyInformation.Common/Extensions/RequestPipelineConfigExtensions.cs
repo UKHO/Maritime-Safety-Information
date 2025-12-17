@@ -1,21 +1,28 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 using UKHO.MaritimeSafetyInformation.Common.Filters;
 
 namespace UKHO.MaritimeSafetyInformation.Common.Extensions
 {
-    public static class RequestConfigurationExtensions
+    /// <summary>
+    /// Extension method used to configure the HTTP request pipeline.
+    /// Replaces the previous ConfigureRequest method in RequestConfigurationExtensions.cs.
+    /// Uses the WebApplication type for better integration with ASP.NET Core 6+. instead of IApplicationBuilder.
+    /// and removes the isDevelopment parameter, as the environment can be checked directly within the method.
+    /// </summary>
+    /// <param name="app"></param>
+    /// <param name="defaultController"></param>
+    /// <param name="defaultAction"></param>
+
+    /// <returns></returns>
+    public static class RequestPipelineConfigExtensions
     {
-        /// <summary>
-        /// Extension method used to configure the HTTP request pipeline.
-        /// This has been replaced by RequestPipelineConfigExtensions.ConfigureRequestPipeline for better integration with ASP.NET Core 6+.
-        /// Rhz: To be Removed.
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="defaultController"></param>
-        /// <param name="defaultAction"></param>
-        /// <param name="isDevelopment"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder ConfigureRequest(this IApplicationBuilder app, string defaultController, string defaultAction, bool isDevelopment)
+        public static WebApplication ConfigureRequestPipeline(this WebApplication app, string defaultController, string defaultAction)
         {
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
@@ -43,24 +50,29 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseXfo(x => x.SameOrigin());
             app.UseXContentTypeOptions();
 
-            if (isDevelopment)
+            if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseExceptionHandler("/error");
             app.UseRouting();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMockAuthSelection();
+            }
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: $"{{controller={defaultController}}}/{{action={defaultAction}}}/{{id?}}");
-                endpoints.MapHealthChecks("/health");
-            });
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: $"{{controller={defaultController}}}/{{action={defaultAction}}}/{{id?}}");
+
+            app.MapHealthChecks("/health");
 
             return app;
         }
-	}
+    }
 }

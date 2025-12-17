@@ -1,0 +1,533 @@
+{
+  "count": 2,
+  "total": 2,
+  "entries": [
+    {
+      "batchId": "3a42a817-8a59-4072-9b7e-bb594c095fd9",
+      "status": "Committed",
+      "allFilesZipSize": 5344462,
+      "attributes": [
+        {
+          "key": "Data Date",
+          "value": "2024-06-20"
+        },
+        {
+          "key": "Frequency",
+          "value": "Weekly"
+        },
+        {
+          "key": "Product Type",
+          "value": "Notices to Mariners"
+        },
+        {
+          "key": "Week Number",
+          "value": "25"
+        },
+        {
+          "key": "Year",
+          "value": "2024"
+        },
+        {
+          "key": "Year / Week",
+          "value": "2024 / 25"
+        }
+      ],
+      "businessUnit": "MaritimeSafetyInformation",
+      "batchPublishedDate": "2024-06-12T16:31:26.503Z",
+      "expiryDate": "2027-06-10T16:29:30Z",
+      "files": [
+        {
+          "filename": "NP234(B) 2024.pdf",
+          "fileSize": 26489,
+          "mimeType": "application/pdf",
+          "hash": "T/NEk2l2IbT/kQbepezXcQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/NP234(B)%2024.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2636NM2779 2.pdf",
+          "fileSize": 57801,
+          "mimeType": "application/pdf",
+          "hash": "q5sNw7uTT5iQujCUhka5yg==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2636NM2779%202.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2613NM2940.pdf",
+          "fileSize": 68336,
+          "mimeType": "application/pdf",
+          "hash": "sFe1ZEEGCaGgY5KF5rcekA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2613NM2940.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2636NM2779 3.pdf",
+          "fileSize": 78152,
+          "mimeType": "application/pdf",
+          "hash": "DDkjr4KGHGujdzLPlBXGoA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2636NM2779%203.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2451NM2940.pdf",
+          "fileSize": 78536,
+          "mimeType": "application/pdf",
+          "hash": "gFINQEk7SOHC5aMT+g3nQw==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2451NM2940.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart125NM2800.pdf",
+          "fileSize": 85566,
+          "mimeType": "application/pdf",
+          "hash": "yqR74bIeNbybXd9Zqog3pQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart125NM2800.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Wk25-magnote.pdf",
+          "fileSize": 85702,
+          "mimeType": "application/pdf",
+          "hash": "ORGLTi+avKsNNsxXdtYjpA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Wk25-magnote.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2636NM2779.pdf",
+          "fileSize": 87061,
+          "mimeType": "application/pdf",
+          "hash": "MqpcnZxUAjL4GFt6l1YSag==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2636NM2779.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2284NM2833.pdf",
+          "fileSize": 114423,
+          "mimeType": "application/pdf",
+          "hash": "ADWWo1tjBZqENP3sD7aIzA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2284NM2833.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2619NM2910 2.pdf",
+          "fileSize": 219682,
+          "mimeType": "application/pdf",
+          "hash": "B9DoI4OyuN4KForbwj3A8g==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2619NM2910%202.pdf"
+            }
+          }
+        },
+        {
+          "filename": "PWKLY 25-24.pdf",
+          "fileSize": 246013,
+          "mimeType": "application/pdf",
+          "hash": "0E6LBrCePGc6AylF2ne2yA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/PWKLY%2025-24.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2619NM2910.pdf",
+          "fileSize": 276147,
+          "mimeType": "application/pdf",
+          "hash": "9jd1cpwgyWwNMEW9wdVJoA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/Chart2619NM2910.pdf"
+            }
+          }
+        },
+        {
+          "filename": "NP234Wk25-24.pdf",
+          "fileSize": 578591,
+          "mimeType": "application/pdf",
+          "hash": "HkR1fF5s61ryuZiI/gl0AQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/NP234Wk25-24.pdf"
+            }
+          }
+        },
+        {
+          "filename": "25snii24.pdf",
+          "fileSize": 926040,
+          "mimeType": "application/pdf",
+          "hash": "cyQSkn5BzqXXKbB4CWCNmA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/25snii24.pdf"
+            }
+          }
+        },
+        {
+          "filename": "25wknm24.pdf",
+          "fileSize": 2898300,
+          "mimeType": "application/pdf",
+          "hash": "pb9ge44nTtpCqnhEqlHJCg==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/3a42a817-8a59-4072-9b7e-bb594c095fd9/files/25wknm24.pdf"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "batchId": "05d164ab-1b18-4239-a823-f919296e2c8a",
+      "status": "Committed",
+      "allFilesZipSize": 5603334,
+      "attributes": [
+        {
+          "key": "Data Date",
+          "value": "2023-06-22"
+        },
+        {
+          "key": "Frequency",
+          "value": "Weekly"
+        },
+        {
+          "key": "Product Type",
+          "value": "Notices to Mariners"
+        },
+        {
+          "key": "Week Number",
+          "value": "25"
+        },
+        {
+          "key": "Year",
+          "value": "2023"
+        },
+        {
+          "key": "Year / Week",
+          "value": "2023 / 25"
+        }
+      ],
+      "businessUnit": "MaritimeSafetyInformation",
+      "batchPublishedDate": "2023-06-12T13:10:42.22Z",
+      "expiryDate": "2026-06-18T13:10:03Z",
+      "files": [
+        {
+          "filename": "NP234(B) 2023.pdf",
+          "fileSize": 9391,
+          "mimeType": "application/pdf",
+          "hash": "eQky/7QZFtAA2A76m77oEA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/NP234(B)%2024.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart585NM2077.pdf",
+          "fileSize": 19946,
+          "mimeType": "application/pdf",
+          "hash": "sMlSfI8tt7Loy/tVzTu79Q==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart585NM2077.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Wk25-magnote.pdf",
+          "fileSize": 20480,
+          "mimeType": "application/pdf",
+          "hash": "gCbb6zzszpDvJi596LzvAQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Wk25-magnote.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart593NM2077.pdf",
+          "fileSize": 22474,
+          "mimeType": "application/pdf",
+          "hash": "Ie7JkHNLuMGcOgCG9tiOAA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart593NM2077.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2835NM2057.pdf",
+          "fileSize": 23330,
+          "mimeType": "application/pdf",
+          "hash": "BErRg9543w3BgtEubmckng==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart2835NM2057.pdf"
+            }
+          }
+        },
+        {
+          "filename": "NMreference23.pdf",
+          "fileSize": 24092,
+          "mimeType": "application/pdf",
+          "hash": "qHezKdMcB14Pbnbc+VX+9Q==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/NMreference23.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart497NM2091.pdf",
+          "fileSize": 25283,
+          "mimeType": "application/pdf",
+          "hash": "hct8grc4pj6t83IjEGVN8w==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart497NM2091.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart1103NM2022.pdf",
+          "fileSize": 37270,
+          "mimeType": "application/pdf",
+          "hash": "OdhJLnWWNvEsdoIFndoXHw==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart1103NM2022.pdf"
+            }
+          }
+        },
+        {
+          "filename": "ChartAus826NM2062.pdf",
+          "fileSize": 44400,
+          "mimeType": "application/pdf",
+          "hash": "LLFRxkVdOXrVsILT1SHZrw==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/ChartAus826NM2062.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart3853NM2024.pdf",
+          "fileSize": 61216,
+          "mimeType": "application/pdf",
+          "hash": "hDZDwEGX+H2OGMKWf3F7QA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart3853NM2024.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart3993NM2093.pdf",
+          "fileSize": 77602,
+          "mimeType": "application/pdf",
+          "hash": "5jwjmkxf3LwQiAXoWyqWFg==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart3993NM2093.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart4955NM2046.pdf",
+          "fileSize": 89260,
+          "mimeType": "application/pdf",
+          "hash": "yGN1R4sZTePLs9BoBfOHtg==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart4955NM2046.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart3923NM2069 2.pdf",
+          "fileSize": 119732,
+          "mimeType": "application/pdf",
+          "hash": "Eyx9KEr0yEzlkstpw559Pw==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart3923NM2069%202.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart2246NM2021.pdf",
+          "fileSize": 143954,
+          "mimeType": "application/pdf",
+          "hash": "ntKM/r54pGjEANpReE9SyQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart2246NM2021.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart3749NM2069.pdf",
+          "fileSize": 161807,
+          "mimeType": "application/pdf",
+          "hash": "n26YHtjf8ZuOVS3WcME1HQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart3749NM2069.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart3923NM2069.pdf",
+          "fileSize": 167779,
+          "mimeType": "application/pdf",
+          "hash": "zvLK6mH3L/lFsyj14bAEhQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart3923NM2069.pdf"
+            }
+          }
+        },
+        {
+          "filename": "Chart3922NM2069.pdf",
+          "fileSize": 171981,
+          "mimeType": "application/pdf",
+          "hash": "cJZgyW/0VMtlebwBGMQSaQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/Chart3922NM2069.pdf"
+            }
+          }
+        },
+        {
+          "filename": "00 An overview of the 26 sections.pdf",
+          "fileSize": 83900,
+          "mimeType": "application/pdf",
+          "hash": "yrR2SHucnJL8JRJEd+fAJA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/f6ad3e65-c8b0-42ff-b7cc-3c8f6437fa8b/files/00%20An%20overview%20of%20the%2026%20sections.pdf"
+            }
+          }
+        },
+        {
+          "filename": "PWKLY 25-23.pdf",
+          "fileSize": 320267,
+          "mimeType": "application/pdf",
+          "hash": "cNo47imeDW5p5bz4xR8btQ==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/PWKLY%2025-23.pdf"
+            }
+          }
+        },
+        {
+          "filename": "NP234Wk25-23.pdf",
+          "fileSize": 802132,
+          "mimeType": "application/pdf",
+          "hash": "8Pnah/IBR+R2H5QUWcI0rA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/NP234Wk25-23.pdf"
+            }
+          }
+        },
+        {
+          "filename": "25snii23.pdf",
+          "fileSize": 883620,
+          "mimeType": "application/pdf",
+          "hash": "62xHIZ480AZ/MYM9uKq3sw==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/25snii23.pdf"
+            }
+          }
+        },
+        {
+          "filename": "25wknm23.pdf",
+          "fileSize": 3243280,
+          "mimeType": "application/pdf",
+          "hash": "VPzfbTV2SlRc3HqK/8DRuA==",
+          "attributes": [],
+          "links": {
+            "get": {
+              "href": "/batch/05d164ab-1b18-4239-a823-f919296e2c8a/files/25wknm23.pdf"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "_Links": {
+    "self": {
+      "href": "/batch?limit=10&start=0&$filter=%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20and%20%24batch%28Week%20Number%29%20eq%20%2725%27"
+    },
+    "first": {
+      "href": "/batch?limit=10&start=0&$filter=%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20and%20%24batch%28Week%20Number%29%20eq%20%2725%27"
+    },
+    "last": {
+      "href": "/batch?limit=10&start=0&$filter=%24batch%28Product%20Type%29%20eq%20%27Notices%20to%20Mariners%27%20and%20%24batch%28Week%20Number%29%20eq%20%2725%27"
+    }
+  }
+}
