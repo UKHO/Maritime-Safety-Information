@@ -10,8 +10,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
     [TestFixture]
     public class MSIFunctionalTest : PageTest
     {
-        private DistributedApplication _app;
-        private const string _frontend = "ukho-msi-web";
+        private DistributedApplication? _app;
+        private const string Frontend = "ukho-msi-web";
         private string _httpEndpoint = string.Empty;
         private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
@@ -52,9 +52,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
                 var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
                 await _app.StartAsync();
-                await resourceNotificationService.WaitForResourceAsync(_frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
+                await resourceNotificationService.WaitForResourceAsync(Frontend, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
-                _httpEndpoint = _app.GetEndpoint(_frontend, "https").ToString(); 
+                _httpEndpoint = _app.GetEndpoint(Frontend, "https").ToString();
 
             }
         }
@@ -66,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 return; // No need to dispose in pipeline, as it is managed by the CI/CD environment
             }
-            await _app.DisposeAsync();
+            await _app!.DisposeAsync();
         }
 
         [SetUp]
@@ -164,15 +164,18 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             var notice = new NoticeToMarinersPageObject(Page);
 
-            Assert.That(await notice.CheckEnabledYearDropDownAsync(), Is.True);
-            Assert.That(await notice.CheckEnabledWeekDropDownAsync(), Is.True);
-            Assert.That(await notice.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
-            Assert.That(await notice.CheckTextAsync(notice.MenuValueAddedResellers), Is.EqualTo("Value Added Resellers"));
-            Assert.That(await notice.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
-            Assert.That(await notice.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
-            Assert.That(await notice.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
-            Assert.That(await notice.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
-            Assert.That(await notice.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(await notice.CheckEnabledYearDropDownAsync(), Is.True);
+                Assert.That(await notice.CheckEnabledWeekDropDownAsync(), Is.True);
+                Assert.That(await notice.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
+                Assert.That(await notice.CheckTextAsync(notice.MenuValueAddedResellers), Is.EqualTo("Value Added Resellers"));
+                Assert.That(await notice.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
+                Assert.That(await notice.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
+                Assert.That(await notice.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
+                Assert.That(await notice.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
+                Assert.That(await notice.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
+            }
         }
 
         [Test]
@@ -239,7 +242,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await noticeFileDownload.GoToNoticeToMarinerAsync();
 
             var names = await noticeFileDownload.CheckFileDownloadAsync();
-            Assert.That(names.Count > 0, Is.True);
+            Assert.That(names, Is.Not.Empty);
             var fileName = names[0];
 
             var element = await Page.QuerySelectorAsync(noticeFileDownload.WeeklyDownload);
@@ -305,13 +308,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             await _rnwListEndUser.GoToRadioWarningAsync();
 
-
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AllWarningEndUser), Is.EqualTo("All warnings"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.NavAreaEndUser), Is.EqualTo("NAVAREA 1"));
-            Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.UkCostalEnduser), Is.EqualTo("UK Coastal"));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
+                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
+                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
+                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AllWarningEndUser), Is.EqualTo("All warnings"));
+                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.NavAreaEndUser), Is.EqualTo("NAVAREA 1"));
+                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.UkCostalEnduser), Is.EqualTo("UK Coastal"));
+            }
         }
 
         [Test]
@@ -355,9 +360,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await _rnwListEndUser.VerifyNavareaAndUkCostalFilterAsync(_rnwListEndUser.UkCostalEnduser, "UK Coastal", _httpEndpoint);
         }
 
-
-
-
         private static bool IsRunningInPipeline()
         {
             // Common environment variables for CI/CD pipelines
@@ -372,10 +374,5 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 || !string.IsNullOrEmpty(azurePipeline);
 
         }
-
-        
-
-
-
     }
 }
