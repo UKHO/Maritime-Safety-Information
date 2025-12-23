@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Playwright;
-using Newtonsoft.Json.Linq;
-using NUnit.Framework.Legacy;
+﻿using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
-    internal class NoticeToMarinersPageObject
+    internal class NoticeToMarinersPageObject(IPage page)
     {
-        private readonly IPage _page;
-        private readonly JObject _appConfig;
+        private readonly IPage _page = page;
 
         public ILocator NoticeMarine => _page.Locator("a:has-text(\"Notices to Mariners\")");
         public ILocator RadioNavigationalWarnings => _page.Locator("a:has-text(\"Radio Navigation Warnings\")");
@@ -29,11 +21,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator TabAnnual => _page.Locator("#annual-tab");
         public ILocator NavareaTab => _page.Locator("#NAVAREA1-tab");
         public ILocator UkCoastalTab => _page.Locator("#ukcoastal-tab");
-
-        public NoticeToMarinersPageObject(IPage page)
-        {
-            _page = page;
-        }
 
         public async Task ClickToNoticeMarineAsync()
         {
@@ -64,8 +51,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             //var baseUrl = _appConfig["url"]?.ToString(); Rhz Why?
             var baseUrl = url;
-            Assert.That(_page.Url, Is.EqualTo(baseUrl));
-            Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(_page.Url, Is.EqualTo(baseUrl));
+                Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
+            }
         }
 
         public async Task CheckUrlAsync(ILocator locator, string url, string title)
@@ -171,7 +161,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                     {
                         var fileData = tableCell.Trim().Split(' ');
                         var unit = fileData.Length > 1 ? fileData[1] : "";
-                        bool boolFileSize = unit is "MB" or "KB" or "GB" or "Bytes";
+                        var boolFileSize = unit is "MB" or "KB" or "GB" or "Bytes";
                         Assert.That(boolFileSize, Is.True);   
                     }
                 }

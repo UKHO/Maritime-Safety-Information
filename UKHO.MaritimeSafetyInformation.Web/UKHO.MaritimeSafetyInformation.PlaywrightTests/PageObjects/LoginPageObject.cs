@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 using OtpNet; // ensure reference for Totp and Base32 encoding in v1.4.0
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
@@ -69,7 +67,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForLoadStateAsync(); // Ensure page loaded
             await LoginUsername.ClickAsync();
             var text = await LoginUsername.InnerTextAsync();
-            Assert.That(text.Contains("UKHOTest MSI"), Is.True, "Login was not successful, username not found on page.");
+            Assert.That(text, Does.Contain("UKHOTest MSI"), "Login was not successful, username not found on page.");
         }
 
         public async Task LoginWithDistributorDetailsAsync(string username, string password)
@@ -88,7 +86,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await SignOutText.ClickAsync();
             await _page.WaitForLoadStateAsync();
             var text = await SignIn.InnerTextAsync();
-            Assert.That(text.Contains("Sign in"), Is.True, "Sign out was not successful, Sign in text not found on page.");
+            Assert.That(text, Does.Contain("Sign in"), "Sign out was not successful, Sign in text not found on page.");
         }
 
         public async Task AdLoginAsync(string username, string password)
@@ -169,19 +167,19 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             await AdUserNameDropdown.ClickAsync();
             var text = await AdSignOutText.InnerTextAsync();
-            Assert.That(text.Contains("Sign out"), Is.True, "Login was not successful, username not found on page.");
+            Assert.That(text, Does.Contain("Sign out"), "Login was not successful, username not found on page.");
         }
 
         public async Task AdUnathorisedDetailsAsync()
         {
             var text = await AdUnathorisedError.InnerTextAsync();
-            Assert.That(text.Contains("Sorry, you do not have access to this website."), Is.True, "Login was not successful, username not found on page.");
+            Assert.That(text, Does.Contain("Sorry, you do not have access to this website."), "Login was not successful, username not found on page.");
         }
 
         public async Task AdPasswordErrorCheckAsync()
         {
             var text = await AdPasswordError.InnerTextAsync();
-            Assert.That(text.Contains("Your account or password is incorrect"), Is.True, "Login was not successful, username not found on page.");
+            Assert.That(text, Does.Contain("Your account or password is incorrect"), "Login was not successful, username not found on page.");
         }
     }
 }
