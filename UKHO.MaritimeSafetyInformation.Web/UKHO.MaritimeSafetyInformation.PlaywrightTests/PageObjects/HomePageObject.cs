@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
@@ -39,54 +34,52 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public async Task VerifyAdmiraltyHomePageAsync()
         {
             var text = await SiteTitle.InnerTextAsync();
-            Assert.That(text.Contains("Maritime Safety Information"));
+            Assert.That(text, Does.Contain("Maritime Safety Information"));
         }
 
         public async Task VerifyHomePageTitleAsync()
         {
             var text = await HeadingLevelOne.InnerTextAsync();
-            Assert.That(text.Contains("Maritime Safety Information"));
+            Assert.That(text, Does.Contain("Maritime Safety Information"));
         }
 
         public async Task VerifyAdmiraltyAsync()
         {
             var src = await Admiralty.GetAttributeAsync("src");
-            Assert.That(src.Contains("/images/Admiralty-stacked-logo.svg"));
+            Assert.That(src, Does.Contain("/images/Admiralty-stacked-logo.svg"));
         }
 
         public async Task VerifyPageAsync()
         {
             var noticeText = await GotoNoticeMariners.InnerTextAsync();
-            Assert.That(noticeText.Contains("Go to Notices to Mariners"));
+            Assert.That(noticeText, Does.Contain("Go to Notices to Mariners"));
 
             var warningText = await GotoNavigationalWarnings.InnerTextAsync();
-            Assert.That(warningText.Contains("Go to Radio Navigation Warnings"));
+            Assert.That(warningText, Does.Contain("Go to Radio Navigation Warnings"));
         }
 
         public async Task VerifyUkHydrographicAsync()
         {
             var src = await UkHydrographic.GetAttributeAsync("src");
-            Assert.That(src.Contains("/images/UKHO-stacked-logo.svg"));
+            Assert.That(src, Does.Contain("/images/UKHO-stacked-logo.svg"));
         }
 
         public async Task VerifyPrivacyPolicyAsync()
         {
             var text = await PrivacyPolicyLink.InnerTextAsync();
-            Assert.That(text.Contains("Privacy and cookies"));
+            Assert.That(text, Does.Contain("Privacy and cookies"));
 
             var href = await PrivacyPolicyLink.GetAttributeAsync("href");
-            Assert.That(href.Contains("https://www.admiralty.co.uk/cookie-policy"));
+            Assert.That(href, Does.Contain("https://www.admiralty.co.uk/cookie-policy"));
         }
 
         public async Task VerifyAccessibilityAsync()
         {
             var text = await AccessibilityLink.InnerTextAsync();
-            Assert.That(text.Contains("Accessibility"));
+            Assert.That(text, Does.Contain("Accessibility"));
 
             var href = await AccessibilityLink.GetAttributeAsync("href");
-            Assert.That(href.Contains("AccessibilityStatement"));
+            Assert.That(href, Does.Contain("AccessibilityStatement"));
         }
-
-
     }
 }
