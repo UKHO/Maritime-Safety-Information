@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic; // added for headers
-using Aspire.Hosting;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Aspire.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using NUnit.Framework;
 using UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
@@ -14,15 +10,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
     [TestFixture]
     public class MSIAdminFunctionalTests : PageTest
     {
-        private DistributedApplication _app;
-        private const string _frontend_admin = "ukho-msi-admin-web";
-        private const string _frontend = "ukho-msi-web";
+        private DistributedApplication? _app;
+        private const string Frontend_admin = "ukho-msi-admin-web";
+        private const string Frontend = "ukho-msi-web";
         private string _httpEndpoint_admin = string.Empty;
         private string _httpEndpoint = string.Empty;
         private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
         // Configuration settings for pipeline running
-        private IConfiguration _configuration;
+        private IConfiguration? _configuration;
         private string _b2cAutoTest_UserName = string.Empty;
         private string _b2cAutoTest_Password = string.Empty;
         private string _distributorTest_UserName = string.Empty;
@@ -73,10 +69,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
                 var resourceNotificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
                 await _app.StartAsync();
-                await resourceNotificationService.WaitForResourceAsync(_frontend_admin, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
+                await resourceNotificationService.WaitForResourceAsync(Frontend_admin, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
-                _httpEndpoint_admin = _app.GetEndpoint(_frontend_admin).ToString();
-                _httpEndpoint = _app.GetEndpoint(_frontend).ToString();
+                _httpEndpoint_admin = _app.GetEndpoint(Frontend_admin).ToString();
+                _httpEndpoint = _app.GetEndpoint(Frontend).ToString();
             }
 
         }
@@ -88,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 return; // No need to dispose in pipeline, as it is managed by the CI/CD environment
             }
-            await _app.DisposeAsync();
+            await _app!.DisposeAsync();
         }
 
         [SetUp]
@@ -342,11 +338,17 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
             var _rnwList = new RadioNavigationalWarningsListObject(Page);
             await AdminLoginAsync();
-            Assert.That(await _rnwList.CheckEnabledWarningTypeDropDownAsync());
-            Assert.That(await _rnwList.CheckEnabledYearDropDownAsync());
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(await _rnwList.CheckEnabledWarningTypeDropDownAsync());
+                Assert.That(await _rnwList.CheckEnabledYearDropDownAsync());
+            }
             var createRecordText = await _rnwList.CheckCreateNewRecordTextAsync();
-            Assert.That(string.IsNullOrWhiteSpace(createRecordText), Is.False);
-            Assert.That(await _rnwList.CheckPageHeaderTextAsync(), Is.EqualTo("Radio Navigational Warnings Admin List"));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(string.IsNullOrWhiteSpace(createRecordText), Is.False);
+                Assert.That(await _rnwList.CheckPageHeaderTextAsync(), Is.EqualTo("Radio Navigational Warnings Admin List"));
+            }
         }
 
         [Test]
@@ -413,7 +415,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
             var radioNavigationalWarnings = new RadioNavigationalWarningsObject(Page);
             await AdminLoginAsync();
-           
+
             await radioNavigationalWarnings.SearchListWithFilterAsync("UK Coastal");
             await radioNavigationalWarnings.GetEditUrlAsync();
             await radioNavigationalWarnings.IsDeleteAsync();
@@ -449,7 +451,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 return;
             }
 
-            IPage activePage = Page;
+            var activePage = Page;
 
             if (_isRunningInPipeline)
             {
@@ -462,7 +464,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             else
             {
                 activePage = await MockDistributorLoginAsync();
-                await activePage.GotoAsync(_httpEndpoint);
+                await activePage!.GotoAsync(_httpEndpoint);
             }
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(activePage);
 
@@ -483,7 +485,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 return;
             }
 
-            IPage activePage = Page;
+            var activePage = Page;
 
             if (_isRunningInPipeline)
             {
@@ -497,10 +499,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             else
             {
                 activePage = await MockDistributorLoginAsync();
-                await activePage.GotoAsync(_httpEndpoint);
+                await activePage!.GotoAsync(_httpEndpoint);
             }
 
-            var notice = new NoticeToMarinersPageObject(activePage);
+            _ = new NoticeToMarinersPageObject(activePage);
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(activePage);
 
             await noticeFileDownload.GoToNoticeToMarinerAsync();
@@ -508,12 +510,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await noticeFileDownload.CheckWeeklyFileSectionNameAsync();
             await noticeFileDownload.CheckWeeklyFileSortingWithDistributorRoleAsync();
             var names = await noticeFileDownload.CheckFileDownloadAsync();
-            Assert.That(names.Count > 0);
+            Assert.That(names, Is.Not.Empty);
             var fileName = names[0];
             var newPageUrl = await activePage.Locator(noticeFileDownload.WeeklyDownload).GetAttributeAsync("href");
-            Assert.That(newPageUrl!.Contains($"NoticesToMariners/DownloadFile?fileName={fileName}"));
+            Assert.That(newPageUrl!, Does.Contain($"NoticesToMariners/DownloadFile?fileName={fileName}"));
         }
-
 
         private static bool IsRunningInPipeline()
         {
@@ -529,7 +530,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 || !string.IsNullOrEmpty(azurePipeline);
         }
 
-        private async Task<IPage> MockDistributorLoginAsync()
+        private async Task<IPage?> MockDistributorLoginAsync()
         {
             if (!_isRunningInPipeline)
             {
