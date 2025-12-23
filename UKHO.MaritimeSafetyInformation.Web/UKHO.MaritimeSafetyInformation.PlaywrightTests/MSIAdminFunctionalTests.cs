@@ -215,7 +215,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await radioNavigationalWarnings.PageLoadAsync();
             await radioNavigationalWarnings.FillFormWithValidDetailsAsync("1", "NAVAREA1");
             await radioNavigationalWarnings.CreateRNWAsync();
-            await radioNavigationalWarnings.ConfirmationBoxAsync(radioNavigationalWarnings.AlertMessage, radioNavigationalWarnings.Message, "yes");
+            await radioNavigationalWarnings.ConfirmationBoxAsync(radioNavigationalWarnings.AlertMessage, RadioNavigationalWarningsObject.Message, "yes");
             await radioNavigationalWarnings.GetDialogTextAsync("Record created successfully!");
         }
 
@@ -234,7 +234,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(
                 radioNavigationalWarnings.AlertMessage,
-                radioNavigationalWarnings.Message,
+                RadioNavigationalWarningsObject.Message,
                 "cancel"
             );
             await radioNavigationalWarnings.CheckConfirmationBoxVisibleAsync(false);
@@ -255,7 +255,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             await radioNavigationalWarnings.CreateRNWAsync();
             await radioNavigationalWarnings.ConfirmationBoxAsync(
                 radioNavigationalWarnings.AlertMessage,
-                radioNavigationalWarnings.Message,
+                RadioNavigationalWarningsObject.Message,
                 "no"
             );
             await radioNavigationalWarnings.CheckConfirmationBoxVisibleAsync(false);

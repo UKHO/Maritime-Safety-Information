@@ -168,13 +168,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 Assert.That(await notice.CheckEnabledYearDropDownAsync(), Is.True);
                 Assert.That(await notice.CheckEnabledWeekDropDownAsync(), Is.True);
-                Assert.That(await notice.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
-                Assert.That(await notice.CheckTextAsync(notice.MenuValueAddedResellers), Is.EqualTo("Value Added Resellers"));
-                Assert.That(await notice.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
-                Assert.That(await notice.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
-                Assert.That(await notice.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
-                Assert.That(await notice.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
-                Assert.That(await notice.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.MenuNoticeToMarine), Is.EqualTo("Notices to Mariners"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.MenuValueAddedResellers), Is.EqualTo("Value Added Resellers"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.MenuAbout), Is.EqualTo("About"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.TabWeekly), Is.EqualTo("Weekly"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.TabDaily), Is.EqualTo("Daily"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.TabCumulative), Is.EqualTo("Cumulative"));
+                Assert.That(await NoticeToMarinersPageObject.CheckTextAsync(notice.TabAnnual), Is.EqualTo("Annual"));
             }
         }
 
@@ -310,12 +310,12 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
-                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
-                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
-                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.AllWarningEndUser), Is.EqualTo("All warnings"));
-                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.NavAreaEndUser), Is.EqualTo("NAVAREA 1"));
-                Assert.That(await _rnwListEndUser.CheckTextAsync(_rnwListEndUser.UkCostalEnduser), Is.EqualTo("UK Coastal"));
+                Assert.That(await RadioNavigationalWarningsListEndUserObject.CheckTextAsync(_rnwListEndUser.RadioNavigationalWarningsEndUser), Is.EqualTo("Radio Navigation Warnings"));
+                Assert.That(await RadioNavigationalWarningsListEndUserObject.CheckTextAsync(_rnwListEndUser.RadioWarningEndUser), Is.EqualTo("Radio Warnings"));
+                Assert.That(await RadioNavigationalWarningsListEndUserObject.CheckTextAsync(_rnwListEndUser.AboutEndUser), Is.EqualTo("About"));
+                Assert.That(await RadioNavigationalWarningsListEndUserObject.CheckTextAsync(_rnwListEndUser.AllWarningEndUser), Is.EqualTo("All warnings"));
+                Assert.That(await RadioNavigationalWarningsListEndUserObject.CheckTextAsync(_rnwListEndUser.NavAreaEndUser), Is.EqualTo("NAVAREA 1"));
+                Assert.That(await RadioNavigationalWarningsListEndUserObject.CheckTextAsync(_rnwListEndUser.UkCostalEnduser), Is.EqualTo("UK Coastal"));
             }
         }
 

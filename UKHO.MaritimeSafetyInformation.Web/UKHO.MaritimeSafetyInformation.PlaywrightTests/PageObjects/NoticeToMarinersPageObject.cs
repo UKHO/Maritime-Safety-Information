@@ -82,14 +82,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             Assert.That(await _page.TitleAsync(), Is.EqualTo(title));
         }
 
-        public async Task<string> CheckTextAsync(ILocator locator)
+        public static async Task<string> CheckTextAsync(ILocator locator)
         {
             return (await locator.InnerTextAsync()).ToString();
         }
 
         public async Task<int> CheckTableRecordCountAsync()
         {
-            var yearlyLength = (await _page.QuerySelectorAllAsync("#ddlYears option")).Count;
             await DropDownYearly.SelectOptionAsync(new SelectOptionValue { Index = 1 });
             var weekLength = (await _page.QuerySelectorAllAsync("#ddlWeeks option")).Count;
             await DropDownWeekly.SelectOptionAsync(new SelectOptionValue { Index = weekLength - 1 });
@@ -102,12 +101,12 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task<string> CheckFileSizeTextAsync()
         {
-            return (await FileSize.TextContentAsync()).ToString();
+            return await FileSize.TextContentAsync() ?? string.Empty;
         }
 
         public async Task<string> CheckFileNameTextAsync()
         {
-            return (await FileName.TextContentAsync()).ToString();
+            return await FileName.TextContentAsync() ?? string.Empty;
         }
 
         public async Task VerifyTableContainsDownloadLinkAsync()
@@ -154,15 +153,18 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                     await _page.WaitForSelectorAsync("td[id^=filesize]"); //Rhz
 
                     var fileSizeData = await _page.EvalOnSelectorAllAsync<string[]>("td[id^=filesize]", "els => els.map(e => e.textContent)");
-                    Assert.That(fileSizeData.Length, Is.GreaterThan(0));
-                    Assert.That(await CheckFileNameTextAsync(), Is.EqualTo("File Name"));
-                    Assert.That(await CheckFileSizeTextAsync(), Is.EqualTo("File Size"));
+                    using (Assert.EnterMultipleScope())
+                    {
+                        Assert.That(fileSizeData.Length, Is.GreaterThan(0));
+                        Assert.That(await CheckFileNameTextAsync(), Is.EqualTo("File Name"));
+                        Assert.That(await CheckFileSizeTextAsync(), Is.EqualTo("File Size"));
+                    }
                     foreach (var tableCell in fileSizeData)
                     {
                         var fileData = tableCell.Trim().Split(' ');
                         var unit = fileData.Length > 1 ? fileData[1] : "";
                         var boolFileSize = unit is "MB" or "KB" or "GB" or "Bytes";
-                        Assert.That(boolFileSize, Is.True);   
+                        Assert.That(boolFileSize, Is.True);
                     }
                 }
             }
