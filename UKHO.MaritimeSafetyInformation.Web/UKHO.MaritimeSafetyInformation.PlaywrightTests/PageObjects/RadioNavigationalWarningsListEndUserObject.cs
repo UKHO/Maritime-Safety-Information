@@ -13,7 +13,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator AllWarningEndUser { get; }
         public ILocator NavAreaEndUser { get; }
         public ILocator UkCostalEnduser { get; }
-        public ILocator TableHeader { get; }
         public ILocator ShowSelection { get; }
         public ILocator SelectCheckBox { get; }
         public ILocator BtnShowSelection { get; }
@@ -30,7 +29,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator AboutRNW { get; }
         public ILocator RadioNavigationalWarnings { get; }
 
-        public readonly string[] TableHeaderText = { "Reference", "Date Time Group", "Description", "Select all", "Select" };
+        private readonly string[] _tableHeaderText;
 
         public RadioNavigationalWarningsListEndUserObject(IPage page)
         {
@@ -57,9 +56,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             DetailWarningType = _page.Locator("[id^=\"Details_WarningType\"]");
             About = _page.Locator("a:has-text(\"IHO WWNWS-SC\")");
             AboutRNW = _page.Locator(" div >  p:nth-child(3)");
+            _tableHeaderText = ["Reference", "Date Time Group", "Description", "Select all", "Select"];
         }
 
-        private List<string> SortDateListDescending(List<string> dateList)
+        private static List<string> SortDateListDescending(List<string> dateList)
         {
             //To do a date sort
             // Remove "UTC ", trim the string and convert to date for sorting, return the original format in a new list.
@@ -79,7 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await RadioNavigationalWarnings.ClickAsync();
         }
 
-        public async Task<string> CheckTextAsync(ILocator locator)
+        public static async Task<string> CheckTextAsync(ILocator locator)
         {
             return await locator.InnerTextAsync();
         }
@@ -87,7 +87,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public async Task VerifyTableDateColumnDataAsync()
         {
             var resultYear = await _page.Locator("[id^=\"DateTimeGroupRnwFormat\"]").AllInnerTextsAsync();
-            Assert.That(resultYear.Count, Is.GreaterThan(0));
+            Assert.That(resultYear, Is.Not.Empty);
 
             var resultdate = (await _page.Locator("[id^=\"DateTimeGroupRnwFormat\"]").AllInnerTextsAsync())
                 .Select(x => x.Trim().Substring(6)).ToList();
@@ -110,8 +110,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var tableColsHeader = (await _page.Locator(".table>thead>tr>th").AllInnerTextsAsync()).Select(x => x.Trim()).ToList();
             var selectAllHeader = await SelectAll.InputValueAsync();
             tableColsHeader.Insert(3, selectAllHeader);
-            tableColsHeader = tableColsHeader.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            var match = TableHeaderText.Length == tableColsHeader.Count && TableHeaderText.SequenceEqual(tableColsHeader);
+            tableColsHeader = [.. tableColsHeader.Where(x => !string.IsNullOrWhiteSpace(x))];
+            var match = _tableHeaderText.Length == tableColsHeader.Count && _tableHeaderText.SequenceEqual(tableColsHeader);
             Assert.That(match, Is.True);
         }
 
@@ -127,8 +127,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             Assert.That(newDetails, Is.Not.Null.And.Not.Empty);
             var afterReference = await _page.Locator("[id^=\"Details_Reference\"]").First.InnerTextAsync();
             var afterDateTime = await _page.Locator("[id^=\"Details_DateTimeGroupRnwFormat\"]").First.InnerTextAsync();
-            Assert.That(beforeReference, Is.EqualTo(afterReference));
-            Assert.That(beforeDatetime, Is.EqualTo(afterDateTime));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(beforeReference, Is.EqualTo(afterReference));
+                Assert.That(beforeDatetime, Is.EqualTo(afterDateTime));
+            }
         }
 
         public async Task VerifyImportantBlockAsync()
@@ -137,7 +140,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await ImportantBlockAsync(rnwHeader);
         }
 
-        public async Task ImportantBlockAsync(string rnwHeader)
+        public static async Task ImportantBlockAsync(string rnwHeader)
         {
             var rnwHeaderText = rnwHeader.Split(':');
             var rnwMessageText = rnwHeaderText[0];
@@ -150,7 +153,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var rnwModifiedDateTime = DateTime.ParseExact(rnwDateTime, "ddHHmm  MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal).ToUniversalTime();
             var lastModifiedDateTime = new DateTimeOffset(rnwModifiedDateTime).ToUnixTimeMilliseconds();
 
-            Assert.That(lastModifiedDateTime < currentDateTime, Is.True);
+            Assert.That(lastModifiedDateTime, Is.LessThan(currentDateTime));
         }
 
         public async Task VerifySelectOptionTextAsync()
@@ -181,15 +184,18 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await SelectAll.ClickAsync(new LocatorClickOptions { Force = true });
             Assert.That(await SelectCheckBox.First.IsEnabledAsync(), Is.True);
             var detailsReference = await Refrence.First.InnerTextAsync();
-            Assert.That(detailsReference.Length, Is.GreaterThan(0));
+            Assert.That(detailsReference, Is.Not.Empty);
             var beforeDetailsReference = (await Refrence.First.InnerTextAsync()).Trim();
             var beforeDetailsDateTimeGroupRnwFormat = (await DateTimeGroupRnwFormat.First.InnerTextAsync()).Trim();
             await SelectCheckBox.First.ClickAsync();
             await BtnShowSelection.ClickAsync();
             var afterDetailsReference = (await DetailsReference.First.InnerTextAsync()).Trim();
             var afterDetailsDateTimeGroupRnwFormat = (await DetailsDateTimeGroupRnwFormat.First.InnerTextAsync()).Trim();
-            Assert.That(beforeDetailsDateTimeGroupRnwFormat, Is.EqualTo(afterDetailsDateTimeGroupRnwFormat));
-            Assert.That(beforeDetailsReference, Is.EqualTo(afterDetailsReference));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(beforeDetailsDateTimeGroupRnwFormat, Is.EqualTo(afterDetailsDateTimeGroupRnwFormat));
+                Assert.That(beforeDetailsReference, Is.EqualTo(afterDetailsReference));
+            }
             await BackToAllWarning.ClickAsync();
         }
 
@@ -233,7 +239,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             var sortedDesc = SortDateListDescending(resultdate);
             Assert.That(resultdate, Is.EqualTo(sortedDesc));
             var anchor = await locator.GetAttributeAsync("href");
-            var urlName = new UriBuilder(appUrl) { Path = $"/RadioNavigationalWarnings"}.Uri.ToString();
+            var urlName = new UriBuilder(appUrl) { Path = $"/RadioNavigationalWarnings" }.Uri.ToString();
             urlName += anchor;
             Assert.That(_page.Url, Is.EqualTo(urlName));
             //await _page.WaitForTimeoutAsync(5000);

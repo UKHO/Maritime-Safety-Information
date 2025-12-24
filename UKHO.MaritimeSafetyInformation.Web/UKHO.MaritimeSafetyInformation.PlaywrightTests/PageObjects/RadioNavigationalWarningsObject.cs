@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Playwright;
-using NUnit.Framework.Legacy;
+﻿using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
@@ -38,7 +32,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public ILocator ConfirmAlertClose { get; }
         public ILocator ConfirmAlertNo { get; }
         public ILocator ConfirmAlertYes { get; }
-        public string Message => "A warning record with this reference number already exists. Would you like to add another record with the same reference?";
+        public const string Message = "A warning record with this reference number already exists. Would you like to add another record with the same reference?";
 
         public RadioNavigationalWarningsObject(IPage page)
         {
@@ -85,7 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             await Delete.UncheckAsync();
             Assert.That(await Warning.IsVisibleAsync());
-            
+
         }
 
         public async Task GetDialogTextAsync(string text)
@@ -211,13 +205,19 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
             if (visible)
             {
-                StringAssert.Contains("d-block", await Overlay.GetAttributeAsync("class"));
-                StringAssert.Contains("d-block", await Backdrop.GetAttributeAsync("class"));
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(await Overlay.GetAttributeAsync("class"), Does.Contain("d-block"));
+                    Assert.That(await Backdrop.GetAttributeAsync("class"), Does.Contain("d-block"));
+                }
             }
             else
             {
-                StringAssert.Contains("d-none", await Overlay.GetAttributeAsync("class"));
-                StringAssert.Contains("d-none", await Backdrop.GetAttributeAsync("class"));
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(await Overlay.GetAttributeAsync("class"), Does.Contain("d-none"));
+                    Assert.That(await Backdrop.GetAttributeAsync("class"), Does.Contain("d-none"));
+                }
             }
         }
 

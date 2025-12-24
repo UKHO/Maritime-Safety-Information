@@ -3,7 +3,7 @@ using Microsoft.Playwright;
 
 namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
-    internal class NoticeToMarinersWeekDownloadPageObject
+    internal partial class NoticeToMarinersWeekDownloadPageObject
     {
         private readonly IPage _page;
 
@@ -94,7 +94,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await Week.SelectOptionAsync(new SelectOptionValue { Index = 1 });
             await _page.WaitForSelectorAsync("[id^='filename']");
             var result = await _page.Locator("[id^='filename']").AllInnerTextsAsync();
-            return result.Select(x => x.Trim()).ToList();
+            return [.. result.Select(x => x.Trim())];
         }
 
         public async Task CheckImportantSafetyNoticeAsync()
@@ -110,8 +110,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             if (!string.IsNullOrWhiteSpace(dailyFileName))
             {
                 var href = await Download.First.GetAttributeAsync("href");
-                var dailyDownloadPageUrl = href.Trim().Split('&');
-                var downloadUrl = dailyDownloadPageUrl[1].Replace("%20", " ");
+                var dailyDownloadPageUrl = href?.Trim().Split('&');
+                var downloadUrl = dailyDownloadPageUrl?[1].Replace("%20", " ");
                 Assert.That(downloadUrl, Does.Contain($"fileName={dailyFileName}"));
             }
             else
@@ -142,9 +142,9 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             await _page.WaitForSelectorAsync("td[id^='FileName']");
             var cumulativeFileNames = await _page.Locator("td[id^='FileName']").AllInnerTextsAsync();
-            Assert.That(cumulativeFileNames.Count, Is.GreaterThan(0));
+            Assert.That(cumulativeFileNames, Is.Not.Empty);
 
-            var sortedDesc = cumulativeFileNames.OrderByDescending(x => int.Parse(Regex.Match(x,@"\d{4}$").Value)).ToList();
+            var sortedDesc = cumulativeFileNames.OrderByDescending(x => int.Parse(CumulativeFileNameRegex().Match(x).Value)).ToList();
             Assert.That(cumulativeFileNames, Is.EqualTo(sortedDesc).AsCollection);
         }
 
@@ -178,7 +178,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForLoadStateAsync();
             await _page.WaitForSelectorAsync("[id^='caption']");
             var dailyWeekFileNames = await _page.Locator("[id^='caption']").AllInnerTextsAsync();
-            var regex = new Regex(@"^\d{4},\s[a-zA-Z]{4}\s\d{2}$");
+            var regex = DailyWeekFileRegex();
             foreach (var name in dailyWeekFileNames)
             {
                 Assert.That(regex.IsMatch(name), Is.True);
@@ -192,12 +192,15 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForLoadStateAsync();
             await _page.WaitForSelectorAsync("[id^='filesize']");
             var dailyFileSizes = await _page.Locator("[id^='filesize']").AllInnerTextsAsync();
-            var regex = new Regex(@"^\S+\s(B|MB|KB|GB)$");
+            var regex = DailyFileSizeRegex();
             foreach (var size in dailyFileSizes)
             {
                 var parts = size.Split(" ");
-                Assert.That(parts.Length, Is.GreaterThan(1));
-                Assert.That(regex.IsMatch($"{parts[0]} {parts[1]}"), Is.True);
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(parts, Has.Length.GreaterThan(1));
+                    Assert.That(regex.IsMatch($"{parts[0]} {parts[1]}"), Is.True);
+                }
             }
         }
 
@@ -213,9 +216,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForSelectorAsync("text=Partner");
             var fileNumber = await DistributorFileNumber.CountAsync();
             if (fileNumber > 0)
+            {
                 Assert.That(fileNumber, Is.EqualTo(1));
+            }
             else
-                Assert.That(fileNumber, Is.EqualTo(0));
+                Assert.That(fileNumber, Is.Zero);
         }
 
         public async Task VerifyIntegrationDownloadAllAsync()
@@ -260,7 +265,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             var fileNameLinks = FileNameDownload;
             var fileNameData = await fileNameLinks.EvaluateAllAsync<string[]>("els => els.map(e => e.getAttribute('href'))");
-            Assert.That(fileNameData.Length, Is.GreaterThan(0));
+            Assert.That(fileNameData, Is.Not.Empty);
             Assert.That(fileNameData.All(x => !string.IsNullOrEmpty(x)),Is.True);
         }
 
@@ -268,7 +273,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             var annualDownload = Download;
             var annualDownloadLinks = await annualDownload.EvaluateAllAsync<string[]>("els => els.map(e => e.getAttribute('href'))");
-            Assert.That(annualDownloadLinks.Length, Is.GreaterThan(0));
+            Assert.That(annualDownloadLinks, Is.Not.Empty);
             Assert.That(annualDownloadLinks.All(x => !string.IsNullOrEmpty(x)),Is.True);
         }
 
@@ -278,15 +283,28 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await _page.WaitForSelectorAsync("[id^='filesize']");
             var annualFileSizeData = FileSize;
             var dailyFileSizes = await annualFileSizeData.EvaluateAllAsync<string[]>("els => els.map(e => e.textContent.trim())");
-            var regex = new Regex(@"^\S+\s(B|MB|KB|GB|Bytes)$");
+            var regex = AnnualFileSizeRegex();
             foreach (var size in dailyFileSizes)
             {
                 var parts = size.Split(" ");
-                Assert.That(parts.Length, Is.GreaterThan(1));
-                Assert.That(regex.IsMatch($"{parts[0]} {parts[1]}"),Is.True,$"Error no match P0: {parts[0]} P1: {parts[1]}");
+                using (Assert.EnterMultipleScope())
+                {
+                    Assert.That(parts, Has.Length.GreaterThan(1));
+                    Assert.That(regex.IsMatch($"{parts[0]} {parts[1]}"), Is.True, $"Error no match P0: {parts[0]} P1: {parts[1]}");
+                }
             }
         }
+
+        [GeneratedRegex(@"\d{4}$")]
+        private static partial Regex CumulativeFileNameRegex();
+
+        [GeneratedRegex(@"^\d{4},\s[a-zA-Z]{4}\s\d{2}$")]
+        private static partial Regex DailyWeekFileRegex();
+
+        [GeneratedRegex(@"^\S+\s(B|MB|KB|GB)$")]
+        private static partial Regex DailyFileSizeRegex();
+
+        [GeneratedRegex(@"^\S+\s(B|MB|KB|GB|Bytes)$")]
+        private static partial Regex AnnualFileSizeRegex();
     }
-
 }
-
