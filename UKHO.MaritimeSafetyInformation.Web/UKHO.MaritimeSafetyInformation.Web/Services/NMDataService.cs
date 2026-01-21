@@ -58,13 +58,15 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 if (searchResult.Entries == null)
                 {
-                    string accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
+                    var accessToken = await _authFssTokenProvider.GenerateADAccessToken(_userService.IsDistributorUser, correlationId);
 
-                    string searchText = $" and $batch(Frequency) eq '{frequency}' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
+                    var searchText = week < 10
+                        ? $" and $batch(Frequency) eq '{frequency}' and $batch(Year) eq '{year}' and ($batch(Week Number) eq '{week}' or $batch(Week Number) eq '{week:00}')"
+                        : $" and $batch(Frequency) eq '{frequency}' and $batch(Year) eq '{year}' and $batch(Week Number) eq '{week}'";
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    var result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
                     searchResult = result.Data;
                 }
 
