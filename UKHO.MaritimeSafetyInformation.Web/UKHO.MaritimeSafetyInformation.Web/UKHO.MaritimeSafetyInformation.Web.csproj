@@ -36,9 +36,9 @@
     <PackageReference Include="FluentValidation" Version="11.12.0" />
     <PackageReference Include="HtmlSanitizer" Version="9.0.889" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="9.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="9.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="9.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="9.0.12" />
     <PackageReference Include="NuGet.ProjectModel" Version="6.14.0" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
