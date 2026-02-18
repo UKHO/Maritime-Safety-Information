@@ -22,25 +22,25 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
             app.UseReferrerPolicy(x => x.NoReferrer());
-            app.UseCsp(x =>
-            {
-                x.DefaultSources(y => y.Self());
-                x.ScriptSources(y => y.Self().CustomSources(
-                    "https://www.googletagmanager.com",
-                    "https://cdn-ukwest.onetrust.com"
-                ));
-                x.StyleSources(y => y.Self().CustomSources(
-                    "https://unpkg.com/%40ukho/styles@1.3.21/",
-                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
-                ));
-                x.FontSources(y => y.Self().CustomSources(
-                    "https://unpkg.com/%40ukho/styles@1.3.21/",
-                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
-                ));
-                x.ImageSources(y => y.Self().CustomSources(
-                    "data:"
-                ));
-            });
+            //app.UseCsp(x =>
+            //{
+            //    x.DefaultSources(y => y.Self());
+            //    x.ScriptSources(y => y.Self().CustomSources(
+            //        "https://www.googletagmanager.com",
+            //        "https://cdn-ukwest.onetrust.com"
+            //    ));
+            //    x.StyleSources(y => y.Self().CustomSources(
+            //        "https://unpkg.com/%40ukho/styles@1.3.21/",
+            //        "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
+            //    ));
+            //    x.FontSources(y => y.Self().CustomSources(
+            //        "https://unpkg.com/%40ukho/styles@1.3.21/",
+            //        "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
+            //    ));
+            //    x.ImageSources(y => y.Self().CustomSources(
+            //        "data:"
+            //    ));
+            //});
             app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
             app.UseXfo(x => x.SameOrigin());
