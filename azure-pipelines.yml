@@ -70,7 +70,7 @@ stages:
 - stage: QaDeploy
   displayName: QA deploy
   dependsOn:
-  - DevDeploy
+  - BuildTestPublish
   condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')))
   jobs:
   - template: /Deployment/templates/continuous-deployment.yml

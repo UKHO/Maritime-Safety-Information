@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using UKHO.MaritimeSafetyInformation.Common.Filters;
 
@@ -31,7 +26,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             {
                 x.DefaultSources(y => y.Self());
                 x.ScriptSources(y => y.Self().CustomSources(
-                    "https://www.googletagmanager.com"
+                    "https://www.googletagmanager.com",
+                    "https://cdn-ukwest.onetrust.com"
                 ));
                 x.StyleSources(y => y.Self().CustomSources(
                     "https://unpkg.com/%40ukho/styles@1.3.21/",
