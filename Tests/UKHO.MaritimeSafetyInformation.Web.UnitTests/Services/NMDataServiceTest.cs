@@ -51,23 +51,23 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
         }
 
-        [Test]
-        public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles()
+        [TestCase(9, " and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '2022' and ($batch(Week Number) eq '9' or $batch(Week Number) eq '09')")]
+        [TestCase(10, " and $batch(Frequency) eq 'Weekly' and $batch(Year) eq '2022' and $batch(Week Number) eq '10'")]
+        public async Task WhenGetWeeklyBatchFilesIsCalled_ThenShouldReturnsMoreThanZeroFiles(int week, string expectedSearch)
         {
             const int year = 2022;
-            const int week = 15;
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
-            Result<BatchSearchResponse> searchResult = SetSearchResultForWeekly();
+            var searchResult = SetSearchResultForWeekly();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(expectedSearch, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 2;
 
-            ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
+            var showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
-            Assert.That(expectedRecordCount, Is.EqualTo(showNMFilesResponseModel.ShowFilesResponseModel.Count));
+            Assert.That(showNMFilesResponseModel.ShowFilesResponseModel.Count, Is.EqualTo(expectedRecordCount));
         }
 
         [Test]

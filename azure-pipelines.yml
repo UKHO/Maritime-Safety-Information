@@ -46,7 +46,7 @@ variables:
 - name: WindowsPool2
   value: "Mare Nubium"
 - name: DotNetSdkVersion
-  value: "8.x"
+  value: "9.x"
 - name: snykAbzuOrganizationId
   value: aeb7543b-8394-457c-8334-a31493d8910d
 

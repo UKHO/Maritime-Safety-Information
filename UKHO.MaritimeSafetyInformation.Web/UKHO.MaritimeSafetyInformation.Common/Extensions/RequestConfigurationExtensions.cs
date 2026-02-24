@@ -5,15 +5,17 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
 {
     public static class RequestConfigurationExtensions
     {
-		/// <summary>
-		/// Extension method used to configure the HTTP request pipeline.
-		/// </summary>
-		/// <param name="app"></param>
-		/// <param name="defaultController"></param>
-		/// <param name="defaultAction"></param>
-		/// <param name="isDevelopment"></param>
-		/// <returns></returns>
-		public static IApplicationBuilder ConfigureRequest(this IApplicationBuilder app, string defaultController, string defaultAction, bool isDevelopment)
+        /// <summary>
+        /// Extension method used to configure the HTTP request pipeline.
+        /// This has been replaced by RequestPipelineConfigExtensions.ConfigureRequestPipeline for better integration with ASP.NET Core 6+.
+        /// Rhz: To be Removed.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="defaultController"></param>
+        /// <param name="defaultAction"></param>
+        /// <param name="isDevelopment"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder ConfigureRequest(this IApplicationBuilder app, string defaultController, string defaultAction, bool isDevelopment)
         {
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());

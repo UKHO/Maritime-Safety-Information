@@ -17,8 +17,6 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{EE2F39EA-5394-4E83-BE3A-7D3FE20E9FB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.IntegrationTests", "UKHO.MaritimeSafetyInformation.IntegrationTests\UKHO.MaritimeSafetyInformation.IntegrationTests.csproj", "{2531CBB9-F254-493B-BCB7-CCD49A29EB39}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformationAdmin.Web", "UKHO.MaritimeSafetyInformationAdmin.Web\UKHO.MaritimeSafetyInformationAdmin.Web.csproj", "{D3888119-3006-46E5-BD9F-581D6C938DA8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipeline", "Pipeline", "{0BCB0F5D-23E7-4F9F-99E9-A6188A0ABCEB}"
@@ -105,6 +103,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "var", "var", "{4D22B97D-E82
 		..\Deployment\templates\var\qa-deploy.yml = ..\Deployment\templates\var\qa-deploy.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Web.AppHost", "UKHO.MaritimeSafetyInformation.Web.AppHost\UKHO.MaritimeSafetyInformation.Web.AppHost.csproj", "{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults", "UKHO.MaritimeSafetyInformation.Web.ServiceDefaults\UKHO.MaritimeSafetyInformation.Web.ServiceDefaults.csproj", "{B738101A-4479-C30C-6562-AD0BF74ACB85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks.MSI", "UKHO.ADDS.Mocks.MSI\UKHO.ADDS.Mocks.MSI.csproj", "{5FE035EA-E303-2518-FC1E-57A6E744A6F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks", "UKHO.ADDS.Mocks\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj", "{FBDADAAD-61F0-F890-E12F-5362F2E2D643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.PlaywrightTests", "UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj", "{0B3E7CBA-B01A-C600-EE4C-426342FF619B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,14 +141,30 @@ Global
 		{11186474-3757-4857-BB35-995DC2295D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11186474-3757-4857-BB35-995DC2295D0E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11186474-3757-4857-BB35-995DC2295D0E}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2531CBB9-F254-493B-BCB7-CCD49A29EB39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3888119-3006-46E5-BD9F-581D6C938DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{704E4E7F-7F58-4171-8A2D-B41CB1EB6785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B738101A-4479-C30C-6562-AD0BF74ACB85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -149,7 +173,6 @@ Global
 		{1BCE0BFA-F200-4B02-944F-1F465277E807} = {CAC252B6-01EF-483B-ABFF-D1143EB89F62}
 		{BF6409FA-1671-44BC-83C9-9652FEAB3FD5} = {CAC252B6-01EF-483B-ABFF-D1143EB89F62}
 		{11186474-3757-4857-BB35-995DC2295D0E} = {EE2F39EA-5394-4E83-BE3A-7D3FE20E9FB1}
-		{2531CBB9-F254-493B-BCB7-CCD49A29EB39} = {CAC252B6-01EF-483B-ABFF-D1143EB89F62}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {0BCB0F5D-23E7-4F9F-99E9-A6188A0ABCEB}
 		{3AE101FE-2558-4381-A852-FDCE5DEC1F8B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{0BFD3E2F-3E82-4258-9E7A-6C795D0AC657} = {3AE101FE-2558-4381-A852-FDCE5DEC1F8B}
