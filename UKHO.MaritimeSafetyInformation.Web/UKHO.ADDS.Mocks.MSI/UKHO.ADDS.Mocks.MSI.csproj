@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UKHO.ADDS.Mocks\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj" />
+    <Folder Include="Override\Files\fssmsi\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Override\Files\fssmsi\" />
+    <PackageReference Include="UKHO.ADDS.Mocks" Version="1.0.60213-rc.11" />
   </ItemGroup>
 
 </Project>
