@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11520.95 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKHO.MaritimeSafetyInformation.Web", "UKHO.MaritimeSafetyInformation.Web\UKHO.MaritimeSafetyInformation.Web.csproj", "{1E980BA5-AEF4-45C9-890E-224A6AF169DD}"
 EndProject
@@ -109,8 +109,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks.MSI", "UKHO.ADDS.Mocks.MSI\UKHO.ADDS.Mocks.MSI.csproj", "{5FE035EA-E303-2518-FC1E-57A6E744A6F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.ADDS.Mocks", "UKHO.ADDS.Mocks\src\UKHO.ADDS.Mocks\UKHO.ADDS.Mocks.csproj", "{FBDADAAD-61F0-F890-E12F-5362F2E2D643}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKHO.MaritimeSafetyInformation.PlaywrightTests", "UKHO.MaritimeSafetyInformation.PlaywrightTests\UKHO.MaritimeSafetyInformation.PlaywrightTests.csproj", "{0B3E7CBA-B01A-C600-EE4C-426342FF619B}"
 EndProject
 Global
@@ -157,10 +155,6 @@ Global
 		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FE035EA-E303-2518-FC1E-57A6E744A6F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBDADAAD-61F0-F890-E12F-5362F2E2D643}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B3E7CBA-B01A-C600-EE4C-426342FF619B}.Release|Any CPU.ActiveCfg = Release|Any CPU
