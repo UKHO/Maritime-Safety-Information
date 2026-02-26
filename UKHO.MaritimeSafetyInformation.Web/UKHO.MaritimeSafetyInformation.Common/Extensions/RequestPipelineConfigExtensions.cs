@@ -22,6 +22,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
             app.UseReferrerPolicy(x => x.NoReferrer());
+#if !DEBUG
             app.UseCsp(x =>
             {
                 x.DefaultSources(y => y.Self());
@@ -52,6 +53,7 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
                     "data:"
                 ));
             });
+#endif
             app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
             app.UseXfo(x => x.SameOrigin());
