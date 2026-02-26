@@ -27,7 +27,18 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
                 x.DefaultSources(y => y.Self());
                 x.ScriptSources(y => y.Self().CustomSources(
                     "https://www.googletagmanager.com",
-                    "https://cdn-ukwest.onetrust.com"
+                    "https://cdn-ukwest.onetrust.com",
+                    "https://js-eu1.hs-analytics.net",
+                    "https://js-eu1.hubspot.com",
+                    "https://js-eu1.hsadspixel.net",
+                    "https://js-eu1.hs-banner.com"
+                ));
+                x.ConnectSources(y => y.Self().CustomSources(
+                    "https://cdn-ukwest.onetrust.com",
+                    "https://js-eu1.hs-analytics.net",
+                    "https://js-eu1.hubspot.com",
+                    "https://js-eu1.hsadspixel.net",
+                    "https://js-eu1.hs-banner.com"
                 ));
                 x.StyleSources(y => y.Self().CustomSources(
                     "https://unpkg.com/%40ukho/styles@1.3.21/",
