@@ -46,7 +46,9 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
                     "https://www.google.co.uk",
                     "https://track-eu1.hubspot.com",
                     "https://perf-eu1.hsforms.com",
-                    "https://px.ads.linkedin.com"
+                    "https://px.ads.linkedin.com",
+                    "https://bat.bing.com",
+                    "https://*.svc.dynamics.com"
                 ));
                 x.ConnectSources(y => y.Self().CustomSources(
 #if DEBUG
@@ -68,7 +70,8 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
                     "https://cta-eu1.hubspot.com",
                     "https://static.hsappstatic.net",
                     "https://px.ads.linkedin.com",
-                    "https://pagead2.googlesyndication.com"
+                    "https://pagead2.googlesyndication.com",
+                    "https://bat.bing.com"
                 ));
                 x.FrameSources(y => y.Self().CustomSources(
                     "https://www.googletagmanager.com"
