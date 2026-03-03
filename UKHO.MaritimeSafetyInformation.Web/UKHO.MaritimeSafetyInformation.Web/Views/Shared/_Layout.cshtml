@@ -21,7 +21,7 @@
             })(window, document, 'script', 'dataLayer', '@_config["GoogleTagManagerID"]');</script>
         <!-- End Google Tag Manager -->
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=@_config["GoogleTagManagerID"]"></script>
+        <script async nws-csp-add-nonce="true" src="https://www.googletagmanager.com/gtag/js?id=@_config["GoogleTagManagerID"]"></script>
         <script nws-csp-add-nonce="true">
             window.dataLayer = window.dataLayer || [];
             function gtag() { dataLayer.push(arguments); }
@@ -101,8 +101,8 @@
             </div>
         </div>
     </footer>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script nws-csp-add-nonce="true" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script nws-csp-add-nonce="true" src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

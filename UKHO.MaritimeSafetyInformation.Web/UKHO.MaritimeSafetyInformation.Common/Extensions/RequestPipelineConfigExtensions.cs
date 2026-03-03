@@ -13,7 +13,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
     /// <param name="app"></param>
     /// <param name="defaultController"></param>
     /// <param name="defaultAction"></param>
-
     /// <returns></returns>
     public static class RequestPipelineConfigExtensions
     {
@@ -25,21 +24,32 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseCsp(x =>
             {
                 x.DefaultSources(y => y.Self());
-                x.ScriptSources(y => y.Self().CustomSources(
+                x.ScriptSources(y => y.Self().StrictDynamic().CustomSources(
 #if DEBUG
-                    "https://localhost",
-                    "http://localhost",
+                    "https://localhost:*",
+                    "http://localhost:*",
 #endif
+                    "https://www.googletagmanager.com"
+                ));
+                x.StyleSources(y => y.Self().UnsafeInline().CustomSources(
+                    "https://unpkg.com",
+                    "https://cdn.jsdelivr.net"
+                ));
+                x.FontSources(y => y.Self().CustomSources(
+                    "https://unpkg.com",
+                    "https://cdn.jsdelivr.net"
+                ));
+                x.ImageSources(y => y.Self().CustomSources(
+                    "data:",
                     "https://www.googletagmanager.com",
-                    "https://cdn-ukwest.onetrust.com",
-                    "https://js-eu1.hs-analytics.net",
-                    "https://js-eu1.hubspot.com",
-                    "https://js-eu1.hsadspixel.net",
-                    "https://js-eu1.hs-banner.com"
+                    "https://www.google.com",
+                    "https://www.google.co.uk",
+                    "https://track-eu1.hubspot.com",
+                    "https://perf-eu1.hsforms.com",
+                    "https://px.ads.linkedin.com"
                 ));
                 x.ConnectSources(y => y.Self().CustomSources(
 #if DEBUG
-                    // Visual Studio Browser Link + ASP.NET Core browser refresh use random localhost ports + websockets
                     "https://localhost:*",
                     "http://localhost:*",
                     "ws://localhost:*",
@@ -49,22 +59,19 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
                     "ws://127.0.0.1:*",
                     "wss://127.0.0.1:*",
 #endif
+                    "https://www.googletagmanager.com",
+                    "https://www.google.com",
+                    "https://region1.google-analytics.com",
                     "https://cdn-ukwest.onetrust.com",
-                    "https://js-eu1.hs-analytics.net",
-                    "https://js-eu1.hubspot.com",
-                    "https://js-eu1.hsadspixel.net",
-                    "https://js-eu1.hs-banner.com"
+                    "https://privacyportal-uk.onetrust.com",
+                    "https://api-eu1.hubapi.com",
+                    "https://cta-eu1.hubspot.com",
+                    "https://static.hsappstatic.net",
+                    "https://px.ads.linkedin.com",
+                    "https://pagead2.googlesyndication.com"
                 ));
-                x.StyleSources(y => y.Self().UnsafeInline().CustomSources(
-                    "https://unpkg.com/%40ukho/styles@1.3.21/",
-                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
-                ));
-                x.FontSources(y => y.Self().CustomSources(
-                    "https://unpkg.com/%40ukho/styles@1.3.21/",
-                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
-                ));
-                x.ImageSources(y => y.Self().CustomSources(
-                    "data:"
+                x.FrameSources(y => y.Self().CustomSources(
+                    "https://www.googletagmanager.com"
                 ));
             });
             app.UseCustomSecurityHeaders();
