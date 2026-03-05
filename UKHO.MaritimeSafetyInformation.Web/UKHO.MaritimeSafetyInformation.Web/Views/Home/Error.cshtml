@@ -2,10 +2,7 @@
     ViewData["Title"] = "Maritime Safety Information";
     Layout = "~/Views/Shared/_MSILayout.cshtml";
 }
-@section Scripts
-{
-    <script type="text/javascript" nws-csp-add-nonce="true" src="@Url.Content("~/js/Custom/RadioNavigationalWarnings.js")"></script>
-}
+
 <div class="container-fluid">
     <div class="row">
         @if (ViewData["ControllerName"]?.ToString() == "NoticesToMariners")

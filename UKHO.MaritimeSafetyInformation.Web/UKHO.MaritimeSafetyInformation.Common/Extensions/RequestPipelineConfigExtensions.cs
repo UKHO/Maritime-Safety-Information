@@ -21,7 +21,11 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
             app.UseReferrerPolicy(x => x.NoReferrer());
+#if DEBUG
+            app.UseCspReportOnly(x =>
+#else
             app.UseCsp(x =>
+#endif
             {
                 x.ScriptSources(y => y.Self().StrictDynamic());
                 x.ObjectSources(y => y.None());
