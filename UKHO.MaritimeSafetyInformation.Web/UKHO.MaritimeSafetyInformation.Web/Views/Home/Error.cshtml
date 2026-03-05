@@ -2,10 +2,7 @@
     ViewData["Title"] = "Maritime Safety Information";
     Layout = "~/Views/Shared/_MSILayout.cshtml";
 }
-@section Scripts
-{
-<script type="text/javascript" src="@Url.Content("~/js/Custom/RadioNavigationalWarnings.js")"></script>
-}
+
 <div class="container-fluid">
     <div class="row">
         @if (ViewData["ControllerName"]?.ToString() == "NoticesToMariners")
@@ -42,4 +39,3 @@
         </div>
     </div>
 </div>
-
