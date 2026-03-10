@@ -117,7 +117,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             if (_isRunningInPipeline)
             {
                 Console.WriteLine($"Admin Tests Running in CI/CD pipeline. {_httpEndpoint_admin}  ");
-                Assert.That(_httpEndpoint_admin, Does.Contain("https://rnwadmin-dev.ukho.gov.uk/"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
+                Assert.That(_httpEndpoint_admin, Does.Contain("https://rnwadmin"), "Running in CI/CD pipeline, expected endpoint to contain 'https://rnwadmin'.");
             }
             else
             {

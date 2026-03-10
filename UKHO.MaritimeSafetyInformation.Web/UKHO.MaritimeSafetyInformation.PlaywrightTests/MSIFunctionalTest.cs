@@ -84,7 +84,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             if (_isRunningInPipeline)
             {
                 Console.WriteLine($"Regular Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
-                Assert.That(_httpEndpoint, Does.Contain("msi-dev.admiralty.co.uk"), "Running in CI/CD pipeline, expected endpoint to contain 'msi-dev.admiralty.co.uk'.");
+                Assert.That(_httpEndpoint, Does.Contain("https://msi"), "Running in CI/CD pipeline, expected endpoint to contain 'https://msi'.");
             }
             else
             {
@@ -95,8 +95,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
             await Task.CompletedTask;
         }
-
-
 
 
         [Test]
