@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using UKHO.MaritimeSafetyInformation.Common.Filters;
 
@@ -18,7 +13,6 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
     /// <param name="app"></param>
     /// <param name="defaultController"></param>
     /// <param name="defaultAction"></param>
-
     /// <returns></returns>
     public static class RequestPipelineConfigExtensions
     {
@@ -27,23 +21,15 @@ namespace UKHO.MaritimeSafetyInformation.Common.Extensions
             app.UseHttpsRedirection();
             app.UseHsts(x => x.MaxAge(365).IncludeSubdomains());
             app.UseReferrerPolicy(x => x.NoReferrer());
+#if DEBUG
+            app.UseCspReportOnly(x =>
+#else
             app.UseCsp(x =>
+#endif
             {
-                x.DefaultSources(y => y.Self());
-                x.ScriptSources(y => y.Self().CustomSources(
-                    "https://www.googletagmanager.com"
-                ));
-                x.StyleSources(y => y.Self().CustomSources(
-                    "https://unpkg.com/%40ukho/styles@1.3.21/",
-                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
-                ));
-                x.FontSources(y => y.Self().CustomSources(
-                    "https://unpkg.com/%40ukho/styles@1.3.21/",
-                    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/"
-                ));
-                x.ImageSources(y => y.Self().CustomSources(
-                    "data:"
-                ));
+                x.ScriptSources(y => y.Self().StrictDynamic());
+                x.ObjectSources(y => y.None());
+                x.BaseUris(y => y.None());
             });
             app.UseCustomSecurityHeaders();
             app.UseStaticFiles();
