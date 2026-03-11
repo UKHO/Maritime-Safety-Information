@@ -18,22 +18,10 @@ steps:
   inputs:
     packageType: sdk
     version: $(DotNetSdkVersion)
-
-
-- pwsh:  'ls env:'
-
-- pwsh:  'ls -Recurse -File'
-
-- pwsh:  'ls $(Pipeline.Workspace)/PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests -Recurse -File'
-
-
-
  
 - pwsh: ./UKHO.MaritimeSafetyInformation.PlaywrightTests/playwright.ps1 install
   displayName: Install Playwright dependencies
   workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
-
-
 
 - task: DotNetCoreCLI@2
   displayName: Run dotnet Playwright tests
@@ -42,59 +30,6 @@ steps:
     projects: '$(Pipeline.Workspace)\PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
     testRunTitle: $(Environment)-PlaywrightTests
     workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
-
-
-- task: NodeTool@0
-  displayName: Install Node.js
-  inputs:
-    versionSpec: '18.x'
-
-- script: |
-    npm ci
-  displayName: npm restore
-  workingDirectory: '$(Build.SourcesDirectory)/Tests'
-
-- script: |
-    npx playwright install --with-deps
-  displayName: npx playwright install
-  workingDirectory: '$(Build.SourcesDirectory)/Tests'
-
-# - task: FileTransform@2
-#   displayName: Transform - test configuration
-#   inputs:
-#     folderPath: '$(Build.SourcesDirectory)\Tests\Configuration'
-#     xmlTransformationRules: ''
-#     jsonTargetFiles: 'appConfig.json'
-
-# - script: |
-#     npm run test:auto
-#   displayName: Run functional tests
-#   workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/FunctionalTest'
-
-# - task: PublishTestResults@2
-#   displayName: Publish functional test results
-#   condition: succeededOrFailed()
-#   inputs:
-#     testRunner: JUnit
-#     testResultsFiles: results.xml
-#     mergeTestResults: true
-#     searchFolder:  '$(Build.SourcesDirectory)\Tests'
-#     testRunTitle: $(Environment)-FunctionalTests
-
-# - script: |
-#     npm run test:a11y
-#   displayName: Run accessibility tests
-#   workingDirectory: '$(Build.SourcesDirectory)/Tests/AutoTests/AccessibilityTest'
-          
-# - task: PublishTestResults@2
-#   displayName: Publish accessibility test results
-#   condition: succeededOrFailed()
-#   inputs:
-#     testRunner: JUnit
-#     testResultsFiles: results.xml
-#     mergeTestResults: true
-#     searchFolder:  '$(Build.SourcesDirectory)\Tests'
-#     testRunTitle: $(Environment)-AccessibilityTests
 
 - task: AzureCLI@2
   displayName: Swap MSI BusinessUnit
