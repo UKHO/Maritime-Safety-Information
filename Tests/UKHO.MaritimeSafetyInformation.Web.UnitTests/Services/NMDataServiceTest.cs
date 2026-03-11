@@ -61,7 +61,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             var searchResult = SetSearchResultForWeekly();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(expectedSearch, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(expectedSearch, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 2;
 
@@ -79,7 +79,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             ShowNMFilesResponseModel showNMFilesResponseModel = await nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -96,7 +96,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
             Task<ShowNMFilesResponseModel> result = nMDataService.GetWeeklyBatchFiles(year, week, CorrelationId);
 
@@ -110,7 +110,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int dailyFilesDataCount = 2;
@@ -128,7 +128,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateDailyFiles();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
@@ -173,7 +173,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int expectedDailyFilesDataCount = 2;
@@ -196,7 +196,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
             A.CallTo(() => fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
@@ -239,7 +239,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateWeeklyFiles();
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => fakeFileShareServiceCache.GetWeeklyBatchResponseFromCache(A<int>.Ignored, A<int>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 3;
@@ -256,7 +256,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Task<ShowDailyFilesResponseListModel> result = nMDataService.GetDailyBatchDetailsFiles(CorrelationId);
 
@@ -269,7 +269,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for daily NM files"),
                 async delegate { await nMDataService.GetDailyBatchDetailsFiles(CorrelationId); });
@@ -281,7 +281,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Task<YearWeekResponseDataModel> result = nMDataService.GetAllYearWeek(CorrelationId);
             Assert.That(result.IsFaulted);
@@ -293,7 +293,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No Data received from File Share Service for request to search attribute year and week"),
                 async delegate { await nMDataService.GetAllYearWeek(CorrelationId); });
@@ -305,7 +305,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchNoYearWeekData();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("No data received from File Share Service for request to search attribute year and week"),
                 async delegate { await nMDataService.GetAllYearWeek(CorrelationId); });
@@ -320,7 +320,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
             A.CallTo(() => fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
             A.CallTo(() => fakeFileShareServiceCache.InsertCacheObject(A<object>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).MustNotHaveHappened();
 
@@ -339,7 +339,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
             A.CallTo(() => fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(GetBatchAttributesSearchModel());
 
             YearWeekResponseDataModel result = await nMDataService.GetAllYearWeek(CorrelationId);
@@ -358,7 +358,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
             A.CallTo(() => fakeFileShareServiceCache.GetAllYearsAndWeeksFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchAttributesSearchModel());
 
             YearWeekResponseDataModel result = await nMDataService.GetAllYearWeek(CorrelationId);
@@ -379,10 +379,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
@@ -401,10 +401,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDaily();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
@@ -421,10 +421,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             Result<BatchSearchResponse> searchResult = new();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = SetAttributeSearchResult();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             ShowWeeklyFilesResponseModel showWeeklyFilesResponseModel = await nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
@@ -444,10 +444,10 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             Result<BatchSearchResponse> searchResult = new();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             IResult<BatchAttributesSearchResponse> res = new Result<BatchAttributesSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSSearchAttributeAsync(A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Task<ShowWeeklyFilesResponseModel> result = nMDataService.GetWeeklyFilesResponseModelsAsync(year, week, CorrelationId);
 
@@ -464,7 +464,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => fakeFileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
+            A.CallTo(() => fakeFileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).Returns(stream);
             Task<byte[]> result = nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.That(result, Is.InstanceOf<Task<byte[]>>());
         }
@@ -477,7 +477,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             const string frequency = "";
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => fakeFileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSDownloadFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored, A<string>.Ignored)).ThrowsAsync(new Exception());
             Task<byte[]> result = nMDataService.DownloadFssFileAsync(batchId, filename, CorrelationId, frequency);
             Assert.That(result.IsFaulted);
         }
@@ -491,7 +491,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes("test stream"));
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => fakeFileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
+            A.CallTo(() => fakeFileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(stream);
 
             Task<byte[]> result = nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
 
@@ -506,7 +506,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             fileShareServiceConfig.Value.BaseUrl = "http://www.test.com";
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
-            A.CallTo(() => fakeFileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSDownloadZipFileAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
             Task<byte[]> result = nMDataService.DownloadFSSZipFileAsync(batchId, fileName, CorrelationId);
 
@@ -521,7 +521,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForCumulative();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 4;
 
@@ -542,7 +542,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 4;
 
@@ -565,7 +565,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for cumulative NM files"),
                 async delegate { await nMDataService.GetCumulativeBatchFiles(CorrelationId); });
@@ -577,7 +577,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored)).Throws(new Exception());
 
             IResult<BatchSearchResponse> res = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(res);
 
             Task<ShowNMFilesResponseModel> result = nMDataService.GetCumulativeBatchFiles(CorrelationId);
 
@@ -610,7 +610,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForDuplicateCumulative();
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 4;
@@ -647,7 +647,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForDailyDistributorTracings();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 1;
             const int dailyFilesDataCount = 1;
@@ -666,7 +666,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForAnnual();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 6;
 
@@ -681,7 +681,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
 
             Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
 
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             const int expectedRecordCount = 6;
 
@@ -696,7 +696,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
 
             Assert.ThrowsAsync(Is.TypeOf<InvalidDataException>().And.Message.EqualTo("Invalid data received for annual NM files"),
                 async delegate { await nMDataService.GetAnnualBatchFiles(CorrelationId); });
@@ -708,7 +708,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
 
             IResult<BatchSearchResponse> searchResult = new Result<BatchSearchResponse>();
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Throws(new Exception());
 
             Task<ShowNMFilesResponseModel> result = nMDataService.GetAnnualBatchFiles(CorrelationId);
 
@@ -741,7 +741,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Services
             Result<BatchSearchResponse> searchResult = SetSearchResultForAnnualDuplicateData();
 
             A.CallTo(() => fakeAuthFssTokenProvider.GenerateADAccessToken(A<bool>.Ignored, A<string>.Ignored));
-            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
+            A.CallTo(() => fakeFileShareService.FSSBatchSearchAsync(A<string>.Ignored, A<string>.Ignored, A<IFileShareApiClient>.Ignored)).Returns(searchResult);
             A.CallTo(() => fakeFileShareServiceCache.GetBatchResponseFromCache(A<string>.Ignored, A<string>.Ignored, A<string>.Ignored, A<string>.Ignored)).Returns(new BatchSearchResponseModel());
 
             const int expectedRecordCount = 6;
