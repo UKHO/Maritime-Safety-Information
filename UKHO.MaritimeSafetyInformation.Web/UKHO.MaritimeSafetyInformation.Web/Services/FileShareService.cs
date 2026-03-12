@@ -6,7 +6,6 @@ using UKHO.MaritimeSafetyInformation.Common.Configuration;
 using UKHO.MaritimeSafetyInformation.Common.Logging;
 using UKHO.MaritimeSafetyInformation.Web.Services.Interfaces;
 
-
 namespace UKHO.MaritimeSafetyInformation.Web.Services
 {
     public class FileShareService(IOptions<FileShareServiceConfiguration> fileShareServiceConfig, ILogger<FileShareService> logger) : IFileShareService
@@ -14,7 +13,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
         private readonly IOptions<FileShareServiceConfiguration> _fileShareServiceConfig = fileShareServiceConfig;
         private readonly ILogger<FileShareService> _logger = logger;
 
-        public async Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient)
+        public async Task<IResult<BatchSearchResponse>> FSSBatchSearchAsync(string searchText, string correlationId, IFileShareApiClient fileShareApiClient)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<IResult<BatchAttributesSearchResponse>> FSSSearchAttributeAsync(string accessToken, string correlationId, IFileShareApiClient fileShareApiClient)
+        public async Task<IResult<BatchAttributesSearchResponse>> FSSSearchAttributeAsync(string correlationId, IFileShareApiClient fileShareApiClient)
         {
             try
             {
@@ -55,7 +54,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient, string frequency)
+        public async Task<Stream> FSSDownloadFileAsync(string batchId, string fileName, string correlationId, IFileShareApiClient fileShareApiClient, string frequency)
         {
             try
             {
@@ -73,7 +72,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
             }
         }
 
-        public async Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string accessToken, string correlationId, IFileShareApiClient fileShareApiClient)
+        public async Task<Stream> FSSDownloadZipFileAsync(string batchId, string fileName, string correlationId, IFileShareApiClient fileShareApiClient)
         {
             try
             {

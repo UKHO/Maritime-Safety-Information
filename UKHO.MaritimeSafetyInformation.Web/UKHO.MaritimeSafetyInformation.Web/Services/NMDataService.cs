@@ -66,7 +66,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    var result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    var result = await _fileShareService.FSSBatchSearchAsync(searchText, correlationId, fileShareApiClient);
                     searchResult = result.Data;
                 }
 
@@ -126,7 +126,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    IResult<BatchAttributesSearchResponse> attributes = await _fileShareService.FSSSearchAttributeAsync(accessToken, correlationId, fileShareApiClient);
+                    IResult<BatchAttributesSearchResponse> attributes = await _fileShareService.FSSSearchAttributeAsync(correlationId, fileShareApiClient);
 
                     searchAttributes = new()
                     {
@@ -225,7 +225,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, correlationId, fileShareApiClient);
 
                     searchResult = result.Data;
 
@@ -306,7 +306,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient, frequency);
+                Stream stream = await _fileShareService.FSSDownloadFileAsync(batchId, fileName, correlationId, fileShareApiClient, frequency);
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
@@ -332,7 +332,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                 IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                Stream stream = await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, accessToken, correlationId, fileShareApiClient);
+                Stream stream = await _fileShareService.FSSDownloadZipFileAsync(batchId, fileName, correlationId, fileShareApiClient);
 
                 byte[] fileBytes = await NMHelper.GetFileBytesFromStream(stream);
 
@@ -379,7 +379,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, correlationId, fileShareApiClient);
 
                     searchResult = result.Data;
 
@@ -442,7 +442,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.Services
 
                     IFileShareApiClient fileShareApiClient = new FileShareApiClient(_httpClientFactory, _fileShareServiceConfig.Value.BaseUrl, accessToken);
 
-                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, accessToken, correlationId, fileShareApiClient);
+                    IResult<BatchSearchResponse> result = await _fileShareService.FSSBatchSearchAsync(searchText, correlationId, fileShareApiClient);
 
                     searchResult = result.Data;
 
