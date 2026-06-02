@@ -16,7 +16,6 @@ parameters:
 
 trigger:
 - main
-- release/*
 
 pool: 
   name: NautilusBuild

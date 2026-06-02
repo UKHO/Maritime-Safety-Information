@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="UKHO.ADDS.Mocks" Version="1.0.60408-rc.9" />
+    <PackageReference Include="UKHO.ADDS.Mocks" Version="1.0.60515-rc.2" />
   </ItemGroup>
 
 </Project>

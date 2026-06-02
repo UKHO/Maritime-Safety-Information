@@ -102,19 +102,19 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
         [Test]
         public async Task WhenCallShowSelectionAndExceptionThrown_ThenReturnView()
         {
-            DefaultHttpContext httpContext = new();
+            var httpContext = new DefaultHttpContext();
             const string expectedView = "~/Views/RadioNavigationalWarnings/ShowSelection.cshtml";
 
             A.CallTo(() => fakeRnwService.GetRadioNavigationalWarningsLastModifiedDateTime(A<string>.Ignored)).Returns(DateTime.UtcNow.ToString());
             A.CallTo(() => fakeRnwService.GetSelectedRadioNavigationalWarningsData(Array.Empty<int>(), string.Empty)).Throws(new Exception());
 
-            IActionResult result = await controller.ShowSelection();
+            var result = await controller.ShowSelection();
 
             Assert.That(result, Is.InstanceOf<IActionResult>());
-            string actualView = ((ViewResult)result).ViewName;
+            var actualView = ((ViewResult)result).ViewName;
             Assert.That(expectedView, Is.EqualTo(actualView));
             Assert.That(true, Is.EqualTo(controller.ViewBag.HasError));
-            Assert.That(controller.ViewBag.LastModifiedDateTime, Is.Null);
+            Assert.That(controller.ViewBag.LastModifiedDateTime is null, Is.True);
         }
     }
 }
