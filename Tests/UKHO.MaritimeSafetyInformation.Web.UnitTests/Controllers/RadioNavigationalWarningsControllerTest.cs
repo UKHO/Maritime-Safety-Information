@@ -114,7 +114,7 @@ namespace UKHO.MaritimeSafetyInformation.Web.UnitTests.Controllers
             var actualView = ((ViewResult)result).ViewName;
             Assert.That(expectedView, Is.EqualTo(actualView));
             Assert.That(true, Is.EqualTo(controller.ViewBag.HasError));
-            Assert.That(controller.ViewBag.LastModifiedDateTime as Action, Is.Null);
+            Assert.That(controller.ViewBag.LastModifiedDateTime is null, Is.True);
         }
     }
 }
