@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -26,6 +26,7 @@
     <PackageReference Include="Microsoft.Identity.Client" Version="4.84.1" />
     <PackageReference Include="runtime.native.System.Net.Security" Version="4.3.1" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
   </ItemGroup>
 
 </Project>
