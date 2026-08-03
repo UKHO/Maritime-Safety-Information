@@ -65,6 +65,7 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             var sqlConnectionStringBuilder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(msiDBConfiguration.ConnectionString)
             {
+                Encrypt = Microsoft.Data.SqlClient.SqlConnectionEncryptOption.Optional,
                 TrustServerCertificate = true
             };
 
