@@ -62,7 +62,16 @@ namespace UKHO.MaritimeSafetyInformation.Web
 
             var msiDBConfiguration = new RadioNavigationalWarningsContextConfiguration();
             builder.Configuration.Bind("RadioNavigationalWarningsContext", msiDBConfiguration);
-            builder.Services.AddDbContext<RadioNavigationalWarningsContext>(options => options.UseSqlServer(msiDBConfiguration.ConnectionString));
+
+            var sqlConnectionStringBuilder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(msiDBConfiguration.ConnectionString)
+            {
+                TrustServerCertificate = true
+            };
+
+            builder.Services.AddDbContext<RadioNavigationalWarningsContext>(options =>
+                options.UseSqlServer(
+                    sqlConnectionStringBuilder.ConnectionString,
+                    sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
             builder.Services.AddScoped<IEventHubLoggingHealthClient, EventHubLoggingHealthClient>();
             builder.Services.AddScoped<INMDataService, NMDataService>();
