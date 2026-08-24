@@ -21,6 +21,19 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
         private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
+        private static readonly string _videoDir =
+            Environment.GetEnvironmentVariable("PLAYWRIGHT_VIDEO_DIR")
+            ?? Path.Combine(TestContext.CurrentContext.WorkDirectory, "videos");
+
+        public override BrowserNewContextOptions ContextOptions()
+        {
+            return new BrowserNewContextOptions
+            {
+                RecordVideoDir = _videoDir,
+                RecordVideoSize = new RecordVideoSize { Width = 1280, Height = 720 }
+            };
+        }
+
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
@@ -137,9 +150,43 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    await loginPage.AdPasswordErrorCheckAsync();
         //}
 
-        
+        [TearDown]
+        public async Task RecordVideoOnFailureAsync()
+        {
+            var failed = TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed;
 
-        
+            // Capture the video path before the context is closed.
+            var video = Page.Video;
+
+            // Closing the context flushes the video file to disk.
+            await Context.CloseAsync();
+
+            if (video is null)
+            {
+                return;
+            }
+
+            if (failed)
+            {
+                var videoPath = await video.PathAsync();
+                var targetPath = Path.Combine(
+                    _videoDir,
+                    $"{TestContext.CurrentContext.Test.Name}.webm");
+
+                if (!string.Equals(videoPath, targetPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Move(videoPath, targetPath, overwrite: true);
+                }
+
+                TestContext.AddTestAttachment(targetPath, "Playwright failure video");
+                Console.WriteLine($"Test failed. Video saved to: {targetPath}");
+            }
+            else
+            {
+                // Delete video for passing tests to save space.
+                await video.DeleteAsync();
+            }
+        }
 
 
 

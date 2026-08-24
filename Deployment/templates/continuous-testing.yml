@@ -30,6 +30,16 @@ steps:
     projects: '$(Pipeline.Workspace)\PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests/UKHO.MaritimeSafetyInformation.PlaywrightTests.dll'
     testRunTitle: $(Environment)-PlaywrightTests
     workingDirectory: '$(Pipeline.Workspace)/PlaywrightTests'
+  env:
+    PLAYWRIGHT_VIDEO_DIR: '$(Pipeline.Workspace)/PlaywrightTests/videos'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Playwright failure videos
+  condition: failed()
+  inputs:
+    targetPath: '$(Pipeline.Workspace)/PlaywrightTests/videos'
+    artifact: 'PlaywrightFailureVideos-$(Environment)'
+    publishLocation: 'pipeline'
 
 - task: AzureCLI@2
   displayName: Swap MSI BusinessUnit
