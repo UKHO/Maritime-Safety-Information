@@ -92,15 +92,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         public async Task AdLoginAsync(string username, string password)
         {
             await AdUsername.FillAsync(username);
-            await Task.WhenAll(
-                _page.WaitForNavigationAsync(),
-                AdNext.ClickAsync()
-            );
+            await AdNext.ClickAsync();
+            await _page.WaitForLoadStateAsync();
             await AdPassword.FillAsync(password);
-            await Task.WhenAll(
-                _page.WaitForNavigationAsync(),
-                LoginButton.ClickAsync()
-            );
+            await LoginButton.ClickAsync();
+            await _page.WaitForLoadStateAsync();
         }
 
         public async Task AdLoginWithMfaAsync(string username, string password, string totpSecret)
@@ -123,10 +119,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
                     // Some tenants auto-verify after fill; attempt click if button present
                     if (await MfaVerifyButton.IsVisibleAsync())
                     {
-                        await Task.WhenAll(
-                            _page.WaitForNavigationAsync(new PageWaitForNavigationOptions { Timeout = 10000 }),
-                            MfaVerifyButton.ClickAsync()
-                        );
+                        await MfaVerifyButton.ClickAsync();
+                        await _page.WaitForLoadStateAsync(options: new() { Timeout = 10000 });
                     }
                 }
             }

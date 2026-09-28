@@ -144,10 +144,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task PageLoadAsync()
         {
-            await Task.WhenAll(
-                _page.WaitForNavigationAsync(),  //Rhz To Do
-                CreateNewRecord.ClickAsync()
-            );
+            await CreateNewRecord.ClickAsync();
+            await _page.WaitForLoadStateAsync();
         }
 
         public async Task SearchListWithFilterAsync(string selectWarnings)
