@@ -28,7 +28,14 @@ terraform validate
 if ( !$? ) { echo "Something went wrong during terraform validation" ; throw "Error" }
 
 Write-output "Execute Terraform plan"
-terraform plan -out "terraform.deployment.tfplan" | tee terraform_output.txt
+$varFileArgs = @()
+$varFile = "config/$($workSpace.ToLower()).tfvars"
+if (Test-Path $varFile) {
+    Write-Output "Using var file $varFile"
+    $varFileArgs += "-var-file=$varFile"
+}
+
+terraform plan -out "terraform.deployment.tfplan" @varFileArgs | tee terraform_output.txt
 if ( !$? ) { echo "Something went wrong during terraform plan" ; throw "Error" }
 
 $totalDestroyLines=(Get-Content -Path terraform_output.txt | Select-String -Pattern "destroy" -CaseSensitive |  where {$_ -ne ""}).length
