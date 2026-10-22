@@ -35,7 +35,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             _page = page;
             RadioNavigationalWarningsPage = _page.Locator("a:has-text(\"Radio Navigation Warnings\")");
-            RadioNavigationalWarnings = _page.Locator("#navbarSupportedContent > ul > li:nth-child(2) > a");
+            RadioNavigationalWarnings = _page.Locator("a[href="/RadioNavigationalWarnings"]");
             RadioNavigationalWarningsEndUser = _page.Locator("#headingLevelOne");
             RadioWarningEndUser = _page.Locator("text=Radio Warnings");
             AboutEndUser = _page.Locator("text=About");
