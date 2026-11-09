@@ -5,6 +5,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
     internal class LoginPageObject
     {
+        private const int ExpectTimeoutMs = 30_000;
         private readonly IPage _page;
         public ILocator SignIn { get; }
         public ILocator Username { get; }
@@ -64,7 +65,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             await BtnContinue.ClickAsync();
             await Password.FillAsync(password);
             await BtnLogin.ClickAsync();
-            await _page.WaitForLoadStateAsync(); // Ensure page loaded
+            await Assertions.Expect(LoginUsername).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             await LoginUsername.ClickAsync();
             var text = await LoginUsername.InnerTextAsync();
             Assert.That(text, Does.Contain("UKHOTest MSI"), "Login was not successful, username not found on page.");
@@ -81,10 +82,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task SignOutAsync()
         {
-            await _page.WaitForLoadStateAsync();
+            await Assertions.Expect(LoginUsername).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             await LoginUsername.ClickAsync();
             await SignOutText.ClickAsync();
-            await _page.WaitForLoadStateAsync();
+            await Assertions.Expect(SignIn).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             var text = await SignIn.InnerTextAsync();
             Assert.That(text, Does.Contain("Sign in"), "Sign out was not successful, Sign in text not found on page.");
         }
