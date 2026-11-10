@@ -1,4 +1,4 @@
-﻿namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
+namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 {
     internal static class SiteWarmUp
     {

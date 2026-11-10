@@ -84,6 +84,21 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
             Assert.That(text, Does.Contain("UKHOTest MSI"), "Login was not successful, username not found on page.");
         }
 
+        private async Task WaitForReturnToApplicationAsync()
+        {
+            try
+            {
+                await _page.WaitForURLAsync(
+                    url => !url.Contains("b2clogin", StringComparison.OrdinalIgnoreCase)
+                        && !url.Contains("/signin-oidc", StringComparison.OrdinalIgnoreCase),
+                    new() { Timeout = ReturnToApplicationTimeoutMs, WaitUntil = WaitUntilState.DOMContentLoaded });
+            }
+            catch (PlaywrightException ex)
+            {
+                Assert.Fail($"Did not return to the application after sign in. Current URL: {_page.Url}. {ex.Message}");
+            }
+        }
+
         public async Task LoginWithDistributorDetailsAsync(string username, string password)
         {
             await Username.ClickAsync();
@@ -188,21 +203,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
         {
             var text = await AdPasswordError.InnerTextAsync();
             Assert.That(text, Does.Contain("Your account or password is incorrect"), "Login was not successful, username not found on page.");
-        }
-
-        private async Task WaitForReturnToApplicationAsync()
-        {
-            try
-            {
-                await _page.WaitForURLAsync(
-                    url => !url.Contains("b2clogin", StringComparison.OrdinalIgnoreCase)
-                        && !url.Contains("/signin-oidc", StringComparison.OrdinalIgnoreCase),
-                    new() { Timeout = ReturnToApplicationTimeoutMs, WaitUntil = WaitUntilState.DOMContentLoaded });
-            }
-            catch (PlaywrightException ex)
-            {
-                Assert.Fail($"Did not return to the application after sign in. Current URL: {_page.Url}. {ex.Message}");
-            }
         }
     }
 }

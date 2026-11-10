@@ -40,8 +40,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 _httpEndpoint = new Uri(_httpEndpoint).ToString();
 
                 await SiteWarmUp.WarmUpAsync(
-                   _httpEndpoint,
-                   new Uri(new Uri(_httpEndpoint), "RadioNavigationalWarnings").ToString());
+                    _httpEndpoint,
+                    new Uri(new Uri(_httpEndpoint), "RadioNavigationalWarnings").ToString());
             }
             else
             {
