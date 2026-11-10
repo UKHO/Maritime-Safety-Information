@@ -38,6 +38,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
                 _httpEndpoint = _configuration["url"] ?? "Not Found";
                 _httpEndpoint = new Uri(_httpEndpoint).ToString();
+
+                await SiteWarmUp.WarmUpAsync(
+                    _httpEndpoint,
+                    new Uri(new Uri(_httpEndpoint), "RadioNavigationalWarnings").ToString());
             }
             else
             {
@@ -74,7 +78,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         {
             // Navigate to the MSI Admin page before each test
 
-            await Page.GotoAsync(_httpEndpoint);
+            await Page.GotoAsync(_httpEndpoint, new PageGotoOptions
+            {
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+                Timeout = 60_000
+            });
 
         }
 

@@ -5,6 +5,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
     internal class LoginPageObject
     {
+        private const int ExpectTimeoutMs = 30_000;
+        private const int ReturnToApplicationTimeoutMs = 60_000;
         private readonly IPage _page;
         public ILocator SignIn { get; }
         public ILocator Username { get; }
@@ -59,15 +61,42 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task LoginWithValidDetailsAsync(string username, string password)
         {
+            // Wait for the B2C page scripts to be ready before interacting, otherwise the
+            // form can be submitted natively and the browser is left on a blank page.
+            await _page.WaitForLoadStateAsync(LoadState.Load, new() { Timeout = ExpectTimeoutMs });
+            await Assertions.Expect(Username).ToBeEditableAsync(new() { Timeout = ExpectTimeoutMs });
             await Username.ClickAsync();
             await Username.FillAsync(username);
+            await Assertions.Expect(BtnContinue).ToBeEnabledAsync(new() { Timeout = ExpectTimeoutMs });
             await BtnContinue.ClickAsync();
+
+            await Assertions.Expect(Password).ToBeEditableAsync(new() { Timeout = ExpectTimeoutMs });
+            await _page.WaitForLoadStateAsync(LoadState.Load, new() { Timeout = ExpectTimeoutMs });
             await Password.FillAsync(password);
+            await Assertions.Expect(BtnLogin).ToBeEnabledAsync(new() { Timeout = ExpectTimeoutMs });
             await BtnLogin.ClickAsync();
-            await _page.WaitForLoadStateAsync(); // Ensure page loaded
+
+            await WaitForReturnToApplicationAsync();
+
+            await Assertions.Expect(LoginUsername).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             await LoginUsername.ClickAsync();
             var text = await LoginUsername.InnerTextAsync();
             Assert.That(text, Does.Contain("UKHOTest MSI"), "Login was not successful, username not found on page.");
+        }
+
+        private async Task WaitForReturnToApplicationAsync()
+        {
+            try
+            {
+                await _page.WaitForURLAsync(
+                    url => !url.Contains("b2clogin", StringComparison.OrdinalIgnoreCase)
+                        && !url.Contains("/signin-oidc", StringComparison.OrdinalIgnoreCase),
+                    new() { Timeout = ReturnToApplicationTimeoutMs, WaitUntil = WaitUntilState.DOMContentLoaded });
+            }
+            catch (PlaywrightException ex)
+            {
+                Assert.Fail($"Did not return to the application after sign in. Current URL: {_page.Url}. {ex.Message}");
+            }
         }
 
         public async Task LoginWithDistributorDetailsAsync(string username, string password)
@@ -81,10 +110,10 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task SignOutAsync()
         {
-            await _page.WaitForLoadStateAsync();
+            await Assertions.Expect(LoginUsername).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             await LoginUsername.ClickAsync();
             await SignOutText.ClickAsync();
-            await _page.WaitForLoadStateAsync();
+            await Assertions.Expect(SignIn).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             var text = await SignIn.InnerTextAsync();
             Assert.That(text, Does.Contain("Sign in"), "Sign out was not successful, Sign in text not found on page.");
         }

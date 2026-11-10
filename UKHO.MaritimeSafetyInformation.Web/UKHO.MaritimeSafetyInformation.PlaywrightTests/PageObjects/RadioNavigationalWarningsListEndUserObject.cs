@@ -5,6 +5,8 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 {
     internal class RadioNavigationalWarningsListEndUserObject
     {
+        private const int ExpectTimeoutMs = 30_000;
+        private const int NavigationTimeoutMs = 60_000;
         private readonly IPage _page;
         public ILocator RadioNavigationalWarningsPage { get; }
         public ILocator RadioNavigationalWarningsEndUser { get; }
@@ -75,8 +77,14 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests.PageObjects
 
         public async Task GoToRadioWarningAsync()
         {
+            await Assertions.Expect(RadioNavigationalWarnings).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             await RadioNavigationalWarnings.HighlightAsync();
-            await RadioNavigationalWarnings.ClickAsync();
+            await RadioNavigationalWarnings.ClickAsync(new() { Timeout = NavigationTimeoutMs });
+            await _page.WaitForURLAsync("**/RadioNavigationalWarnings**", new()
+            {
+                Timeout = NavigationTimeoutMs,
+                WaitUntil = WaitUntilState.DOMContentLoaded
+            });
         }
 
         public static async Task<string> CheckTextAsync(ILocator locator)

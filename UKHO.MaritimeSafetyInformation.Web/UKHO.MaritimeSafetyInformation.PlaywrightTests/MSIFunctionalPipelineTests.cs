@@ -21,6 +21,22 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
         private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
+        private const int FirstNavigationTimeoutMs = 60_000;
+        private const int ExpectTimeoutMs = 30_000;
+
+        private static readonly string _videoDir =
+            Environment.GetEnvironmentVariable("PLAYWRIGHT_VIDEO_DIR")
+            ?? Path.Combine(TestContext.CurrentContext.WorkDirectory, "videos");
+
+        public override BrowserNewContextOptions ContextOptions()
+        {
+            return new BrowserNewContextOptions
+            {
+                RecordVideoDir = _videoDir,
+                RecordVideoSize = new RecordVideoSize { Width = 1280, Height = 720 }
+            };
+        }
+
         [OneTimeSetUp]
         public async Task SetupAsync()
         {
@@ -41,6 +57,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             //_rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
 
             Console.WriteLine($"Login Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
+
+            if (_isRunningInPipeline)
+            {
+                await SiteWarmUp.WarmUpAsync(_httpEndpoint);
+            }
         }
 
 
@@ -57,9 +78,14 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 Assert.Ignore("Test only runs in CI/CD pipeline.");
             }
-            await Page.GotoAsync(_httpEndpoint);
+            await Page.GotoAsync(_httpEndpoint, new PageGotoOptions
+            {
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+                Timeout = FirstNavigationTimeoutMs
+            });
 
             var login = new LoginPageObject(Page);
+            await Expect(login.SignIn).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
             await login.GoToSignInAsync();
             await login.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
@@ -86,8 +112,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 Assert.Ignore("Test only runs in CI/CD pipeline.");
             }
-            await Page.GotoAsync(_httpEndpoint);
+            await Page.GotoAsync(_httpEndpoint, new PageGotoOptions
+            {
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+                Timeout = FirstNavigationTimeoutMs
+            });
             var loginPage = new LoginPageObject(Page);
+            await Expect(loginPage.SignIn).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
 
             await loginPage.GoToSignInAsync();
 
@@ -137,9 +168,43 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //    await loginPage.AdPasswordErrorCheckAsync();
         //}
 
-        
+        [TearDown]
+        public async Task RecordVideoOnFailureAsync()
+        {
+            var failed = TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed;
 
-        
+            // Capture the video path before the context is closed.
+            var video = Page.Video;
+
+            // Closing the context flushes the video file to disk.
+            await Context.CloseAsync();
+
+            if (video is null)
+            {
+                return;
+            }
+
+            if (failed)
+            {
+                var videoPath = await video.PathAsync();
+                var targetPath = Path.Combine(
+                    _videoDir,
+                    $"{TestContext.CurrentContext.Test.Name}.webm");
+
+                if (!string.Equals(videoPath, targetPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Move(videoPath, targetPath, overwrite: true);
+                }
+
+                TestContext.AddTestAttachment(targetPath, "Playwright failure video");
+                Console.WriteLine($"Test failed. Video saved to: {targetPath}");
+            }
+            else
+            {
+                // Delete video for passing tests to save space.
+                await video.DeleteAsync();
+            }
+        }
 
 
 
