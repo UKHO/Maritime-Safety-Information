@@ -21,6 +21,12 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
         //private string _rnwAdminAutoTestNoAccess_Pass = string.Empty;
         private readonly bool _isRunningInPipeline = IsRunningInPipeline();
 
+        private const int FirstNavigationTimeoutMs = 60_000;
+        private const int ExpectTimeoutMs = 30_000;
+        private const int WarmUpMaxAttempts = 3;
+        private static readonly TimeSpan WarmUpRequestTimeout = TimeSpan.FromSeconds(60);
+        private static readonly TimeSpan WarmUpRetryDelay = TimeSpan.FromSeconds(10);
+
         private static readonly string _videoDir =
             Environment.GetEnvironmentVariable("PLAYWRIGHT_VIDEO_DIR")
             ?? Path.Combine(TestContext.CurrentContext.WorkDirectory, "videos");
@@ -54,6 +60,11 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             //_rnwAdminAutoTestNoAccess_Pass = _configuration["RNWAdminAutoTestNoAccess_Pass"] ?? "";
 
             Console.WriteLine($"Login Tests Running in CI/CD pipeline. {_httpEndpoint}  ");
+
+            if (_isRunningInPipeline)
+            {
+                await WarmUpAsync(_httpEndpoint);
+            }
         }
 
 
@@ -70,9 +81,14 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 Assert.Ignore("Test only runs in CI/CD pipeline.");
             }
-            await Page.GotoAsync(_httpEndpoint);
+            await Page.GotoAsync(_httpEndpoint, new PageGotoOptions
+            {
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+                Timeout = FirstNavigationTimeoutMs
+            });
 
             var login = new LoginPageObject(Page);
+            await Expect(login.SignIn).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
             var noticeFileDownload = new NoticeToMarinersWeekDownloadPageObject(Page);
             await login.GoToSignInAsync();
             await login.LoginWithDistributorDetailsAsync(_distributorTest_UserName, _distributorTest_Password);
@@ -99,8 +115,13 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             {
                 Assert.Ignore("Test only runs in CI/CD pipeline.");
             }
-            await Page.GotoAsync(_httpEndpoint);
+            await Page.GotoAsync(_httpEndpoint, new PageGotoOptions
+            {
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+                Timeout = FirstNavigationTimeoutMs
+            });
             var loginPage = new LoginPageObject(Page);
+            await Expect(loginPage.SignIn).ToBeVisibleAsync(new() { Timeout = ExpectTimeoutMs });
 
             await loginPage.GoToSignInAsync();
 
@@ -188,11 +209,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
             }
         }
 
-
-
-
-
-
         private static bool IsRunningInPipeline()
         {
             // Common environment variables for CI/CD pipelines
@@ -206,6 +222,51 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
                 || !string.IsNullOrEmpty(githubActions)
                 || !string.IsNullOrEmpty(azurePipeline);
 
+        }
+
+        private static async Task WarmUpAsync(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return;
+            }
+
+            const int maxAttempts = WarmUpMaxAttempts;
+            using var handler = new HttpClientHandler { AllowAutoRedirect = false };
+            using var client = new HttpClient(handler) { Timeout = WarmUpRequestTimeout };
+
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                try
+                {
+                    using var response = await client.GetAsync(url);
+                    var status = (int)response.StatusCode;
+
+                    if (status is >= 200 and < 400)
+                    {
+                        TestContext.Progress.WriteLine($"Warm-up succeeded on attempt {attempt} with status {status}.");
+                        return;
+                    }
+
+                    if (status is >= 400 and < 500)
+                    {
+                        Assert.Fail($"Warm-up request to {url} returned {status}. Check the 'url' configuration.");
+                    }
+
+                    TestContext.Progress.WriteLine($"Warm-up attempt {attempt} returned status {status}.");
+                }
+                catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+                {
+                    TestContext.Progress.WriteLine($"Warm-up attempt {attempt} failed: {ex.Message}");
+                }
+
+                if (attempt < maxAttempts)
+                {
+                    await Task.Delay(WarmUpRetryDelay);
+                }
+            }
+
+            Assert.Fail($"Site {url} did not respond successfully after {maxAttempts} warm-up attempts.");
         }
     }
 }
