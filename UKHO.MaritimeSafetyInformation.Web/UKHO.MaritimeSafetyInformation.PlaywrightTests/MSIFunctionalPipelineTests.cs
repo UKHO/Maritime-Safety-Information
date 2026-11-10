@@ -23,9 +23,6 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
         private const int FirstNavigationTimeoutMs = 60_000;
         private const int ExpectTimeoutMs = 30_000;
-        private const int WarmUpMaxAttempts = 3;
-        private static readonly TimeSpan WarmUpRequestTimeout = TimeSpan.FromSeconds(60);
-        private static readonly TimeSpan WarmUpRetryDelay = TimeSpan.FromSeconds(10);
 
         private static readonly string _videoDir =
             Environment.GetEnvironmentVariable("PLAYWRIGHT_VIDEO_DIR")
@@ -63,7 +60,7 @@ namespace UKHO.MaritimeSafetyInformation.PlaywrightTests
 
             if (_isRunningInPipeline)
             {
-                await WarmUpAsync(_httpEndpoint);
+                await SiteWarmUp.WarmUpAsync(_httpEndpoint);
             }
         }
 
