@@ -347,6 +347,8 @@ crash.log
 # to change depending on the environment.
 #
 *.tfvars
+# Non-secret per-environment Front Door config loaded by the deploy script
+!Deployment/src/config/*.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
